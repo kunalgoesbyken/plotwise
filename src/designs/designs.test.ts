@@ -153,8 +153,10 @@ describe('podium and tower', () => {
   it('stops an office on a narrow soi at the zone office-size condition, not at the envelope', () => {
     const solution = solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)
     const tower = byId(designs(solution), 'podium-tower')!
-    expect(tower.metrics.gfaSqm).toBeLessThanOrEqual(pack.useConditions.office.threshold.value)
-    expect(tower.checks.find((c) => c.id === 'use-size')?.status).toBe('pass')
+    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    const size = tower.checks.find((c) => c.id === 'use-size')
+    expect(size?.status === 'pass' && size.actual / size.limit).toBeGreaterThan(0.95)
+    expect(nearStation.metrics.gfaSqm).toBeGreaterThan(tower.metrics.gfaSqm)
   })
 })
 
