@@ -7,9 +7,11 @@ export const MAX_CORNERS = 100
 
 const COORDINATE_SCALE = 1e7
 
+type Brief = { buildingType: BuildingType; nearStation: boolean }
+
 export type Draft =
-  | { status: 'drawing'; points: readonly LngLat[]; buildingType: BuildingType }
-  | { status: 'closed'; corners: readonly Corner[]; buildingType: BuildingType }
+  | ({ status: 'drawing'; points: readonly LngLat[] } & Brief)
+  | ({ status: 'closed'; corners: readonly Corner[] } & Brief)
 
 export type DraftAction =
   | { type: 'add'; at: LngLat }
@@ -24,6 +26,7 @@ export type DraftAction =
   | { type: 'set-road-width'; edge: number; widthM: number }
   | { type: 'estimate-road-width'; edge: number; widthM: number }
   | { type: 'set-building-type'; buildingType: BuildingType }
+  | { type: 'set-near-station'; nearStation: boolean }
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
 
@@ -34,7 +37,7 @@ type ClosedDraft = Extract<Draft, { status: 'closed' }>
 type DrawingDraft = Extract<Draft, { status: 'drawing' }>
 
 export function emptyDraft(buildingType: BuildingType): Draft {
-  return { status: 'drawing', points: [], buildingType }
+  return { status: 'drawing', points: [], buildingType, nearStation: false }
 }
 
 function roundCoordinate(value: number) {
@@ -48,11 +51,12 @@ export function roundLngLat([lng, lat]: LngLat): [number, number] {
 const accept = (draft: Draft): EditResult => ({ ok: true, draft })
 const reject = (reason: Rejection): EditResult => ({ ok: false, reason })
 
-function closed(buildingType: BuildingType, corners: readonly Corner[]): EditResult {
+function closed(brief: Brief, corners: readonly Corner[]): EditResult {
   if (corners.length < 3) return reject('too-few-corners')
   if (corners.length > MAX_CORNERS) return reject('too-many-corners')
   const outline = normalizeOutline(corners)
-  return outline.ok ? accept({ status: 'closed', corners: outline.corners, buildingType }) : reject(outline.reason)
+  const { buildingType, nearStation } = brief
+  return outline.ok ? accept({ status: 'closed', corners: outline.corners, buildingType, nearStation }) : reject(outline.reason)
 }
 
 function reshaped(draft: ClosedDraft, corners: Corner[]): EditResult {
@@ -71,10 +75,7 @@ function editDrawing(draft: DrawingDraft, action: DraftAction): EditResult {
     case 'undo':
       return accept({ ...draft, points: points.slice(0, -1) })
     case 'close':
-      return closed(
-        draft.buildingType,
-        points.map((at) => ({ at, edge: SIDE })),
-      )
+      return closed(draft, points.map((at) => ({ at, edge: SIDE })))
     default:
       return accept(draft)
   }
@@ -103,7 +104,7 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
       return reshaped(draft, corners.toSpliced(action.edge + 1, 0, { at: action.at, edge: corner.edge }))
     }
     case 'settle':
-      return closed(draft.buildingType, corners)
+      return closed(draft, corners)
     case 'remove': {
       const removed = corners[action.corner]
       if (!removed) return accept(draft)
@@ -111,7 +112,7 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
       const previous = (action.corner - 1 + corners.length) % corners.length
       const merged = corners[previous].edge.road ? corners[previous].edge : removed.edge
       const relinked = corners.with(previous, { ...corners[previous], edge: merged })
-      return closed(draft.buildingType, relinked.toSpliced(action.corner, 1))
+      return closed(draft, relinked.toSpliced(action.corner, 1))
     }
     case 'mark-road':
       return replaceEdge(draft, action.edge, (edge) => (edge.road ? edge : { road: true, widthM: null, estimated: false }))
@@ -136,13 +137,15 @@ function fromPlot(plot: Plot): EditResult {
     const widthM = widths.get(i)
     return { at, edge: widthM === undefined ? SIDE : { road: true, widthM, estimated: false } }
   })
-  return closed(plot.buildingType, corners)
+  return closed(plot, corners)
 }
 
 export function editDraft(draft: Draft, action: DraftAction): EditResult {
   switch (action.type) {
     case 'set-building-type':
       return accept({ ...draft, buildingType: action.buildingType })
+    case 'set-near-station':
+      return accept({ ...draft, nearStation: action.nearStation })
     case 'clear':
       return accept(emptyDraft(draft.buildingType))
     case 'load':
@@ -160,6 +163,7 @@ export function toPlot(draft: Draft): Plot | null {
     if (e.widthM === null) return null
     roads.push({ edge, widthM: e.widthM })
   }
-  const parsed = PlotSchema.safeParse({ ring: draft.corners.map((c) => c.at), roads, buildingType: draft.buildingType })
+  const { buildingType, nearStation } = draft
+  const parsed = PlotSchema.safeParse({ ring: draft.corners.map((c) => c.at), roads, buildingType, nearStation })
   return parsed.success ? parsed.data : null
 }

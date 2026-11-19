@@ -35,6 +35,12 @@ describe('PlotSchema', () => {
     expect(PlotSchema.safeParse({ ...valid, roads }).success).toBe(false)
   })
 
+  it('defaults to not being near a station, so plots saved before the flag existed stay valid', () => {
+    expect(PlotSchema.parse(valid).nearStation).toBe(false)
+    expect(PlotSchema.parse({ ...valid, nearStation: true }).nearStation).toBe(true)
+    expect(PlotSchema.safeParse({ ...valid, nearStation: 'yes' }).success).toBe(false)
+  })
+
   it('rejects a non-positive road width and an unknown building type', () => {
     expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: 0 }] }).success).toBe(false)
     expect(PlotSchema.safeParse({ ...valid, buildingType: 'castle' }).success).toBe(false)

@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
+import { loadPack } from '@/rules'
+import { stationDistance } from '@/solve'
 import type { EditorAction } from './editor-state'
 import { EXAMPLE_PLOT } from './example-plot'
 import { edgeName } from './map-features'
@@ -15,6 +17,8 @@ const BUILDING_TYPE_NAMES: Record<BuildingType, string> = {
   office: 'Office',
   hotel: 'Hotel',
 }
+
+const STATION_DISTANCE_M = stationDistance(loadPack('bkk-y9')).value
 
 type Dispatch = (action: EditorAction) => void
 
@@ -185,12 +189,31 @@ function BuildingTypePicker() {
   )
 }
 
+function StationToggle() {
+  const store = useEditorStore()
+  const { draft } = useEditorState()
+  return (
+    <PanelSection title="Mass transit">
+      <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm lg:min-h-9">
+        <input
+          type="checkbox"
+          checked={draft.nearStation}
+          onChange={(e) => store.dispatch({ type: 'set-near-station', nearStation: e.target.checked })}
+          className="size-4 accent-plot"
+        />
+        Within {STATION_DISTANCE_M} m of a BTS/MRT station
+      </label>
+    </PanelSection>
+  )
+}
+
 export function SitePanel() {
   return (
     <>
       <PlotOutline />
       <Frontage />
       <BuildingTypePicker />
+      <StationToggle />
     </>
   )
 }
