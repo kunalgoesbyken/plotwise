@@ -88,7 +88,7 @@ test('keeps showing the plot when the surroundings fail, and retries on request'
   await open(page, ON_A_MAPPED_BLOCK)
   await expect(page.getByText('Surrounding buildings unavailable.')).toBeVisible({ timeout: 30_000 })
   await expect(scene(page)).toHaveAttribute('data-scene-plot-corners', '4')
-  await expect(canvas(page)).toHaveAttribute('aria-label', '3D view of the plot.')
+  await expect(canvas(page)).toHaveAttribute('aria-label', /^3D view of the plot\. Allowed envelope/)
   failing = false
   await page.getByRole('button', { name: 'Try again' }).click()
   await expect(scene(page)).toHaveAttribute('data-scene-buildings', /\d+/)

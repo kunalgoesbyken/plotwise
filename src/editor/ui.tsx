@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { t } from '@/text/messages'
 
 const TONES = {
   primary: 'bg-plot text-paper hover:bg-ink',
@@ -19,11 +20,11 @@ export function Button({ tone = 'quiet', className = '', ...props }: ButtonProps
   )
 }
 
-export function Click() {
+export function PointerText({ text }: { text: (verb: string) => string }) {
   return (
     <>
-      <span className="pointer-coarse:hidden">Click</span>
-      <span className="hidden pointer-coarse:inline">Tap</span>
+      <span className="pointer-coarse:hidden">{text(t('verb.click'))}</span>
+      <span className="hidden pointer-coarse:inline">{text(t('verb.tap'))}</span>
     </>
   )
 }

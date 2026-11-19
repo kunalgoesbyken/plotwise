@@ -87,15 +87,17 @@ export function PlotMarks({ ring, roadEdges, palette }: PlotMarksProps) {
   )
 }
 
-export function Envelope({ prisms, color }: { prisms: readonly Prism[]; color: string }) {
+type EnvelopeProps = { prisms: readonly Prism[]; color: string; faint?: boolean }
+
+export function Envelope({ prisms, color, faint = false }: EnvelopeProps) {
   const { geometry, edges } = useLayers(prisms)
   if (prisms.length === 0) return null
   return (
     <>
       <mesh geometry={geometry}>
-        <meshLambertMaterial color={color} transparent opacity={0.16} depthWrite={false} />
+        <meshLambertMaterial color={color} transparent opacity={faint ? 0.07 : 0.16} depthWrite={false} />
       </mesh>
-      <Line segments points={edges} color={color} lineWidth={1.5} />
+      <Line segments points={edges} color={color} lineWidth={faint ? 1 : 1.5} dashed={faint} dashSize={1.5} gapSize={1} transparent opacity={faint ? 0.7 : 1} />
     </>
   )
 }

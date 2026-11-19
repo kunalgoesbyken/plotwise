@@ -9,12 +9,13 @@ const DISTANCE_PER_RADIUS = 4.5
 const ELEVATION_RAD = (2 * Math.PI) / 9
 const BEARING_RAD = (7 * Math.PI) / 6
 const REFRAME_SHARE = 0.25
+const RADIUS_PER_HEIGHT = 0.6
 
 export function framingOf(ring: Loop, heightM: number): Framing {
   const [minX, minY, maxX, maxY] = extentOf(ring)
   return {
     target: [(minX + maxX) / 2, (minY + maxY) / 2, heightM / 3],
-    radiusM: Math.max(Math.hypot(maxX - minX, maxY - minY) / 2, heightM / 2, MIN_RADIUS_M),
+    radiusM: Math.max(Math.hypot(maxX - minX, maxY - minY) / 2, heightM * RADIUS_PER_HEIGHT, MIN_RADIUS_M),
   }
 }
 

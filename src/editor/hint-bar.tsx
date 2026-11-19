@@ -1,43 +1,40 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { t } from '@/text/messages'
 import { nextStep, type EditorState } from './editor-state'
 import { cornerName, edgeName } from './map-features'
 import { MAX_CORNERS, type Rejection } from './plot-draft'
 import { useEditorState, useEditorStore } from './plot-store'
-import { Button, Click } from './ui'
+import { Button, PointerText } from './ui'
 
-const REJECTIONS: Record<Rejection, string> = {
-  crossing: 'Edges can’t cross or overlap. Try another point.',
-  degenerate: 'These corners are too close together or all in a line to make a plot.',
-  'out-of-range': 'That point is too far from the rest of the plot.',
-  'too-few-corners': 'A plot needs at least 3 corners.',
-  'too-many-corners': `A plot can have up to ${MAX_CORNERS} corners.`,
+function rejection(reason: Rejection): string {
+  return reason === 'too-many-corners' ? t('rejection.too-many-corners', { count: MAX_CORNERS }) : t(`rejection.${reason}`)
 }
 
 type Hint = { label: string; text: ReactNode; alert?: boolean }
 
 function hintFor(state: EditorState): Hint {
   const { draft, selection, notice } = state
-  if (notice) return { label: 'Not allowed', text: REJECTIONS[notice], alert: true }
+  if (notice) return { label: t('hint.label.not-allowed'), text: rejection(notice), alert: true }
   if (selection.kind === 'corner' && draft.status === 'closed') {
-    return { label: `Corner ${cornerName(selection.index)}`, text: 'Drag to move it, or delete it.' }
+    return { label: t('hint.label.corner', { name: cornerName(selection.index) }), text: t('hint.corner') }
   }
   const step = nextStep(state)
   const count = draft.status === 'closed' ? draft.corners.length : 0
   switch (step.step) {
     case 'start':
-      return { label: 'Outline', text: <><Click /> the map to place the first corner of the plot.</> }
+      return { label: t('hint.label.outline'), text: <PointerText text={(verb) => t('hint.start', { verb })} /> }
     case 'place':
-      return { label: 'Outline', text: <><Click /> to place the next corner.</> }
+      return { label: t('hint.label.outline'), text: <PointerText text={(verb) => t('hint.place', { verb })} /> }
     case 'close':
-      return { label: 'Outline', text: <><Click /> corner A to close the outline.</> }
+      return { label: t('hint.label.outline'), text: <PointerText text={(verb) => t('hint.close', { verb })} /> }
     case 'road':
-      return { label: 'Frontage', text: <><Click /> each edge that faces a road.</> }
+      return { label: t('hint.label.frontage'), text: <PointerText text={(verb) => t('hint.road', { verb })} /> }
     case 'width':
-      return { label: 'Frontage', text: `Enter the width of the road on edge ${edgeName(step.edge, count)}.` }
+      return { label: t('hint.label.frontage'), text: t('hint.width', { edge: edgeName(step.edge, count) }) }
     case 'done':
-      return { label: 'Ready', text: 'Drag a corner to reshape the plot. Drag an edge’s midpoint to add a corner.' }
+      return { label: t('hint.label.ready'), text: t('hint.done') }
   }
 }
 
@@ -62,18 +59,18 @@ export function HintBar() {
         {drawing && (
           <div className="flex gap-1.5">
             <Button tone="inverse" onClick={() => store.dispatch({ type: 'undo' })}>
-              Undo corner
+              {t('action.undo-corner')}
             </Button>
             {draft.points.length >= 3 && (
               <Button tone="inverse" onClick={() => store.dispatch({ type: 'close' })}>
-                Close outline
+                {t('action.close-outline')}
               </Button>
             )}
           </div>
         )}
         {selection.kind === 'corner' && draft.status === 'closed' && (
           <Button tone="inverse" onClick={() => store.dispatch({ type: 'remove', corner: selection.index })}>
-            Delete corner
+            {t('action.delete-corner')}
           </Button>
         )}
       </div>
