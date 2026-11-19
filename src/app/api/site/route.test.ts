@@ -11,7 +11,7 @@ mock.module('@/site/load-site', () => ({
   loadSite: async (bbox: Bbox) => {
     requested.push(bbox)
     if (failure) throw failure
-    return { bbox, buildings: [], roads: [], attribution: 'test' }
+    return { bbox, buildings: [], roads: [], stations: [], attribution: 'test' }
   },
 }))
 

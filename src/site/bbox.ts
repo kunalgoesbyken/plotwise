@@ -65,14 +65,14 @@ export function bboxQuery(bbox: Bbox): string {
   return bbox.join(',')
 }
 
+export function expandBbox([minLng, minLat, maxLng, maxLat]: Bbox, marginM: number): Bbox {
+  const frame = localFrame([minLng, minLat])
+  const [width, height] = frame.toLocal([maxLng, maxLat])
+  return [...frame.toLngLat([-marginM, -marginM]), ...frame.toLngLat([width + marginM, height + marginM])]
+}
+
 export function plotSiteBbox(ring: readonly LngLat[]): Bbox {
-  const frame = localFrame(ring[0])
-  const local = ring.map(frame.toLocal)
-  const xs = local.map(([x]) => x)
-  const ys = local.map(([, y]) => y)
-  const margin = SITE_MARGIN_M.value
-  return [
-    ...frame.toLngLat([Math.min(...xs) - margin, Math.min(...ys) - margin]),
-    ...frame.toLngLat([Math.max(...xs) + margin, Math.max(...ys) + margin]),
-  ]
+  const lngs = ring.map(([lng]) => lng)
+  const lats = ring.map(([, lat]) => lat)
+  return expandBbox([Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)], SITE_MARGIN_M.value)
 }

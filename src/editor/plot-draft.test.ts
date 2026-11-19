@@ -70,7 +70,7 @@ describe('drawing', () => {
 
   it('undoes the last point', () => {
     const draft = apply(emptyDraft('condo'), { type: 'add', at: [0, 0] }, { type: 'add', at: [1, 0] }, { type: 'undo' })
-    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo', nearStation: false })
+    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo', nearStation: false, nearStationSource: 'default' })
   })
 })
 
@@ -244,6 +244,27 @@ describe('editing a closed plot', () => {
 
   it('loads the station flag with the plot', () => {
     expect(toPlot(loaded({ ...plot, nearStation: true }))?.nearStation).toBe(true)
+  })
+
+  it('takes a station estimate until the user sets the flag, then keeps the user choice', () => {
+    const estimated = apply(emptyDraft('condo'), { type: 'estimate-near-station', nearStation: true })
+    expect(estimated).toMatchObject({ nearStation: true, nearStationSource: 'estimate' })
+    expect(apply(estimated, { type: 'estimate-near-station', nearStation: false }).nearStation).toBe(false)
+    const chosen = apply(estimated, { type: 'set-near-station', nearStation: true })
+    expect(chosen.nearStationSource).toBe('user')
+    expect(apply(chosen, { type: 'estimate-near-station', nearStation: false })).toBe(chosen)
+  })
+
+  it('returns the same draft when an estimate changes nothing', () => {
+    const estimated = apply(loaded(), { type: 'clear' }, { type: 'estimate-near-station', nearStation: false })
+    expect(apply(estimated, { type: 'estimate-near-station', nearStation: false })).toBe(estimated)
+  })
+
+  it('treats the flag of a loaded plot as the user choice, and forgets the choice on clear', () => {
+    const draft = loaded({ ...plot, nearStation: false })
+    expect(draft.nearStationSource).toBe('user')
+    expect(apply(draft, { type: 'estimate-near-station', nearStation: true })).toBe(draft)
+    expect(apply(draft, { type: 'clear' }).nearStationSource).toBe('default')
   })
 
   it('ignores edits aimed at corners or edges that do not exist', () => {

@@ -4,7 +4,7 @@ const PointSchema = z.object({ lat: z.number(), lon: z.number() })
 const TagsSchema = z.record(z.string(), z.string()).default({})
 const GeometrySchema = z.array(PointSchema.nullable()).optional()
 
-const NodeSchema = z.object({ type: z.literal('node'), id: z.number() })
+const NodeSchema = z.object({ type: z.literal('node'), id: z.number(), lat: z.number(), lon: z.number(), tags: TagsSchema })
 
 const WaySchema = z.object({
   type: z.literal('way'),
@@ -33,6 +33,7 @@ export const OverpassResponseSchema = z.object({
 })
 
 export type OverpassResponse = z.infer<typeof OverpassResponseSchema>
+export type OverpassNode = z.infer<typeof NodeSchema>
 export type OverpassWay = z.infer<typeof WaySchema>
 export type OverpassRelation = z.infer<typeof RelationSchema>
 export type OverpassTags = OverpassWay['tags']

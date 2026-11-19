@@ -30,8 +30,10 @@ const site: Site = {
       widthM: 5,
       widthSource: 'class',
       grade: 'ground',
+      oneway: false,
     },
   ],
+  stations: [{ id: 'node/3', name: 'Asok', nameTh: 'อโศก', kind: 'station', geometry: { type: 'point', at: [100.56, 13.737] } }],
   attribution: OSM_ATTRIBUTION,
 }
 

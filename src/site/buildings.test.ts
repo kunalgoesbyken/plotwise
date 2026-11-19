@@ -73,7 +73,7 @@ describe('parseBuildingElements', () => {
       way(2, { building: 'yes' }, square(100, 13, 0.001).slice(0, 3)),
       { type: 'way', id: 3, tags: { building: 'yes' } },
       way(4, { highway: 'residential' }, square(100, 13, 0.001)),
-      { type: 'node', id: 5 },
+      { type: 'node', id: 5, lat: 13, lon: 100, tags: { building: 'yes' } },
     ])
     expect(outlines).toEqual([])
     expect(parts).toEqual([])

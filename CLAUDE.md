@@ -29,5 +29,6 @@ Bangkok plot → allowed envelope → at least two concept designs in 3D, each w
 - e2e (local prod build): bun run build && bun run e2e   (live: E2E_URL=https://plotwise-ashy.vercel.app bun run e2e; real GPU: E2E_GPU=1)
 - compile rules: bun tools/compile-pack.ts <packId>
 - check rules: bun tools/check-pack.ts <packId>
+- typecheck: bun run typecheck   (next typegen, then tsc --noEmit; no build needed)
 - build: bun run build
 - deploy: vercel --prod

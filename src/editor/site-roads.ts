@@ -17,8 +17,8 @@ export function syncSiteRoads(store: EditorStore) {
     const controller = new AbortController()
     pending = controller
     fetchSite(bbox, { signal: controller.signal })
-      .then((site) => store.dispatch({ type: 'site-roads', roads: site.roads }))
-      .catch(() => store.dispatch({ type: 'site-roads', roads: [] }))
+      .then((site) => store.dispatch({ type: 'site', roads: site.roads, stations: site.stations }))
+      .catch(() => store.dispatch({ type: 'site', roads: [], stations: null }))
   }
 
   refresh()

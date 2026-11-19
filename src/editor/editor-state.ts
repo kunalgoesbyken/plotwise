@@ -1,6 +1,9 @@
 import type { BuildingType, Plot } from '@/plot/plot'
+import { loadPack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
-import type { Road as SiteRoad } from '@/site/schema'
+import { nearestStation, type NearestStation } from '@/site/nearest-station'
+import type { Road as SiteRoad, Station } from '@/site/schema'
+import { satisfies, stationDistance } from '@/solve'
 import { editDraft, emptyDraft, toPlot, type Draft, type DraftAction, type Rejection } from './plot-draft'
 
 export type Selection = { kind: 'none' } | { kind: 'corner'; index: number } | { kind: 'edge'; index: number }
@@ -12,12 +15,14 @@ export type EditorState = {
   notice: Rejection | null
   loads: number
   siteRoads: readonly SiteRoad[]
+  siteStations: readonly Station[] | null
+  nearestStation: NearestStation | null
 }
 
 export type EditorAction =
   | DraftAction
   | { type: 'select'; selection: Selection }
-  | { type: 'site-roads'; roads: readonly SiteRoad[] }
+  | { type: 'site'; roads: readonly SiteRoad[]; stations: readonly Station[] | null }
 
 export type Step =
   | { step: 'start' }
@@ -28,9 +33,19 @@ export type Step =
   | { step: 'done' }
 
 const NONE: Selection = { kind: 'none' }
+const STATION_DISTANCE = stationDistance(loadPack('bkk-y9'))
 
 export function initialEditorState(buildingType: BuildingType): EditorState {
-  return { draft: emptyDraft(buildingType), plot: null, selection: NONE, notice: null, loads: 0, siteRoads: [] }
+  return {
+    draft: emptyDraft(buildingType),
+    plot: null,
+    selection: NONE,
+    notice: null,
+    loads: 0,
+    siteRoads: [],
+    siteStations: null,
+    nearestStation: null,
+  }
 }
 
 function cornerCount(draft: Draft) {
@@ -50,6 +65,7 @@ function selectionAfter(action: DraftAction, current: Selection, before: Draft, 
     case 'estimate-road-width':
     case 'set-building-type':
     case 'set-near-station':
+    case 'estimate-near-station':
       return current
     default:
       return NONE
@@ -82,15 +98,43 @@ function applyDraft(state: EditorState, action: DraftAction): EditorState {
   }
 }
 
-export function reduceEditor(state: EditorState, action: EditorAction): EditorState {
+function isNearStation(nearest: NearestStation | null): boolean {
+  return nearest !== null && satisfies(nearest.distanceM, STATION_DISTANCE)
+}
+
+function sameStationInputs(before: EditorState, after: EditorState): boolean {
+  return (
+    before.siteStations === after.siteStations &&
+    before.draft.status === 'closed' &&
+    after.draft.status === 'closed' &&
+    before.draft.corners === after.draft.corners
+  )
+}
+
+function withStationEstimate(before: EditorState, after: EditorState): EditorState {
+  const { draft, siteStations } = after
+  if (draft.status !== 'closed' || siteStations === null) return after.nearestStation ? { ...after, nearestStation: null } : after
+  if (sameStationInputs(before, after)) return after
+  const nearest = nearestStation(draft.corners.map((corner) => corner.at), siteStations)
+  const estimated = editDraft(draft, { type: 'estimate-near-station', nearStation: isNearStation(nearest) })
+  const next = estimated.ok ? estimated.draft : draft
+  return { ...after, draft: next, plot: next === draft ? after.plot : toPlot(next), nearestStation: nearest }
+}
+
+function reduceAction(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
     case 'select':
       return { ...state, selection: action.selection, notice: null }
-    case 'site-roads':
-      return { ...state, siteRoads: action.roads }
+    case 'site':
+      return { ...state, siteRoads: action.roads, siteStations: action.stations }
     default:
       return applyDraft(state, action)
   }
+}
+
+export function reduceEditor(state: EditorState, action: EditorAction): EditorState {
+  const next = reduceAction(state, action)
+  return next === state ? state : withStationEstimate(state, next)
 }
 
 export function nextStep({ draft }: EditorState): Step {

@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { HIGHWAY_CLASSES } from './assumptions'
+import { HIGHWAY_CLASSES, PLATFORM_MODES, STATION_NODE_TYPES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassUnavailableError, fetchOverpass, overpassQuery } from './overpass'
+import { USER_AGENT } from './user-agent'
 
 const bbox: Bbox = [100.566, 13.762, 100.572, 13.768]
+const stationBbox: Bbox = [100.56, 13.756, 100.578, 13.774]
+const query = overpassQuery(bbox, stationBbox, 20)
 const instances = ['https://a.test/api', 'https://b.test/api', 'https://c.test/api']
 const okBody = { elements: [{ type: 'way', id: 1, tags: { building: 'yes' }, geometry: [] }] }
 
@@ -23,8 +26,6 @@ const ok = () => Response.json(okBody)
 const status = (code: number) => () => new Response('busy', { status: code })
 
 describe('overpassQuery', () => {
-  const query = overpassQuery(bbox, 20)
-
   it('uses south,west,north,east order', () => {
     expect(query).toContain('(13.762,100.566,13.768,100.572)')
   })
@@ -39,6 +40,14 @@ describe('overpassQuery', () => {
     expect(query).toContain(`way["highway"~"^(${HIGHWAY_CLASSES.join('|')})$"]`)
   })
 
+  it('asks for mass-transit platforms and station nodes in the wider station box', () => {
+    const stationArea = '(13.756,100.56,13.774,100.578)'
+    const modes = PLATFORM_MODES.value.join('|')
+    expect(query).toContain(`nw["railway"="platform"]${stationArea};`)
+    expect(query).toContain(`nw["public_transport"="platform"][~"^(${modes})$"~"^yes$"]${stationArea};`)
+    expect(query).toContain(`node["railway"="station"]["station"~"^(${STATION_NODE_TYPES.value.join('|')})$"]${stationArea};`)
+  })
+
   it('returns tags and geometry as JSON with a server timeout', () => {
     expect(query).toStartWith('[out:json][timeout:20];')
     expect(query).toEndWith('out geom;')
@@ -46,7 +55,7 @@ describe('overpassQuery', () => {
 })
 
 describe('fetchOverpass', () => {
-  it('posts the query with a generic User-Agent and returns the parsed response', async () => {
+  it('posts the query with a descriptive User-Agent and returns the parsed response', async () => {
     let seen: RequestInit = {}
     const { fetchImpl } = fakeFetch({
       'https://a.test/api': (_url, init) => {
@@ -54,10 +63,10 @@ describe('fetchOverpass', () => {
         return ok()
       },
     })
-    const response = await fetchOverpass(bbox, { instances, fetchImpl })
+    const response = await fetchOverpass(query, { instances, fetchImpl })
     expect(response.elements).toHaveLength(1)
     expect(seen.method).toBe('POST')
-    expect(new Headers(seen.headers).get('user-agent')).toBe('plotwise/0.1')
+    expect(new Headers(seen.headers).get('user-agent')).toBe(USER_AGENT)
     expect(String(seen.body)).toContain(encodeURIComponent('way["building"]'))
   })
 
@@ -67,7 +76,7 @@ describe('fetchOverpass', () => {
       'https://b.test/api': status(504),
       'https://c.test/api': ok,
     })
-    await fetchOverpass(bbox, { instances, fetchImpl })
+    await fetchOverpass(query, { instances, fetchImpl })
     expect(calls).toEqual(instances)
   })
 
@@ -82,7 +91,7 @@ describe('fetchOverpass', () => {
         }),
       'https://c.test/api': ok,
     })
-    await fetchOverpass(bbox, { instances, fetchImpl, timeoutMs: 20 })
+    await fetchOverpass(query, { instances, fetchImpl, timeoutMs: 20 })
     expect(calls).toEqual(instances)
   })
 
@@ -91,7 +100,7 @@ describe('fetchOverpass', () => {
       'https://a.test/api': () => Response.json({ remark: 'runtime error: Query timed out in "query"', elements: [] }),
       'https://b.test/api': ok,
     })
-    await fetchOverpass(bbox, { instances, fetchImpl })
+    await fetchOverpass(query, { instances, fetchImpl })
     expect(calls).toEqual(instances.slice(0, 2))
   })
 
@@ -101,7 +110,7 @@ describe('fetchOverpass', () => {
       'https://b.test/api': () => Response.json({ nope: true }),
       'https://c.test/api': ok,
     })
-    await fetchOverpass(bbox, { instances, fetchImpl })
+    await fetchOverpass(query, { instances, fetchImpl })
     expect(calls).toEqual(instances)
   })
 
@@ -111,7 +120,7 @@ describe('fetchOverpass', () => {
       'https://b.test/api': status(500),
       'https://c.test/api': status(504),
     })
-    const failure = await fetchOverpass(bbox, { instances, fetchImpl }).catch((error: unknown) => error)
+    const failure = await fetchOverpass(query, { instances, fetchImpl }).catch((error: unknown) => error)
     expect(failure).toBeInstanceOf(OverpassUnavailableError)
     expect((failure as OverpassUnavailableError).attempts).toHaveLength(3)
     expect((failure as OverpassUnavailableError).message).toContain('https://c.test/api')
