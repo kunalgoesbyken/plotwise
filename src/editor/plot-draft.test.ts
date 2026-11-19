@@ -63,9 +63,9 @@ describe('drawing', () => {
   })
 
   it('refuses more than the corner limit', () => {
-    const points = Array.from({ length: MAX_CORNERS }, (_, i): LngLat => [Math.cos(i / 20), Math.sin(i / 20) + i])
+    const points = Array.from({ length: MAX_CORNERS }, (_, i): LngLat => [Math.cos(i / 20), Math.sin(i / 20) + i / 2])
     const draft = apply(emptyDraft('condo'), ...points.map((at): DraftAction => ({ type: 'add', at })))
-    expect(editDraft(draft, { type: 'add', at: [50, 500] })).toEqual({ ok: false, reason: 'too-many-corners' })
+    expect(editDraft(draft, { type: 'add', at: [50, 60] })).toEqual({ ok: false, reason: 'too-many-corners' })
   })
 
   it('undoes the last point', () => {
@@ -251,6 +251,29 @@ describe('editing a closed plot', () => {
     expect(apply(draft, { type: 'move', corner: 99, at: [0, 0] })).toBe(draft)
     expect(apply(draft, { type: 'mark-road', edge: -1 })).toBe(draft)
     expect(apply(draft, { type: 'set-road-width', edge: 3, widthM: 8 })).toBe(draft)
+  })
+
+  it('ignores a road width the plot schema would refuse', () => {
+    const draft = loaded()
+    for (const widthM of [0, -5, Number.NaN, Infinity, 1e12]) {
+      expect(apply(draft, { type: 'set-road-width', edge: 0, widthM })).toBe(draft)
+      expect(apply(draft, { type: 'mark-road', edge: 1 }, { type: 'set-road-width', edge: 1, widthM }).corners[1].edge).toEqual({
+        road: true,
+        widthM: null,
+        estimated: false,
+      })
+    }
+  })
+
+  it('refuses a corner outside the longitude and latitude range', () => {
+    const outside: LngLat[] = [[190, 13.7], [100.5, 91], [Number.NaN, 13.7], [100.5, Infinity]]
+    for (const at of outside) {
+      expect(editDraft(emptyDraft('condo'), { type: 'add', at })).toEqual({ ok: false, reason: 'out-of-range' })
+      expect(editDraft(loaded(), { type: 'move', corner: 1, at })).toEqual({ ok: false, reason: 'out-of-range' })
+      expect(editDraft(loaded(), { type: 'insert', edge: 1, at })).toEqual({ ok: false, reason: 'out-of-range' })
+    }
+    const wrapped: Plot = { ...plot, ring: plot.ring.map(([lng, lat]): LngLat => [lng + 180, lat]) }
+    expect(editDraft(emptyDraft('condo'), { type: 'load', plot: wrapped })).toEqual({ ok: false, reason: 'out-of-range' })
   })
 })
 
