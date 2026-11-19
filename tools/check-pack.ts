@@ -124,12 +124,14 @@ const checkQuestions: Check = (pack) => {
   return [...duplicates, ...missing]
 }
 
-const CHECKS: Check[] = [checkRanges, checkBands, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions]
+const checkDecided: Check = (pack) =>
+  pack.questions.filter((q) => q.decision === null).map((q) => `question ${q.id} awaits a decision (recommended: ${q.recommendation})`)
+
+const CHECKS: Check[] = [checkRanges, checkBands, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
 
 export function checkPack(pack: RulePack): CheckResult {
-  const open = pack.questions.filter((q) => q.decision === null).map((q) => `question ${q.id} awaits a decision (recommended: ${q.recommendation})`)
   const capped = pack.far.max.value > pack.highRise.farMax.value ? [`plan FAR ${pack.far.max.value} is above the Reg 33 cap ${pack.highRise.farMax.value}`] : []
-  return { errors: CHECKS.flatMap((check) => check(pack)), info: [...open, ...capped] }
+  return { errors: CHECKS.flatMap((check) => check(pack)), info: capped }
 }
 
 if (import.meta.main) {

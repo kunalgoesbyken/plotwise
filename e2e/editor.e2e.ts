@@ -141,6 +141,12 @@ test('ignores a malformed link and starts empty', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('names the one zone it covers and links the official map to confirm it', async ({ page }) => {
+  await open(page, '/')
+  await expect(page.getByText('ย.9 · very high-density residential')).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Check the zone on the BMA city plan' })).toHaveAttribute('href', /bangkok\.go\.th/)
+})
+
 test('works from the keyboard, and suggests a mapped road width that stays editable', async ({ page }) => {
   await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
   await page.getByRole('button', { name: 'Use an example plot' }).focus()

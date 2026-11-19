@@ -17,6 +17,10 @@ describe('checkPack', () => {
     expect(checkPack(shipped).errors).toEqual([])
   })
 
+  it('flags an interpretation question nobody has decided', () => {
+    expect(errorsOf(mutate((p) => void (p.questions[0].decision = null)))).toContain(`question ${shipped.questions[0].id} awaits a decision`)
+  })
+
   it('flags a value outside its plausible range', () => {
     expect(errorsOf(mutate((p) => void (p.far.max.value = 70)))).toContain('far.max')
     expect(errorsOf(mutate((p) => void (p.openSpaceRatio.minShareOfFloorArea.value = 4.5)))).toContain('openSpaceRatio')

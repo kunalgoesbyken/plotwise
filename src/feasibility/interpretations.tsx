@@ -8,14 +8,11 @@ import { Sources } from './sources'
 
 function QuestionItem({ question, readingId }: { question: Question; readingId: string }) {
   const reading = question.readings.find((r) => r.id === readingId)
-  const decided = question.decision !== null
   return (
     <li className="py-2.5">
       <p className="text-sm leading-snug">{question.question}</p>
-      <p
-        className={`mt-1.5 inline-block rounded px-1.5 py-0.5 font-mono text-[10px] tracking-wide uppercase ${decided ? 'bg-plot-wash text-plot' : 'bg-road/15 text-road-ink'}`}
-      >
-        {t(decided ? 'interpretation.decided' : 'interpretation.awaiting')}
+      <p className="mt-1.5 inline-block rounded bg-plot-wash px-1.5 py-0.5 font-mono text-[10px] tracking-wide text-plot uppercase">
+        {t('interpretation.decided')}
       </p>
       {reading && <p className="mt-1 text-xs leading-relaxed">{reading.reading}</p>}
       <Disclosure label={t('interpretation.why')} tone="slate">
