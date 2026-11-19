@@ -1,6 +1,6 @@
 import type { LngLat } from '@/geo/projection'
-import { PlotSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
-import { checkOutline, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
+import { PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
+import { checkOutline, isOnEarth, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
 import { isSimplePath } from './path'
 
 export const MAX_CORNERS = 100
@@ -48,6 +48,8 @@ export function roundLngLat([lng, lat]: LngLat): [number, number] {
   return [roundCoordinate(lng), roundCoordinate(lat)]
 }
 
+const isRoadWidth = (widthM: number) => RoadWidthSchema.safeParse(widthM).success
+
 const accept = (draft: Draft): EditResult => ({ ok: true, draft })
 const reject = (reason: Rejection): EditResult => ({ ok: false, reason })
 
@@ -69,6 +71,7 @@ function editDrawing(draft: DrawingDraft, action: DraftAction): EditResult {
   switch (action.type) {
     case 'add': {
       if (points.length >= MAX_CORNERS) return reject('too-many-corners')
+      if (!isOnEarth(action.at)) return reject('out-of-range')
       const next = [...points, action.at]
       return isSimplePath(next) ? accept({ ...draft, points: next }) : reject('crossing')
     }
@@ -119,10 +122,12 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
     case 'unmark-road':
       return replaceEdge(draft, action.edge, (edge) => (edge.road ? SIDE : edge))
     case 'set-road-width':
+      if (!isRoadWidth(action.widthM)) return accept(draft)
       return replaceEdge(draft, action.edge, (edge) =>
         edge.road ? { road: true, widthM: action.widthM, estimated: false } : edge,
       )
     case 'estimate-road-width':
+      if (!isRoadWidth(action.widthM)) return accept(draft)
       return replaceEdge(draft, action.edge, (edge) =>
         edge.road && edge.widthM === null ? { road: true, widthM: action.widthM, estimated: true } : edge,
       )

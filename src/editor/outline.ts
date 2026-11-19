@@ -1,5 +1,6 @@
 import { localFrame, type LngLat } from '@/geo/projection'
 import { GeometryError, normalizeRing, type GeometryErrorReason } from '@/geometry'
+import { LngLatSchema } from '@/plot/plot'
 
 export type Edge = { road: false } | { road: true; widthM: number | null; estimated: boolean }
 export type Corner = { at: LngLat; edge: Edge }
@@ -9,6 +10,8 @@ export type OutlineResult = { ok: true; corners: Corner[] } | { ok: false; reaso
 
 export const SIDE: Edge = { road: false }
 
+export const isOnEarth = (at: LngLat) => LngLatSchema.safeParse(at).success
+
 const REJECTION_FOR: Partial<Record<GeometryErrorReason, OutlineRejection>> = {
   'self-intersecting': 'crossing',
   degenerate: 'degenerate',
@@ -17,6 +20,7 @@ const REJECTION_FOR: Partial<Record<GeometryErrorReason, OutlineRejection>> = {
 }
 
 function normalizedOrder(corners: readonly Corner[]): number[] | OutlineRejection {
+  if (!corners.every((c) => isOnEarth(c.at))) return 'out-of-range'
   const frame = localFrame(corners[0].at)
   const local = corners.map((c) => frame.toLocal(c.at))
   try {

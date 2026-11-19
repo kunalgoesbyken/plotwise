@@ -1,5 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
+import { ASSUMPTIONS } from '@/solve/assumptions'
 import { parseMetres } from './metres'
 
 describe('parseMetres', () => {
@@ -10,12 +11,12 @@ describe('parseMetres', () => {
   })
 
   it('rejects empty, zero, negative and non-numeric input', () => {
-    for (const text of ['', '  ', '0', '-3', 'abc', '1e999', '12m', 'NaN', 'Infinity']) expect(parseMetres(text)).toBeNull()
+    for (const text of ['', '  ', '0', '-3', 'abc', '1e999', '12m', 'NaN', 'Infinity', '1000000000000']) expect(parseMetres(text)).toBeNull()
   })
 
-  it('accepts every positive finite number written as text', () => {
+  it('accepts every positive width up to the widest road', () => {
     fc.assert(
-      fc.property(fc.double({ min: 0.01, max: 1000, noNaN: true }), (n) => {
+      fc.property(fc.double({ min: 0.01, max: ASSUMPTIONS.maxRoadWidthM.value, noNaN: true }), (n) => {
         expect(parseMetres(String(n))).toBe(n)
       }),
     )
