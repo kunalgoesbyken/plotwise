@@ -16,6 +16,7 @@ export const PlotSchema = z
     ring: z.array(LngLatSchema).min(3),
     roads: z.array(RoadSchema).min(1),
     buildingType: z.enum(BUILDING_TYPES),
+    nearStation: z.boolean().default(false),
   })
   .refine((p) => p.roads.every((r) => r.edge < p.ring.length), { message: 'road edge outside the ring', path: ['roads'] })
   .refine((p) => new Set(p.roads.map((r) => r.edge)).size === p.roads.length, {

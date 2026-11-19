@@ -11,4 +11,5 @@ export const EXAMPLE_PLOT: Plot = {
   ],
   roads: [{ edge: 0, widthM: 12 }],
   buildingType: 'condo',
+  nearStation: false,
 }

@@ -12,6 +12,7 @@ const plot: Plot = {
   ],
   roads: [{ edge: 1, widthM: 12.5 }],
   buildingType: 'condo',
+  nearStation: false,
 }
 
 const loaded = reduceEditor(initialEditorState('condo'), { type: 'load', plot })

@@ -13,6 +13,7 @@ const plot: Plot = {
   ],
   roads: [{ edge: 0, widthM: 12 }],
   buildingType: 'condo',
+  nearStation: false,
 }
 
 function run(...actions: EditorAction[]) {
@@ -55,6 +56,13 @@ describe('reduceEditor', () => {
     expect(run({ type: 'load', plot }, selected, { type: 'clear' }).selection).toEqual({ kind: 'none' })
   })
 
+  it('keeps the selection when the station flag changes', () => {
+    const selected = run({ type: 'load', plot }, { type: 'select', selection: { kind: 'edge', index: 0 } })
+    const near = reduceEditor(selected, { type: 'set-near-station', nearStation: true })
+    expect(near.selection).toEqual({ kind: 'edge', index: 0 })
+    expect(near.plot?.nearStation).toBe(true)
+  })
+
   it('counts loads so the map knows when to frame a new plot', () => {
     expect(run({ type: 'load', plot }, { type: 'mark-road', edge: 2 }, { type: 'load', plot }).loads).toBe(2)
   })
@@ -76,6 +84,7 @@ describe('road width estimates', () => {
     ].map(([x, y]) => [...frame.toLngLat([x, y])] as [number, number]),
     roads: [{ edge: 0, widthM: 12 }],
     buildingType: 'condo',
+    nearStation: false,
   }
   const soi: SiteRoad = {
     id: 'soi',

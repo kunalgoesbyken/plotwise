@@ -13,7 +13,7 @@ const lShape: Plot['ring'] = [
   [100.53, 13.726],
 ]
 
-const plot: Plot = { ring: lShape, roads: [{ edge: 0, widthM: 16 }], buildingType: 'condo' }
+const plot: Plot = { ring: lShape, roads: [{ edge: 0, widthM: 16 }], buildingType: 'condo', nearStation: false }
 
 function apply(draft: Draft, ...actions: DraftAction[]) {
   return actions.reduce((d, action) => {
@@ -37,7 +37,7 @@ describe('drawing', () => {
     expect(draft.status).toBe('closed')
     expect(toPlot(draft)).toBeNull()
     const withRoad = apply(draft, { type: 'mark-road', edge: 2 }, { type: 'set-road-width', edge: 2, widthM: 10 })
-    expect(toPlot(withRoad)).toEqual({ ring: lShape, roads: [{ edge: 2, widthM: 10 }], buildingType: 'office' })
+    expect(toPlot(withRoad)).toEqual({ ring: lShape, roads: [{ edge: 2, widthM: 10 }], buildingType: 'office', nearStation: false })
   })
 
   it('refuses a point whose new edge crosses an earlier edge', () => {
@@ -70,7 +70,7 @@ describe('drawing', () => {
 
   it('undoes the last point', () => {
     const draft = apply(emptyDraft('condo'), { type: 'add', at: [0, 0] }, { type: 'add', at: [1, 0] }, { type: 'undo' })
-    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo' })
+    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo', nearStation: false })
   })
 })
 
@@ -81,6 +81,7 @@ describe('normalizing the outline', () => {
       ring: lShape,
       roads: [{ edge: 0, widthM: 9 }],
       buildingType: 'office',
+      nearStation: false,
     })
   })
 
@@ -91,7 +92,7 @@ describe('normalizing the outline', () => {
   })
 
   it('remaps roads when a loaded clockwise plot is reversed', () => {
-    const clockwise: Plot = { ring: [...lShape].reverse(), roads: [{ edge: 0, widthM: 7 }], buildingType: 'condo' }
+    const clockwise: Plot = { ...plot, ring: [...lShape].reverse(), roads: [{ edge: 0, widthM: 7 }] }
     const result = toPlot(loaded(clockwise))
     expect(result?.ring[0]).toEqual(clockwise.ring[0])
     expect(result?.roads).toEqual([{ edge: 5, widthM: 7 }])
@@ -231,6 +232,18 @@ describe('editing a closed plot', () => {
 
   it('clear keeps the building type', () => {
     expect(apply(loaded(), { type: 'clear' })).toEqual(emptyDraft('condo'))
+  })
+
+  it('marks the plot as near a station in any state, and a new outline starts unmarked', () => {
+    const near = apply(loaded(), { type: 'set-near-station', nearStation: true })
+    expect(toPlot(near)?.nearStation).toBe(true)
+    expect(toPlot(apply(near, { type: 'set-near-station', nearStation: false }))).toEqual(plot)
+    expect(apply(emptyDraft('condo'), { type: 'set-near-station', nearStation: true }).nearStation).toBe(true)
+    expect(apply(near, { type: 'clear' }).nearStation).toBe(false)
+  })
+
+  it('loads the station flag with the plot', () => {
+    expect(toPlot(loaded({ ...plot, nearStation: true }))?.nearStation).toBe(true)
   })
 
   it('ignores edits aimed at corners or edges that do not exist', () => {

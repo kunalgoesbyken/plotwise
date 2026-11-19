@@ -49,6 +49,7 @@ function selectionAfter(action: DraftAction, current: Selection, before: Draft, 
     case 'set-road-width':
     case 'estimate-road-width':
     case 'set-building-type':
+    case 'set-near-station':
       return current
     default:
       return NONE
