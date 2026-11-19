@@ -1,7 +1,9 @@
 import { localFrame, type LngLat, type LocalFrame, type Vec2 } from '@/geo/projection'
+import { dot, length, segmentDistance, subtract } from '@/geometry'
 import { NEAREST_ROAD_MAX_ANGLE_DEG, NEAREST_ROAD_MAX_GAP_M } from './assumptions'
 import type { Road } from './schema'
-import { distanceBetweenSegments, dot, length, subtract, type Segment } from './segment'
+
+type Segment = readonly [Vec2, Vec2]
 
 export type NearestRoad = { road: Road; distanceM: number; widthM: number }
 
@@ -33,7 +35,7 @@ function roadSegments(road: Road, frame: LocalFrame): Segment[] {
 function distanceAlongside(road: Road, edge: Segment, edgeDirection: Vec2, frame: LocalFrame): number {
   const distances = roadSegments(road, frame)
     .filter((segment) => isRoughlyParallel(edgeDirection, segment) && runsAlongside(edge, edgeDirection, segment))
-    .map((segment) => distanceBetweenSegments(edge, segment))
+    .map(([start, end]) => segmentDistance(edge[0], edge[1], start, end))
   return Math.min(...distances)
 }
 

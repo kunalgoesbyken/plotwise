@@ -15,3 +15,4 @@ export {
 } from './polygon'
 export { setbackEnvelope } from './setback'
 export { tieredEnvelope, type Prism, type Tier } from './volume'
+export { dot, length, segmentDistance, subtract } from './vector'

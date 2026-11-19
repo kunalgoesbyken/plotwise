@@ -24,3 +24,15 @@ export function segmentDistance(a: Vec2, b: Vec2, c: Vec2, d: Vec2): number {
   if (crosses(a, b, c, d)) return 0
   return Math.min(distanceToSegment(a, c, d), distanceToSegment(b, c, d), distanceToSegment(c, a, b), distanceToSegment(d, a, b))
 }
+
+export function subtract([ax, ay]: Vec2, [bx, by]: Vec2): Vec2 {
+  return [ax - bx, ay - by]
+}
+
+export function dot([ax, ay]: Vec2, [bx, by]: Vec2): number {
+  return ax * bx + ay * by
+}
+
+export function length([x, y]: Vec2): number {
+  return Math.hypot(x, y)
+}
