@@ -1,9 +1,5 @@
-import { PlotMap } from '@/components/plot-map'
+import { EditorShell } from '@/editor/editor-shell'
 
 export default function Home() {
-  return (
-    <main className="h-dvh w-full">
-      <PlotMap />
-    </main>
-  )
+  return <EditorShell />
 }
