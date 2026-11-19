@@ -1,0 +1,751 @@
+{
+  "id": "bkk-y9",
+  "sources": {
+    "mr56-bma": {
+      "title": "กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
+      "url": "http://download.asa.or.th/03media/04law/cpa/mr56-bma.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 41 ก, 16 May 2013 (PDF page 82 carries the 9 Oct 2013 correction)",
+      "kind": "gazette",
+      "textLayer": "readable"
+    },
+    "mr56-correction": {
+      "title": "แก้คำผิด กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
+      "url": "http://download.asa.or.th/03media/04law/cpa/mr56-correction.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 91 ก, 9 Oct 2013",
+      "kind": "gazette",
+      "textLayer": "readable"
+    },
+    "bb69-bma": {
+      "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2569",
+      "url": "https://download.asa.or.th/03media/04law/cpa/bb69-bma.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 143 ตอนพิเศษ 66 ง, 13 Mar 2026",
+      "kind": "gazette",
+      "textLayer": "garbled"
+    },
+    "mr43-55-upd68": {
+      "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522, consolidated to ฉบับที่ 68 (พ.ศ. 2563)",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr43-55-upd68.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 117 ตอนที่ 75 ก, 7 Aug 2000; amendments to 3 Dec 2020; ASA consolidation",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "mr35-33-upd69": {
+      "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) อาคารสูง อาคารขนาดใหญ่พิเศษ, consolidated with ฉบับที่ 42, 50 and 64",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr35-33-upd69.pdf",
+      "published": "ASA consolidation of the gazetted text and its amendments",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "mr17-07-upd64": {
+      "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ที่จอดรถยนต์, consolidated with ฉบับที่ 41 and 64",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr17-07-upd64.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 91 ตอนที่ 86, 21 May 1974; amendment ฉบับที่ 64 of 30 Nov 2012; ASA consolidation",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "bb44-03": {
+      "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544",
+      "url": "https://download.asa.or.th/03media/04law/cba/bb/bb44-03.pdf",
+      "published": "ASA typeset text of the Bangkok building control bylaw",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    }
+  },
+  "zone": {
+    "code": "ย.9",
+    "cite": { "$cite": { "src": "mr56-bma", "page": 33, "line": 4, "token": "ย. ๙", "clause": "ข้อ 16" } },
+    "noPlanHeightLimit": {
+      "$absent": {
+        "src": "mr56-bma",
+        "clause": "ข้อ 16",
+        "from": { "page": 33, "line": 4 },
+        "to": { "page": 35, "line": 15 },
+        "term": "ความสูง"
+      }
+    }
+  },
+  "far": {
+    "max": { "$num": { "src": "mr56-bma", "page": 35, "line": 8, "token": "๗ : ๑", "clause": "ข้อ 16 วรรคสาม (1)" } },
+    "definition": { "$cite": { "src": "mr56-bma", "page": 2, "line": 5, "token": "ทใ่ี ช้เปน็ ท่ตี ง้ั อาคาร", "clause": "ข้อ 4" } },
+    "subdividedPlotsShareCap": { "$cite": { "src": "mr56-bma", "page": 35, "line": 10, "token": "รวมกันต้องไมเ่ กนิ ๗ : ๑", "clause": "ข้อ 16 วรรคสาม (1)" } }
+  },
+  "openSpaceRatio": {
+    "minShareOfFloorArea": { "$num": { "src": "mr56-bma", "page": 35, "line": 11, "token": "ร้อยละส่จี ดุ ห้า", "clause": "ข้อ 16 วรรคสาม (2)" } },
+    "definition": { "$cite": { "src": "mr56-bma", "page": 2, "line": 8, "token": "ต่อพื้นทอ่ี าคารรวมทกุ ชัน้", "clause": "ข้อ 4" } },
+    "permeableShareOfOpenSpace": { "$num": { "src": "mr56-bma", "page": 35, "line": 15, "token": "รอ้ ยละหา้ สิบ", "clause": "ข้อ 16 วรรคสาม (2)" } },
+    "notBelowBuildingControl": { "$cite": { "src": "mr56-bma", "page": 35, "line": 12, "token": "ตามกฎหมายว่าด้วยการควบคุมอาคาร", "clause": "ข้อ 16 วรรคสาม (2)" } }
+  },
+  "farBonus": {
+    "combinedMaxShare": { "$num": { "src": "mr56-bma", "page": 79, "line": 5, "token": "ร้อยละย่สี บิ", "clause": "ข้อ 57" } },
+    "measures": [
+      {
+        "kind": "affordableHousing",
+        "eligible": "residential",
+        "maxShare": { "$num": { "src": "mr56-bma", "page": 77, "line": 23, "token": "ร้อยละยี่สิบ", "clause": "ข้อ 52" } },
+        "maxExtraPerProvidedArea": { "$num": { "src": "mr56-bma", "page": 77, "line": 24, "token": "ส่เี ท่า", "clause": "ข้อ 52" } }
+      },
+      {
+        "kind": "publicOpenSpace",
+        "eligible": "publicBuilding",
+        "zones": { "$cite": { "src": "mr56-bma", "page": 77, "line": 39, "token": "ย. ๘ ถึง ย. ๑๐", "clause": "ข้อ 53" } },
+        "maxShare": { "$num": { "src": "mr56-bma", "page": 77, "line": 45, "token": "รอ้ ยละยี่สบิ", "clause": "ข้อ 53" } },
+        "maxExtraPerProvidedArea": { "$num": { "src": "mr56-bma", "page": 77, "line": 45, "token": "หา้ เท่า", "clause": "ข้อ 53" } },
+        "excludesBuildingControlOpenSpace": { "$cite": { "src": "mr56-bma", "page": 78, "line": 4, "token": "ไมร่ วมถงึ ที่วา่ งอนั ปราศจาก", "clause": "ข้อ 53 วรรคสอง" } }
+      },
+      {
+        "kind": "publicParking",
+        "eligible": "publicBuilding",
+        "maxStationDistanceM": { "$bound": { "src": "mr56-bma", "page": 78, "line": 8, "token": "๕๐๐ เมตร", "op": "ภ่ ายในระยะ", "clause": "ข้อ 54" } },
+        "maxShare": { "$num": { "src": "mr56-bma", "page": 78, "line": 13, "token": "ร้อยละย่ีสิบ", "clause": "ข้อ 54" } },
+        "maxExtraPerSpaceSqm": { "$num": { "src": "mr56-bma", "page": 78, "line": 13, "token": "๓๐ ตารางเมตร", "clause": "ข้อ 54" } },
+        "parkingExemptFromFarAndOsr": { "$cite": { "src": "mr56-bma", "page": 78, "line": 16, "token": "ยกเว้นไม่ต้องนํามาพิจารณา", "clause": "ข้อ 54 วรรคสอง" } }
+      },
+      {
+        "kind": "floodRetention",
+        "eligible": "anyBuilding",
+        "volumeM3": { "$num": { "src": "mr56-bma", "page": 78, "line": 22, "token": "๑ ลกู บาศกเ์ มตร", "clause": "ข้อ 55" } },
+        "perLandSqm": { "$num": { "src": "mr56-bma", "page": 78, "line": 22, "token": "๕๐ ตารางเมตร", "clause": "ข้อ 55" } },
+        "baseShare": { "$num": { "src": "mr56-bma", "page": 78, "line": 24, "token": "ร้อยละห้า", "clause": "ข้อ 55" } },
+        "maxShare": { "$num": { "src": "mr56-bma", "page": 78, "line": 25, "token": "ร้อยละยีส่ ิบ", "clause": "ข้อ 55" } }
+      },
+      {
+        "kind": "energyRating",
+        "eligible": "anyBuilding",
+        "levels": [
+          {
+            "level": { "$num": { "src": "mr56-bma", "page": 78, "line": 33, "token": "หน่ึง", "clause": "ข้อ 56 (1)" } },
+            "share": { "$num": { "src": "mr56-bma", "page": 78, "line": 34, "token": "รอ้ ยละหา้", "clause": "ข้อ 56 (1)" } }
+          },
+          {
+            "level": { "$num": { "src": "mr56-bma", "page": 78, "line": 36, "token": "สอง", "clause": "ข้อ 56 (2)" } },
+            "share": { "$num": { "src": "mr56-bma", "page": 78, "line": 37, "token": "ร้อยละสบิ", "clause": "ข้อ 56 (2)" } }
+          },
+          {
+            "level": { "$num": { "src": "mr56-bma", "page": 78, "line": 39, "token": "สาม", "clause": "ข้อ 56 (3)" } },
+            "share": { "$num": { "src": "mr56-bma", "page": 78, "line": 40, "token": "รอ้ ยละสบิ ห้า", "clause": "ข้อ 56 (3)" } }
+          },
+          {
+            "level": { "$num": { "src": "mr56-bma", "page": 78, "line": 42, "token": "ส่ี", "clause": "ข้อ 56 (4)" } },
+            "share": { "$num": { "src": "mr56-bma", "page": 78, "line": 43, "token": "รอ้ ยละย่ีสบิ", "clause": "ข้อ 56 (4)" } }
+          }
+        ]
+      }
+    ]
+  },
+  "useConditions": {
+    "condo": {
+      "kind": "notListed",
+      "absent": {
+        "$absent": {
+          "src": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง",
+          "from": { "page": 33, "line": 7 },
+          "to": { "page": 35, "line": 5 },
+          "term": "อาคารอยู่อาศัยรวม"
+        }
+      }
+    },
+    "hotel": {
+      "kind": "restrictedAbove",
+      "measure": "rooms",
+      "threshold": { "$bound": { "src": "mr56-bma", "page": 33, "line": 26, "token": "๘๐ ห้อง", "op": "เกิน", "clause": "ข้อ 16 วรรคสอง (8)" } },
+      "unlessRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 33, "line": 27, "token": "๑๒ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 16 วรรคสอง (8)" } },
+      "unlessStationDistanceM": { "$bound": { "src": "mr56-bma", "page": 33, "line": 27, "token": "๕๐๐ เมตร", "op": "ภายในระยะ", "clause": "ข้อ 16 วรรคสอง (8)" } }
+    },
+    "office": {
+      "kind": "restrictedAbove",
+      "measure": "operatingAreaSqm",
+      "threshold": { "$bound": { "src": "mr56-bma", "page": 33, "line": 39, "token": "๑๐,๐๐๐ ตารางเมตร", "op": "เกิน", "clause": "ข้อ 16 วรรคสอง (10)" } },
+      "unlessRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 33, "line": 40, "token": "๑๖ เมตร", "op": "ไมน่ อ้ ยกว่า", "clause": "ข้อ 16 วรรคสอง (10)" } },
+      "unlessStationDistanceM": { "$bound": { "src": "mr56-bma", "page": 33, "line": 40, "token": "๕๐๐ เมตร", "op": "ภายในระยะ", "clause": "ข้อ 16 วรรคสอง (10)" } }
+    },
+    "roadAccessTiers": [
+      {
+        "roadWidthM": { "$bound": { "src": "mr56-bma", "page": 72, "line": 35, "token": "๑๐ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (1)" } },
+        "frontageM": { "$bound": { "src": "mr56-bma", "page": 72, "line": 36, "token": "๑๒ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (1)" } },
+        "otherEndRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 72, "line": 40, "token": "๘ เมตร", "op": "ไมน่ ้อยกวา่", "clause": "ข้อ 36 (1)" } },
+        "maxDistanceM": { "$bound": { "src": "mr56-bma", "page": 72, "line": 40, "token": "๒๐๐ เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 36 (1)" } }
+      },
+      {
+        "roadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 4, "token": "๑๒ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (2)" } },
+        "frontageM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 5, "token": "๑๒ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (2)" } },
+        "otherEndRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 8, "token": "๘ เมตร", "op": "ไมน่ อ้ ยกว่า", "clause": "ข้อ 36 (2)" } },
+        "maxDistanceM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 8, "token": "๒๐๐ เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 36 (2)" } }
+      },
+      {
+        "roadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 10, "token": "๑๖ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (3)" } },
+        "frontageM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 11, "token": "๑๖ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (3)" } },
+        "otherEndRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 14, "token": "๑๒ เมตร", "op": "ไม่นอ้ ยกวา่", "clause": "ข้อ 36 (3)" } },
+        "maxDistanceM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 14, "token": "๓๐๐ เมตร", "op": "ไมเ่ กิน", "clause": "ข้อ 36 (3)" } }
+      },
+      {
+        "roadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 16, "token": "๓๐ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (4)" } },
+        "frontageM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 17, "token": "๓๐ เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 36 (4)" } },
+        "otherEndRoadWidthM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 20, "token": "๑๖ เมตร", "op": "ไมน่ ้อยกวา่", "clause": "ข้อ 36 (4)" } },
+        "maxDistanceM": { "$bound": { "src": "mr56-bma", "page": 73, "line": 20, "token": "๕๐๐ เมตร", "op": "ไม่เกิน", "clause": "ข้อ 36 (4)" } }
+      }
+    ],
+    "stationDistanceFrom": { "$cite": { "src": "mr56-bma", "page": 73, "line": 29, "token": "แนวเขตชานชาลา", "clause": "ข้อ 37" } }
+  },
+  "buildingClasses": {
+    "highRiseFromHeightM": { "$bound": { "src": "mr35-33-upd69", "page": 1, "line": 14, "token": "23.00 เมตร", "op": "ตงั แต่", "clause": "ข้อ 1 อาคารสูง" } },
+    "extraLargeFromFloorAreaSqm": { "$bound": { "src": "mr35-33-upd69", "page": 1, "line": 19, "token": "10,000 ตารางเมตร", "op": "ตงั แต่", "opLine": 18, "clause": "ข้อ 1 อาคารขนาดใหญ่พิเศษ" } },
+    "largeAboveFloorAreaSqm": { "$bound": { "src": "mr43-55-upd68", "page": 2, "line": 3, "token": "2,000", "op": "เกนิ", "clause": "ข้อ 1 อาคารขนาดใหญ่" } },
+    "largeIfTallFromHeightM": { "$bound": { "src": "mr43-55-upd68", "page": 2, "line": 4, "token": "15.00 เมตร", "op": "ตงั แต่", "clause": "ข้อ 1 อาคารขนาดใหญ่" } },
+    "largeIfTallAboveFloorAreaSqm": { "$bound": { "src": "mr43-55-upd68", "page": 2, "line": 4, "token": "1,000", "op": "เกนิ", "clause": "ข้อ 1 อาคารขนาดใหญ่" } },
+    "heightMeasuredToRoofDeck": { "$cite": { "src": "mr35-33-upd69", "page": 1, "line": 15, "token": "พนื ดาดฟ้า", "clause": "ข้อ 1 อาคารสูง" } }
+  },
+  "classification": {
+    "condo": {
+      "residential": { "kind": "stated", "member": true, "cite": { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 38, "token": "อาคารอยู่อาศยั รวม", "clause": "ข้อ 33 (1)" } } },
+      "publicBuilding": { "kind": "question", "questionId": "condo-public-building" }
+    },
+    "office": {
+      "residential": { "kind": "stated", "member": false, "cite": { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 41, "token": "ไม่ไดใ้ ชเ้ ป็นทอี ย่อู าศยั", "clause": "ข้อ 33 (2)" } } },
+      "publicBuilding": { "kind": "question", "questionId": "office-public-building" }
+    },
+    "hotel": {
+      "residential": { "kind": "question", "questionId": "hotel-residential" },
+      "publicBuilding": { "kind": "stated", "member": true, "cite": { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 32, "token": "โรงแรม", "clause": "ข้อ 1 อาคารสาธารณะ" } } }
+    }
+  },
+  "openSpaceMinimums": [
+    {
+      "use": "residential",
+      "scope": "anyBuilding",
+      "base": "largestFloorArea",
+      "minShare": { "$num": { "src": "mr43-55-upd68", "page": 7, "line": 38, "token": "30 ใน 100", "clause": "ข้อ 33 (1)" } }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "anyBuilding",
+      "base": "largestFloorArea",
+      "minShare": { "$num": { "src": "mr43-55-upd68", "page": 7, "line": 43, "token": "10 ใน 100", "clause": "ข้อ 33 (2)" } }
+    },
+    {
+      "use": "residential",
+      "scope": "anyBuilding",
+      "base": "landArea",
+      "minShare": { "$num": { "src": "bb44-03", "page": 15, "line": 26, "token": "30 ใน 100", "clause": "ข้อ 52 (1)" } }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "anyBuilding",
+      "base": "landArea",
+      "minShare": { "$num": { "src": "bb44-03", "page": 15, "line": 29, "token": "10 ใน 100", "clause": "ข้อ 52 (2)" } }
+    },
+    {
+      "use": "residential",
+      "scope": "highRiseOrExtraLarge",
+      "base": "landArea",
+      "minShare": { "$num": { "src": "mr35-33-upd69", "page": 2, "line": 44, "token": "รอ้ ยละ 30", "clause": "ข้อ 6 (1)" } }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "highRiseOrExtraLarge",
+      "base": "landArea",
+      "minShare": { "$num": { "src": "mr35-33-upd69", "page": 2, "line": 47, "token": "รอ้ ยละ 10", "clause": "ข้อ 6 (2)" } }
+    }
+  ],
+  "roadSetbacks": [
+    {
+      "appliesAbove": {
+        "storeys": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 20, "token": "สองชนั", "op": "เกนิ", "clause": "ข้อ 41 วรรคสอง" } },
+        "heightM": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 20, "token": "8 เมตร", "op": "เกนิ", "clause": "ข้อ 41 วรรคสอง" } }
+      },
+      "bands": [
+        {
+          "roadWidthM": { "max": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 23, "token": "10 เมตร", "op": "น้อยกว่า", "clause": "ข้อ 41 วรรคสอง (1)" } } },
+          "setback": { "kind": "fromCentreline", "distanceM": { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 24, "token": "6 เมตร", "clause": "ข้อ 41 วรรคสอง (1)" } } }
+        },
+        {
+          "roadWidthM": {
+            "min": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 26, "token": "10 เมตร", "op": "ตงั แต่", "clause": "ข้อ 41 วรรคสอง (2)" } },
+            "max": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 26, "token": "20 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 41 วรรคสอง (2)" } }
+          },
+          "setback": { "kind": "fromRoadBoundaryShareOfWidth", "share": { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 27, "token": "1 ใน 10", "clause": "ข้อ 41 วรรคสอง (2)" } } }
+        },
+        {
+          "roadWidthM": { "min": { "$bound": { "src": "mr43-55-upd68", "page": 9, "line": 29, "token": "20 เมตร", "op": "เกนิ", "clause": "ข้อ 41 วรรคสอง (3)" } } },
+          "setback": { "kind": "fromRoadBoundary", "distanceM": { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 30, "token": "2 เมตร", "clause": "ข้อ 41 วรรคสอง (3)" } } }
+        }
+      ]
+    },
+    {
+      "appliesAbove": {
+        "storeys": { "$bound": { "src": "bb44-03", "page": 15, "line": 7, "token": "2 ชนั", "op": "เกนิ", "clause": "ข้อ 50 วรรคสอง" } },
+        "heightM": { "$bound": { "src": "bb44-03", "page": 15, "line": 7, "token": "8 เมตร", "op": "เกนิ", "clause": "ข้อ 50 วรรคสอง" } }
+      },
+      "bands": [
+        {
+          "roadWidthM": { "max": { "$bound": { "src": "bb44-03", "page": 15, "line": 11, "token": "10 เมตร", "op": "น้อยกวา่", "clause": "ข้อ 50 วรรคสอง (1)" } } },
+          "setback": { "kind": "fromCentreline", "distanceM": { "$num": { "src": "bb44-03", "page": 15, "line": 12, "token": "6 เมตร", "clause": "ข้อ 50 วรรคสอง (1)" } } }
+        },
+        {
+          "roadWidthM": {
+            "min": { "$bound": { "src": "bb44-03", "page": 15, "line": 14, "token": "10 เมตร", "op": "ตงั แต่", "clause": "ข้อ 50 วรรคสอง (2)" } },
+            "max": { "$bound": { "src": "bb44-03", "page": 15, "line": 14, "token": "20 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 50 วรรคสอง (2)" } }
+          },
+          "setback": { "kind": "fromRoadBoundaryShareOfWidth", "share": { "$num": { "src": "bb44-03", "page": 15, "line": 15, "token": "1 ใน 10", "clause": "ข้อ 50 วรรคสอง (2)" } } }
+        },
+        {
+          "roadWidthM": { "min": { "$bound": { "src": "bb44-03", "page": 15, "line": 17, "token": "20 เมตร", "op": "เกนิ", "clause": "ข้อ 50 วรรคสอง (3)" } } },
+          "setback": { "kind": "fromRoadBoundary", "distanceM": { "$num": { "src": "bb44-03", "page": 15, "line": 18, "token": "2 เมตร", "clause": "ข้อ 50 วรรคสอง (3)" } } }
+        }
+      ]
+    }
+  ],
+  "boundarySetbacks": [
+    {
+      "rule": "wallsWithOpenings",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": { "max": { "$bound": { "src": "mr43-55-upd68", "page": 11, "line": 10, "token": "9 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 50 (1)" } } },
+          "distanceM": { "$num": { "src": "mr43-55-upd68", "page": 11, "line": 10, "token": "2 เมตร", "clause": "ข้อ 50 (1)" } }
+        },
+        {
+          "heightM": {
+            "min": { "$bound": { "src": "mr43-55-upd68", "page": 11, "line": 11, "token": "9 เมตร", "op": "เกนิ", "clause": "ข้อ 50 (2)" } },
+            "max": { "$bound": { "src": "mr43-55-upd68", "page": 11, "line": 11, "token": "23 เมตร", "op": "ไม่ถงึ", "clause": "ข้อ 50 (2)" } }
+          },
+          "distanceM": { "$num": { "src": "mr43-55-upd68", "page": 11, "line": 11, "token": "3", "unit": "เมตร", "unitLine": 12, "clause": "ข้อ 50 (2)" } }
+        }
+      ]
+    },
+    {
+      "rule": "wallsWithOpenings",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": { "max": { "$bound": { "src": "bb44-03", "page": 16, "line": 10, "token": "9 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 54" } } },
+          "distanceM": { "$num": { "src": "bb44-03", "page": 16, "line": 10, "token": "2 เมตร", "clause": "ข้อ 54" } }
+        },
+        {
+          "heightM": { "min": { "$bound": { "src": "bb44-03", "page": 16, "line": 10, "token": "9 เมตร", "op": "เกนิ", "clause": "ข้อ 54" } } },
+          "distanceM": { "$num": { "src": "bb44-03", "page": 16, "line": 11, "token": "3 เมตร", "clause": "ข้อ 54" } }
+        }
+      ]
+    },
+    {
+      "rule": "clearanceAroundBuilding",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": { "max": { "$bound": { "src": "bb44-03", "page": 16, "line": 13, "token": "15 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 55" } } },
+          "distanceM": { "$num": { "src": "bb44-03", "page": 16, "line": 13, "token": "1 เมตร", "clause": "ข้อ 55" } }
+        },
+        {
+          "heightM": { "min": { "$bound": { "src": "bb44-03", "page": 16, "line": 16, "token": "15 เมตร", "op": "เกนิ", "clause": "ข้อ 55 วรรคสอง" } } },
+          "distanceM": { "$num": { "src": "bb44-03", "page": 16, "line": 16, "token": "2 เมตร", "clause": "ข้อ 55 วรรคสอง" } }
+        }
+      ]
+    },
+    {
+      "rule": "outermostPart",
+      "scope": "highRiseOrExtraLarge",
+      "from": "plotBoundaryOrPublicRoad",
+      "bands": [
+        {
+          "heightM": {},
+          "distanceM": { "$num": { "src": "mr35-33-upd69", "page": 2, "line": 33, "token": "6.00 เมตร", "clause": "ข้อ 4" } }
+        }
+      ]
+    }
+  ],
+  "blindWall": {
+    "minDistanceM": { "$num": { "src": "mr43-55-upd68", "page": 11, "line": 13, "token": "50", "unit": "เซนตเิ มตร", "unitLine": 14, "clause": "ข้อ 50 วรรคสอง" } },
+    "onBoundaryMaxHeightM": { "$bound": { "src": "mr43-55-upd68", "page": 11, "line": 14, "token": "15 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 50 วรรคสอง" } }
+  },
+  "heightVsRoad": {
+    "maxMultipleOfDistance": [
+      { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 47, "token": "สองเท่า", "clause": "ข้อ 44" } },
+      { "$num": { "src": "bb44-03", "page": 14, "line": 44, "token": "2 เท่า", "clause": "ข้อ 49" } }
+    ],
+    "measuredTo": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 48, "token": "ดา้ นตรงขา้ มของถนนสาธารณะ", "clause": "ข้อ 44" } },
+    "heightToHighestPoint": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 50, "token": "ส่วนของอาคารทสี งู ทสี ุด", "clause": "ข้อ 44 วรรคสอง" } },
+    "rooftopStructuresExcluded": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 54, "token": "ไม่ตอ้ งนําความสงู", "clause": "ข้อ 44 วรรคสาม" } },
+    "parallelRoads": {
+      "maxRoadSpacingM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } },
+      "maxBuildingWidthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } }
+    },
+    "cornerNarrowerRoadMaxLengthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 9, "token": "60 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 46" } },
+    "wideRoadException": {
+      "roadWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "80 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } },
+      "withinM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "100 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 49 วรรคสอง" } },
+      "accessWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 48, "token": "12 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } }
+    }
+  },
+  "frontOpenSpace": {
+    "appliesTo": { "$cite": { "src": "bb44-03", "page": 15, "line": 43, "token": "อาคารสาธารณะ", "clause": "ข้อ 52 (6)" } },
+    "depthM": { "$num": { "src": "bb44-03", "page": 15, "line": 44, "token": "6 เมตร", "clause": "ข้อ 52 (6)" } },
+    "tallAboveStoreys": { "$bound": { "src": "bb44-03", "page": 15, "line": 46, "token": "3 ชนั", "op": "เกนิ", "clause": "ข้อ 52 (6) วรรคสอง" } },
+    "tallDepthM": { "$num": { "src": "bb44-03", "page": 15, "line": 46, "token": "12 เมตร", "clause": "ข้อ 52 (6) วรรคสอง" } },
+    "minShareOfPerimeter": { "$num": { "src": "bb44-03", "page": 15, "line": 47, "token": "1 ใน 6", "clause": "ข้อ 52 (6) วรรคสาม" } },
+    "exemptIfFrontageShareOfPerimeter": { "$bound": { "src": "bb44-03", "page": 16, "line": 4, "token": "1 ใน 8", "op": "มากกว่า", "clause": "ข้อ 53" } },
+    "exemptIfWithinRoadM": { "$bound": { "src": "bb44-03", "page": 16, "line": 5, "token": "20 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 53" } }
+  },
+  "highRise": {
+    "access": [
+      {
+        "floorAreaSqm": { "max": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 12, "token": "30,000", "op": "ไม่เกนิ", "clause": "ข้อ 2" } } },
+        "frontageM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 13, "token": "12.00 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 2" } },
+        "roadWidthM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 14, "token": "10.00 เมตร", "op": "ไม่น้อยกวา่", "clause": "ข้อ 2" } }
+      },
+      {
+        "floorAreaSqm": { "min": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 16, "token": "30,000", "op": "มากกว่า", "clause": "ข้อ 2 วรรคสอง" } } },
+        "frontageM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 17, "token": "12.00 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 2 วรรคสอง" } },
+        "roadWidthM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 18, "token": "18.00 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 2 วรรคสอง" } }
+      }
+    ],
+    "accessStripWidthM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 20, "token": "12.00 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 2 วรรคสาม" } },
+    "fireLaneWidthM": { "$bound": { "src": "mr35-33-upd69", "page": 2, "line": 23, "token": "6.00 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 3" } },
+    "farMax": { "$num": { "src": "mr35-33-upd69", "page": 2, "line": 37, "token": "10 ต่อ 1", "clause": "ข้อ 5" } }
+  },
+  "parking": [
+    {
+      "scope": "bangkokBylaw",
+      "appliesWhere": { "$cite": { "src": "bb44-03", "page": 27, "line": 9, "token": "ขอ้ 83", "clause": "ข้อ 83" } },
+      "condo": {
+        "kind": "perUnit",
+        "spacesPerUnit": { "$num": { "src": "bb44-03", "page": 27, "line": 47, "token": "1 คนั", "clause": "ข้อ 84 (3)" } },
+        "unitsFromSqm": { "$bound": { "src": "bb44-03", "page": 27, "line": 12, "token": "60 ตารางเมตร", "op": "ตงั แต่", "clause": "ข้อ 83 (3)" } }
+      },
+      "office": {
+        "kind": "perFloorArea",
+        "sqmPerSpace": { "$num": { "src": "bb44-03", "page": 28, "line": 3, "token": "60 ตารางเมตร", "clause": "ข้อ 84 (6)" } },
+        "appliesFromSqm": { "$bound": { "src": "bb44-03", "page": 27, "line": 15, "token": "300 ตารางเมตร", "op": "ตงั แต่", "clause": "ข้อ 83 (6)" } }
+      },
+      "hotel": {
+        "kind": "perRoomTiers",
+        "firstRooms": { "$num": { "src": "bb44-03", "page": 27, "line": 41, "token": "30 ห้อง", "clause": "ข้อ 84 (2)" } },
+        "firstSpaces": { "$num": { "src": "bb44-03", "page": 27, "line": 41, "token": "10 คนั", "clause": "ข้อ 84 (2)" } },
+        "tiers": [
+          {
+            "uptoRooms": { "$num": { "src": "bb44-03", "page": 27, "line": 41, "token": "100 หอ้ ง", "clause": "ข้อ 84 (2)" } },
+            "roomsPerSpace": { "$num": { "src": "bb44-03", "page": 27, "line": 42, "token": "5 หอ้ ง", "clause": "ข้อ 84 (2)" } }
+          },
+          {
+            "roomsPerSpace": { "$num": { "src": "bb44-03", "page": 27, "line": 45, "token": "10 หอ้ ง", "clause": "ข้อ 84 (2) วรรคสอง" } }
+          }
+        ]
+      },
+      "hallSqmPerSpace": { "$num": { "src": "bb44-03", "page": 28, "line": 17, "token": "10 ตารางเมตร", "clause": "ข้อ 84 (17)" } },
+      "largeBuildingSqmPerSpace": { "$num": { "src": "bb44-03", "page": 28, "line": 14, "token": "120 ตารางเมตร", "clause": "ข้อ 84 (16)" } },
+      "largerOfSumOrArea": { "$cite": { "src": "bb44-03", "page": 28, "line": 16, "token": "มากกว่าเป็นเกณฑ", "clause": "ข้อ 84 (16)" } },
+      "fractionsRoundUp": { "$cite": { "src": "bb44-03", "page": 28, "line": 21, "token": "หากมเี ศษ", "clause": "ข้อ 85" } }
+    },
+    {
+      "scope": "ministerialInnerBangkok",
+      "appliesWhere": { "$cite": { "src": "mr17-07-upd64", "page": 2, "line": 12, "token": "เฉพาะในเขตเทศบาลนครหลวง", "clause": "ข้อ 3 (1)" } },
+      "condo": {
+        "kind": "perUnit",
+        "spacesPerUnit": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 26, "token": "1 คนั", "clause": "ข้อ 3 (1) (ค)" } },
+        "unitsFromSqm": { "$bound": { "src": "mr17-07-upd64", "page": 1, "line": 55, "token": "60 ตารางเมตร", "op": "ตงั แต่", "clause": "ข้อ 2 (3)" } }
+      },
+      "office": {
+        "kind": "perFloorArea",
+        "sqmPerSpace": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 35, "token": "60 ตารางเมตร", "clause": "ข้อ 3 (1) (ฉ)" } },
+        "appliesFromSqm": { "$bound": { "src": "mr17-07-upd64", "page": 2, "line": 5, "token": "300 ตารางเมตร", "op": "ตงั แต่", "clause": "ข้อ 2 (6)" } }
+      },
+      "hotel": {
+        "kind": "perLobbyAndCommercialArea",
+        "appliesFromSqm": { "$bound": { "src": "mr17-07-upd64", "page": 1, "line": 53, "token": "300 ตารางเมตร", "op": "ตงั แต่", "clause": "ข้อ 2 (2)" } },
+        "lobbySqmPerSpace": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 21, "token": "10 ตารางเมตร", "clause": "ข้อ 3 (1) (ข)" } },
+        "commercialSqmPerSpace": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 23, "token": "20 ตารางเมตร", "clause": "ข้อ 3 (1) (ข)" } }
+      },
+      "hallSqmPerSpace": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 38, "token": "10 ตารางเมตร", "clause": "ข้อ 3 (1) (ช)" } },
+      "largeBuildingSqmPerSpace": { "$num": { "src": "mr17-07-upd64", "page": 2, "line": 40, "token": "120 ตารางเมตร", "clause": "ข้อ 3 (1) (ซ)" } },
+      "largerOfSumOrArea": { "$cite": { "src": "mr17-07-upd64", "page": 2, "line": 41, "token": "มากกวา่ เป็นเกณฑ์", "clause": "ข้อ 3 (1) (ซ)" } },
+      "fractionsRoundUp": { "$cite": { "src": "mr17-07-upd64", "page": 2, "line": 35, "token": "เศษของ 60", "clause": "ข้อ 3 (1) (ฉ)" } }
+    }
+  ],
+  "questions": [
+    {
+      "id": "hotel-residential",
+      "question": "Is a hotel 'residential' for the building-control open-space minimum and the ข้อ 52 affordable-housing bonus?",
+      "readings": [
+        {
+          "id": "public-building",
+          "reading": "No. Reg 55 ข้อ 1 names โรงแรม as an อาคารสาธารณะ, and ข้อ 33 (2) gives public buildings 10 in 100.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 32, "token": "โรงแรม", "clause": "ข้อ 1 อาคารสาธารณะ" } },
+            { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 41, "token": "อาคารสาธารณะ", "clause": "ข้อ 33 (2)" } }
+          ]
+        },
+        {
+          "id": "residential",
+          "reading": "Yes. Reg 55 ข้อ 1 defines อาคารอยู่อาศัย as lived in day and night, permanently or temporarily, and ข้อ 33 (2) sends a building also used as a residence to the 30 in 100 rule.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 18, "token": "อาศัยอย่างถาวรหรือชั่วคราว", "clause": "ข้อ 1 อาคารอยู่อาศัย" } },
+            { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 43, "token": "ใช้เป็นที่อยู่อาศัย", "clause": "ข้อ 33 (2)" } }
+          ]
+        }
+      ],
+      "recommendation": "residential",
+      "why": "Feasibility should under-promise: the 30 in 100 reading gives the smaller footprint, and the ข้อ 33 (2) proviso reads as written for buildings people sleep in.",
+      "decision": null
+    },
+    {
+      "id": "condo-public-building",
+      "question": "Is a condo an อาคารสาธารณะ, so that the ข้อ 53 public-open-space bonus and the ข้อ 54 public-parking bonus can apply?",
+      "readings": [
+        {
+          "id": "not-public",
+          "reading": "No. Reg 55 ข้อ 1 defines อาคารสาธารณะ as a building for public gathering, and ข้อ 33 treats อาคารอยู่อาศัยรวม as its own class.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 31, "token": "ชุมนุมคน", "clause": "ข้อ 1 อาคารสาธารณะ" } },
+            { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 38, "token": "อาคารอยู่อาศัยรวม", "clause": "ข้อ 33 (1)" } }
+          ]
+        },
+        {
+          "id": "public",
+          "reading": "Yes. The list of examples ends with เป็นต้น, so it is open, and the plan only says อาคารสาธารณะตามกฎหมายว่าด้วยการควบคุมอาคาร.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 34, "token": "เป็นต้น", "clause": "ข้อ 1 อาคารสาธารณะ" } },
+            { "$cite": { "src": "mr56-bma", "page": 77, "line": 41, "token": "อาคารสาธารณะ", "clause": "ข้อ 53" } }
+          ]
+        }
+      ],
+      "recommendation": "not-public",
+      "why": "Every listed example is a place where the public gathers; private homes are not, so a condo should get no ข้อ 53 or ข้อ 54 bonus.",
+      "decision": null
+    },
+    {
+      "id": "office-public-building",
+      "question": "Is an office an อาคารสาธารณะ for the ข้อ 53 and ข้อ 54 FAR bonuses?",
+      "readings": [
+        {
+          "id": "not-public",
+          "reading": "No. Reg 55 defines สำนักงาน separately and the public-building examples never name an office.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 2, "line": 8, "token": "สำนักงาน", "clause": "ข้อ 1 สำนักงาน" } },
+            { "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 33, "token": "ห้างสรรพสินค้า", "clause": "ข้อ 1 อาคารสาธารณะ" } }
+          ]
+        },
+        {
+          "id": "public",
+          "reading": "Yes. The definition covers gathering for การพาณิชยกรรม, which a large office arguably serves.",
+          "cites": [{ "$cite": { "src": "mr43-55-upd68", "page": 1, "line": 32, "token": "การพาณิชยกรรม", "clause": "ข้อ 1 อาคารสาธารณะ" } }]
+        }
+      ],
+      "recommendation": "not-public",
+      "why": "Offices have their own definition; reading them into the public-building list would also change their fire and open-space class.",
+      "decision": null
+    },
+    {
+      "id": "open-space-base",
+      "question": "Which building-control open-space minimum does the plan's 'not below the building control minimum' point to?",
+      "readings": [
+        {
+          "id": "all-stricter",
+          "reading": "Apply Reg 55 ข้อ 33 (share of the largest floor), the Bangkok bylaw ข้อ 52 (share of land) and, for high-rise or extra-large buildings, Reg 33 ข้อ 6 (share of land); the largest required area governs.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 40, "token": "ที่มากที่สุดของอาคาร", "clause": "ข้อ 33 (1)" } },
+            { "$cite": { "src": "bb44-03", "page": 15, "line": 26, "token": "พื้นที่ที่ดิน", "clause": "ข้อ 52 (1)" } },
+            { "$cite": { "src": "mr35-33-upd69", "page": 2, "line": 44, "token": "พื้นที่ดินที่ใช้เป็นที่ตั้งอาคาร", "clause": "ข้อ 6 (1)" } }
+          ]
+        },
+        {
+          "id": "ministerial-only",
+          "reading": "Apply Reg 55 ข้อ 33 to ordinary buildings and Reg 33 ข้อ 6 to high-rise; the bylaw's share of land is ignored where it differs, because a local bylaw cannot conflict with a ministerial regulation.",
+          "cites": [
+            { "$cite": { "src": "mr43-55-upd68", "page": 7, "line": 38, "token": "30 ใน 100", "clause": "ข้อ 33 (1)" } },
+            { "$cite": { "src": "mr35-33-upd69", "page": 2, "line": 44, "token": "ร้อยละ 30", "clause": "ข้อ 6 (1)" } }
+          ]
+        }
+      ],
+      "recommendation": "all-stricter",
+      "why": "A Bangkok permit office checks both the ministerial regulation and the bylaw; meeting the largest requirement satisfies every reading.",
+      "decision": null
+    },
+    {
+      "id": "parking-source",
+      "question": "Which parking rule governs a ย.9 plot?",
+      "readings": [
+        {
+          "id": "bylaw",
+          "reading": "The Bangkok bylaw ข้อ 83 to 85 (hotel by rooms, condo 1 per unit of 60 m² or more, office 1 per 60 m²).",
+          "cites": [{ "$cite": { "src": "bb44-03", "page": 27, "line": 9, "token": "ข้อ 83", "clause": "ข้อ 83" } }]
+        },
+        {
+          "id": "ministerial",
+          "reading": "Reg 7 ข้อ 3 (1), which applies only inside the old เทศบาลนครหลวง area (hotel by lobby and commercial area).",
+          "cites": [{ "$cite": { "src": "mr17-07-upd64", "page": 2, "line": 12, "token": "เฉพาะในเขตเทศบาลนครหลวง", "clause": "ข้อ 3 (1)" } }]
+        },
+        {
+          "id": "higher-of-both",
+          "reading": "Compute both and require the higher count for each building type.",
+          "cites": [
+            { "$cite": { "src": "bb44-03", "page": 28, "line": 21, "token": "มากกว่าเป็นเกณฑ์", "clause": "ข้อ 85" } },
+            { "$cite": { "src": "mr17-07-upd64", "page": 2, "line": 41, "token": "มากกว่าเป็นเกณฑ์", "clause": "ข้อ 3 (1) (ซ)" } }
+          ]
+        }
+      ],
+      "recommendation": "higher-of-both",
+      "why": "The two texts agree on condo and office and differ only for hotels; taking the higher count is safe and needs no map of the 1971 municipal boundary.",
+      "decision": null
+    },
+    {
+      "id": "permeable-base",
+      "question": "The permeable 50% is a share of which open space?",
+      "readings": [
+        {
+          "id": "required",
+          "reading": "Of the minimum open space the plan requires (4.5% of total floor area).",
+          "cites": [{ "$cite": { "src": "mr56-bma", "page": 35, "line": 11, "token": "ร้อยละสี่จุดห้า", "clause": "ข้อ 16 วรรคสาม (2)" } }]
+        },
+        {
+          "id": "provided",
+          "reading": "Of all open space actually left on the plot.",
+          "cites": [{ "$cite": { "src": "mr56-bma", "page": 35, "line": 15, "token": "ของพื้นที่ว่าง", "clause": "ข้อ 16 วรรคสาม (2)" } }]
+        }
+      ],
+      "recommendation": "required",
+      "why": "The sentence sits inside the OSR rule and 'พื้นที่ว่าง' refers back to the open space that rule requires; the other reading would penalise leaving extra open space.",
+      "decision": null
+    },
+    {
+      "id": "gfa-includes-parking",
+      "question": "Does parking floor area count in พื้นที่อาคารรวม for FAR and OSR?",
+      "readings": [
+        {
+          "id": "counts",
+          "reading": "Yes. The definition counts every storey of every building, and ข้อ 54 has to exempt bonus public parking explicitly, which implies ordinary parking counts.",
+          "cites": [
+            { "$cite": { "src": "mr56-bma", "page": 2, "line": 4, "token": "อัตราส่วนพื้นที่อาคารรวมทุกชั้น", "clause": "ข้อ 4" } },
+            { "$cite": { "src": "mr56-bma", "page": 78, "line": 16, "token": "ยกเว้นไม่ต้องนำมาพิจารณา", "clause": "ข้อ 54 วรรคสอง" } }
+          ]
+        },
+        {
+          "id": "excluded",
+          "reading": "No. Parking is not floor area people occupy, so it is left out of total floor area.",
+          "cites": [{ "$cite": { "src": "mr35-33-upd69", "page": 1, "line": 20, "token": "พื้นที่อาคาร", "clause": "ข้อ 1 พื้นที่อาคาร" } }]
+        }
+      ],
+      "recommendation": "counts",
+      "why": "The plan defines its own term with no exclusion, and the explicit ข้อ 54 exemption only makes sense if parking otherwise counts.",
+      "decision": null
+    },
+    {
+      "id": "office-operating-area",
+      "question": "For the ย.9 office limit (operating area above 10,000 m² needs a 16 m road or a station within 500 m), is operating area the office's total floor area?",
+      "readings": [
+        {
+          "id": "gfa",
+          "reading": "Yes. ข้อ 4 defines พื้นที่ประกอบการ to include areas in continuous use for the business, inside or outside the building.",
+          "cites": [
+            { "$cite": { "src": "mr56-bma", "page": 1, "line": 25, "token": "พื้นที่ประกอบการ", "clause": "ข้อ 4" } },
+            { "$cite": { "src": "mr56-bma", "page": 1, "line": 26, "token": "ต่อเนื่อง", "clause": "ข้อ 4" } }
+          ]
+        },
+        {
+          "id": "net",
+          "reading": "No. Count only rentable office space; lobbies, plant and parking are not 'operating' the business.",
+          "cites": [{ "$cite": { "src": "mr56-bma", "page": 33, "line": 39, "token": "สำนักงาน", "clause": "ข้อ 16 วรรคสอง (10)" } }]
+        }
+      ],
+      "recommendation": "gfa",
+      "why": "The definition reaches beyond the building itself; using total floor area can only make the tool stricter.",
+      "decision": null
+    },
+    {
+      "id": "road-access-tiers",
+      "question": "When a hotel or office relies on the road-width exemption, what must the tool check under ข้อ 36 (as corrected on 9 Oct 2013)?",
+      "readings": [
+        {
+          "id": "frontage-and-row",
+          "reading": "Enforce the right-of-way tier and the minimum frontage on that road; show the continuity, connecting-road width and distance tests as a manual check, because they depend on the road network beyond the plot.",
+          "cites": [
+            { "$cite": { "src": "mr56-bma", "page": 73, "line": 5, "token": "ด้านใดด้านหนึ่งกว้างไม่น้อยกว่า", "clause": "ข้อ 36 (2)" } },
+            { "$cite": { "src": "mr56-correction", "page": 1, "line": 16, "token": "ข้อ ๓๖", "clause": "แก้คำผิด ข้อ 36" } }
+          ]
+        },
+        {
+          "id": "row-only",
+          "reading": "Enforce only the right-of-way named in ข้อ 16; ข้อ 36 is for the permit officer.",
+          "cites": [{ "$cite": { "src": "mr56-bma", "page": 33, "line": 27, "token": "ขนาดเขตทาง", "clause": "ข้อ 16 วรรคสอง (8)" } }]
+        }
+      ],
+      "recommendation": "frontage-and-row",
+      "why": "Frontage is visible on the drawn plot, so skipping it would let a 4 m wide flag lot pass; the network tests cannot be read from one plot.",
+      "decision": null
+    },
+    {
+      "id": "bylaw-2569-scope",
+      "question": "Does the 13 Mar 2026 Bangkok bylaw change anything in ข้อ 16 (ย.9) that this pack uses?",
+      "readings": [
+        {
+          "id": "factories-only",
+          "reading": "No. The readable parts (gazette header, digits, annex) show it rewrites the factory item of the prohibited-use lists and adds factory types 76 and 90 per zone; FAR, OSR and the hotel and office conditions are untouched.",
+          "cites": [
+            { "$cite": { "src": "bb69-bma", "page": 3, "line": 10, "token": "_d", "clause": "ข้อ 10 (garbled)" } },
+            { "$cite": { "src": "bb69-bma", "page": 6, "line": 9, "token": "ของโรงงาน", "clause": "บัญชีท้ายข้อบัญญัติ" } }
+          ]
+        },
+        {
+          "id": "unverified",
+          "reading": "Unknown until a Thai reader or OCR reads the operative text; mark every ย.9 value as unverified against the 2026 amendment.",
+          "cites": [{ "$cite": { "src": "bb69-bma", "page": 1, "line": 2, "token": "ตอนพิเศษ ๖๖ ง", "clause": "header" } }]
+        }
+      ],
+      "recommendation": "factories-only",
+      "why": "The decoded article numbers and the readable annex are all about factories, but show a banner saying the amendment's body text was not machine-readable.",
+      "decision": null
+    },
+    {
+      "id": "front-open-space",
+      "question": "Does a building on a public road need the bylaw ข้อ 52 (6) front open space (6 m, or 12 m above 3 storeys)?",
+      "readings": [
+        {
+          "id": "exempt-on-road",
+          "reading": "No, if it meets ข้อ 53: the road-facing building line is longer than 1/8 of the perimeter and within 20 m of the road.",
+          "cites": [{ "$cite": { "src": "bb44-03", "page": 16, "line": 4, "token": "แนวอาคารด้านที่ประชิดติดริมทางสาธารณะ", "clause": "ข้อ 53" } }]
+        },
+        {
+          "id": "always",
+          "reading": "Yes. ข้อ 52 (6) applies to every public or taller building; ข้อ 53 only adds the road-facing conditions.",
+          "cites": [{ "$cite": { "src": "bb44-03", "page": 15, "line": 43, "token": "อาคารสูงเกิน 2 ชั้น", "clause": "ข้อ 52 (6)" } }]
+        }
+      ],
+      "recommendation": "exempt-on-road",
+      "why": "ข้อ 53 opens with 'อาคารอยู่ริมทางสาธารณะที่ไม่ต้องมีที่ว่างตามข้อ 52(3) และ 52(6)', which only makes sense as an exemption.",
+      "decision": null
+    }
+  ],
+  "gaps": [
+    {
+      "id": "bylaw-2569-text",
+      "what": "Operative text of the 13 Mar 2026 Bangkok bylaw amending the plan",
+      "why": "The PDF's fonts have no Unicode map: pdftotext and one Context.dev scrape both return cipher text. Nothing from it is in the pack."
+    },
+    {
+      "id": "large-building-road",
+      "what": "Minimum road width for a large building (above 2,000 m² but below 10,000 m² and below 23 m)",
+      "why": "Not found in Reg 55, Reg 33, Reg 7 or the 2544 bylaw; Reg 33 ข้อ 2 covers only high-rise and extra-large buildings."
+    },
+    {
+      "id": "plan-map-and-road-list",
+      "what": "Which plots are ย.9, the ย.9-1 to ย.9-30 sub-areas, planned road widenings (ถนนสาย ก/ข) and station platforms",
+      "why": "They live in the plan's maps and annexed lists, which are not in the regulation's text layer."
+    },
+    {
+      "id": "coverage",
+      "what": "A separate building-coverage percentage",
+      "why": "No source read states one; coverage is bounded only by the open-space minimums and setbacks in the pack."
+    },
+    {
+      "id": "eia",
+      "what": "EIA thresholds for condos and hotels",
+      "why": "Set by a Ministry of Natural Resources notice that was not downloaded."
+    },
+    {
+      "id": "fire-and-services",
+      "what": "Fire stairs, lifts, refuge floors and other Reg 33 / Reg 39 / Reg 47 design rules",
+      "why": "Out of scope for the envelope; they shape the core, not the allowed volume."
+    }
+  ]
+}
