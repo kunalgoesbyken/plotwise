@@ -25,6 +25,8 @@ export type Metrics = {
   readonly yield: Yield
 }
 
+export type Limiter = 'far' | 'building-class' | 'use' | 'envelope'
+
 export type Design = {
   readonly id: TypologyId
   readonly nameKey: `design.${TypologyId}`
@@ -32,6 +34,7 @@ export type Design = {
   readonly plates: FloorPlates
   readonly metrics: Metrics
   readonly checks: readonly Check[]
+  readonly limitedBy: Limiter
 }
 
 type Candidate = { readonly building: Building; readonly programme: Programme }
@@ -47,23 +50,25 @@ function fitsUse({ limits }: Solution, { conditionMeasure }: Programme): boolean
   return compare(conditionMeasure, negate(use.threshold.cmp), use.threshold.value)
 }
 
-function fits(solution: Solution, kind: EnvelopeKind, candidate: Candidate): boolean {
-  return (
-    candidate.programme.farSqm <= solution.limits.far.maxGfaSqm &&
-    fitsClass(solution, kind, candidate.building) &&
-    fitsUse(solution, candidate.programme)
-  )
+function limiter(solution: Solution, kind: EnvelopeKind, candidate: Candidate): Limiter | null {
+  if (candidate.programme.farSqm > solution.limits.far.maxGfaSqm) return 'far'
+  if (!fitsClass(solution, kind, candidate.building)) return 'building-class'
+  if (!fitsUse(solution, candidate.programme)) return 'use'
+  return null
 }
 
-function tallestFit(solution: Solution, { envelope, plates }: Massing): (Candidate & { storeys: number }) | null {
-  let best: (Candidate & { storeys: number }) | null = null
+type Fit = Candidate & { readonly storeys: number; readonly limitedBy: Limiter }
+
+function tallestFit(solution: Solution, { envelope, plates }: Massing): Fit | null {
+  let best: Fit | null = null
   let builtSqm = 0
   for (const [index, floor] of plates.floors.entries()) {
     builtSqm += floor.areaSqm
     const building = { heightM: floor.topM - plates.floors[0].baseM, storeys: index + 1, floorAreaSqm: builtSqm }
     const candidate = { building, programme: programme(solution, building) }
-    if (!fits(solution, envelope.kind, candidate)) break
-    best = { ...candidate, storeys: index + 1 }
+    const stop = limiter(solution, envelope.kind, candidate)
+    if (stop) return best && { ...best, limitedBy: stop }
+    best = { ...candidate, storeys: index + 1, limitedBy: 'envelope' }
   }
   return best
 }
@@ -96,6 +101,7 @@ function design(solution: Solution, id: TypologyId): Design | null {
     plates,
     metrics: metricsOf(solution, plates, fit),
     checks: checksFor({ solution, plates, building: fit.building, programme: fit.programme }),
+    limitedBy: fit.limitedBy,
   }
 }
 

@@ -150,6 +150,15 @@ describe('podium and tower', () => {
     expect(tower.plates.floors.at(-1)!.topM).toBeGreaterThan(prisms.at(-3)!.topM)
   })
 
+  it('names the rule that stops each design growing', () => {
+    const office = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)), 'podium-tower')!
+    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    expect(office.limitedBy).toBe('use')
+    expect(nearStation.limitedBy).not.toBe('use')
+    const lowRise = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'condo' }, pack, readings)), 'low-rise')!
+    expect(['building-class', 'envelope']).toContain(lowRise.limitedBy)
+  })
+
   it('stops an office on a narrow soi at the zone office-size condition, not at the envelope', () => {
     const solution = solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)
     const tower = byId(designs(solution), 'podium-tower')!
