@@ -9,12 +9,12 @@ import { Sources } from './sources'
 function QuestionItem({ question, readingId }: { question: Question; readingId: string }) {
   const reading = question.readings.find((r) => r.id === readingId)
   return (
-    <li className="py-2.5">
+    <li className="py-3">
       <p className="text-sm leading-snug">{question.question}</p>
-      <p className="mt-1.5 inline-block rounded bg-plot-wash px-1.5 py-0.5 font-mono text-[10px] tracking-wide text-plot uppercase">
-        {t('interpretation.decided')}
+      <p className="mt-2 flex items-baseline gap-2 text-xs leading-relaxed">
+        <span className="shrink-0 rounded-sm bg-plot-wash px-1.5 font-medium text-plot">{t('interpretation.decided')}</span>
+        {reading && <span>{reading.reading}</span>}
       </p>
-      {reading && <p className="mt-1 text-xs leading-relaxed">{reading.reading}</p>}
       <Disclosure label={t('interpretation.why')} tone="slate">
         <p className="mt-1 text-xs leading-relaxed text-slate">{question.why}</p>
       </Disclosure>

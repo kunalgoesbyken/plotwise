@@ -11,7 +11,7 @@ import { t } from '@/text/messages'
 import type { SceneDesign } from './scene-view'
 import { useSite, type SiteStatus } from './use-site'
 
-const NOTE = 'rounded-md bg-paper/90 px-2.5 py-1.5 text-xs text-slate shadow-sm'
+const NOTE = 'rounded-md bg-paper px-2.5 py-1.5 text-xs text-slate shadow-sm ring-1 ring-rule'
 
 const SceneView = dynamic(() => import('./scene-view'), {
   ssr: false,

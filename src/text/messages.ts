@@ -39,7 +39,9 @@ const en = {
 
   'shell.panel': 'Plot settings',
   'shell.tabs': 'Panels',
-  'shell.waiting': 'Appears once the outline is closed and every road edge has a width.',
+  'shell.waiting.rules': 'Once the outline is closed and every road has a width, the limits for this plot appear here, each with its legal source.',
+  'shell.waiting.designs': 'Once the outline is closed and every road has a width, at least two concept designs appear here, each with a pass/fail checklist.',
+  'shell.waiting.view3d': 'Once the outline is closed and every road has a width, the allowed envelope and the designs appear here in 3D.',
   'tab.site': 'Site',
   'tab.rules': 'Rules',
   'tab.designs': 'Designs',
@@ -83,6 +85,8 @@ const en = {
   'frontage.width-placeholder': 'width',
   'frontage.metres': 'm',
   'frontage.estimated': 'Estimated from OpenStreetMap. Check it on site.',
+  'frontage.estimated-tag': 'est.',
+  'frontage.boundary': 'Neighbour',
   'frontage.remove': 'Remove',
   'frontage.remove-label': ({ edge }: { edge: string }) => `Remove road on edge ${edge}`,
   'frontage.mark': 'Mark as road',
@@ -224,17 +228,28 @@ const en = {
   'design.checklist': 'Checklist',
   'designs.none': 'No design fits this plot under these rules. Try a wider road, a larger plot or another building type.',
 
+  'limited-by.far': 'Limited by the floor area ratio.',
+  'limited-by.building-class': ({ height }: { height: string }) =>
+    `Limited by the high-rise rules, which apply from ${height} tall or to an extra-large floor area.`,
+  'limited-by.use': 'Limited by the zone’s size condition for this use.',
+  'limited-by.use-unless': ({ road, station }: { road: string; station: string }) =>
+    `Limited by the zone’s size condition for this use: going larger needs a ${road} road or a station within ${station}.`,
+  'limited-by.envelope': 'Limited by the allowed envelope.',
+
   'metric.gfa-of-max': ({ max }: { max: string }) => `of ${max} max floor area`,
   'metric.far': 'FAR',
   'metric.height': 'Height',
   'metric.storeys': 'Storeys',
-  'metric.yield': 'Yield',
   'metric.parking': 'Parking',
   'metric.open-space': 'Open space',
-  'metric.units': ({ count }: { count: string }) => `${count} units`,
-  'metric.rooms': ({ count }: { count: string }) => `${count} rooms`,
-  'metric.net-area': ({ area }: Area) => `${area} net`,
+  'metric.units': 'Units',
+  'metric.rooms': 'Rooms',
+  'metric.net-area': 'Net area',
   'metric.spaces': ({ count }: { count: string }) => `${count} spaces`,
+
+  'summary.label': 'Results for the design shown in 3D',
+  'summary.floor-area': 'Floor area',
+  'summary.max-floor-area': 'Max allowed',
 
   'status.pass': 'Pass',
   'status.fail': 'Fail',

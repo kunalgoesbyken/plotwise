@@ -13,6 +13,20 @@
   --color-signal: #b8322a;
 }
 
+@theme {
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --animate-flash: flash 1.4s var(--ease-out-quart);
+
+  @keyframes flash {
+    from {
+      background-color: var(--color-plot-wash);
+      color: var(--color-plot);
+    }
+  }
+}
+
 @theme inline {
   --font-display: var(--font-bai-jamjuree), ui-sans-serif, sans-serif;
   --font-sans: var(--font-anuphan), ui-sans-serif, system-ui, sans-serif;
@@ -36,6 +50,21 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-plot);
   outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-plot-wash);
+}
+
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-slate) 35%, transparent) transparent;
+}
+
+@media (width >= 64rem) {
+  .thin-scroll {
+    scrollbar-gutter: stable;
+  }
 }
 
 .map-label {
@@ -66,9 +95,43 @@ body {
   box-shadow: 0 0 0 2px var(--color-paper);
 }
 
-.maplibregl-ctrl-group,
-.maplibregl-ctrl-attrib {
+.maplibregl-map {
   font-family: var(--font-sans);
+}
+
+.maplibregl-map .maplibregl-ctrl-group {
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 12%, transparent), 0 0 0 1px var(--color-rule);
+}
+
+.maplibregl-map .maplibregl-ctrl-group button {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib {
+  font-size: var(--text-2xs);
+  color: var(--color-slate);
+  background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  color: var(--color-ink);
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact {
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--color-rule);
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show {
+  border-radius: 0.75rem;
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib-button::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
 }
 
 .maplibregl-ctrl-scale {
@@ -82,6 +145,10 @@ body {
   .maplibregl-map .maplibregl-ctrl-top-right,
   .maplibregl-map .maplibregl-ctrl-bottom-right {
     right: calc(var(--panel-w) + 1.5rem);
+  }
+
+  .maplibregl-map .maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib {
+    max-width: calc((100vw - var(--panel-w)) * 0.5 - 3rem);
   }
 }
 

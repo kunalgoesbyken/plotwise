@@ -3,6 +3,7 @@
 import { totalArea } from '@/geometry'
 import type { Envelope, Limits } from '@/solve'
 import { formatQuantity } from '@/text/format'
+import { SEGMENT, SEGMENTS } from '@/editor/ui'
 import { t } from '@/text/messages'
 import { CARVING } from './compute'
 import { useFeasibility } from './feasibility-provider'
@@ -39,8 +40,8 @@ export function RuleStepper() {
   const footprint = totalArea(layers.shown[0]?.polygons ?? [])
   const cites = layers.step === 'plot' ? [] : setbacksOf(envelope, layers.step, CARVING).flatMap((s) => s.cites)
   return (
-    <div className="border-t border-rule bg-paper px-2 pt-2 pb-1" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
-      <div role="group" aria-label={t('step.label')} className="grid grid-cols-4 gap-1 rounded-lg bg-vellum p-1">
+    <div className="@container border-t border-rule bg-paper px-3 pt-3 pb-1.5" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
+      <div role="group" aria-label={t('step.label')} className={`${SEGMENTS} max-w-2xl grid-cols-2 @xs:grid-cols-4`}>
         {RULE_STEPS.map((step, i) => {
           const available = layers.steps.includes(step)
           return (
@@ -51,15 +52,15 @@ export function RuleStepper() {
               disabled={!available}
               title={available ? undefined : t('step.not-binding')}
               onClick={() => chooseStep(step)}
-              className="flex min-h-11 items-center justify-center gap-1 rounded-md px-1 text-center text-xs leading-tight font-medium text-slate transition-colors hover:text-ink disabled:cursor-not-allowed disabled:opacity-40 aria-pressed:bg-plot aria-pressed:text-paper aria-pressed:shadow-sm lg:min-h-8"
+              className={`${SEGMENT} group/step px-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`}
             >
-              <span className="font-mono text-[10px] opacity-60">{i + 1}</span>
+              <span className="hidden font-mono text-2xs text-slate group-aria-pressed/step:text-plot @md:inline">{i + 1}</span>
               {t(`step.${step}`)}
             </button>
           )
         })}
       </div>
-      <div className="flex flex-wrap items-start gap-x-3 px-1 pt-1.5">
+      <div className="flex max-w-2xl flex-wrap items-baseline gap-x-3 px-0.5 pt-2">
         <p aria-live="polite" className="min-w-0 flex-1 basis-56 text-xs leading-snug">
           {caption({ envelope, layers, limits: result.solution.limits })}{' '}
           <span className="font-mono whitespace-nowrap text-slate tabular-nums">{t('step.footprint', { area: formatQuantity(footprint, 'sqm') })}</span>
