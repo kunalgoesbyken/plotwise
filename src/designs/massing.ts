@@ -130,30 +130,69 @@ function podiumStoreys(solution: Solution, podium: FloorPlates): number {
   return Math.min(podium.floors.length, Math.max(1, Math.ceil(parkingSqm / podium.footprintSqm)))
 }
 
-const TOWER_FIT_TRIES = 8
-const TOWER_SHRINK = 0.85
+const TOWER_SEARCH_STEPS = 10
+const MIN_TOWER_SIDE_SHARE = 0.3
 
-function inside(frame: RoadFrame, square: { centre: Vec2; half: number }, region: readonly Polygon[]): boolean {
-  const corners = centred(frame, square.centre, square.half, square.half).outer
-  const covered = (point: Vec2) => region.some((p) => contains(p.outer, point) && !p.holes.some((hole) => contains(hole, point)))
-  const strictlyWithin = (point: Vec2) => {
-    const [a, n] = inFrame(frame, point)
-    return Math.abs(a - square.centre[0]) < square.half && Math.abs(n - square.centre[1]) < square.half
+const covers = (region: readonly Polygon[], point: Vec2) =>
+  region.some((p) => contains(p.outer, point) && !p.holes.some((hole) => contains(hole, point)))
+
+function edgeMeetsSquare([x1, y1]: Vec2, [x2, y2]: Vec2, [a, n]: Vec2, half: number): boolean {
+  if (Math.max(x1, x2) < a - half || Math.min(x1, x2) > a + half || Math.max(y1, y2) < n - half || Math.min(y1, y2) > n + half) return false
+  const slabs: readonly (readonly [number, number])[] = [
+    [x1 - x2, x1 - (a - half)],
+    [x2 - x1, a + half - x1],
+    [y1 - y2, y1 - (n - half)],
+    [y2 - y1, n + half - y1],
+  ]
+  let [from, to] = [0, 1]
+  for (const [p, q] of slabs) {
+    if (p === 0) {
+      if (q < 0) return false
+      continue
+    }
+    if (p < 0) from = Math.max(from, q / p)
+    else to = Math.min(to, q / p)
+    if (from > to) return false
   }
-  return corners.every(covered) && !region.some((p) => [p.outer, ...p.holes].some((loop) => loop.some(strictlyWithin)))
+  return true
+}
+
+function clearOfBoundary(region: readonly Polygon[], centre: Vec2, half: number): boolean {
+  const meets = (loop: readonly Vec2[]) => loop.some((v, i) => edgeMeetsSquare(v, loop[(i + 1) % loop.length], centre, half))
+  return !region.some((p) => meets(p.outer) || p.holes.some(meets))
+}
+
+function largestHalf(region: readonly Polygon[], centre: Vec2, maxHalf: number): number {
+  if (!covers(region, centre)) return 0
+  if (clearOfBoundary(region, centre, maxHalf)) return maxHalf
+  let [fits, fails] = [0, maxHalf]
+  for (let step = 0; step < TOWER_SEARCH_STEPS; step++) {
+    const half = (fits + fails) / 2
+    if (clearOfBoundary(region, centre, half)) fits = half
+    else fails = half
+  }
+  return fits
+}
+
+function reachM(prisms: readonly Prism[], centre: Vec2): number {
+  const stop = prisms.findIndex((prism) => !covers(prism.polygons, centre))
+  return stop === -1 ? prisms[prisms.length - 1].topM : stop === 0 ? 0 : prisms[stop - 1].topM
 }
 
 const largestPolygon = (polygons: readonly Polygon[]) => polygons.reduce((a, b) => (polygonArea(b) > polygonArea(a) ? b : a))
 
 function towerFootprint(solution: Solution, envelope: Envelope, podium: readonly Polygon[]): Polygon | null {
   const frame = roadFrame(solution)
-  const centres = envelope.prisms.toReversed().map((prism) => inFrame(frame, centroid(largestPolygon(prism.polygons).outer)))
-  let half = Math.sqrt(ASSUMPTIONS.towerPlateSqm[solution.plot.buildingType].value) / 2
-  for (let attempt = 0; attempt < TOWER_FIT_TRIES; attempt++, half *= TOWER_SHRINK) {
-    const centre = centres.find((c) => inside(frame, { centre: c, half }, podium))
-    if (centre) return centred(frame, centre, half, half)
-  }
-  return null
+  const toFrame = (loop: readonly Vec2[]) => loop.map((point) => inFrame(frame, point))
+  const region = podium.map((p) => ({ outer: toFrame(p.outer), holes: p.holes.map(toFrame) }))
+  const maxHalf = Math.sqrt(ASSUMPTIONS.towerPlateSqm[solution.plot.buildingType].value) / 2
+  const options = envelope.prisms.map((prism) => {
+    const centre = centroid(largestPolygon(prism.polygons).outer)
+    const half = largestHalf(region, inFrame(frame, centre), maxHalf)
+    return { centre, half, score: half * half * reachM(envelope.prisms, centre) }
+  })
+  const best = options.filter((o) => o.half >= maxHalf * MIN_TOWER_SIDE_SHARE).reduce<(typeof options)[number] | null>((a, b) => (a && a.score >= b.score ? a : b), null)
+  return best ? centred(frame, inFrame(frame, best.centre), best.half, best.half) : null
 }
 
 function podiumTower(solution: Solution): Massing | null {
