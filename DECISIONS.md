@@ -1,0 +1,6 @@
+# Decisions
+
+| # | Decision | Why | Status |
+|---|---|---|---|
+| D0 | Keep the prepared plot → envelope → designs engine; rebuild the rule pack from Thai sources; add a real-site 3D context task. | The brief is plot feasibility (main plan), but for Bangkok, not Bangalore. Indian rule sources don't apply. | Decided 2026-11-19 |
+| D1 | Which Bangkok zone | Pending research/bkk-rules.md | Open |
