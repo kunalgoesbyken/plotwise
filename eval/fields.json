@@ -1,0 +1,803 @@
+{
+ "pack": "bkk-y9",
+ "fields": [
+  {
+   "path": "far.max",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสาม (1)",
+   "page": 35
+  },
+  {
+   "path": "openSpaceRatio.minShareOfFloorArea",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสาม (2)",
+   "page": 35
+  },
+  {
+   "path": "openSpaceRatio.permeableShareOfOpenSpace",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสาม (2)",
+   "page": 35
+  },
+  {
+   "path": "farBonus.combinedMaxShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 57",
+   "page": 79
+  },
+  {
+   "path": "farBonus.measures[0].maxShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 52",
+   "page": 77
+  },
+  {
+   "path": "farBonus.measures[0].maxExtraPerProvidedArea",
+   "source": "mr56-bma",
+   "clause": "ข้อ 52",
+   "page": 77
+  },
+  {
+   "path": "farBonus.measures[1].maxShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 53",
+   "page": 77
+  },
+  {
+   "path": "farBonus.measures[1].maxExtraPerProvidedArea",
+   "source": "mr56-bma",
+   "clause": "ข้อ 53",
+   "page": 77
+  },
+  {
+   "path": "farBonus.measures[2].maxStationDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 54",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[2].maxShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 54",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[2].maxExtraPerSpaceSqm",
+   "source": "mr56-bma",
+   "clause": "ข้อ 54",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[3].volumeM3",
+   "source": "mr56-bma",
+   "clause": "ข้อ 55",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[3].perLandSqm",
+   "source": "mr56-bma",
+   "clause": "ข้อ 55",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[3].baseShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 55",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[3].maxShare",
+   "source": "mr56-bma",
+   "clause": "ข้อ 55",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[0].level",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (1)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[0].share",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (1)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[1].level",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (2)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[1].share",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (2)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[2].level",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (3)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[2].share",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (3)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[3].level",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (4)",
+   "page": 78
+  },
+  {
+   "path": "farBonus.measures[4].levels[3].share",
+   "source": "mr56-bma",
+   "clause": "ข้อ 56 (4)",
+   "page": 78
+  },
+  {
+   "path": "useConditions.office.threshold",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (10)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.office.unlessRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (10)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.office.unlessStationDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (10)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.hotel.threshold",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (8)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.hotel.unlessRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (8)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.hotel.unlessStationDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 16 วรรคสอง (8)",
+   "page": 33
+  },
+  {
+   "path": "useConditions.roadAccessTiers[0].roadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (1)",
+   "page": 72
+  },
+  {
+   "path": "useConditions.roadAccessTiers[0].frontageM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (1)",
+   "page": 72
+  },
+  {
+   "path": "useConditions.roadAccessTiers[0].otherEndRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (1)",
+   "page": 72
+  },
+  {
+   "path": "useConditions.roadAccessTiers[0].maxDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (1)",
+   "page": 72
+  },
+  {
+   "path": "useConditions.roadAccessTiers[1].roadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (2)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[1].frontageM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (2)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[1].otherEndRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (2)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[1].maxDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (2)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[2].roadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (3)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[2].frontageM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (3)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[2].otherEndRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (3)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[2].maxDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (3)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[3].roadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (4)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[3].frontageM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (4)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[3].otherEndRoadWidthM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (4)",
+   "page": 73
+  },
+  {
+   "path": "useConditions.roadAccessTiers[3].maxDistanceM",
+   "source": "mr56-bma",
+   "clause": "ข้อ 36 (4)",
+   "page": 73
+  },
+  {
+   "path": "buildingClasses.highRiseFromHeightM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 1 อาคารสูง",
+   "page": 1
+  },
+  {
+   "path": "buildingClasses.extraLargeFromFloorAreaSqm",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 1 อาคารขนาดใหญ่พิเศษ",
+   "page": 1
+  },
+  {
+   "path": "buildingClasses.largeAboveFloorAreaSqm",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 1 อาคารขนาดใหญ่",
+   "page": 2
+  },
+  {
+   "path": "buildingClasses.largeIfTallFromHeightM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 1 อาคารขนาดใหญ่",
+   "page": 2
+  },
+  {
+   "path": "buildingClasses.largeIfTallAboveFloorAreaSqm",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 1 อาคารขนาดใหญ่",
+   "page": 2
+  },
+  {
+   "path": "openSpaceMinimums[0].minShare",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 33 (1)",
+   "page": 7
+  },
+  {
+   "path": "openSpaceMinimums[1].minShare",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 33 (2)",
+   "page": 7
+  },
+  {
+   "path": "openSpaceMinimums[2].minShare",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (1)",
+   "page": 15
+  },
+  {
+   "path": "openSpaceMinimums[3].minShare",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (2)",
+   "page": 15
+  },
+  {
+   "path": "openSpaceMinimums[4].minShare",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 6 (1)",
+   "page": 2
+  },
+  {
+   "path": "openSpaceMinimums[5].minShare",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 6 (2)",
+   "page": 2
+  },
+  {
+   "path": "roadSetbacks[0].appliesAbove.storeys",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].appliesAbove.heightM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[0].roadWidthM.max",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (1)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[0].setback.distanceM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (1)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[1].roadWidthM.min",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (2)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[1].roadWidthM.max",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (2)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[1].setback.share",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (2)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[2].roadWidthM.min",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (3)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[0].bands[2].setback.distanceM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 41 วรรคสอง (3)",
+   "page": 9
+  },
+  {
+   "path": "roadSetbacks[1].appliesAbove.storeys",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].appliesAbove.heightM",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[0].roadWidthM.max",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (1)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[0].setback.distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (1)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[1].roadWidthM.min",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (2)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[1].roadWidthM.max",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (2)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[1].setback.share",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (2)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[2].roadWidthM.min",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (3)",
+   "page": 15
+  },
+  {
+   "path": "roadSetbacks[1].bands[2].setback.distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 50 วรรคสอง (3)",
+   "page": 15
+  },
+  {
+   "path": "boundarySetbacks[0].bands[0].heightM.max",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 (1)",
+   "page": 11
+  },
+  {
+   "path": "boundarySetbacks[0].bands[0].distanceM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 (1)",
+   "page": 11
+  },
+  {
+   "path": "boundarySetbacks[0].bands[1].heightM.min",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 (2)",
+   "page": 11
+  },
+  {
+   "path": "boundarySetbacks[0].bands[1].heightM.max",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 (2)",
+   "page": 11
+  },
+  {
+   "path": "boundarySetbacks[0].bands[1].distanceM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 (2)",
+   "page": 11
+  },
+  {
+   "path": "boundarySetbacks[1].bands[0].heightM.max",
+   "source": "bb44-03",
+   "clause": "ข้อ 54",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[1].bands[0].distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 54",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[1].bands[1].heightM.min",
+   "source": "bb44-03",
+   "clause": "ข้อ 54",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[1].bands[1].distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 54",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[2].bands[0].heightM.max",
+   "source": "bb44-03",
+   "clause": "ข้อ 55",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[2].bands[0].distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 55",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[2].bands[1].heightM.min",
+   "source": "bb44-03",
+   "clause": "ข้อ 55 วรรคสอง",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[2].bands[1].distanceM",
+   "source": "bb44-03",
+   "clause": "ข้อ 55 วรรคสอง",
+   "page": 16
+  },
+  {
+   "path": "boundarySetbacks[3].bands[0].distanceM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 4",
+   "page": 2
+  },
+  {
+   "path": "blindWall.minDistanceM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 วรรคสอง",
+   "page": 11
+  },
+  {
+   "path": "blindWall.onBoundaryMaxHeightM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 50 วรรคสอง",
+   "page": 11
+  },
+  {
+   "path": "heightVsRoad.maxMultipleOfDistance[0]",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 44",
+   "page": 9
+  },
+  {
+   "path": "heightVsRoad.maxMultipleOfDistance[1]",
+   "source": "bb44-03",
+   "clause": "ข้อ 49",
+   "page": 14
+  },
+  {
+   "path": "heightVsRoad.parallelRoads.maxRoadSpacingM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 45",
+   "page": 10
+  },
+  {
+   "path": "heightVsRoad.parallelRoads.maxBuildingWidthM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 45",
+   "page": 10
+  },
+  {
+   "path": "heightVsRoad.cornerNarrowerRoadMaxLengthM",
+   "source": "mr43-55-upd68",
+   "clause": "ข้อ 46",
+   "page": 10
+  },
+  {
+   "path": "heightVsRoad.wideRoadException.roadWidthM",
+   "source": "bb44-03",
+   "clause": "ข้อ 49 วรรคสอง",
+   "page": 14
+  },
+  {
+   "path": "heightVsRoad.wideRoadException.withinM",
+   "source": "bb44-03",
+   "clause": "ข้อ 49 วรรคสอง",
+   "page": 14
+  },
+  {
+   "path": "heightVsRoad.wideRoadException.accessWidthM",
+   "source": "bb44-03",
+   "clause": "ข้อ 49 วรรคสอง",
+   "page": 14
+  },
+  {
+   "path": "frontOpenSpace.depthM",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (6)",
+   "page": 15
+  },
+  {
+   "path": "frontOpenSpace.tallAboveStoreys",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (6) วรรคสอง",
+   "page": 15
+  },
+  {
+   "path": "frontOpenSpace.tallDepthM",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (6) วรรคสอง",
+   "page": 15
+  },
+  {
+   "path": "frontOpenSpace.minShareOfPerimeter",
+   "source": "bb44-03",
+   "clause": "ข้อ 52 (6) วรรคสาม",
+   "page": 15
+  },
+  {
+   "path": "frontOpenSpace.exemptIfFrontageShareOfPerimeter",
+   "source": "bb44-03",
+   "clause": "ข้อ 53",
+   "page": 16
+  },
+  {
+   "path": "frontOpenSpace.exemptIfWithinRoadM",
+   "source": "bb44-03",
+   "clause": "ข้อ 53",
+   "page": 16
+  },
+  {
+   "path": "highRise.access[0].floorAreaSqm.max",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2",
+   "page": 2
+  },
+  {
+   "path": "highRise.access[0].frontageM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2",
+   "page": 2
+  },
+  {
+   "path": "highRise.access[0].roadWidthM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2",
+   "page": 2
+  },
+  {
+   "path": "highRise.access[1].floorAreaSqm.min",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2 วรรคสอง",
+   "page": 2
+  },
+  {
+   "path": "highRise.access[1].frontageM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2 วรรคสอง",
+   "page": 2
+  },
+  {
+   "path": "highRise.access[1].roadWidthM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2 วรรคสอง",
+   "page": 2
+  },
+  {
+   "path": "highRise.accessStripWidthM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 2 วรรคสาม",
+   "page": 2
+  },
+  {
+   "path": "highRise.fireLaneWidthM",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 3",
+   "page": 2
+  },
+  {
+   "path": "highRise.farMax",
+   "source": "mr35-33-upd69",
+   "clause": "ข้อ 5",
+   "page": 2
+  },
+  {
+   "path": "parking[0].condo.spacesPerUnit",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (3)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].condo.unitsFromSqm",
+   "source": "bb44-03",
+   "clause": "ข้อ 83 (3)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].office.sqmPerSpace",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (6)",
+   "page": 28
+  },
+  {
+   "path": "parking[0].office.appliesFromSqm",
+   "source": "bb44-03",
+   "clause": "ข้อ 83 (6)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hotel.firstRooms",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (2)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hotel.firstSpaces",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (2)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hotel.tiers[0].uptoRooms",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (2)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hotel.tiers[0].roomsPerSpace",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (2)",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hotel.tiers[1].roomsPerSpace",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (2) วรรคสอง",
+   "page": 27
+  },
+  {
+   "path": "parking[0].hallSqmPerSpace",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (17)",
+   "page": 28
+  },
+  {
+   "path": "parking[0].largeBuildingSqmPerSpace",
+   "source": "bb44-03",
+   "clause": "ข้อ 84 (16)",
+   "page": 28
+  },
+  {
+   "path": "parking[1].condo.spacesPerUnit",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ค)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].condo.unitsFromSqm",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 2 (3)",
+   "page": 1
+  },
+  {
+   "path": "parking[1].office.sqmPerSpace",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ฉ)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].office.appliesFromSqm",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 2 (6)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].hotel.appliesFromSqm",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 2 (2)",
+   "page": 1
+  },
+  {
+   "path": "parking[1].hotel.lobbySqmPerSpace",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ข)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].hotel.commercialSqmPerSpace",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ข)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].hallSqmPerSpace",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ช)",
+   "page": 2
+  },
+  {
+   "path": "parking[1].largeBuildingSqmPerSpace",
+   "source": "mr17-07-upd64",
+   "clause": "ข้อ 3 (1) (ซ)",
+   "page": 2
+  }
+ ]
+}
