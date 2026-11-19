@@ -1993,7 +1993,7 @@
       ],
       "recommendation": "residential",
       "why": "Feasibility should under-promise: the 30 in 100 reading gives the smaller footprint, and the ข้อ 33 (2) proviso reads as written for buildings people sleep in.",
-      "decision": null
+      "decision": "residential"
     },
     {
       "id": "condo-public-building",
@@ -2042,7 +2042,7 @@
       ],
       "recommendation": "not-public",
       "why": "Every listed example is a place where the public gathers; private homes are not, so a condo should get no ข้อ 53 or ข้อ 54 bonus.",
-      "decision": null
+      "decision": "not-public"
     },
     {
       "id": "office-public-building",
@@ -2084,7 +2084,7 @@
       ],
       "recommendation": "not-public",
       "why": "Offices have their own definition; reading them into the public-building list would also change their fire and open-space class.",
-      "decision": null
+      "decision": "not-public"
     },
     {
       "id": "open-space-base",
@@ -2140,7 +2140,7 @@
       ],
       "recommendation": "all-stricter",
       "why": "A Bangkok permit office checks both the ministerial regulation and the bylaw; meeting the largest requirement satisfies every reading.",
-      "decision": null
+      "decision": "all-stricter"
     },
     {
       "id": "parking-source",
@@ -2195,7 +2195,7 @@
       ],
       "recommendation": "higher-of-both",
       "why": "The two texts agree on condo and office and differ only for hotels; taking the higher count is safe and needs no map of the 1971 municipal boundary.",
-      "decision": null
+      "decision": "higher-of-both"
     },
     {
       "id": "permeable-base",
@@ -2230,7 +2230,7 @@
       ],
       "recommendation": "required",
       "why": "The sentence sits inside the OSR rule and 'พื้นที่ว่าง' refers back to the open space that rule requires; the other reading would penalise leaving extra open space.",
-      "decision": null
+      "decision": "required"
     },
     {
       "id": "gfa-includes-parking",
@@ -2272,7 +2272,7 @@
       ],
       "recommendation": "counts",
       "why": "The plan defines its own term with no exclusion, and the explicit ข้อ 54 exemption only makes sense if parking otherwise counts.",
-      "decision": null
+      "decision": "counts"
     },
     {
       "id": "office-operating-area",
@@ -2314,7 +2314,7 @@
       ],
       "recommendation": "gfa",
       "why": "The definition reaches beyond the building itself; using total floor area can only make the tool stricter.",
-      "decision": null
+      "decision": "gfa"
     },
     {
       "id": "road-access-tiers",
@@ -2356,7 +2356,7 @@
       ],
       "recommendation": "frontage-and-row",
       "why": "Frontage is visible on the drawn plot, so skipping it would let a 4 m wide flag lot pass; the network tests cannot be read from one plot.",
-      "decision": null
+      "decision": "frontage-and-row"
     },
     {
       "id": "bylaw-2569-scope",
@@ -2398,7 +2398,7 @@
       ],
       "recommendation": "factories-only",
       "why": "The decoded article numbers and the readable annex are all about factories, but show a banner saying the amendment's body text was not machine-readable.",
-      "decision": null
+      "decision": "factories-only"
     },
     {
       "id": "front-open-space",
@@ -2433,7 +2433,7 @@
       ],
       "recommendation": "exempt-on-road",
       "why": "ข้อ 53 opens with 'อาคารอยู่ริมทางสาธารณะที่ไม่ต้องมีที่ว่างตามข้อ 52(3) และ 52(6)', which only makes sense as an exemption.",
-      "decision": null
+      "decision": "exempt-on-road"
     }
   ],
   "gaps": [

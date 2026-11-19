@@ -11,9 +11,14 @@ describe('interpretations', () => {
     expect(Object.fromEntries(engine)).toEqual(Object.fromEntries(fromPack))
   })
 
-  it('takes each decision from the pack, and its recommendation while undecided', () => {
-    const expected = Object.fromEntries(pack.questions.map((q) => [q.id, q.decision ?? q.recommendation]))
-    expect(packInterpretations(pack) as Record<string, string>).toEqual(expected)
+  it('takes each decision from the pack', () => {
+    const expected = Object.fromEntries(pack.questions.map((q) => [q.id, q.decision]))
+    expect(packInterpretations(pack) as Record<string, string | null>).toEqual(expected)
+  })
+
+  it('refuses a pack with an undecided question instead of picking a reading', () => {
+    const undecided = { ...pack, questions: pack.questions.map((q, i) => (i === 0 ? { ...q, decision: null } : q)) }
+    expect(() => packInterpretations(undecided)).toThrow(pack.questions[0].id)
   })
 
   it('rejects an incomplete record or an unknown reading at the boundary', () => {

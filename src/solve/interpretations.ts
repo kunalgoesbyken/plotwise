@@ -27,7 +27,9 @@ const MEMBER_READING = {
 type ClassQuestion = keyof typeof MEMBER_READING
 
 export function packInterpretations(pack: RulePack): Interpretations {
-  return InterpretationsSchema.parse(Object.fromEntries(pack.questions.map((q) => [q.id, q.decision ?? q.recommendation])))
+  const undecided = pack.questions.filter((q) => q.decision === null).map((q) => q.id)
+  if (undecided.length) throw new Error(`the pack has undecided questions: ${undecided.join(', ')}`)
+  return InterpretationsSchema.parse(Object.fromEntries(pack.questions.map((q) => [q.id, q.decision])))
 }
 
 export function readingCites(pack: RulePack, questionId: QuestionId, readingId: string): readonly Cite[] {

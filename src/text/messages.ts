@@ -206,7 +206,6 @@ const en = {
 
   'interpretation.intro': 'Where the texts are ambiguous, the engine uses one reading. Each is listed with the reading in use.',
   'interpretation.decided': 'Decided',
-  'interpretation.awaiting': 'Recommended reading · awaiting decision',
   'interpretation.why': 'Why this reading',
 
   'design.podium-tower': 'Podium and tower',
