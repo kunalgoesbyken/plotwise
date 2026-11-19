@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'bun:test'
 import { localFrame, type LngLat, type Vec2 } from '@/geo/projection'
 import fixture from './__fixtures__/ratchadaphisek.overpass.json'
-import { NEAREST_ROAD_MAX_GAP_M } from './assumptions'
+import { MAX_MEDIAN_WIDTH_M, NEAREST_ROAD_MAX_GAP_M } from './assumptions'
 import { nearestRoad } from './nearest-road'
 import { OverpassResponseSchema } from './overpass-response'
 import { parseOverpass } from './parse'
 import type { Road } from './schema'
+
+const RATCHADAPHISEK_CENTRELINES_FROM_EDGE_MIDPOINT_M = [14.12, 33.0]
+const RATCHADAPHISEK_LANES_WIDTH_M = 13
+const RATCHADAPHISEK_KERB_TO_KERB_M =
+  RATCHADAPHISEK_CENTRELINES_FROM_EDGE_MIDPOINT_M[1] - RATCHADAPHISEK_CENTRELINES_FROM_EDGE_MIDPOINT_M[0] + RATCHADAPHISEK_LANES_WIDTH_M
 
 const frame = localFrame([100.5018, 13.7563])
 const at = (x: number, y: number): LngLat => frame.toLngLat([x, y])
@@ -19,6 +24,7 @@ function road(id: string, points: Vec2[], overrides: Partial<Road> = {}): Road {
     widthM: 12,
     widthSource: 'class',
     grade: 'ground',
+    oneway: false,
     ...overrides,
   }
 }
@@ -34,6 +40,7 @@ describe('nearestRoad', () => {
     expect(result?.road.id).toBe('front')
     expect(result?.distanceM).toBeCloseTo(10, 1)
     expect(result?.widthM).toBe(12)
+    expect(result?.carriageways).toBe(1)
   })
 
   it('is the same whichever way the edge is drawn', () => {
@@ -129,14 +136,15 @@ describe('nearestRoad', () => {
     expect(nearestRoad(edge, [expressway, front])?.road.id).toBe('front')
   })
 
-  it('finds Ratchadaphisek Road for a building edge facing it in the recorded sample', () => {
+  it('finds both carriageways of Ratchadaphisek Road for a building edge facing it in the recorded sample', () => {
     const site = parseOverpass(OverpassResponseSchema.parse(fixture))
     const building = site.buildings.find((b) => b.id === 'way/369892554')
     const result = nearestRoad([building!.outer[1], building!.outer[2]], site.roads)
     expect(result?.road.nameTh).toBe('ถนนรัชดาภิเษก')
     expect(result?.road.highway).toBe('primary')
     expect(result?.distanceM).toBeCloseTo(9.5, 1)
-    expect(result?.widthM).toBe(13)
+    expect(result?.carriageways).toBe(2)
+    expect(result?.widthM).toBeCloseTo(RATCHADAPHISEK_KERB_TO_KERB_M, 0)
   })
 
   it('uses the part of a bent road that runs alongside the edge', () => {
@@ -147,5 +155,60 @@ describe('nearestRoad', () => {
       [100, 60],
     ])
     expect(nearestRoad(edge, [bent])?.distanceM).toBeCloseTo(10, 1)
+  })
+})
+
+describe('nearestRoad on a divided road', () => {
+  const lanes = { oneway: true, widthM: 13, widthSource: 'lanes', name: 'Ratchadaphisek Road' } as const
+  const near = road('near', [[-20, -10], [60, -10]], lanes)
+  const opposite = (y: number, overrides: Partial<Road> = {}) => road('opposite', [[60, y], [-20, y]], { ...lanes, ...overrides })
+
+  it('adds the opposite carriageway and the median, kerb to kerb', () => {
+    const result = nearestRoad(edge, [near, opposite(-30)])
+    expect(result?.road.id).toBe('near')
+    expect(result?.distanceM).toBeCloseTo(10, 1)
+    expect(result?.carriageways).toBe(2)
+    expect(result?.widthM).toBeCloseTo(20 + 13, 1)
+  })
+
+  it('pairs carriageways by Thai name or road reference when the English name is missing', () => {
+    const thai = { name: undefined, nameTh: 'ถนนรัชดาภิเษก' }
+    expect(nearestRoad(edge, [{ ...near, ...thai }, opposite(-30, thai)])?.carriageways).toBe(2)
+    const ref = { name: undefined, ref: '31' }
+    expect(nearestRoad(edge, [{ ...near, ...ref }, opposite(-30, ref)])?.carriageways).toBe(2)
+  })
+
+  it('keeps one carriageway when there is no opposite carriageway', () => {
+    const result = nearestRoad(edge, [near])
+    expect(result?.carriageways).toBe(1)
+    expect(result?.widthM).toBe(13)
+  })
+
+  it('does not pair roads with different names, or with no name or reference at all', () => {
+    expect(nearestRoad(edge, [near, opposite(-30, { name: 'Din Daeng Road' })])?.carriageways).toBe(1)
+    const unnamed = { name: undefined }
+    expect(nearestRoad(edge, [{ ...near, ...unnamed }, opposite(-30, unnamed)])?.carriageways).toBe(1)
+  })
+
+  it('does not pair a carriageway whose median would be wider than the limit', () => {
+    const atLimit = -10 - 13 - MAX_MEDIAN_WIDTH_M.value
+    expect(nearestRoad(edge, [near, opposite(atLimit + 0.5)])?.carriageways).toBe(2)
+    expect(nearestRoad(edge, [near, opposite(atLimit - 0.5)])?.carriageways).toBe(1)
+  })
+
+  it('does not pair a parallel road running the same way, a two-way road or an elevated road', () => {
+    const sameWay = road('same-way', [[-20, -30], [60, -30]], lanes)
+    expect(nearestRoad(edge, [near, sameWay])?.carriageways).toBe(1)
+    expect(nearestRoad(edge, [near, opposite(-30, { oneway: false })])?.carriageways).toBe(1)
+    expect(nearestRoad(edge, [near, opposite(-30, { grade: 'elevated' })])?.carriageways).toBe(1)
+  })
+
+  it('does not pair a carriageway on the other side of the plot', () => {
+    expect(nearestRoad(edge, [near, opposite(20)])?.carriageways).toBe(1)
+  })
+
+  it('pairs with the nearest opposite carriageway when there are several', () => {
+    const result = nearestRoad(edge, [near, opposite(-40), opposite(-30)])
+    expect(result?.widthM).toBeCloseTo(33, 1)
   })
 })

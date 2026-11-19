@@ -1,6 +1,7 @@
-import { HIGHWAY_CLASSES } from './assumptions'
+import { HIGHWAY_CLASSES, PLATFORM_MODES, STATION_NODE_TYPES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassResponseSchema, type OverpassResponse } from './overpass-response'
+import { USER_AGENT } from './user-agent'
 
 export const OVERPASS_INSTANCES = [
   'https://overpass-api.de/api/interpreter',
@@ -8,7 +9,6 @@ export const OVERPASS_INSTANCES = [
   'https://overpass.private.coffee/api/interpreter',
 ]
 
-const USER_AGENT = 'plotwise/0.1'
 const SERVER_TIMEOUT_S = 12
 const CLIENT_TIMEOUT_MS = 15_000
 
@@ -18,8 +18,13 @@ export class OverpassUnavailableError extends Error {
   }
 }
 
-export function overpassQuery([minLng, minLat, maxLng, maxLat]: Bbox, timeoutS = SERVER_TIMEOUT_S): string {
-  const area = `(${minLat},${minLng},${maxLat},${maxLng})`
+function overpassArea([minLng, minLat, maxLng, maxLat]: Bbox): string {
+  return `(${minLat},${minLng},${maxLat},${maxLng})`
+}
+
+export function overpassQuery(siteBbox: Bbox, stationBbox: Bbox, timeoutS = SERVER_TIMEOUT_S): string {
+  const area = overpassArea(siteBbox)
+  const stationArea = overpassArea(stationBbox)
   return [
     `[out:json][timeout:${timeoutS}];(`,
     `way["building"]["building"!="no"]${area};`,
@@ -27,6 +32,9 @@ export function overpassQuery([minLng, minLat, maxLng, maxLat]: Bbox, timeoutS =
     `way["building:part"]${area};`,
     `relation["building:part"]["type"="multipolygon"]${area};`,
     `way["highway"~"^(${HIGHWAY_CLASSES.join('|')})$"]${area};`,
+    `nw["railway"="platform"]${stationArea};`,
+    `nw["public_transport"="platform"][~"^(${PLATFORM_MODES.value.join('|')})$"~"^yes$"]${stationArea};`,
+    `node["railway"="station"]["station"~"^(${STATION_NODE_TYPES.value.join('|')})$"]${stationArea};`,
     `);out geom;`,
   ].join('')
 }
@@ -61,10 +69,9 @@ function describeFailure(instance: string, error: unknown): string {
 }
 
 export async function fetchOverpass(
-  bbox: Bbox,
+  query: string,
   { instances = OVERPASS_INSTANCES, timeoutMs = CLIENT_TIMEOUT_MS, fetchImpl = fetch }: FetchOverpassOptions = {},
 ): Promise<OverpassResponse> {
-  const query = overpassQuery(bbox)
   const attempts: string[] = []
   for (const instance of instances) {
     try {

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import { localFrame } from '@/geo/projection'
 import type { Plot } from '@/plot/plot'
-import type { Road as SiteRoad } from '@/site/schema'
+import { loadPack } from '@/rules'
+import type { Road as SiteRoad, Station } from '@/site/schema'
+import { stationDistance } from '@/solve'
 import { initialEditorState, reduceEditor, nextStep, type EditorAction, type EditorState } from './editor-state'
 
 const plot: Plot = {
@@ -93,10 +95,11 @@ describe('road width estimates', () => {
     widthM: 8,
     widthSource: 'lanes',
     grade: 'ground',
+    oneway: false,
   }
 
   it('fills a newly marked road with the nearest mapped road width, marked as an estimate', () => {
-    const state = run({ type: 'load', plot: lot }, { type: 'site-roads', roads: [soi] }, { type: 'mark-road', edge: 2 })
+    const state = run({ type: 'load', plot: lot }, { type: 'site', roads: [soi], stations: [] }, { type: 'mark-road', edge: 2 })
     expect(state.draft.status === 'closed' && state.draft.corners[2].edge).toEqual({ road: true, widthM: 8, estimated: true })
     expect(state.plot?.roads).toEqual([
       { edge: 0, widthM: 12 },
@@ -105,8 +108,80 @@ describe('road width estimates', () => {
   })
 
   it('leaves the width empty when no mapped road runs along the edge', () => {
-    const state = run({ type: 'load', plot: lot }, { type: 'site-roads', roads: [soi] }, { type: 'mark-road', edge: 1 })
+    const state = run({ type: 'load', plot: lot }, { type: 'site', roads: [soi], stations: [] }, { type: 'mark-road', edge: 1 })
     expect(state.draft.status === 'closed' && state.draft.corners[1].edge).toEqual({ road: true, widthM: null, estimated: false })
+  })
+})
+
+describe('station distance estimates', () => {
+  const frame = localFrame([100.5603, 13.737])
+  const limitM = stationDistance(loadPack('bkk-y9')).value
+  const corners: [number, number][] = [
+    [0, 0],
+    [40, 0],
+    [40, 30],
+    [0, 30],
+  ]
+  const draw: EditorAction[] = [
+    ...corners.map(([x, y]): EditorAction => ({ type: 'add', at: frame.toLngLat([x, y]) })),
+    { type: 'close' },
+    { type: 'mark-road', edge: 0 },
+    { type: 'set-road-width', edge: 0, widthM: 12 },
+  ]
+  const platformAt = (y: number): Station => ({
+    id: 'platform',
+    kind: 'platform',
+    geometry: { type: 'line', line: [frame.toLngLat([0, y]), frame.toLngLat([40, y])] },
+  })
+  const asok: Station = { id: 'asok', name: 'Asok', kind: 'station', geometry: { type: 'point', at: frame.toLngLat([20, 30 + limitM - 1]) } }
+  const site = (stations: Station[] | null): EditorAction => ({ type: 'site', roads: [], stations })
+
+  it('pre-sets the flag as an estimate when the nearest platform is within the limit', () => {
+    const state = run(...draw, site([platformAt(30 + limitM - 1)]))
+    expect(state.nearestStation).toEqual({ distanceM: expect.closeTo(limitM - 1, 3), measuredFrom: 'platform' })
+    expect(state.draft).toMatchObject({ nearStation: true, nearStationSource: 'estimate' })
+    expect(state.plot?.nearStation).toBe(true)
+  })
+
+  it('falls back to a station point and leaves the flag off past the limit', () => {
+    const near = run(...draw, site([asok]))
+    expect(near.nearestStation).toEqual({ name: 'Asok', distanceM: expect.closeTo(limitM - 1, 3), measuredFrom: 'station' })
+    expect(near.draft.nearStation).toBe(true)
+    const far = run(...draw, site([platformAt(30 + limitM + 1)]))
+    expect(far.draft).toMatchObject({ nearStation: false, nearStationSource: 'estimate' })
+  })
+
+  it('re-estimates when a corner moves', () => {
+    const state = run(...draw, site([platformAt(30 + limitM + 1)]), { type: 'move', corner: 2, at: frame.toLngLat([40, 32]) })
+    expect(state.draft.nearStation).toBe(true)
+  })
+
+  it('keeps the user choice when station data arrives or the plot changes', () => {
+    const chosen = run(...draw, { type: 'set-near-station', nearStation: false }, site([asok]))
+    expect(chosen.draft).toMatchObject({ nearStation: false, nearStationSource: 'user' })
+    expect(chosen.nearestStation?.name).toBe('Asok')
+  })
+
+  it('keeps the flag of a loaded plot but still reports the nearest station', () => {
+    const ring = corners.map(([x, y]) => [...frame.toLngLat([x, y])] as [number, number])
+    const state = run({ type: 'load', plot: { ...plot, ring } }, site([asok]))
+    expect(state.draft.nearStation).toBe(false)
+    expect(state.nearestStation?.measuredFrom).toBe('station')
+  })
+
+  it('makes no estimate until station data is known, and forgets it when the plot is cleared', () => {
+    const unknown = run(...draw, site(null))
+    expect(unknown.nearestStation).toBeNull()
+    expect(unknown.draft.nearStationSource).toBe('default')
+    const cleared = run(...draw, site([asok]), { type: 'clear' })
+    expect(cleared.nearestStation).toBeNull()
+    expect(cleared.draft).toMatchObject({ nearStation: false, nearStationSource: 'default' })
+  })
+
+  it('estimates no station when none is mapped nearby', () => {
+    const state = run(...draw, site([]))
+    expect(state.nearestStation).toBeNull()
+    expect(state.draft).toMatchObject({ nearStation: false, nearStationSource: 'estimate' })
   })
 })
 

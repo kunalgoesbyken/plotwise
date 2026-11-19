@@ -35,6 +35,7 @@ describe('parseRoadElements', () => {
         widthM: 4 * LANE_WIDTH_M.value,
         widthSource: 'lanes',
         grade: 'ground',
+        oneway: false,
       },
     ])
   })
@@ -44,6 +45,33 @@ describe('parseRoadElements', () => {
     expect(road).not.toHaveProperty('name')
     expect(road).not.toHaveProperty('nameTh')
     expect(road.widthSource).toBe('class')
+  })
+
+  it('keeps the road reference so carriageways can be matched without a name', () => {
+    const [road] = parseRoadElements([way(1, { highway: 'trunk', ref: '31' })])
+    expect(road.ref).toBe('31')
+    expect(parseRoadElements([way(2, { highway: 'trunk' })])[0]).not.toHaveProperty('ref')
+  })
+
+  it.each([
+    ['yes', true],
+    ['1', true],
+    ['true', true],
+    ['no', false],
+    ['reversible', false],
+  ])('reads oneway=%p as one-way %p, keeping the drawn direction', (oneway, expected) => {
+    const [road] = parseRoadElements([way(1, { highway: 'primary', oneway })])
+    expect(road.oneway).toBe(expected)
+    expect(road.line[0]).toEqual([100.5, 13.7])
+  })
+
+  it('reverses a oneway=-1 road so its line always runs in the direction of travel', () => {
+    const [road] = parseRoadElements([way(1, { highway: 'primary', oneway: '-1' })])
+    expect(road.oneway).toBe(true)
+    expect(road.line).toEqual([
+      [100.501, 13.7],
+      [100.5, 13.7],
+    ])
   })
 
   it('marks elevated roads', () => {
@@ -56,7 +84,7 @@ describe('parseRoadElements', () => {
       way(1, { highway: 'footway' }),
       way(2, { highway: 'steps' }),
       way(3, { building: 'yes' }),
-      { type: 'node', id: 4 },
+      { type: 'node', id: 4, lat: 13.7, lon: 100.5, tags: { highway: 'primary' } },
       { type: 'way', id: 5, tags: { highway: 'primary' } },
       way(6, { highway: 'primary' }, [{ lon: 100.5, lat: 13.7 }]),
       way(7, { highway: 'primary' }, [{ lon: 100.5, lat: 13.7 }, null, { lon: 100.6, lat: 13.7 }]),

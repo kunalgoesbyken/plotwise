@@ -7,7 +7,9 @@ export const MAX_CORNERS = 100
 
 const COORDINATE_SCALE = 1e7
 
-type Brief = { buildingType: BuildingType; nearStation: boolean }
+export type NearStationSource = 'default' | 'estimate' | 'user'
+
+type Brief = { buildingType: BuildingType; nearStation: boolean; nearStationSource: NearStationSource }
 
 export type Draft =
   | ({ status: 'drawing'; points: readonly LngLat[] } & Brief)
@@ -27,6 +29,7 @@ export type DraftAction =
   | { type: 'estimate-road-width'; edge: number; widthM: number }
   | { type: 'set-building-type'; buildingType: BuildingType }
   | { type: 'set-near-station'; nearStation: boolean }
+  | { type: 'estimate-near-station'; nearStation: boolean }
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
 
@@ -37,7 +40,7 @@ type ClosedDraft = Extract<Draft, { status: 'closed' }>
 type DrawingDraft = Extract<Draft, { status: 'drawing' }>
 
 export function emptyDraft(buildingType: BuildingType): Draft {
-  return { status: 'drawing', points: [], buildingType, nearStation: false }
+  return { status: 'drawing', points: [], buildingType, nearStation: false, nearStationSource: 'default' }
 }
 
 function roundCoordinate(value: number) {
@@ -55,8 +58,9 @@ function closed(brief: Brief, corners: readonly Corner[]): EditResult {
   if (corners.length < 3) return reject('too-few-corners')
   if (corners.length > MAX_CORNERS) return reject('too-many-corners')
   const outline = normalizeOutline(corners)
-  const { buildingType, nearStation } = brief
-  return outline.ok ? accept({ status: 'closed', corners: outline.corners, buildingType, nearStation }) : reject(outline.reason)
+  const { buildingType, nearStation, nearStationSource } = brief
+  if (!outline.ok) return reject(outline.reason)
+  return accept({ status: 'closed', corners: outline.corners, buildingType, nearStation, nearStationSource })
 }
 
 function reshaped(draft: ClosedDraft, corners: Corner[]): EditResult {
@@ -137,7 +141,13 @@ function fromPlot(plot: Plot): EditResult {
     const widthM = widths.get(i)
     return { at, edge: widthM === undefined ? SIDE : { road: true, widthM, estimated: false } }
   })
-  return closed(plot, corners)
+  return closed({ ...plot, nearStationSource: 'user' }, corners)
+}
+
+function estimateNearStation(draft: Draft, nearStation: boolean): Draft {
+  if (draft.nearStationSource === 'user') return draft
+  if (draft.nearStationSource === 'estimate' && draft.nearStation === nearStation) return draft
+  return { ...draft, nearStation, nearStationSource: 'estimate' }
 }
 
 export function editDraft(draft: Draft, action: DraftAction): EditResult {
@@ -145,7 +155,9 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
     case 'set-building-type':
       return accept({ ...draft, buildingType: action.buildingType })
     case 'set-near-station':
-      return accept({ ...draft, nearStation: action.nearStation })
+      return accept({ ...draft, nearStation: action.nearStation, nearStationSource: 'user' })
+    case 'estimate-near-station':
+      return accept(estimateNearStation(draft, action.nearStation))
     case 'clear':
       return accept(emptyDraft(draft.buildingType))
     case 'load':

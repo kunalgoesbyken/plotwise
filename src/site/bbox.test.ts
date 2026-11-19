@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { localFrame } from '@/geo/projection'
 import { NEAREST_ROAD_MAX_GAP_M, SITE_MARGIN_M } from './assumptions'
-import { BboxParamSchema, bboxQuery, plotSiteBbox, snapBbox, type Bbox } from './bbox'
+import { BboxParamSchema, bboxQuery, expandBbox, plotSiteBbox, snapBbox, type Bbox } from './bbox'
 
 const central: Bbox = [100.5671, 13.7632, 100.5709, 13.7668]
 
@@ -82,6 +82,24 @@ describe('BboxParamSchema', () => {
 
   it('accepts a box of about 1.3 km', () => {
     expect(issues('100.50,13.70,100.51,13.71')).toBe('')
+  })
+})
+
+describe('expandBbox', () => {
+  it('grows the box by the margin on every side', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 0, max: 2000, noNaN: true }), (marginM) => {
+        const frame = localFrame([central[0], central[1]])
+        const [west, south] = frame.toLocal([central[0], central[1]])
+        const [east, north] = frame.toLocal([central[2], central[3]])
+        const [minLng, minLat, maxLng, maxLat] = expandBbox(central, marginM)
+        const grown = [...frame.toLocal([minLng, minLat]), ...frame.toLocal([maxLng, maxLat])]
+        expect(grown[0]).toBeCloseTo(west - marginM, 3)
+        expect(grown[1]).toBeCloseTo(south - marginM, 3)
+        expect(grown[2]).toBeCloseTo(east + marginM, 3)
+        expect(grown[3]).toBeCloseTo(north + marginM, 3)
+      }),
+    )
   })
 })
 

@@ -13,7 +13,7 @@ function sameLngLat(a: LngLat, b: LngLat): boolean {
   return a[0] === b[0] && a[1] === b[1]
 }
 
-function isClosed(line: LngLat[]): boolean {
+export function isClosed(line: LngLat[]): boolean {
   return line.length > 1 && sameLngLat(line[0], line[line.length - 1])
 }
 

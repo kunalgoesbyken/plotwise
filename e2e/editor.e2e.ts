@@ -21,12 +21,13 @@ const SOI_NORTH_OF_EXAMPLE: Road = {
   widthM: 9,
   widthSource: 'lanes',
   grade: 'ground',
+  oneway: false,
 }
 
 async function open(page: Page, path = '/', roads: Road[] = []) {
   await page.route('**/api/site?**', (route) => {
     const bbox = new URL(route.request().url()).searchParams.get('bbox')!.split(',').map(Number)
-    return route.fulfill({ json: { bbox, buildings: [], roads, attribution: 'test' } })
+    return route.fulfill({ json: { bbox, buildings: [], roads, stations: [], attribution: 'test' } })
   })
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))

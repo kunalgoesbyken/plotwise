@@ -110,8 +110,32 @@ export const NEAREST_ROAD_MAX_GAP_M: Assumption<number> = {
     'assumption: widest plausible gap between a plot edge and the kerb of the road it faces (verge, footpath, setback)',
 }
 
+export const MAX_MEDIAN_WIDTH_M: Assumption<number> = {
+  value: 20,
+  source:
+    'assumption: Bangkok arterial medians run from a kerb strip to the pier line under elevated rail or tollways; the recorded Ratchadaphisek sample has about 6 m between its estimated carriageways. A same-named opposite carriageway farther away is treated as a separate road, such as a frontage road',
+}
+
 export const SITE_MARGIN_M: Assumption<number> = {
   value: 200,
   source:
     'assumption: 200 m around the plot covers the street block, the roads it faces and the towers that shade or overlook it; one margin for road suggestions and the 3D context so both share one cached request',
+}
+
+export const PLATFORM_MODES: Assumption<readonly string[]> = {
+  value: ['train', 'subway', 'light_rail', 'monorail'],
+  source:
+    'OSM public_transport=platform modes of Bangkok mass transit: BTS and MRT are tagged subway, the Gold Line light_rail, the Pink and Yellow lines monorail, the Airport Rail Link and Red Line train (Overpass, 2026-11-20). train also matches SRT intercity platforms, which OSM does not tag apart',
+}
+
+export const STATION_NODE_TYPES: Assumption<readonly string[]> = {
+  value: ['subway', 'light_rail', 'monorail'],
+  source:
+    'OSM station=* values on Bangkok BTS, MRT, Gold Line and monorail station nodes (Overpass, 2026-11-20); Airport Rail Link and Red Line nodes carry only train=yes, like SRT intercity stations, so they are not used',
+}
+
+export const STATION_PLATFORM_RADIUS_M: Assumption<number> = {
+  value: 50,
+  source:
+    'measured: of the 69 Bangkok BTS and MRT station nodes with a platform mapped within 100 m, 67 have it within 10 m (Overpass, 2026-11-20); a station node with no platform this close stands in for its platform',
 }

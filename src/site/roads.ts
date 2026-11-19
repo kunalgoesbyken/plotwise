@@ -1,5 +1,6 @@
+import type { LngLat } from '@/geo/projection'
 import { HIGHWAY_CLASSES, type HighwayClass } from './assumptions'
-import { toLine } from './geometry'
+import { namesOf, toLine } from './geometry'
 import type { OverpassResponse, OverpassTags, OverpassWay } from './overpass-response'
 import { resolveRoadGrade, resolveRoadWidth } from './road-width'
 import type { Road } from './schema'
@@ -10,8 +11,16 @@ function isHighwayClass(value: string | undefined): value is HighwayClass {
   return HIGHWAY_CLASSES.some((highway) => highway === value)
 }
 
-function namesOf(tags: OverpassTags): Pick<Road, 'name' | 'nameTh'> {
-  return { ...(tags.name && { name: tags.name }), ...(tags['name:th'] && { nameTh: tags['name:th'] }) }
+const ONE_WAY_FORWARD = ['yes', '1', 'true']
+const ONE_WAY_BACKWARD = '-1'
+
+function labelsOf(tags: OverpassTags): Pick<Road, 'name' | 'nameTh' | 'ref'> {
+  return { ...namesOf(tags), ...(tags.ref && { ref: tags.ref }) }
+}
+
+function inTravelDirection(line: LngLat[], tags: OverpassTags): Pick<Road, 'line' | 'oneway'> {
+  if (tags.oneway === ONE_WAY_BACKWARD) return { line: line.toReversed(), oneway: true }
+  return { line, oneway: ONE_WAY_FORWARD.includes(tags.oneway ?? '') }
 }
 
 function toRoad(way: OverpassWay): Road | undefined {
@@ -20,11 +29,11 @@ function toRoad(way: OverpassWay): Road | undefined {
   if (!isHighwayClass(highway) || !line || line.length < 2) return undefined
   return {
     id: `way/${way.id}`,
-    line,
-    ...namesOf(way.tags),
+    ...labelsOf(way.tags),
     highway,
     ...resolveRoadWidth(way.tags, highway),
     grade: resolveRoadGrade(way.tags),
+    ...inTravelDirection(line, way.tags),
   }
 }
 
