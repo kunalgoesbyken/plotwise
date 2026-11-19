@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { ASSUMPTIONS } from '@/solve/assumptions'
+import { MAX_ROAD_WIDTH_M } from '@/plot/plot'
 import { parseMetres } from './metres'
 
 describe('parseMetres', () => {
@@ -16,7 +16,7 @@ describe('parseMetres', () => {
 
   it('accepts every positive width up to the widest road', () => {
     fc.assert(
-      fc.property(fc.double({ min: 0.01, max: ASSUMPTIONS.maxRoadWidthM.value, noNaN: true }), (n) => {
+      fc.property(fc.double({ min: 0.01, max: MAX_ROAD_WIDTH_M, noNaN: true }), (n) => {
         expect(parseMetres(String(n))).toBe(n)
       }),
     )

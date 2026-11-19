@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { ASSUMPTIONS } from '@/solve/assumptions'
-import { PlotSchema } from './plot'
+import { MAX_ROAD_WIDTH_M, PlotSchema } from './plot'
 
 const ring = [
   [100.56, 13.74],
@@ -43,10 +42,10 @@ describe('PlotSchema', () => {
   })
 
   it('rejects a road wider than any real street, which would make the envelope unbounded', () => {
-    for (const widthM of [ASSUMPTIONS.maxRoadWidthM.value + 1, 1e12, Number.MAX_VALUE, Infinity]) {
+    for (const widthM of [MAX_ROAD_WIDTH_M + 1, 1e12, Number.MAX_VALUE, Infinity]) {
       expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM }] }).success).toBe(false)
     }
-    expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: ASSUMPTIONS.maxRoadWidthM.value }] }).success).toBe(true)
+    expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: MAX_ROAD_WIDTH_M }] }).success).toBe(true)
   })
 
   it('rejects a non-positive road width and an unknown building type', () => {

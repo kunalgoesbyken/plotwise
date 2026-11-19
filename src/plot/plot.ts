@@ -1,12 +1,13 @@
 import { z } from 'zod'
-import { ASSUMPTIONS } from '@/solve/assumptions'
 
 export const BUILDING_TYPES = ['condo', 'office', 'hotel'] as const
 export type BuildingType = (typeof BUILDING_TYPES)[number]
 
 export const LngLatSchema = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)])
 
-export const RoadWidthSchema = z.number().positive().max(ASSUMPTIONS.maxRoadWidthM.value)
+export const MAX_ROAD_WIDTH_M = 200
+
+export const RoadWidthSchema = z.number().positive().max(MAX_ROAD_WIDTH_M)
 
 const RoadSchema = z.object({
   edge: z.int().nonnegative(),

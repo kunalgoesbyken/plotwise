@@ -40,10 +40,6 @@ export const ASSUMPTIONS = {
     office: { value: 2000, source: `${EDITABLE}; central core office floor` },
     hotel: { value: 1000, source: `${EDITABLE}; one core serving about 20 keys per floor` },
   } satisfies PerUse,
-  maxRoadWidthM: {
-    value: 200,
-    source: `${EDITABLE}; input sanity bound, not a rule: the high-rise height limit grows with road width, so an absurd width would make the envelope unbounded`,
-  },
   envelopeSteps: {
     value: 8,
     source: 'engine resolution: the height-to-road step-back is drawn in at most this many tiers so a solve stays under 30 ms',
