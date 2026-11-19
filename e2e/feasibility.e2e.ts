@@ -98,9 +98,28 @@ test('updates every panel live when the road width or the building type changes'
   await page.getByText('Hotel', { exact: true }).click()
   await expect(rules(page).getByRole('region', { name: 'Use · Hotel' })).toBeVisible()
   await expect(limitValue(page, 'Rooms')).toContainText('≤ 80')
-  await expect(designCards(page).first()).toContainText('rooms')
+  await expect(designCards(page).first()).toContainText('Rooms')
   expect(await stillSameDocument(page)).toBe(true)
 })
+
+for (const viewport of [
+  { width: 1280, height: 800 },
+  { width: 375, height: 812 },
+])
+  test(`switching the building type changes the results summary in view at ${viewport.width} px`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    await open(page)
+    const summary = page.getByRole('region', { name: 'Results for the design shown in 3D' })
+    await expect(summary).toBeInViewport()
+    await expect(summary).toContainText('Units')
+    const before = await summary.textContent()
+
+    await page.getByText('Office', { exact: true }).click()
+    await expect(summary).toContainText('Net area')
+    await expect(summary).not.toHaveText(before!)
+    await expect(summary).toBeInViewport()
+    await expect(summary).toContainText(/Limited by .+\./)
+  })
 
 test('the rule stepper carves the envelope in 3D and on the map, and a chosen design shows in 3D', async ({ page }) => {
   const errors = await open(page)

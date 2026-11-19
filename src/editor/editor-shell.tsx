@@ -93,7 +93,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
   }
 
   return (
-    <main className="relative h-dvh w-full overflow-hidden [--panel-w:24rem] 2xl:[--panel-w:27rem]">
+    <main className="relative h-dvh w-full overflow-clip [--panel-w:24rem] 2xl:[--panel-w:27rem]">
       <PlotMap covers={covers} overlay={overlay} />
       <aside
         ref={panel}
@@ -113,7 +113,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
         </nav>
         <div className={`thin-scroll min-h-0 flex-1 scroll-pt-28 overflow-y-auto overscroll-contain ${open ? '' : 'max-lg:hidden'}`}>
           {ready && summary && (
-            <div className={`sticky top-0 z-10 bg-vellum px-(--pad) py-3 ${tab === 'view3d' ? 'max-lg:hidden' : ''}`}>{summary}</div>
+            <div className={`sticky top-0 z-10 -mb-px border-b border-rule bg-paper px-(--pad) py-3 ${tab === 'view3d' ? 'max-lg:hidden' : ''}`}>{summary}</div>
           )}
           <div className={shownOnPhone('site')}>
             <SitePanel />
@@ -127,7 +127,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
           <section
             ref={inset}
             aria-label={t('section.view3d')}
-            className={`${shownOnPhone('view3d')} max-lg:h-[46dvh] ${ready && view3d ? 'lg:fixed lg:bottom-3 lg:left-3 lg:h-[48vh] lg:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] lg:overflow-hidden lg:rounded-xl lg:border lg:border-rule lg:bg-paper lg:shadow-xl' : 'lg:hidden'}`}
+            className={`${shownOnPhone('view3d')} max-lg:h-[50dvh] ${ready && view3d ? 'lg:fixed lg:bottom-3 lg:left-3 lg:h-[48vh] lg:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] lg:overflow-hidden lg:rounded-xl lg:border lg:border-rule lg:bg-paper lg:shadow-xl' : 'lg:hidden'}`}
           >
             {ready && view3d ? (
               view3d

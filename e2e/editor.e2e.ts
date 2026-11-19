@@ -169,6 +169,31 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   ])
 })
 
+async function frontageColumns(page: Page) {
+  const rows = page.getByRole('region', { name: 'Road frontage' }).getByRole('listitem')
+  return rows.evaluateAll((items) =>
+    items.map((item) => {
+      const [, width, action] = [...item.children].map((cell) => cell.getBoundingClientRect())
+      return { width: Math.round(width.left), actionLeft: Math.round(action.left), actionRight: Math.round(action.right), height: Math.round(item.getBoundingClientRect().height) }
+    }),
+  )
+}
+
+for (const width of [536, 1280])
+  test(`road frontage rows keep one column grid at ${width} px, with or without an estimated width`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
+    await page.getByRole('button', { name: 'Use an example plot' }).click()
+    await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
+    await expect(site(page).getByText('Estimated from OpenStreetMap. Check it on site.')).toBeVisible()
+    const rows = await frontageColumns(page)
+    expect(rows).toHaveLength(6)
+    for (const key of ['width', 'actionLeft', 'actionRight', 'height'] as const)
+      expect(new Set(rows.map((row) => row[key])).size, `${key} differs between rows`).toBe(1)
+    const roadInput = await page.getByLabel('Road width on edge C–D, in metres').boundingBox()
+    expect(Math.round(roadInput!.x)).toBe(rows[0].width)
+  })
+
 async function layout(page: Page) {
   return page.evaluate(() => {
     const panel = document.querySelector('aside')!.getBoundingClientRect()

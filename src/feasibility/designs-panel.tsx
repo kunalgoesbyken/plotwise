@@ -1,6 +1,6 @@
 'use client'
 
-import type { Design, Metrics, Yield } from '@/designs'
+import type { Design, Limiter, Metrics } from '@/designs'
 import { Placeholder } from '@/editor/ui'
 import type { Limits } from '@/solve'
 import { formatQuantity } from '@/text/format'
@@ -8,9 +8,11 @@ import { t } from '@/text/messages'
 import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { Disclosure } from './disclosure'
 import { useFeasibility } from './feasibility-provider'
+import { limiterText } from './limiter-text'
 import { WhenReady } from './ready'
 import { Sources } from './sources'
 import { Tally } from './tally'
+import { yieldFigure, type Figure } from './yield-figure'
 
 const STATUS_STYLE: Readonly<Record<CheckStatus, { mark: string; tone: string }>> = {
   pass: { mark: '✓', tone: 'bg-plot-wash text-plot' },
@@ -18,18 +20,7 @@ const STATUS_STYLE: Readonly<Record<CheckStatus, { mark: string; tone: string }>
   manual: { mark: '?', tone: 'bg-road/20 text-road-ink' },
 }
 
-function yieldText(output: Yield): string {
-  switch (output.kind) {
-    case 'units':
-      return t('metric.units', { count: formatQuantity(output.count, 'count') })
-    case 'rooms':
-      return t('metric.rooms', { count: formatQuantity(output.count, 'count') })
-    case 'netArea':
-      return t('metric.net-area', { area: formatQuantity(output.sqm, 'sqm') })
-  }
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value }: Figure) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
       <dt className="text-xs text-slate">{label}</dt>
@@ -38,7 +29,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   )
 }
 
-function FloorAreaBar({ metrics, limits }: { metrics: Metrics; limits: Limits }) {
+function FloorAreaBar({ metrics, limitedBy, limits }: { metrics: Metrics; limitedBy: Limiter; limits: Limits }) {
   const share = Math.min(1, metrics.gfaSqm / limits.far.maxGfaSqm)
   return (
     <div className="mt-4">
@@ -51,6 +42,7 @@ function FloorAreaBar({ metrics, limits }: { metrics: Metrics; limits: Limits })
       <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-vellum" aria-hidden="true">
         <div className="h-full rounded-full bg-plot" style={{ width: `${share * 100}%` }} />
       </div>
+      <p className="mt-1.5 text-xs leading-snug text-slate">{limiterText(limitedBy, limits)}</p>
     </div>
   )
 }
@@ -98,12 +90,12 @@ function DesignCard({ design, limits, selected, onSelect }: DesignCardProps) {
           {t(selected ? 'design.shown' : 'design.view')}
         </button>
       </div>
-      <FloorAreaBar metrics={metrics} limits={limits} />
+      <FloorAreaBar metrics={metrics} limitedBy={design.limitedBy} limits={limits} />
       <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 @[17rem]:grid-cols-3">
         <Metric label={t('metric.far')} value={formatQuantity(metrics.far, 'ratio')} />
         <Metric label={t('metric.height')} value={formatQuantity(metrics.heightM, 'm')} />
         <Metric label={t('metric.storeys')} value={formatQuantity(metrics.storeys, 'count')} />
-        <Metric label={t('metric.yield')} value={yieldText(metrics.yield)} />
+        <Metric {...yieldFigure(metrics.yield)} />
         <Metric label={t('metric.parking')} value={t('metric.spaces', { count: formatQuantity(metrics.parkingSpaces, 'count') })} />
         <Metric label={t('metric.open-space')} value={formatQuantity(metrics.openSpaceSqm, 'sqm')} />
       </dl>

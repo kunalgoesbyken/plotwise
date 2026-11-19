@@ -40,8 +40,8 @@ export function RuleStepper() {
   const footprint = totalArea(layers.shown[0]?.polygons ?? [])
   const cites = layers.step === 'plot' ? [] : setbacksOf(envelope, layers.step, CARVING).flatMap((s) => s.cites)
   return (
-    <div className="border-t border-rule bg-paper px-3 pt-3 pb-1.5" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
-      <div role="group" aria-label={t('step.label')} className={`${SEGMENTS} grid-cols-4`}>
+    <div className="@container border-t border-rule bg-paper px-3 pt-3 pb-1.5" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
+      <div role="group" aria-label={t('step.label')} className={`${SEGMENTS} max-w-2xl grid-cols-2 @xs:grid-cols-4`}>
         {RULE_STEPS.map((step, i) => {
           const available = layers.steps.includes(step)
           return (
@@ -54,13 +54,13 @@ export function RuleStepper() {
               onClick={() => chooseStep(step)}
               className={`${SEGMENT} group/step px-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`}
             >
-              <span className="font-mono text-2xs text-slate group-aria-pressed/step:text-plot">{i + 1}</span>
+              <span className="hidden font-mono text-2xs text-slate group-aria-pressed/step:text-plot @md:inline">{i + 1}</span>
               {t(`step.${step}`)}
             </button>
           )
         })}
       </div>
-      <div className="flex flex-wrap items-baseline gap-x-3 px-0.5 pt-2">
+      <div className="flex max-w-2xl flex-wrap items-baseline gap-x-3 px-0.5 pt-2">
         <p aria-live="polite" className="min-w-0 flex-1 basis-56 text-xs leading-snug">
           {caption({ envelope, layers, limits: result.solution.limits })}{' '}
           <span className="font-mono whitespace-nowrap text-slate tabular-nums">{t('step.footprint', { area: formatQuantity(footprint, 'sqm') })}</span>

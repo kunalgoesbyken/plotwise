@@ -101,7 +101,7 @@ function RoadWidth({ edge, name, widthM, estimated, noteId, prompt, dispatch }: 
           const value = parseMetres(e.target.value)
           if (value !== null) dispatch({ type: 'set-road-width', edge, widthM: value })
         }}
-        className="h-11 w-20 rounded-md border border-rule bg-paper px-2.5 text-right font-mono text-sm tabular-nums transition-colors duration-150 placeholder:text-slate hover:border-slate focus-visible:border-plot aria-invalid:border-signal data-estimated:border-dashed data-estimated:border-road-ink/60 data-estimated:bg-road/10 lg:h-9"
+        className="h-11 w-20 rounded-md border border-rule bg-paper px-2.5 text-right font-mono text-sm tabular-nums transition-colors duration-150 placeholder:text-slate hover:border-slate focus-visible:border-plot aria-invalid:border-signal data-estimated:border-dashed data-estimated:border-road-ink/50 data-estimated:bg-road/15 lg:h-9"
       />
       <span className="font-mono text-sm text-slate">{t('frontage.metres')}</span>
       {estimated && <EstimateTag />}

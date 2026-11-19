@@ -16,6 +16,7 @@ const START_ZOOM = 17
 const MAX_FIT_ZOOM = 19
 const FIT_MARGIN_PX = 48
 const FIT_MARGIN = { top: FIT_MARGIN_PX * 2, bottom: FIT_MARGIN_PX, left: FIT_MARGIN_PX, right: FIT_MARGIN_PX }
+const PHONE_LAYOUT = '(width < 64rem)'
 
 type View = { map: MapLibreMap; createMarker: (element: HTMLElement) => Marker }
 type Covers = readonly RefObject<HTMLElement | null>[]
@@ -86,7 +87,7 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       created.keyboard.disableRotation()
       created.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right')
       created.addControl(new maplibre.ScaleControl({ unit: 'metric' }), 'bottom-right')
-      created.addControl(new maplibre.AttributionControl(), 'bottom-right')
+      created.addControl(new maplibre.AttributionControl({ compact: matchMedia(PHONE_LAYOUT).matches }), 'bottom-right')
       created.on('load', () => {
         addEditorLayers(created, readPalette(element))
         unbind = bindInteractions(created, store)

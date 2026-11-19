@@ -1,41 +1,30 @@
 'use client'
 
-import type { Design, Yield } from '@/designs'
+import type { Design } from '@/designs'
 import type { Limits } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { useFeasibility } from './feasibility-provider'
+import { limiterText } from './limiter-text'
 import { Tally } from './tally'
-
-type Figure = { readonly label: string; readonly value: string }
-
-function yieldFigure(output: Yield): Figure {
-  switch (output.kind) {
-    case 'units':
-      return { label: t('summary.units'), value: formatQuantity(output.count, 'count') }
-    case 'rooms':
-      return { label: t('summary.rooms'), value: formatQuantity(output.count, 'count') }
-    case 'netArea':
-      return { label: t('summary.net-area'), value: formatQuantity(output.sqm, 'sqm') }
-  }
-}
+import { yieldFigure, type Figure } from './yield-figure'
 
 function figures({ metrics }: Design, limits: Limits): readonly Figure[] {
   return [
     { label: t('summary.floor-area'), value: formatQuantity(metrics.gfaSqm, 'sqm') },
     { label: t('summary.max-floor-area'), value: formatQuantity(limits.far.maxGfaSqm, 'sqm') },
-    { label: t('summary.height'), value: formatQuantity(metrics.heightM, 'm') },
+    { label: t('metric.height'), value: formatQuantity(metrics.heightM, 'm') },
     yieldFigure(metrics.yield),
   ]
 }
 
 function Figures({ design, limits }: { design: Design; limits: Limits }) {
   return (
-    <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 @xs:grid-cols-4">
+    <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 @xs:flex @xs:justify-between">
       {figures(design, limits).map(({ label, value }) => (
-        <div key={label} className="min-w-0">
-          <dt className="truncate text-xs text-slate">{label}</dt>
-          <dd key={value} className="-mx-1 w-fit animate-flash rounded px-1 font-mono text-sm font-medium tabular-nums">
+        <div key={label}>
+          <dt className="text-xs whitespace-nowrap text-slate">{label}</dt>
+          <dd key={value} className="-mx-1 w-fit animate-flash rounded px-1 font-mono text-sm font-medium whitespace-nowrap tabular-nums">
             {value}
           </dd>
         </div>
@@ -58,6 +47,9 @@ export function ResultsSummary() {
         <Tally checks={design.checks} />
       </div>
       <Figures design={design} limits={result.solution.limits} />
+      <p key={design.limitedBy} className="mt-2 animate-flash rounded text-xs leading-snug text-slate">
+        {limiterText(design.limitedBy, result.solution.limits)}
+      </p>
     </section>
   )
 }

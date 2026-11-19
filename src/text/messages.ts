@@ -228,25 +228,28 @@ const en = {
   'design.checklist': 'Checklist',
   'designs.none': 'No design fits this plot under these rules. Try a wider road, a larger plot or another building type.',
 
+  'limited-by.far': 'Limited by the floor area ratio.',
+  'limited-by.building-class': ({ height }: { height: string }) =>
+    `Limited by the high-rise rules, which apply from ${height} tall or to an extra-large floor area.`,
+  'limited-by.use': 'Limited by the zone’s size condition for this use.',
+  'limited-by.use-unless': ({ road, station }: { road: string; station: string }) =>
+    `Limited by the zone’s size condition for this use: going larger needs a ${road} road or a station within ${station}.`,
+  'limited-by.envelope': 'Limited by the allowed envelope.',
+
   'metric.gfa-of-max': ({ max }: { max: string }) => `of ${max} max floor area`,
   'metric.far': 'FAR',
   'metric.height': 'Height',
   'metric.storeys': 'Storeys',
-  'metric.yield': 'Yield',
   'metric.parking': 'Parking',
   'metric.open-space': 'Open space',
-  'metric.units': ({ count }: { count: string }) => `${count} units`,
-  'metric.rooms': ({ count }: { count: string }) => `${count} rooms`,
-  'metric.net-area': ({ area }: Area) => `${area} net`,
+  'metric.units': 'Units',
+  'metric.rooms': 'Rooms',
+  'metric.net-area': 'Net area',
   'metric.spaces': ({ count }: { count: string }) => `${count} spaces`,
 
   'summary.label': 'Results for the design shown in 3D',
   'summary.floor-area': 'Floor area',
   'summary.max-floor-area': 'Max allowed',
-  'summary.height': 'Height',
-  'summary.units': 'Units',
-  'summary.rooms': 'Rooms',
-  'summary.net-area': 'Net area',
 
   'status.pass': 'Pass',
   'status.fail': 'Fail',

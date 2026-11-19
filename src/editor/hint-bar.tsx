@@ -12,7 +12,7 @@ function rejection(reason: Rejection): string {
   return reason === 'too-many-corners' ? t('rejection.too-many-corners', { count: MAX_CORNERS }) : t(`rejection.${reason}`)
 }
 
-type Hint = { label: string; text: ReactNode; alert?: boolean }
+type Hint = { label: string; text: ReactNode; alert?: boolean; settled?: boolean }
 
 function hintFor(state: EditorState): Hint {
   const { draft, selection, notice } = state
@@ -34,7 +34,7 @@ function hintFor(state: EditorState): Hint {
     case 'width':
       return { label: t('hint.label.frontage'), text: t('hint.width', { edge: edgeName(step.edge, count) }) }
     case 'done':
-      return { label: t('hint.label.ready'), text: t('hint.done') }
+      return { label: t('hint.label.ready'), text: t('hint.done'), settled: true }
   }
 }
 
@@ -46,7 +46,7 @@ export function HintBar() {
   const drawing = draft.status === 'drawing' && draft.points.length > 0
 
   return (
-    <div className="shrink-0 px-2 pt-2 lg:pointer-events-none lg:fixed lg:top-3 lg:left-3 lg:max-w-[min(38rem,calc(100vw-var(--panel-w)-7rem))] lg:p-0">
+    <div className={`shrink-0 px-2 pt-2 ${hint.settled ? 'max-lg:hidden' : ''} lg:pointer-events-none lg:fixed lg:top-3 lg:left-3 lg:max-w-[min(38rem,calc(100vw-var(--panel-w)-7rem))] lg:p-0`}>
       <div
         role="status"
         aria-live="polite"
