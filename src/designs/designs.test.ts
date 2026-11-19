@@ -8,6 +8,7 @@ import type { BuildingType } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { buildingControlOpenSpace, isHighRiseOrExtraLarge, packInterpretations, ratioOpenSpace, solve, type Interpretations } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
+import { EXAMPLE_PLOT } from '@/editor/example-plot'
 import { designs, type Design } from './designs'
 
 const pack = loadPack('bkk-y9')
@@ -138,6 +139,33 @@ describe('designs follow the rules as inputs change', () => {
     for (const d of [wide, narrow]) expect(d.metrics.far).toBeGreaterThan(0.9 * pack.far.max.value)
     expect(fromRoad(wide)).toMatchObject({ status: 'pass' })
     expect((fromRoad(wide) as { actual: number }).actual).toBeLessThan((fromRoad(narrow) as { actual: number }).actual)
+  })
+})
+
+describe('podium and tower', () => {
+  it.each(['condo', 'office', 'hotel'] as const)('lets a %s tower climb into the top tiers of the stepped envelope', (buildingType) => {
+    const solution = solve({ ...EXAMPLE_PLOT, buildingType, nearStation: true }, pack, readings)
+    const prisms = solution.envelopes.find((e) => e.kind === 'highRise')!.prisms
+    const tower = byId(designs(solution), 'podium-tower')!
+    expect(tower.plates.floors.at(-1)!.topM).toBeGreaterThan(prisms.at(-3)!.topM)
+  })
+
+  it('names the rule that stops each design growing', () => {
+    const office = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)), 'podium-tower')!
+    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    expect(office.limitedBy).toBe('use')
+    expect(nearStation.limitedBy).not.toBe('use')
+    const lowRise = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'condo' }, pack, readings)), 'low-rise')!
+    expect(['building-class', 'envelope']).toContain(lowRise.limitedBy)
+  })
+
+  it('stops an office on a narrow soi at the zone office-size condition, not at the envelope', () => {
+    const solution = solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)
+    const tower = byId(designs(solution), 'podium-tower')!
+    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    const size = tower.checks.find((c) => c.id === 'use-size')
+    expect(size?.status === 'pass' && size.actual / size.limit).toBeGreaterThan(0.95)
+    expect(nearStation.metrics.gfaSqm).toBeGreaterThan(tower.metrics.gfaSqm)
   })
 })
 
