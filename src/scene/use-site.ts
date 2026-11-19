@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { LngLat } from '@/geo/projection'
-import { bboxQuery, snapBbox, type Bbox } from '@/site/bbox'
+import { bboxQuery, plotSiteBbox, snapBbox, type Bbox } from '@/site/bbox'
 import { fetchSite } from '@/site/client'
 import type { Site } from '@/site/schema'
-import { contextBbox } from './context'
 import { useSettled } from './use-settled'
 
 export type SiteStatus = 'loading' | 'ready' | 'failed'
@@ -13,7 +12,7 @@ type Outcome = { readonly bbox: Bbox; readonly attempt: number; readonly ok: boo
 const cacheCell = (bbox: Bbox) => bboxQuery(snapBbox(bbox))
 
 export function useSite(ring: readonly LngLat[]) {
-  const bbox = useSettled(contextBbox(ring), (kept, next) => cacheCell(kept) !== cacheCell(next))
+  const bbox = useSettled(plotSiteBbox(ring), (kept, next) => cacheCell(kept) !== cacheCell(next))
   const [attempt, setAttempt] = useState(0)
   const [site, setSite] = useState<Site | null>(null)
   const [outcome, setOutcome] = useState<Outcome | null>(null)

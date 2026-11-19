@@ -7,8 +7,7 @@ import { OSM_ATTRIBUTION } from '@/site/assumptions'
 import { OverpassResponseSchema } from '@/site/overpass-response'
 import { parseOverpass } from '@/site/parse'
 import type { Site } from '@/site/schema'
-import { CONTEXT_MARGIN_M } from './assumptions'
-import { contextBbox, siteContext, standingBuildings, type ContextBuilding } from './context'
+import { siteContext, standingBuildings, type ContextBuilding } from './context'
 import { extentOf, extentsMeet } from './extent'
 
 const recorded = parseOverpass(OverpassResponseSchema.parse(fixture))
@@ -32,18 +31,6 @@ const block = (x: number, y: number, w: number, h: number): ContextBuilding => (
   baseM: 0,
   topM: 20,
   guessed: false,
-})
-
-describe('contextBbox', () => {
-  it('covers the plot with the context margin on every side', () => {
-    const frame = localFrame([100.53, 13.724])
-    const ring = [frame.toLngLat([0, 0]), frame.toLngLat([40, 0]), frame.toLngLat([40, 30])]
-    const [minLng, minLat, maxLng, maxLat] = contextBbox(ring)
-    const [west, south] = frame.toLocal([minLng, minLat])
-    const [east, north] = frame.toLocal([maxLng, maxLat])
-    const margin = CONTEXT_MARGIN_M.value
-    expect([west, south, east, north].map((v) => Math.round(v * 1000) / 1000)).toEqual([-margin, -margin, 40 + margin, 30 + margin])
-  })
 })
 
 describe('siteContext on a recorded Bangkok response', () => {

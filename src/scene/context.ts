@@ -1,9 +1,8 @@
 import { areaPathsD, FillRule, intersectD, type PathsD } from 'clipper2-ts'
 import { localFrame, type LngLat, type LocalFrame, type Vec2 } from '@/geo/projection'
 import { polygonArea, type Loop, type Polygon } from '@/geometry'
-import type { Bbox } from '@/site/bbox'
 import type { Site } from '@/site/schema'
-import { CONTEXT_MARGIN_M, REDEVELOPED_SHARE } from './assumptions'
+import { REDEVELOPED_SHARE } from './assumptions'
 import { extentOf, extentsMeet } from './extent'
 
 export type ContextBuilding = {
@@ -19,13 +18,6 @@ export type SiteContext = {
   readonly frame: LocalFrame
   readonly buildings: readonly ContextBuilding[]
   readonly roads: readonly ContextRoad[]
-}
-
-export function contextBbox(ring: readonly LngLat[]): Bbox {
-  const frame = localFrame(ring[0])
-  const [minX, minY, maxX, maxY] = extentOf(ring.map(frame.toLocal))
-  const margin = CONTEXT_MARGIN_M.value
-  return [...frame.toLngLat([minX - margin, minY - margin]), ...frame.toLngLat([maxX + margin, maxY + margin])]
 }
 
 export function siteContext(site: Site): SiteContext {

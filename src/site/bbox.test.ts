@@ -1,6 +1,8 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { BboxParamSchema, bboxQuery, snapBbox, type Bbox } from './bbox'
+import { localFrame } from '@/geo/projection'
+import { NEAREST_ROAD_MAX_GAP_M, SITE_MARGIN_M } from './assumptions'
+import { BboxParamSchema, bboxQuery, plotSiteBbox, snapBbox, type Bbox } from './bbox'
 
 const central: Bbox = [100.5671, 13.7632, 100.5709, 13.7668]
 
@@ -80,5 +82,21 @@ describe('BboxParamSchema', () => {
 
   it('accepts a box of about 1.3 km', () => {
     expect(issues('100.50,13.70,100.51,13.71')).toBe('')
+  })
+})
+
+describe('plotSiteBbox', () => {
+  it('covers the plot with the site margin on every side', () => {
+    const frame = localFrame([100.53, 13.724])
+    const ring = [frame.toLngLat([0, 0]), frame.toLngLat([40, 0]), frame.toLngLat([40, 30])]
+    const [minLng, minLat, maxLng, maxLat] = plotSiteBbox(ring)
+    const [west, south] = frame.toLocal([minLng, minLat])
+    const [east, north] = frame.toLocal([maxLng, maxLat])
+    const margin = SITE_MARGIN_M.value
+    expect([west, south, east, north].map((v) => Math.round(v * 1000) / 1000)).toEqual([-margin, -margin, 40 + margin, 30 + margin])
+  })
+
+  it('leaves room for a road across the widest allowed gap', () => {
+    expect(SITE_MARGIN_M.value).toBeGreaterThanOrEqual(2 * NEAREST_ROAD_MAX_GAP_M.value)
   })
 })
