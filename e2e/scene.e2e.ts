@@ -19,7 +19,7 @@ function plotAround(id: string): Plot {
     [east + PADDING_DEG, north + PADDING_DEG],
     [west - PADDING_DEG, north + PADDING_DEG],
   ]
-  return { ring: ring.map(([lng, lat]) => [lng, lat]), roads: [{ edge: 0, widthM: 10 }], buildingType: 'condo' }
+  return { ring: ring.map(([lng, lat]) => [lng, lat]), roads: [{ edge: 0, widthM: 10 }], buildingType: 'condo', nearStation: false }
 }
 
 const ON_A_MAPPED_BLOCK = plotAround('way/601499547')
@@ -31,6 +31,7 @@ const OPEN_GROUND: Plot = {
   ],
   roads: [{ edge: 0, widthM: 8 }],
   buildingType: 'office',
+  nearStation: false,
 }
 
 const fulfilSite = (route: Route) => {
