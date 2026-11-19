@@ -9,8 +9,9 @@ export function PlotMap() {
   useEffect(() => {
     let map: import('maplibre-gl').Map | undefined
     let cancelled = false
-    import('maplibre-gl').then(({ Map }) => {
+    import('maplibre-gl').then(({ Map, setWorkerUrl }) => {
       if (cancelled || !container.current) return
+      setWorkerUrl(new URL('/maplibre-gl-worker.mjs', location.origin).href)
       map = new Map({
         container: container.current,
         style: 'https://tiles.openfreemap.org/styles/liberty',
@@ -18,6 +19,7 @@ export function PlotMap() {
         zoom: 15,
         pitch: 45,
       })
+      map.once('idle', () => container.current?.setAttribute('data-map-ready', 'true'))
     })
     return () => {
       cancelled = true

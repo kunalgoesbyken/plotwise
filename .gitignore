@@ -43,3 +43,13 @@ next-env.d.ts
 # transcripts (contain personal details; shared via links)
 *-session.md
 .vercel
+
+public/maplibre-gl-worker.mjs
+e2e/.results
+.playwright-mcp
+
+# planning files (kept local, not committed)
+BRIEF.md
+DECISIONS.md
+docs/
+research/
