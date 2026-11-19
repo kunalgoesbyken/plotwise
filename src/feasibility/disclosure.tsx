@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-const TONES = { plot: 'text-plot', slate: 'text-slate' } as const
+const TONES = { plot: 'text-plot', slate: 'text-slate hover:text-ink' } as const
 
 type DisclosureProps = {
   readonly label: ReactNode
@@ -13,11 +13,11 @@ export function Disclosure({ label, tone = 'plot', className = '', children }: D
   return (
     <details className={`group ${className}`}>
       <summary
-        className={`inline-flex min-h-11 cursor-pointer list-none items-center gap-1 font-mono text-[11px] tracking-wide uppercase select-none lg:min-h-6 [&::-webkit-details-marker]:hidden ${TONES[tone]}`}
+        className={`inline-flex min-h-11 cursor-pointer list-none items-center gap-1 rounded-sm text-xs font-medium transition-colors select-none lg:min-h-7 [&::-webkit-details-marker]:hidden ${TONES[tone]}`}
       >
-        <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90">
-          ›
-        </span>
+        <svg viewBox="0 0 16 16" aria-hidden="true" className="size-3.5 transition-transform duration-150 ease-out-quart group-open:rotate-90">
+          <path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
         {label}
       </summary>
       {children}

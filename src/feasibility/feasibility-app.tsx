@@ -7,6 +7,7 @@ import { DesignsPanel } from './designs-panel'
 import { FeasibilityProvider, useFeasibility } from './feasibility-provider'
 import { FeasibilityScene } from './feasibility-scene'
 import { mapOverlay } from './map-overlay'
+import { ResultsSummary } from './results-summary'
 import { RulesPanel } from './rules-panel'
 
 function Workspace() {
@@ -15,7 +16,7 @@ function Workspace() {
     if (result?.status !== 'ready' || !layers) return undefined
     return mapOverlay(result.solution.site.frame, layers.shown[0]?.polygons ?? [], design?.plates.footprint ?? [])
   }, [result, design, layers])
-  return <EditorShell rules={<RulesPanel />} designs={<DesignsPanel />} view3d={<FeasibilityScene />} overlay={overlay} />
+  return <EditorShell summary={<ResultsSummary />} rules={<RulesPanel />} designs={<DesignsPanel />} view3d={<FeasibilityScene />} overlay={overlay} />
 }
 
 export function FeasibilityApp() {

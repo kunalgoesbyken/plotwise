@@ -111,18 +111,18 @@ export default function SceneView({ frame, plot, site, envelope, carved, designs
         <p id={helpId} className="sr-only">
           {t('scene.help')}
         </p>
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-wrap items-start gap-2 p-2">
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-wrap items-start gap-2 p-3">
           <div className="pointer-events-auto mr-auto">{children}</div>
-          <Button className="pointer-events-auto" onClick={() => setResets((n) => n + 1)}>
+          <Button className="pointer-events-auto shadow-sm" onClick={() => setResets((n) => n + 1)}>
             {t('scene.reset')}
           </Button>
           {fullscreen.supported && (
-            <Button className="pointer-events-auto" onClick={fullscreen.toggle}>
+            <Button className="pointer-events-auto shadow-sm" onClick={fullscreen.toggle}>
               {t(fullscreen.active ? 'scene.fullscreen.exit' : 'scene.fullscreen.enter')}
             </Button>
           )}
         </div>
-        <p className="pointer-events-none absolute bottom-1.5 left-2 font-mono text-[10px] text-slate">{site?.attribution}</p>
+        <p className="pointer-events-none absolute bottom-2 left-3 font-mono text-2xs text-slate">{site?.attribution}</p>
       </div>
       {controls}
     </div>

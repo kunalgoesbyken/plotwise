@@ -8,9 +8,10 @@ import type { MapOverlay } from './map-layers'
 import { PlotMap } from './plot-map'
 import { useEditorState, useEditorStore, type EditorStore } from './plot-store'
 import { SitePanel } from './site-panel'
-import { PanelSection, Placeholder } from './ui'
+import { PanelSection, Placeholder, SEGMENT, SEGMENTS } from './ui'
 
 export type EditorSlots = {
+  summary?: ReactNode
   rules?: ReactNode
   designs?: ReactNode
   view3d?: ReactNode
@@ -58,13 +59,13 @@ function Wordmark() {
         <path d="M4 8 L14 3 L21 9 L18 20 L6 19 Z" fill="none" className="stroke-plot" strokeWidth="1.75" strokeLinejoin="round" />
         <path d="M6 19 L18 20" className="stroke-road" strokeWidth="3.5" strokeLinecap="round" />
       </svg>
-      <span className="font-display text-lg font-semibold tracking-tight">{t('app.name')}</span>
-      <span className="font-mono text-[11px] tracking-wider text-slate uppercase">{t('app.city')}</span>
+      <span className="font-display text-lg leading-none font-semibold tracking-tight">{t('app.name')}</span>
+      <span className="text-sm leading-none text-slate">{t('app.city')}</span>
     </div>
   )
 }
 
-export function EditorShell({ rules, designs, view3d, overlay }: EditorSlots) {
+export function EditorShell({ summary, rules, designs, view3d, overlay }: EditorSlots) {
   const store = useEditorStore()
   const state = useEditorState()
   const panel = useRef<HTMLElement>(null)
@@ -97,41 +98,44 @@ export function EditorShell({ rules, designs, view3d, overlay }: EditorSlots) {
       <aside
         ref={panel}
         aria-label={t('shell.panel')}
-        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col rounded-t-2xl border-t border-rule bg-paper pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px] shadow-ink/25 lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:border lg:pb-0 lg:shadow-xl"
+        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col rounded-t-2xl border-t border-rule bg-paper pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px] shadow-ink/25 [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-[26rem] md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
       >
-        <header className="hidden border-b border-rule px-5 py-4 lg:block">
+        <header className="hidden h-14 shrink-0 items-center border-b border-rule px-(--pad) lg:flex">
           <Wordmark />
         </header>
         <HintBar />
-        <nav aria-label={t('shell.tabs')} className="flex shrink-0 gap-1 border-b border-rule p-1.5 lg:hidden">
+        <nav aria-label={t('shell.tabs')} className={`${SEGMENTS} mx-2 my-2 shrink-0 grid-cols-4 lg:hidden`}>
           {TABS.map((id) => (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={open && tab === id}
-              onClick={() => chooseTab(id)}
-              className="min-h-11 flex-1 rounded-md font-display text-sm font-medium text-slate aria-pressed:bg-vellum aria-pressed:text-ink"
-            >
+            <button key={id} type="button" aria-pressed={open && tab === id} onClick={() => chooseTab(id)} className={`${SEGMENT} font-display text-sm`}>
               {t(`tab.${id}`)}
             </button>
           ))}
         </nav>
-        <div className={`min-h-0 flex-1 overflow-y-auto overscroll-contain ${open ? '' : 'max-lg:hidden'}`}>
+        <div className={`thin-scroll min-h-0 flex-1 scroll-pt-28 overflow-y-auto overscroll-contain ${open ? '' : 'max-lg:hidden'}`}>
+          {ready && summary && (
+            <div className={`sticky top-0 z-10 bg-vellum px-(--pad) py-3 ${tab === 'view3d' ? 'max-lg:hidden' : ''}`}>{summary}</div>
+          )}
           <div className={shownOnPhone('site')}>
             <SitePanel />
           </div>
           <PanelSection title={t('tab.rules')} className={shownOnPhone('rules')}>
-            {ready && rules ? rules : <Placeholder>{t('shell.waiting')}</Placeholder>}
+            {ready && rules ? rules : <Placeholder>{t('shell.waiting.rules')}</Placeholder>}
           </PanelSection>
           <PanelSection title={t('tab.designs')} className={shownOnPhone('designs')}>
-            {ready && designs ? designs : <Placeholder>{t('shell.waiting')}</Placeholder>}
+            {ready && designs ? designs : <Placeholder>{t('shell.waiting.designs')}</Placeholder>}
           </PanelSection>
           <section
             ref={inset}
             aria-label={t('section.view3d')}
             className={`${shownOnPhone('view3d')} max-lg:h-[46dvh] ${ready && view3d ? 'lg:fixed lg:bottom-3 lg:left-3 lg:h-[48vh] lg:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] lg:overflow-hidden lg:rounded-xl lg:border lg:border-rule lg:bg-paper lg:shadow-xl' : 'lg:hidden'}`}
           >
-            {ready && view3d ? view3d : <div className="p-4"><Placeholder>{t('shell.waiting')}</Placeholder></div>}
+            {ready && view3d ? (
+              view3d
+            ) : (
+              <div className="px-(--pad) py-5">
+                <Placeholder>{t('shell.waiting.view3d')}</Placeholder>
+              </div>
+            )}
           </section>
         </div>
       </aside>

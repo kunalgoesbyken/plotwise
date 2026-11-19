@@ -2,6 +2,7 @@
 
 import { edgeName } from '@/editor/map-features'
 import { useEditorState } from '@/editor/plot-store'
+import { Note } from '@/editor/ui'
 import type { Bound, Range } from '@/rules'
 import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
@@ -31,11 +32,10 @@ function BylawBanner({ solution }: Pick<Ready, 'solution'>) {
   const question = PACK.questions.find((q) => q.id === 'bylaw-2569-scope')
   const cites = question?.readings.find((r) => r.id === reading)?.cites ?? []
   return (
-    <div role="note" className="mb-4 rounded-lg border border-road/60 bg-road/10 p-3">
-      <p className="font-display text-sm font-semibold text-road-ink">{t('rules.bylaw.title')}</p>
-      <p className="mt-1 text-xs leading-relaxed text-ink">{t(`rules.bylaw.${reading}`, { zone: PACK.zone.code })}</p>
+    <Note title={t('rules.bylaw.title')}>
+      <p>{t(`rules.bylaw.${reading}`, { zone: PACK.zone.code })}</p>
       <Sources cites={cites} />
-    </div>
+    </Note>
   )
 }
 
@@ -45,9 +45,9 @@ function EstimatedRoads() {
   const names = draft.corners.flatMap((c, i) => (c.edge.road && c.edge.estimated ? [edgeName(i, draft.corners.length)] : []))
   if (names.length === 0) return null
   return (
-    <p role="note" className="mb-4 rounded-lg border border-rule bg-vellum p-3 text-xs leading-relaxed text-road-ink">
-      {t('rules.estimated-roads', { edges: formatList(names) })}
-    </p>
+    <Note>
+      <p>{t('rules.estimated-roads', { edges: formatList(names) })}</p>
+    </Note>
   )
 }
 
@@ -224,10 +224,12 @@ function Rules({ plot, solution }: Ready) {
   const { site, limits } = solution
   return (
     <div>
-      <BylawBanner solution={solution} />
-      <EstimatedRoads />
-      <p className="mb-4 flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
-        <span className="font-display font-semibold">{t('rules.zone', { zone: PACK.zone.code })}</span>
+      <div className="mb-5 flex flex-col gap-2">
+        <BylawBanner solution={solution} />
+        <EstimatedRoads />
+      </div>
+      <p className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
+        <span className="font-medium">{t('rules.zone', { zone: PACK.zone.code })}</span>
         <span className="font-mono text-slate tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
       </p>
       <FloorArea limits={limits} />

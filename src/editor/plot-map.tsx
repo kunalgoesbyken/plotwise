@@ -25,6 +25,10 @@ function paddingFor(map: MapLibreMap, covers: Covers) {
   return fitPadding(map.getContainer().getBoundingClientRect(), rects, FIT_MARGIN)
 }
 
+function collapseAttribution(element: HTMLElement) {
+  element.querySelector('.maplibregl-compact-show')?.classList.remove('maplibregl-compact-show')
+}
+
 function labelElement(label: MapLabel) {
   const element = document.createElement('div')
   element.className = `map-label map-label-${label.kind}`
@@ -87,7 +91,10 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
         addEditorLayers(created, readPalette(element))
         unbind = bindInteractions(created, store)
         setView({ map: created, createMarker: (el) => new maplibre.Marker({ element: el, anchor: 'center' }) })
-        created.once('idle', () => element.setAttribute('data-map-ready', 'true'))
+        created.once('idle', () => {
+          collapseAttribution(element)
+          element.setAttribute('data-map-ready', 'true')
+        })
       })
     })
     return () => {
