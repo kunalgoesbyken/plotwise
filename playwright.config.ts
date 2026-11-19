@@ -4,6 +4,7 @@ const port = 3123
 
 export default defineConfig({
   testDir: 'e2e',
+  testMatch: '**/*.e2e.ts',
   timeout: 90_000,
   workers: 1,
   reporter: [['list']],

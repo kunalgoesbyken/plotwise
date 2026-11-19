@@ -7,7 +7,8 @@
     "build": "bun scripts/copy-maplibre-worker.ts && next build",
     "start": "next start",
     "lint": "eslint",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "test": "bun test"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@playwright/test": "^1.65.1",
     "@tailwindcss/turbopack": "4.3.3",
+    "@types/bun": "^1.4.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -33,8 +35,7 @@
     "eslint-config-next": "16.4.6",
     "fast-check": "^4.10.3",
     "tailwindcss": "4.3.3",
-    "typescript": "^5",
-    "vitest": "^5.1.1"
+    "typescript": "^5"
   },
   "packageManager": "bun@1.4.5",
   "ignoreScripts": [
