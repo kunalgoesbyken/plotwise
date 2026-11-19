@@ -1,0 +1,13 @@
+import { parseBuildingElements } from './buildings'
+import { dropCoveredOutlines } from './coverage'
+import type { OverpassResponse } from './overpass-response'
+import { parseRoadElements } from './roads'
+import type { SiteData } from './schema'
+
+export function parseOverpass({ elements }: OverpassResponse): SiteData {
+  const { outlines, parts } = parseBuildingElements(elements)
+  return {
+    buildings: [...dropCoveredOutlines(outlines, parts), ...parts],
+    roads: parseRoadElements(elements),
+  }
+}
