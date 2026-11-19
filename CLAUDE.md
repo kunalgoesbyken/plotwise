@@ -1,6 +1,6 @@
 # Plotwise: rules for agents
 
-Bangkok plot → allowed envelope → at least two concept designs in 3D, each with a pass/fail checklist. Brief: BRIEF.md. Plan: docs/04-tech-plan.md (written for Bangalore; the engine carries over, the rules are rebuilt for Bangkok). Decisions: DECISIONS.md. Research: research/.
+Bangkok plot → allowed envelope → at least two concept designs in 3D, each with a pass/fail checklist. Brief: BRIEF.md. Plan: docs/04-tech-plan.md (written for Bangalore; the engine carries over, the rules are rebuilt for Bangkok). Decisions: DECISIONS.md. Research: research/. Stack: Next.js 16 App Router + React 19 + TypeScript on bun; MapLibre (plot drawing), three.js via react-three-fiber (3D), clipper2-ts (geometry). Read node_modules/next/dist/docs/ before using a Next API you are unsure of (see AGENTS.md).
 
 ## Hard rules
 - No code comments. KISS, YAGNI, DRY.
@@ -15,8 +15,10 @@ Bangkok plot → allowed envelope → at least two concept designs in 3D, each w
 - Never commit transcripts (*-session.md) or secrets.
 
 ## Commands
-- test: npx vitest run
-- compile rules: npx tsx tools/compile-pack.ts <packId>
-- check rules: npx tsx tools/check-pack.ts <packId>
-- build: npm run build
+- install: bun install
+- dev: bun run dev
+- test: bunx vitest run
+- compile rules: bun tools/compile-pack.ts <packId>
+- check rules: bun tools/check-pack.ts <packId>
+- build: bun run build
 - deploy: vercel --prod
