@@ -95,9 +95,10 @@ function renderLimits({ fields, truth, methods }: Results): string {
   const covered = fields.filter((f) => truth[f.path]).length
   const urls = new Set(Object.values(truth).flatMap((entry) => entry.sources.map((s) => s.url)))
   const uncovered = fields.filter((f) => !truth[f.path]).map((f) => f.path)
+  const notes = [...new Set(Object.values(truth).flatMap((entry) => entry.sources.flatMap((s) => (s.note ? [s.note] : []))))]
   const writeRuns = methods.length - 1
   return bulletList([
-    `Ground truth comes from secondary published sources (re-published law text on LawPlayer and Longdo, ASA and university PDF copies, Thai real-estate articles), with a verbatim quote for each value. It was not hand-typed by a human from the gazette. The FAR-bonus values come from an article about the draft revision of the plan, used as evidence for the 2556 plan.`,
+    `Ground truth comes from secondary published sources (re-published law text, PDF copies, Thai real-estate articles), with a verbatim quote for each value. It was not hand-typed by a human from the gazette.${notes.length ? ` Source notes: ${notes.join(' ')}` : ''}`,
     `Coverage of the truth set: ${covered} of ${fields.length} fields, from ${urls.size} distinct URLs. Fields with no independent source are scored only by agreement: ${uncovered.join(', ') || 'none'}.`,
     'Ambiguity recall could not be measured fairly: the interpretation questions had already been seen and decided while the pointers were built, so there is no unseen set to recall.',
     `n = ${writeRuns} write run${writeRuns === 1 ? '' : 's'}. Run-to-run agreement is a cheap uncertainty signal, not a confidence interval.`,
