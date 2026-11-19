@@ -32,6 +32,7 @@ export type DraftAction =
   | { type: 'estimate-near-station'; nearStation: boolean }
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
+  | { type: 'load-example'; plot: Plot }
 
 export type Rejection = OutlineRejection | 'too-few-corners' | 'too-many-corners'
 export type EditResult = { ok: true; draft: Draft } | { ok: false; reason: Rejection }
@@ -140,13 +141,13 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
   }
 }
 
-function fromPlot(plot: Plot): EditResult {
+function fromPlot(plot: Plot, nearStationSource: NearStationSource): EditResult {
   const widths = new Map(plot.roads.map((r) => [r.edge, r.widthM]))
   const corners = plot.ring.map((at, i): Corner => {
     const widthM = widths.get(i)
     return { at, edge: widthM === undefined ? SIDE : { road: true, widthM, estimated: false } }
   })
-  return closed({ ...plot, nearStationSource: 'user' }, corners)
+  return closed({ ...plot, nearStationSource }, corners)
 }
 
 function estimateNearStation(draft: Draft, nearStation: boolean): Draft {
@@ -166,7 +167,9 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
     case 'clear':
       return accept(emptyDraft(draft.buildingType))
     case 'load':
-      return fromPlot(action.plot)
+      return fromPlot(action.plot, 'user')
+    case 'load-example':
+      return fromPlot(action.plot, 'default')
     default:
       return draft.status === 'drawing' ? editDrawing(draft, action) : editClosed(draft, action)
   }

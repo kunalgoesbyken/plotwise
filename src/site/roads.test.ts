@@ -40,6 +40,14 @@ describe('parseRoadElements', () => {
     ])
   })
 
+  it('reads English from name:en and Thai from name:th, or from a name written in Thai script', () => {
+    const [thaiName] = parseRoadElements([way(1, { highway: 'residential', name: 'ซอยสาทร 1', 'name:en': 'Soi Sathon 1' })])
+    expect(thaiName).toMatchObject({ name: 'Soi Sathon 1', nameTh: 'ซอยสาทร 1' })
+    const [latinName] = parseRoadElements([way(2, { highway: 'residential', name: 'Soi Sathon 1' })])
+    expect(latinName.name).toBe('Soi Sathon 1')
+    expect(latinName).not.toHaveProperty('nameTh')
+  })
+
   it('omits names that are not tagged', () => {
     const [road] = parseRoadElements([way(1, { highway: 'residential' })])
     expect(road).not.toHaveProperty('name')

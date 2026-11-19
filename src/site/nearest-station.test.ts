@@ -65,10 +65,15 @@ describe('nearestStation', () => {
     expect(nearestStation(plot, [beside, farPlatform])).toEqual({ name: 'Beside', distanceM: expect.closeTo(40, 3), measuredFrom: 'station' })
   })
 
-  it('keeps a platform name over the name of its station', () => {
+  it('keeps a platform name over the name of its station, and takes the rest from the station', () => {
     const named = platformArea('named', [100, 0, 250, 10], { name: 'Sukhumvit' })
     expect(nearestStation(plot, [named, node])?.name).toBe('Sukhumvit')
-    expect(nearestStation(plot, [named, node])).not.toHaveProperty('nameTh')
+    expect(nearestStation(plot, [named, node])?.nameTh).toBe(asok.nameTh)
+  })
+
+  it('fills a name the platform lacks from its station', () => {
+    const thaiOnly = platformArea('thai', [100, 0, 250, 10], { nameTh: 'สุขุมวิท' })
+    expect(nearestStation(plot, [thaiOnly, node])).toMatchObject({ name: asok.name, nameTh: 'สุขุมวิท' })
   })
 
   it('is zero when a platform touches, crosses or lies inside the plot', () => {

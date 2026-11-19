@@ -2,7 +2,7 @@ import { bboxQuery, plotSiteBbox, snapBbox } from '@/site/bbox'
 import { fetchSite } from '@/site/client'
 import type { EditorStore } from './plot-store'
 
-export function syncSiteRoads(store: EditorStore) {
+export function syncSite(store: EditorStore) {
   let requested = ''
   let pending: AbortController | undefined
 

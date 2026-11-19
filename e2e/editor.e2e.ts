@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { decodePlot } from '../src/editor/plot-url'
-import type { Road } from '../src/site/schema'
+import type { Place } from '../src/geocode/schema'
+import type { Road, Station } from '../src/site/schema'
 
 const L_SHAPE = [
   [300, 300],
@@ -24,10 +25,25 @@ const SOI_NORTH_OF_EXAMPLE: Road = {
   oneway: false,
 }
 
-async function open(page: Page, path = '/', roads: Road[] = []) {
+const PLATFORM_THROUGH_START_VIEW: Station = {
+  id: 'way/1',
+  name: 'Test Platform',
+  kind: 'platform',
+  geometry: {
+    type: 'line',
+    line: [
+      [100.5268, 13.72],
+      [100.5268, 13.73],
+    ],
+  },
+}
+
+const ASOK: Place = { id: 'N1', label: 'Asok, Watthana, Bangkok', labelTh: 'อโศก, วัฒนา, กรุงเทพมหานคร', lngLat: [100.5604, 13.7372], kind: 'locality' }
+
+async function open(page: Page, path = '/', roads: Road[] = [], stations: Station[] = []) {
   await page.route('**/api/site?**', (route) => {
     const bbox = new URL(route.request().url()).searchParams.get('bbox')!.split(',').map(Number)
-    return route.fulfill({ json: { bbox, buildings: [], roads, stations: [], attribution: 'test' } })
+    return route.fulfill({ json: { bbox, buildings: [], roads, stations, attribution: 'test' } })
   })
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
@@ -194,6 +210,51 @@ for (const width of [536, 1280])
     const roadInput = await page.getByLabel('Road width on edge C–D, in metres').boundingBox()
     expect(Math.round(roadInput!.x)).toBe(rows[0].width)
   })
+
+test('finds a place by name, in Thai or English, and draws the plot there', async ({ page }) => {
+  await page.route('**/api/geocode?**', (route) => route.fulfill({ json: [ASOK] }))
+  const errors = await open(page)
+  await page.getByLabel('Search for an address or place in Thailand').fill('อโศก')
+  await page.getByRole('button', { name: 'Search', exact: true }).click()
+  const result = page.getByRole('list', { name: 'Places found' }).getByRole('button')
+  await expect(result).toContainText('Asok, Watthana, Bangkok')
+  await expect(result).toContainText('อโศก, วัฒนา')
+  await result.click()
+  await expect(page.getByRole('list', { name: 'Places found' })).toBeHidden()
+  await page.waitForTimeout(4_000)
+  await draw(page, [
+    [600, 380],
+    [700, 380],
+    [650, 460],
+  ])
+  await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
+  await page.getByLabel('Road width on edge A–B, in metres').fill('10')
+  const [lng, lat] = (await plotInUrl(page))!.ring[0]
+  expect(Math.abs(lng - ASOK.lngLat[0])).toBeLessThan(0.01)
+  expect(Math.abs(lat - ASOK.lngLat[1])).toBeLessThan(0.01)
+  expect(errors).toEqual([])
+})
+
+test('says when place search is down instead of failing silently', async ({ page }) => {
+  await page.route('**/api/geocode?**', (route) => route.fulfill({ status: 502, json: { error: 'down' } }))
+  await open(page)
+  await page.getByLabel('Search for an address or place in Thailand').fill('asok')
+  await page.keyboard.press('Enter')
+  await expect(site(page).getByText('Place search is unavailable right now')).toBeVisible()
+})
+
+test('ticks the station box from the nearest mapped platform as an estimate the user can override', async ({ page }) => {
+  await open(page, '/', [], [PLATFORM_THROUGH_START_VIEW])
+  await draw(page, L_SHAPE)
+  await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
+  await page.getByLabel('Road width on edge A–B, in metres').fill('10')
+  const near = page.getByRole('checkbox', { name: /Within 500 m of a BTS\/MRT station/ })
+  await expect(site(page).getByText(/Nearest mapped platform: Test Platform, [\d.,]+ m from the plot/)).toBeVisible()
+  await expect(near).toBeChecked()
+  await near.uncheck()
+  await expect.poll(async () => (await plotInUrl(page))?.nearStation).toBe(false)
+  await expect(site(page).getByText('est.', { exact: true })).toHaveCount(0)
+})
 
 async function layout(page: Page) {
   return page.evaluate(() => {

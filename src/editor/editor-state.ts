@@ -1,3 +1,4 @@
+import type { LngLat } from '@/geo/projection'
 import type { BuildingType, Plot } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
@@ -17,12 +18,14 @@ export type EditorState = {
   siteRoads: readonly SiteRoad[]
   siteStations: readonly Station[] | null
   nearestStation: NearestStation | null
+  focus: { at: LngLat; requests: number } | null
 }
 
 export type EditorAction =
   | DraftAction
   | { type: 'select'; selection: Selection }
   | { type: 'site'; roads: readonly SiteRoad[]; stations: readonly Station[] | null }
+  | { type: 'focus'; at: LngLat }
 
 export type Step =
   | { step: 'start' }
@@ -45,6 +48,7 @@ export function initialEditorState(buildingType: BuildingType): EditorState {
     siteRoads: [],
     siteStations: null,
     nearestStation: null,
+    focus: null,
   }
 }
 
@@ -94,7 +98,7 @@ function applyDraft(state: EditorState, action: DraftAction): EditorState {
     plot: draft === state.draft ? state.plot : toPlot(draft),
     selection: draft === state.draft ? state.selection : selectionAfter(action, state.selection, state.draft, draft),
     notice: null,
-    loads: action.type === 'load' ? state.loads + 1 : state.loads,
+    loads: action.type === 'load' || action.type === 'load-example' ? state.loads + 1 : state.loads,
   }
 }
 
@@ -127,6 +131,8 @@ function reduceAction(state: EditorState, action: EditorAction): EditorState {
       return { ...state, selection: action.selection, notice: null }
     case 'site':
       return { ...state, siteRoads: action.roads, siteStations: action.stations }
+    case 'focus':
+      return { ...state, focus: { at: action.at, requests: (state.focus?.requests ?? 0) + 1 } }
     default:
       return applyDraft(state, action)
   }

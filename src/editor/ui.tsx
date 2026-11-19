@@ -63,3 +63,11 @@ export function Note({ title, children }: { title?: string; children: ReactNode 
     </div>
   )
 }
+
+export function EstimateTag() {
+  return (
+    <span aria-hidden="true" className="rounded-sm bg-road/20 px-1.5 font-mono text-2xs font-medium text-road-ink">
+      {t('frontage.estimated-tag')}
+    </span>
+  )
+}

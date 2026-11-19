@@ -4,7 +4,7 @@ import { createContext, use, useDeferredValue, useEffect, useState, useSyncExter
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
 import { initialEditorState, reduceEditor, type EditorAction, type EditorState } from './editor-state'
 import { decodePlot, encodePlot } from './plot-url'
-import { syncSiteRoads } from './site-roads'
+import { syncSite } from './site-sync'
 
 const URL_WRITE_DELAY_MS = 300
 
@@ -70,7 +70,7 @@ const EditorStoreContext = createContext<EditorStore | null>(null)
 export function EditorStoreProvider({ children }: { children: ReactNode }) {
   const [store] = useState(createEditorStore)
   useEffect(() => syncWithUrl(store), [store])
-  useEffect(() => syncSiteRoads(store), [store])
+  useEffect(() => syncSite(store), [store])
   return <EditorStoreContext value={store}>{children}</EditorStoreContext>
 }
 

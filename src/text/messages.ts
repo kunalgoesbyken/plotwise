@@ -100,6 +100,21 @@ const en = {
   'zone.check': 'Check the zone on the BMA city plan',
   'transit.title': 'Mass transit',
   'transit.near': ({ distance }: { distance: string }) => `Within ${distance} of a BTS/MRT station`,
+  'transit.nearest-platform': ({ name, distance }: { name: string; distance: string }) =>
+    `Nearest mapped platform: ${name}, ${distance} from the plot (OpenStreetMap). Check it on site.`,
+  'transit.nearest-station': ({ name, distance }: { name: string; distance: string }) =>
+    `Nearest mapped station: ${name}, ${distance} from the plot. No platform is mapped there, so this is to the station point. Check it on site.`,
+  'transit.none': ({ distance }: { distance: string }) => `No BTS/MRT platform is mapped within ${distance} of the plot.`,
+  'transit.unnamed': 'an unnamed station',
+
+  'search.title': 'Find the site',
+  'search.label': 'Search for an address or place in Thailand',
+  'search.placeholder': 'Address, building or soi',
+  'search.submit': 'Search',
+  'search.searching': 'Searching…',
+  'search.failed': 'Place search is unavailable right now. Pan the map to the site instead.',
+  'search.none': 'No places found. Try the soi or building name, in Thai or English.',
+  'search.results': 'Places found',
 
   'feasibility.working': 'Working out the rules for this plot…',
   'feasibility.failed.non-finite': 'A corner of this outline has no valid position. Move or delete it to continue.',

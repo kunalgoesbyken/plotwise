@@ -3,8 +3,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { BUILDING_TYPES } from '@/plot/plot'
 import { loadPack } from '@/rules'
-import { stationDistance } from '@/solve'
-import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import type { EditorAction } from './editor-state'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
@@ -12,10 +10,11 @@ import { edgeName } from './map-features'
 import { parseMetres } from './metres'
 import type { Edge } from './outline'
 import { useEditorState, useEditorStore } from './plot-store'
-import { Button, PanelSection, Placeholder, PointerText, SEGMENT, SEGMENTS } from './ui'
+import { PlaceSearch } from './place-search'
+import { StationToggle } from './station-toggle'
+import { Button, EstimateTag, PanelSection, Placeholder, PointerText, SEGMENT, SEGMENTS } from './ui'
 
 const PACK = loadPack('bkk-y9')
-const STATION_DISTANCE_M = stationDistance(PACK).value
 const BMA_CITY_PLAN_URL = 'https://webportal.bangkok.go.th/cpud'
 
 type Dispatch = (action: EditorAction) => void
@@ -33,7 +32,7 @@ function PlotOutline() {
           <p className="text-sm leading-relaxed text-slate">
             <PointerText text={(verb) => t('plot.start', { verb })} />
           </p>
-          <Button onClick={() => store.dispatch({ type: 'load', plot: EXAMPLE_PLOT })}>{t('plot.example')}</Button>
+          <Button onClick={() => store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })}>{t('plot.example')}</Button>
         </div>
       ) : (
         <div className="flex items-center justify-between gap-3">
@@ -44,14 +43,6 @@ function PlotOutline() {
         </div>
       )}
     </PanelSection>
-  )
-}
-
-function EstimateTag() {
-  return (
-    <span aria-hidden="true" className="rounded-sm bg-road/20 px-1.5 font-mono text-2xs font-medium text-road-ink">
-      {t('frontage.estimated-tag')}
-    </span>
   )
 }
 
@@ -231,27 +222,10 @@ function Zone() {
   )
 }
 
-function StationToggle() {
-  const store = useEditorStore()
-  const { draft } = useEditorState()
-  return (
-    <PanelSection title={t('transit.title')}>
-      <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm lg:min-h-9">
-        <input
-          type="checkbox"
-          checked={draft.nearStation}
-          onChange={(e) => store.dispatch({ type: 'set-near-station', nearStation: e.target.checked })}
-          className="size-4.5 shrink-0 accent-plot"
-        />
-        {t('transit.near', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}
-      </label>
-    </PanelSection>
-  )
-}
-
 export function SitePanel() {
   return (
     <>
+      <PlaceSearch />
       <PlotOutline />
       <Zone />
       <Frontage />

@@ -14,6 +14,7 @@ const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
 const BANGKOK_CENTRE: LngLat = [100.5268, 13.7236]
 const START_ZOOM = 17
 const MAX_FIT_ZOOM = 19
+const PLACE_ZOOM = 18
 const FIT_MARGIN_PX = 48
 const FIT_MARGIN = { top: FIT_MARGIN_PX * 2, bottom: FIT_MARGIN_PX, left: FIT_MARGIN_PX, right: FIT_MARGIN_PX }
 const PHONE_LAYOUT = '(width < 64rem)'
@@ -138,6 +139,12 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       { padding, maxZoom: MAX_FIT_ZOOM, duration: 600 },
     )
   }, [view, loads, closed, ready, store, covers])
+
+  const { focus } = state
+  useEffect(() => {
+    if (!view || !focus) return
+    view.map.flyTo({ center: [...focus.at], zoom: PLACE_ZOOM, padding: paddingFor(view.map, covers) })
+  }, [view, focus, covers])
 
   return (
     <div className="absolute inset-0">

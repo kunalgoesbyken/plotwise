@@ -50,10 +50,8 @@ function nodesServing(platform: Located, nodes: readonly Located[]): Located[] {
 }
 
 function platformNames(platform: Located, nodes: readonly Located[]): Names {
-  const { name, nameTh } = platform.station
-  if (name || nameTh) return namesOf(platform.station)
   const [station] = nodesServing(platform, nodes)
-  return station ? namesOf(station.station) : {}
+  return { ...(station && namesOf(station.station)), ...namesOf(platform.station) }
 }
 
 export function nearestStation(ring: readonly LngLat[], stations: readonly Station[]): NearestStation | null {

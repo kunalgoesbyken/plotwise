@@ -44,9 +44,9 @@ describe('parseStationElements', () => {
     })
   })
 
-  it('reads a mass-transit station node as a station point', () => {
+  it('reads a mass-transit station node as a station point, its untranslated name as Thai', () => {
     const [station] = parseStationElements([node(4, { railway: 'station', station: 'subway', name: 'อโศก' })])
-    expect(station).toEqual({ id: 'node/4', name: 'อโศก', kind: 'station', geometry: { type: 'point', at: [100.5, 13.7] } })
+    expect(station).toEqual({ id: 'node/4', nameTh: 'อโศก', kind: 'station', geometry: { type: 'point', at: [100.5, 13.7] } })
   })
 
   it('skips bus platforms, intercity station nodes, buildings, roads and broken geometry', () => {

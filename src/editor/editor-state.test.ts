@@ -77,6 +77,15 @@ describe('reduceEditor', () => {
     expect(run({ type: 'load', plot }, { type: 'mark-road', edge: 2 }, { type: 'load', plot }).loads).toBe(2)
   })
 
+  it('asks the map to go to a searched place, again even when it is the same place, without touching the plot', () => {
+    const loaded = run({ type: 'load', plot })
+    const first = reduceEditor(loaded, { type: 'focus', at: [100.53, 13.73] })
+    const again = reduceEditor(first, { type: 'focus', at: [100.53, 13.73] })
+    expect(first.focus).toEqual({ at: [100.53, 13.73], requests: 1 })
+    expect(again.focus?.requests).toBe(2)
+    expect(again.plot).toBe(loaded.plot)
+  })
+
   it('returns the same state for a no-op', () => {
     const state = run({ type: 'load', plot })
     expect(reduceEditor(state, { type: 'unmark-road', edge: 3 })).toBe(state)
@@ -175,6 +184,13 @@ describe('station distance estimates', () => {
     const state = run({ type: 'load', plot: { ...plot, ring } }, site([asok]))
     expect(state.draft.nearStation).toBe(false)
     expect(state.nearestStation?.measuredFrom).toBe('station')
+  })
+
+  it('estimates the flag for the example plot, which is nobody’s choice, and frames it like any load', () => {
+    const ring = corners.map(([x, y]) => [...frame.toLngLat([x, y])] as [number, number])
+    const state = run({ type: 'load-example', plot: { ...plot, ring } }, site([asok]))
+    expect(state.draft).toMatchObject({ nearStation: true, nearStationSource: 'estimate' })
+    expect(state.loads).toBe(1)
   })
 
   it('makes no estimate until station data is known, and forgets it when the plot is cleared', () => {
