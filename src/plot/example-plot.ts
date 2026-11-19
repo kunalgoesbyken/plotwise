@@ -1,4 +1,4 @@
-import type { Plot } from '@/plot/plot'
+import type { Plot } from './plot'
 
 export const EXAMPLE_PLOT: Plot = {
   ring: [

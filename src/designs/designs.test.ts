@@ -8,7 +8,7 @@ import type { BuildingType } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { buildingControlOpenSpace, isHighRiseOrExtraLarge, packInterpretations, ratioOpenSpace, solve, type Interpretations } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
-import { EXAMPLE_PLOT } from '@/editor/example-plot'
+import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { designs, type Design } from './designs'
 
 const pack = loadPack('bkk-y9')
