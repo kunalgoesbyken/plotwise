@@ -1,0 +1,2471 @@
+{
+  "id": "bkk-y9",
+  "zone": {
+    "code": "ย.9",
+    "cite": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 16",
+      "page": 33,
+      "line": 4,
+      "quote": "ขอ้ ๑๖ ที่ดินประเภท ย. ๙ เป็นที่ดินประเภทท่ีอยู่อาศัยหนาแน่นมากท่ีมีวัตถุประสงค์"
+    },
+    "noPlanHeightLimit": {
+      "term": "ความสูง",
+      "from": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 16",
+        "page": 33,
+        "line": 4,
+        "quote": "ขอ้ ๑๖ ที่ดินประเภท ย. ๙ เป็นที่ดินประเภทท่ีอยู่อาศัยหนาแน่นมากท่ีมีวัตถุประสงค์"
+      },
+      "to": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 16",
+        "page": 35,
+        "line": 15,
+        "quote": "ร้อยละสีจ่ ดุ ห้า และให้มีพ้ืนท่ีน้าํ ซมึ ผ่านได้เพือ่ ปลูกตน้ ไมไ้ มน่ อ้ ยกว่ารอ้ ยละหา้ สิบของพน้ื ทีว่ ่าง"
+      }
+    }
+  },
+  "sources": {
+    "mr56-bma": {
+      "title": "กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
+      "url": "http://download.asa.or.th/03media/04law/cpa/mr56-bma.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 41 ก, 16 May 2013 (PDF page 82 carries the 9 Oct 2013 correction)",
+      "kind": "gazette",
+      "textLayer": "readable"
+    },
+    "mr56-correction": {
+      "title": "แก้คำผิด กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
+      "url": "http://download.asa.or.th/03media/04law/cpa/mr56-correction.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 91 ก, 9 Oct 2013",
+      "kind": "gazette",
+      "textLayer": "readable"
+    },
+    "bb69-bma": {
+      "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2569",
+      "url": "https://download.asa.or.th/03media/04law/cpa/bb69-bma.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 143 ตอนพิเศษ 66 ง, 13 Mar 2026",
+      "kind": "gazette",
+      "textLayer": "garbled"
+    },
+    "mr43-55-upd68": {
+      "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522, consolidated to ฉบับที่ 68 (พ.ศ. 2563)",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr43-55-upd68.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 117 ตอนที่ 75 ก, 7 Aug 2000; amendments to 3 Dec 2020; ASA consolidation",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "mr35-33-upd69": {
+      "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) อาคารสูง อาคารขนาดใหญ่พิเศษ, consolidated with ฉบับที่ 42, 50 and 64",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr35-33-upd69.pdf",
+      "published": "ASA consolidation of the gazetted text and its amendments",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "mr17-07-upd64": {
+      "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ที่จอดรถยนต์, consolidated with ฉบับที่ 41 and 64",
+      "url": "https://download.asa.or.th/03media/04law/cba/mr/mr17-07-upd64.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 91 ตอนที่ 86, 21 May 1974; amendment ฉบับที่ 64 of 30 Nov 2012; ASA consolidation",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    },
+    "bb44-03": {
+      "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544",
+      "url": "https://download.asa.or.th/03media/04law/cba/bb/bb44-03.pdf",
+      "published": "ASA typeset text of the Bangkok building control bylaw",
+      "kind": "consolidated",
+      "textLayer": "readable"
+    }
+  },
+  "far": {
+    "max": {
+      "value": 7,
+      "cite": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 16 วรรคสาม (1)",
+        "page": 35,
+        "line": 8,
+        "quote": "(๑) มีอัตราส่วนพ้ืนท่ีอาคารรวมต่อพ้ืนที่ดินไม่เกิน ๗ : ๑ ท้ังนี้ ที่ดินแปลงใดที่ได้ใช้"
+      }
+    },
+    "definition": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 4",
+      "page": 2,
+      "line": 5,
+      "quote": "ของอาคารทกุ หลังต่อพนื้ ทีด่ นิ ทใ่ี ช้เปน็ ท่ตี ง้ั อาคาร"
+    },
+    "subdividedPlotsShareCap": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 16 วรรคสาม (1)",
+      "page": 35,
+      "line": 10,
+      "quote": "ของที่ดินแปลงท่ีเกิดจากการแบ่งแยกหรือแบง่ โอนท้ังหมดรวมกันต้องไมเ่ กนิ ๗ : ๑"
+    }
+  },
+  "openSpaceRatio": {
+    "minShareOfFloorArea": {
+      "value": 0.045,
+      "cite": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 16 วรรคสาม (2)",
+        "page": 35,
+        "line": 11,
+        "quote": "(๒) มอี ัตราสว่ นของท่ีว่างต่อพื้นที่อาคารรวมไม่น้อยกว่าร้อยละส่จี ดุ ห้า แต่อัตราสว่ นของที่ว่าง"
+      }
+    },
+    "definition": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 4",
+      "page": 2,
+      "line": 8,
+      "quote": "ของพน้ื ที่ดินทีใ่ ช้เป็นทตี่ งั้ อาคารต่อพื้นทอ่ี าคารรวมทกุ ชัน้ ของอาคารทกุ หลัง"
+    },
+    "permeableShareOfOpenSpace": {
+      "value": 0.5,
+      "cite": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 16 วรรคสาม (2)",
+        "page": 35,
+        "line": 15,
+        "quote": "ร้อยละสีจ่ ดุ ห้า และให้มีพ้ืนท่ีน้าํ ซมึ ผ่านได้เพือ่ ปลูกตน้ ไมไ้ มน่ อ้ ยกว่ารอ้ ยละหา้ สิบของพน้ื ทีว่ ่าง"
+      }
+    },
+    "notBelowBuildingControl": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 16 วรรคสาม (2)",
+      "page": 35,
+      "line": 12,
+      "quote": "ต้องไม่ตํ่ากวา่ เกณฑข์ ัน้ ตา่ํ ของที่วา่ งอันปราศจากสงิ่ ปกคลมุ ตามกฎหมายว่าด้วยการควบคุมอาคาร ท้ังนี้"
+    }
+  },
+  "farBonus": {
+    "combinedMaxShare": {
+      "value": 0.2,
+      "cite": {
+        "source": "mr56-bma",
+        "clause": "ข้อ 57",
+        "page": 79,
+        "line": 5,
+        "quote": "พ้นื ทอ่ี าคารรวมตอ่ พนื้ ทด่ี นิ รวมกนั เพ่มิ ไดไ้ ม่เกินร้อยละย่สี บิ"
+      }
+    },
+    "measures": [
+      {
+        "kind": "affordableHousing",
+        "eligible": "residential",
+        "maxShare": {
+          "value": 0.2,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 52",
+            "page": 77,
+            "line": 23,
+            "quote": "ภายในพื้นท่ีโครงการ ให้มีอัตราส่วนพื้นท่ีอาคารรวมต่อพื้นท่ีดินเพ่ิมได้ไม่เกินร้อยละยี่สิบ โดยพื้นท่ี"
+          }
+        },
+        "maxExtraPerProvidedArea": {
+          "value": 4,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 52",
+            "page": 77,
+            "line": 24,
+            "quote": "อาคารรวมทเี่ พิ่มข้นึ ต้องไมเ่ กนิ ส่เี ท่าของพ้ืนท่ีทีจ่ ัดใหเ้ ป็นท่ีอย่อู าศัยสําหรับผู้มีรายได้น้อย ที่อยู่อาศัยที่มีราคา"
+          }
+        }
+      },
+      {
+        "kind": "publicOpenSpace",
+        "eligible": "publicBuilding",
+        "zones": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 53",
+          "page": 77,
+          "line": 39,
+          "quote": "ขอ้ ๕๓ ในที่ดินประเภท ย. ๘ ถึง ย. ๑๐ และประเภท พ. ๒ ถึง พ. ๕ การใช้"
+        },
+        "maxShare": {
+          "value": 0.2,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 53",
+            "page": 77,
+            "line": 45,
+            "quote": "ให้มีอัตราส่วนพน้ื ที่อาคารรวมต่อพนื้ ทดี่ ินเพิม่ ไดไ้ ม่เกินรอ้ ยละยี่สบิ โดยพืน้ ท่อี าคารรวมทีเ่ พ่มิ ขึ้นต้องไม่เกินหา้ เท่า"
+          }
+        },
+        "maxExtraPerProvidedArea": {
+          "value": 5,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 53",
+            "page": 77,
+            "line": 45,
+            "quote": "ให้มีอัตราส่วนพน้ื ที่อาคารรวมต่อพนื้ ทดี่ ินเพิม่ ไดไ้ ม่เกินรอ้ ยละยี่สบิ โดยพืน้ ท่อี าคารรวมทีเ่ พ่มิ ขึ้นต้องไม่เกินหา้ เท่า"
+          }
+        },
+        "excludesBuildingControlOpenSpace": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 53 วรรคสอง",
+          "page": 78,
+          "line": 4,
+          "quote": "พน้ื ท่โี ล่งเพือ่ ประโยชนส์ าธารณะหรือสวนสาธารณะตามวรรคหนึ่ง ไมร่ วมถงึ ที่วา่ งอนั ปราศจาก"
+        }
+      },
+      {
+        "kind": "publicParking",
+        "eligible": "publicBuilding",
+        "maxStationDistanceM": {
+          "value": 500,
+          "cmp": "lte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 54",
+            "page": 78,
+            "line": 8,
+            "quote": "ทต่ี ้ังอยูภ่ ายในระยะ ๕๐๐ เมตร จากบรเิ วณโดยรอบสถานรี ถไฟฟ้าขนส่งมวลชน สถานศี นู ย์วฒั นธรรม"
+          }
+        },
+        "maxShare": {
+          "value": 0.2,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 54",
+            "page": 78,
+            "line": 13,
+            "quote": "อาคารรวมต่อพ้ืนที่ดินเพิ่มได้ไม่เกินร้อยละย่ีสิบ โดยพ้ืนท่ีอาคารรวมท่ีเพ่ิมขึ้นต้องไม่เกิน ๓๐ ตารางเมตร"
+          }
+        },
+        "maxExtraPerSpaceSqm": {
+          "value": 30,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 54",
+            "page": 78,
+            "line": 13,
+            "quote": "อาคารรวมต่อพ้ืนที่ดินเพิ่มได้ไม่เกินร้อยละย่ีสิบ โดยพ้ืนท่ีอาคารรวมท่ีเพ่ิมขึ้นต้องไม่เกิน ๓๐ ตารางเมตร"
+          }
+        },
+        "parkingExemptFromFarAndOsr": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 54 วรรคสอง",
+          "page": 78,
+          "line": 16,
+          "quote": "พืน้ ที่จอดรถยนต์ที่เพ่ิมขึ้นให้ได้รับการยกเว้นไม่ต้องนํามาพิจารณาอัตราส่วนพื้นที่อาคารรวม"
+        }
+      },
+      {
+        "kind": "floodRetention",
+        "eligible": "anyBuilding",
+        "volumeM3": {
+          "value": 1,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 55",
+            "page": 78,
+            "line": 22,
+            "quote": "ไม่นอ้ ยกว่า ๑ ลกู บาศกเ์ มตร ตอ่ พน้ื ทด่ี ิน ๕๐ ตารางเมตร ใหม้ อี ตั ราสว่ นพ้นื ทอ่ี าคารรวมตอ่ พ้ืนท่ีดิน"
+          }
+        },
+        "perLandSqm": {
+          "value": 50,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 55",
+            "page": 78,
+            "line": 22,
+            "quote": "ไม่นอ้ ยกว่า ๑ ลกู บาศกเ์ มตร ตอ่ พน้ื ทด่ี ิน ๕๐ ตารางเมตร ใหม้ อี ตั ราสว่ นพ้นื ทอ่ี าคารรวมตอ่ พ้ืนท่ีดิน"
+          }
+        },
+        "baseShare": {
+          "value": 0.05,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 55",
+            "page": 78,
+            "line": 24,
+            "quote": "เพ่ิมได้ไม่เกินร้อยละห้า ถ้าสามารถกักเก็บนํ้าได้มากกว่า ๑ ลูกบาศก์เมตร ให้มีอัตราส่วนพื้นท่ีอาคารรวม"
+          }
+        },
+        "maxShare": {
+          "value": 0.2,
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 55",
+            "page": 78,
+            "line": 25,
+            "quote": "ตอ่ พ้ืนท่ีดนิ เพ่มิ ไดต้ ามสดั สว่ น แตท่ ้งั น้ีตอ้ งไม่เกนิ ร้อยละยีส่ ิบ"
+          }
+        }
+      },
+      {
+        "kind": "energyRating",
+        "eligible": "anyBuilding",
+        "levels": [
+          {
+            "level": {
+              "value": 1,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (1)",
+                "page": 78,
+                "line": 33,
+                "quote": "(๑) อาคารที่ไดร้ ับการรบั รองการอนุรกั ษพ์ ลังงานระดับทห่ี น่ึง ให้มีอัตราส่วนพ้ืนท่ีอาคารรวม"
+              }
+            },
+            "share": {
+              "value": 0.05,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (1)",
+                "page": 78,
+                "line": 34,
+                "quote": "ต่อพืน้ ทด่ี ินเพ่มิ ไดไ้ ม่เกนิ รอ้ ยละหา้"
+              }
+            }
+          },
+          {
+            "level": {
+              "value": 2,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (2)",
+                "page": 78,
+                "line": 36,
+                "quote": "(๒) อาคารท่ีได้รบั การรับรองการอนรุ กั ษพ์ ลงั งานระดับที่สอง ให้มีอัตราส่วนพื้นที่อาคารรวม"
+              }
+            },
+            "share": {
+              "value": 0.1,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (2)",
+                "page": 78,
+                "line": 37,
+                "quote": "ตอ่ พื้นทด่ี ินเพ่ิมได้ไม่เกนิ ร้อยละสบิ"
+              }
+            }
+          },
+          {
+            "level": {
+              "value": 3,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (3)",
+                "page": 78,
+                "line": 39,
+                "quote": "(๓) อาคารท่ไี ด้รับการรับรองการอนรุ ักษพ์ ลังงานระดับที่สาม ให้มีอัตราส่วนพ้ืนท่ีอาคารรวม"
+              }
+            },
+            "share": {
+              "value": 0.15,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (3)",
+                "page": 78,
+                "line": 40,
+                "quote": "ต่อพน้ื ทด่ี นิ เพ่มิ ได้ไม่เกนิ รอ้ ยละสบิ ห้า"
+              }
+            }
+          },
+          {
+            "level": {
+              "value": 4,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (4)",
+                "page": 78,
+                "line": 42,
+                "quote": "(๔) อาคารท่ีได้รับการรับรองการอนุรักษ์พลังงานระดับที่ส่ี ให้มีอัตราส่วนพื้นที่อาคารรวม"
+              }
+            },
+            "share": {
+              "value": 0.2,
+              "cite": {
+                "source": "mr56-bma",
+                "clause": "ข้อ 56 (4)",
+                "page": 78,
+                "line": 43,
+                "quote": "ตอ่ พ้นื ทด่ี ินเพ่มิ ได้ไม่เกนิ รอ้ ยละย่ีสบิ"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "useConditions": {
+    "condo": {
+      "kind": "notListed",
+      "absent": {
+        "term": "อาคารอยู่อาศัยรวม",
+        "from": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง",
+          "page": 33,
+          "line": 7,
+          "quote": "ทีด่ นิ ประเภทนี้ หา้ มใช้ประโยชน์ท่ดี นิ เพือ่ กจิ การตามทกี่ ําหนด ดงั ตอ่ ไปน้ี"
+        },
+        "to": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง",
+          "page": 35,
+          "line": 5,
+          "quote": "๒๐๐ เมตร จากบรเิ วณเขตก่อสรา้ งเพอ่ื ประโยชนแ์ ก่โครงการกอ่ สรา้ งน้ัน"
+        }
+      }
+    },
+    "office": {
+      "kind": "restrictedAbove",
+      "measure": "operatingAreaSqm",
+      "threshold": {
+        "value": 10000,
+        "cmp": "gt",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (10)",
+          "page": 33,
+          "line": 39,
+          "quote": "(๑๐) สํานักงานท่ีมีพ้ืนท่ีประกอบการเกิน ๑๐,๐๐๐ ตารางเมตร เว้นแต่ท่ีต้ังอยู่ริม"
+        }
+      },
+      "unlessRoadWidthM": {
+        "value": 16,
+        "cmp": "gte",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (10)",
+          "page": 33,
+          "line": 40,
+          "quote": "ถนนสาธารณะทมี่ ขี นาดเขตทางไมน่ อ้ ยกว่า ๑๖ เมตร หรือตั้งอยู่ภายในระยะ ๕๐๐ เมตร จากบริเวณ"
+        }
+      },
+      "unlessStationDistanceM": {
+        "value": 500,
+        "cmp": "lte",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (10)",
+          "page": 33,
+          "line": 40,
+          "quote": "ถนนสาธารณะทมี่ ขี นาดเขตทางไมน่ อ้ ยกว่า ๑๖ เมตร หรือตั้งอยู่ภายในระยะ ๕๐๐ เมตร จากบริเวณ"
+        }
+      }
+    },
+    "hotel": {
+      "kind": "restrictedAbove",
+      "measure": "rooms",
+      "threshold": {
+        "value": 80,
+        "cmp": "gt",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (8)",
+          "page": 33,
+          "line": 26,
+          "quote": "(๘) โรงแรมตามกฎหมายว่าด้วยโรงแรมที่มีจํานวนห้องพักเกิน ๘๐ ห้อง เว้นแต่ที่ตั้งอยู่"
+        }
+      },
+      "unlessRoadWidthM": {
+        "value": 12,
+        "cmp": "gte",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (8)",
+          "page": 33,
+          "line": 27,
+          "quote": "ริมถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๒ เมตร หรือต้ังอยู่ภายในระยะ ๕๐๐ เมตร"
+        }
+      },
+      "unlessStationDistanceM": {
+        "value": 500,
+        "cmp": "lte",
+        "cite": {
+          "source": "mr56-bma",
+          "clause": "ข้อ 16 วรรคสอง (8)",
+          "page": 33,
+          "line": 27,
+          "quote": "ริมถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๒ เมตร หรือต้ังอยู่ภายในระยะ ๕๐๐ เมตร"
+        }
+      }
+    },
+    "roadAccessTiers": [
+      {
+        "roadWidthM": {
+          "value": 10,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (1)",
+            "page": 72,
+            "line": 35,
+            "quote": "(๑) ถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๐ เมตร การใช้ประโยชน์ท่ีดินต้องเป็น"
+          }
+        },
+        "frontageM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (1)",
+            "page": 72,
+            "line": 36,
+            "quote": "กรณีท่ีตั้งอยู่บนท่ีดินแปลงใดแปลงหนึ่งซ่ึงมีด้านใดด้านหนึ่งกว้างไม่น้อยกว่า ๑๒ เมตร ติดถนนสาธารณะ"
+          }
+        },
+        "otherEndRoadWidthM": {
+          "value": 8,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (1)",
+            "page": 72,
+            "line": 40,
+            "quote": "เขตทางไมน่ ้อยกวา่ ๘ เมตร และท่ีดนิ แปลงนัน้ ต้ังอยู่ในระยะไมเ่ กนิ ๒๐๐ เมตร จากริมเขตทางนั้น"
+          }
+        },
+        "maxDistanceM": {
+          "value": 200,
+          "cmp": "lte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (1)",
+            "page": 72,
+            "line": 40,
+            "quote": "เขตทางไมน่ ้อยกวา่ ๘ เมตร และท่ีดนิ แปลงนัน้ ต้ังอยู่ในระยะไมเ่ กนิ ๒๐๐ เมตร จากริมเขตทางนั้น"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (2)",
+            "page": 73,
+            "line": 4,
+            "quote": "(๒) ถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๒ เมตร การใช้ประโยชน์ท่ีดินต้องเป็น"
+          }
+        },
+        "frontageM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (2)",
+            "page": 73,
+            "line": 5,
+            "quote": "กรณีที่ตั้งอยู่บนที่ดินแปลงใดแปลงหนึ่งซ่ึงมีด้านใดด้านหน่ึงกว้างไม่น้อยกว่า ๑๒ เมตร ติดถนนสาธารณะ"
+          }
+        },
+        "otherEndRoadWidthM": {
+          "value": 8,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (2)",
+            "page": 73,
+            "line": 8,
+            "quote": "เขตทางไมน่ อ้ ยกว่า ๘ เมตร และท่ีดนิ แปลงนัน้ ตง้ั อยใู่ นระยะไมเ่ กนิ ๒๐๐ เมตร จากรมิ เขตทางน้ัน"
+          }
+        },
+        "maxDistanceM": {
+          "value": 200,
+          "cmp": "lte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (2)",
+            "page": 73,
+            "line": 8,
+            "quote": "เขตทางไมน่ อ้ ยกว่า ๘ เมตร และท่ีดนิ แปลงนัน้ ตง้ั อยใู่ นระยะไมเ่ กนิ ๒๐๐ เมตร จากรมิ เขตทางน้ัน"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "value": 16,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (3)",
+            "page": 73,
+            "line": 10,
+            "quote": "(๓) ถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๖ เมตร การใช้ประโยชน์ที่ดินต้องเป็น"
+          }
+        },
+        "frontageM": {
+          "value": 16,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (3)",
+            "page": 73,
+            "line": 11,
+            "quote": "กรณีที่ตั้งอยู่บนท่ีดินแปลงใดแปลงหน่ึงซ่ึงมีด้านใดด้านหน่ึงกว้างไม่น้อยกว่า ๑๖ เมตร ติดถนนสาธารณะ"
+          }
+        },
+        "otherEndRoadWidthM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (3)",
+            "page": 73,
+            "line": 14,
+            "quote": "เขตทางไม่นอ้ ยกวา่ ๑๒ เมตร และทดี่ นิ แปลงน้ันตงั้ อยู่ในระยะไมเ่ กิน ๓๐๐ เมตร จากรมิ เขตทางน้ัน"
+          }
+        },
+        "maxDistanceM": {
+          "value": 300,
+          "cmp": "lte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (3)",
+            "page": 73,
+            "line": 14,
+            "quote": "เขตทางไม่นอ้ ยกวา่ ๑๒ เมตร และทดี่ นิ แปลงน้ันตงั้ อยู่ในระยะไมเ่ กิน ๓๐๐ เมตร จากรมิ เขตทางน้ัน"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "value": 30,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (4)",
+            "page": 73,
+            "line": 16,
+            "quote": "(๔) ถนนสาธารณะท่ีมีขนาดเขตทางไม่น้อยกว่า ๓๐ เมตร การใช้ประโยชน์ที่ดินต้องเป็น"
+          }
+        },
+        "frontageM": {
+          "value": 30,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (4)",
+            "page": 73,
+            "line": 17,
+            "quote": "กรณีท่ีต้ังอยู่บนท่ีดินแปลงใดแปลงหนึ่งซึ่งมีด้านใดด้านหนึ่งกว้างไม่น้อยกว่า ๓๐ เมตร ติดถนนสาธารณะ"
+          }
+        },
+        "otherEndRoadWidthM": {
+          "value": 16,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (4)",
+            "page": 73,
+            "line": 20,
+            "quote": "เขตทางไมน่ ้อยกวา่ ๑๖ เมตร และทดี่ นิ แปลงนนั้ ต้ังอย่ใู นระยะไม่เกิน ๕๐๐ เมตร จากริมเขตทางนนั้"
+          }
+        },
+        "maxDistanceM": {
+          "value": 500,
+          "cmp": "lte",
+          "cite": {
+            "source": "mr56-bma",
+            "clause": "ข้อ 36 (4)",
+            "page": 73,
+            "line": 20,
+            "quote": "เขตทางไมน่ ้อยกวา่ ๑๖ เมตร และทดี่ นิ แปลงนนั้ ต้ังอย่ใู นระยะไม่เกิน ๕๐๐ เมตร จากริมเขตทางนนั้"
+          }
+        }
+      }
+    ],
+    "stationDistanceFrom": {
+      "source": "mr56-bma",
+      "clause": "ข้อ 37",
+      "page": 73,
+      "line": 29,
+      "quote": "ขนสง่ มวลชน ให้วัดระยะจากแนวเขตชานชาลาสถานรี ถไฟฟา้ ขนส่งมวลชน"
+    }
+  },
+  "buildingClasses": {
+    "highRiseFromHeightM": {
+      "value": 23,
+      "cmp": "gte",
+      "cite": {
+        "source": "mr35-33-upd69",
+        "clause": "ข้อ 1 อาคารสูง",
+        "page": 1,
+        "line": 14,
+        "quote": "“อาคารสงู ” หมายความว่า อาคารทบี ุคคลอาจเขา้ อย่หู รอื เขา้ ใชส้ อยไดโ้ ดยมคี วามสงู ตงั แต่ 23.00 เมตรขนึ ไป การ"
+      }
+    },
+    "extraLargeFromFloorAreaSqm": {
+      "value": 10000,
+      "cmp": "gte",
+      "cite": {
+        "source": "mr35-33-upd69",
+        "clause": "ข้อ 1 อาคารขนาดใหญ่พิเศษ",
+        "page": 1,
+        "line": 19,
+        "quote": "10,000 ตารางเมตรขนึ ไป"
+      }
+    },
+    "largeAboveFloorAreaSqm": {
+      "value": 2000,
+      "cmp": "gt",
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 1 อาคารขนาดใหญ่",
+        "page": 2,
+        "line": 3,
+        "quote": "“อาคารขนาดใหญ่” หมายความวา่ อาคารทมี พี นื ทรี วมกนั ทุกชนั หรอื ชนั หนึงชนั ใดในหลงั เดยี วกนั เกนิ 2,000 ตาราง"
+      }
+    },
+    "largeIfTallFromHeightM": {
+      "value": 15,
+      "cmp": "gte",
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 1 อาคารขนาดใหญ่",
+        "page": 2,
+        "line": 4,
+        "quote": "เมตร หรอื อาคารทมี คี วามสงู ตงั แต่ 15.00 เมตรขนึ ไป และมพี นื ทรี วมกนั ทุกชนั หรอื ชนั หนึงชนั ใดในหลงั เดยี วกนั เกนิ 1,000"
+      }
+    },
+    "largeIfTallAboveFloorAreaSqm": {
+      "value": 1000,
+      "cmp": "gt",
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 1 อาคารขนาดใหญ่",
+        "page": 2,
+        "line": 4,
+        "quote": "เมตร หรอื อาคารทมี คี วามสงู ตงั แต่ 15.00 เมตรขนึ ไป และมพี นื ทรี วมกนั ทุกชนั หรอื ชนั หนึงชนั ใดในหลงั เดยี วกนั เกนิ 1,000"
+      }
+    },
+    "heightMeasuredToRoofDeck": {
+      "source": "mr35-33-upd69",
+      "clause": "ข้อ 1 อาคารสูง",
+      "page": 1,
+      "line": 15,
+      "quote": "วดั ความสงู ของอาคารใหว้ ดั จากระดบั พนื ดนิ ทกี ่อสรา้ งถงึ พนื ดาดฟ้า สาํ หรบั อาคารทรงจวั หรอื ปันหยาใหว้ ดั จากระดบั พนื ดนิ ที"
+    }
+  },
+  "classification": {
+    "condo": {
+      "residential": {
+        "kind": "stated",
+        "member": true,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 33 (1)",
+          "page": 7,
+          "line": 38,
+          "quote": "(1) อาคารอยู่อาศยั และอาคารอยู่อาศยั รวม ต้องมีทวี ่างไม่น้อยกว่า 30 ใน 100 ส่วนของพนื ทชี นั ใด"
+        }
+      },
+      "publicBuilding": {
+        "kind": "question",
+        "questionId": "condo-public-building"
+      }
+    },
+    "office": {
+      "residential": {
+        "kind": "stated",
+        "member": false,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 33 (2)",
+          "page": 7,
+          "line": 41,
+          "quote": "(2) หอ้ งแถว ตกึ แถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ และอาคารอนื ซงึ ไม่ไดใ้ ชเ้ ป็นทอี ย่อู าศยั"
+        }
+      },
+      "publicBuilding": {
+        "kind": "question",
+        "questionId": "office-public-building"
+      }
+    },
+    "hotel": {
+      "residential": {
+        "kind": "question",
+        "questionId": "hotel-residential"
+      },
+      "publicBuilding": {
+        "kind": "stated",
+        "member": true,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 1 อาคารสาธารณะ",
+          "page": 1,
+          "line": 32,
+          "quote": "การเมือง การศึกษา การศาสนา การสงั คม การนันทนาการ หรือการพาณิชยกรรม เช่น โรงมหรสพ หอประชุม โรงแรม"
+        }
+      }
+    }
+  },
+  "openSpaceMinimums": [
+    {
+      "use": "residential",
+      "scope": "anyBuilding",
+      "base": "largestFloorArea",
+      "minShare": {
+        "value": 0.3,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 33 (1)",
+          "page": 7,
+          "line": 38,
+          "quote": "(1) อาคารอยู่อาศยั และอาคารอยู่อาศยั รวม ต้องมีทวี ่างไม่น้อยกว่า 30 ใน 100 ส่วนของพนื ทชี นั ใด"
+        }
+      }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "anyBuilding",
+      "base": "largestFloorArea",
+      "minShare": {
+        "value": 0.1,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 33 (2)",
+          "page": 7,
+          "line": 43,
+          "quote": "ต้องมที วี ่างไม่น้อยกว่า 10 ใน 100 ส่วน ของพนื ทชี นั ใดชนั หนึงทมี ากทสี ุดของอาคาร แต่ถา้ อาคารดงั กล่าวใชเ้ ป็นทอี ย่อู าศยั"
+        }
+      }
+    },
+    {
+      "use": "residential",
+      "scope": "anyBuilding",
+      "base": "landArea",
+      "minShare": {
+        "value": 0.3,
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 52 (1)",
+          "page": 15,
+          "line": 26,
+          "quote": "(1) อาคารอย่อู าศยั ตอ้ งมที วี า่ งไม่น้อยกวา่ 30 ใน 100 ส่วนของพนื ทที ดี นิ"
+        }
+      }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "anyBuilding",
+      "base": "landArea",
+      "minShare": {
+        "value": 0.1,
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 52 (2)",
+          "page": 15,
+          "line": 29,
+          "quote": "ตอ้ งมที วี า่ งไมน่ ้อยกวา่ 10 ใน 100 สว่ นของพนื ทที ดี นิ แต่ถา้ อาคารนนั ใชเ้ ป็นทอี ย่อู าศยั ดว้ ยตอ้ งมที วี ่างตาม (1)"
+        }
+      }
+    },
+    {
+      "use": "residential",
+      "scope": "highRiseOrExtraLarge",
+      "base": "landArea",
+      "minShare": {
+        "value": 0.3,
+        "cite": {
+          "source": "mr35-33-upd69",
+          "clause": "ข้อ 6 (1)",
+          "page": 2,
+          "line": 44,
+          "quote": "(1) อาคารทอี ย่อู าศยั ตอ้ งมที วี า่ งไมน่ ้อยกวา่ รอ้ ยละ 30 ของพนื ทดี นิ ทใี ชเ้ ป็นทตี งั อาคาร"
+        }
+      }
+    },
+    {
+      "use": "nonResidential",
+      "scope": "highRiseOrExtraLarge",
+      "base": "landArea",
+      "minShare": {
+        "value": 0.1,
+        "cite": {
+          "source": "mr35-33-upd69",
+          "clause": "ข้อ 6 (2)",
+          "page": 2,
+          "line": 47,
+          "quote": "กวา่ รอ้ ยละ 10 ของพนื ทดี นิ ทใี ชเ้ ป็นทตี งั อาคาร แต่ถา้ อาคารนนั ใชเ้ ป็นทอี ยอู่ าศยั รวมอย่ดู ว้ ยตอ้ งมที วี า่ งตาม (1)"
+        }
+      }
+    }
+  ],
+  "roadSetbacks": [
+    {
+      "appliesAbove": {
+        "storeys": {
+          "value": 2,
+          "cmp": "gt",
+          "cite": {
+            "source": "mr43-55-upd68",
+            "clause": "ข้อ 41 วรรคสอง",
+            "page": 9,
+            "line": 20,
+            "quote": "อาคารทสี งู เกนิ สองชนั หรอื เกนิ 8 เมตร หอ้ งแถว ตกึ แถว บา้ นแถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ ป้าย"
+          }
+        },
+        "heightM": {
+          "value": 8,
+          "cmp": "gt",
+          "cite": {
+            "source": "mr43-55-upd68",
+            "clause": "ข้อ 41 วรรคสอง",
+            "page": 9,
+            "line": 20,
+            "quote": "อาคารทสี งู เกนิ สองชนั หรอื เกนิ 8 เมตร หอ้ งแถว ตกึ แถว บา้ นแถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ ป้าย"
+          }
+        }
+      },
+      "bands": [
+        {
+          "roadWidthM": {
+            "max": {
+              "value": 10,
+              "cmp": "lt",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (1)",
+                "page": 9,
+                "line": 23,
+                "quote": "(1) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งน้อยกว่า 10 เมตร ใหร้ ่นแนวอาคารห่างจากกงึ กลางถนนสาธารณะ"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromCentreline",
+            "distanceM": {
+              "value": 6,
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (1)",
+                "page": 9,
+                "line": 24,
+                "quote": "อย่างน้อย 6 เมตร"
+              }
+            }
+          }
+        },
+        {
+          "roadWidthM": {
+            "min": {
+              "value": 10,
+              "cmp": "gte",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (2)",
+                "page": 9,
+                "line": 26,
+                "quote": "(2) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งตงั แต่ 10 เมตรขนึ ไป แต่ไมเ่ กนิ 20 เมตร ใหร้ ่นแนวอาคารหา่ งจาก"
+              }
+            },
+            "max": {
+              "value": 20,
+              "cmp": "lte",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (2)",
+                "page": 9,
+                "line": 26,
+                "quote": "(2) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งตงั แต่ 10 เมตรขนึ ไป แต่ไมเ่ กนิ 20 เมตร ใหร้ ่นแนวอาคารหา่ งจาก"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundaryShareOfWidth",
+            "share": {
+              "value": 0.1,
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (2)",
+                "page": 9,
+                "line": 27,
+                "quote": "เขตถนนสาธารณะอยา่ งน้อย 1 ใน 10 ของความกวา้ งของถนนสาธารณะ"
+              }
+            }
+          }
+        },
+        {
+          "roadWidthM": {
+            "min": {
+              "value": 20,
+              "cmp": "gt",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (3)",
+                "page": 9,
+                "line": 29,
+                "quote": "(3) ถ้าถนนสาธารณะนันมคี วามกวา้ งเกนิ 20 เมตรขนึ ไป ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะ"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundary",
+            "distanceM": {
+              "value": 2,
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 41 วรรคสอง (3)",
+                "page": 9,
+                "line": 30,
+                "quote": "อย่างน้อย 2 เมตร"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "appliesAbove": {
+        "storeys": {
+          "value": 2,
+          "cmp": "gt",
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 50 วรรคสอง",
+            "page": 15,
+            "line": 7,
+            "quote": "อาคารทสี งู เกนิ 2 ชนั หรอื เกนิ 8 เมตร อาคารขนาดใหญ่ หอ้ งแถว ตกึ แถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ"
+          }
+        },
+        "heightM": {
+          "value": 8,
+          "cmp": "gt",
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 50 วรรคสอง",
+            "page": 15,
+            "line": 7,
+            "quote": "อาคารทสี งู เกนิ 2 ชนั หรอื เกนิ 8 เมตร อาคารขนาดใหญ่ หอ้ งแถว ตกึ แถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ"
+          }
+        }
+      },
+      "bands": [
+        {
+          "roadWidthM": {
+            "max": {
+              "value": 10,
+              "cmp": "lt",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (1)",
+                "page": 15,
+                "line": 11,
+                "quote": "(1) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งน้อยกวา่ 10 เมตร ใหร้ น่ แนวอาคารห่างจากกงึ กลางถนนสาธารณะ"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromCentreline",
+            "distanceM": {
+              "value": 6,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (1)",
+                "page": 15,
+                "line": 12,
+                "quote": "อยา่ งน้อย 6 เมตร"
+              }
+            }
+          }
+        },
+        {
+          "roadWidthM": {
+            "min": {
+              "value": 10,
+              "cmp": "gte",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (2)",
+                "page": 15,
+                "line": 14,
+                "quote": "(2) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งตงั แต่ 10 เมตรขนึ ไป แตไ่ มเ่ กนิ 20 เมตร ใหร้ น่ แนวอาคารหา่ งจาก"
+              }
+            },
+            "max": {
+              "value": 20,
+              "cmp": "lte",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (2)",
+                "page": 15,
+                "line": 14,
+                "quote": "(2) ถา้ ถนนสาธารณะนนั มคี วามกวา้ งตงั แต่ 10 เมตรขนึ ไป แตไ่ มเ่ กนิ 20 เมตร ใหร้ น่ แนวอาคารหา่ งจาก"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundaryShareOfWidth",
+            "share": {
+              "value": 0.1,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (2)",
+                "page": 15,
+                "line": 15,
+                "quote": "เขตถนนสาธารณะอย่างน้อย 1 ใน 10 ของความกวา้ งของถนนสาธารณะ"
+              }
+            }
+          }
+        },
+        {
+          "roadWidthM": {
+            "min": {
+              "value": 20,
+              "cmp": "gt",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (3)",
+                "page": 15,
+                "line": 17,
+                "quote": "(3) ถ้าถนนสาธารณะนันมคี วามกวา้ งเกนิ 20 เมตรขนึ ไป ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะ"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundary",
+            "distanceM": {
+              "value": 2,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 50 วรรคสอง (3)",
+                "page": 15,
+                "line": 18,
+                "quote": "อยา่ งน้อย 2 เมตร"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "boundarySetbacks": [
+    {
+      "rule": "wallsWithOpenings",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": {
+            "max": {
+              "value": 9,
+              "cmp": "lte",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 50 (1)",
+                "page": 11,
+                "line": 10,
+                "quote": "(1) อาคารทมี คี วามสงู ไมเ่ กนิ 9 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไม่น้อยกวา่ 2 เมตร"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 2,
+            "cite": {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 50 (1)",
+              "page": 11,
+              "line": 10,
+              "quote": "(1) อาคารทมี คี วามสงู ไมเ่ กนิ 9 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไม่น้อยกวา่ 2 เมตร"
+            }
+          }
+        },
+        {
+          "heightM": {
+            "min": {
+              "value": 9,
+              "cmp": "gt",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 50 (2)",
+                "page": 11,
+                "line": 11,
+                "quote": "(2) อาคารทมี คี วามสงู เกนิ 9 เมตร แต่ไม่ถงึ 23 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไมน่ ้อยกว่า 3"
+              }
+            },
+            "max": {
+              "value": 23,
+              "cmp": "lt",
+              "cite": {
+                "source": "mr43-55-upd68",
+                "clause": "ข้อ 50 (2)",
+                "page": 11,
+                "line": 11,
+                "quote": "(2) อาคารทมี คี วามสงู เกนิ 9 เมตร แต่ไม่ถงึ 23 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไมน่ ้อยกว่า 3"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 3,
+            "cite": {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 50 (2)",
+              "page": 11,
+              "line": 11,
+              "quote": "(2) อาคารทมี คี วามสงู เกนิ 9 เมตร แต่ไม่ถงึ 23 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไมน่ ้อยกว่า 3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rule": "wallsWithOpenings",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": {
+            "max": {
+              "value": 9,
+              "cmp": "lte",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 54",
+                "page": 16,
+                "line": 10,
+                "quote": "หรอื สงู ไม่เกนิ 9 เมตร ตอ้ งอยหู่ า่ งเขตทดี นิ ไมน่ ้อยกวา่ 2 เมตร และสาํ หรบั ชนั 3 ขนึ ไปหรอื สงู เกนิ 9 เมตร ตอ้ งหา่ งไมน่ ้อยกวา่"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 2,
+            "cite": {
+              "source": "bb44-03",
+              "clause": "ข้อ 54",
+              "page": 16,
+              "line": 10,
+              "quote": "หรอื สงู ไม่เกนิ 9 เมตร ตอ้ งอยหู่ า่ งเขตทดี นิ ไมน่ ้อยกวา่ 2 เมตร และสาํ หรบั ชนั 3 ขนึ ไปหรอื สงู เกนิ 9 เมตร ตอ้ งหา่ งไมน่ ้อยกวา่"
+            }
+          }
+        },
+        {
+          "heightM": {
+            "min": {
+              "value": 9,
+              "cmp": "gt",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 54",
+                "page": 16,
+                "line": 10,
+                "quote": "หรอื สงู ไม่เกนิ 9 เมตร ตอ้ งอยหู่ า่ งเขตทดี นิ ไมน่ ้อยกวา่ 2 เมตร และสาํ หรบั ชนั 3 ขนึ ไปหรอื สงู เกนิ 9 เมตร ตอ้ งหา่ งไมน่ ้อยกวา่"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 3,
+            "cite": {
+              "source": "bb44-03",
+              "clause": "ข้อ 54",
+              "page": 16,
+              "line": 11,
+              "quote": "3 เมตร"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rule": "clearanceAroundBuilding",
+      "scope": "anyBuilding",
+      "from": "plotBoundary",
+      "bands": [
+        {
+          "heightM": {
+            "max": {
+              "value": 15,
+              "cmp": "lte",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 55",
+                "page": 16,
+                "line": 13,
+                "quote": "ข้อ 55 อาคารทมี คี วามสงู ไม่เกนิ 15 เมตร ตอ้ งมที วี ่างโดยรอบอาคารไม่น้อยกวา่ 1 เมตร ยกเวน้ บา้ นพกั อาศยั ทมี ี"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 1,
+            "cite": {
+              "source": "bb44-03",
+              "clause": "ข้อ 55",
+              "page": 16,
+              "line": 13,
+              "quote": "ข้อ 55 อาคารทมี คี วามสงู ไม่เกนิ 15 เมตร ตอ้ งมที วี ่างโดยรอบอาคารไม่น้อยกวา่ 1 เมตร ยกเวน้ บา้ นพกั อาศยั ทมี ี"
+            }
+          }
+        },
+        {
+          "heightM": {
+            "min": {
+              "value": 15,
+              "cmp": "gt",
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 55 วรรคสอง",
+                "page": 16,
+                "line": 16,
+                "quote": "อาคารทมี คี วามสงู เกนิ 15 เมตร ตอ้ งมที วี ่างโดยรอบอาคารไม่น้อยกว่า 2 เมตร"
+              }
+            }
+          },
+          "distanceM": {
+            "value": 2,
+            "cite": {
+              "source": "bb44-03",
+              "clause": "ข้อ 55 วรรคสอง",
+              "page": 16,
+              "line": 16,
+              "quote": "อาคารทมี คี วามสงู เกนิ 15 เมตร ตอ้ งมที วี ่างโดยรอบอาคารไม่น้อยกว่า 2 เมตร"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rule": "outermostPart",
+      "scope": "highRiseOrExtraLarge",
+      "from": "plotBoundaryOrPublicRoad",
+      "bands": [
+        {
+          "heightM": {},
+          "distanceM": {
+            "value": 6,
+            "cite": {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 4",
+              "page": 2,
+              "line": 33,
+              "quote": "กวา่ ระดบั พนื ดนิ ตอ้ งห่างจากเขตทดี นิ ของผอู้ นื หรอื ถนนสาธารณะไมน่ ้อยกว่า 6.00 เมตร ทงั นี ไมร่ วมถงึ สว่ นทเี ป็นฐานรากของ"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "blindWall": {
+    "minDistanceM": {
+      "value": 0.5,
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 50 วรรคสอง",
+        "page": 11,
+        "line": 13,
+        "quote": "ผนังของอาคารทอี ย่หู ่างเขตทดี นิ น้อยกว่าตามทกี าํ หนดไวใ้ น (1) หรอื (2) ต้องอย่หู ่างจากเขตทดี นิ ไม่น้อยกว่า 50"
+      }
+    },
+    "onBoundaryMaxHeightM": {
+      "value": 15,
+      "cmp": "lte",
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 50 วรรคสอง",
+        "page": 11,
+        "line": 14,
+        "quote": "เซนตเิ มตร เวน้ แต่จะก่อสรา้ งชดิ เขตทดี นิ และอาคารดงั กล่าวจะก่อสรา้ งไดส้ งู ไม่เกนิ 15 เมตร ผนังของอาคารทอี ย่ชู ดิ เขตทดี นิ"
+      }
+    }
+  },
+  "heightVsRoad": {
+    "maxMultipleOfDistance": [
+      {
+        "value": 2,
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 44",
+          "page": 9,
+          "line": 47,
+          "quote": "ข้อ 44 ความสงู ของอาคารไมว่ ่าจากจดุ หนึงจดุ ใด ตอ้ งไม่เกนิ สองเท่าของระยะราบ วดั จากจดุ นนั ไปตงั ฉากกบั แนว"
+        }
+      },
+      {
+        "value": 2,
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 49",
+          "page": 14,
+          "line": 44,
+          "quote": "ขอ้ 49 ความสงู ของอาคารไม่วา่ จากจุดหนึงจดุ ใด ตอ้ งไม่เกนิ 2 เท่าของระยะราบ วดั จากจุดนนั ไปตงั ฉากกบั แนว"
+        }
+      }
+    ],
+    "measuredTo": {
+      "source": "mr43-55-upd68",
+      "clause": "ข้อ 44",
+      "page": 9,
+      "line": 48,
+      "quote": "เขตดา้ นตรงขา้ มของถนนสาธารณะทอี ย่ใู กลอ้ าคารนนั ทสี ดุ"
+    },
+    "heightToHighestPoint": {
+      "source": "mr43-55-upd68",
+      "clause": "ข้อ 44 วรรคสอง",
+      "page": 9,
+      "line": 50,
+      "quote": "ความสงู ของอาคารใหว้ ดั แนวดงิ จากระดบั ถนนหรอื ระดบั พนื ดนิ ทกี ่อสรา้ งขนึ ไปถงึ ส่วนของอาคารทสี งู ทสี ุด สาํ หรบั"
+    },
+    "rooftopStructuresExcluded": {
+      "source": "mr43-55-upd68",
+      "clause": "ข้อ 44 วรรคสาม",
+      "page": 9,
+      "line": 54,
+      "quote": "ดาดฟ้า หรอื สว่ นหนงึ สว่ นใดของอาคารดว้ ย ไม่ตอ้ งนําความสงู ของสงิ ทสี รา้ งขนึ อยา่ งอนื นนั มาคดิ รวมเป็นความสงู ของอาคาร"
+    },
+    "parallelRoads": {
+      "maxRoadSpacingM": {
+        "value": 60,
+        "cmp": "lte",
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 45",
+          "page": 10,
+          "line": 4,
+          "quote": "สองสายนนั ไม่เกนิ 60 เมตร และส่วนกวา้ งของอาคารตามแนวถนนสาธารณะทกี วา้ งกว่าไม่เกนิ 60 เมตร ความสงู ของอาคาร"
+        }
+      },
+      "maxBuildingWidthM": {
+        "value": 60,
+        "cmp": "lte",
+        "cite": {
+          "source": "mr43-55-upd68",
+          "clause": "ข้อ 45",
+          "page": 10,
+          "line": 4,
+          "quote": "สองสายนนั ไม่เกนิ 60 เมตร และส่วนกวา้ งของอาคารตามแนวถนนสาธารณะทกี วา้ งกว่าไม่เกนิ 60 เมตร ความสงู ของอาคาร"
+        }
+      }
+    },
+    "cornerNarrowerRoadMaxLengthM": {
+      "value": 60,
+      "cmp": "lte",
+      "cite": {
+        "source": "mr43-55-upd68",
+        "clause": "ข้อ 46",
+        "page": 10,
+        "line": 9,
+        "quote": "ยาวของอาคารตามแนวถนนสาธารณะทแี คบกวา่ ตอ้ งไมเ่ กนิ 60 เมตร"
+      }
+    },
+    "wideRoadException": {
+      "roadWidthM": {
+        "value": 80,
+        "cmp": "gte",
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 49 วรรคสอง",
+          "page": 14,
+          "line": 47,
+          "quote": "กรณีอาคารตงั อย่รู มิ หรอื ห่างไม่เกนิ 100 เมตร จากถนนสาธารณะทกี วา้ งไม่น้อยกว่า 80 เมตร และมที างเขา้ ออก"
+        }
+      },
+      "withinM": {
+        "value": 100,
+        "cmp": "lte",
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 49 วรรคสอง",
+          "page": 14,
+          "line": 47,
+          "quote": "กรณีอาคารตงั อย่รู มิ หรอื ห่างไม่เกนิ 100 เมตร จากถนนสาธารณะทกี วา้ งไม่น้อยกว่า 80 เมตร และมที างเขา้ ออก"
+        }
+      },
+      "accessWidthM": {
+        "value": 12,
+        "cmp": "gte",
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 49 วรรคสอง",
+          "page": 14,
+          "line": 48,
+          "quote": "จากอาคารสู่ทางสาธารณะนันกวา้ งไม่น้อยกว่า 12 เมตร ใหค้ ดิ ความสูงของอาคารจากความกวา้ งของถนนสาธารณะทกี วา้ ง"
+        }
+      }
+    }
+  },
+  "frontOpenSpace": {
+    "appliesTo": {
+      "source": "bb44-03",
+      "clause": "ข้อ 52 (6)",
+      "page": 15,
+      "line": 43,
+      "quote": "(6) อาคารพาณิชย์ โรงงานอุตสาหกรรม คลงั สนิ คา้ อาคารสาธารณะ อาคารสงู เกนิ 2 ชนั หรอื สูงเกนิ 8"
+    },
+    "depthM": {
+      "value": 6,
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 52 (6)",
+        "page": 15,
+        "line": 44,
+        "quote": "เมตร ยกเวน้ อาคารอยอู่ าศยั สงู ไมเ่ กนิ 3 ชนั ทไี มอ่ ย่รู มิ ทางสาธารณะ ใหม้ ที วี ่างดา้ นหน้ากวา้ งไม่น้อยกวา่ 6 เมตร"
+      }
+    },
+    "tallAboveStoreys": {
+      "value": 3,
+      "cmp": "gt",
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 52 (6) วรรคสอง",
+        "page": 15,
+        "line": 46,
+        "quote": "อาคารตามวรรคหนึงถา้ สงู เกนิ 3 ชนั ใหม้ ที วี ่างกวา้ งไมน่ ้อยกวา่ 12 เมตร"
+      }
+    },
+    "tallDepthM": {
+      "value": 12,
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 52 (6) วรรคสอง",
+        "page": 15,
+        "line": 46,
+        "quote": "อาคารตามวรรคหนึงถา้ สงู เกนิ 3 ชนั ใหม้ ที วี ่างกวา้ งไมน่ ้อยกวา่ 12 เมตร"
+      }
+    },
+    "minShareOfPerimeter": {
+      "value": 0.16666666666666666,
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 52 (6) วรรคสาม",
+        "page": 15,
+        "line": 47,
+        "quote": "ทวี ่างตามวรรคหนึงและวรรคสอง ตอ้ งมพี นื ทตี ่อเนืองกนั ยาวไม่น้อยกว่า 1 ใน 6 ของความยาวเสน้"
+      }
+    },
+    "exemptIfFrontageShareOfPerimeter": {
+      "value": 0.125,
+      "cmp": "gt",
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 53",
+        "page": 16,
+        "line": 4,
+        "quote": "แนวอาคารด้านทีประชดิ ติดริมทางสาธารณะ ต้องมีความยาวมากกว่า 1 ใน 8 ส่วนของความยาวเส้นรอบรูป"
+      }
+    },
+    "exemptIfWithinRoadM": {
+      "value": 20,
+      "cmp": "lte",
+      "cite": {
+        "source": "bb44-03",
+        "clause": "ข้อ 53",
+        "page": 16,
+        "line": 5,
+        "quote": "ภายนอกของอาคาร ทงั นี แนวอาคารดา้ นทปี ระชดิ ตดิ ทางสาธารณะตอ้ งหา่ งทางสาธารณะไม่เกนิ 20 เมตร"
+      }
+    }
+  },
+  "highRise": {
+    "access": [
+      {
+        "floorAreaSqm": {
+          "max": {
+            "value": 30000,
+            "cmp": "lte",
+            "cite": {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 2",
+              "page": 2,
+              "line": 12,
+              "quote": "5 ขอ้ 2 ทดี นิ ทใี ชเ้ ป็นทตี งั ของอาคารสูงหรอื อาคารขนาดใหญ่พเิ ศษทมี พี นื ทอี าคารรวมกนั ทุกชนั ไม่เกนิ 30,000"
+            }
+          }
+        },
+        "frontageM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr35-33-upd69",
+            "clause": "ข้อ 2",
+            "page": 2,
+            "line": 13,
+            "quote": "ตารางเมตร ต้องมดี า้ นหนึงด้านใดของทดี นิ นันยาวไม่น้อยกว่า 12.00 เมตร ตดิ ถนนสาธารณะทมี เี ขตทางกวา้ งไม่น้อยกว่า"
+          }
+        },
+        "roadWidthM": {
+          "value": 10,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr35-33-upd69",
+            "clause": "ข้อ 2",
+            "page": 2,
+            "line": 14,
+            "quote": "10.00 เมตร ยาวต่อเนอื งกนั โดยตลอดจนไปเชอื มต่อกบั ถนนสาธารณะอนื ทมี เี ขตทางกวา้ งไม่น้อยกวา่ 10.00 เมตร"
+          }
+        }
+      },
+      {
+        "floorAreaSqm": {
+          "min": {
+            "value": 30000,
+            "cmp": "gt",
+            "cite": {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 2 วรรคสอง",
+              "page": 2,
+              "line": 16,
+              "quote": "สาํ หรบั ทดี นิ ทใี ชเ้ ป็นทตี งั ของอาคารสงู หรอื อาคารขนาดใหญ่พเิ ศษทมี พี นื ทอี าคารรวมกนั ทุกชนั มากกว่า 30,000"
+            }
+          }
+        },
+        "frontageM": {
+          "value": 12,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr35-33-upd69",
+            "clause": "ข้อ 2 วรรคสอง",
+            "page": 2,
+            "line": 17,
+            "quote": "ตารางเมตร ต้องมดี า้ นหนึงด้านใดของทดี นิ นันยาวไม่น้อยกว่า 12.00 เมตร ตดิ ถนนสาธารณะทมี เี ขตทางกวา้ งไม่น้อยกว่า"
+          }
+        },
+        "roadWidthM": {
+          "value": 18,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr35-33-upd69",
+            "clause": "ข้อ 2 วรรคสอง",
+            "page": 2,
+            "line": 18,
+            "quote": "18.00 เมตร ยาวต่อเนอื งกนั โดยตลอดจนไปเชอื มต่อกบั ถนนสาธารณะอนื ทมี เี ขตทางกวา้ งไม่น้อยกว่า 18.00 เมตร"
+          }
+        }
+      }
+    ],
+    "accessStripWidthM": {
+      "value": 12,
+      "cmp": "gte",
+      "cite": {
+        "source": "mr35-33-upd69",
+        "clause": "ข้อ 2 วรรคสาม",
+        "page": 2,
+        "line": 20,
+        "quote": "ทดี นิ ดา้ นทตี ดิ ถนนสาธารณะตามวรรคหนึงและวรรคสอง ตอ้ งมคี วามกวา้ งไม่น้อยกว่า 12.00 เมตร ยาวต่อเนอื งกนั"
+      }
+    },
+    "fireLaneWidthM": {
+      "value": 6,
+      "cmp": "gte",
+      "cite": {
+        "source": "mr35-33-upd69",
+        "clause": "ข้อ 3",
+        "page": 2,
+        "line": 23,
+        "quote": "6 ขอ้ 3 อาคารสูงหรืออาคารขนาดใหญ่พเิ ศษต้องจดั ใหม้ ถี นนทมี ีผวิ การจราจรกว้างไม่น้อยกว่า 6.00 เมตร ที"
+      }
+    },
+    "farMax": {
+      "value": 10,
+      "cite": {
+        "source": "mr35-33-upd69",
+        "clause": "ข้อ 5",
+        "page": 2,
+        "line": 37,
+        "quote": "อตั ราสว่ นพนื ทอี าคารรวมกนั ทุกชนั ของอาคารทุกหลงั ต่อพนื ทดี นิ ทใี ชเ้ ป็นทตี งั อาคารไม่เกนิ 10 ต่อ 1"
+      }
+    }
+  },
+  "parking": [
+    {
+      "scope": "bangkokBylaw",
+      "appliesWhere": {
+        "source": "bb44-03",
+        "clause": "ข้อ 83",
+        "page": 27,
+        "line": 9,
+        "quote": "ขอ้ 83 อาคารตามประเภทดงั ตอ่ ไปนี ตอ้ งมที จี อดรถ ทกี ลบั รถ และทางเขา้ ออกของรถ คอื"
+      },
+      "condo": {
+        "kind": "perUnit",
+        "spacesPerUnit": {
+          "value": 1,
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 84 (3)",
+            "page": 27,
+            "line": 47,
+            "quote": "(3) อาคารอยอู่ าศยั รวมหรอื อาคารชุด ใหม้ ที จี อดรถ 1 คนั ต่อ 1 หอ้ งชุด"
+          }
+        },
+        "unitsFromSqm": {
+          "value": 60,
+          "cmp": "gte",
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 83 (3)",
+            "page": 27,
+            "line": 12,
+            "quote": "(3) อาคารอย่อู าศยั รวมหรอื อาคารชดุ ทมี พี นื ทหี อ้ งชุดแต่ละหอ้ งชดุ ตงั แต่ 60 ตารางเมตรขนึ ไป"
+          }
+        }
+      },
+      "office": {
+        "kind": "perFloorArea",
+        "sqmPerSpace": {
+          "value": 60,
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 84 (6)",
+            "page": 28,
+            "line": 3,
+            "quote": "(6) สาํ นักงาน ใหม้ ที จี อดรถ 1 คนั ต่อพนื ทอี าคาร 60 ตารางเมตร"
+          }
+        },
+        "appliesFromSqm": {
+          "value": 300,
+          "cmp": "gte",
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 83 (6)",
+            "page": 27,
+            "line": 15,
+            "quote": "(6) สาํ นกั งานทมี พี นื ทหี อ้ งทาํ งานรวมตงั แต่ 300 ตารางเมตรขนึ ไป"
+          }
+        }
+      },
+      "hotel": {
+        "kind": "perRoomTiers",
+        "firstRooms": {
+          "value": 30,
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 84 (2)",
+            "page": 27,
+            "line": 41,
+            "quote": "(2) โรงแรมทมี หี อ้ งพกั ไม่เกนิ 100 หอ้ ง ให้มที จี อดรถไม่น้อยกว่า 10 คนั สําหรบั ห้องพกั 30 ห้องแรก"
+          }
+        },
+        "firstSpaces": {
+          "value": 10,
+          "cite": {
+            "source": "bb44-03",
+            "clause": "ข้อ 84 (2)",
+            "page": 27,
+            "line": 41,
+            "quote": "(2) โรงแรมทมี หี อ้ งพกั ไม่เกนิ 100 หอ้ ง ให้มที จี อดรถไม่น้อยกว่า 10 คนั สําหรบั ห้องพกั 30 ห้องแรก"
+          }
+        },
+        "tiers": [
+          {
+            "uptoRooms": {
+              "value": 100,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 84 (2)",
+                "page": 27,
+                "line": 41,
+                "quote": "(2) โรงแรมทมี หี อ้ งพกั ไม่เกนิ 100 หอ้ ง ให้มที จี อดรถไม่น้อยกว่า 10 คนั สําหรบั ห้องพกั 30 ห้องแรก"
+              }
+            },
+            "roomsPerSpace": {
+              "value": 5,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 84 (2)",
+                "page": 27,
+                "line": 42,
+                "quote": "สว่ นทเี กนิ 30 หอ้ งใหม้ ที จี อดรถ 1 คนั ต่อจาํ นวนหอ้ งพกั 5 หอ้ ง"
+              }
+            }
+          },
+          {
+            "roomsPerSpace": {
+              "value": 10,
+              "cite": {
+                "source": "bb44-03",
+                "clause": "ข้อ 84 (2) วรรคสอง",
+                "page": 27,
+                "line": 45,
+                "quote": "หอ้ งแรก สว่ นทเี กนิ 100 หอ้ งใหม้ ที จี อดรถ 1 คนั ตอ่ จาํ นวนหอ้ งพกั 10 หอ้ ง"
+              }
+            }
+          }
+        ]
+      },
+      "hallSqmPerSpace": {
+        "value": 10,
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 84 (17)",
+          "page": 28,
+          "line": 17,
+          "quote": "(17) หอ้ งโถง ใหม้ ที จี อดรถ 1 คนั ต่อพนื ทอี าคาร 10 ตารางเมตร"
+        }
+      },
+      "largeBuildingSqmPerSpace": {
+        "value": 120,
+        "cite": {
+          "source": "bb44-03",
+          "clause": "ข้อ 84 (16)",
+          "page": 28,
+          "line": 14,
+          "quote": "(16) อาคารขนาดใหญ่ ใหม้ ที จี อดรถ 1 คนั ต่อพนื ทอี าคาร 120 ตารางเมตร หรอื ใหม้ ที จี อดรถตามจาํ นวน"
+        }
+      },
+      "largerOfSumOrArea": {
+        "source": "bb44-03",
+        "clause": "ข้อ 84 (16)",
+        "page": 28,
+        "line": 16,
+        "quote": "มากกว่าเป็นเกณฑบ์ งั คบั ยกเวน้ โรงงาน คลงั สนิ คา้"
+      },
+      "fractionsRoundUp": {
+        "source": "bb44-03",
+        "clause": "ข้อ 85",
+        "page": 28,
+        "line": 21,
+        "quote": "อาคารโดยใหใ้ ชจ้ าํ นวนทจี อดรถรวมทมี ากกวา่ เป็นเกณฑ์ หากมเี ศษของจาํ นวนทจี อดรถในแตล่ ะประเภทการใชส้ อย ใหค้ ดิ เป็น"
+      }
+    },
+    {
+      "scope": "ministerialInnerBangkok",
+      "appliesWhere": {
+        "source": "mr17-07-upd64",
+        "clause": "ข้อ 3 (1)",
+        "page": 2,
+        "line": 12,
+        "quote": "(1) ในเขตทอ้ งทกี รุงเทพมหานคร เฉพาะในเขตเทศบาลนครหลวงตามประกาศของคณะปฏวิ ตั ิ ฉบบั ที"
+      },
+      "condo": {
+        "kind": "perUnit",
+        "spacesPerUnit": {
+          "value": 1,
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 3 (1) (ค)",
+            "page": 2,
+            "line": 26,
+            "quote": "(ค) อาคารชดุ ใหม้ ที จี อดรถยนตไ์ ม่น้อยกวา่ 1 คนั ต่อ 1 ครอบครวั"
+          }
+        },
+        "unitsFromSqm": {
+          "value": 60,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 2 (3)",
+            "page": 1,
+            "line": 55,
+            "quote": "(3) อาคารชุดทมี พี นื ทแี ต่ละครอบครวั ตงั แต่ 60 ตารางเมตรขนึ ไป"
+          }
+        }
+      },
+      "office": {
+        "kind": "perFloorArea",
+        "sqmPerSpace": {
+          "value": 60,
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 3 (1) (ฉ)",
+            "page": 2,
+            "line": 35,
+            "quote": "(ฉ) สาํ นกั งาน ใหม้ ที จี อดรถยนตไ์ มน่ ้อยกวา่ 1 คนั ต่อพนื ที 60 ตารางเมตร เศษของ 60 ตารางเมตร"
+          }
+        },
+        "appliesFromSqm": {
+          "value": 300,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 2 (6)",
+            "page": 2,
+            "line": 5,
+            "quote": "(6) สาํ นกั งานทมี พี นื ทตี งั แต่ 300 ตารางเมตรขนึ ไป"
+          }
+        }
+      },
+      "hotel": {
+        "kind": "perLobbyAndCommercialArea",
+        "appliesFromSqm": {
+          "value": 300,
+          "cmp": "gte",
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 2 (2)",
+            "page": 1,
+            "line": 53,
+            "quote": "ตงั แต่ 300 ตารางเมตรขนึ ไป"
+          }
+        },
+        "lobbySqmPerSpace": {
+          "value": 10,
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 3 (1) (ข)",
+            "page": 2,
+            "line": 21,
+            "quote": "4 (ข) โรงแรม ให้มีทจี อดรถยนต์ไม่น้อยกว่า 1 คนั ต่อพืนทีห้องโถง 10 ตารางเมตร เศษของ 10"
+          }
+        },
+        "commercialSqmPerSpace": {
+          "value": 20,
+          "cite": {
+            "source": "mr17-07-upd64",
+            "clause": "ข้อ 3 (1) (ข)",
+            "page": 2,
+            "line": 23,
+            "quote": "ตารางเมตร ใหค้ ดิ เป็น 10 ตารางเมตร และไมน่ ้อยกว่า 1 คนั ต่อพนื ทที ใี ชเ้ พอื กจิ การพาณิชยกรรม 20 ตารางเมตร เศษของ 20"
+          }
+        }
+      },
+      "hallSqmPerSpace": {
+        "value": 10,
+        "cite": {
+          "source": "mr17-07-upd64",
+          "clause": "ข้อ 3 (1) (ช)",
+          "page": 2,
+          "line": 38,
+          "quote": "ต่อพนื ทหี อ้ งโถง 10 ตารางเมตร เศษของ 10 ตารางเมตร ใหค้ ดิ เป็น 10 ตารางเมตร"
+        }
+      },
+      "largeBuildingSqmPerSpace": {
+        "value": 120,
+        "cite": {
+          "source": "mr17-07-upd64",
+          "clause": "ข้อ 3 (1) (ซ)",
+          "page": 2,
+          "line": 40,
+          "quote": "ทปี ระกอบกจิ การในอาคารขนาดใหญ่นนั รวมกนั หรอื ใหม้ ที จี อดรถยนตไ์ มน่ ้อยกวา่ 1 คนั ต่อพนื ทอี าคาร 120 ตารางเมตร เศษ"
+        }
+      },
+      "largerOfSumOrArea": {
+        "source": "mr17-07-upd64",
+        "clause": "ข้อ 3 (1) (ซ)",
+        "page": 2,
+        "line": 41,
+        "quote": "ของ 120 ตารางเมตร ใหค้ ดิ เป็น 120 ตารางเมตร ทงั นีใหถ้ อื ทจี อดรถยนตจ์ าํ นวนทมี ากกวา่ เป็นเกณฑ์"
+      },
+      "fractionsRoundUp": {
+        "source": "mr17-07-upd64",
+        "clause": "ข้อ 3 (1) (ฉ)",
+        "page": 2,
+        "line": 35,
+        "quote": "(ฉ) สาํ นกั งาน ใหม้ ที จี อดรถยนตไ์ มน่ ้อยกวา่ 1 คนั ต่อพนื ที 60 ตารางเมตร เศษของ 60 ตารางเมตร"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "hotel-residential",
+      "question": "Is a hotel 'residential' for the building-control open-space minimum and the ข้อ 52 affordable-housing bonus?",
+      "readings": [
+        {
+          "id": "public-building",
+          "reading": "No. Reg 55 ข้อ 1 names โรงแรม as an อาคารสาธารณะ, and ข้อ 33 (2) gives public buildings 10 in 100.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารสาธารณะ",
+              "page": 1,
+              "line": 32,
+              "quote": "การเมือง การศึกษา การศาสนา การสงั คม การนันทนาการ หรือการพาณิชยกรรม เช่น โรงมหรสพ หอประชุม โรงแรม"
+            },
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 33 (2)",
+              "page": 7,
+              "line": 41,
+              "quote": "(2) หอ้ งแถว ตกึ แถว อาคารพาณิชย์ โรงงาน อาคารสาธารณะ และอาคารอนื ซงึ ไม่ไดใ้ ชเ้ ป็นทอี ย่อู าศยั"
+            }
+          ]
+        },
+        {
+          "id": "residential",
+          "reading": "Yes. Reg 55 ข้อ 1 defines อาคารอยู่อาศัย as lived in day and night, permanently or temporarily, and ข้อ 33 (2) sends a building also used as a residence to the 30 in 100 rule.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารอยู่อาศัย",
+              "page": 1,
+              "line": 18,
+              "quote": "อาศยั อยา่ งถาวรหรอื ชวั คราว"
+            },
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 33 (2)",
+              "page": 7,
+              "line": 43,
+              "quote": "ต้องมที วี ่างไม่น้อยกว่า 10 ใน 100 ส่วน ของพนื ทชี นั ใดชนั หนึงทมี ากทสี ุดของอาคาร แต่ถา้ อาคารดงั กล่าวใชเ้ ป็นทอี ย่อู าศยั"
+            }
+          ]
+        }
+      ],
+      "recommendation": "residential",
+      "why": "Feasibility should under-promise: the 30 in 100 reading gives the smaller footprint, and the ข้อ 33 (2) proviso reads as written for buildings people sleep in.",
+      "decision": null
+    },
+    {
+      "id": "condo-public-building",
+      "question": "Is a condo an อาคารสาธารณะ, so that the ข้อ 53 public-open-space bonus and the ข้อ 54 public-parking bonus can apply?",
+      "readings": [
+        {
+          "id": "not-public",
+          "reading": "No. Reg 55 ข้อ 1 defines อาคารสาธารณะ as a building for public gathering, and ข้อ 33 treats อาคารอยู่อาศัยรวม as its own class.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารสาธารณะ",
+              "page": 1,
+              "line": 31,
+              "quote": "“อาคารสาธารณะ” หมายความว่า อาคารทใี ชเ้ พอื ประโยชน์ในการชุมนุมคนไดโ้ ดยทวั ไป เพอื กจิ กรรมทางราชการ"
+            },
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 33 (1)",
+              "page": 7,
+              "line": 38,
+              "quote": "(1) อาคารอยู่อาศยั และอาคารอยู่อาศยั รวม ต้องมีทวี ่างไม่น้อยกว่า 30 ใน 100 ส่วนของพนื ทชี นั ใด"
+            }
+          ]
+        },
+        {
+          "id": "public",
+          "reading": "Yes. The list of examples ends with เป็นต้น, so it is open, and the plan only says อาคารสาธารณะตามกฎหมายว่าด้วยการควบคุมอาคาร.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารสาธารณะ",
+              "page": 1,
+              "line": 34,
+              "quote": "อากาศยาน อโุ มงค์ สะพาน อาคารจอดรถ สถานีรถ ทา่ จอดเรอื โป๊ ะจอดเรอื สสุ าน ฌาปนสถาน ศาสนสถาน เป็นตน้"
+            },
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 53",
+              "page": 77,
+              "line": 41,
+              "quote": "ประโยชนท์ ี่ดินประเภทอาคารสาธารณะตามกฎหมายว่าด้วยการควบคุมอาคาร หากเจ้าของที่ดินหรือ"
+            }
+          ]
+        }
+      ],
+      "recommendation": "not-public",
+      "why": "Every listed example is a place where the public gathers; private homes are not, so a condo should get no ข้อ 53 or ข้อ 54 bonus.",
+      "decision": null
+    },
+    {
+      "id": "office-public-building",
+      "question": "Is an office an อาคารสาธารณะ for the ข้อ 53 and ข้อ 54 FAR bonuses?",
+      "readings": [
+        {
+          "id": "not-public",
+          "reading": "No. Reg 55 defines สำนักงาน separately and the public-building examples never name an office.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 สำนักงาน",
+              "page": 2,
+              "line": 8,
+              "quote": "“สาํ นกั งาน” หมายความวา่ อาคารหรอื สว่ นหนงึ สว่ นใดของอาคารทใี ชเ้ ป็นสาํ นกั งานหรอื ทที าํ การ"
+            },
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารสาธารณะ",
+              "page": 1,
+              "line": 33,
+              "quote": "โรงพยาบาล สถานศกึ ษา หอสมุด สนามกฬี ากลางแจง้ สนามกฬี าในร่ม ตลาด หา้ งสรรพสนิ คา้ ศนู ยก์ ารคา้ สถานบรกิ าร ท่า"
+            }
+          ]
+        },
+        {
+          "id": "public",
+          "reading": "Yes. The definition covers gathering for การพาณิชยกรรม, which a large office arguably serves.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 1 อาคารสาธารณะ",
+              "page": 1,
+              "line": 32,
+              "quote": "การเมือง การศึกษา การศาสนา การสงั คม การนันทนาการ หรือการพาณิชยกรรม เช่น โรงมหรสพ หอประชุม โรงแรม"
+            }
+          ]
+        }
+      ],
+      "recommendation": "not-public",
+      "why": "Offices have their own definition; reading them into the public-building list would also change their fire and open-space class.",
+      "decision": null
+    },
+    {
+      "id": "open-space-base",
+      "question": "Which building-control open-space minimum does the plan's 'not below the building control minimum' point to?",
+      "readings": [
+        {
+          "id": "all-stricter",
+          "reading": "Apply Reg 55 ข้อ 33 (share of the largest floor), the Bangkok bylaw ข้อ 52 (share of land) and, for high-rise or extra-large buildings, Reg 33 ข้อ 6 (share of land); the largest required area governs.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 33 (1)",
+              "page": 7,
+              "line": 40,
+              "quote": "ชนั หนึงทมี ากทสี ดุ ของอาคาร"
+            },
+            {
+              "source": "bb44-03",
+              "clause": "ข้อ 52 (1)",
+              "page": 15,
+              "line": 26,
+              "quote": "(1) อาคารอย่อู าศยั ตอ้ งมที วี า่ งไม่น้อยกวา่ 30 ใน 100 ส่วนของพนื ทที ดี นิ"
+            },
+            {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 6 (1)",
+              "page": 2,
+              "line": 44,
+              "quote": "(1) อาคารทอี ย่อู าศยั ตอ้ งมที วี า่ งไมน่ ้อยกวา่ รอ้ ยละ 30 ของพนื ทดี นิ ทใี ชเ้ ป็นทตี งั อาคาร"
+            }
+          ]
+        },
+        {
+          "id": "ministerial-only",
+          "reading": "Apply Reg 55 ข้อ 33 to ordinary buildings and Reg 33 ข้อ 6 to high-rise; the bylaw's share of land is ignored where it differs, because a local bylaw cannot conflict with a ministerial regulation.",
+          "cites": [
+            {
+              "source": "mr43-55-upd68",
+              "clause": "ข้อ 33 (1)",
+              "page": 7,
+              "line": 38,
+              "quote": "(1) อาคารอยู่อาศยั และอาคารอยู่อาศยั รวม ต้องมีทวี ่างไม่น้อยกว่า 30 ใน 100 ส่วนของพนื ทชี นั ใด"
+            },
+            {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 6 (1)",
+              "page": 2,
+              "line": 44,
+              "quote": "(1) อาคารทอี ย่อู าศยั ตอ้ งมที วี า่ งไมน่ ้อยกวา่ รอ้ ยละ 30 ของพนื ทดี นิ ทใี ชเ้ ป็นทตี งั อาคาร"
+            }
+          ]
+        }
+      ],
+      "recommendation": "all-stricter",
+      "why": "A Bangkok permit office checks both the ministerial regulation and the bylaw; meeting the largest requirement satisfies every reading.",
+      "decision": null
+    },
+    {
+      "id": "parking-source",
+      "question": "Which parking rule governs a ย.9 plot?",
+      "readings": [
+        {
+          "id": "bylaw",
+          "reading": "The Bangkok bylaw ข้อ 83 to 85 (hotel by rooms, condo 1 per unit of 60 m² or more, office 1 per 60 m²).",
+          "cites": [
+            {
+              "source": "bb44-03",
+              "clause": "ข้อ 83",
+              "page": 27,
+              "line": 9,
+              "quote": "ขอ้ 83 อาคารตามประเภทดงั ตอ่ ไปนี ตอ้ งมที จี อดรถ ทกี ลบั รถ และทางเขา้ ออกของรถ คอื"
+            }
+          ]
+        },
+        {
+          "id": "ministerial",
+          "reading": "Reg 7 ข้อ 3 (1), which applies only inside the old เทศบาลนครหลวง area (hotel by lobby and commercial area).",
+          "cites": [
+            {
+              "source": "mr17-07-upd64",
+              "clause": "ข้อ 3 (1)",
+              "page": 2,
+              "line": 12,
+              "quote": "(1) ในเขตทอ้ งทกี รุงเทพมหานคร เฉพาะในเขตเทศบาลนครหลวงตามประกาศของคณะปฏวิ ตั ิ ฉบบั ที"
+            }
+          ]
+        },
+        {
+          "id": "higher-of-both",
+          "reading": "Compute both and require the higher count for each building type.",
+          "cites": [
+            {
+              "source": "bb44-03",
+              "clause": "ข้อ 85",
+              "page": 28,
+              "line": 21,
+              "quote": "อาคารโดยใหใ้ ชจ้ าํ นวนทจี อดรถรวมทมี ากกวา่ เป็นเกณฑ์ หากมเี ศษของจาํ นวนทจี อดรถในแตล่ ะประเภทการใชส้ อย ใหค้ ดิ เป็น"
+            },
+            {
+              "source": "mr17-07-upd64",
+              "clause": "ข้อ 3 (1) (ซ)",
+              "page": 2,
+              "line": 41,
+              "quote": "ของ 120 ตารางเมตร ใหค้ ดิ เป็น 120 ตารางเมตร ทงั นีใหถ้ อื ทจี อดรถยนตจ์ าํ นวนทมี ากกวา่ เป็นเกณฑ์"
+            }
+          ]
+        }
+      ],
+      "recommendation": "higher-of-both",
+      "why": "The two texts agree on condo and office and differ only for hotels; taking the higher count is safe and needs no map of the 1971 municipal boundary.",
+      "decision": null
+    },
+    {
+      "id": "permeable-base",
+      "question": "The permeable 50% is a share of which open space?",
+      "readings": [
+        {
+          "id": "required",
+          "reading": "Of the minimum open space the plan requires (4.5% of total floor area).",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 16 วรรคสาม (2)",
+              "page": 35,
+              "line": 11,
+              "quote": "(๒) มอี ัตราสว่ นของท่ีว่างต่อพื้นที่อาคารรวมไม่น้อยกว่าร้อยละส่จี ดุ ห้า แต่อัตราสว่ นของที่ว่าง"
+            }
+          ]
+        },
+        {
+          "id": "provided",
+          "reading": "Of all open space actually left on the plot.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 16 วรรคสาม (2)",
+              "page": 35,
+              "line": 15,
+              "quote": "ร้อยละสีจ่ ดุ ห้า และให้มีพ้ืนท่ีน้าํ ซมึ ผ่านได้เพือ่ ปลูกตน้ ไมไ้ มน่ อ้ ยกว่ารอ้ ยละหา้ สิบของพน้ื ทีว่ ่าง"
+            }
+          ]
+        }
+      ],
+      "recommendation": "required",
+      "why": "The sentence sits inside the OSR rule and 'พื้นที่ว่าง' refers back to the open space that rule requires; the other reading would penalise leaving extra open space.",
+      "decision": null
+    },
+    {
+      "id": "gfa-includes-parking",
+      "question": "Does parking floor area count in พื้นที่อาคารรวม for FAR and OSR?",
+      "readings": [
+        {
+          "id": "counts",
+          "reading": "Yes. The definition counts every storey of every building, and ข้อ 54 has to exempt bonus public parking explicitly, which implies ordinary parking counts.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 4",
+              "page": 2,
+              "line": 4,
+              "quote": "“อัตราส่วนพื้นท่ีอาคารรวมต่อพ้ืนที่ดิน” หมายความว่า อัตราส่วนพื้นที่อาคารรวมทุกชั้น"
+            },
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 54 วรรคสอง",
+              "page": 78,
+              "line": 16,
+              "quote": "พืน้ ที่จอดรถยนต์ที่เพ่ิมขึ้นให้ได้รับการยกเว้นไม่ต้องนํามาพิจารณาอัตราส่วนพื้นที่อาคารรวม"
+            }
+          ]
+        },
+        {
+          "id": "excluded",
+          "reading": "No. Parking is not floor area people occupy, so it is left out of total floor area.",
+          "cites": [
+            {
+              "source": "mr35-33-upd69",
+              "clause": "ข้อ 1 พื้นที่อาคาร",
+              "page": 1,
+              "line": 20,
+              "quote": "1 “พนื ทอี าคาร” หมายความว่า พนื ทขี องพนื ของอาคารแต่ละชนั ทบี ุคคลเขา้ อยู่หรอื เขา้ ใชส้ อยไดภ้ ายในขอบเขตดา้ น"
+            }
+          ]
+        }
+      ],
+      "recommendation": "counts",
+      "why": "The plan defines its own term with no exclusion, and the explicit ข้อ 54 exemption only makes sense if parking otherwise counts.",
+      "decision": null
+    },
+    {
+      "id": "office-operating-area",
+      "question": "For the ย.9 office limit (operating area above 10,000 m² needs a 16 m road or a station within 500 m), is operating area the office's total floor area?",
+      "readings": [
+        {
+          "id": "gfa",
+          "reading": "Yes. ข้อ 4 defines พื้นที่ประกอบการ to include areas in continuous use for the business, inside or outside the building.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 4",
+              "page": 1,
+              "line": 25,
+              "quote": "“พนื้ ท่ปี ระกอบการ” หมายความว่า พืน้ ที่ที่ใช้ประกอบกิจการบนพื้นดิน เหนือพื้นดิน หรือ"
+            },
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 4",
+              "page": 1,
+              "line": 26,
+              "quote": "ใต้พ้ืนดิน และให้หมายความรวมถงึ พนื้ ท่ีที่มีการใช้ประโยชนต์ ่อเน่อื งของกิจการไม่ว่าจะอยู่ภายในอาคาร"
+            }
+          ]
+        },
+        {
+          "id": "net",
+          "reading": "No. Count only rentable office space; lobbies, plant and parking are not 'operating' the business.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 16 วรรคสอง (10)",
+              "page": 33,
+              "line": 39,
+              "quote": "(๑๐) สํานักงานท่ีมีพ้ืนท่ีประกอบการเกิน ๑๐,๐๐๐ ตารางเมตร เว้นแต่ท่ีต้ังอยู่ริม"
+            }
+          ]
+        }
+      ],
+      "recommendation": "gfa",
+      "why": "The definition reaches beyond the building itself; using total floor area can only make the tool stricter.",
+      "decision": null
+    },
+    {
+      "id": "road-access-tiers",
+      "question": "When a hotel or office relies on the road-width exemption, what must the tool check under ข้อ 36 (as corrected on 9 Oct 2013)?",
+      "readings": [
+        {
+          "id": "frontage-and-row",
+          "reading": "Enforce the right-of-way tier and the minimum frontage on that road; show the continuity, connecting-road width and distance tests as a manual check, because they depend on the road network beyond the plot.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 36 (2)",
+              "page": 73,
+              "line": 5,
+              "quote": "กรณีที่ตั้งอยู่บนที่ดินแปลงใดแปลงหนึ่งซ่ึงมีด้านใดด้านหน่ึงกว้างไม่น้อยกว่า ๑๒ เมตร ติดถนนสาธารณะ"
+            },
+            {
+              "source": "mr56-correction",
+              "clause": "แก้คำผิด ข้อ 36",
+              "page": 1,
+              "line": 16,
+              "quote": "หน้า ๗๒               ขอ้ ๓๖ วรรคหนงึ่ บรรทดั ที่ ๒ คําวา่ “ริมถนนสาธารณะ” ให้แก้เป็น"
+            }
+          ]
+        },
+        {
+          "id": "row-only",
+          "reading": "Enforce only the right-of-way named in ข้อ 16; ข้อ 36 is for the permit officer.",
+          "cites": [
+            {
+              "source": "mr56-bma",
+              "clause": "ข้อ 16 วรรคสอง (8)",
+              "page": 33,
+              "line": 27,
+              "quote": "ริมถนนสาธารณะที่มีขนาดเขตทางไม่น้อยกว่า ๑๒ เมตร หรือต้ังอยู่ภายในระยะ ๕๐๐ เมตร"
+            }
+          ]
+        }
+      ],
+      "recommendation": "frontage-and-row",
+      "why": "Frontage is visible on the drawn plot, so skipping it would let a 4 m wide flag lot pass; the network tests cannot be read from one plot.",
+      "decision": null
+    },
+    {
+      "id": "bylaw-2569-scope",
+      "question": "Does the 13 Mar 2026 Bangkok bylaw change anything in ข้อ 16 (ย.9) that this pack uses?",
+      "readings": [
+        {
+          "id": "factories-only",
+          "reading": "No. The readable parts (gazette header, digits, annex) show it rewrites the factory item of the prohibited-use lists and adds factory types 76 and 90 per zone; FAR, OSR and the hotel and office conditions are untouched.",
+          "cites": [
+            {
+              "source": "bb69-bma",
+              "clause": "ข้อ 10 (garbled)",
+              "page": 3,
+              "line": 10,
+              "quote": "\u0010Oอ _^ QหO0\u000fNล>\u000fค/@/Q% (_) \u0010อ\u000f/11ค2อ\u000f \u0010อ\u000f\u0010Oอ _d OหN\u000f\u000f\u0010\u000f1>#1/\u000fQหOQ\u0012O&?\u000fค?&"
+            },
+            {
+              "source": "bb69-bma",
+              "clause": "บัญชีท้ายข้อบัญญัติ",
+              "page": 6,
+              "line": 9,
+              "quote": "ท่ี  ของโรงงาน                        ย.๑ ย.๒ ย.๓ ย.๔ ย.๕ ย.๖ ย.๗ ย.๘ ย.๙ ย.๑๐ พ.๑ พ.๒ พ.๓ พ.๔ พ.๕ อ.๑      อ.๒ อ.๓ ก.๑ ก.๒ ก.๓ ก.๔ ก.5"
+            }
+          ]
+        },
+        {
+          "id": "unverified",
+          "reading": "Unknown until a Thai reader or OCR reads the operative text; mark every ย.9 value as unverified against the 2026 amendment.",
+          "cites": [
+            {
+              "source": "bb69-bma",
+              "clause": "header",
+              "page": 1,
+              "line": 2,
+              "quote": "เลม ๑๔๓ ตอนพเิ ศษ ๖๖ ง ราชกิจจานุเบกษา"
+            }
+          ]
+        }
+      ],
+      "recommendation": "factories-only",
+      "why": "The decoded article numbers and the readable annex are all about factories, but show a banner saying the amendment's body text was not machine-readable.",
+      "decision": null
+    },
+    {
+      "id": "front-open-space",
+      "question": "Does a building on a public road need the bylaw ข้อ 52 (6) front open space (6 m, or 12 m above 3 storeys)?",
+      "readings": [
+        {
+          "id": "exempt-on-road",
+          "reading": "No, if it meets ข้อ 53: the road-facing building line is longer than 1/8 of the perimeter and within 20 m of the road.",
+          "cites": [
+            {
+              "source": "bb44-03",
+              "clause": "ข้อ 53",
+              "page": 16,
+              "line": 4,
+              "quote": "แนวอาคารด้านทีประชดิ ติดริมทางสาธารณะ ต้องมีความยาวมากกว่า 1 ใน 8 ส่วนของความยาวเส้นรอบรูป"
+            }
+          ]
+        },
+        {
+          "id": "always",
+          "reading": "Yes. ข้อ 52 (6) applies to every public or taller building; ข้อ 53 only adds the road-facing conditions.",
+          "cites": [
+            {
+              "source": "bb44-03",
+              "clause": "ข้อ 52 (6)",
+              "page": 15,
+              "line": 43,
+              "quote": "(6) อาคารพาณิชย์ โรงงานอุตสาหกรรม คลงั สนิ คา้ อาคารสาธารณะ อาคารสงู เกนิ 2 ชนั หรอื สูงเกนิ 8"
+            }
+          ]
+        }
+      ],
+      "recommendation": "exempt-on-road",
+      "why": "ข้อ 53 opens with 'อาคารอยู่ริมทางสาธารณะที่ไม่ต้องมีที่ว่างตามข้อ 52(3) และ 52(6)', which only makes sense as an exemption.",
+      "decision": null
+    }
+  ],
+  "gaps": [
+    {
+      "id": "bylaw-2569-text",
+      "what": "Operative text of the 13 Mar 2026 Bangkok bylaw amending the plan",
+      "why": "The PDF's fonts have no Unicode map: pdftotext and one Context.dev scrape both return cipher text. Nothing from it is in the pack."
+    },
+    {
+      "id": "large-building-road",
+      "what": "Minimum road width for a large building (above 2,000 m² but below 10,000 m² and below 23 m)",
+      "why": "Not found in Reg 55, Reg 33, Reg 7 or the 2544 bylaw; Reg 33 ข้อ 2 covers only high-rise and extra-large buildings."
+    },
+    {
+      "id": "plan-map-and-road-list",
+      "what": "Which plots are ย.9, the ย.9-1 to ย.9-30 sub-areas, planned road widenings (ถนนสาย ก/ข) and station platforms",
+      "why": "They live in the plan's maps and annexed lists, which are not in the regulation's text layer."
+    },
+    {
+      "id": "coverage",
+      "what": "A separate building-coverage percentage",
+      "why": "No source read states one; coverage is bounded only by the open-space minimums and setbacks in the pack."
+    },
+    {
+      "id": "eia",
+      "what": "EIA thresholds for condos and hotels",
+      "why": "Set by a Ministry of Natural Resources notice that was not downloaded."
+    },
+    {
+      "id": "fire-and-services",
+      "what": "Fire stairs, lifts, refuge floors and other Reg 33 / Reg 39 / Reg 47 design rules",
+      "why": "Out of scope for the envelope; they shape the core, not the allowed volume."
+    }
+  ]
+}
