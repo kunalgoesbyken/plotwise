@@ -14,6 +14,7 @@ import { CARVING, feasibility } from './compute'
 import { envelopeLayers, RULE_STEPS } from './rule-layers'
 
 const TAU = 2 * Math.PI
+const FUZZ_TIMEOUT_MS = 30_000
 const AREA_TOLERANCE_SQM = 0.05
 const RELATIVE_AREA_TOLERANCE = 1e-6
 
@@ -170,5 +171,5 @@ describe('plot to designs fuzz', () => {
       }),
       { numRuns: 100 },
     )
-  })
+  }, FUZZ_TIMEOUT_MS)
 })

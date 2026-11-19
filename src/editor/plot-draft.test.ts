@@ -257,11 +257,8 @@ describe('editing a closed plot', () => {
     const draft = loaded()
     for (const widthM of [0, -5, Number.NaN, Infinity, 1e12]) {
       expect(apply(draft, { type: 'set-road-width', edge: 0, widthM })).toBe(draft)
-      expect(apply(draft, { type: 'mark-road', edge: 1 }, { type: 'set-road-width', edge: 1, widthM }).corners[1].edge).toEqual({
-        road: true,
-        widthM: null,
-        estimated: false,
-      })
+      const marked = apply(draft, { type: 'mark-road', edge: 1 })
+      expect(apply(marked, { type: 'set-road-width', edge: 1, widthM })).toBe(marked)
     }
   })
 
@@ -272,7 +269,7 @@ describe('editing a closed plot', () => {
       expect(editDraft(loaded(), { type: 'move', corner: 1, at })).toEqual({ ok: false, reason: 'out-of-range' })
       expect(editDraft(loaded(), { type: 'insert', edge: 1, at })).toEqual({ ok: false, reason: 'out-of-range' })
     }
-    const wrapped: Plot = { ...plot, ring: plot.ring.map(([lng, lat]): LngLat => [lng + 180, lat]) }
+    const wrapped: Plot = { ...plot, ring: plot.ring.map(([lng, lat]): [number, number] => [lng + 180, lat]) }
     expect(editDraft(emptyDraft('condo'), { type: 'load', plot: wrapped })).toEqual({ ok: false, reason: 'out-of-range' })
   })
 })
