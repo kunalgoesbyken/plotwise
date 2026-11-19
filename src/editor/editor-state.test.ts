@@ -58,6 +58,14 @@ describe('reduceEditor', () => {
     expect(run({ type: 'load', plot }, selected, { type: 'clear' }).selection).toEqual({ kind: 'none' })
   })
 
+  it('does not select a corner or edge that an ignored edit never created', () => {
+    const refused = run({ type: 'close' })
+    expect(refused.notice).toBe('too-few-corners')
+    expect(reduceEditor(refused, { type: 'insert', edge: 0, at: [0, 0] }).selection).toEqual({ kind: 'none' })
+    const refusedOnPlot = run({ type: 'load', plot }, { type: 'remove', corner: 9 }, { type: 'select', selection: { kind: 'none' } })
+    expect(reduceEditor(refusedOnPlot, { type: 'mark-road', edge: 9 }).selection).toEqual({ kind: 'none' })
+  })
+
   it('keeps the selection when the station flag changes', () => {
     const selected = run({ type: 'load', plot }, { type: 'select', selection: { kind: 'edge', index: 0 } })
     const near = reduceEditor(selected, { type: 'set-near-station', nearStation: true })

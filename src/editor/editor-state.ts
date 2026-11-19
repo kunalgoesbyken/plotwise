@@ -92,7 +92,7 @@ function applyDraft(state: EditorState, action: DraftAction): EditorState {
     ...state,
     draft,
     plot: draft === state.draft ? state.plot : toPlot(draft),
-    selection: selectionAfter(action, state.selection, state.draft, draft),
+    selection: draft === state.draft ? state.selection : selectionAfter(action, state.selection, state.draft, draft),
     notice: null,
     loads: action.type === 'load' ? state.loads + 1 : state.loads,
   }
