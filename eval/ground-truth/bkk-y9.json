@@ -1,0 +1,918 @@
+{
+ "openSpaceRatio.permeableShareOfOpenSpace": {
+  "value": 0.5,
+  "sources": [
+   {
+    "url": "https://www.posttoday.com/politics/225562",
+    "title": "สาระสำคัยที่ควรรู้ ของผังเมือง รวม กทม. พ.ศ. 2556 (ตอนจบ)",
+    "quote": "เพื่อปลูกต้นไม้ไม่น้อยกว่าร้อยละ 50 ของพื้นที่ว่างตามข้อกำหนด"
+   }
+  ]
+ },
+ "farBonus.measures[0].maxExtraPerProvidedArea": {
+  "value": 4,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "โดยพื้นที่อาคารรวมที่เพิ่มขึ้นต้องไม่เกินสี่เท่าของพื้นที่ที่จัดให้เป็นที่อยู่อาศัยสําหรับผู้มีรายได้น้อย",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[1].maxExtraPerProvidedArea": {
+  "value": 5,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "โดยพื้นที่อาคารรวมที่เพิ่มขึ้นต้องไม่เกินห้าเท่าของพื้นที่โล่งเพื่อประโยชน์สาธารณะหรือสวนสาธารณะที่จัดให้มีขึ้น",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[2].maxStationDistanceM": {
+  "value": 500,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "การจัดให้มีที่จอดรถยนต์สําหรับประชาชนทั่วไปในบริเวณพื้นที่ภายในระยะ 500 เมตรโดยรอบสถานีรถไฟฟ้าขนส่งมวลชน",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[2].maxExtraPerSpaceSqm": {
+  "value": 30,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "โดยพื้นที่อาคารรวมที่เพิ่มขึ้นต้องไม่เกิน 30 ตารางเมตรต?อที่จอดรถยนต?ที่เพิ่มขึ้น 1 คัน",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[3].volumeM3": {
+  "value": 1,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "การจัดให้มีพื้นที่รับน้ำในแปลงที่ดินในสัดส่วนไม่น้อยกว่า 1 ลูกบาศก์เมตร ต่อพื้นที่ดิน 50 ตารางเมตร",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   },
+   {
+    "url": "https://www.feasyonline.com/content/detail/1194/far-bonus-",
+    "title": "FAR Bonus เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "การจัดให้มีพื้นที่รับน้ำในแปลงที่ดินในสัดส่วนไม่น้อยกว่า 1 ลูกบาศก์เมตร ต่อพื้นที่ดิน 50 ตารางเมตร"
+   }
+  ]
+ },
+ "farBonus.measures[3].perLandSqm": {
+  "value": 50,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "การจัดให้มีพื้นที่รับน้ำในแปลงที่ดินในสัดส่วนไม่น้อยกว่า 1 ลูกบาศก์เมตร ต่อพื้นที่ดิน 50 ตารางเมตร",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   },
+   {
+    "url": "https://www.feasyonline.com/content/detail/1194/far-bonus-",
+    "title": "FAR Bonus เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "การจัดให้มีพื้นที่รับน้ำในแปลงที่ดินในสัดส่วนไม่น้อยกว่า 1 ลูกบาศก์เมตร ต่อพื้นที่ดิน 50 ตารางเมตร"
+   }
+  ]
+ },
+ "farBonus.measures[3].baseShare": {
+  "value": 0.05,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินได้ไม่เกินร้อยละห้า",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[3].maxShare": {
+  "value": 0.2,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ตามสัดส่วน แต่ต้องไม่เกินร้อยละยี่สิบ",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[0].level": {
+  "value": 1,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 1 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 5",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[0].share": {
+  "value": 0.05,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 1 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 5",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[1].level": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 2 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 10",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[1].share": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 2 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 10",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[2].level": {
+  "value": 3,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 3 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 15",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[2].share": {
+  "value": 0.15,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 3 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 15",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[3].level": {
+  "value": 4,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 4 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 20",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "farBonus.measures[4].levels[3].share": {
+  "value": 0.2,
+  "sources": [
+   {
+    "url": "https://tooktee102.blogspot.com/2020/07/far-bonus-8.html",
+    "title": "FAR Bonus คืออะไร เงื่อนไข 8 ข้อ เพิ่มพื้นที่อาคาร ตามกฎหมายผังเมืองใหม่",
+    "quote": "อาคารที่ได้รับการรับรองระดับที่ 4 ให้มีอัตราส่วนพื้นที่อาคารรวมต่อพื้นที่ดินเพิ่มได้ไม่เกินร้อยละ 20",
+    "note": "The article covers the bonus measures under the draft revision of the plan; it is used here as evidence for the 2556 measure."
+   }
+  ]
+ },
+ "buildingClasses.highRiseFromHeightM": {
+  "value": 23,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารสูง หมายความว่า อาคารที่บุคคลอาจเข้าอยู่หรือเข้าใช้สอยได้โดยมีความสูงตั้งแต่ ๒๓.๐๐ เมตรขึ้นไป"
+   },
+   {
+    "url": "https://greenoffice.library.cmu.ac.th/api/assets/estimate/20210618012431-46.pdf",
+    "title": "(แกไขเพิ่มเติมโดยกฎกระทรวง ฉบับที่ 42 (พ.ศ. 2537) ฯ",
+    "quote": "หมายความวา อาคารที่บุคคลอาจเขาอยูหรือเขาใชสอยไดโดยมีความสูงตั้งแต 23.00"
+   }
+  ]
+ },
+ "buildingClasses.extraLargeFromFloorAreaSqm": {
+  "value": 10000,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "โดยมีพื้นที่รวมกันทุกชั้นหรือชั้นหนึ่งชั้นใดในหลังเดียวกันตั้งแต่ ๑๐,๐๐๐ ตารางเมตรขึ้นไป"
+   },
+   {
+    "url": "https://greenoffice.library.cmu.ac.th/api/assets/estimate/20210618012431-46.pdf",
+    "title": "(แกไขเพิ่มเติมโดยกฎกระทรวง ฉบับที่ 42 (พ.ศ. 2537) ฯ",
+    "quote": "ชั้นหนึ่งชั้นใดในหลังเดียวกันตั้งแต 10,000 ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "buildingClasses.largeAboveFloorAreaSqm": {
+  "value": 2000,
+  "sources": [
+   {
+    "url": "http://law.longdo.com/law/179/sub13869",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522",
+    "quote": "ใดในหลังเดียวกันเกิน ๒,๐๐๐ ตารางเมตร หรืออาคารที่มีความสูงตั้งแต่ ๑๕.๐๐ เมตรขึ้นไป"
+   }
+  ]
+ },
+ "buildingClasses.largeIfTallFromHeightM": {
+  "value": 15,
+  "sources": [
+   {
+    "url": "http://law.longdo.com/law/179/sub13869",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522",
+    "quote": "ใดในหลังเดียวกันเกิน ๒,๐๐๐ ตารางเมตร หรืออาคารที่มีความสูงตั้งแต่ ๑๕.๐๐ เมตรขึ้นไป"
+   }
+  ]
+ },
+ "openSpaceMinimums[0].minShare": {
+  "value": 0.3,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) อาคารอยู่อาศัย และอาคารอยู่อาศัยรวม ต้องมีที่ว่างไม่น้อยกว่า ๓๐ ใน ๑๐๐ ส่วนของพื้นที่ชั้นใดชั้นหนึ่งที่มากที่สุดของอาคาร"
+   }
+  ]
+ },
+ "openSpaceMinimums[1].minShare": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารสาธารณะ และอาคารอื่นซึ่งไม่ได้ใช้เป็นที่อยู่อาศัย ต้องมีที่ว่างไม่น้อยกว่า ๑๐ ใน ๑๐๐ ส่วนของพื้นที่ชั้นใดชั้นหนึ่งที่มากที่สุดของอาคาร"
+   }
+  ]
+ },
+ "openSpaceMinimums[2].minShare": {
+  "value": 0.3,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) อาคารอยู่อาศัย ต้องมีที่ว่างไม่น้อยกว่า ๓๐ ใน ๑๐๐ ส่วน ของพื้น ที่ที่ดิน"
+   }
+  ]
+ },
+ "openSpaceMinimums[3].minShare": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารอื่น ซึ่งไม่ได้ใช้เป็นที่อยู่อาศัย ต้องมีที่ว่างไม่น้อยกว่า ๑๐ ใน ๑๐๐ ส่วนของพื้นที่ที่ดิน"
+   }
+  ]
+ },
+ "openSpaceMinimums[4].minShare": {
+  "value": 0.3,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) อาคารที่อยู่อาศัยต้องมีที่ว่างไม่น้อยกว่าร้อยละ ๓๐ ของพื้นที่ดินที่ใช้เป็นที่ตั้งอาคาร"
+   }
+  ]
+ },
+ "openSpaceMinimums[5].minShare": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารอื่นที่ไม่ได้ใช้เป็นที่อยู่อาศัยต้องมีที่ว่างไม่น้อยกว่าร้อยละ ๑๐ ของพื้นที่ดินที่ใช้เป็นที่ตั้งอาคาร"
+   }
+  ]
+ },
+ "roadSetbacks[0].appliesAbove.storeys": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารที่สูงเกินสองชั้นหรือเกิน ๘ เมตร ห้องแถว ตึกแถว บ้านแถว อาคารพาณิชย์"
+   }
+  ]
+ },
+ "roadSetbacks[0].appliesAbove.heightM": {
+  "value": 8,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารที่สูงเกินสองชั้นหรือเกิน ๘ เมตร ห้องแถว ตึกแถว บ้านแถว อาคารพาณิชย์"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[0].roadWidthM.max": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) ถ้าถนนสาธารณะนั้นมีความกว้างน้อยกว่า ๑๐ เมตร ให้ร่นแนวอาคารห่างจากกึ่งกลางถนนสาธารณะอย่างน้อย ๖ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[0].setback.distanceM": {
+  "value": 6,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) ถ้าถนนสาธารณะนั้นมีความกว้างน้อยกว่า ๑๐ เมตร ให้ร่นแนวอาคารห่างจากกึ่งกลางถนนสาธารณะอย่างน้อย ๖ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[1].roadWidthM.min": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไป แต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[1].roadWidthM.max": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไป แต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[1].setback.share": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไป แต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[2].roadWidthM.min": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) ถ้าถนนสาธารณะนั้นมีความกว้างเกิน ๒๐ เมตรขึ้นไป ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๒ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[0].bands[2].setback.distanceM": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) ถ้าถนนสาธารณะนั้นมีความกว้างเกิน ๒๐ เมตรขึ้นไป ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๒ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[1].appliesAbove.storeys": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารที่สูงเกิน ๒ ชั้นหรือเกิน ๘ เมตร อาคารขนาดใหญ่ ห้องแถว ตึกแถว อาคารพาณิชย์"
+   }
+  ]
+ },
+ "roadSetbacks[1].appliesAbove.heightM": {
+  "value": 8,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารที่สูงเกิน ๒ ชั้นหรือเกิน ๘ เมตร อาคารขนาดใหญ่ ห้องแถว ตึกแถว อาคารพาณิชย์"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[0].roadWidthM.max": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) ถ้าถนนสาธารณะนั้นมีความกว้างน้อยกว่า ๑๐ เมตรให้ร่นแนว อาคารห่างจากกึ่งกลางถนนสาธารณะอย่างน้อย ๖ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[0].setback.distanceM": {
+  "value": 6,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) ถ้าถนนสาธารณะนั้นมีความกว้างน้อยกว่า ๑๐ เมตรให้ร่นแนว อาคารห่างจากกึ่งกลางถนนสาธารณะอย่างน้อย ๖ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[1].roadWidthM.min": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไปแต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของ ถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[1].roadWidthM.max": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไปแต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของ ถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[1].setback.share": {
+  "value": 0.1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) ถ้าถนนสาธารณะนั้นมีความกว้างตั้งแต่ ๑๐ เมตรขึ้นไปแต่ไม่เกิน ๒๐ เมตร ให้ร่นแนวอาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๑ ใน ๑๐ ของความกว้างของ ถนนสาธารณะ"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[2].roadWidthM.min": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) ถ้าถนนสาธารณะนั้นมีความกว้างเกิน ๒๐ เมตรขึ้นไปให้ร่นแนว อาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๒ เมตร"
+   }
+  ]
+ },
+ "roadSetbacks[1].bands[2].setback.distanceM": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) ถ้าถนนสาธารณะนั้นมีความกว้างเกิน ๒๐ เมตรขึ้นไปให้ร่นแนว อาคารห่างจากเขตถนนสาธารณะอย่างน้อย ๒ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[0].bands[0].heightM.max": {
+  "value": 9,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) อาคารที่มีความสูงไม่เกิน ๙ เมตร ผนังหรือระเบียงต้องอยู่ห่างเขตที่ดินไม่น้อยกว่า ๒ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[0].bands[0].distanceM": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑) อาคารที่มีความสูงไม่เกิน ๙ เมตร ผนังหรือระเบียงต้องอยู่ห่างเขตที่ดินไม่น้อยกว่า ๒ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[0].bands[1].heightM.min": {
+  "value": 9,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) อาคารที่มีความสูงเกิน ๙ เมตร แต่ไม่ถึง ๒๓ เมตร ผนังหรือระเบียงต้องอยู่ห่างเขตที่ดินไม่น้อยกว่า ๓ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[0].bands[1].heightM.max": {
+  "value": 23,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) อาคารที่มีความสูงเกิน ๙ เมตร แต่ไม่ถึง ๒๓ เมตร ผนังหรือระเบียงต้องอยู่ห่างเขตที่ดินไม่น้อยกว่า ๓ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[0].bands[1].distanceM": {
+  "value": 3,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) อาคารที่มีความสูงเกิน ๙ เมตร แต่ไม่ถึง ๒๓ เมตร ผนังหรือระเบียงต้องอยู่ห่างเขตที่ดินไม่น้อยกว่า ๓ เมตร"
+   }
+  ]
+ },
+ "boundarySetbacks[3].bands[0].distanceM": {
+  "value": 6,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ต้องห่างจากเขตที่ดินของผู้อื่นหรือถนนสาธารณะไม่น้อยกว่า ๖.๐๐ เมตร ทั้งนี้ ไม่รวมถึงส่วนที่เป็นฐานรากของอาคาร"
+   },
+   {
+    "url": "https://www.buildinginspector1445.com/images/2.pdf",
+    "title": "กฎกระทรวง ฉบับที่ ๓๓ (พ.ศ. ๒๕๓๕) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. ๒๕๒๒",
+    "quote": "สาธารณะไมนอยกวา ๖.๐๐ เมตร"
+   }
+  ]
+ },
+ "blindWall.minDistanceM": {
+  "value": 0.5,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ต้องอยู่ห่างจากเขตที่ดินไม่น้อยกว่า ๕๐ เซนติเมตร เว้นแต่จะก่อสร้างชิดเขตที่ดินและอาคารดังกล่าวจะก่อสร้างได้สูงไม่เกิน ๑๕ เมตร"
+   }
+  ]
+ },
+ "blindWall.onBoundaryMaxHeightM": {
+  "value": 15,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ต้องอยู่ห่างจากเขตที่ดินไม่น้อยกว่า ๕๐ เซนติเมตร เว้นแต่จะก่อสร้างชิดเขตที่ดินและอาคารดังกล่าวจะก่อสร้างได้สูงไม่เกิน ๑๕ เมตร"
+   }
+  ]
+ },
+ "heightVsRoad.maxMultipleOfDistance[0]": {
+  "value": 2,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ข้อ ๔๔ ความสูงของอาคารไม่ว่าจากจุดหนึ่งจุดใด ต้องไม่เกินสองเท่าของระยะราบ"
+   }
+  ]
+ },
+ "heightVsRoad.parallelRoads.maxRoadSpacingM": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "http://law.longdo.com/law/179/sub13869",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522",
+    "quote": "เมื่อระยะระหว่างถนนสาธารณะสองสายนั้นไม่เกิน ๖๐ เมตร และส่วนกว้างของอาคารตามแนว"
+   }
+  ]
+ },
+ "heightVsRoad.parallelRoads.maxBuildingWidthM": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "http://law.longdo.com/law/179/sub13869",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522",
+    "quote": "ถนนสาธารณะที่กว้างกว่าไม่เกิน ๖๐ เมตร ความสูงของอาคาร ณ จุดใดต้องไม่เกินสองเท่าของ"
+   }
+  ]
+ },
+ "heightVsRoad.cornerNarrowerRoadMaxLengthM": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_0eaea6d852477b7f",
+    "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "และความยาวของอาคารตามแนวถนนสาธารณะที่แคบกว่าต้องไม่เกิน ๖๐ เมตร"
+   }
+  ]
+ },
+ "frontOpenSpace.exemptIfFrontageShareOfPerimeter": {
+  "value": 0.125,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ต้องมีความยาวมากกว่า ๑ ใน ๘ ส่วนของความยาวเส้นรอบรูปภายนอกของอาคาร"
+   }
+  ]
+ },
+ "frontOpenSpace.exemptIfWithinRoadM": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "แนวอาคารด้านที่ประชิดติดทาบสาธารณะ ต้องห่างทางสาธารณะไม่เกิน ๒๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[0].floorAreaSqm.max": {
+  "value": 30000,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นไม่เกิน ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๐.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[0].frontageM": {
+  "value": 12,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นไม่เกิน ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๐.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[0].roadWidthM": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นไม่เกิน ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๐.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[1].floorAreaSqm.min": {
+  "value": 30000,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "สำหรับที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นมากกว่า ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๘.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[1].frontageM": {
+  "value": 12,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "สำหรับที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นมากกว่า ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๘.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.access[1].roadWidthM": {
+  "value": 18,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "สำหรับที่ดินที่ใช้เป็นที่ตั้งของอาคารสูงหรืออาคารขนาดใหญ่พิเศษที่มีพื้นที่อาคารรวมกันทุกชั้นมากกว่า ๓๐,๐๐๐ ตารางเมตร ต้องมีด้านหนึ่งด้านใดของที่ดินนั้นยาวไม่น้อยกว่า ๑๒.๐๐ เมตร ติดถนนสาธารณะที่มีเขตทางกว้างไม่น้อยกว่า ๑๘.๐๐ เมตร"
+   }
+  ]
+ },
+ "highRise.accessStripWidthM": {
+  "value": 12,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ที่ดินด้านที่ติดถนนสาธารณะตามวรรคหนึ่งและวรรคสอง ต้องมีความกว้างไม่น้อยกว่า ๑๒.๐๐ เมตร ยาวต่อเนื่องกันโดยตลอดจนถึงบริเวณที่ตั้งของอาคาร"
+   }
+  ]
+ },
+ "highRise.fireLaneWidthM": {
+  "value": 6,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_8663640b2f6f8998",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "อาคารสูงหรืออาคารขนาดใหญ่พิเศษต้องจัดให้มีถนนที่มีผิวการจราจรกว้างไม่น้อยกว่า ๖.๐๐ เมตร ที่ปราศจากสิ่งปกคลุมโดยรอบอาคาร"
+   }
+  ]
+ },
+ "highRise.farMax": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_7e669ae6954267e6",
+    "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ข้อ ๕ อาคารสูงหรืออาคารขนาดใหญ่พิเศษต้องมีค่าสูงสุดของอัตราส่วนพื้นที่อาคารรวมกันทุกชั้นต่อพื้นที่ดินของอาคารทุกหลังที่ก่อสร้างขึ้นในที่ดินแปลงเดียวกันไม่เกิน ๑๐ ต่อ ๑"
+   },
+   {
+    "url": "https://greenoffice.library.cmu.ac.th/api/assets/estimate/20210618012431-46.pdf",
+    "title": "(แกไขเพิ่มเติมโดยกฎกระทรวง ฉบับที่ 42 (พ.ศ. 2537) ฯ",
+    "quote": "ทุกหลังตอพื้นที่ดินที่ใชเปนที่ตั้งอาคารไมเกิน 10 ตอ 1 ดวย"
+   }
+  ]
+ },
+ "parking[0].condo.spacesPerUnit": {
+  "value": 1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) อาคารอยู่อาศัยรวมหรืออาคารชุด ให้มีที่จอดรถ ๑ คัน ต่อ ๑ ห้อง ชุด"
+   }
+  ]
+ },
+ "parking[0].condo.unitsFromSqm": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) อาคารอยู่อาศัยรวมหรืออาคารชุด ที่มีพื้นที่ห้องชุดแต่ละห้องชุด ตั้งแต่ ๖๐ ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "parking[0].office.sqmPerSpace": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๖) สำนักงาน ให้มีที่จอดรถ ๑ คันต่อพื้นที่อาคาร ๖๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[0].office.appliesFromSqm": {
+  "value": 300,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๖) สำนักงานที่มีพื้นที่ห้องทำงานรวมตั้งแต่ ๓๐๐ ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "parking[0].hotel.firstRooms": {
+  "value": 30,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) โรงแรมที่มีห้องพักไม่เกิน ๑๐๐ ห้อง ให้มีที่จอดรถไม่น้อยกว่า ๑๐ คันสำหรับห้องพัก ๓๐ ห้องแรก ส่วนที่เกิน ๓๐ ห้องให้มีที่จอดรถ ๑ คัน ต่อจำนวนห้องพัก ๕ ห้อง"
+   }
+  ]
+ },
+ "parking[0].hotel.firstSpaces": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) โรงแรมที่มีห้องพักไม่เกิน ๑๐๐ ห้อง ให้มีที่จอดรถไม่น้อยกว่า ๑๐ คันสำหรับห้องพัก ๓๐ ห้องแรก ส่วนที่เกิน ๓๐ ห้องให้มีที่จอดรถ ๑ คัน ต่อจำนวนห้องพัก ๕ ห้อง"
+   }
+  ]
+ },
+ "parking[0].hotel.tiers[0].uptoRooms": {
+  "value": 100,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) โรงแรมที่มีห้องพักไม่เกิน ๑๐๐ ห้อง ให้มีที่จอดรถไม่น้อยกว่า ๑๐ คันสำหรับห้องพัก ๓๐ ห้องแรก ส่วนที่เกิน ๓๐ ห้องให้มีที่จอดรถ ๑ คัน ต่อจำนวนห้องพัก ๕ ห้อง"
+   }
+  ]
+ },
+ "parking[0].hotel.tiers[0].roomsPerSpace": {
+  "value": 5,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๒) โรงแรมที่มีห้องพักไม่เกิน ๑๐๐ ห้อง ให้มีที่จอดรถไม่น้อยกว่า ๑๐ คันสำหรับห้องพัก ๓๐ ห้องแรก ส่วนที่เกิน ๓๐ ห้องให้มีที่จอดรถ ๑ คัน ต่อจำนวนห้องพัก ๕ ห้อง"
+   }
+  ]
+ },
+ "parking[0].hotel.tiers[1].roomsPerSpace": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ส่วนที่เกิน ๑๐๐ ห้องให้มีที่จอดรถ ๑ คันต่อจำนวน"
+   }
+  ]
+ },
+ "parking[0].hallSqmPerSpace": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_913eb25903dfb0d1",
+    "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๑๗) ห้องโถง ให้มีที่จอดรถ ๑ คันต่อพื้นที่อาคาร ๑๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[1].condo.spacesPerUnit": {
+  "value": 1,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "คันต่อ ๑ ครอบครัว"
+   }
+  ]
+ },
+ "parking[1].condo.unitsFromSqm": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๓) อาคารชุดที่มีพื้นที่แต่ละครอบครัวตั้งแต่ ๖๐ ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "parking[1].office.sqmPerSpace": {
+  "value": 60,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ให้มีที่จอดรถยนต์ไม่น้อยกว่า ๑ คันต่อพื้นที่ ๖๐ ตารางเมตร เศษของ ๖๐ ตารางเมตร ให้คิดเป็น ๖๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[1].office.appliesFromSqm": {
+  "value": 300,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "(๖) สำนักงานที่มีพื้นที่ตั้งแต่ ๓๐๐ ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "parking[1].hotel.appliesFromSqm": {
+  "value": 300,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "โรงแรมที่มีพื้นที่ห้องโถงหรือพื้นที่ที่ใช้เพื่อกิจการพาณิชยกรรมในหลังเดียวกันหรือหลายหลังรวมกันตั้งแต่ ๓๐๐ ตารางเมตรขึ้นไป"
+   }
+  ]
+ },
+ "parking[1].hotel.lobbySqmPerSpace": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "โรงแรม ให้มีที่จอดรถยนต์ไม่น้อยกว่า ๑ คันต่อพื้นที่ห้องโถง ๑๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[1].hotel.commercialSqmPerSpace": {
+  "value": 20,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "และไม่น้อยกว่า ๑ คันต่อพื้นที่ที่ใช้เพื่อกิจการพาณิชยกรรม ๒๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[1].hallSqmPerSpace": {
+  "value": 10,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "ห้องโถงของภัตตาคารหรืออาคารขนาดใหญ่ตามข้อ ๒ (๘) ให้มีที่จอดรถยนต์ไม่น้อยกว่า ๑ คันต่อพื้นที่ห้องโถง ๑๐ ตารางเมตร"
+   }
+  ]
+ },
+ "parking[1].largeBuildingSqmPerSpace": {
+  "value": 120,
+  "sources": [
+   {
+    "url": "https://lawplayer.com/th/act/pythainlp_e13a0f7e0f4545f8",
+    "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ออกตามความในพระราชบัญญัติควบคุมการก่อสร้างอาคาร พุทธศักราช 2479 ฉบับเต็ม อัปเดต 2569 | LawPlayer",
+    "quote": "หรือให้มีที่จอดรถยนต์ไม่น้อยกว่า ๑ คันต่อพื้นที่อาคาร ๑๒๐ ตารางเมตร เศษของ ๑๒๐ ตารางเมตร ให้คิดเป็น ๑๒๐ ตารางเมตร"
+   }
+  ]
+ }
+}
