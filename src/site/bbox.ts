@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { localFrame } from '@/geo/projection'
-import { MAX_BBOX_SIDE_M, SNAP_CELLS_PER_DEGREE, THAILAND_BBOX } from './assumptions'
+import { localFrame, type LngLat } from '@/geo/projection'
+import { MAX_BBOX_SIDE_M, SITE_MARGIN_M, SNAP_CELLS_PER_DEGREE, THAILAND_BBOX } from './assumptions'
 
 export type Bbox = readonly [minLng: number, minLat: number, maxLng: number, maxLat: number]
 
@@ -63,4 +63,16 @@ export const BboxParamSchema = z
 
 export function bboxQuery(bbox: Bbox): string {
   return bbox.join(',')
+}
+
+export function plotSiteBbox(ring: readonly LngLat[]): Bbox {
+  const frame = localFrame(ring[0])
+  const local = ring.map(frame.toLocal)
+  const xs = local.map(([x]) => x)
+  const ys = local.map(([, y]) => y)
+  const margin = SITE_MARGIN_M.value
+  return [
+    ...frame.toLngLat([Math.min(...xs) - margin, Math.min(...ys) - margin]),
+    ...frame.toLngLat([Math.max(...xs) + margin, Math.max(...ys) + margin]),
+  ]
 }

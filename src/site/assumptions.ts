@@ -109,3 +109,9 @@ export const NEAREST_ROAD_MAX_GAP_M: Assumption<number> = {
   source:
     'assumption: widest plausible gap between a plot edge and the kerb of the road it faces (verge, footpath, setback)',
 }
+
+export const SITE_MARGIN_M: Assumption<number> = {
+  value: 200,
+  source:
+    'assumption: 200 m around the plot covers the street block, the roads it faces and the towers that shade or overlook it; one margin for road suggestions and the 3D context so both share one cached request',
+}
