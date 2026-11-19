@@ -1,29 +1,37 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next'
+import { Anuphan, Bai_Jamjuree, IBM_Plex_Mono } from 'next/font/google'
+import './globals.css'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const display = Bai_Jamjuree({
+  variable: '--font-bai-jamjuree',
+  subsets: ['latin', 'thai'],
+  weight: ['500', '600'],
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const body = Anuphan({
+  variable: '--font-anuphan',
+  subsets: ['latin', 'thai'],
+})
+
+const mono = IBM_Plex_Mono({
+  variable: '--font-plex-mono',
+  subsets: ['latin'],
+  weight: ['400', '500'],
+})
 
 export const metadata: Metadata = {
-  title: "Plotwise · Bangkok plot feasibility",
-  description: "What you can build on a Bangkok plot, in 3D",
-};
+  title: 'Plotwise · Bangkok plot feasibility',
+  description: 'Draw a Bangkok plot, mark its roads and see what you can build on it, in 3D.',
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export const viewport: Viewport = {
+  themeColor: '#eef2f1',
+}
+
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <body>{children}</body>
     </html>
-  );
+  )
 }

@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme static {
+  --color-paper: #fbfcfb;
+  --color-vellum: #eef2f1;
+  --color-ink: #1a2228;
+  --color-slate: #56646c;
+  --color-rule: #d3dbd9;
+  --color-plot: #2c48c8;
+  --color-plot-wash: #e6eafa;
+  --color-road: #e2a01b;
+  --color-road-ink: #6e4a00;
+  --color-signal: #b8322a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-bai-jamjuree), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-anuphan), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-vellum);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-plot);
+  outline-offset: 2px;
+}
+
+.map-label {
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.map-label-corner {
+  translate: 14px -14px;
+  padding: 3px 4px;
+  font-size: 11px;
+  color: var(--color-plot);
+  background: var(--color-paper);
+  border: 1px solid var(--color-plot);
+  border-radius: 3px;
+}
+
+.map-label-road {
+  translate: 0 -20px;
+  padding: 4px 7px;
+  font-size: 12px;
+  color: var(--color-ink);
+  background: var(--color-road);
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--color-paper);
+}
+
+.maplibregl-ctrl-group,
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-sans);
+}
+
+.maplibregl-ctrl-scale {
+  font-family: var(--font-mono);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-paper) 85%, transparent);
+}
+
+@media (width >= 64rem) {
+  .maplibregl-map .maplibregl-ctrl-top-right,
+  .maplibregl-map .maplibregl-ctrl-bottom-right {
+    right: calc(var(--panel-w) + 1.5rem);
+  }
+}
+
+@media (width < 64rem) {
+  .maplibregl-map .maplibregl-ctrl-bottom-right {
+    top: 0;
+    bottom: auto;
+  }
+
+  .maplibregl-map .maplibregl-ctrl-top-right,
+  .maplibregl-map .maplibregl-ctrl-scale {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
 }
