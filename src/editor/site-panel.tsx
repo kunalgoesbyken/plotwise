@@ -14,7 +14,9 @@ import type { Edge } from './outline'
 import { useEditorState, useEditorStore } from './plot-store'
 import { Button, PanelSection, Placeholder, PointerText } from './ui'
 
-const STATION_DISTANCE_M = stationDistance(loadPack('bkk-y9')).value
+const PACK = loadPack('bkk-y9')
+const STATION_DISTANCE_M = stationDistance(PACK).value
+const BMA_CITY_PLAN_URL = 'https://webportal.bangkok.go.th/cpud'
 
 type Dispatch = (action: EditorAction) => void
 
@@ -185,6 +187,23 @@ function BuildingTypePicker() {
   )
 }
 
+function Zone() {
+  return (
+    <PanelSection title={t('zone.title')}>
+      <p className="text-sm font-medium">{t('zone.name', { code: PACK.zone.code })}</p>
+      <p className="mt-1 text-xs leading-relaxed text-slate">{t('zone.scope')}</p>
+      <a
+        href={BMA_CITY_PLAN_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex min-h-11 items-center text-xs text-plot underline decoration-plot/30 underline-offset-2 hover:decoration-plot lg:min-h-0 lg:pt-1.5"
+      >
+        {t('zone.check')}
+      </a>
+    </PanelSection>
+  )
+}
+
 function StationToggle() {
   const store = useEditorStore()
   const { draft } = useEditorState()
@@ -207,6 +226,7 @@ export function SitePanel() {
   return (
     <>
       <PlotOutline />
+      <Zone />
       <Frontage />
       <BuildingTypePicker />
       <StationToggle />

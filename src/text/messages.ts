@@ -90,6 +90,10 @@ const en = {
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',
+  'zone.title': 'Zone',
+  'zone.name': ({ code }: { code: string }) => `${code} · very high-density residential (brown)`,
+  'zone.scope': 'Plotwise covers this one zone of the Bangkok Comprehensive Plan B.E. 2556. Confirm the plot sits in it before relying on the numbers.',
+  'zone.check': 'Check the zone on the BMA city plan',
   'transit.title': 'Mass transit',
   'transit.near': ({ distance }: { distance: string }) => `Within ${distance} of a BTS/MRT station`,
 

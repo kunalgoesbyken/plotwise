@@ -67,7 +67,7 @@ test('shows the rules that apply with their sources, and at least two designs wi
   await expect(setbacks.getByRole('row')).toHaveCount(6)
   await expect(setbacks.getByRole('row', { name: /A–B/ })).toContainText('Road 30 m')
   await expect(rules(page).getByRole('note').filter({ hasText: '2026 plan amendment' })).toBeVisible()
-  await expect(rules(page).getByText('Recommended reading · awaiting decision').first()).toBeVisible()
+  await expect(rules(page).getByText('Decided', { exact: true }).first()).toBeVisible()
   for (const label of ['Open space ratio', 'Height against road', 'Bangkok building bylaw']) await expect(limitValue(page, label)).toBeVisible()
 
   expect(await designCards(page).count()).toBeGreaterThanOrEqual(2)
