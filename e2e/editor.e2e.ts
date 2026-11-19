@@ -46,6 +46,23 @@ async function plotInUrl(page: Page) {
   return decodePlot(new URL(page.url()).hash)
 }
 
+async function settledCorner(page: Page, name: string): Promise<[number, number]> {
+  const label = page.locator('.map-label-corner').getByText(name, { exact: true })
+  const centre = async () => {
+    const box = (await label.boundingBox())!
+    return [Math.round(box.x + box.width / 2 - 14), Math.round(box.y + box.height / 2 + 14)] as [number, number]
+  }
+  let last: [number, number] = [Number.NaN, Number.NaN]
+  await expect
+    .poll(async () => {
+      const [previous, now] = [last, await centre()]
+      last = now
+      return now[0] === previous[0] && now[1] === previous[1]
+    }, { intervals: [150] })
+    .toBe(true)
+  return last
+}
+
 const hint = (page: Page) => page.getByRole('status')
 const site = (page: Page) => page.getByRole('complementary', { name: 'Plot settings' })
 
@@ -98,15 +115,18 @@ test('drags a corner, inserts one on an edge and deletes it again', async ({ pag
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
   const before = await plotInUrl(page)
 
-  await page.mouse.move(440, 420)
+  const [dx, dy] = await settledCorner(page, 'D')
+  await page.mouse.move(dx, dy)
   await page.mouse.down()
-  await page.mouse.move(470, 450, { steps: 5 })
+  await page.mouse.move(dx + 30, dy + 30, { steps: 5 })
   await page.mouse.up()
   await expect.poll(async () => (await plotInUrl(page))?.ring[3]).not.toEqual(before?.ring[3])
 
-  await page.mouse.move(430, 300)
+  const [[ax, ay], [fx, fy]] = [await settledCorner(page, 'A'), await settledCorner(page, 'F')]
+  const [mx, my] = [(ax + fx) / 2, (ay + fy) / 2]
+  await page.mouse.move(mx, my)
   await page.mouse.down()
-  await page.mouse.move(430, 260, { steps: 5 })
+  await page.mouse.move(mx, my - 40, { steps: 5 })
   await page.mouse.up()
   await expect(site(page).getByText('7 corners')).toBeVisible()
   await expect(hint(page)).toContainText('Corner G')

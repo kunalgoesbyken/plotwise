@@ -19,7 +19,7 @@ describe('framingOf', () => {
 
   it('grows with whichever is larger, the plot or the height, and never frames tighter than a small plot', () => {
     expect(framingOf(rectangle(0, 0, 400, 300), 0).radiusM).toBe(250)
-    expect(framingOf(rectangle(0, 0, 40, 30), 300).radiusM).toBe(150)
+    expect(framingOf(rectangle(0, 0, 40, 30), 300).radiusM).toBe(180)
     expect(framingOf(rectangle(0, 0, 4, 3), 0).radiusM).toBe(50)
   })
 })

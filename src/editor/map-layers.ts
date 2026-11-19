@@ -2,8 +2,17 @@ import type { ExpressionSpecification, Map as MapLibreMap } from 'maplibre-gl'
 
 export const PLOT_SOURCE = 'plotwise-plot'
 export const PREVIEW_SOURCE = 'plotwise-preview'
+export const OVERLAY_SOURCE = 'plotwise-overlay'
+
+export type OverlayKind = 'envelope' | 'building'
+export type MapOverlay = GeoJSON.FeatureCollection<GeoJSON.MultiPolygon, { kind: OverlayKind }>
+
+export const EMPTY_OVERLAY: MapOverlay = { type: 'FeatureCollection', features: [] }
 
 export const LAYERS = {
+  envelope: 'plotwise-envelope',
+  envelopeOutline: 'plotwise-envelope-outline',
+  building: 'plotwise-building',
   area: 'plotwise-area',
   selectedEdge: 'plotwise-selected-edge',
   edge: 'plotwise-edge',
@@ -29,6 +38,7 @@ export function readPalette(element: Element): Palette {
 export function addEditorLayers(map: MapLibreMap, palette: Palette) {
   map.addSource(PLOT_SOURCE, { type: 'geojson', data: EMPTY })
   map.addSource(PREVIEW_SOURCE, { type: 'geojson', data: EMPTY })
+  map.addSource(OVERLAY_SOURCE, { type: 'geojson', data: EMPTY_OVERLAY })
   const source = PLOT_SOURCE
   map.addLayer({
     id: LAYERS.area,
@@ -36,6 +46,27 @@ export function addEditorLayers(map: MapLibreMap, palette: Palette) {
     source,
     filter: kind('area'),
     paint: { 'fill-color': palette.plot, 'fill-opacity': 0.1 },
+  })
+  map.addLayer({
+    id: LAYERS.envelope,
+    type: 'fill',
+    source: OVERLAY_SOURCE,
+    filter: kind('envelope'),
+    paint: { 'fill-color': palette.plot, 'fill-opacity': 0.14 },
+  })
+  map.addLayer({
+    id: LAYERS.envelopeOutline,
+    type: 'line',
+    source: OVERLAY_SOURCE,
+    filter: kind('envelope'),
+    paint: { 'line-color': palette.plot, 'line-width': 1.5, 'line-dasharray': [3, 2] },
+  })
+  map.addLayer({
+    id: LAYERS.building,
+    type: 'fill',
+    source: OVERLAY_SOURCE,
+    filter: kind('building'),
+    paint: { 'fill-color': palette.ink, 'fill-opacity': 0.22, 'fill-outline-color': palette.ink },
   })
   map.addLayer({
     id: LAYERS.selectedEdge,

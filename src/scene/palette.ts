@@ -9,6 +9,7 @@ export type Palette = {
   readonly rule: string
   readonly plot: string
   readonly road: string
+  readonly signal: string
 }
 
 const MAPPED_SHADE = 0.25
@@ -24,6 +25,7 @@ export function readPalette(): Palette {
     rule: read('rule'),
     plot: read('plot'),
     road: read('road'),
+    signal: read('signal'),
   }
 }
 

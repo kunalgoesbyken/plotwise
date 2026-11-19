@@ -1,4 +1,6 @@
 import type { LngLat } from '@/geo/projection'
+import { formatQuantity } from '@/text/format'
+import { t } from '@/text/messages'
 import type { EditorState, Selection } from './editor-state'
 import type { Draft } from './plot-draft'
 
@@ -17,8 +19,8 @@ export function edgeName(edge: number, cornerCount: number) {
   return `${cornerName(edge)}–${cornerName((edge + 1) % cornerCount)}`
 }
 
-function formatMetres(widthM: number | null) {
-  return `${widthM ?? '?'} m`
+function formatWidth(widthM: number | null) {
+  return widthM === null ? t('map.road-width-unknown') : formatQuantity(widthM, 'm')
 }
 
 function midpoint(a: LngLat, b: LngLat): LngLat {
@@ -76,7 +78,7 @@ export function mapLabels(draft: Draft): MapLabel[] {
   if (draft.status === 'drawing') return corners
   const roads = draft.corners.flatMap(({ edge }, i): MapLabel[] =>
     edge.road
-      ? [{ id: `road-${i}`, kind: 'road', at: midpoint(at[i], at[(i + 1) % at.length]), text: formatMetres(edge.widthM) }]
+      ? [{ id: `road-${i}`, kind: 'road', at: midpoint(at[i], at[(i + 1) % at.length]), text: formatWidth(edge.widthM) }]
       : [],
   )
   return [...corners, ...roads]

@@ -1,6 +1,5 @@
-import { EditorShell } from '@/editor/editor-shell'
-import { PlotScene } from '@/scene/plot-scene'
+import { FeasibilityApp } from '@/feasibility/feasibility-app'
 
 export default function Home() {
-  return <EditorShell view3d={<PlotScene envelope={[]} designs={[]} />} />
+  return <FeasibilityApp />
 }
