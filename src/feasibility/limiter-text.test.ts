@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { EXAMPLE_PLOT } from '@/editor/example-plot'
+import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { stationDistance } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { feasibility, PACK } from './compute'
