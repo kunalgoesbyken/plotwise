@@ -87,6 +87,37 @@ test('semicolon-separated coordinates in latitude then longitude order are detec
   expectRing(plot.ring, PLOT_LNG_LAT)
 })
 
+test('one line of space-separated longitude,latitude pairs, as KML writes them, becomes the plot', async ({ page }) => {
+  await openImport(page)
+  await pasteBox(page).fill(PLOT_LNG_LAT.map(([lng, lat]) => `${lng},${lat}`).join(' '))
+  await expect(page.getByText(/^4 corners, [\d,]+\sm²$/)).toBeVisible()
+  expectRing((await finishWithRoad(page)).ring, PLOT_LNG_LAT)
+})
+
+test('one line of latitude,longitude pairs is detected too, and a broken pair is named', async ({ page }) => {
+  await openImport(page)
+  await pasteBox(page).fill('100.5,13.7 100.6,abc 100.6,13.8')
+  await expect(alert(page, 'Entry 2 is not a pair of numbers. Write one corner per line, like 100.5754, 13.7787.')).toBeVisible()
+  await pasteBox(page).fill(PLOT_LNG_LAT.map(([lng, lat]) => `${lat},${lng}`).join(' '))
+  await expect(page.getByText(/^4 corners, [\d,]+\sm²$/)).toBeVisible()
+  expectRing((await finishWithRoad(page)).ring, PLOT_LNG_LAT)
+})
+
+const PLACEHOLDERS = [
+  { region: 'Bangkok', lines: ['100.5754, 13.7787', '100.5757, 13.7787', '100.5757, 13.7791'] },
+  { region: 'Mumbai', lines: ['72.8416, 19.1168', '72.8420, 19.1168', '72.8420, 19.1172'] },
+  { region: 'Dubai', lines: ['55.2096, 25.0605', '55.2095, 25.0601', '55.2099, 25.0600'] },
+  { region: 'Custom rules', lines: ['longitude, latitude', 'longitude, latitude', 'longitude, latitude'] },
+] as const
+
+test('the paste box shows example corners inside the chosen region, and a neutral example for custom rules', async ({ page }) => {
+  await openImport(page)
+  for (const { region, lines } of PLACEHOLDERS) {
+    await page.getByRole('radiogroup', { name: 'Rules' }).getByRole('radio', { name: region }).click()
+    await expect(pasteBox(page)).toHaveAttribute('placeholder', lines.join('\n'))
+  }
+})
+
 test('pasted UTM metres wait for the zone, then land on the same plot', async ({ page }) => {
   await openImport(page)
   await pasteBox(page).fill(asLines(PLOT_UTM_47N))
