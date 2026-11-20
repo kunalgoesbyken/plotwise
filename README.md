@@ -180,6 +180,26 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 | Rate limits | Per server instance, so the real ceiling is higher. They shield the free upstreams from a runaway script; they are not an abuse defence |
 | Security policy | Allows inline scripts |
 
+## How I built this
+
+I read the Bangkok, Mumbai and Dubai sources before writing code. Bangkok and Mumbai are compiled from the official PDFs; Dubai's limits come from the affection plan, which you enter, so its results are marked unverified. Rules are never typed: a pointer file names the page, line and token of each value, `tools/compile-pack.ts` copies it from the source text and `tools/check-pack.ts` checks it. Every number has a test first (`bun test` with fast-check, over 1,000 tests); Playwright covers the interface in a real browser.
+
+I built it with Claude Code (Anthropic) as the coding agent. I planned the work as separate workstreams, and each ran as follows:
+
+```mermaid
+flowchart LR
+  plan["Planned workstream"] --> build["Subagent builds it<br/>in its own git worktree"]
+  build --> review["Independent review"]
+  review -->|"findings"| fix["Fix loop"]
+  fix --> review
+  review -->|"clean"| merge["Merge to main"]
+  merge --> final["Final whole-branch review"]
+```
+
+AI wrote code, did research and reviewed. It did not type a rule number: each one is compiled from the source text by a deterministic tool, and the app calls no AI when it runs, so every area, limit and cost comes from tested code.
+
+I decided the scope (one Bangkok zone, three building types), which readings apply where the law is ambiguous (eleven questions in the Bangkok pack, such as whether a hotel counts as residential; each lists its readings and the one applied) and what ships as a draft or unverified.
+
 ## Setup
 
 Requires [bun](https://bun.sh) 1.4 or later. No API keys or environment variables are needed.
