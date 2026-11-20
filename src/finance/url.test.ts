@@ -6,9 +6,9 @@ import { MAX_ASKING_PRICE } from './asking-price'
 import { decodeAskingPrice, decodeAssumptions, encodeAskingPrice, encodeAssumptions } from './url'
 import { resolveValues } from './values'
 
-const prices = MONEY_REGIONS.bkk.prices
-
 const bkk = MONEY_REGIONS.bkk
+
+const prices = bkk.prices
 
 describe('assumption share links', () => {
   it('keeps the meaning of the keys old links already use', () => {
