@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import type { Design } from '@/designs'
+import { useRegion } from '@/editor/plot-store'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
@@ -14,14 +15,16 @@ export type MoneyRow = { readonly label: string; readonly cell: (design: Design)
 
 export function useMoneyRows(): readonly MoneyRow[] {
   const finance = useFinance()
-  if (!finance) return []
+  const { areaUnit } = useRegion()
+  const priced = finance?.priced
+  if (!finance || !priced) return []
   const { currency } = finance.region
   return [
-    { label: t('money.built-up'), cell: (design) => formatQuantity(finance.estimateFor(design).builtSqm, 'sqm') },
-    { label: t('money.saleable'), cell: (design) => formatQuantity(finance.estimateFor(design).saleableSqm, 'sqm') },
-    { label: t('money.parking-levels'), cell: (design) => parkingText(finance.estimateFor(design).parking) },
-    { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(finance.estimateFor(design)), currency) },
-    { label: t('money.land-value'), cell: (design) => rangeText(finance.estimateFor(design).landValue, currency) },
+    { label: t('money.built-up'), cell: (design) => formatQuantity(priced.estimateFor(design).builtSqm, areaUnit) },
+    { label: t('money.saleable'), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
+    { label: t('money.parking-levels'), cell: (design) => parkingText(priced.estimateFor(design).parking) },
+    { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(priced.estimateFor(design)), currency) },
+    { label: t('money.land-value'), cell: (design) => rangeText(priced.estimateFor(design).landValue, currency) },
   ]
 }
 
@@ -43,8 +46,9 @@ function Figure({ label, value }: { readonly label: string; readonly value: Reac
 export function DesignMoney() {
   const { design } = useFeasibility()
   const finance = useFinance()
-  if (!design || !finance) return null
-  const estimate = finance.estimateFor(design)
+  const { areaUnit } = useRegion()
+  if (!design || !finance?.priced) return null
+  const estimate = finance.priced.estimateFor(design)
   const { currency } = finance.region
   return (
     <section aria-label={t('money.title')} className="flex flex-col gap-2">
@@ -53,10 +57,10 @@ export function DesignMoney() {
         <Badge variant="outline">{t('money.estimated')}</Badge>
       </header>
       <dl className="divide-y">
-        <Figure label={t('money.built-up')} value={formatQuantity(estimate.builtSqm, 'sqm')} />
-        <Figure label={t('money.gross')} value={formatQuantity(estimate.grossSqm, 'sqm')} />
-        <Figure label={t('money.saleable')} value={formatQuantity(estimate.saleableSqm, 'sqm')} />
-        <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, 'sqm')} />
+        <Figure label={t('money.built-up')} value={formatQuantity(estimate.builtSqm, areaUnit)} />
+        <Figure label={t('money.gross')} value={formatQuantity(estimate.grossSqm, areaUnit)} />
+        <Figure label={t('money.saleable')} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
+        <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, areaUnit)} />
         <Figure label={t('money.parking-levels')} value={parkingText(estimate.parking)} />
         <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />
         {COST_PARTS.map(({ part, label }) => (

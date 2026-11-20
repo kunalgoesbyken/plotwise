@@ -10,8 +10,9 @@ import { BUILDING_TYPES, type Plot } from '@/plot/plot'
 import type { Solution } from '@/solve'
 import { layerSolids, solidsGeometry } from '@/scene/meshes'
 import { framingOf } from '@/scene/framing'
-import { CARVING, feasibility } from './compute'
-import { envelopeLayers, RULE_STEPS } from './rule-layers'
+import { loadPack, type PackId } from '@/rules'
+import { feasibility } from './compute'
+import { carvingRules, envelopeLayers, RULE_STEPS } from './rule-layers'
 
 const TAU = 2 * Math.PI
 const FUZZ_TIMEOUT_MS = 30_000
@@ -135,9 +136,10 @@ function expectDrawable(solution: Solution, design: Design) {
   expectFinite(framingOf(solution.site.ring, topM), 'framing')
 }
 
-function expectLayersDrawable({ envelopes, site }: Solution) {
+function expectLayersDrawable({ envelopes, site, pack }: Solution) {
+  const carving = carvingRules(pack)
   for (const envelope of envelopes)
-    for (const step of RULE_STEPS) expectFinite(envelopeLayers(envelope, site, step, CARVING), `layers.${step}`)
+    for (const step of RULE_STEPS) expectFinite(envelopeLayers(envelope, site, step, carving), `layers.${step}`)
 }
 
 function expectSound(solution: Solution, design: Design) {
@@ -163,8 +165,41 @@ describe('plot to designs fuzz', () => {
       fc.property(plots, (plot) => {
         const loaded = openLikeTheApp(plot)
         if (!loaded.plot) return expect(loaded.notice).not.toBeNull()
-        const result = feasibility(loaded.plot)
+        const result = feasibility(loaded.plot, loadPack('bkk-y9'))
         if (result.status === 'failed') return expect(result.reason).not.toBe('unknown')
+        expectFinite(result.solution.limits, 'limits')
+        expectLayersDrawable(result.solution)
+        for (const design of result.designs) expectSound(result.solution, design)
+      }),
+      { numRuns: 100 },
+    )
+  }, FUZZ_TIMEOUT_MS)
+})
+
+const entered = fc.record(
+  {
+    maxGfaSqm: real(1, 200_000),
+    maxFar: real(0.1, 20),
+    maxHeightM: real(3, 300),
+    maxStoreys: fc.integer({ min: 1, max: 80 }),
+    maxCoverageShare: real(0.05, 1),
+    roadSetbackM: real(0, 30),
+    boundarySetbackM: real(0, 30),
+    minOpenSpaceShare: real(0, 0.95),
+    parkingSqmPerSpace: real(10, 500),
+  },
+  { requiredKeys: [] },
+)
+
+describe('plot to designs fuzz with limits the user enters', () => {
+  it('keeps every design inside its envelope and limits, or names the limit still missing', () => {
+    fc.assert(
+      fc.property(plots, entered, fc.constantFrom<PackId>('custom', 'dxb-ap'), (plot, limits, packId) => {
+        const loaded = openLikeTheApp({ ...plot, limits })
+        if (!loaded.plot) return expect(loaded.notice).not.toBeNull()
+        const result = feasibility(loaded.plot, loadPack(packId))
+        if (result.status === 'failed') return expect(result.reason).not.toBe('unknown')
+        expect(result.solution.verification).toBe('unverified')
         expectFinite(result.solution.limits, 'limits')
         expectLayersDrawable(result.solution)
         for (const design of result.designs) expectSound(result.solution, design)

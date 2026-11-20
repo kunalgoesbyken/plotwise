@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { localFrame, type LngLat, type Vec2 } from '@/geo/projection'
+import { REGIONS } from '@/region/regions'
 import fixture from './__fixtures__/ratchadaphisek.overpass.json'
 import { MAX_MEDIAN_WIDTH_M, NEAREST_ROAD_MAX_GAP_M } from './assumptions'
 import { nearestRoad } from './nearest-road'
@@ -137,7 +138,7 @@ describe('nearestRoad', () => {
   })
 
   it('finds both carriageways of Ratchadaphisek Road for a building edge facing it in the recorded sample', () => {
-    const site = parseOverpass(OverpassResponseSchema.parse(fixture))
+    const site = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.bkk.transit)
     const building = site.buildings.find((b) => b.id === 'way/369892554')
     const result = nearestRoad([building!.outer[1], building!.outer[2]], site.roads)
     expect(result?.road.nameTh).toBe('ถนนรัชดาภิเษก')

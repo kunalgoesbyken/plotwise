@@ -1,11 +1,11 @@
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType, Plot } from '@/plot/plot'
-import { REGION } from '@/region/regions'
+import { DEFAULT_REGION, REGIONS } from '@/region/regions'
 import { loadPack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
 import { nearestStation, type NearestStation } from '@/site/nearest-station'
 import type { Road as SiteRoad, Station } from '@/site/schema'
-import { satisfies, stationDistance } from '@/solve'
+import { satisfies, stationDistance, type RegionId } from '@/solve'
 import type { Corner } from './outline'
 import { editDraft, emptyDraft, toPlot, type Draft, type DraftAction, type Rejection } from './plot-draft'
 import type { LinkProblem } from './plot-url'
@@ -17,6 +17,7 @@ export type Notice = Rejection | LinkProblem
 export type Load = { source: 'link' | 'example'; count: number }
 
 export type EditorState = {
+  region: RegionId
   draft: Draft
   plot: Plot | null
   selection: Selection
@@ -34,6 +35,7 @@ export type EditorAction =
   | { type: 'site'; roads: readonly SiteRoad[]; stations: readonly Station[] | null }
   | { type: 'focus'; at: LngLat }
   | { type: 'reject-link'; problem: LinkProblem }
+  | { type: 'set-region'; region: RegionId }
 
 export type Step =
   | { step: 'start' }
@@ -44,10 +46,10 @@ export type Step =
   | { step: 'done' }
 
 const NONE: Selection = { kind: 'none' }
-const STATION_DISTANCE = stationDistance(loadPack(REGION.packId))
 
 export function initialEditorState(buildingType: BuildingType): EditorState {
   return {
+    region: DEFAULT_REGION.id,
     draft: emptyDraft(buildingType),
     plot: null,
     selection: NONE,
@@ -86,6 +88,7 @@ function selectionAfter(action: DraftAction, current: Selection, before: Draft, 
     case 'set-building-type':
     case 'set-near-station':
     case 'estimate-near-station':
+    case 'set-limit':
       return current
     default:
       return NONE
@@ -127,12 +130,14 @@ function applyDraft(state: EditorState, action: DraftAction): EditorState {
   }
 }
 
-function isNearStation(nearest: NearestStation | null): boolean {
-  return STATION_DISTANCE !== null && nearest !== null && satisfies(nearest.distanceM, STATION_DISTANCE)
+function isNearStation(region: RegionId, nearest: NearestStation | null): boolean {
+  const limit = stationDistance(loadPack(REGIONS[region].packId))
+  return limit !== null && nearest !== null && satisfies(nearest.distanceM, limit)
 }
 
 function sameStationInputs(before: EditorState, after: EditorState): boolean {
   return (
+    before.region === after.region &&
     before.siteStations === after.siteStations &&
     before.draft.status === 'closed' &&
     after.draft.status === 'closed' &&
@@ -145,7 +150,7 @@ function withStationEstimate(before: EditorState, after: EditorState): EditorSta
   if (draft.status !== 'closed' || siteStations === null) return after.nearestStation ? { ...after, nearestStation: null } : after
   if (sameStationInputs(before, after)) return after
   const nearest = nearestStation(draft.corners.map((corner) => corner.at), siteStations)
-  const estimated = editDraft(draft, { type: 'estimate-near-station', nearStation: isNearStation(nearest) })
+  const estimated = editDraft(draft, { type: 'estimate-near-station', nearStation: isNearStation(after.region, nearest) })
   const next = estimated.ok ? estimated.draft : draft
   return { ...after, draft: next, plot: next === draft ? after.plot : toPlot(next), nearestStation: nearest }
 }
@@ -176,6 +181,8 @@ function reduceAction(state: EditorState, action: EditorAction): EditorState {
       return { ...state, selection: action.selection, notice: null }
     case 'site':
       return { ...state, siteRoads: action.roads, siteStations: action.stations }
+    case 'set-region':
+      return action.region === state.region ? state : { ...state, region: action.region }
     case 'reject-link':
       return { ...state, notice: action.problem }
     case 'focus':

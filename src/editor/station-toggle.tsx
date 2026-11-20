@@ -1,6 +1,5 @@
 'use client'
 
-import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
 import type { NearestStation } from '@/site/nearest-station'
 import { stationDistance } from '@/solve'
@@ -8,10 +7,8 @@ import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { PanelSection } from '@/ui/section'
 import { SwitchRow } from '@/ui/switch'
-import { useEditorState, useEditorStore } from './plot-store'
+import { useEditorState, useEditorStore, useRegion } from './plot-store'
 import { EstimateTag } from './ui'
-
-const STATION_DISTANCE_M = stationDistance(loadPack(REGION.packId))?.value
 
 function nearestText(nearest: NearestStation): string {
   const name = nearest.name ?? t('transit.unnamed')
@@ -31,14 +28,16 @@ function NearestLine({ nearest, estimated, distanceM }: { nearest: NearestStatio
 export function StationToggle() {
   const store = useEditorStore()
   const { draft, siteStations, nearestStation } = useEditorState()
-  if (draft.status !== 'closed' || STATION_DISTANCE_M === undefined) return null
+  const region = useRegion()
+  const stationDistanceM = stationDistance(loadPack(region.packId))?.value
+  if (draft.status !== 'closed' || stationDistanceM === undefined) return null
   return (
     <PanelSection title={t('transit.title')}>
       <SwitchRow checked={draft.nearStation} onCheckedChange={(nearStation) => store.dispatch({ type: 'set-near-station', nearStation })}>
-        {t('transit.near', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}
+        {t('transit.near', { distance: formatQuantity(stationDistanceM, 'm') })}
       </SwitchRow>
       {siteStations !== null && (
-        <NearestLine nearest={nearestStation} estimated={draft.nearStationSource === 'estimate'} distanceM={STATION_DISTANCE_M} />
+        <NearestLine nearest={nearestStation} estimated={draft.nearStationSource === 'estimate'} distanceM={stationDistanceM} />
       )}
     </PanelSection>
   )

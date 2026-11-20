@@ -1,3 +1,4 @@
+import type { RegionId } from '@/solve'
 import { PlaceErrorSchema, PlacesSchema, normaliseQuery, type Place } from './schema'
 
 export const GEOCODE_ENDPOINT = '/api/geocode'
@@ -19,8 +20,8 @@ async function failureOf(response: Response): Promise<PlaceSearchError> {
   return new PlaceSearchError(message, response.status)
 }
 
-export async function searchPlaces(query: string, { signal, fetchImpl = fetch }: SearchPlacesOptions = {}): Promise<Place[]> {
-  const params = new URLSearchParams({ q: normaliseQuery(query) })
+export async function searchPlaces(query: string, region: RegionId, { signal, fetchImpl = fetch }: SearchPlacesOptions = {}): Promise<Place[]> {
+  const params = new URLSearchParams({ q: normaliseQuery(query), region })
   const response = await fetchImpl(`${GEOCODE_ENDPOINT}?${params}`, { signal })
   if (!response.ok) throw await failureOf(response)
   return PlacesSchema.parse(await response.json())

@@ -26,7 +26,7 @@ function zoneCode(packId: PackId): string {
   return zone.code
 }
 
-export const ZONE_SOURCES: Readonly<Record<RegionId, ZoneSource>> = {
+export const ZONE_SOURCES: Readonly<Partial<Record<RegionId, ZoneSource>>> = {
   bkk: {
     plan: REGIONS.bkk.cityPlan,
     layerUrl: 'https://cityplangis.bangkok.go.th/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8',

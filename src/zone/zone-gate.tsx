@@ -6,6 +6,7 @@ import type { ZoneVerdict } from './schema'
 import { useZone } from './use-zone'
 
 export type ZoneGate = {
+  readonly zone: string | null
   readonly verdict: ZoneVerdict | null
   readonly cleared: boolean
   readonly confirmable: boolean
@@ -17,22 +18,24 @@ const ZoneGateContext = createContext<ZoneGate | null>(null)
 const isRefused = (verdict: ZoneVerdict | null) => verdict?.status === 'outside' || verdict?.status === 'mixed'
 
 type ZoneGateProps = {
+  readonly zone: string | null
   readonly ring: readonly LngLat[] | null
   readonly confirmed: boolean
   readonly onConfirm: () => void
   readonly children: ReactNode
 }
 
-export function ZoneGateProvider({ ring, confirmed, onConfirm, children }: ZoneGateProps) {
-  const verdict = useZone(ring)
+export function ZoneGateProvider({ zone, ring, confirmed, onConfirm, children }: ZoneGateProps) {
+  const verdict = useZone(zone ? ring : null)
   const gate = useMemo(
     () => ({
+      zone,
       verdict,
-      cleared: verdict?.status === 'inside' || (confirmed && !isRefused(verdict)),
-      confirmable: !confirmed && !isRefused(verdict) && verdict?.status !== 'inside',
+      cleared: zone === null || verdict?.status === 'inside' || (confirmed && !isRefused(verdict)),
+      confirmable: zone !== null && !confirmed && !isRefused(verdict) && verdict?.status !== 'inside',
       confirm: onConfirm,
     }),
-    [verdict, confirmed, onConfirm],
+    [zone, verdict, confirmed, onConfirm],
   )
   return <ZoneGateContext value={gate}>{children}</ZoneGateContext>
 }

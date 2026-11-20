@@ -1,13 +1,15 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useRegion } from '@/editor/plot-store'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
+import type { AreaUnit } from '@/units/area'
 import { useFeasibility } from './feasibility-provider'
 import { widthSensitivity, type WidthRow } from './width-sensitivity'
 
-function OutcomeCells({ row }: { row: WidthRow }) {
+function OutcomeCells({ row, areaUnit }: { row: WidthRow; areaUnit: AreaUnit }) {
   if (!row.outcome) {
     return (
       <td colSpan={2} className="py-1 text-right text-muted-foreground">
@@ -17,16 +19,17 @@ function OutcomeCells({ row }: { row: WidthRow }) {
   }
   return (
     <>
-      <td className="py-1 text-right">{formatQuantity(row.outcome.gfaSqm, 'sqm')}</td>
+      <td className="py-1 text-right">{formatQuantity(row.outcome.gfaSqm, areaUnit)}</td>
       <td className="py-1 text-right">{formatQuantity(row.outcome.heightM, 'm')}</td>
     </>
   )
 }
 
 export function WidthSensitivity() {
-  const { plot, result, farBonus } = useFeasibility()
+  const { plot, pack, result, farBonus } = useFeasibility()
+  const { areaUnit } = useRegion()
   const ready = result?.status === 'ready'
-  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot, farBonus ? 'bonus' : 'standard') : null), [plot, ready, farBonus])
+  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot, pack, farBonus ? 'bonus' : 'standard') : null), [plot, pack, ready, farBonus])
   if (!rows) return null
   return (
     <section aria-label={t('sensitivity.label')}>
@@ -51,7 +54,7 @@ export function WidthSensitivity() {
               <th scope="row" className="py-1 font-[inherit]">
                 {formatQuantity(row.widthM, 'm')}
               </th>
-              <OutcomeCells row={row} />
+              <OutcomeCells row={row} areaUnit={areaUnit} />
             </tr>
           ))}
         </tbody>

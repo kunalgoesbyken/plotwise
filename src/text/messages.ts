@@ -1,12 +1,12 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
-import { REGION } from '@/region/regions'
+import { DEFAULT_REGION } from '@/region/regions'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
 
-const { ratio, ratioName } = REGION.areaTerms
+const { ratio, ratioName } = DEFAULT_REGION.areaTerms
 
 type Message = string | ((params: never) => string)
 
@@ -32,9 +32,9 @@ const en = {
   'landing.description': ({ city }: { city: string }) =>
     `Draw a plot in ${city}. See the floor area the rules allow, designs in 3D, what is left to check and a rough first cost.`,
   'landing.nav.label': 'Main',
-  'app.title': ({ city }: { city: string }) => `Plotwise · ${city} plot feasibility`,
+  'app.title': 'Plotwise · Plot feasibility',
   'app.description': ({ city }: { city: string }) =>
-    `Trace a plot in ${city} and see the floor area the rules allow, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
+    `Trace a plot in ${city}, in Dubai from its affection plan, or anywhere with your own rules, and see the floor area allowed, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
   'share.image.alt': ({ city }: { city: string }) => `Plotwise: see what a ${city} plot can hold before you buy it`,
   'landing.nav.how': 'How it works',
   'landing.nav.faq': 'Questions',
@@ -42,7 +42,7 @@ const en = {
   'landing.open': 'Open the app',
   'landing.hero.title': 'See what a plot can hold before you buy it',
   'landing.hero.lede': ({ city }: { city: string }) =>
-    `Draw a plot in ${city}. Plotwise reads the city plan and the building law for it, then shows the floor area you can build, up to three designs in 3D and a rough cost.`,
+    `Draw a plot in ${city}. Plotwise reads the city plan and the building law for it, then shows the floor area you can build, up to three designs in 3D and a rough cost. In Dubai, enter the limits from the plot’s affection plan; anywhere else, enter your own rules.`,
   'landing.hero.example': 'Try the example plot',
   'landing.hero.draw': 'Draw your own',
   'landing.frame.place': 'Example plot',
@@ -74,9 +74,9 @@ const en = {
   'landing.money.land': 'Land value supported',
   'landing.missing.title': 'This page is not on the map',
   'landing.missing.body': 'The address may be mistyped, or the page may have moved. The app and the example plot are one click away.',
-  'landing.scope.title': 'One zone, for now',
+  'landing.scope.title': 'One verified zone, and rules you enter anywhere else',
   'landing.scope.body': ({ zone, city, authority }: { zone: string; city: string; authority: string }) =>
-    `Plotwise covers one zone of the ${city} plan: ${zone}. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
+    `Plotwise reads the law for one zone of the ${city} plan: ${zone}. In Dubai you enter the limits from the plot’s affection plan, and anywhere else your own rules; those results are always marked unverified. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
   'landing.faq.title': 'Questions',
   'landing.faq.sources.q': 'Where do the rules come from?',
   'landing.faq.sources.a':
@@ -86,9 +86,9 @@ const en = {
     'Treat them as a first look. Sale prices follow Knight Frank average asking prices for the plot’s area, and the margin is a listed developer’s. Build rates, fees, holding and finance costs are Plotwise estimates with no published source for each line; the build cost is only cross-checked against a Bangkok quantity surveyor’s range. Each figure shows where it comes from, and you can change every one.',
   'landing.faq.share.q': 'Can I share a result?',
   'landing.faq.share.a': 'Yes. The link holds the plot, the roads, the building type and any assumption you changed. You can also print a one-page summary.',
-  'landing.faq.region.q': 'Does it work outside this city?',
+  'landing.faq.region.q': 'Does it work outside Bangkok?',
   'landing.faq.region.a':
-    'Not yet. A new city needs its own rule pack and region file. The engine reads both as data, so nothing else has to change for rules of the same kind.',
+    'Yes, with limits you enter. Pick Dubai to enter the values from the plot’s affection plan, or Custom rules to type the limits you know for a plot anywhere. Plotwise draws the envelope and the designs from them, shows areas and prices in the region’s units, and marks every such result unverified. Only Bangkok’s rules are read from the law and cited line by line.',
   'landing.footer.data': 'Map data © OpenStreetMap contributors. Rules from the published city plan and building law.',
 
   'verb.click': 'Click',
@@ -96,6 +96,9 @@ const en = {
 
   'unit.m': ({ number }: Num) => `${number}\u00a0m`,
   'unit.sqm': ({ number }: Num) => `${number}\u00a0m²`,
+  'unit.sqft': ({ number }: Num) => `${number} sq ft`,
+  'area-unit.sqm': 'm²',
+  'area-unit.sqft': 'sq ft',
   'unit.rooms': ({ number }: Num) => `${number} rooms`,
 
   'building.condo': 'Condominium',
@@ -112,7 +115,41 @@ const en = {
   'flow.next.plot': 'Next: roads',
   'flow.next.roads': 'See what you can build',
   'flow.back': 'Back',
-  'plot.framing': ({ city }: { city: string }) => `Check what a ${city} plot can hold before you buy it.`,
+  'plot.framing.pack': ({ city }: { city: string }) => `Check what a ${city} plot can hold before you buy it.`,
+  'plot.framing.affectionPlan': ({ city }: { city: string }) => `Check what a ${city} plot can hold, from the limits on its affection plan.`,
+  'plot.framing.custom': 'Check what a plot anywhere can hold, from the limits you enter.',
+  'region.title': 'Rules',
+  'region.pack': 'Rules read from the law, cited line by line.',
+  'region.affectionPlan': 'You enter the limits from the plot’s affection plan. Results are unverified.',
+  'region.custom': 'You enter the limits you know, for a plot anywhere. Results are unverified.',
+  'limits.title.pack': 'Limits set for this plot',
+  'limits.title.affectionPlan': 'From the affection plan',
+  'limits.title.custom': 'Your rules',
+  'limits.intro.pack': 'These rules set some limits plot by plot. Enter them from the plot’s own documents.',
+  'limits.intro.affectionPlan':
+    'Enter the values printed on the plot’s affection plan. Floor area or ratio, and height or floors, are needed; leave the rest blank if the plan does not state them.',
+  'limits.intro.custom': 'Enter the limits you know. Floor area or ratio, and height or storeys, are needed; leave the rest blank to skip them.',
+  'limits.use.affectionPlan': ({ term }: { term: string }) => `Pick the building type above that matches the ${term} on the plan.`,
+  'limits.terms': 'Where these terms come from',
+  'limits.unit.percent': '%',
+  'limits.unit.m': 'm',
+  'limits.unit.storeys': 'storeys',
+  'limits.unit.floors': 'G+',
+  'limits.unit.ratio': ': 1',
+  'limits.unit.per-space': ({ unit }: { unit: string }) => `${unit} per space`,
+  'limits.custom.maxGfaSqm': 'Maximum floor area',
+  'limits.custom.maxFar': 'Floor area ratio (FAR)',
+  'limits.custom.maxHeightM': 'Maximum height',
+  'limits.custom.maxStoreys': 'Maximum storeys',
+  'limits.custom.maxCoverageShare': 'Maximum ground coverage',
+  'limits.custom.roadSetbackM': 'Setback from the road',
+  'limits.custom.boundarySetbackM': 'Setback from neighbours',
+  'limits.custom.minOpenSpaceShare': 'Minimum open space, share of the plot',
+  'limits.custom.parkingSqmPerSpace': 'Parking, one space per floor area',
+  'verification.pack': 'Unverified: includes limits you entered',
+  'verification.affectionPlan': 'Unverified: from your affection plan',
+  'verification.custom': 'Unverified: your own rules',
+  'verification.detail': 'Plotwise has not checked these limits against any law. Confirm them with the authority before you rely on them.',
   'rejection.link-incomplete': 'This link is missing part of the plot, so it could not be opened.',
   'rejection.link-invalid': 'This link’s plot is not valid, so it could not be opened.',
   'frontage.right-of-way': 'Right-of-way: the full width between property lines across the road, not just the paved lanes.',
@@ -126,7 +163,7 @@ const en = {
   'share.failed': 'Copy the address bar',
   'share.print': 'Print',
   'assumptions.all': 'All money assumptions',
-  'report.title': ({ city }: { city: string }) => `Plotwise · ${city} plot summary`,
+  'report.title': ({ region }: { region: string }) => `Plotwise plot summary · ${region}`,
   'report.plot': ({ area, allowed }: { area: string; allowed: string }) => `Plot ${area}. Up to ${allowed} of floor area allowed.`,
   'report.open': 'Not passed yet',
   'report.assumptions': 'Assumptions used (estimated, editable)',
@@ -219,6 +256,7 @@ const en = {
 
   'search.title': 'Find the site',
   'search.label': ({ country }: { country: string }) => `Search for an address or place in ${country}`,
+  'search.label.anywhere': 'Search for an address or place anywhere',
   'search.placeholder': 'Address, building or soi',
   'search.submit': 'Search',
   'search.searching': 'Searching…',
@@ -237,7 +275,7 @@ const en = {
   'feasibility.failed.invalid-cap': 'The floor-area limit could not be applied to this plot. Try reshaping it.',
   'feasibility.failed.invalid-reservation': 'The road-widening strip does not fit this plot. Check the road widths or reshape the plot.',
   'feasibility.failed.plot-limit-missing': ({ limits }: { limits: string }) =>
-    `This area’s rules set some limits plot by plot. Enter ${limits} for this plot to continue.`,
+    `These rules set some limits plot by plot. Enter ${limits} for this plot in the Roads step to continue.`,
   'plot-limit.maxGfaSqm': 'the maximum floor area',
   'plot-limit.maxFar': 'the floor area ratio',
   'plot-limit.maxHeightM': 'the maximum height',
@@ -294,6 +332,8 @@ const en = {
 
   'limit.far': ratioName,
   'limit.far.detail': ({ area }: Area) => `At most ${area} of total floor area on this plot.`,
+  'limit.coverage': 'Ground coverage',
+  'limit.coverage.detail': ({ area }: Area) => `The building may cover at most ${area} of the plot.`,
   'limit.far-bonus': `${ratio} bonus`,
   'limit.far-bonus.detail': ({ area, measures }: Area & { measures: string }) =>
     `Up to ${area} if the plan’s bonus measures are provided (${measures}).`,
@@ -409,8 +449,12 @@ const en = {
   'money.title': 'Areas and first cost',
   'money.estimated': 'Estimated',
   'money.range': ({ low, high }: { low: string; high: string }) => `${low} to ${high}`,
-  'money.per-sqm': ({ currency }: { currency: string }) => `${currency} per m²`,
-  'money.per-land-unit': ({ currency, unit }: { currency: string; unit: string }) => `${currency} per ${unit}`,
+  'money.per-unit': ({ unit }: { unit: string }) => `per ${unit}`,
+  'money.per-unit-in': ({ currency, unit }: { currency: string; unit: string }) => `${currency} per ${unit}`,
+  'money.needs-prices': ({ region }: { region: string }) =>
+    `Plotwise has no sourced prices or costs for ${region}, so it shows no money figures until you enter every value below: sale price, margin, land costs, asking prices and build rates.`,
+  'money.missing': ({ count }: Count) => `${count} ${count === 1 ? 'value' : 'values'} still to enter`,
+  'assumptions.blank': 'No default: enter your own',
   'money.built-up': 'Built-up area',
   'money.gross': 'Gross floor area',
   'money.saleable': 'Saleable area, estimated',
@@ -431,7 +475,7 @@ const en = {
   'area.cityFringe': 'city fringe',
   'area.suburban': 'suburban Bangkok',
   'land.title': 'Land value',
-  'land.sale-price': 'Sale price per m² of saleable area',
+  'land.sale-price': ({ unit }: { unit: string }) => `Sale price per ${unit} of saleable area`,
   'land.margin': 'Target margin',
   'land.headline': ({ range }: { range: string }) => `This design supports land worth about ${range}.`,
   'land.per-unit': ({ range, unit }: { range: string; unit: string }) => `${range} per ${unit}`,
@@ -448,12 +492,12 @@ const en = {
   'assumptions.price': 'Price and margin',
   'assumptions.land': 'Land purchase and asking prices',
   'assumptions.parking': 'Parking',
-  'assumptions.rates': 'Build cost rates, per m² of built-up area',
+  'assumptions.rates': ({ unit }: { unit: string }) => `Build cost rates, per ${unit} of built-up area`,
   'assumptions.low': 'Low',
   'assumptions.high': 'High',
   'assumptions.source': 'Source',
   'assumptions.reset': 'Reset to defaults',
-  'assumptions.salePrice': 'Sale price per m² of saleable area',
+  'assumptions.salePrice': ({ unit }: { unit: string }) => `Sale price per ${unit} of saleable area`,
   'assumptions.saleableShare': 'Saleable share of built-up area above parking',
   'assumptions.margin': 'Developer margin on sales',
   'assumptions.softCost': 'Design fees, marketing and overheads, share of first cost',
@@ -468,7 +512,7 @@ const en = {
   'assumptions.rate.superstructure.lowRise': 'Superstructure, low-rise',
   'assumptions.rate.superstructure.highRise': 'Superstructure, high-rise',
   'assumptions.rate.services': 'Services',
-  'assumptions.rate.basement': 'Basement, per m² of basement',
+  'assumptions.rate.basement': ({ unit }: { unit: string }) => `Basement, per ${unit} of basement`,
 
   'status.pass': 'Pass',
   'status.fail': 'Fail',

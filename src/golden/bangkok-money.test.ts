@@ -15,7 +15,7 @@ describe('Bangkok money estimates stay byte-identical across engine refactors', 
     it(name, () => {
       const solution = solve(plot, pack, readings, farMode)
       const site = financeSite(solution, region)
-      const values = resolveValues(region, basisOf(site), {})
+      const values = resolveValues(region.prices, basisOf(site, region.prices), {})
       expect(designs(solution).map((design) => ({ id: design.id, ...estimate(design.metrics, site, values) }))).toMatchSnapshot()
     })
   }

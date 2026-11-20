@@ -3,7 +3,7 @@ import { isPlotLimitField } from '@/plot/plot'
 import { isSourceCite, type Cite } from '@/rules'
 import { t } from '@/text/messages'
 import { Disclosure } from '@/ui/disclosure'
-import { PACK } from './compute'
+import { useFeasibility } from './feasibility-provider'
 import { citeKey } from './rule-layers'
 
 const unique = (cites: readonly Cite[]) => [...new Map(cites.map((cite) => [citeKey(cite), cite])).values()]
@@ -18,8 +18,9 @@ function EnteredItem({ field }: { field: string }) {
 }
 
 function CiteItem({ cite }: { cite: Cite }) {
+  const { pack } = useFeasibility()
   if (!isSourceCite(cite)) return <EnteredItem field={cite.field} />
-  const source = PACK.sources[cite.source]
+  const source = pack.sources[cite.source]
   return (
     <li className="flex flex-col gap-0.5 py-1.5 text-xs">
       <p className="font-medium text-foreground">{source?.name ?? cite.source}</p>

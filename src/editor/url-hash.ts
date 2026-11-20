@@ -23,6 +23,11 @@ type HashCodec<T> = { readonly decode: (value: string | null) => T; readonly enc
 
 export function useHashState<T>(key: string, codec: HashCodec<T>) {
   const [value, setValue] = useState<T>(() => codec.decode(typeof window === 'undefined' ? null : readHashParam(key)))
+  const [readKey, setReadKey] = useState(key)
+  if (readKey !== key) {
+    setReadKey(key)
+    setValue(codec.decode(readHashParam(key)))
+  }
   useEffect(() => {
     const encoded = codec.encode(value)
     writeHash([key], encoded === null ? '' : `${key}=${encodeURIComponent(encoded)}`)

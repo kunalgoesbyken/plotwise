@@ -1,3 +1,4 @@
+import type { RegionId } from '@/solve'
 import { bboxQuery, snapBbox, type Bbox } from './bbox'
 import { fetchSite } from './client'
 import type { Site } from './schema'
@@ -12,8 +13,10 @@ function untilAborted<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
   })
 }
 
-function startLoad(bbox: Bbox, cell: string) {
-  const load = fetchSite(bbox).catch((error: unknown) => {
+export const siteCell = (bbox: Bbox, region: RegionId) => `${region}|${bboxQuery(snapBbox(bbox))}`
+
+function startLoad(bbox: Bbox, region: RegionId, cell: string) {
+  const load = fetchSite(bbox, region).catch((error: unknown) => {
     loads.delete(cell)
     throw error
   })
@@ -21,8 +24,8 @@ function startLoad(bbox: Bbox, cell: string) {
   return load
 }
 
-export function loadSharedSite(bbox: Bbox, { signal }: { signal?: AbortSignal } = {}): Promise<Site> {
-  const cell = bboxQuery(snapBbox(bbox))
-  const load = loads.get(cell) ?? startLoad(bbox, cell)
+export function loadSharedSite(bbox: Bbox, region: RegionId, { signal }: { signal?: AbortSignal } = {}): Promise<Site> {
+  const cell = siteCell(bbox, region)
+  const load = loads.get(cell) ?? startLoad(bbox, region, cell)
   return signal ? untilAborted(load, signal) : load
 }

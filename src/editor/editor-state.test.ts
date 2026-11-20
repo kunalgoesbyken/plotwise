@@ -249,6 +249,52 @@ describe('station distance estimates', () => {
     expect(state.nearestStation).toBeNull()
     expect(state.draft).toMatchObject({ nearStation: false, nearStationSource: 'estimate' })
   })
+
+  it('estimates the flag off where the rules have no station rule, and on again back in Bangkok', () => {
+    const near = run(...draw, site([platformAt(30 + limitM - 1)]))
+    const custom = reduceEditor(near, { type: 'set-region', region: 'custom' })
+    expect(custom.draft).toMatchObject({ nearStation: false, nearStationSource: 'estimate' })
+    expect(reduceEditor(custom, { type: 'set-region', region: 'bkk' }).draft.nearStation).toBe(true)
+  })
+})
+
+describe('rules source and entered limits', () => {
+  it('starts on Bangkok and switches the rules source without touching the plot', () => {
+    expect(run().region).toBe('bkk')
+    const loaded = run({ type: 'load', plot })
+    const dubai = reduceEditor(loaded, { type: 'set-region', region: 'dxb' })
+    expect(dubai.region).toBe('dxb')
+    expect(dubai.plot).toEqual(loaded.plot)
+    expect(reduceEditor(dubai, { type: 'set-region', region: 'dxb' })).toBe(dubai)
+  })
+
+  it('sets and clears an entered limit, carried on the plot', () => {
+    const set = run({ type: 'load', plot }, { type: 'set-limit', field: 'maxGfaSqm', value: 5000 }, { type: 'set-limit', field: 'maxStoreys', value: 8 })
+    expect(set.plot?.limits).toEqual({ maxGfaSqm: 5000, maxStoreys: 8 })
+    const cleared = reduceEditor(set, { type: 'set-limit', field: 'maxGfaSqm', value: undefined })
+    expect(cleared.plot?.limits).toEqual({ maxStoreys: 8 })
+    expect(reduceEditor(cleared, { type: 'set-limit', field: 'maxStoreys', value: undefined }).plot).toEqual(plot)
+  })
+
+  it('refuses a limit outside its range and keeps the last good value', () => {
+    const set = run({ type: 'load', plot }, { type: 'set-limit', field: 'maxCoverageShare', value: 0.5 })
+    for (const value of [1.5, -1, Number.NaN, Infinity]) {
+      expect(reduceEditor(set, { type: 'set-limit', field: 'maxCoverageShare', value })).toBe(set)
+    }
+    expect(reduceEditor(set, { type: 'set-limit', field: 'maxStoreys', value: 2.5 })).toBe(set)
+  })
+
+  it('keeps entered limits while drawing and when the outline is cleared, and takes a link’s own limits', () => {
+    const drawing = run({ type: 'set-limit', field: 'maxFar', value: 3 })
+    expect(drawing.plot).toBeNull()
+    const closed = reduceEditor(drawing, { type: 'load', plot: { ...plot, limits: { maxFar: 3 } } })
+    expect(closed.plot?.limits).toEqual({ maxFar: 3 })
+    expect(reduceEditor(closed, { type: 'clear' }).draft.limits).toEqual({ maxFar: 3 })
+    expect(reduceEditor(closed, { type: 'load', plot }).plot).toEqual(plot)
+    const drawn = [[0, 0], [1, 0], [1, 1]].map((at): EditorAction => ({ type: 'add', at: at as [number, number] }))
+    const fresh = run({ type: 'set-limit', field: 'maxFar', value: 3 }, ...drawn, { type: 'close' }, { type: 'mark-road', edge: 0 }, { type: 'set-road-width', edge: 0, widthM: 9 })
+    expect(fresh.plot?.limits).toEqual({ maxFar: 3 })
+  })
 })
 
 describe('nextStep', () => {

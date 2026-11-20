@@ -3,16 +3,18 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import type { Design } from '@/designs'
+import { useRegion } from '@/editor/plot-store'
 import { tally } from '@/feasibility/checklist'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
-import { firstCostRange, rangeText } from '@/finance/figures'
+import { VerificationNote } from '@/feasibility/verification-note'
+import { firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
 import { formatMoney } from '@/finance/format-money'
 import { RATES, SCALARS, type Parameter, type ScalarId } from '@/finance/parameters'
-import { useFinance, type Finance } from '@/finance/use-finance'
+import { useFinance, type Finance, type Priced } from '@/finance/use-finance'
 import type { Loop, Polygon } from '@/geometry'
-import { REGION } from '@/region/regions'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
+import { perAreaToDisplay, type AreaUnit } from '@/units/area'
 
 const DRAWING_PX = 220
 
@@ -41,43 +43,52 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-function valueText(finance: Finance, parameter: Parameter) {
+function valueText(finance: Finance, parameter: Parameter, area: AreaUnit) {
   const value = finance.valueOf(parameter)
+  if (value === null) return t('assumptions.blank')
   if (parameter.unit === 'share') return formatQuantity(value, 'percent')
   if (parameter.unit === 'count') return formatQuantity(value, 'count')
-  return formatMoney(value, finance.region.currency)
+  return formatMoney(parameter.unit === 'money' ? perAreaToDisplay(value, area) : value, finance.region.currency)
 }
 
-function Assumptions({ finance }: { finance: Finance }) {
+function Assumptions({ finance, area }: { finance: Finance; area: AreaUnit }) {
   return (
     <dl className="columns-2 gap-8 text-xs">
       {(Object.keys(SCALARS) as ScalarId[]).map((id) => (
-        <Fact key={id} label={t(`assumptions.${id}`)}>
-          {valueText(finance, SCALARS[id])}
+        <Fact key={id} label={scalarLabel(id, area)}>
+          {valueText(finance, SCALARS[id], area)}
         </Fact>
       ))}
       {RATES.map(({ row, low, high }) => (
-        <Fact key={row} label={t(`assumptions.rate.${row}`)}>
-          {t('money.range', { low: valueText(finance, low), high: valueText(finance, high) })}
+        <Fact key={row} label={rateLabel(row, area)}>
+          {t('money.range', { low: valueText(finance, low, area), high: valueText(finance, high, area) })}
         </Fact>
       ))}
     </dl>
   )
 }
 
-function DesignFacts({ design, finance }: { design: Design; finance: Finance }) {
-  const estimate = finance.estimateFor(design)
+function MoneyFacts({ design, finance, priced, area }: { design: Design; finance: Finance; priced: Priced; area: AreaUnit }) {
+  const estimate = priced.estimateFor(design)
   const { currency } = finance.region
+  return (
+    <>
+      <Fact label={t('money.built-up')}>{formatQuantity(estimate.builtSqm, area)}</Fact>
+      <Fact label={t('money.saleable')}>{formatQuantity(estimate.saleableSqm, area)}</Fact>
+      <Fact label={t('money.first-cost')}>{rangeText(firstCostRange(estimate), currency)}</Fact>
+      <Fact label={t('money.land-value')}>{rangeText(estimate.landValue, currency)}</Fact>
+    </>
+  )
+}
+
+function DesignFacts({ design, finance, area }: { design: Design; finance: Finance; area: AreaUnit }) {
   const counts = tally(design.checks)
   return (
     <dl className="text-sm">
-      <Fact label={t('metric.floor-area')}>{formatQuantity(design.metrics.gfaSqm, 'sqm')}</Fact>
-      <Fact label={t('money.built-up')}>{formatQuantity(estimate.builtSqm, 'sqm')}</Fact>
-      <Fact label={t('money.saleable')}>{formatQuantity(estimate.saleableSqm, 'sqm')}</Fact>
+      <Fact label={t('metric.floor-area')}>{formatQuantity(design.metrics.gfaSqm, area)}</Fact>
       <Fact label={t('metric.height')}>{formatQuantity(design.metrics.heightM, 'm')}</Fact>
       <Fact label={t('metric.storeys')}>{formatQuantity(design.metrics.storeys, 'count')}</Fact>
-      <Fact label={t('money.first-cost')}>{rangeText(firstCostRange(estimate), currency)}</Fact>
-      <Fact label={t('money.land-value')}>{rangeText(estimate.landValue, currency)}</Fact>
+      {finance.priced && <MoneyFacts design={design} finance={finance} priced={finance.priced} area={area} />}
       <Fact label={t('metric.checks')}>
         {[t('tally.pass', { count: counts.pass }), t('tally.manual', { count: counts.manual }), t('tally.fail', { count: counts.fail })].join(' · ')}
       </Fact>
@@ -98,24 +109,27 @@ function useLinkAtPrint() {
 export function PrintSummary() {
   const { result, design } = useFeasibility()
   const finance = useFinance()
+  const region = useRegion()
   const href = useLinkAtPrint()
   if (result?.status !== 'ready' || !design || !finance) return null
   const { site, farCap } = result.solution
+  const area = region.areaUnit
   const toCheck = design.checks.filter((check) => check.status !== 'pass')
   return (
     <article className="hidden flex-col gap-6 p-8 text-foreground print:flex">
       <header className="flex items-baseline justify-between border-b pb-3">
-        <h1 className="text-xl font-semibold">{t('report.title', { city: REGION.city })}</h1>
-        <p className="text-xs text-muted-foreground">{REGION.zone.name}</p>
+        <h1 className="text-xl font-semibold">{t('report.title', { region: region.name })}</h1>
+        {region.zone && <p className="text-xs text-muted-foreground">{region.zone.name}</p>}
       </header>
+      <VerificationNote solution={result.solution} detailed />
       <section className="flex gap-8">
         <PlotDrawing ring={site.ring} footprint={design.plates.footprint} />
         <div className="flex-1">
           <h2 className="text-sm font-semibold">{t(design.nameKey)}</h2>
           <p className="mb-2 text-xs text-muted-foreground">
-            {t('report.plot', { area: formatQuantity(site.areaSqm, 'sqm'), allowed: formatQuantity(farCap.maxGfaSqm, 'sqm') })}
+            {t('report.plot', { area: formatQuantity(site.areaSqm, area), allowed: formatQuantity(farCap.maxGfaSqm, area) })}
           </p>
-          <DesignFacts design={design} finance={finance} />
+          <DesignFacts design={design} finance={finance} area={area} />
         </div>
       </section>
       {toCheck.length > 0 && (
@@ -132,7 +146,7 @@ export function PrintSummary() {
       )}
       <section>
         <h2 className="mb-1 text-sm font-semibold">{t('report.assumptions')}</h2>
-        <Assumptions finance={finance} />
+        <Assumptions finance={finance} area={area} />
       </section>
       <footer className="border-t pt-3 text-2xs break-all text-muted-foreground">
         {t('report.disclaimer')} {href}

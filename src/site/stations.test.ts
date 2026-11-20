@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'bun:test'
+import { REGIONS } from '@/region/regions'
 import type { OverpassResponse } from './overpass-response'
 import { StationSchema } from './schema'
 import { parseStationElements } from './stations'
+
+const TRANSIT = REGIONS.bkk.transit
 
 type Element = OverpassResponse['elements'][number]
 
@@ -24,17 +27,17 @@ const square: [number, number][] = [
 
 describe('parseStationElements', () => {
   it('reads a closed platform way as an area without the repeated closing point', () => {
-    const [platform] = parseStationElements([way(1, { railway: 'platform', public_transport: 'platform', subway: 'yes' }, square)])
+    const [platform] = parseStationElements([way(1, { railway: 'platform', public_transport: 'platform', subway: 'yes' }, square)], TRANSIT)
     expect(platform).toEqual({ id: 'way/1', kind: 'platform', geometry: { type: 'area', ring: square.slice(0, -1) } })
   })
 
   it('reads an open platform way as a line', () => {
-    const [platform] = parseStationElements([way(2, { public_transport: 'platform', train: 'yes' }, square.slice(0, 2))])
+    const [platform] = parseStationElements([way(2, { public_transport: 'platform', train: 'yes' }, square.slice(0, 2))], TRANSIT)
     expect(platform.geometry).toEqual({ type: 'line', line: square.slice(0, 2) })
   })
 
   it('reads a platform node as a point and keeps only its English name', () => {
-    const [platform] = parseStationElements([node(3, { public_transport: 'platform', monorail: 'yes', name: 'Lat Phrao', 'name:th': 'ลาดพร้าว' })])
+    const [platform] = parseStationElements([node(3, { public_transport: 'platform', monorail: 'yes', name: 'Lat Phrao', 'name:th': 'ลาดพร้าว' })], TRANSIT)
     expect(platform).toEqual({
       id: 'node/3',
       name: 'Lat Phrao',
@@ -44,7 +47,7 @@ describe('parseStationElements', () => {
   })
 
   it('reads a mass-transit station node as a station point, and drops a name only in Thai script', () => {
-    const [station] = parseStationElements([node(4, { railway: 'station', station: 'subway', name: 'อโศก' })])
+    const [station] = parseStationElements([node(4, { railway: 'station', station: 'subway', name: 'อโศก' })], TRANSIT)
     expect(station).toEqual({ id: 'node/4', kind: 'station', geometry: { type: 'point', at: [100.5, 13.7] } })
   })
 
@@ -56,7 +59,7 @@ describe('parseStationElements', () => {
       way(8, { highway: 'primary' }, square.slice(0, 2)),
       way(9, { railway: 'platform' }, square.slice(0, 1)),
       { type: 'way', id: 10, tags: { railway: 'platform' } },
-    ])
+    ], TRANSIT)
     expect(stations).toEqual([])
   })
 
@@ -64,7 +67,7 @@ describe('parseStationElements', () => {
     const stations = parseStationElements([
       way(1, { railway: 'platform' }, square),
       node(4, { railway: 'station', station: 'monorail' }),
-    ])
+    ], TRANSIT)
     expect(stations.every((station) => StationSchema.safeParse(station).success)).toBe(true)
   })
 })

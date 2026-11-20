@@ -8,7 +8,7 @@ import { landCheck } from './land-check'
 import { resolveValues } from './values'
 
 const region = MONEY_REGIONS.bkk
-const defaults = resolveValues(region, { use: 'condo', tier: 'cityFringe' }, {})
+const defaults = resolveValues(region.prices, { use: 'condo', tier: 'cityFringe' }, {})
 const withShares = (shares: { transferCosts: number; holdingCost: number; landFinance: number }) => ({ ...defaults, ...shares })
 const share = fc.double({ min: 0, max: 0.5, noNaN: true })
 const money = fc.double({ min: 0, max: 1e10, noNaN: true })

@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react'
 import type { LngLat } from '@/geo/projection'
-import { bboxQuery, plotSiteBbox, snapBbox, type Bbox } from '@/site/bbox'
-import { loadSharedSite } from '@/site/shared-site'
+import { plotSiteBbox, type Bbox } from '@/site/bbox'
+import { loadSharedSite, siteCell } from '@/site/shared-site'
 import type { Site } from '@/site/schema'
+import type { RegionId } from '@/solve'
 import { useSettled } from './use-settled'
 
 export type SiteStatus = 'loading' | 'ready' | 'failed'
 
 type Outcome = { readonly bbox: Bbox; readonly attempt: number; readonly ok: boolean }
 
-const cacheCell = (bbox: Bbox) => bboxQuery(snapBbox(bbox))
-
-export function useSite(ring: readonly LngLat[]) {
-  const bbox = useSettled(plotSiteBbox(ring), (kept, next) => cacheCell(kept) !== cacheCell(next))
+export function useSite(ring: readonly LngLat[], region: RegionId) {
+  const bbox = useSettled(plotSiteBbox(ring), (kept, next) => siteCell(kept, region) !== siteCell(next, region))
   const [attempt, setAttempt] = useState(0)
   const [site, setSite] = useState<Site | null>(null)
   const [outcome, setOutcome] = useState<Outcome | null>(null)
 
   useEffect(() => {
     const controller = new AbortController()
-    loadSharedSite(bbox, { signal: controller.signal }).then(
+    loadSharedSite(bbox, region, { signal: controller.signal }).then(
       (loaded) => {
         if (controller.signal.aborted) return
         setSite(loaded)
@@ -30,7 +29,7 @@ export function useSite(ring: readonly LngLat[]) {
       },
     )
     return () => controller.abort()
-  }, [bbox, attempt])
+  }, [bbox, region, attempt])
 
   const status: SiteStatus =
     outcome?.bbox !== bbox || outcome.attempt !== attempt ? 'loading' : outcome.ok ? 'ready' : 'failed'

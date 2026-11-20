@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { EditorShell, type ResultPanel } from '@/editor/editor-shell'
-import { EditorStoreProvider } from '@/editor/plot-store'
+import { EditorStoreProvider, useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
 import { AssumptionsPanel, AssumptionsProvider, DesignMoney, LandValue, useMoneyRows } from '@/finance'
 import { LandLine } from '@/finance/land-line'
@@ -57,8 +57,9 @@ function usePanels(): readonly ResultPanel[] {
 }
 
 function PlotZone() {
+  const { zone } = useZoneGate()
   const { plot } = useFeasibility()
-  if (!plot) return null
+  if (!plot || !zone) return null
   return (
     <div className="mt-2">
       <ZoneStatus />
@@ -102,6 +103,7 @@ const ZONE_CONFIRMED_IN_URL = { decode: (value: string | null) => value === 'con
 
 function GatedWorkspace() {
   const { plot } = useFeasibility()
+  const region = useRegion()
   const [confirmed, setConfirmed] = useHashState('zone', ZONE_CONFIRMED_IN_URL)
   const confirm = useCallback(() => setConfirmed(true), [setConfirmed])
   const hadPlot = useRef(false)
@@ -113,7 +115,7 @@ function GatedWorkspace() {
     }
   }, [plot, setConfirmed])
   return (
-    <ZoneGateProvider ring={plot?.ring ?? null} confirmed={confirmed} onConfirm={confirm}>
+    <ZoneGateProvider zone={region.zone?.name ?? null} ring={plot?.ring ?? null} confirmed={confirmed} onConfirm={confirm}>
       <Workspace />
     </ZoneGateProvider>
   )

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { REGION } from '@/region/regions'
+import type { Region } from '@/region/regions'
 import { USER_AGENT } from '@/site/user-agent'
 import { SEARCH_RESULT_LIMIT } from './assumptions'
 import { PLACE_KINDS, type Place } from './schema'
@@ -36,21 +36,19 @@ export class PlaceSearchUnavailableError extends Error {}
 
 export type FetchPlacesOptions = { timeoutMs?: number; fetchImpl?: typeof fetch }
 
-function photonUrl(query: string): string {
-  const [lon, lat] = REGION.searchBias.value
+function photonUrl(query: string, { searchBias, bounds }: Region): string {
   const params = new URLSearchParams({
     q: query,
     lang: 'en',
-    lon: String(lon),
-    lat: String(lat),
-    bbox: REGION.bounds.value.join(','),
+    ...(searchBias && { lon: String(searchBias.value[0]), lat: String(searchBias.value[1]) }),
+    ...(bounds && { bbox: bounds.value.join(',') }),
     limit: String(SEARCH_RESULT_LIMIT.value),
   })
   return `${PHOTON_URL}?${params}`
 }
 
-async function queryPhoton(query: string, timeoutMs: number, fetchImpl: typeof fetch): Promise<Feature[]> {
-  const response = await fetchImpl(photonUrl(query), {
+async function queryPhoton(query: string, region: Region, timeoutMs: number, fetchImpl: typeof fetch): Promise<Feature[]> {
+  const response = await fetchImpl(photonUrl(query, region), {
     headers: { 'User-Agent': USER_AGENT },
     signal: AbortSignal.timeout(timeoutMs),
   })
@@ -78,9 +76,10 @@ function toPlace({ properties, geometry }: Feature): Place | undefined {
 
 export async function fetchPlaces(
   query: string,
+  region: Region,
   { timeoutMs = TIMEOUT_MS, fetchImpl = fetch }: FetchPlacesOptions = {},
 ): Promise<Place[]> {
-  const features = await queryPhoton(query, timeoutMs, fetchImpl).catch((error: unknown) => {
+  const features = await queryPhoton(query, region, timeoutMs, fetchImpl).catch((error: unknown) => {
     throw new PlaceSearchUnavailableError(`Place search is unavailable: ${error instanceof Error ? error.message : String(error)}`)
   })
   const places = features.flatMap((feature) => toPlace(feature) ?? [])

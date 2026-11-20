@@ -1,6 +1,5 @@
 'use client'
 
-import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Button } from '@/ui/button'
@@ -61,11 +60,11 @@ export function ZoneStatus() {
 }
 
 export function ZoneHold() {
-  const { confirmable, confirm } = useZoneGate()
+  const { zone, confirmable, confirm } = useZoneGate()
   return (
     <section aria-label={t('zone.hold.label')} className="flex flex-col gap-3">
       <ZoneStatus />
-      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : t('zone.hold.refused')}</p>
+      <p className="text-sm leading-snug">{confirmable && zone ? t('zone.hold.confirmable', { zone }) : t('zone.hold.refused')}</p>
       {confirmable && (
         <Button size="sm" variant="outline" className="self-start" onClick={confirm}>
           {t('zone.hold.confirm')}

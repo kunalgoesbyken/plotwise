@@ -5,7 +5,7 @@ import { MONEY_REGIONS } from '@/solve'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { placementOf } from './area'
 
-const { areas } = MONEY_REGIONS.bkk
+const { areas } = MONEY_REGIONS.bkk.prices
 const frame = localFrame([areas.centre.lng, areas.centre.lat])
 const atKm = (km: number) => frame.toLngLat([km * 1000, 0])
 
@@ -49,7 +49,7 @@ describe('placementOf', () => {
   })
 
   it('uses the more conservative fringe value for the fallback', () => {
-    const { condo } = MONEY_REGIONS.bkk.salePricePerSqm
+    const { condo } = MONEY_REGIONS.bkk.prices.salePricePerSqm
     expect(areas.fallbackTier).toBe('cityFringe')
     expect(condo.cityFringe.value).toBeLessThan(condo.cbd.value)
   })

@@ -2,17 +2,21 @@
 
 import { useId, type ReactNode } from 'react'
 import type { Design } from '@/designs'
+import { useRegion } from '@/editor/plot-store'
+import type { Solution } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import { Disclosure } from '@/ui/disclosure'
 import { Placeholder } from '@/ui/section'
+import type { AreaUnit } from '@/units/area'
 import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { useFeasibility } from './feasibility-provider'
 import { WhenReady } from './ready'
 import { Sources } from './sources'
 import { Tally } from './tally'
 import { ToCheck } from './to-check'
+import { VerificationNote } from './verification-note'
 import { yieldFigure } from './yield-figure'
 
 const STATUS_TONE: Readonly<Record<CheckStatus, string>> = {
@@ -23,15 +27,15 @@ const STATUS_TONE: Readonly<Record<CheckStatus, string>> = {
 
 export type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
-function rowsFor([first]: readonly Design[], showChecks: (design: Design) => void): readonly Row[] {
+function rowsFor([first]: readonly Design[], area: AreaUnit, showChecks: (design: Design) => void): readonly Row[] {
   return [
-    { label: t('metric.floor-area'), cell: (d) => formatQuantity(d.metrics.gfaSqm, 'sqm') },
+    { label: t('metric.floor-area'), cell: (d) => formatQuantity(d.metrics.gfaSqm, area) },
     { label: t('metric.height'), cell: (d) => formatQuantity(d.metrics.heightM, 'm') },
     { label: t('metric.storeys'), cell: (d) => formatQuantity(d.metrics.storeys, 'count') },
-    { label: yieldFigure(first.metrics.yield).label, cell: (d) => yieldFigure(d.metrics.yield).value },
+    { label: yieldFigure(first.metrics.yield, area).label, cell: (d) => yieldFigure(d.metrics.yield, area).value },
     { label: t('metric.far'), cell: (d) => formatQuantity(d.metrics.far, 'ratio') },
     { label: t('metric.parking'), cell: (d) => formatQuantity(d.metrics.parkingSpaces, 'count') },
-    { label: t('metric.open-space'), cell: (d) => formatQuantity(d.metrics.openSpaceSqm, 'sqm') },
+    { label: t('metric.open-space'), cell: (d) => formatQuantity(d.metrics.openSpaceSqm, area) },
     { label: t('metric.limited-by'), cell: (d) => t(`limiter.${d.limitedBy}`) },
     { label: t('metric.checks'), cell: (d) => <Tally checks={d.checks} onShowChecks={() => showChecks(d)} /> },
   ]
@@ -51,8 +55,11 @@ function CheckItem({ row }: { row: CheckRow }) {
   )
 }
 
-function DesignTable({ designs, extraRows }: { designs: readonly Design[]; extraRows: readonly Row[] }) {
+type DesignTableProps = { readonly designs: readonly Design[]; readonly solution: Solution; readonly extraRows: readonly Row[] }
+
+function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
   const { design: selected, selectDesign } = useFeasibility()
+  const { areaUnit } = useRegion()
   const toCheckId = useId()
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
   const shown = (design: Design) => design.id === selected.id
@@ -85,7 +92,7 @@ function DesignTable({ designs, extraRows }: { designs: readonly Design[]; extra
           </tr>
         </thead>
         <tbody className="divide-y">
-          {[...rowsFor(designs, showChecks), ...extraRows].map(({ label, cell }) => (
+          {[...rowsFor(designs, areaUnit, showChecks), ...extraRows].map(({ label, cell }) => (
             <tr key={label}>
               <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
                 {label}
@@ -101,10 +108,11 @@ function DesignTable({ designs, extraRows }: { designs: readonly Design[]; extra
       </table>
       <p className="text-xs leading-relaxed text-muted-foreground">{t(`${selected.nameKey}.summary`)}</p>
       <ToCheck design={selected} id={toCheckId} />
+      <VerificationNote solution={solution} detailed />
       <Disclosure label={t('design.checklist', { name: t(selected.nameKey) })}>
         <ul className="divide-y">
           {selected.checks.map((check) => (
-            <CheckItem key={check.id} row={checkRow(check)} />
+            <CheckItem key={check.id} row={checkRow(check, areaUnit)} />
           ))}
         </ul>
       </Disclosure>
@@ -113,5 +121,5 @@ function DesignTable({ designs, extraRows }: { designs: readonly Design[]; extra
 }
 
 export function DesignsPanel({ extraRows = [] }: { extraRows?: readonly Row[] }) {
-  return <WhenReady render={({ designs }) => <DesignTable designs={designs} extraRows={extraRows} />} />
+  return <WhenReady render={({ designs, solution }) => <DesignTable designs={designs} solution={solution} extraRows={extraRows} />} />
 }

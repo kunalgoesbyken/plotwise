@@ -1,15 +1,17 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { useRegion } from '@/editor/plot-store'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Button } from '@/ui/button'
 import { Disclosure } from '@/ui/disclosure'
+import { rateLabel, scalarLabel } from './figures'
 import { ParameterInput } from './parameter-input'
-import { RATES, SCALARS, type Parameter } from './parameters'
+import { RATES, SCALARS, type ScalarId } from './parameters'
 import { useFinance, type Finance } from './use-finance'
 
-function Row({ label, source, children }: { readonly label: string; readonly source: string; readonly children: ReactNode }) {
+function Row({ label, source, children }: { readonly label: string; readonly source: string | null; readonly children: ReactNode }) {
   return (
     <li className="flex flex-col gap-2 py-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -17,14 +19,21 @@ function Row({ label, source, children }: { readonly label: string; readonly sou
         <Badge variant="outline">{t('money.estimated')}</Badge>
       </div>
       <div className="flex flex-wrap gap-4">{children}</div>
-      <Disclosure label={t('assumptions.source')} tone="muted">
-        <p className="pb-2 text-xs leading-relaxed text-muted-foreground">{source}</p>
-      </Disclosure>
+      {source === null ? (
+        <p className="text-xs text-muted-foreground">{t('assumptions.blank')}</p>
+      ) : (
+        <Disclosure label={t('assumptions.source')} tone="muted">
+          <p className="pb-2 text-xs leading-relaxed text-muted-foreground">{source}</p>
+        </Disclosure>
+      )}
     </li>
   )
 }
 
-function ScalarRow({ finance, parameter, label }: { finance: Finance; parameter: Parameter; label: string }) {
+function ScalarRow({ finance, id }: { finance: Finance; id: ScalarId }) {
+  const { areaUnit } = useRegion()
+  const parameter = SCALARS[id]
+  const label = scalarLabel(id, areaUnit)
   return (
     <Row label={label} source={finance.sourceOf(parameter)}>
       <ParameterInput finance={finance} parameter={parameter} label={label} hideLabel />
@@ -43,6 +52,7 @@ function Group({ title, children }: { readonly title: string; readonly children:
 
 export function AssumptionsPanel() {
   const finance = useFinance()
+  const { areaUnit } = useRegion()
   if (!finance) return null
   return (
     <div className="flex flex-col gap-5">
@@ -56,24 +66,24 @@ export function AssumptionsPanel() {
       </header>
       <p className="text-sm leading-relaxed text-muted-foreground">{t('assumptions.note')}</p>
       <Group title={t('assumptions.price')}>
-        <ScalarRow finance={finance} parameter={SCALARS.salePrice} label={t('assumptions.salePrice')} />
-        <ScalarRow finance={finance} parameter={SCALARS.saleableShare} label={t('assumptions.saleableShare')} />
-        <ScalarRow finance={finance} parameter={SCALARS.margin} label={t('assumptions.margin')} />
-        <ScalarRow finance={finance} parameter={SCALARS.softCost} label={t('assumptions.softCost')} />
+        <ScalarRow finance={finance} id="salePrice" />
+        <ScalarRow finance={finance} id="saleableShare" />
+        <ScalarRow finance={finance} id="margin" />
+        <ScalarRow finance={finance} id="softCost" />
       </Group>
       <Group title={t('assumptions.land')}>
-        <ScalarRow finance={finance} parameter={SCALARS.transferCosts} label={t('assumptions.transferCosts')} />
-        <ScalarRow finance={finance} parameter={SCALARS.holdingCost} label={t('assumptions.holdingCost')} />
-        <ScalarRow finance={finance} parameter={SCALARS.landFinance} label={t('assumptions.landFinance')} />
-        <ScalarRow finance={finance} parameter={SCALARS.landReferenceLow} label={t('assumptions.landReferenceLow')} />
-        <ScalarRow finance={finance} parameter={SCALARS.landReferenceHigh} label={t('assumptions.landReferenceHigh')} />
+        <ScalarRow finance={finance} id="transferCosts" />
+        <ScalarRow finance={finance} id="holdingCost" />
+        <ScalarRow finance={finance} id="landFinance" />
+        <ScalarRow finance={finance} id="landReferenceLow" />
+        <ScalarRow finance={finance} id="landReferenceHigh" />
       </Group>
       <Group title={t('assumptions.parking')}>
-        <ScalarRow finance={finance} parameter={SCALARS.parkingLevels} label={t('assumptions.parkingLevels')} />
+        <ScalarRow finance={finance} id="parkingLevels" />
       </Group>
-      <Group title={t('assumptions.rates')}>
+      <Group title={t('assumptions.rates', { unit: t(`area-unit.${areaUnit}`) })}>
         {RATES.map(({ row, low, high }) => (
-          <Row key={row} label={t(`assumptions.rate.${row}`)} source={finance.sourceOf(low)}>
+          <Row key={row} label={rateLabel(row, areaUnit)} source={finance.sourceOf(low)}>
             <ParameterInput finance={finance} parameter={low} label={t('assumptions.low')} />
             <ParameterInput finance={finance} parameter={high} label={t('assumptions.high')} />
           </Row>

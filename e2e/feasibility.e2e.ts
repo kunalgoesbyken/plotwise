@@ -3,9 +3,10 @@ import { encodePlot } from '../src/editor/plot-url'
 import type { Plot } from '../src/plot/plot'
 import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
+import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
 
-const recorded = parseOverpass(OverpassResponseSchema.parse(fixture))
+const recorded = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.bkk.transit)
 
 const PLOT: Plot = {
   ring: [

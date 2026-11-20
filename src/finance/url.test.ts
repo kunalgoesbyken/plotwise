@@ -3,7 +3,7 @@ import { MONEY_REGIONS } from '@/solve'
 import { decodeAssumptions, encodeAssumptions } from './url'
 import { resolveValues } from './values'
 
-const region = MONEY_REGIONS.bkk
+const prices = MONEY_REGIONS.bkk.prices
 
 describe('assumption share links', () => {
   it('keeps the meaning of the keys old links already use', () => {
@@ -24,14 +24,14 @@ describe('assumption share links', () => {
 
   it('uses the defaults of the plot area for keys a link does not carry', () => {
     const old = decodeAssumptions('salePrice.condo:300000')
-    const values = resolveValues(region, { use: 'condo', tier: 'suburban' }, old)
+    const values = resolveValues(prices, { use: 'condo', tier: 'suburban' }, old)
     expect(values.salePrice).toBe(300000)
-    expect(values.transferCosts).toBe(region.transferCostShare.value)
-    expect(values.landReferenceHigh).toBe(region.landReferencePerUnit.suburban.high)
+    expect(values.transferCosts).toBe(prices.transferCostShare.value)
+    expect(values.landReferenceHigh).toBe(prices.landReferencePerUnit.suburban.high)
   })
 
   it('gives each area its own sale price default, dearer nearer the centre', () => {
-    const price = (tier: 'cbd' | 'cityFringe' | 'suburban') => resolveValues(region, { use: 'condo', tier }, {}).salePrice
+    const price = (tier: 'cbd' | 'cityFringe' | 'suburban') => resolveValues(prices, { use: 'condo', tier }, {}).salePrice
     expect(price('cbd')).toBeGreaterThan(price('cityFringe'))
     expect(price('cityFringe')).toBeGreaterThan(price('suburban'))
   })

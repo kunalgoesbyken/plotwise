@@ -1,5 +1,5 @@
 import type { LngLat } from '@/geo/projection'
-import { MAX_CORNERS, PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
+import { MAX_CORNERS, PlotLimitsSchema, PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type PlotLimitField, type PlotLimits, type Road } from '@/plot/plot'
 import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
 import { isSimplePath } from './path'
 
@@ -7,7 +7,7 @@ const COORDINATE_SCALE = 1e7
 
 export type NearStationSource = 'default' | 'estimate' | 'user'
 
-type Brief = { buildingType: BuildingType; nearStation: boolean; nearStationSource: NearStationSource }
+type Brief = { buildingType: BuildingType; nearStation: boolean; nearStationSource: NearStationSource; limits: PlotLimits }
 
 export type Draft =
   | ({ status: 'drawing'; points: readonly LngLat[] } & Brief)
@@ -29,6 +29,7 @@ export type DraftAction =
   | { type: 'set-building-type'; buildingType: BuildingType }
   | { type: 'set-near-station'; nearStation: boolean }
   | { type: 'estimate-near-station'; nearStation: boolean }
+  | { type: 'set-limit'; field: PlotLimitField; value: number | undefined }
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
   | { type: 'load-example'; plot: Plot }
@@ -40,7 +41,7 @@ type ClosedDraft = Extract<Draft, { status: 'closed' }>
 type DrawingDraft = Extract<Draft, { status: 'drawing' }>
 
 export function emptyDraft(buildingType: BuildingType): Draft {
-  return { status: 'drawing', points: [], buildingType, nearStation: false, nearStationSource: 'default' }
+  return { status: 'drawing', points: [], buildingType, nearStation: false, nearStationSource: 'default', limits: {} }
 }
 
 function roundCoordinate(value: number) {
@@ -60,9 +61,9 @@ function closed(brief: Brief, corners: readonly Corner[]): EditResult {
   if (corners.length < 3) return reject('too-few-corners')
   if (corners.length > MAX_CORNERS) return reject('too-many-corners')
   const outline = normalizeOutline(corners)
-  const { buildingType, nearStation, nearStationSource } = brief
+  const { buildingType, nearStation, nearStationSource, limits } = brief
   if (!outline.ok) return reject(outline.reason)
-  return accept({ status: 'closed', corners: outline.corners, buildingType, nearStation, nearStationSource })
+  return accept({ status: 'closed', corners: outline.corners, buildingType, nearStation, nearStationSource, limits })
 }
 
 function reshaped(draft: ClosedDraft, corners: Corner[]): EditResult {
@@ -155,7 +156,7 @@ function fromPlot(plot: Plot, nearStationSource: NearStationSource): EditResult 
     const widthM = widths.get(i)
     return { at, edge: widthM === undefined ? NEIGHBOUR : { road: true, widthM, estimated: false } }
   })
-  return closed({ ...plot, nearStationSource }, corners)
+  return closed({ ...plot, limits: plot.limits ?? {}, nearStationSource }, corners)
 }
 
 function estimateNearStation(draft: Draft, nearStation: boolean): Draft {
@@ -164,8 +165,15 @@ function estimateNearStation(draft: Draft, nearStation: boolean): Draft {
   return { ...draft, nearStation, nearStationSource: 'estimate' }
 }
 
+function setLimit(draft: Draft, field: PlotLimitField, value: number | undefined): Draft {
+  if (value === undefined) return { ...draft, limits: Object.fromEntries(Object.entries(draft.limits).filter(([key]) => key !== field)) }
+  return PlotLimitsSchema.shape[field].safeParse(value).success ? { ...draft, limits: { ...draft.limits, [field]: value } } : draft
+}
+
 export function editDraft(draft: Draft, action: DraftAction): EditResult {
   switch (action.type) {
+    case 'set-limit':
+      return accept(setLimit(draft, action.field, action.value))
     case 'set-building-type':
       return accept({ ...draft, buildingType: action.buildingType })
     case 'set-near-station':
@@ -173,7 +181,7 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
     case 'estimate-near-station':
       return accept(estimateNearStation(draft, action.nearStation))
     case 'clear':
-      return accept(emptyDraft(draft.buildingType))
+      return accept({ ...emptyDraft(draft.buildingType), limits: draft.limits })
     case 'load':
       return fromPlot(action.plot, 'user')
     case 'load-example':
@@ -191,7 +199,8 @@ export function toPlot(draft: Draft): Plot | null {
     if (e.widthM === null) return null
     roads.push({ edge, widthM: e.widthM })
   }
-  const { buildingType, nearStation } = draft
-  const parsed = PlotSchema.safeParse({ ring: draft.corners.map((c) => c.at), roads, buildingType, nearStation })
+  const { buildingType, nearStation, limits } = draft
+  const entered = Object.keys(limits).length > 0 ? { limits } : {}
+  const parsed = PlotSchema.safeParse({ ring: draft.corners.map((c) => c.at), roads, buildingType, nearStation, ...entered })
   return parsed.success ? parsed.data : null
 }

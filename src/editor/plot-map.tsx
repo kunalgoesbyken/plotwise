@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import type { GeoJSONSource, Map as MapLibreMap, Marker } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { REGION } from '@/region/regions'
+import { REGIONS } from '@/region/regions'
+import { bboxContains } from '@/site/bbox'
 import { fitPadding, insideClearArea } from './fit-padding'
 import { bindInteractions } from './map-interactions'
 import { mapFeatures, mapLabels, type MapLabel } from './map-features'
@@ -11,7 +12,7 @@ import { addEditorLayers, EMPTY_OVERLAY, labelInEnglish, OVERLAY_SOURCE, PLOT_SO
 import { useEditorState, useEditorStore } from './plot-store'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
-const START_ZOOM = 17
+
 const MAX_FIT_ZOOM = 19
 const PLACE_ZOOM = 18
 const FIT_MARGIN_PX = 48
@@ -69,14 +70,15 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
     let cancelled = false
     import('maplibre-gl').then((maplibre) => {
       const element = container.current
+      const start = REGIONS[store.getState().region].mapStart.value
       if (cancelled || !element) return
       maplibre.setWorkerUrl(new URL('/maplibre-gl-worker.mjs', location.origin).href)
       const created = new maplibre.Map({
         container: element,
         style: STYLE_URL,
         transformStyle: withoutUnusedBaseLayers,
-        center: [...REGION.mapStart.value],
-        zoom: START_ZOOM,
+        center: [...start.centre],
+        zoom: start.zoom,
         attributionControl: false,
         dragRotate: false,
         pitchWithRotate: false,
@@ -140,6 +142,15 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       { padding, maxZoom: MAX_FIT_ZOOM, duration: 600 },
     )
   }, [view, loads, closed, ready, store, covers])
+
+  const { region } = state
+  useEffect(() => {
+    const { draft } = store.getState()
+    const { bounds, mapStart } = REGIONS[region]
+    const drawn = draft.status === 'closed' || draft.points.length > 0
+    if (!view || drawn || !bounds || bboxContains(bounds.value, view.map.getCenter().toArray())) return
+    view.map.jumpTo({ center: [...mapStart.value.centre], zoom: mapStart.value.zoom })
+  }, [view, region, store])
 
   const { focus } = state
   useEffect(() => {

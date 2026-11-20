@@ -2,12 +2,12 @@ import { ImageResponse } from 'next/og'
 import { localFrame } from '@/geo/projection'
 import { exampleFigures } from '@/landing/example'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
-import { REGION } from '@/region/regions'
+import { DEFAULT_REGION } from '@/region/regions'
 import { SHARE_PALETTE } from '@/seo/identity'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 
-export const alt = t('share.image.alt', { city: REGION.city })
+export const alt = t('share.image.alt', { city: DEFAULT_REGION.city })
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

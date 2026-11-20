@@ -2,12 +2,13 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { localFrame } from '@/geo/projection'
 import { NEAREST_ROAD_MAX_GAP_M, SITE_MARGIN_M } from './assumptions'
-import { BboxParamSchema, bboxQuery, expandBbox, plotSiteBbox, snapBbox, type Bbox } from './bbox'
+import { REGIONS } from '@/region/regions'
+import { bboxParamSchema, bboxQuery, expandBbox, plotSiteBbox, snapBbox, type Bbox } from './bbox'
 
 const central: Bbox = [100.5671, 13.7632, 100.5709, 13.7668]
 
 function issues(param: unknown): string {
-  const result = BboxParamSchema.safeParse(param)
+  const result = bboxParamSchema(REGIONS.bkk).safeParse(param)
   return result.success ? '' : result.error.issues.map((i) => i.message).join(' | ')
 }
 
@@ -45,14 +46,14 @@ describe('snapBbox', () => {
   })
 })
 
-describe('BboxParamSchema', () => {
+describe('bboxParamSchema', () => {
   it('parses and snaps a valid bbox', () => {
-    expect(BboxParamSchema.parse('100.5671,13.7632,100.5709,13.7668')).toEqual([100.566, 13.762, 100.572, 13.768])
+    expect(bboxParamSchema(REGIONS.bkk).parse('100.5671,13.7632,100.5709,13.7668')).toEqual([100.566, 13.762, 100.572, 13.768])
   })
 
   it('round-trips through bboxQuery', () => {
     const snapped = snapBbox(central)
-    expect(BboxParamSchema.parse(bboxQuery(snapped))).toEqual(snapped)
+    expect(bboxParamSchema(REGIONS.bkk).parse(bboxQuery(snapped))).toEqual(snapped)
   })
 
   it('rejects a missing parameter', () => {

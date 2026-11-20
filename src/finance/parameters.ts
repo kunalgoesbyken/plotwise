@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
-import type { AreaTier, AssumedRange, MoneyRegion } from '@/solve'
+import type { AreaTier, AssumedRange, MoneyPrices } from '@/solve'
 
 export type Unit = 'money' | 'landMoney' | 'share' | 'count'
 export type RateRow = 'substructure.lowRise' | 'substructure.highRise' | 'superstructure.lowRise' | 'superstructure.highRise' | 'services' | 'basement'
@@ -25,7 +25,7 @@ export type Parameter = {
   readonly id: ParameterId
   readonly unit: Unit
   readonly perUse: boolean
-  readonly assumed: (region: MoneyRegion, basis: Basis) => Assumed
+  readonly assumed: (prices: MoneyPrices, basis: Basis) => Assumed
 }
 
 export const RATE_ROWS: readonly RateRow[] = [
@@ -47,34 +47,34 @@ const UNIT_SCHEMAS: Readonly<Record<Unit, z.ZodNumber>> = {
   count: z.number().int().min(0).max(MAX_PARKING_LEVELS),
 }
 
-const RATE_RANGES: Readonly<Record<RateRow, (region: MoneyRegion, use: BuildingType) => AssumedRange>> = {
-  'substructure.lowRise': (region) => region.rates.substructure.lowRise,
-  'substructure.highRise': (region) => region.rates.substructure.highRise,
-  'superstructure.lowRise': (region) => region.rates.superstructure.lowRise,
-  'superstructure.highRise': (region) => region.rates.superstructure.highRise,
-  services: (region, use) => region.rates.services[use],
-  basement: (region) => region.rates.basement,
+const RATE_RANGES: Readonly<Record<RateRow, (prices: MoneyPrices, use: BuildingType) => AssumedRange>> = {
+  'substructure.lowRise': (prices) => prices.rates.substructure.lowRise,
+  'substructure.highRise': (prices) => prices.rates.substructure.highRise,
+  'superstructure.lowRise': (prices) => prices.rates.superstructure.lowRise,
+  'superstructure.highRise': (prices) => prices.rates.superstructure.highRise,
+  services: (prices, use) => prices.rates.services[use],
+  basement: (prices) => prices.rates.basement,
 }
 
 const referenceParameter = (id: ScalarId, bound: Bound): Parameter => ({
   id,
   unit: 'landMoney',
   perUse: false,
-  assumed: (region, { tier }) => {
-    const range = region.landReferencePerUnit[tier]
+  assumed: (prices, { tier }) => {
+    const range = prices.landReferencePerUnit[tier]
     return { value: range[bound], source: range.source }
   },
 })
 
 export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {
-  salePrice: { id: 'salePrice', unit: 'money', perUse: true, assumed: (region, { use, tier }) => region.salePricePerSqm[use][tier] },
-  saleableShare: { id: 'saleableShare', unit: 'share', perUse: true, assumed: (region, { use }) => region.saleableShare[use] },
-  margin: { id: 'margin', unit: 'share', perUse: false, assumed: (region) => region.developerMargin },
-  softCost: { id: 'softCost', unit: 'share', perUse: false, assumed: (region) => region.softCostShare },
-  parkingLevels: { id: 'parkingLevels', unit: 'count', perUse: false, assumed: (region) => region.maxAboveGroundParkingLevels },
-  transferCosts: { id: 'transferCosts', unit: 'share', perUse: false, assumed: (region) => region.transferCostShare },
-  holdingCost: { id: 'holdingCost', unit: 'share', perUse: false, assumed: (region) => region.holdingCostShare },
-  landFinance: { id: 'landFinance', unit: 'share', perUse: false, assumed: (region) => region.landFinanceShare },
+  salePrice: { id: 'salePrice', unit: 'money', perUse: true, assumed: (prices, { use, tier }) => prices.salePricePerSqm[use][tier] },
+  saleableShare: { id: 'saleableShare', unit: 'share', perUse: true, assumed: (prices, { use }) => prices.saleableShare[use] },
+  margin: { id: 'margin', unit: 'share', perUse: false, assumed: (prices) => prices.developerMargin },
+  softCost: { id: 'softCost', unit: 'share', perUse: false, assumed: (prices) => prices.softCostShare },
+  parkingLevels: { id: 'parkingLevels', unit: 'count', perUse: false, assumed: (prices) => prices.maxAboveGroundParkingLevels },
+  transferCosts: { id: 'transferCosts', unit: 'share', perUse: false, assumed: (prices) => prices.transferCostShare },
+  holdingCost: { id: 'holdingCost', unit: 'share', perUse: false, assumed: (prices) => prices.holdingCostShare },
+  landFinance: { id: 'landFinance', unit: 'share', perUse: false, assumed: (prices) => prices.landFinanceShare },
   landReferenceLow: referenceParameter('landReferenceLow', 'low'),
   landReferenceHigh: referenceParameter('landReferenceHigh', 'high'),
 }
@@ -83,8 +83,8 @@ const rateParameter = (row: RateRow, bound: Bound): Parameter => ({
   id: `${row}.${bound}`,
   unit: 'money',
   perUse: row === 'services',
-  assumed: (region, { use }) => {
-    const range = RATE_RANGES[row](region, use)
+  assumed: (prices, { use }) => {
+    const range = RATE_RANGES[row](prices, use)
     return { value: range[bound], source: range.source }
   },
 })

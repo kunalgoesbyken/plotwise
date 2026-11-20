@@ -4,12 +4,12 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react'
 import { useEffect, useId, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { searchPlaces } from '@/geocode/client'
 import { MIN_QUERY_LENGTH, normaliseQuery, type Place } from '@/geocode/schema'
-import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import { Input } from '@/ui/input'
 import { PanelSection } from '@/ui/section'
-import { useEditorStore } from './plot-store'
+import type { RegionId } from '@/solve'
+import { useEditorStore, useRegion } from './plot-store'
 
 const TYPING_PAUSE_MS = 250
 
@@ -21,7 +21,7 @@ type SearchState =
 
 const placesOf = (search: SearchState) => (search.status === 'found' || search.status === 'searching' ? search.places : [])
 
-function useLiveSearch(query: string) {
+function useLiveSearch(query: string, region: RegionId) {
   const [search, setSearch] = useState<SearchState>({ status: 'idle' })
   const normalised = normaliseQuery(query)
   const [settled, setSettled] = useState(normalised)
@@ -36,7 +36,7 @@ function useLiveSearch(query: string) {
     if (!ready) return
     const controller = new AbortController()
     const timer = setTimeout(() => {
-      searchPlaces(normalised, { signal: controller.signal })
+      searchPlaces(normalised, region, { signal: controller.signal })
         .then((places) => setSearch({ status: 'found', places }))
         .catch(() => {
           if (!controller.signal.aborted) setSearch({ status: 'failed' })
@@ -46,7 +46,7 @@ function useLiveSearch(query: string) {
       clearTimeout(timer)
       controller.abort()
     }
-  }, [normalised, ready])
+  }, [normalised, ready, region])
 
   return { search, close: () => setSearch({ status: 'idle' }) }
 }
@@ -65,7 +65,8 @@ export function PlaceSearch() {
   const [query, setQuery] = useState('')
   const [picked, setPicked] = useState<string | null>(null)
   const [active, setActive] = useState(0)
-  const { search, close } = useLiveSearch(query === picked ? '' : query)
+  const region = useRegion()
+  const { search, close } = useLiveSearch(query === picked ? '' : query, region.id)
   const places = placesOf(search)
   const open = places.length > 0
   const highlighted = Math.min(active, places.length - 1)
@@ -97,7 +98,7 @@ export function PlaceSearch() {
     <PanelSection title={t('search.title')}>
       <form role="search" onSubmit={submit}>
         <label htmlFor={id} className="sr-only">
-          {t('search.label', { country: REGION.country })}
+          {region.country ? t('search.label', { country: region.country }) : t('search.label.anywhere')}
         </label>
         <div className="relative">
           <MagnifyingGlassIcon aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
