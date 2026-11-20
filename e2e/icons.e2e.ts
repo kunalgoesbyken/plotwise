@@ -35,12 +35,17 @@ test('the favicon holds 16, 32 and 48 pixel images', async ({ request }) => {
   expect(widths).toEqual([16, 32, 48])
 })
 
-test('the apple touch icon is a 180 pixel PNG', async ({ request }) => {
-  const bytes = await (await request.get('/apple-icon.png')).body()
-  expect(bytes.subarray(1, 4).toString('ascii')).toBe('PNG')
-  expect(bytes.readUInt32BE(16)).toBe(180)
-  expect(bytes.readUInt32BE(20)).toBe(180)
-})
+for (const pathname of ['/apple-icon.png', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png']) {
+  test(`${pathname} is the 180 pixel apple touch icon PNG`, async ({ request }) => {
+    const response = await request.get(pathname)
+    expect(response.status()).toBe(200)
+    expect(response.headers()['content-type']).toContain('image/png')
+    const bytes = await response.body()
+    expect(bytes.subarray(1, 4).toString('ascii')).toBe('PNG')
+    expect(bytes.readUInt32BE(16)).toBe(180)
+    expect(bytes.readUInt32BE(20)).toBe(180)
+  })
+}
 
 test('the web manifest names the app, opens the app and lists icons that exist', async ({ request }) => {
   const response = await request.get('/manifest.webmanifest')
