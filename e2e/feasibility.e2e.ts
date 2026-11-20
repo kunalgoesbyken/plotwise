@@ -31,7 +31,7 @@ async function open(page: Page, plot: Plot = PLOT, hash = '') {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   await page.route('**/api/site?**', fulfilSite)
   await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
-  await page.goto(`/#${encodePlot(plot)}${hash}`)
+  await page.goto(`/app#${encodePlot(plot)}${hash}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
   return errors

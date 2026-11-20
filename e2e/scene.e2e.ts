@@ -43,7 +43,7 @@ async function open(page: Page, plot: Plot) {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
-  await page.goto(`/#${encodePlot(plot)}`)
+  await page.goto(`/app#${encodePlot(plot)}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   return errors
 }

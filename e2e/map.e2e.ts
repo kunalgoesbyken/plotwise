@@ -7,7 +7,7 @@ async function openReady(page: Page) {
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   const start = Date.now()
-  await page.goto('/')
+  await page.goto('/app')
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   return { errors, readyMs: Date.now() - start }
 }

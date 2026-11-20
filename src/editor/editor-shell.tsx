@@ -156,7 +156,7 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const sceneInPanel = step === 'results' && tab === VIEW_3D
 
   return (
-    <main className="relative h-dvh w-full overflow-clip">
+    <main data-workspace className="relative h-dvh w-full overflow-clip">
       <PlotMap covers={covers} overlay={overlay} />
       <aside
         ref={panel}

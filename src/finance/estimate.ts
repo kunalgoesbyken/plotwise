@@ -1,7 +1,7 @@
 import type { Metrics } from '@/designs'
 import type { BuildingType } from '@/plot/plot'
 import type { RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge } from '@/solve'
+import { isHighRiseOrExtraLarge, type MoneyRegion, type Solution } from '@/solve'
 import type { Bound, RateRow } from './parameters'
 import type { Values } from './values'
 
@@ -13,6 +13,13 @@ export type FinanceSite = {
   readonly plotAreaSqm: number
   readonly landUnitSqm: number
 }
+
+export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSite => ({
+  pack: solution.pack,
+  use: solution.plot.buildingType,
+  plotAreaSqm: solution.site.areaSqm,
+  landUnitSqm: region.landUnit.sqm.value,
+})
 
 export type CostSplit = { readonly substructure: number; readonly superstructure: number; readonly services: number }
 export type Range = { readonly low: number; readonly high: number }

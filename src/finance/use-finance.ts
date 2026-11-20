@@ -6,7 +6,7 @@ import { useFeasibility } from '@/feasibility/feasibility-provider'
 import type { BuildingType } from '@/plot/plot'
 import type { MoneyRegion } from '@/solve'
 import { useAssumptions } from './assumptions-provider'
-import { estimate, type Estimate, type FinanceSite } from './estimate'
+import { estimate, financeSite, type Estimate } from './estimate'
 import { storageKey, type Parameter } from './parameters'
 import { resolveValues, type Values } from './values'
 
@@ -30,12 +30,7 @@ export function useFinance(): Finance | null {
   const values = useMemo(() => use && resolveValues(region, use, overrides), [region, use, overrides])
   return useMemo(() => {
     if (!solution || !use || !values) return null
-    const site: FinanceSite = {
-      pack: solution.pack,
-      use,
-      plotAreaSqm: solution.site.areaSqm,
-      landUnitSqm: region.landUnit.sqm.value,
-    }
+    const site = financeSite(solution, region)
     return {
       region,
       use,

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { REGION } from '@/region/regions'
+import { t } from '@/text/messages'
 import './globals.css'
 
 const sans = Geist({
@@ -9,8 +10,8 @@ const sans = Geist({
 })
 
 export const metadata: Metadata = {
-  title: `Plotwise · ${REGION.city} plot feasibility`,
-  description: `Draw a ${REGION.city} plot, mark its roads and see what you can build on it, in 3D.`,
+  title: t('landing.title', { city: REGION.city }),
+  description: t('landing.description', { city: REGION.city }),
 }
 
 export const viewport: Viewport = {

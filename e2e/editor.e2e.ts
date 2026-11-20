@@ -41,7 +41,7 @@ const PLATFORM_THROUGH_START_VIEW: Station = {
 
 const ASOK: Place = { id: 'N1', label: 'Asok, Watthana, Bangkok', lngLat: [100.5604, 13.7372], kind: 'locality' }
 
-async function open(page: Page, path = '/', roads: Road[] = [], stations: Station[] = []) {
+async function open(page: Page, path = '/app', roads: Road[] = [], stations: Station[] = []) {
   await page.route('**/api/site?**', (route) => {
     const bbox = new URL(route.request().url()).searchParams.get('bbox')!.split(',').map(Number)
     return route.fulfill({ json: { bbox, buildings: [], roads, stations, attribution: 'test' } })
@@ -158,14 +158,14 @@ test('drags a corner, inserts one on an edge and deletes it again', async ({ pag
 })
 
 test('says why a link was not opened and still starts empty', async ({ page }) => {
-  const errors = await open(page, '/#plot=1,2;garbage&roads=0:-1&type=castle')
+  const errors = await open(page, '/app#plot=1,2;garbage&roads=0:-1&type=castle')
   await expect(hint(page)).toContainText('This link’s plot is not valid')
   await expect(page.getByRole('button', { name: 'Try an example plot' })).toBeVisible()
   expect(errors).toEqual([])
 })
 
 test('says when a link is missing part of the plot', async ({ page }) => {
-  await open(page, '/#plot=100.5,13.7;100.51,13.7;100.51,13.71&roads=0:12')
+  await open(page, '/app#plot=100.5,13.7;100.51,13.7;100.51,13.71&roads=0:12')
   await expect(hint(page)).toContainText('This link is missing part of the plot')
 })
 
@@ -179,19 +179,19 @@ test('the example plot opens on the roads step with its road selected and its wi
 })
 
 test('a plot opened from a link goes straight to the results', async ({ page }) => {
-  await open(page, '/#plot=100.5262,13.7228;100.526774,13.7228;100.526774,13.723052;100.526163,13.72325&roads=0:12&type=condo')
+  await open(page, '/app#plot=100.5262,13.7228;100.526774,13.7228;100.526774,13.723052;100.526163,13.72325&roads=0:12&type=condo')
   await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
   await expect(page.getByRole('region', { name: 'Road frontage' })).toHaveCount(0)
 })
 
 test('names the one zone it covers and links the official map to confirm it', async ({ page }) => {
-  await open(page, '/')
+  await open(page, '/app')
   await expect(page.getByText('Brown zone · very high-density residential')).toBeVisible()
   await expect(page.getByRole('link', { name: 'Check your plot is in it' })).toHaveAttribute('href', /bangkok\.go\.th/)
 })
 
 test('works from the keyboard, and suggests a mapped road width that stays editable', async ({ page }) => {
-  await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
+  await open(page, '/app', [SOI_NORTH_OF_EXAMPLE])
   await page.getByRole('button', { name: 'Try an example plot' }).focus()
   await page.keyboard.press('Enter')
   await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).focus()
@@ -230,7 +230,7 @@ async function frontageColumns(page: Page) {
 for (const width of [536, 1280])
   test(`road frontage rows keep one column grid at ${width} px, with or without an estimated width`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
-    await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
+    await open(page, '/app', [SOI_NORTH_OF_EXAMPLE])
     await page.getByRole('button', { name: 'Try an example plot' }).click()
     await goTo(page, 'Roads')
     await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
@@ -273,7 +273,7 @@ test('says when place search is down instead of failing silently', async ({ page
 })
 
 test('turns on the station switch from the nearest mapped platform as an estimate the user can override', async ({ page }) => {
-  await open(page, '/', [], [PLATFORM_THROUGH_START_VIEW])
+  await open(page, '/app', [], [PLATFORM_THROUGH_START_VIEW])
   await draw(page, L_SHAPE)
   await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
