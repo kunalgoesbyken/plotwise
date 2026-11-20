@@ -22,6 +22,7 @@ import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { SQM_PER_SQFT } from '@/units/area'
 import { designs, type Design } from './designs'
 import { headline } from './headline'
+import { TYPOLOGIES } from './massing'
 import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const pack = loadPack('bkk-y9')
@@ -335,6 +336,35 @@ describe('the low-rise block', () => {
           const taller = byId(designedUnder('dxb-ap', plot(storeys + more)).options, 'low-rise')
           if (!lower || !taller) return
           expect(taller.metrics.gfaSqm).toBeGreaterThanOrEqual(lower.metrics.gfaSqm - AREA_TOLERANCE_SQM)
+        },
+      ),
+      { numRuns: 40 },
+    )
+  })
+
+  it('gets within a tenth of a floor of the extra-large threshold without reaching it, unless the whole ground cannot', () => {
+    const CENT_SQM = 0.01
+    const unbounded = (solution: Solution, highRise: Solution['limits']['highRise']): Solution => ({
+      ...solution,
+      limits: { ...solution.limits, highRise },
+      farCap: { ...solution.farCap, maxGfaSqm: Infinity },
+    })
+    fc.assert(
+      fc.property(
+        fc.oneof(convexPolygon(10), starPolygon(16)),
+        fc.double({ min: 4, max: 40, noNaN: true }),
+        fc.double({ min: 0.3, max: 1.5, noNaN: true }),
+        (points: Vec2[], roadWidthM, share) => {
+          const scaled = points.map(([x, y]): Vec2 => [4 * x, 4 * y])
+          const solution = solve(plotFromMetres(scaled, [{ edge: 0, widthM: roadWidthM }]), pack, readings)
+          const fullSqm = TYPOLOGIES['low-rise'](unbounded(solution, null))?.plates.gfaSqm
+          if (!fullSqm) return
+          const highRise = solution.limits.highRise!
+          const threshold = { ...highRise.extraLargeFromFloorAreaSqm, value: share * fullSqm }
+          const block = TYPOLOGIES['low-rise'](unbounded(solution, { ...highRise, extraLargeFromFloorAreaSqm: threshold }))!
+          const floors = block.plates.floors.length
+          expect(satisfies(block.plates.gfaSqm, threshold)).toBe(false)
+          expect(block.plates.gfaSqm).toBeGreaterThanOrEqual(Math.min(threshold.value, fullSqm) - threshold.value / floors / 10 - floors * CENT_SQM)
         },
       ),
       { numRuns: 40 },
