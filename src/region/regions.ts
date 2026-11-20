@@ -38,6 +38,7 @@ export type Region = {
   readonly floors: FloorCount
   readonly example: Plot | null
   readonly areaUnit: AreaUnit
+  readonly limitAreaUnit: AreaUnit
   readonly zone: { readonly name: string; readonly scope: string } | null
   readonly authority: string
   readonly cityPlan: { readonly name: string; readonly version: string; readonly url: string } | null
@@ -63,6 +64,7 @@ export const REGIONS = {
     floors: 'storeys',
     example: EXAMPLE_PLOT,
     areaUnit: 'sqm',
+    limitAreaUnit: 'sqm',
     zone: {
       name: 'Brown zone · very high-density residential',
       scope: 'Plotwise covers only this zone of the Bangkok city plan.',
@@ -102,6 +104,7 @@ export const REGIONS = {
     floors: 'gPlus',
     example: DUBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
+    limitAreaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
     cityPlan: null,
@@ -127,6 +130,7 @@ export const REGIONS = {
     floors: 'storeys',
     example: MUMBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
+    limitAreaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',
     cityPlan: {
@@ -156,6 +160,7 @@ export const REGIONS = {
     floors: 'storeys',
     example: null,
     areaUnit: 'sqm',
+    limitAreaUnit: 'sqm',
     zone: null,
     authority: 'your local planning authority',
     cityPlan: null,

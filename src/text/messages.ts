@@ -162,6 +162,7 @@ const en = {
   'input.comma': 'Use a point for decimals, as in 2.5. A comma may only group thousands, as in 5,000.',
   'limits.out-of-range': 'Out of range for a real plot, so it is not used. Check the number and its unit.',
   'limits.terms': 'Where these terms come from',
+  'limits.area-unit': 'Areas in',
   'limits.unit.percent': '%',
   'limits.unit.m': 'm',
   'limits.unit.storeys': 'storeys',

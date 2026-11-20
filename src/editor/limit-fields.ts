@@ -20,6 +20,8 @@ export const FIELD_UNITS: Readonly<Record<PlotLimitField, LimitUnit>> = {
   parkingSqmPerSpace: 'perSpace',
 }
 
+export const isAreaField = (field: PlotLimitField) => FIELD_UNITS[field] === 'area' || FIELD_UNITS[field] === 'perSpace'
+
 const PERCENT = 100
 const PRECISION = 12
 
@@ -53,7 +55,7 @@ function fromShown(field: PlotLimitField, shown: number, { area, floors }: Limit
   }
 }
 
-export const limitDisplay = ({ areaUnit, floors }: Region): LimitDisplay => ({ area: areaUnit, floors })
+export const limitDisplay = ({ floors }: Region, area: AreaUnit): LimitDisplay => ({ area, floors })
 
 export const limitLabel = (field: PlotLimitField, { limitTerms }: Region) => limitTerms?.fields[field]?.value ?? t(`limits.custom.${field}`)
 

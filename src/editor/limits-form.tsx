@@ -11,7 +11,9 @@ import { Disclosure } from '@/ui/disclosure'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { PanelSection } from '@/ui/section'
-import { FIELD_UNITS, limitDisplay, limitLabel, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
+import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
+import { AREA_UNITS, type AreaUnit } from '@/units/area'
+import { FIELD_UNITS, isAreaField, limitDisplay, limitLabel, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
 import { useEditorState, useEditorStore, useRegion } from './plot-store'
 
 type Affix = { readonly prefix: string | null; readonly suffix: string | null }
@@ -42,13 +44,13 @@ function refusal(read: ReadNumber): string | null {
   return read.kind === 'unreadable' && read.reason === 'comma' ? t('input.comma') : null
 }
 
-type LimitInputProps = { readonly field: PlotLimitField; readonly value: number | undefined; readonly region: Region }
+type LimitInputProps = { readonly field: PlotLimitField; readonly value: number | undefined; readonly region: Region; readonly areaUnit: AreaUnit }
 
-function LimitInput({ field, value, region }: LimitInputProps) {
+function LimitInput({ field, value, region, areaUnit }: LimitInputProps) {
   const store = useEditorStore()
   const id = useId()
   const hintId = useId()
-  const display = limitDisplay(region)
+  const display = limitDisplay(region, areaUnit)
   const { prefix, suffix } = affixOf(field, display)
   const [draft, setDraft] = useState<string | null>(null)
   const shown = draft ?? (value === undefined ? '' : shownLimit(field, value, display))
@@ -109,27 +111,47 @@ function TermSources({ terms }: { terms: LimitTerms }) {
   )
 }
 
-export function LimitsForm() {
-  const region = useRegion()
+const isAreaUnit = (value: string): value is AreaUnit => (AREA_UNITS as readonly string[]).includes(value)
+
+function AreaUnitToggle({ value, onChange }: { value: AreaUnit; onChange: (unit: AreaUnit) => void }) {
+  return (
+    <div className="flex items-center justify-between gap-3 pb-2">
+      <span className="text-sm">{t('limits.area-unit')}</span>
+      <ToggleGroup type="single" variant="outline" size="sm" aria-label={t('limits.area-unit')} value={value} onValueChange={(unit) => isAreaUnit(unit) && onChange(unit)}>
+        {AREA_UNITS.map((unit) => (
+          <ToggleGroupItem key={unit} value={unit} className="px-3 data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
+            {t(`area-unit.${unit}`)}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+    </div>
+  )
+}
+
+function Limits({ region, fields }: { region: Region; fields: readonly PlotLimitField[] }) {
   const { draft } = useEditorState()
-  const fields = plotLimitFields(loadPack(region.packId))
-  if (fields.length === 0) return null
+  const [areaUnit, setAreaUnit] = useState(region.limitAreaUnit)
   const terms = region.limitTerms
   return (
     <PanelSection title={t(`limits.title.${region.rules}`)} description={t(`limits.intro.${region.rules}`)}>
+      {fields.some(isAreaField) && <AreaUnitToggle value={areaUnit} onChange={setAreaUnit} />}
       <ul className="flex flex-col divide-y">
         {fields.map((field) => (
-          <LimitInput key={field} field={field} value={draft.limits[field]} region={region} />
+          <LimitInput key={field} field={field} value={draft.limits[field]} region={region} areaUnit={areaUnit} />
         ))}
       </ul>
       {terms && (
         <>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            {t('limits.use', { use: terms.use.value, document: terms.document.value.toLowerCase() })}
-          </p>
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('limits.use', { use: terms.use.value, document: terms.document.value.toLowerCase() })}</p>
           <TermSources terms={terms} />
         </>
       )}
     </PanelSection>
   )
+}
+
+export function LimitsForm() {
+  const region = useRegion()
+  const fields = plotLimitFields(loadPack(region.packId))
+  return fields.length === 0 ? null : <Limits key={region.id} region={region} fields={fields} />
 }
