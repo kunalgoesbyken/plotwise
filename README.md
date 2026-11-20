@@ -10,132 +10,175 @@
 
 <p align="center"><img src="src/landing/app.png" width="900" alt="Plotwise with the example plot: the plot and its buildable area on the map, a podium-and-tower design in 3D among the real buildings, and the results panel"></p>
 
-## For reviewers
+Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Dubai, Mumbai (draft) and custom rules sit beside it. The landing page is at `/` and the app at `/app`; old share links on the root still open in the app.
 
-### A 60-second tour
+## A 60-second tour
 
-1. Open the [landing page](https://plotwise-ashy.vercel.app) and choose **Try the example plot**. The app opens with a worked example, so the results are already there.
-2. In **Designs**, compare up to three concepts side by side. Each has a pass / check / fail list, and the **to check** items say why they cannot be confirmed and who signs them off.
-3. In **Rules**, step through the setbacks and the road-height rule and watch each one carve the allowed shape in 3D. Every limit links to the page and line of the regulation it comes from.
-4. In **Money**, change any assumption. Each shows its source, and the figures are labelled as estimates.
-5. Use **Share** to copy a link that holds the whole result, or **Print** for a one-page summary.
-6. Back at the start, search an address and click the corners of your own plot, or import its boundary from pasted coordinates or a KML, GeoJSON or DXF file.
+1. Open the [landing page](https://plotwise-ashy.vercel.app) and choose **Try the example plot**.
+2. In **Designs**, compare up to three concepts. Each has a pass / check / fail list; **to check** items say why and who signs them off.
+3. In **Rules**, step through the setbacks and the road-height rule and watch each carve the allowed shape in 3D. Every limit cites its page and line.
+4. In **Money**, change any assumption. Each shows its source.
+5. **Share** copies a link that holds the whole result. **Print** gives a one-page summary.
+6. Back at the start, search an address and click the corners of your plot, or import its boundary.
 
-### Architecture
+## From plot to result
 
 ```mermaid
 flowchart LR
-  pdf[Thai legal PDFs] --> pointers[pointers/*.json] --> compile[tools/compile-pack.ts] --> pack[Rule pack with citations]
-  pack --> solve[solve: limits, setbacks, envelopes]
-  map[MapLibre: plot outline and roads] --> solve
-  solve --> geometry[geometry: tiered envelope, floor plates]
-  geometry --> designs[designs + pass / check / fail]
-  designs --> finance[finance: editable estimates]
-  designs --> ui[Results panel and 3D scene]
-  finance --> ui
-  ui <--> url[(URL hash: rules, plot, roads, limits, assumptions)]
-  map -.-> site[/api/site/] -.-> osm[OpenStreetMap via Overpass]
-  map -.-> geocode[/api/geocode/] -.-> photon[Photon place search]
-  map -.-> bma[BMA city-plan layer, queried by the browser]
+  subgraph plot["1 Plot"]
+    search["Search a place"] --> draw["Draw on the map"]
+    paste["Paste coordinates, or a<br/>KML, GeoJSON or DXF file"]
+    example["Example plot"]
+  end
+  plot --> outline["Checked outline"]
+  outline --> roads["2 Roads<br/>estimated widths, editable"]
+  roads --> gate{"Zone check<br/>Bangkok only"}
+  gate -->|"outside or straddles"| held["Results held"]
+  gate -->|"inside, or unknown and you confirm"| results
+  subgraph results["3 Results"]
+    designs["Designs + to-check list<br/>FAR bonus, road-width sensitivity"]
+    rules["Rules"]
+    money["Money"]
+    share["Share link · Print"]
+  end
+  results --- view3d["3D view"]
 ```
 
-Solid arrows are deterministic code that runs in the browser. Dotted arrows are calls to a free public service: the two server routes add input validation, CDN caching and a per-IP rate limit, and the browser calls the BMA layer itself.
+Files are read in the browser, never uploaded. Coordinates may be longitude and latitude or UTM; a DXF asks for its unit and where it sits. Edits update the results live.
 
-### Key decisions and trade-offs
 
-- **Rule values are compiled from the official PDFs, never typed.** Each value keeps its page, line and Thai quote, so a reviewer can check it against the source. The price is that adding a rule means writing a pointer, and the pack schema still has Thai-law shapes.
-- **No model runs at runtime.** Areas, limits and costs are computed by tested code, so they cannot be invented. The price is that there is no free-text input beyond the place search.
-- **The share link is the URL hash.** There is no account or database, and the whole state (plot, roads, building type, assumptions) lives in the hash, which browsers never send to a server. The plot is not kept anywhere, but it is not private from the services either: the browser sends the plot outline to the BMA city-plan layer to check the zone, and `/api/site` receives its bounding box to load the surroundings. The price is that a shared link cannot show a preview of its own plot, so every link unfurls with the same card.
-- **A static Content Security Policy with inline scripts allowed.** A nonce-based policy makes every page render per request, which turns off the static shell and CDN caching ([Next.js guide](https://nextjs.org/docs/app/guides/content-security-policy)). Instead the policy limits every other source to the site itself, the map-tile host and the BMA city-plan host, and forbids objects, framing and foreign form targets.
-- **Free services only, so the routes protect them.** Overpass and Photon are public and slow at times. Answers are cached hard and each route allows 60 (search) or 20 (site) requests a minute per client. The BMA layer is called by the browser, so the app remembers each answer for an hour and skips a server that just failed for a minute. The limits live in memory, so they apply per server instance.
-- **Estimates stay editable.** Cost, sales value and land value are first-look figures on assumptions with sources, not valuations.
+## Rules are compiled, never typed
 
-### What is verified and what is estimated
+```mermaid
+flowchart LR
+  pdf["Official PDFs"] --> txt["sources/*.txt<br/>text by page and line"]
+  txt --> ptr["pointers/*.json<br/>page, line, token"]
+  ptr --> compile["tools/compile-pack.ts"]
+  compile -->|"token not at that spot"| stop["Error: no pack written"]
+  compile --> pack["src/rules/packs/*.json<br/>value + page, line, quote"]
+  pack --> check["tools/check-pack.ts<br/>ranges, band gaps, agreement, caps"]
+  check --> ask{"Open interpretation<br/>question?"}
+  ask -->|"decision: null"| person["A person decides<br/>and records the reading"]
+  person --> pack
+  ask -->|"all decided"| engine["Engine loads the pack"]
+```
+
+Where the law is ambiguous, the pack holds a question with candidate readings. The check fails, and the engine refuses to run, until a person records a decision for each.
+
+## Engine
+
+```mermaid
+flowchart TD
+  url[("URL hash<br/>rules, plot, roads, type, station, limits,<br/>far, buy-*, assume-*, zone")]
+  plot["Plot and roads<br/>local metres"]
+  pack["Rule pack + decided readings"]
+  solve["solve<br/>limits: FAR, height, open space, parking, use<br/>setbacks by height and road width"]
+  geometry["geometry · clipper2-ts<br/>tiered envelopes: ordinary, high-rise"]
+  designs["designs<br/>podium-tower, slab, low-rise<br/>floor plates + checklist"]
+  finance["finance<br/>editable estimates"]
+  ui["Results panels + 3D scene"]
+  url <--> plot
+  url <--> ui
+  plot --> solve
+  pack --> solve
+  solve --> geometry --> designs --> finance --> ui
+  designs --> ui
+```
+
+Each design grows storey by storey until FAR, building class, use or the envelope stops it. Its checklist comes from its own geometry; what the data cannot confirm is marked "check".
+
+Money estimates saleable area, parking levels, a first-cost range and the land value each design supports. The condo price depends on the plot's area (CBD, city fringe or suburban, by distance from Ratchaprasong; unknown means city fringe). Every rate is an editable, sourced assumption. None of it is law.
+
+## Regions
+
+```mermaid
+flowchart LR
+  subgraph regions["One record per region · src/region/regions.ts"]
+    bkk["Bangkok<br/>verified pack bkk-y9<br/>m² · FAR"]
+    mum["Mumbai, draft<br/>pack mum-suburbs-res<br/>sq ft · FSI · carpet area"]
+    dxb["Dubai<br/>limits from the affection plan, entered by you<br/>sq ft · AED"]
+    custom["Custom<br/>limits you know, anywhere<br/>m²"]
+  end
+  regions --> packs["src/rules/packs/*.json"]
+  regions -->|"keyed by region"| moneyr["MONEY_REGIONS · src/solve/assumptions.ts<br/>currency, land unit, prices<br/>sourced for Bangkok only"]
+  regions -->|"keyed by region"| zoner["ZONE_SOURCES · src/zone/sources.ts<br/>BMA city-plan layer, Bangkok only"]
+```
+
+A record also holds names, authority, city-plan link, map start, search bounds and OSM transit tags. The link carries `rules=`; without it, Bangkok.
+
+A pack is built from optional blocks in `src/rules` (FAR, bonus, purchasable FAR, height, setbacks, coverage, open space, parking, road widening, use conditions), so a city whose rules fit them is a data change. A value you enter makes the result unverified; a verified pack cannot hold one.
+
+- **Dubai:** limits from the affection plan (GFA or FAR, height or G+ floors, setbacks, coverage, parking), in the Dubai Building Code's terms.
+- **Custom:** the limits you know for a plot anywhere.
+- Both are labelled unverified in the results, checklist and print, with no zone check and no sourced prices: every money input starts blank.
+
+## Mumbai FSI stack
+
+```mermaid
+flowchart LR
+  widen["Road widening<br/>FSI counts on the net plot<br/>land priced on the gross plot<br/>area in lieu of the handed-over strip"] --> basic
+  basic["Basic FSI<br/>by road width, free"] --> total["FSI a design can reach"]
+  premium["Premium<br/>capped by road-width band<br/>priced off the land rate"] --> total
+  tdr["TDR<br/>capped by road-width band<br/>price you enter"] --> total
+  fungible["Fungible<br/>capped as a share of the permissible FSI<br/>priced off the land rate"] --> total
+  sliders["You choose how much of each"] --> premium & tdr & fungible
+  total --> cost["Cost only on the area<br/>each design actually uses<br/>above the free cap"]
+```
+
+Compiled from DCPR 2034 as sanctioned in 2018, which also gives the street height rule, front open spaces, Table No 17 and Table No 21 (parking). Sale prices are per sq ft of carpet area, in INR.
+
+## Services and boundaries
+
+```mermaid
+flowchart LR
+  browser["Browser"]
+  subgraph server["Next.js routes"]
+    guard["per-IP rate limit (429)<br/>zod validation (400)<br/>cached answer<br/>502 if upstream fails"]
+    site["/api/site"]
+    geocode["/api/geocode"]
+  end
+  browser --> guard
+  guard --> site --> overpass["Overpass<br/>OSM buildings, roads, stations"]
+  guard --> geocode --> photon["Photon<br/>place search"]
+  browser -->|"plot outline, direct"| bma["BMA city-plan layer<br/>answers only from Thai networks"]
+  browser -->|"tiles, direct"| tiles["OpenFreeMap"]
+  csp["CSP connect-src:<br/>self, OpenFreeMap, BMA"] -.-> browser
+```
+
+Nothing stores the plot, but it is not private from these services: the BMA layer gets the outline and `/api/site` the bounding box.
+
+## Decisions and trade-offs
+
+| Decision | Why | Price |
+|---|---|---|
+| Rules compiled from the PDFs | Every value keeps its page, line and Thai quote | A new rule needs a pointer |
+| No model at runtime | Areas, limits and costs come from tested code, so they cannot be invented | No free text beyond place search |
+| Share link is the URL hash | No account or database; browsers never send the hash to a server | A shared link cannot preview its own plot |
+| Static CSP, inline scripts allowed | A nonce policy renders every page per request, ending the static shell and CDN caching ([Next.js guide](https://nextjs.org/docs/app/guides/content-security-policy)); other sources stay limited to the site, tiles and BMA | Inline scripts run |
+| Free services only | Overpass and Photon are public and slow: cached answers, 60 (search) or 20 (site) requests a minute per client. The browser keeps each BMA answer for an hour and skips a failed server for a minute | Limits are in memory, per server instance |
+
+## Verified and estimated
 
 | Verified | Estimated |
 |---|---|
-| Rule values, compiled from the PDFs with page, line and quote; ranges, band gaps, cross-source agreement and bonus caps are checked by `tools/check-pack.ts` | Road widths (from OSM lanes or road class, not the legal right-of-way) |
-| Setbacks, floor-area limits, envelopes and design checks, by `bun test` unit and property tests | Building heights and station distance (partial OSM coverage) |
-| Input validation on every server route, the rate limiter, the share-link encoding | Saleable area, first cost, sale value and the land value a design supports |
-| The interface in a real browser: map, 3D view, layouts, performance and security headers, by Playwright | The zone verdict, which comes from the live BMA layer and is shown as unchecked when it cannot be reached |
+| Rule values, by `tools/check-pack.ts` | Road widths (OSM lanes or road class, not the right-of-way) |
+| Setbacks, limits, envelopes, design checks, by `bun test` | Building heights, station distance |
+| Route input validation, rate limiter, share-link encoding | Saleable area, first cost, sale and land value |
+| The interface in a real browser, by Playwright | The zone verdict (live BMA layer; unchecked when unreachable) |
 
-### Known limits
+## Known limits
 
-- **One zone.** The zone check needs the BMA city-plan service, which answers only from Thai networks. Elsewhere the app says the zone was not checked and links the official map.
-- **Money figures are first-look estimates, not valuations.**
-  - The build rates are Plotwise estimates with no published source for each element (`NO_BKK_COST`). Their total is only cross-checked against RHLB (Siam) Ltd.'s July 2025 range for residential condominiums.
-  - The land costs (holding, finance on the land) and the area distances are Plotwise estimates, unsourced. The transfer fee comes from published fee rules.
-  - Condo sale prices come from Knight Frank's average asking prices by area, and the margin from a listed developer's report. Office and hotel prices are not split by area.
-  - The land check compares against listing and broker figures, which are asking prices.
-  - Every value is editable and travels in the share link.
-- **OSM coverage.**
-  - Heights exist for about a third of central Bangkok buildings, and roads carry no width tags, so widths come from lanes or road class.
-  - Road widths are carriageway estimates, not the legal right-of-way, so they stay editable and labelled.
-  - Station distance comes from OSM platforms. Coverage is partial: BTS 52 of 64, MRT 15 of 52, and the monorail lines 1 of 55.
-- **Road-network continuity** and planned road widenings are not in any open dataset used here. They appear in the "to check" list.
-- **The 2026 amending bylaw's** body text could not be machine-read.
-- **Rate limits are per server instance.** A serverless platform can run several instances, each with its own counters, so the real ceiling is higher than the numbers above. The limits stop a runaway script from exhausting the free upstream services. They are not an abuse defence.
-- **The security policy allows inline scripts**, as explained above.
-
-## What it does
-
-The app takes three steps:
-
-1. **Plot.** Find the site with live place search, then trace its outline on the map, import it from pasted coordinates or a KML, GeoJSON or DXF file, or start from the example plot. Files are read in the browser and never uploaded; coordinates may be longitude and latitude or UTM, and a DXF always asks for its unit and where it sits.
-2. **Roads.** Edges beside a mapped road are pre-marked with an estimated width. You can change any of them.
-3. **Results.** The results show:
-   - the floor area the rules allow, with the optional FAR bonus;
-   - up to three concept designs side by side, each with built-up area, saleable area, parking levels, first cost and supported land value;
-   - a pass / check / fail checklist with a clickable "to check" list that says why each item needs checking and who confirms it;
-   - how the result changes if the road is 2 m narrower or wider;
-   - the rules that apply, with their legal sources;
-   - the allowed envelope in 3D among the real surrounding buildings.
-
-Every edit updates the results live. The share link holds the rules source, the plot, the roads, the building type, any limits you entered, the FAR bonus switch and any edited assumption. **Print** gives a one-page summary.
-
-Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Three more rules sources sit beside it, picked on the first step:
-- **Dubai.** You enter the limits from the plot's affection plan (GFA or FAR, height or G+ floors, setbacks, plot coverage, parking), labelled with the Dubai Building Code's terms. Areas show in sq ft and prices in AED.
-- **Mumbai (draft).** Residential buildings in the R zone of the suburbs, compiled line by line from DCPR 2034 as sanctioned in 2018 (`pointers/mum-suburbs-res.json`): FSI by road width, premium FSI, TDR and fungible area you choose with sliders, front open spaces, the street height rule, Table No 17 low-rise open spaces and Table No 21 parking. A road the development plan widens takes a prescribed width; FSI counts on the plot left, twice the handed-over land is granted in lieu, and land is priced on the whole plot. Side and rear open spaces (Table A) could not be read and are entered per plot. Every result carries "Draft: DCPR 2034 as sanctioned in 2018; later amendments not applied". Areas show in sq ft, sale prices per sq ft of carpet area, money in INR; the ASR land rate and TDR price are entered by you.
-- **Custom rules.** You enter the limits you know for a plot anywhere in the world.
-
-Dubai and custom rules are always labelled unverified, in the results, the checklist and the print. They have no zone check and no sourced prices: every money input starts blank. The landing page is at `/` and the app is at `/app`. Old share links on the root still open in the app, and links without a rules source open as Bangkok.
-
-## How it works
-
-1. **Rules are compiled, never typed.**
-   - `pointers/bkk-y9.json` points at a page, a line and a token in the text of each source PDF in `sources/`.
-   - `tools/compile-pack.ts` parses the Thai number at that spot (Thai digits and number words included) into `src/rules/packs/bkk-y9.json`.
-   - Every value keeps its citation: source, clause, page, line and the Thai quote. The interface names each source in English with its page and line, and links the official PDF.
-   - `tools/check-pack.ts` checks ranges, band gaps and overlaps, cross-source agreement and bonus caps. It fails on any undecided interpretation question.
-2. **Interpretations are decided by a person.** Where the law is ambiguous, the pack holds a question with its candidate readings. The engine refuses to run until each one has a recorded decision.
-3. **Solve.** `src/solve` turns the plot and the pack into limits: FAR (standard or with the bonus), open space, use conditions and parking.
-   - It also produces per-edge setbacks that change with height: road setbacks by road width, neighbour setbacks, the height-to-road rule and the 6 m high-rise distance.
-   - There are two envelopes, ordinary and high-rise.
-4. **Geometry.** `src/geometry` builds each envelope from the real outline, with tiers clipped by clipper2-ts. It works for any polygon, including concave and multi-piece outlines.
-5. **Designs.** `src/designs` generates podium-and-tower, slab and low-rise block concepts inside the envelope. Each gets a checklist computed from its own geometry. Items the data cannot confirm are marked "check".
-6. **Money.** `src/finance` estimates:
-   - saleable area, and parking levels above ground and in basements;
-   - a first-cost range split into substructure, superstructure and services;
-   - the land value each design supports (a residual), after the buyer's transfer fee, holding cost and finance on the land;
-   - a check of that land value against typical asking prices for the plot's area.
-
-   The condo sale price and the asking-price reference depend on the plot's area: central Bangkok (CBD), city fringe or suburban, set by straight-line distance from Ratchaprasong. If the area cannot be told, the city fringe values are used.
-
-   Every rate and price is an editable assumption with its source, shown as "estimated". None of it is law.
-7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass) and Photon, with input validation at the boundary, caching and a per-IP rate limit. The browser asks the BMA city-plan layer directly which zone the plot is in and what share of it lies in each, because the BMA servers do not answer requests from outside Thailand. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
-
-## Region and design system
-
-- **Region.** Everything specific to a jurisdiction lives in one record per region in `src/region/regions.ts` (Bangkok, Dubai, Mumbai and Custom rules):
-  - the rule pack, how its limits are given (from the law, an affection plan or the user), city and country names, zone label and authority;
-  - the display area unit (m² or sq ft), city-plan link and version, and the local terms for the floor area ratio (FAR or FSI), the sold area (saleable or carpet) and the land rate;
-  - map start, search bounds and bias (none for custom rules, which search the whole world);
-  - OSM transit tags, where a pack has station rules.
-
-  Money, with the currency and the land unit, is in `MONEY_REGIONS` in `src/solve/assumptions.ts`; only Bangkok has sourced prices. The zone layer is in `src/zone/sources.ts`, Bangkok only. All are keyed by region. The rules source is picked in the app and kept in the link as `rules=`; a link without it is Bangkok. Internal units stay metres, m² and the region's currency; sq ft is a display unit, converted in `src/units/area.ts`.
-
-  A rule pack is built from blocks in `src/rules`: FAR from the zone, from a road width × plot size table or given per plot, a capped bonus, purchasable FAR (premium, transferable rights), height caps in metres or storeys, road and boundary setbacks by height and road width, coverage, open space, parking, road widening and use conditions. Most blocks are optional. A value the user enters carries its own cite and makes the result unverified, and a verified pack cannot hold one. Adding a city is a data change when its rules fit these blocks: a rule pack, a region record, money defaults and a zone source.
-- **Design tokens.** Colours, fonts, radii, type scale, shadows and motion are defined once in `src/app/globals.css` (`@theme`). The map and the 3D scene read the same tokens at runtime. Components use token names only. The UI uses Geist, Phosphor icons and shadcn/ui on Radix.
+| Area | Limit |
+|---|---|
+| Zone | One zone. The BMA service answers only from Thai networks; elsewhere the app says the zone was not checked and links the official map. Other regions have no zone check |
+| Build cost | No published Bangkok rate per element (`NO_BKK_COST`); the total is only cross-checked against RHLB (Siam) Ltd.'s July 2025 residential condominium range |
+| Land and prices | Holding cost, land finance and area distances are unsourced. Condo prices are Knight Frank asking prices by area, the margin a listed developer's; office and hotel prices are not split by area. The land check compares asking prices. All editable, all in the link |
+| OSM | Heights exist for about a third of central Bangkok buildings; roads have no width tags, so widths are carriageway estimates. Station distance: BTS 52 of 64, MRT 15 of 52, monorail 1 of 55 |
+| Road network | Continuity and planned widenings are in no open dataset used here; they appear in "to check" |
+| Bangkok bylaw 2026 | Body text could not be machine-read |
+| Mumbai | Draft; later amendments not applied, and every result says so. Side and rear open spaces (Table A) could not be read and are entered per plot; the ASR land rate and TDR price are yours |
+| Rate limits | Per server instance, so the real ceiling is higher. They shield the free upstreams from a runaway script; they are not an abuse defence |
+| Security policy | Allows inline scripts |
 
 ## Setup
 
@@ -148,14 +191,14 @@ bun run dev            # http://localhost:3000 (landing), /app (the app)
 
 | Task | Command |
 |---|---|
-| Unit and property tests for the numbers: rules, geometry, solver, designs, site data, input validation | `bun test` |
+| Unit and property tests for the numbers | `bun test` |
 | Browser tests (local production build; `E2E_PORT` picks the port, default 3123) | `bun run build && bun run e2e` |
 | Browser tests against the live site | `E2E_URL=https://plotwise-ashy.vercel.app bun run e2e` |
-| Real-GPU performance numbers (default headless is a software renderer) | add `E2E_GPU=1` |
+| Real-GPU performance numbers | add `E2E_GPU=1` |
 | Recompile / check the rule pack | `bun tools/compile-pack.ts bkk-y9` / `bun tools/check-pack.ts bkk-y9` |
 | Type check and lint | `bun run typecheck` and `bun run lint` |
 
-CI (`.github/workflows/ci.yml`) runs on every push to main and every pull request: type check, lint and `bun test` (without the two timing files), the timing job, then the production build and the Playwright suite in headless Chromium with software WebGL. Frame-rate assertions are skipped on a software renderer. The two millisecond-budget files (`performance.test.ts`) run in their own CI job, so a slow shared runner shows up as a failure of that job alone and the budgets are never loosened. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon and skips itself when it is unreachable, and tests that do not mock the BMA layer query it from the browser, and it answers "not checked" outside Thailand. Overpass is always mocked. On failure the Playwright report is uploaded.
+CI runs type check, lint, `bun test` and the two millisecond-budget `performance.test.ts` files (in a job of their own, so budgets are never loosened), then the production build and Playwright in headless Chromium with software WebGL. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon, and tests that do not mock the BMA layer see "not checked" outside Thailand. Overpass is always mocked.
 
 ## Code layout
 
@@ -163,28 +206,31 @@ Feature-first folders under `src/`:
 
 | Folder | Responsibility |
 |---|---|
-| `editor` | The three-step panel, drawing and editing the plot on MapLibre, roads, building type, live place search, URL state |
-| `import` | Parses pasted coordinates, KML, GeoJSON and DXF into a checked plot outline, with UTM reprojection |
+| `editor` | The three-step panel: plot drawing on MapLibre, roads, building type, place search, URL state |
+| `import` | Pasted coordinates, KML, GeoJSON and DXF into a checked outline, with UTM reprojection |
 | `plot`, `geo` | The validated plot contract and the local metric projection |
 | `rules` | Rule pack building blocks, schema and loader |
-| `solve` | Rules → limits, setbacks by height, envelopes; `assumptions.ts` holds every engineering and money assumption with its source |
+| `solve` | Rules to limits, setbacks by height, envelopes; `assumptions.ts` holds every assumption with its source |
 | `geometry` | Polygon normalization, per-edge setback envelopes, tiers, floor plates |
 | `designs` | Concept designs, metrics and checklists |
-| `finance` | Saleable area, parking levels, first cost, land value, the assumptions panel and their share-link encoding |
-| `feasibility` | Runs solve + designs once for every panel; Designs, Rules, to-check, road-width sensitivity, FAR bonus, share |
+| `finance` | Saleable area, parking, first cost, land value, the assumptions panel and its link encoding |
+| `feasibility` | Runs solve and designs once for every panel: Designs, Rules, to-check, road-width sensitivity, FAR bonus, share |
 | `region` | Each rules source (Bangkok, Dubai, Mumbai, custom) as data |
 | `units` | Display area units (m², sq ft) and their conversions |
 | `zone` | City-plan zone lookup through the BMA ArcGIS layer |
-| `site` | Overpass proxy, OSM parsing, height and width estimates, nearest-road and nearest-station suggestions |
+| `site` | Overpass proxy, OSM parsing, height and width estimates, nearest road and station |
 | `geocode` | Place search through Photon |
 | `scene` | three.js / react-three-fiber view of the context, envelope and designs |
 | `report` | The one-page printable summary |
-| `landing` | The landing page, built from the real example plot's figures |
-| `ui` | shadcn/ui components on Radix, the logo, and shared panel pieces |
+| `landing` | The landing page, built from the example plot's figures |
+| `ui` | shadcn/ui on Radix, the logo, shared panel pieces |
 | `text` | One typed message dictionary and the number formatter |
-| `rate-limit` | The per-IP limiter shared by the three API routes, and their limits with the reasoning |
+| `rate-limit` | The per-IP limiter for both API routes, and its limits |
 | `security` | The Content Security Policy and the other response headers |
-| `seo` | The site address, the share-card colours and the page metadata helper |
+| `seo` | Site address, share-card colours, page metadata |
+| `golden` | Snapshot tests that keep Bangkok results identical across engine changes |
+
+Design tokens are defined once in `src/app/globals.css` (`@theme`); the map and the 3D scene read them at runtime. The UI uses Geist, Phosphor icons and shadcn/ui on Radix.
 
 ## Sources
 
@@ -193,4 +239,5 @@ Feature-first folders under `src/`:
 - Ministerial Regulations 55 (building setbacks, open space, height vs road), 33 (high-rise and extra-large buildings) and 7 (parking)
 - Bangkok Building Control Bylaw B.E. 2544
 - BMA City Planning GIS, comprehensive plan 2556 land-use layer (queried live, not stored)
+- Greater Mumbai Development Control and Promotion Regulations (DCPR) 2034, as sanctioned in 2018 (MCGM)
 - © OpenStreetMap contributors (ODbL); base map by OpenFreeMap / OpenMapTiles
