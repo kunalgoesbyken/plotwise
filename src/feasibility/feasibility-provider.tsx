@@ -61,8 +61,10 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const [step, setStep] = useState<RuleStep>(ALL_RULES)
   const ready = result?.status === 'ready' ? result : null
   const ranked = useMemo(() => (ready ? rank(ready.designs) : []), [ready])
-  const highRiseCostSqm = useMemo(() => (ready ? highRiseCost(ready.solution, ready.designs) : null), [ready])
-  const design = shownOption(ranked, designId)?.design ?? null
+  const plotCostSqm = useMemo(() => (ready ? highRiseCost(ready.solution, ready.designs) : null), [ready])
+  const shown = shownOption(ranked, designId)
+  const design = shown?.design ?? null
+  const highRiseCostSqm = shown?.standing.kind === 'best' ? plotCostSqm : null
   const envelope = ready ? (ready.solution.envelopes.find((e) => e.kind === design?.envelope) ?? ready.solution.envelopes.at(-1) ?? null) : null
   const solution = ready?.solution
   const carving = useMemo(() => (solution ? carvingRules(solution.pack) : null), [solution])
