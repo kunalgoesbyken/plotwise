@@ -1,0 +1,6013 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 10937.119999999997,
+    "firstCost": {
+      "high": {
+        "services": 109371199.99999997,
+        "substructure": 131245439.99999997,
+        "superstructure": 262490879.99999994,
+      },
+      "low": {
+        "services": 76559839.99999999,
+        "substructure": 87496959.99999997,
+        "superstructure": 185931039.99999994,
+      },
+    },
+    "grossSqm": 10937.119999999997,
+    "grossValue": 1679296079.9999993,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 964460993.1199996,
+      "low": 788373361.1199996,
+    },
+    "landValuePerUnit": {
+      "high": 2445400.9955049595,
+      "low": 1998928.9518861517,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1684.8000000000002,
+    "saleableSqm": 6939.239999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9730.36,
+    "firstCost": {
+      "high": {
+        "services": 97303600,
+        "substructure": 116764320,
+        "superstructure": 233528640,
+      },
+      "low": {
+        "services": 68112520,
+        "substructure": 77842880,
+        "superstructure": 165416120,
+      },
+    },
+    "grossSqm": 9730.36,
+    "grossValue": 1495552740.0000002,
+    "id": "slab",
+    "landValue": {
+      "high": 859302682.3600004,
+      "low": 702643886.3600004,
+    },
+    "landValuePerUnit": {
+      "high": 2178770.992163677,
+      "low": 1781560.966640806,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1490.4,
+    "saleableSqm": 6179.970000000001,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7722.47,
+    "firstCost": {
+      "high": {
+        "services": 77224700,
+        "substructure": 46334820,
+        "superstructure": 139004460,
+      },
+      "low": {
+        "services": 54057290,
+        "substructure": 30889880,
+        "superstructure": 100392110,
+      },
+    },
+    "grossSqm": 7722.47,
+    "grossValue": 1186006305,
+    "id": "low-rise",
+    "landValue": {
+      "high": 752268960.2700001,
+      "low": 663460555.2700001,
+    },
+    "landValuePerUnit": {
+      "high": 1907385.8636632839,
+      "low": 1682211.2183998576,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1188,
+    "saleableSqm": 4900.8525,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 10937.119999999997,
+    "firstCost": {
+      "high": {
+        "services": 109371199.99999997,
+        "substructure": 131245439.99999997,
+        "superstructure": 262490879.99999994,
+      },
+      "low": {
+        "services": 76559839.99999999,
+        "substructure": 87496959.99999997,
+        "superstructure": 185931039.99999994,
+      },
+    },
+    "grossSqm": 10937.119999999997,
+    "grossValue": 1679296079.9999993,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 964460993.1199996,
+      "low": 788373361.1199996,
+    },
+    "landValuePerUnit": {
+      "high": 2445400.9955049595,
+      "low": 1998928.9518861517,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1684.8000000000002,
+    "saleableSqm": 6939.239999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9730.36,
+    "firstCost": {
+      "high": {
+        "services": 97303600,
+        "substructure": 116764320,
+        "superstructure": 233528640,
+      },
+      "low": {
+        "services": 68112520,
+        "substructure": 77842880,
+        "superstructure": 165416120,
+      },
+    },
+    "grossSqm": 9730.36,
+    "grossValue": 1495552740.0000002,
+    "id": "slab",
+    "landValue": {
+      "high": 859302682.3600004,
+      "low": 702643886.3600004,
+    },
+    "landValuePerUnit": {
+      "high": 2178770.992163677,
+      "low": 1781560.966640806,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1490.4,
+    "saleableSqm": 6179.970000000001,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7722.47,
+    "firstCost": {
+      "high": {
+        "services": 77224700,
+        "substructure": 46334820,
+        "superstructure": 139004460,
+      },
+      "low": {
+        "services": 54057290,
+        "substructure": 30889880,
+        "superstructure": 100392110,
+      },
+    },
+    "grossSqm": 7722.47,
+    "grossValue": 1186006305,
+    "id": "low-rise",
+    "landValue": {
+      "high": 752268960.2700001,
+      "low": 663460555.2700001,
+    },
+    "landValuePerUnit": {
+      "high": 1907385.8636632839,
+      "low": 1682211.2183998576,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1188,
+    "saleableSqm": 4900.8525,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9253.280000000002,
+    "firstCost": {
+      "high": {
+        "services": 129545920.00000003,
+        "substructure": 111039360.00000003,
+        "superstructure": 222078720.00000006,
+      },
+      "low": {
+        "services": 92532800.00000003,
+        "substructure": 74026240.00000001,
+        "superstructure": 157305760.00000003,
+      },
+    },
+    "grossSqm": 9253.280000000002,
+    "grossValue": 876425031.2000003,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 340965455.39680016,
+      "low": 181346375.39680016,
+    },
+    "landValuePerUnit": {
+      "high": 864521.4995816784,
+      "low": 459805.64283056976,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1922.4,
+    "saleableSqm": 5314.888000000002,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9451.230000000003,
+    "firstCost": {
+      "high": {
+        "services": 132317220.00000004,
+        "substructure": 113414760.00000004,
+        "superstructure": 226829520.0000001,
+      },
+      "low": {
+        "services": 94512300.00000003,
+        "substructure": 75609840.00000003,
+        "superstructure": 160670910.00000006,
+      },
+    },
+    "grossSqm": 9451.230000000003,
+    "grossValue": 894925780.5750004,
+    "id": "slab",
+    "landValue": {
+      "high": 348057577.8880503,
+      "low": 185023860.38805032,
+    },
+    "landValuePerUnit": {
+      "high": 882503.6507770751,
+      "low": 469129.9447180581,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 1965.6000000000001,
+    "saleableSqm": 5427.081750000002,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5902.1,
+    "firstCost": {
+      "high": {
+        "services": 82629400,
+        "substructure": 35412600,
+        "superstructure": 106237800,
+      },
+      "low": {
+        "services": 59021000,
+        "substructure": 23608400,
+        "superstructure": 76727300,
+      },
+    },
+    "grossSqm": 5902.1,
+    "grossValue": 558417772.25,
+    "id": "low-rise",
+    "landValue": {
+      "high": 271291861.6115,
+      "low": 196630296.61150005,
+    },
+    "landValuePerUnit": {
+      "high": 687863.3694775176,
+      "low": 498558.18587820366,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1231.2,
+    "saleableSqm": 3386.4025,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9253.280000000002,
+    "firstCost": {
+      "high": {
+        "services": 129545920.00000003,
+        "substructure": 111039360.00000003,
+        "superstructure": 222078720.00000006,
+      },
+      "low": {
+        "services": 92532800.00000003,
+        "substructure": 74026240.00000001,
+        "superstructure": 157305760.00000003,
+      },
+    },
+    "grossSqm": 9253.280000000002,
+    "grossValue": 876425031.2000003,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 340965455.39680016,
+      "low": 181346375.39680016,
+    },
+    "landValuePerUnit": {
+      "high": 864521.4995816784,
+      "low": 459805.64283056976,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1922.4,
+    "saleableSqm": 5314.888000000002,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9451.230000000003,
+    "firstCost": {
+      "high": {
+        "services": 132317220.00000004,
+        "substructure": 113414760.00000004,
+        "superstructure": 226829520.0000001,
+      },
+      "low": {
+        "services": 94512300.00000003,
+        "substructure": 75609840.00000003,
+        "superstructure": 160670910.00000006,
+      },
+    },
+    "grossSqm": 9451.230000000003,
+    "grossValue": 894925780.5750004,
+    "id": "slab",
+    "landValue": {
+      "high": 348057577.8880503,
+      "low": 185023860.38805032,
+    },
+    "landValuePerUnit": {
+      "high": 882503.6507770751,
+      "low": 469129.9447180581,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 1965.6000000000001,
+    "saleableSqm": 5427.081750000002,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5902.1,
+    "firstCost": {
+      "high": {
+        "services": 82629400,
+        "substructure": 35412600,
+        "superstructure": 106237800,
+      },
+      "low": {
+        "services": 59021000,
+        "substructure": 23608400,
+        "superstructure": 76727300,
+      },
+    },
+    "grossSqm": 5902.1,
+    "grossValue": 558417772.25,
+    "id": "low-rise",
+    "landValue": {
+      "high": 271291861.6115,
+      "low": 196630296.61150005,
+    },
+    "landValuePerUnit": {
+      "high": 687863.3694775176,
+      "low": 498558.18587820366,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1231.2,
+    "saleableSqm": 3386.4025,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 10937.119999999997,
+    "firstCost": {
+      "high": {
+        "services": 207805279.99999994,
+        "substructure": 131245439.99999997,
+        "superstructure": 262490879.99999994,
+      },
+      "low": {
+        "services": 142182559.99999997,
+        "substructure": 87496959.99999997,
+        "superstructure": 185931039.99999994,
+      },
+    },
+    "grossSqm": 10937.119999999997,
+    "grossValue": 1350838719.9999995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 621630574.0799999,
+      "low": 407809878.08000004,
+    },
+    "landValuePerUnit": {
+      "high": 1576150.8609839792,
+      "low": 1034006.2365897133,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1684.8000000000002,
+    "saleableSqm": 9252.319999999996,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9730.36,
+    "firstCost": {
+      "high": {
+        "services": 184876840,
+        "substructure": 116764320,
+        "superstructure": 233528640,
+      },
+      "low": {
+        "services": 126494680.00000001,
+        "substructure": 77842880,
+        "superstructure": 165416120,
+      },
+    },
+    "grossSqm": 9730.36,
+    "grossValue": 1203034160.0000002,
+    "id": "slab",
+    "landValue": {
+      "high": 554053074.2400002,
+      "low": 363824536.24000025,
+    },
+    "landValuePerUnit": {
+      "high": 1404807.399131904,
+      "low": 922480.939568418,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1490.4,
+    "saleableSqm": 8239.960000000001,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7722.47,
+    "firstCost": {
+      "high": {
+        "services": 146726930,
+        "substructure": 46334820,
+        "superstructure": 139004460,
+      },
+      "low": {
+        "services": 100392110,
+        "substructure": 30889880,
+        "superstructure": 100392110,
+      },
+    },
+    "grossSqm": 7722.47,
+    "grossValue": 954032620,
+    "id": "low-rise",
+    "landValue": {
+      "high": 510157337.68000007,
+      "low": 394706411.18000007,
+    },
+    "landValuePerUnit": {
+      "high": 1293509.2972408177,
+      "low": 1000782.2583983637,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1188,
+    "saleableSqm": 6534.47,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors example plot, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 10937.119999999997,
+    "firstCost": {
+      "high": {
+        "services": 207805279.99999994,
+        "substructure": 131245439.99999997,
+        "superstructure": 262490879.99999994,
+      },
+      "low": {
+        "services": 142182559.99999997,
+        "substructure": 87496959.99999997,
+        "superstructure": 185931039.99999994,
+      },
+    },
+    "grossSqm": 10937.119999999997,
+    "grossValue": 1350838719.9999995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 621630574.0799999,
+      "low": 407809878.08000004,
+    },
+    "landValuePerUnit": {
+      "high": 1576150.8609839792,
+      "low": 1034006.2365897133,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1684.8000000000002,
+    "saleableSqm": 9252.319999999996,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9730.36,
+    "firstCost": {
+      "high": {
+        "services": 184876840,
+        "substructure": 116764320,
+        "superstructure": 233528640,
+      },
+      "low": {
+        "services": 126494680.00000001,
+        "substructure": 77842880,
+        "superstructure": 165416120,
+      },
+    },
+    "grossSqm": 9730.36,
+    "grossValue": 1203034160.0000002,
+    "id": "slab",
+    "landValue": {
+      "high": 554053074.2400002,
+      "low": 363824536.24000025,
+    },
+    "landValuePerUnit": {
+      "high": 1404807.399131904,
+      "low": 922480.939568418,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1490.4,
+    "saleableSqm": 8239.960000000001,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7722.47,
+    "firstCost": {
+      "high": {
+        "services": 146726930,
+        "substructure": 46334820,
+        "superstructure": 139004460,
+      },
+      "low": {
+        "services": 100392110,
+        "substructure": 30889880,
+        "superstructure": 100392110,
+      },
+    },
+    "grossSqm": 7722.47,
+    "grossValue": 954032620,
+    "id": "low-rise",
+    "landValue": {
+      "high": 510157337.68000007,
+      "low": 394706411.18000007,
+    },
+    "landValuePerUnit": {
+      "high": 1293509.2972408177,
+      "low": 1000782.2583983637,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1188,
+    "saleableSqm": 6534.47,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29914.98,
+    "firstCost": {
+      "high": {
+        "services": 299149800,
+        "substructure": 358979760,
+        "superstructure": 717959520,
+      },
+      "low": {
+        "services": 209404860,
+        "substructure": 239319840,
+        "superstructure": 508554660,
+      },
+    },
+    "grossSqm": 29914.98,
+    "grossValue": 4598444070,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2642262208.9800005,
+      "low": 2160631030.9800005,
+    },
+    "landValuePerUnit": {
+      "high": 2419452.079835165,
+      "low": 1978434.7003467763,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4579.200000000001,
+    "saleableSqm": 19001.835,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29616.25,
+    "firstCost": {
+      "high": {
+        "services": 296162500,
+        "substructure": 355395000,
+        "superstructure": 710790000,
+      },
+      "low": {
+        "services": 207313750,
+        "substructure": 236930000,
+        "superstructure": 503476250,
+      },
+    },
+    "grossSqm": 29616.25,
+    "grossValue": 4552065375,
+    "id": "slab",
+    "landValue": {
+      "high": 2615503215.2500005,
+      "low": 2138681590.2500007,
+    },
+    "landValuePerUnit": {
+      "high": 2394949.552109373,
+      "low": 1958336.1575734923,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4536,
+    "saleableSqm": 18810.1875,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 892629.8864706954,
+      "low": 787327.4263293671,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36398.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 363985399.99999994,
+        "substructure": 436782479.99999994,
+        "superstructure": 873564959.9999999,
+      },
+      "low": {
+        "services": 254789779.99999994,
+        "substructure": 291188319.99999994,
+        "superstructure": 618775179.9999999,
+      },
+    },
+    "grossSqm": 36398.53999999999,
+    "grossValue": 5594871809.999999,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 3214759381.3399997,
+      "low": 2628742887.3399997,
+    },
+    "landValuePerUnit": {
+      "high": 2943673.1316515384,
+      "low": 2407072.7819938324,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 5572.8,
+    "saleableSqm": 23119.304999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36295.49,
+    "firstCost": {
+      "high": {
+        "services": 358505399.99999994,
+        "substructure": 450229230,
+        "superstructure": 860412959.9999999,
+      },
+      "low": {
+        "services": 250953779.99999994,
+        "substructure": 300152819.99999994,
+        "superstructure": 609459179.9999999,
+      },
+    },
+    "grossSqm": 36295.49,
+    "grossValue": 5580088635,
+    "id": "slab",
+    "landValue": {
+      "high": 3207541501.890001,
+      "low": 2622672420.3900003,
+    },
+    "landValuePerUnit": {
+      "high": 2937063.9036241504,
+      "low": 2401514.21031316,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 444.9500000000007,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 5551.200000000001,
+    "saleableSqm": 23058.2175,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 892629.8864706954,
+      "low": 787327.4263293671,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 30023.81000000001,
+    "firstCost": {
+      "high": {
+        "services": 420333340.0000001,
+        "substructure": 360285720.0000001,
+        "superstructure": 720571440.0000002,
+      },
+      "low": {
+        "services": 300238100.00000006,
+        "substructure": 240190480.00000006,
+        "superstructure": 510404770.0000001,
+      },
+    },
+    "grossSqm": 30023.81000000001,
+    "grossValue": 2845709353.025001,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1107949060.8623507,
+      "low": 590038338.3623505,
+    },
+    "landValuePerUnit": {
+      "high": 1014520.6825213772,
+      "low": 540283.0499113719,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 6220.8,
+    "saleableSqm": 17257.182250000005,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29475.64999999999,
+    "firstCost": {
+      "high": {
+        "services": 412659099.9999999,
+        "substructure": 353707799.9999999,
+        "superstructure": 707415599.9999998,
+      },
+      "low": {
+        "services": 294756499.9999999,
+        "substructure": 235805199.9999999,
+        "superstructure": 501086049.9999998,
+      },
+    },
+    "grossSqm": 29475.64999999999,
+    "grossValue": 2793087124.6249986,
+    "id": "slab",
+    "landValue": {
+      "high": 1087178006.9447494,
+      "low": 578723044.4447496,
+    },
+    "landValuePerUnit": {
+      "high": 995501.158482274,
+      "low": 529921.9240133279,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 6112.8,
+    "saleableSqm": 16938.066249999993,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9877.050000000001,
+    "firstCost": {
+      "high": {
+        "services": 138278700.00000003,
+        "substructure": 59262300.00000001,
+        "superstructure": 177786900.00000003,
+      },
+      "low": {
+        "services": 98770500.00000001,
+        "substructure": 39508200.00000001,
+        "superstructure": 128401650.00000001,
+      },
+    },
+    "grossSqm": 9877.050000000001,
+    "grossValue": 935504290.1250001,
+    "id": "low-rise",
+    "landValue": {
+      "high": 454818089.66175014,
+      "low": 329873407.16175014,
+    },
+    "landValuePerUnit": {
+      "high": 416465.3187102018,
+      "low": 302056.6612682646,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 5673.161250000001,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36067.05,
+    "firstCost": {
+      "high": {
+        "services": 504938700.00000006,
+        "substructure": 432804600.00000006,
+        "superstructure": 865609200.0000001,
+      },
+      "low": {
+        "services": 360670500,
+        "substructure": 288536400,
+        "superstructure": 613139850,
+      },
+    },
+    "grossSqm": 36067.05,
+    "grossValue": 3418418431.125,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1330893840.43575,
+      "low": 708737227.93575,
+    },
+    "landValuePerUnit": {
+      "high": 1218665.528098789,
+      "low": 648972.5941498105,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 7473.6,
+    "saleableSqm": 20730.25125,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36672.10999999999,
+    "firstCost": {
+      "high": {
+        "services": 496673239.9999998,
+        "substructure": 479515169.9999999,
+        "superstructure": 851439839.9999998,
+      },
+      "low": {
+        "services": 354766599.9999999,
+        "substructure": 319676779.99999994,
+        "superstructure": 603103219.9999998,
+      },
+    },
+    "grossSqm": 36672.10999999999,
+    "grossValue": 3475260862.774999,
+    "id": "slab",
+    "landValue": {
+      "high": 1359683752.2988503,
+      "low": 727089854.7988505,
+    },
+    "landValuePerUnit": {
+      "high": 1245027.7157343375,
+      "low": 665777.6262482366,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 1195.4500000000007,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 7603.200000000001,
+    "saleableSqm": 21074.959749999995,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9877.050000000001,
+    "firstCost": {
+      "high": {
+        "services": 138278700.00000003,
+        "substructure": 59262300.00000001,
+        "superstructure": 177786900.00000003,
+      },
+      "low": {
+        "services": 98770500.00000001,
+        "substructure": 39508200.00000001,
+        "superstructure": 128401650.00000001,
+      },
+    },
+    "grossSqm": 9877.050000000001,
+    "grossValue": 935504290.1250001,
+    "id": "low-rise",
+    "landValue": {
+      "high": 454818089.66175014,
+      "low": 329873407.16175014,
+    },
+    "landValuePerUnit": {
+      "high": 416465.3187102018,
+      "low": 302056.6612682646,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 5673.161250000001,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29914.98,
+    "firstCost": {
+      "high": {
+        "services": 568384620,
+        "substructure": 358979760,
+        "superstructure": 717959520,
+      },
+      "low": {
+        "services": 388894740,
+        "substructure": 239319840,
+        "superstructure": 508554660,
+      },
+    },
+    "grossSqm": 29914.98,
+    "grossValue": 3699023880,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1703720812.3200002,
+      "low": 1118882953.3200004,
+    },
+    "landValuePerUnit": {
+      "high": 1560053.6724995717,
+      "low": 1024532.5688351003,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4579.200000000001,
+    "saleableSqm": 25335.78,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29616.25,
+    "firstCost": {
+      "high": {
+        "services": 562708750,
+        "substructure": 355395000,
+        "superstructure": 710790000,
+      },
+      "low": {
+        "services": 385011250,
+        "substructure": 236930000,
+        "superstructure": 503476250,
+      },
+    },
+    "grossSqm": 29616.25,
+    "grossValue": 3661716500,
+    "id": "slab",
+    "landValue": {
+      "high": 1686407106,
+      "low": 1107409418.5000002,
+    },
+    "landValuePerUnit": {
+      "high": 1544199.9534314137,
+      "low": 1014026.5457807016,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4536,
+    "saleableSqm": 25080.25,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 605425.6524038,
+      "low": 468532.4542200732,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors e2e plot, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36398.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 691572259.9999999,
+        "substructure": 436782479.99999994,
+        "superstructure": 873564959.9999999,
+      },
+      "low": {
+        "services": 473181019.99999994,
+        "substructure": 291188319.99999994,
+        "superstructure": 618775179.9999999,
+      },
+    },
+    "grossSqm": 36398.53999999999,
+    "grossValue": 4500558039.999999,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2072838046.56,
+      "low": 1361246589.5600004,
+    },
+    "landValuePerUnit": {
+      "high": 1898044.9048041515,
+      "low": 1246458.7659340801,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 5572.8,
+    "saleableSqm": 30825.739999999994,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 36295.49,
+    "firstCost": {
+      "high": {
+        "services": 681160259.9999999,
+        "substructure": 450229230,
+        "superstructure": 860412959.9999999,
+      },
+      "low": {
+        "services": 466057019.99999994,
+        "substructure": 300152819.99999994,
+        "superstructure": 609459179.9999999,
+      },
+    },
+    "grossSqm": 36295.49,
+    "grossValue": 4488666340,
+    "id": "slab",
+    "landValue": {
+      "high": 2071755027.7600007,
+      "low": 1363201583.2600002,
+    },
+    "landValuePerUnit": {
+      "high": 1897053.2121253351,
+      "low": 1248248.9037778769,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 444.9500000000007,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 5551.200000000001,
+    "saleableSqm": 30744.289999999997,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 605425.6524038,
+      "low": 468532.4542200732,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 24408,
+    "firstCost": {
+      "high": {
+        "services": 244080000,
+        "substructure": 292896000,
+        "superstructure": 585792000,
+      },
+      "low": {
+        "services": 170856000,
+        "substructure": 195264000,
+        "superstructure": 414936000,
+      },
+    },
+    "grossSqm": 24408,
+    "grossValue": 3751822800.0000005,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2155769359.200001,
+      "low": 1762800559.2000008,
+    },
+    "landValuePerUnit": {
+      "high": 2463736.4104745067,
+      "low": 2014629.2104817578,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 3736.8,
+    "saleableSqm": 15503.400000000001,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 24320,
+    "firstCost": {
+      "high": {
+        "services": 243200000,
+        "substructure": 291840000,
+        "superstructure": 583680000,
+      },
+      "low": {
+        "services": 170240000,
+        "substructure": 194560000,
+        "superstructure": 413440000,
+      },
+    },
+    "grossSqm": 24320,
+    "grossValue": 3739771199.9999995,
+    "id": "slab",
+    "landValue": {
+      "high": 2149197756.7999997,
+      "low": 1757645756.7999997,
+    },
+    "landValuePerUnit": {
+      "high": 2456226.0077317692,
+      "low": 2008738.0077389947,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 3715.2000000000003,
+    "saleableSqm": 15453.599999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 1114095.0868277259,
+      "low": 982666.646829848,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29241.62,
+    "firstCost": {
+      "high": {
+        "services": 292416200,
+        "substructure": 350899440,
+        "superstructure": 701798880,
+      },
+      "low": {
+        "services": 204691340,
+        "substructure": 233932960,
+        "superstructure": 497107540,
+      },
+    },
+    "grossSqm": 29241.62,
+    "grossValue": 4495831230,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2583515005.2200003,
+      "low": 2112724923.2200005,
+    },
+    "landValuePerUnit": {
+      "high": 2952588.5773466127,
+      "low": 2414542.7693553003,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 4471.200000000001,
+    "saleableSqm": 18577.815,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29328.4,
+    "firstCost": {
+      "high": {
+        "services": 286356000,
+        "substructure": 374803200,
+        "superstructure": 687254400,
+      },
+      "low": {
+        "services": 200449200.00000003,
+        "substructure": 249868800.00000003,
+        "superstructure": 486805200.00000006,
+      },
+    },
+    "grossSqm": 29328.4,
+    "grossValue": 4507661400,
+    "id": "slab",
+    "landValue": {
+      "high": 2591544699.6000004,
+      "low": 2118560739.6000006,
+    },
+    "landValuePerUnit": {
+      "high": 2961765.3709236076,
+      "low": 2421212.2737894785,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 692.8000000000002,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4492.8,
+    "saleableSqm": 18626.7,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 1114095.0868277259,
+      "low": 982666.646829848,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 23936.039999999994,
+    "firstCost": {
+      "high": {
+        "services": 335104559.9999999,
+        "substructure": 287232479.99999994,
+        "superstructure": 574464959.9999999,
+      },
+      "low": {
+        "services": 239360399.99999994,
+        "substructure": 191488319.99999994,
+        "superstructure": 406912679.9999999,
+      },
+    },
+    "grossSqm": 23936.039999999994,
+    "grossValue": 2267676602.099999,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 882463144.1093997,
+      "low": 469566454.10940003,
+    },
+    "landValuePerUnit": {
+      "high": 1008529.3075373156,
+      "low": 536647.3761163638,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 4968,
+    "saleableSqm": 13751.828999999994,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 23750,
+    "firstCost": {
+      "high": {
+        "services": 330052800,
+        "substructure": 290768400,
+        "superstructure": 565804800,
+      },
+      "low": {
+        "services": 235752000,
+        "substructure": 193845600,
+        "superstructure": 400778400,
+      },
+    },
+    "grossSqm": 23750,
+    "grossValue": 2250599723,
+    "id": "slab",
+    "landValue": {
+      "high": 877055774.5220002,
+      "low": 467368274.5220001,
+    },
+    "landValuePerUnit": {
+      "high": 1002349.4565803874,
+      "low": 534135.1708736615,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 174.80000000000018,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4924.8,
+    "saleableSqm": 13648.27,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 420880.39947663306,
+      "low": 305223.25662135764,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29253.23999999999,
+    "firstCost": {
+      "high": {
+        "services": 409545359.9999999,
+        "substructure": 351038879.9999999,
+        "superstructure": 702077759.9999998,
+      },
+      "low": {
+        "services": 292532399.9999999,
+        "substructure": 234025919.99999994,
+        "superstructure": 497305079.9999998,
+      },
+    },
+    "grossSqm": 29253.23999999999,
+    "grossValue": 2771662121.0999994,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1078690056.5754004,
+      "low": 574071666.5754006,
+    },
+    "landValuePerUnit": {
+      "high": 1232788.6360662668,
+      "low": 656081.9046470074,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 6069.6,
+    "saleableSqm": 16808.138999999996,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29159.30000000001,
+    "firstCost": {
+      "high": {
+        "services": 390058200.0000001,
+        "substructure": 392745600.0000001,
+        "superstructure": 668671200.0000002,
+      },
+      "low": {
+        "services": 278613000.0000001,
+        "substructure": 261830400.0000001,
+        "superstructure": 473642100.0000002,
+      },
+    },
+    "grossSqm": 29159.30000000001,
+    "grossValue": 2763013693.2500014,
+    "id": "slab",
+    "landValue": {
+      "high": 1082894821.3055012,
+      "low": 579896896.305501,
+    },
+    "landValuePerUnit": {
+      "high": 1237594.081472019,
+      "low": 662739.310052729,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 1298,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 6048,
+    "saleableSqm": 16755.69250000001,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 420880.39947663306,
+      "low": 305223.25662135764,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 24408,
+    "firstCost": {
+      "high": {
+        "services": 463752000,
+        "substructure": 292896000,
+        "superstructure": 585792000,
+      },
+      "low": {
+        "services": 317304000,
+        "substructure": 195264000,
+        "superstructure": 414936000,
+      },
+    },
+    "grossSqm": 24408,
+    "grossValue": 3017995200,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1390018492.8000002,
+      "low": 912842092.8000004,
+    },
+    "landValuePerUnit": {
+      "high": 1588592.5631743504,
+      "low": 1043248.1060402988,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 3736.8,
+    "saleableSqm": 20671.2,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 24320,
+    "firstCost": {
+      "high": {
+        "services": 462080000,
+        "substructure": 291840000,
+        "superstructure": 583680000,
+      },
+      "low": {
+        "services": 316160000,
+        "substructure": 194560000,
+        "superstructure": 413440000,
+      },
+    },
+    "grossSqm": 24320,
+    "grossValue": 3008300800,
+    "id": "slab",
+    "landValue": {
+      "high": 1385972851.2000003,
+      "low": 910516851.2000003,
+    },
+    "landValuePerUnit": {
+      "high": 1583968.972774425,
+      "low": 1040590.687068913,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 3715.2000000000003,
+    "saleableSqm": 20604.8,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 755634.283599228,
+      "low": 584777.3116019868,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors typical 50x70 on a 16 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29241.62,
+    "firstCost": {
+      "high": {
+        "services": 555590780,
+        "substructure": 350899440,
+        "superstructure": 701798880,
+      },
+      "low": {
+        "services": 380141060,
+        "substructure": 233932960,
+        "superstructure": 497107540,
+      },
+    },
+    "grossSqm": 29241.62,
+    "grossValue": 3616481319.9999995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1665957000.48,
+      "low": 1094283329.4800003,
+    },
+    "landValuePerUnit": {
+      "high": 1903950.8576606868,
+      "low": 1250609.519385522,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 4471.200000000001,
+    "saleableSqm": 24770.42,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29328.4,
+    "firstCost": {
+      "high": {
+        "services": 544076400,
+        "substructure": 374803200,
+        "superstructure": 687254400,
+      },
+      "low": {
+        "services": 372262800,
+        "substructure": 249868800.00000003,
+        "superstructure": 486805200.00000006,
+      },
+    },
+    "grossSqm": 29328.4,
+    "grossValue": 3625997600.0000005,
+    "id": "slab",
+    "landValue": {
+      "high": 1676284726.4000006,
+      "low": 1104507946.4000008,
+    },
+    "landValuePerUnit": {
+      "high": 1915753.9729976398,
+      "low": 1262294.7958653339,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 692.8000000000002,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4492.8,
+    "saleableSqm": 24835.600000000002,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 755634.283599228,
+      "low": 584777.3116019868,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 8470.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 84705399.9999999,
+        "substructure": 101646479.99999988,
+        "superstructure": 203292959.99999976,
+      },
+      "low": {
+        "services": 59293779.99999993,
+        "substructure": 67764319.99999993,
+        "superstructure": 143999179.99999982,
+      },
+    },
+    "grossSqm": 8470.53999999999,
+    "grossValue": 1302179009.999998,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 748257842.1399989,
+      "low": 611882148.1399992,
+    },
+    "landValuePerUnit": {
+      "high": 1260223.7341303357,
+      "low": 1030538.3547619495,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1296,
+    "saleableSqm": 5380.9049999999925,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 6605.239999999998,
+    "firstCost": {
+      "high": {
+        "services": 66052399.99999998,
+        "substructure": 79262879.99999997,
+        "superstructure": 158525759.99999994,
+      },
+      "low": {
+        "services": 46236679.999999985,
+        "substructure": 52841919.999999985,
+        "superstructure": 112289079.99999997,
+      },
+    },
+    "grossSqm": 6605.239999999998,
+    "grossValue": 1014592259.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 582805267.64,
+      "low": 476460903.64000005,
+    },
+    "landValuePerUnit": {
+      "high": 981566.766551432,
+      "low": 802460.469288301,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1015.2,
+    "saleableSqm": 4192.529999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5116.09,
+    "firstCost": {
+      "high": {
+        "services": 51160900,
+        "substructure": 30696540,
+        "superstructure": 92089620,
+      },
+      "low": {
+        "services": 35812630,
+        "substructure": 20464360,
+        "superstructure": 66509170,
+      },
+    },
+    "grossSqm": 5116.09,
+    "grossValue": 783515535.0000001,
+    "id": "low-rise",
+    "landValue": {
+      "high": 496577561.4900001,
+      "low": 437742526.4900001,
+    },
+    "landValuePerUnit": {
+      "high": 836341.1561935592,
+      "low": 737250.5709304161,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 799.2,
+    "saleableSqm": 3237.6675000000005,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 8470.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 84705399.9999999,
+        "substructure": 101646479.99999988,
+        "superstructure": 203292959.99999976,
+      },
+      "low": {
+        "services": 59293779.99999993,
+        "substructure": 67764319.99999993,
+        "superstructure": 143999179.99999982,
+      },
+    },
+    "grossSqm": 8470.53999999999,
+    "grossValue": 1302179009.999998,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 748257842.1399989,
+      "low": 611882148.1399992,
+    },
+    "landValuePerUnit": {
+      "high": 1260223.7341303357,
+      "low": 1030538.3547619495,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1296,
+    "saleableSqm": 5380.9049999999925,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 6605.239999999998,
+    "firstCost": {
+      "high": {
+        "services": 66052399.99999998,
+        "substructure": 79262879.99999997,
+        "superstructure": 158525759.99999994,
+      },
+      "low": {
+        "services": 46236679.999999985,
+        "substructure": 52841919.999999985,
+        "superstructure": 112289079.99999997,
+      },
+    },
+    "grossSqm": 6605.239999999998,
+    "grossValue": 1014592259.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 582805267.64,
+      "low": 476460903.64000005,
+    },
+    "landValuePerUnit": {
+      "high": 981566.766551432,
+      "low": 802460.469288301,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1015.2,
+    "saleableSqm": 4192.529999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5116.09,
+    "firstCost": {
+      "high": {
+        "services": 51160900,
+        "substructure": 30696540,
+        "superstructure": 92089620,
+      },
+      "low": {
+        "services": 35812630,
+        "substructure": 20464360,
+        "superstructure": 66509170,
+      },
+    },
+    "grossSqm": 5116.09,
+    "grossValue": 783515535.0000001,
+    "id": "low-rise",
+    "landValue": {
+      "high": 496577561.4900001,
+      "low": 437742526.4900001,
+    },
+    "landValuePerUnit": {
+      "high": 836341.1561935592,
+      "low": 737250.5709304161,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 799.2,
+    "saleableSqm": 3237.6675000000005,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 4346.8,
+    "firstCost": {
+      "high": {
+        "services": 60855200,
+        "substructure": 26080800,
+        "superstructure": 78242400,
+      },
+      "low": {
+        "services": 43468000,
+        "substructure": 17387200,
+        "superstructure": 56508400,
+      },
+    },
+    "grossSqm": 4346.8,
+    "grossValue": 411212779,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 199759062.106,
+      "low": 144772042.106,
+    },
+    "landValuePerUnit": {
+      "high": 336436.3151258444,
+      "low": 243826.59723112138,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 907.2,
+    "saleableSqm": 2493.71,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 7020.13,
+    "firstCost": {
+      "high": {
+        "services": 98281820,
+        "substructure": 84241560,
+        "superstructure": 168483120,
+      },
+      "low": {
+        "services": 70201300,
+        "substructure": 56161040,
+        "superstructure": 119342210,
+      },
+    },
+    "grossSqm": 7020.13,
+    "grossValue": 663675379.825,
+    "id": "slab",
+    "landValue": {
+      "high": 257671526.67755008,
+      "low": 136574284.17755014,
+    },
+    "landValuePerUnit": {
+      "high": 433973.0975621246,
+      "low": 230019.84703583948,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 1468.8000000000002,
+    "saleableSqm": 4024.71425,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5535.5,
+    "firstCost": {
+      "high": {
+        "services": 77497000,
+        "substructure": 33213000,
+        "superstructure": 99639000,
+      },
+      "low": {
+        "services": 55355000,
+        "substructure": 22142000,
+        "superstructure": 71961500,
+      },
+    },
+    "grossSqm": 5535.5,
+    "grossValue": 522336827.75000006,
+    "id": "low-rise",
+    "landValue": {
+      "high": 253304902.78850007,
+      "low": 183280827.7885001,
+    },
+    "landValuePerUnit": {
+      "high": 426618.78364372574,
+      "low": 308683.4994332171,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1166.4,
+    "saleableSqm": 3167.5975000000003,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 4346.8,
+    "firstCost": {
+      "high": {
+        "services": 60855200,
+        "substructure": 26080800,
+        "superstructure": 78242400,
+      },
+      "low": {
+        "services": 43468000,
+        "substructure": 17387200,
+        "superstructure": 56508400,
+      },
+    },
+    "grossSqm": 4346.8,
+    "grossValue": 411212779,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 199759062.106,
+      "low": 144772042.106,
+    },
+    "landValuePerUnit": {
+      "high": 336436.3151258444,
+      "low": 243826.59723112138,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 907.2,
+    "saleableSqm": 2493.71,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 7020.13,
+    "firstCost": {
+      "high": {
+        "services": 98281820,
+        "substructure": 84241560,
+        "superstructure": 168483120,
+      },
+      "low": {
+        "services": 70201300,
+        "substructure": 56161040,
+        "superstructure": 119342210,
+      },
+    },
+    "grossSqm": 7020.13,
+    "grossValue": 663675379.825,
+    "id": "slab",
+    "landValue": {
+      "high": 257671526.67755008,
+      "low": 136574284.17755014,
+    },
+    "landValuePerUnit": {
+      "high": 433973.0975621246,
+      "low": 230019.84703583948,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 1468.8000000000002,
+    "saleableSqm": 4024.71425,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5535.5,
+    "firstCost": {
+      "high": {
+        "services": 77497000,
+        "substructure": 33213000,
+        "superstructure": 99639000,
+      },
+      "low": {
+        "services": 55355000,
+        "substructure": 22142000,
+        "superstructure": 71961500,
+      },
+    },
+    "grossSqm": 5535.5,
+    "grossValue": 522336827.75000006,
+    "id": "low-rise",
+    "landValue": {
+      "high": 253304902.78850007,
+      "low": 183280827.7885001,
+    },
+    "landValuePerUnit": {
+      "high": 426618.78364372574,
+      "low": 308683.4994332171,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1166.4,
+    "saleableSqm": 3167.5975000000003,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 8470.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 160940259.99999982,
+        "substructure": 101646479.99999988,
+        "superstructure": 203292959.99999976,
+      },
+      "low": {
+        "services": 110117019.99999987,
+        "substructure": 67764319.99999993,
+        "superstructure": 143999179.99999982,
+      },
+    },
+    "grossSqm": 8470.53999999999,
+    "grossValue": 1047482839.9999986,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 482488433.75999933,
+      "low": 316889376.7599996,
+    },
+    "landValuePerUnit": {
+      "high": 812612.0989640878,
+      "low": 533708.4240167615,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1296,
+    "saleableSqm": 7174.53999999999,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 6605.239999999998,
+    "firstCost": {
+      "high": {
+        "services": 125499559.99999996,
+        "substructure": 79262879.99999997,
+        "superstructure": 158525759.99999994,
+      },
+      "low": {
+        "services": 85868119.99999997,
+        "substructure": 52841919.999999985,
+        "superstructure": 112289079.99999997,
+      },
+    },
+    "grossSqm": 6605.239999999998,
+    "grossValue": 816145839.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 375693725.76,
+      "low": 246561283.76000005,
+    },
+    "landValuePerUnit": {
+      "high": 632747.3275956947,
+      "low": 415261.1094904642,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1015.2,
+    "saleableSqm": 5590.039999999998,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5116.09,
+    "firstCost": {
+      "high": {
+        "services": 97205710,
+        "substructure": 30696540,
+        "superstructure": 92089620,
+      },
+      "low": {
+        "services": 66509170,
+        "substructure": 20464360,
+        "superstructure": 66509170,
+      },
+    },
+    "grossSqm": 5116.09,
+    "grossValue": 630265940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 336531370.16,
+      "low": 260045824.66000006,
+    },
+    "landValuePerUnit": {
+      "high": 566789.6760588626,
+      "low": 437971.9152167766,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 799.2,
+    "saleableSqm": 4316.89,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors concave L-shape on a 12 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 8470.53999999999,
+    "firstCost": {
+      "high": {
+        "services": 160940259.99999982,
+        "substructure": 101646479.99999988,
+        "superstructure": 203292959.99999976,
+      },
+      "low": {
+        "services": 110117019.99999987,
+        "substructure": 67764319.99999993,
+        "superstructure": 143999179.99999982,
+      },
+    },
+    "grossSqm": 8470.53999999999,
+    "grossValue": 1047482839.9999986,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 482488433.75999933,
+      "low": 316889376.7599996,
+    },
+    "landValuePerUnit": {
+      "high": 812612.0989640878,
+      "low": 533708.4240167615,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1296,
+    "saleableSqm": 7174.53999999999,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 6605.239999999998,
+    "firstCost": {
+      "high": {
+        "services": 125499559.99999996,
+        "substructure": 79262879.99999997,
+        "superstructure": 158525759.99999994,
+      },
+      "low": {
+        "services": 85868119.99999997,
+        "substructure": 52841919.999999985,
+        "superstructure": 112289079.99999997,
+      },
+    },
+    "grossSqm": 6605.239999999998,
+    "grossValue": 816145839.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 375693725.76,
+      "low": 246561283.76000005,
+    },
+    "landValuePerUnit": {
+      "high": 632747.3275956947,
+      "low": 415261.1094904642,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 1015.2,
+    "saleableSqm": 5590.039999999998,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 5116.09,
+    "firstCost": {
+      "high": {
+        "services": 97205710,
+        "substructure": 30696540,
+        "superstructure": 92089620,
+      },
+      "low": {
+        "services": 66509170,
+        "substructure": 20464360,
+        "superstructure": 66509170,
+      },
+    },
+    "grossSqm": 5116.09,
+    "grossValue": 630265940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 336531370.16,
+      "low": 260045824.66000006,
+    },
+    "landValuePerUnit": {
+      "high": 566789.6760588626,
+      "low": 437971.9152167766,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 799.2,
+    "saleableSqm": 4316.89,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 840,
+    "firstCost": {
+      "high": {
+        "services": 8400000,
+        "substructure": 5040000,
+        "superstructure": 15120000,
+      },
+      "low": {
+        "services": 5880000,
+        "substructure": 3360000,
+        "superstructure": 10920000,
+      },
+    },
+    "grossSqm": 840,
+    "grossValue": 152460000,
+    "id": "slab",
+    "landValue": {
+      "high": 100918440.00000001,
+      "low": 91258440.00000001,
+    },
+    "landValuePerUnit": {
+      "high": 420493.50001687615,
+      "low": 380243.5000152607,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 630,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 3144.9,
+    "firstCost": {
+      "high": {
+        "services": 31449000,
+        "substructure": 18869400,
+        "superstructure": 56608200,
+      },
+      "low": {
+        "services": 22014300,
+        "substructure": 12579600,
+        "superstructure": 40883700,
+      },
+    },
+    "grossSqm": 3144.9,
+    "grossValue": 480630149.99999994,
+    "id": "low-rise",
+    "landValue": {
+      "high": 304433702.09999996,
+      "low": 268267352.09999996,
+    },
+    "landValuePerUnit": {
+      "high": 1268473.7588009087,
+      "low": 1117780.6337948607,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 496.8,
+    "saleableSqm": 1986.0749999999998,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 840,
+    "firstCost": {
+      "high": {
+        "services": 8400000,
+        "substructure": 5040000,
+        "superstructure": 15120000,
+      },
+      "low": {
+        "services": 5880000,
+        "substructure": 3360000,
+        "superstructure": 10920000,
+      },
+    },
+    "grossSqm": 840,
+    "grossValue": 152460000,
+    "id": "slab",
+    "landValue": {
+      "high": 100918440.00000001,
+      "low": 91258440.00000001,
+    },
+    "landValuePerUnit": {
+      "high": 420493.50001687615,
+      "low": 380243.5000152607,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 630,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 3144.9,
+    "firstCost": {
+      "high": {
+        "services": 31449000,
+        "substructure": 18869400,
+        "superstructure": 56608200,
+      },
+      "low": {
+        "services": 22014300,
+        "substructure": 12579600,
+        "superstructure": 40883700,
+      },
+    },
+    "grossSqm": 3144.9,
+    "grossValue": 480630149.99999994,
+    "id": "low-rise",
+    "landValue": {
+      "high": 304433702.09999996,
+      "low": 268267352.09999996,
+    },
+    "landValuePerUnit": {
+      "high": 1268473.7588009087,
+      "low": 1117780.6337948607,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 496.8,
+    "saleableSqm": 1986.0749999999998,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 750,
+    "firstCost": {
+      "high": {
+        "services": 10500000,
+        "substructure": 4500000,
+        "superstructure": 13500000,
+      },
+      "low": {
+        "services": 7500000,
+        "substructure": 3000000,
+        "superstructure": 9750000,
+      },
+    },
+    "grossSqm": 750,
+    "grossValue": 69005703,
+    "id": "slab",
+    "landValue": {
+      "high": 32883142.242000006,
+      "low": 23395642.24200001,
+    },
+    "landValuePerUnit": {
+      "high": 137013.0926804989,
+      "low": 97481.84267891238,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 172.8,
+    "saleableSqm": 418.47,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 2250,
+    "firstCost": {
+      "high": {
+        "services": 31500000,
+        "substructure": 13500000,
+        "superstructure": 40500000,
+      },
+      "low": {
+        "services": 22500000,
+        "substructure": 9000000,
+        "superstructure": 29250000,
+      },
+    },
+    "grossSqm": 2250,
+    "grossValue": 212181777,
+    "id": "low-rise",
+    "landValue": {
+      "high": 102853466.47800002,
+      "low": 74390966.47800003,
+    },
+    "landValuePerUnit": {
+      "high": 428556.1103421997,
+      "low": 309962.36033744016,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 475.20000000000005,
+    "saleableSqm": 1286.73,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 750,
+    "firstCost": {
+      "high": {
+        "services": 10500000,
+        "substructure": 4500000,
+        "superstructure": 13500000,
+      },
+      "low": {
+        "services": 7500000,
+        "substructure": 3000000,
+        "superstructure": 9750000,
+      },
+    },
+    "grossSqm": 750,
+    "grossValue": 69005703,
+    "id": "slab",
+    "landValue": {
+      "high": 32883142.242000006,
+      "low": 23395642.24200001,
+    },
+    "landValuePerUnit": {
+      "high": 137013.0926804989,
+      "low": 97481.84267891238,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 172.8,
+    "saleableSqm": 418.47,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 2250,
+    "firstCost": {
+      "high": {
+        "services": 31500000,
+        "substructure": 13500000,
+        "superstructure": 40500000,
+      },
+      "low": {
+        "services": 22500000,
+        "substructure": 9000000,
+        "superstructure": 29250000,
+      },
+    },
+    "grossSqm": 2250,
+    "grossValue": 212181777,
+    "id": "low-rise",
+    "landValue": {
+      "high": 102853466.47800002,
+      "low": 74390966.47800003,
+    },
+    "landValuePerUnit": {
+      "high": 428556.1103421997,
+      "low": 309962.36033744016,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 475.20000000000005,
+    "saleableSqm": 1286.73,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 840,
+    "firstCost": {
+      "high": {
+        "services": 15960000,
+        "substructure": 5040000,
+        "superstructure": 15120000,
+      },
+      "low": {
+        "services": 10920000,
+        "substructure": 3360000,
+        "superstructure": 10920000,
+      },
+    },
+    "grossSqm": 840,
+    "grossValue": 84796800,
+    "id": "slab",
+    "landValue": {
+      "high": 40044595.2,
+      "low": 27486595.200000003,
+    },
+    "landValuePerUnit": {
+      "high": 166852.48000669645,
+      "low": 114527.48000459645,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 580.8,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 3144.9,
+    "firstCost": {
+      "high": {
+        "services": 59753100,
+        "substructure": 18869400,
+        "superstructure": 56608200,
+      },
+      "low": {
+        "services": 40883700,
+        "substructure": 12579600,
+        "superstructure": 40883700,
+      },
+    },
+    "grossSqm": 3144.9,
+    "grossValue": 386622600,
+    "id": "low-rise",
+    "landValue": {
+      "high": 206211746.40000004,
+      "low": 159195491.40000004,
+    },
+    "landValuePerUnit": {
+      "high": 859215.6100344838,
+      "low": 663314.5475266216,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 496.8,
+    "saleableSqm": 2648.1,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors narrow deep 12x80 on an 8 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 840,
+    "firstCost": {
+      "high": {
+        "services": 15960000,
+        "substructure": 5040000,
+        "superstructure": 15120000,
+      },
+      "low": {
+        "services": 10920000,
+        "substructure": 3360000,
+        "superstructure": 10920000,
+      },
+    },
+    "grossSqm": 840,
+    "grossValue": 84796800,
+    "id": "slab",
+    "landValue": {
+      "high": 40044595.2,
+      "low": 27486595.200000003,
+    },
+    "landValuePerUnit": {
+      "high": 166852.48000669645,
+      "low": 114527.48000459645,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 580.8,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 3144.9,
+    "firstCost": {
+      "high": {
+        "services": 59753100,
+        "substructure": 18869400,
+        "superstructure": 56608200,
+      },
+      "low": {
+        "services": 40883700,
+        "substructure": 12579600,
+        "superstructure": 40883700,
+      },
+    },
+    "grossSqm": 3144.9,
+    "grossValue": 386622600,
+    "id": "low-rise",
+    "landValue": {
+      "high": 206211746.40000004,
+      "low": 159195491.40000004,
+    },
+    "landValuePerUnit": {
+      "high": 859215.6100344838,
+      "low": 663314.5475266216,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 496.8,
+    "saleableSqm": 2648.1,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13998.47,
+    "firstCost": {
+      "high": {
+        "services": 139984700,
+        "substructure": 167981640,
+        "superstructure": 335963280,
+      },
+      "low": {
+        "services": 97989290,
+        "substructure": 111987760,
+        "superstructure": 237973990,
+      },
+    },
+    "grossSqm": 13998.47,
+    "grossValue": 2152602705,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1237074905.8700001,
+      "low": 1011699538.8700001,
+    },
+    "landValuePerUnit": {
+      "high": 2061791.509813337,
+      "low": 1686165.8981412041,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2138.4,
+    "saleableSqm": 8895.0525,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9279,
+    "firstCost": {
+      "high": {
+        "services": 92790000,
+        "substructure": 111348000,
+        "superstructure": 222696000,
+      },
+      "low": {
+        "services": 64953000,
+        "substructure": 74232000,
+        "superstructure": 157743000,
+      },
+    },
+    "grossSqm": 9279,
+    "grossValue": 1425392099.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 818801969.3999999,
+      "low": 669410069.3999999,
+    },
+    "landValuePerUnit": {
+      "high": 1364669.9490198586,
+      "low": 1115683.4490162353,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1425.6000000000001,
+    "saleableSqm": 5890.049999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 1624722.0016736432,
+      "low": 1433055.526670854,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 14559.659999999998,
+    "firstCost": {
+      "high": {
+        "services": 145596599.99999997,
+        "substructure": 174715919.99999997,
+        "superstructure": 349431839.99999994,
+      },
+      "low": {
+        "services": 101917619.99999999,
+        "substructure": 116477279.99999999,
+        "superstructure": 247514219.99999997,
+      },
+    },
+    "grossSqm": 14559.659999999998,
+    "grossValue": 2238777089.999999,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1286569063.2599993,
+      "low": 1052158537.2599995,
+    },
+    "landValuePerUnit": {
+      "high": 2144281.7721312027,
+      "low": 1753597.5621255178,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2224.8,
+    "saleableSqm": 9251.144999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9279,
+    "firstCost": {
+      "high": {
+        "services": 92790000,
+        "substructure": 111348000,
+        "superstructure": 222696000,
+      },
+      "low": {
+        "services": 64953000,
+        "substructure": 74232000,
+        "superstructure": 157743000,
+      },
+    },
+    "grossSqm": 9279,
+    "grossValue": 1425392099.9999998,
+    "id": "slab",
+    "landValue": {
+      "high": 818801969.3999999,
+      "low": 669410069.3999999,
+    },
+    "landValuePerUnit": {
+      "high": 1364669.9490198586,
+      "low": 1115683.4490162353,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1425.6000000000001,
+    "saleableSqm": 5890.049999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 1624722.0016736432,
+      "low": 1433055.526670854,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 11701.620000000006,
+    "firstCost": {
+      "high": {
+        "services": 163822680.0000001,
+        "substructure": 140419440.0000001,
+        "superstructure": 280838880.0000002,
+      },
+      "low": {
+        "services": 117016200.00000006,
+        "substructure": 93612960.00000004,
+        "superstructure": 198927540.00000012,
+      },
+    },
+    "grossSqm": 11701.620000000006,
+    "grossValue": 1107154183.0500007,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 430233300.0027003,
+      "low": 228380355.0027002,
+    },
+    "landValuePerUnit": {
+      "high": 717055.5000149353,
+      "low": 380633.92501003935,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2440.8,
+    "saleableSqm": 6714.094500000005,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9017.5,
+    "firstCost": {
+      "high": {
+        "services": 126245000,
+        "substructure": 108210000,
+        "superstructure": 216420000,
+      },
+      "low": {
+        "services": 90175000,
+        "substructure": 72140000,
+        "superstructure": 153297500,
+      },
+    },
+    "grossSqm": 9017.5,
+    "grossValue": 853401610.75,
+    "id": "slab",
+    "landValue": {
+      "high": 331714536.15050006,
+      "low": 176162661.15050012,
+    },
+    "landValuePerUnit": {
+      "high": 552857.5602588786,
+      "low": 293604.4352551061,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1879.2,
+    "saleableSqm": 5175.2675,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9695,
+    "firstCost": {
+      "high": {
+        "services": 135730000,
+        "substructure": 58170000,
+        "superstructure": 174510000,
+      },
+      "low": {
+        "services": 96950000,
+        "substructure": 38780000,
+        "superstructure": 126035000,
+      },
+    },
+    "grossSqm": 9695,
+    "grossValue": 918904425.5,
+    "id": "low-rise",
+    "landValue": {
+      "high": 446958452.357,
+      "low": 324316702.35700005,
+    },
+    "landValuePerUnit": {
+      "high": 744930.7539391736,
+      "low": 540527.8372695326,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2008.8000000000002,
+    "saleableSqm": 5572.495,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 12261.930000000004,
+    "firstCost": {
+      "high": {
+        "services": 171667020.00000006,
+        "substructure": 147143160.00000006,
+        "superstructure": 294286320.0000001,
+      },
+      "low": {
+        "services": 122619300.00000004,
+        "substructure": 98095440.00000003,
+        "superstructure": 208452810.00000006,
+      },
+    },
+    "grossSqm": 12261.930000000004,
+    "grossValue": 1161228974.3250005,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 451697702.60055035,
+      "low": 240179410.1005503,
+    },
+    "landValuePerUnit": {
+      "high": 752829.5043452058,
+      "low": 400299.01684007567,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2548.8,
+    "saleableSqm": 7042.019250000003,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9017.5,
+    "firstCost": {
+      "high": {
+        "services": 126245000,
+        "substructure": 108210000,
+        "superstructure": 216420000,
+      },
+      "low": {
+        "services": 90175000,
+        "substructure": 72140000,
+        "superstructure": 153297500,
+      },
+    },
+    "grossSqm": 9017.5,
+    "grossValue": 853401610.75,
+    "id": "slab",
+    "landValue": {
+      "high": 331714536.15050006,
+      "low": 176162661.15050012,
+    },
+    "landValuePerUnit": {
+      "high": 552857.5602588786,
+      "low": 293604.4352551061,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1879.2,
+    "saleableSqm": 5175.2675,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9695,
+    "firstCost": {
+      "high": {
+        "services": 135730000,
+        "substructure": 58170000,
+        "superstructure": 174510000,
+      },
+      "low": {
+        "services": 96950000,
+        "substructure": 38780000,
+        "superstructure": 126035000,
+      },
+    },
+    "grossSqm": 9695,
+    "grossValue": 918904425.5,
+    "id": "low-rise",
+    "landValue": {
+      "high": 446958452.357,
+      "low": 324316702.35700005,
+    },
+    "landValuePerUnit": {
+      "high": 744930.7539391736,
+      "low": 540527.8372695326,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2008.8000000000002,
+    "saleableSqm": 5572.495,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13998.47,
+    "firstCost": {
+      "high": {
+        "services": 265970930,
+        "substructure": 167981640,
+        "superstructure": 335963280,
+      },
+      "low": {
+        "services": 181980110,
+        "substructure": 111987760,
+        "superstructure": 237973990,
+      },
+    },
+    "grossSqm": 13998.47,
+    "grossValue": 1731570220,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 797765020.0800002,
+      "low": 524094931.5800003,
+    },
+    "landValuePerUnit": {
+      "high": 1329608.366819349,
+      "low": 873491.552646045,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2138.4,
+    "saleableSqm": 11860.07,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9279,
+    "firstCost": {
+      "high": {
+        "services": 176301000,
+        "substructure": 111348000,
+        "superstructure": 222696000,
+      },
+      "low": {
+        "services": 120627000,
+        "substructure": 74232000,
+        "superstructure": 157743000,
+      },
+    },
+    "grossSqm": 9279,
+    "grossValue": 1146596400,
+    "id": "slab",
+    "landValue": {
+      "high": 527837169.6000001,
+      "low": 346432719.6,
+    },
+    "landValuePerUnit": {
+      "high": 879728.616012802,
+      "low": 577387.8660084022,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1425.6000000000001,
+    "saleableSqm": 7853.4,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 1101966.663616036,
+      "low": 852800.2461124103,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors corner 40x60 on 16 m and 8 m roads, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 14559.659999999998,
+    "firstCost": {
+      "high": {
+        "services": 276633539.99999994,
+        "substructure": 174715919.99999997,
+        "superstructure": 349431839.99999994,
+      },
+      "low": {
+        "services": 189275579.99999997,
+        "substructure": 116477279.99999999,
+        "superstructure": 247514219.99999997,
+      },
+    },
+    "grossSqm": 14559.659999999998,
+    "grossValue": 1800889559.9999995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 829666959.8399999,
+      "low": 545025606.84,
+    },
+    "landValuePerUnit": {
+      "high": 1382778.2664201222,
+      "low": 908376.0114132188,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2224.8,
+    "saleableSqm": 12334.859999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 9279,
+    "firstCost": {
+      "high": {
+        "services": 176301000,
+        "substructure": 111348000,
+        "superstructure": 222696000,
+      },
+      "low": {
+        "services": 120627000,
+        "substructure": 74232000,
+        "superstructure": 157743000,
+      },
+    },
+    "grossSqm": 9279,
+    "grossValue": 1146596400,
+    "id": "slab",
+    "landValue": {
+      "high": 527837169.6000001,
+      "low": 346432719.6,
+    },
+    "landValuePerUnit": {
+      "high": 879728.616012802,
+      "low": 577387.8660084022,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 1425.6000000000001,
+    "saleableSqm": 7853.4,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 1101966.663616036,
+      "low": 852800.2461124103,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 70812.18,
+    "firstCost": {
+      "high": {
+        "services": 708121799.9999999,
+        "substructure": 849746159.9999999,
+        "superstructure": 1699492319.9999998,
+      },
+      "low": {
+        "services": 495685259.99999994,
+        "substructure": 566497440,
+        "superstructure": 1203807060,
+      },
+    },
+    "grossSqm": 70812.18,
+    "grossValue": 10888290270,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 6257180055.780001,
+      "low": 5117103957.780002,
+    },
+    "landValuePerUnit": {
+      "high": 1390484.4568442798,
+      "low": 1137134.2128435,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 10821.6,
+    "saleableSqm": 44992.935,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105537.60000000003,
+    "firstCost": {
+      "high": {
+        "services": 1002240000.0000002,
+        "substructure": 1441800000.0000002,
+        "superstructure": 2405376000.0000005,
+      },
+      "low": {
+        "services": 701568000.0000002,
+        "substructure": 961200000.0000002,
+        "superstructure": 1703808000.0000005,
+      },
+    },
+    "grossSqm": 105537.60000000003,
+    "grossValue": 16230456000.000008,
+    "id": "slab",
+    "landValue": {
+      "high": 9340028784.000008,
+      "low": 7634762784.000007,
+    },
+    "landValuePerUnit": {
+      "high": 2075561.9520063896,
+      "low": 1696613.9520052231,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 5313.6,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 16113.6,
+    "saleableSqm": 67068.00000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 216629.60022066673,
+      "low": 191074.07022058807,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 78734.15,
+    "firstCost": {
+      "high": {
+        "services": 787341500,
+        "substructure": 944809799.9999999,
+        "superstructure": 1889619599.9999998,
+      },
+      "low": {
+        "services": 551139050,
+        "substructure": 629873200,
+        "superstructure": 1338480550,
+      },
+    },
+    "grossSqm": 78734.15,
+    "grossValue": 12106585424.999998,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 6957343815.949999,
+      "low": 5689724000.95,
+    },
+    "landValuePerUnit": {
+      "high": 1546076.4035492025,
+      "low": 1264383.1113261136,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 12031.2,
+    "saleableSqm": 50027.212499999994,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105537.60000000003,
+    "firstCost": {
+      "high": {
+        "services": 1002240000.0000002,
+        "substructure": 1441800000.0000002,
+        "superstructure": 2405376000.0000005,
+      },
+      "low": {
+        "services": 701568000.0000002,
+        "substructure": 961200000.0000002,
+        "superstructure": 1703808000.0000005,
+      },
+    },
+    "grossSqm": 105537.60000000003,
+    "grossValue": 16230456000.000008,
+    "id": "slab",
+    "landValue": {
+      "high": 9340028784.000008,
+      "low": 7634762784.000007,
+    },
+    "landValuePerUnit": {
+      "high": 2075561.9520063896,
+      "low": 1696613.9520052231,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 5313.6,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 16113.6,
+    "saleableSqm": 67068.00000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 216629.60022066673,
+      "low": 191074.07022058807,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 103850.72999999997,
+    "firstCost": {
+      "high": {
+        "services": 1453910219.9999995,
+        "substructure": 1246208759.9999995,
+        "superstructure": 2492417519.999999,
+      },
+      "low": {
+        "services": 1038507299.9999996,
+        "substructure": 830805839.9999998,
+        "superstructure": 1765462409.9999995,
+      },
+    },
+    "grossSqm": 103850.72999999997,
+    "grossValue": 9843609734.324995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 3832706441.240548,
+      "low": 2041281348.740549,
+    },
+    "landValuePerUnit": {
+      "high": 851712.5425005209,
+      "low": 453618.07749929593,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 21513.600000000002,
+    "saleableSqm": 59694.41924999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105300,
+    "firstCost": {
+      "high": {
+        "services": 1357776000,
+        "substructure": 1538028000,
+        "superstructure": 2327616000,
+      },
+      "low": {
+        "services": 969840000,
+        "substructure": 1025352000,
+        "superstructure": 1648728000,
+      },
+    },
+    "grossSqm": 105300,
+    "grossValue": 9980720910,
+    "id": "slab",
+    "landValue": {
+      "high": 3933798820.740001,
+      "low": 2117373820.7400007,
+    },
+    "landValuePerUnit": {
+      "high": 874177.5157226907,
+      "low": 470527.5157214483,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 8316,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 21816,
+    "saleableSqm": 60525.9,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 81837.85545536301,
+      "low": 59348.9665664049,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 103850.72999999997,
+    "firstCost": {
+      "high": {
+        "services": 1453910219.9999995,
+        "substructure": 1246208759.9999995,
+        "superstructure": 2492417519.999999,
+      },
+      "low": {
+        "services": 1038507299.9999996,
+        "substructure": 830805839.9999998,
+        "superstructure": 1765462409.9999995,
+      },
+    },
+    "grossSqm": 103850.72999999997,
+    "grossValue": 9843609734.324995,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 3832706441.240548,
+      "low": 2041281348.740549,
+    },
+    "landValuePerUnit": {
+      "high": 851712.5425005209,
+      "low": 453618.07749929593,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 21513.600000000002,
+    "saleableSqm": 59694.41924999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105300,
+    "firstCost": {
+      "high": {
+        "services": 1357776000,
+        "substructure": 1538028000,
+        "superstructure": 2327616000,
+      },
+      "low": {
+        "services": 969840000,
+        "substructure": 1025352000,
+        "superstructure": 1648728000,
+      },
+    },
+    "grossSqm": 105300,
+    "grossValue": 9980720910,
+    "id": "slab",
+    "landValue": {
+      "high": 3933798820.740001,
+      "low": 2117373820.7400007,
+    },
+    "landValuePerUnit": {
+      "high": 874177.5157226907,
+      "low": 470527.5157214483,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 8316,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 21816,
+    "saleableSqm": 60525.9,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 81837.85545536301,
+      "low": 59348.9665664049,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 70812.18,
+    "firstCost": {
+      "high": {
+        "services": 1345431419.9999998,
+        "substructure": 849746159.9999999,
+        "superstructure": 1699492319.9999998,
+      },
+      "low": {
+        "services": 920558339.9999999,
+        "substructure": 566497440,
+        "superstructure": 1203807060,
+      },
+    },
+    "grossSqm": 70812.18,
+    "grossValue": 8758624680,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 4035028223.520001,
+      "low": 2650650104.5200024,
+    },
+    "landValuePerUnit": {
+      "high": 896672.9385627599,
+      "low": 589033.3565618134,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 10821.6,
+    "saleableSqm": 59990.579999999994,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105537.60000000003,
+    "firstCost": {
+      "high": {
+        "services": 1904256000.0000005,
+        "substructure": 1441800000.0000002,
+        "superstructure": 2405376000.0000005,
+      },
+      "low": {
+        "services": 1302912000.0000005,
+        "substructure": 961200000.0000002,
+        "superstructure": 1703808000.0000005,
+      },
+    },
+    "grossSqm": 105537.60000000003,
+    "grossValue": 13055904000.000004,
+    "id": "slab",
+    "landValue": {
+      "high": 6064397856.000003,
+      "low": 4013359056.000002,
+    },
+    "landValuePerUnit": {
+      "high": 1347643.9680041482,
+      "low": 891857.5680027453,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 5313.6,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 16113.6,
+    "saleableSqm": 89424.00000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 146928.88848045224,
+      "low": 113706.69948034998,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors large 120x150 on 24 m and 12 m roads, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 78734.15,
+    "firstCost": {
+      "high": {
+        "services": 1495948850,
+        "substructure": 944809799.9999999,
+        "superstructure": 1889619599.9999998,
+      },
+      "low": {
+        "services": 1023543949.9999999,
+        "substructure": 629873200,
+        "superstructure": 1338480550,
+      },
+    },
+    "grossSqm": 78734.15,
+    "grossValue": 9738630700,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 4486563034.800001,
+      "low": 2947310402.3,
+    },
+    "landValuePerUnit": {
+      "high": 997014.0077364021,
+      "low": 654957.8671797937,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 12031.2,
+    "saleableSqm": 66702.95,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 105537.60000000003,
+    "firstCost": {
+      "high": {
+        "services": 1904256000.0000005,
+        "substructure": 1441800000.0000002,
+        "superstructure": 2405376000.0000005,
+      },
+      "low": {
+        "services": 1302912000.0000005,
+        "substructure": 961200000.0000002,
+        "superstructure": 1703808000.0000005,
+      },
+    },
+    "grossSqm": 105537.60000000003,
+    "grossValue": 13055904000.000004,
+    "id": "slab",
+    "landValue": {
+      "high": 6064397856.000003,
+      "low": 4013359056.000002,
+    },
+    "landValuePerUnit": {
+      "high": 1347643.9680041482,
+      "low": 891857.5680027453,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 5313.6,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 16113.6,
+    "saleableSqm": 89424.00000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 146928.88848045224,
+      "low": 113706.69948034998,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 8626500,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 6038550,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 156570975,
+    "id": "slab",
+    "landValue": {
+      "high": 103639633.65,
+      "low": 93719158.65,
+    },
+    "landValuePerUnit": {
+      "high": 1381861.7820201088,
+      "low": 1249588.782018184,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 646.9875,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 8626500,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 6038550,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 156570975,
+    "id": "low-rise",
+    "landValue": {
+      "high": 103639633.65,
+      "low": 93719158.65,
+    },
+    "landValuePerUnit": {
+      "high": 1381861.7820201088,
+      "low": 1249588.782018184,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 646.9875,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 8626500,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 6038550,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 156570975,
+    "id": "slab",
+    "landValue": {
+      "high": 103639633.65,
+      "low": 93719158.65,
+    },
+    "landValuePerUnit": {
+      "high": 1381861.7820201088,
+      "low": 1249588.782018184,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 646.9875,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 8626500,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 6038550,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 156570975,
+    "id": "low-rise",
+    "landValue": {
+      "high": 103639633.65,
+      "low": 93719158.65,
+    },
+    "landValuePerUnit": {
+      "high": 1381861.7820201088,
+      "low": 1249588.782018184,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 0,
+    },
+    "parkingSqm": 0,
+    "saleableSqm": 646.9875,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 623.25,
+    "firstCost": {
+      "high": {
+        "services": 8725500,
+        "substructure": 3739500,
+        "superstructure": 11218500,
+      },
+      "low": {
+        "services": 6232500,
+        "substructure": 2493000,
+        "superstructure": 8102250,
+      },
+    },
+    "grossSqm": 623.25,
+    "grossValue": 59017091.62499999,
+    "id": "slab",
+    "landValue": {
+      "high": 28688000.08275,
+      "low": 20803887.582750004,
+    },
+    "landValuePerUnit": {
+      "high": 382506.6677755662,
+      "low": 277385.1677740365,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 129.60000000000002,
+    "saleableSqm": 357.89624999999995,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 623.25,
+    "firstCost": {
+      "high": {
+        "services": 8725500,
+        "substructure": 3739500,
+        "superstructure": 11218500,
+      },
+      "low": {
+        "services": 6232500,
+        "substructure": 2493000,
+        "superstructure": 8102250,
+      },
+    },
+    "grossSqm": 623.25,
+    "grossValue": 59017091.62499999,
+    "id": "low-rise",
+    "landValue": {
+      "high": 28688000.08275,
+      "low": 20803887.582750004,
+    },
+    "landValuePerUnit": {
+      "high": 382506.6677755662,
+      "low": 277385.1677740365,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 129.60000000000002,
+    "saleableSqm": 357.89624999999995,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 623.25,
+    "firstCost": {
+      "high": {
+        "services": 8725500,
+        "substructure": 3739500,
+        "superstructure": 11218500,
+      },
+      "low": {
+        "services": 6232500,
+        "substructure": 2493000,
+        "superstructure": 8102250,
+      },
+    },
+    "grossSqm": 623.25,
+    "grossValue": 59017091.62499999,
+    "id": "slab",
+    "landValue": {
+      "high": 28688000.08275,
+      "low": 20803887.582750004,
+    },
+    "landValuePerUnit": {
+      "high": 382506.6677755662,
+      "low": 277385.1677740365,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 129.60000000000002,
+    "saleableSqm": 357.89624999999995,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 623.25,
+    "firstCost": {
+      "high": {
+        "services": 8725500,
+        "substructure": 3739500,
+        "superstructure": 11218500,
+      },
+      "low": {
+        "services": 6232500,
+        "substructure": 2493000,
+        "superstructure": 8102250,
+      },
+    },
+    "grossSqm": 623.25,
+    "grossValue": 59017091.62499999,
+    "id": "low-rise",
+    "landValue": {
+      "high": 28688000.08275,
+      "low": 20803887.582750004,
+    },
+    "landValuePerUnit": {
+      "high": 382506.6677755662,
+      "low": 277385.1677740365,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 129.60000000000002,
+    "saleableSqm": 357.89624999999995,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 16390350,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 11214450,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 88103699.99999999,
+    "id": "slab",
+    "landValue": {
+      "high": 41954986.8,
+      "low": 29058369.299999997,
+    },
+    "landValuePerUnit": {
+      "high": 559399.8240081402,
+      "low": 387444.92400563805,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 603.4499999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 16390350,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 11214450,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 88103699.99999999,
+    "id": "low-rise",
+    "landValue": {
+      "high": 41954986.8,
+      "low": 29058369.299999997,
+    },
+    "landValuePerUnit": {
+      "high": 559399.8240081402,
+      "low": 387444.92400563805,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 603.4499999999999,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors small 15x20 on a 6 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 16390350,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 11214450,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 88103699.99999999,
+    "id": "slab",
+    "landValue": {
+      "high": 41954986.8,
+      "low": 29058369.299999997,
+    },
+    "landValuePerUnit": {
+      "high": 559399.8240081402,
+      "low": 387444.92400563805,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 603.4499999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 862.65,
+    "firstCost": {
+      "high": {
+        "services": 16390350,
+        "substructure": 5175900,
+        "superstructure": 15527700,
+      },
+      "low": {
+        "services": 11214450,
+        "substructure": 3450600,
+        "superstructure": 11214450,
+      },
+    },
+    "grossSqm": 862.65,
+    "grossValue": 88103699.99999999,
+    "id": "low-rise",
+    "landValue": {
+      "high": 41954986.8,
+      "low": 29058369.299999997,
+    },
+    "landValuePerUnit": {
+      "high": 559399.8240081402,
+      "low": 387444.92400563805,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 259.20000000000005,
+    "saleableSqm": 603.4499999999999,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13368.529999999995,
+    "firstCost": {
+      "high": {
+        "services": 133685299.99999996,
+        "substructure": 160422359.99999994,
+        "superstructure": 320844719.9999999,
+      },
+      "low": {
+        "services": 93579709.99999997,
+        "substructure": 106948239.99999996,
+        "superstructure": 227265009.9999999,
+      },
+    },
+    "grossSqm": 13368.529999999995,
+    "grossValue": 2053950194.9999988,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1179953554.7299993,
+      "low": 964720221.7299994,
+    },
+    "landValuePerUnit": {
+      "high": 2359907.10949434,
+      "low": 1929440.443488076,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 8487.397499999995,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13440,
+    "firstCost": {
+      "high": {
+        "services": 134400000,
+        "substructure": 161280000,
+        "superstructure": 322560000,
+      },
+      "low": {
+        "services": 94080000,
+        "substructure": 107520000,
+        "superstructure": 228480000,
+      },
+    },
+    "grossSqm": 13440,
+    "grossValue": 2066922000,
+    "id": "slab",
+    "landValue": {
+      "high": 1187882508,
+      "low": 971498508,
+    },
+    "landValuePerUnit": {
+      "high": 2375765.0160345724,
+      "low": 1942997.0160282745,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 8541,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9791.25,
+    "firstCost": {
+      "high": {
+        "services": 97912500,
+        "substructure": 58747500,
+        "superstructure": 176242500,
+      },
+      "low": {
+        "services": 68538750,
+        "substructure": 39165000,
+        "superstructure": 127286250,
+      },
+    },
+    "grossSqm": 9791.25,
+    "grossValue": 1502683875,
+    "id": "low-rise",
+    "landValue": {
+      "high": 952946174.25,
+      "low": 840346799.25,
+    },
+    "landValuePerUnit": {
+      "high": 1905892.3485277346,
+      "low": 1680693.5985244575,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1512,
+    "saleableSqm": 6209.4375,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16499.769999999993,
+    "firstCost": {
+      "high": {
+        "services": 164997699.99999994,
+        "substructure": 197997239.9999999,
+        "superstructure": 395994479.9999998,
+      },
+      "low": {
+        "services": 115498389.99999996,
+        "substructure": 131998159.99999994,
+        "superstructure": 280496089.9999999,
+      },
+    },
+    "grossSqm": 16499.769999999993,
+    "grossValue": 2536021454.9999986,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1457129928.3699994,
+      "low": 1191483631.3699994,
+    },
+    "landValuePerUnit": {
+      "high": 2914259.856782407,
+      "low": 2382967.2627746756,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 2527.2000000000003,
+    "saleableSqm": 10479.427499999994,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16665.6,
+    "firstCost": {
+      "high": {
+        "services": 166656000,
+        "substructure": 199987199.99999997,
+        "superstructure": 399974399.99999994,
+      },
+      "low": {
+        "services": 116659199.99999999,
+        "substructure": 133324799.99999999,
+        "superstructure": 283315200,
+      },
+    },
+    "grossSqm": 16665.6,
+    "grossValue": 2562199199.9999995,
+    "id": "slab",
+    "landValue": {
+      "high": 1472336068.7999997,
+      "low": 1204019908.8,
+    },
+    "landValuePerUnit": {
+      "high": 2944672.13764285,
+      "low": 2408039.8176350417,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 2548.8,
+    "saleableSqm": 10587.599999999999,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9791.25,
+    "firstCost": {
+      "high": {
+        "services": 97912500,
+        "substructure": 58747500,
+        "superstructure": 176242500,
+      },
+      "low": {
+        "services": 68538750,
+        "substructure": 39165000,
+        "superstructure": 127286250,
+      },
+    },
+    "grossSqm": 9791.25,
+    "grossValue": 1502683875,
+    "id": "low-rise",
+    "landValue": {
+      "high": 952946174.25,
+      "low": 840346799.25,
+    },
+    "landValuePerUnit": {
+      "high": 1905892.3485277346,
+      "low": 1680693.5985244575,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1512,
+    "saleableSqm": 6209.4375,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13522.880000000001,
+    "firstCost": {
+      "high": {
+        "services": 189320320,
+        "substructure": 162274560,
+        "superstructure": 324549120,
+      },
+      "low": {
+        "services": 135228800,
+        "substructure": 108183040.00000001,
+        "superstructure": 229888960.00000003,
+      },
+    },
+    "grossSqm": 13522.880000000001,
+    "grossValue": 1280990691.2,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 498430502.63680017,
+      "low": 265160822.6368003,
+    },
+    "landValuePerUnit": {
+      "high": 996861.0052881067,
+      "low": 530321.6452813179,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 2808,
+    "saleableSqm": 7768.2880000000005,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13300,
+    "firstCost": {
+      "high": {
+        "services": 186200000,
+        "substructure": 159600000,
+        "superstructure": 319200000,
+      },
+      "low": {
+        "services": 133000000,
+        "substructure": 106400000,
+        "superstructure": 226100000,
+      },
+    },
+    "grossSqm": 13300,
+    "grossValue": 1259509498,
+    "id": "slab",
+    "landValue": {
+      "high": 489915731.37200016,
+      "low": 260490731.3720001,
+    },
+    "landValuePerUnit": {
+      "high": 979831.4627582588,
+      "low": 520981.4627515815,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 2764.8,
+    "saleableSqm": 7638.02,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7650,
+    "firstCost": {
+      "high": {
+        "services": 107100000,
+        "substructure": 45900000,
+        "superstructure": 137700000,
+      },
+      "low": {
+        "services": 76500000,
+        "substructure": 30600000,
+        "superstructure": 99450000,
+      },
+    },
+    "grossSqm": 7650,
+    "grossValue": 723483909,
+    "id": "low-rise",
+    "landValue": {
+      "high": 351383401.926,
+      "low": 254610901.926,
+    },
+    "landValuePerUnit": {
+      "high": 702766.8038622267,
+      "low": 509221.8038594102,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1598.4,
+    "saleableSqm": 4387.41,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16474.56,
+    "firstCost": {
+      "high": {
+        "services": 230643840.00000003,
+        "substructure": 197694720.00000003,
+        "superstructure": 395389440.00000006,
+      },
+      "low": {
+        "services": 164745600,
+        "substructure": 131796480.00000001,
+        "superstructure": 280067520,
+      },
+    },
+    "grossSqm": 16474.56,
+    "grossValue": 1561566062.4000003,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 608013734.7936003,
+      "low": 323827574.7936002,
+    },
+    "landValuePerUnit": {
+      "high": 1216027.4696048964,
+      "low": 647655.1495966251,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 3412.8,
+    "saleableSqm": 9469.776000000002,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16681.000000000004,
+    "firstCost": {
+      "high": {
+        "services": 233534000.00000006,
+        "substructure": 200172000.00000003,
+        "superstructure": 400344000.00000006,
+      },
+      "low": {
+        "services": 166810000.00000003,
+        "substructure": 133448000.00000003,
+        "superstructure": 283577000.00000006,
+      },
+    },
+    "grossSqm": 16681.000000000004,
+    "grossValue": 1581081812.5000002,
+    "id": "slab",
+    "landValue": {
+      "high": 615590345.3750001,
+      "low": 327843095.375,
+    },
+    "landValuePerUnit": {
+      "high": 1231180.6907679164,
+      "low": 655686.1907595416,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 3456,
+    "saleableSqm": 9588.125000000002,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 7650,
+    "firstCost": {
+      "high": {
+        "services": 107100000,
+        "substructure": 45900000,
+        "superstructure": 137700000,
+      },
+      "low": {
+        "services": 76500000,
+        "substructure": 30600000,
+        "superstructure": 99450000,
+      },
+    },
+    "grossSqm": 7650,
+    "grossValue": 723483909,
+    "id": "low-rise",
+    "landValue": {
+      "high": 351383401.926,
+      "low": 254610901.926,
+    },
+    "landValuePerUnit": {
+      "high": 702766.8038622267,
+      "low": 509221.8038594102,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1598.4,
+    "saleableSqm": 4387.41,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13368.529999999995,
+    "firstCost": {
+      "high": {
+        "services": 254002069.9999999,
+        "substructure": 160422359.99999994,
+        "superstructure": 320844719.9999999,
+      },
+      "low": {
+        "services": 173790889.99999994,
+        "substructure": 106948239.99999996,
+        "superstructure": 227265009.9999999,
+      },
+    },
+    "grossSqm": 13368.529999999995,
+    "grossValue": 1652213379.9999993,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 760696930.3199997,
+      "low": 499342168.8199998,
+    },
+    "landValuePerUnit": {
+      "high": 1521393.8606621388,
+      "low": 998684.3376545325,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 11316.529999999995,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 13440,
+    "firstCost": {
+      "high": {
+        "services": 255360000,
+        "substructure": 161280000,
+        "superstructure": 322560000,
+      },
+      "low": {
+        "services": 174720000,
+        "substructure": 107520000,
+        "superstructure": 228480000,
+      },
+    },
+    "grossSqm": 13440,
+    "grossValue": 1662648000,
+    "id": "slab",
+    "landValue": {
+      "high": 766067472,
+      "low": 503315472.0000001,
+    },
+    "landValuePerUnit": {
+      "high": 1532134.9440222958,
+      "low": 1006630.9440146488,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 4,
+    },
+    "parkingSqm": 2052,
+    "saleableSqm": 11388,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9791.25,
+    "firstCost": {
+      "high": {
+        "services": 186033750,
+        "substructure": 58747500,
+        "superstructure": 176242500,
+      },
+      "low": {
+        "services": 127286250,
+        "substructure": 39165000,
+        "superstructure": 127286250,
+      },
+    },
+    "grossSqm": 9791.25,
+    "grossValue": 1208770500,
+    "id": "low-rise",
+    "landValue": {
+      "high": 646141062.0000001,
+      "low": 499761874.5000002,
+    },
+    "landValuePerUnit": {
+      "high": 1292282.1240188056,
+      "low": 999523.7490145455,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1512,
+    "saleableSqm": 8279.25,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors wide road 40x50 on a 30 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16499.769999999993,
+    "firstCost": {
+      "high": {
+        "services": 313495629.9999999,
+        "substructure": 197997239.9999999,
+        "superstructure": 395994479.9999998,
+      },
+      "low": {
+        "services": 214497009.9999999,
+        "substructure": 131998159.99999994,
+        "superstructure": 280496089.9999999,
+      },
+    },
+    "grossSqm": 16499.769999999993,
+    "grossValue": 2039995219.9999988,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 939516160.0799996,
+      "low": 616945656.5799997,
+    },
+    "landValuePerUnit": {
+      "high": 1879032.3201873428,
+      "low": 1233891.313177955,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 3,
+    },
+    "parkingSqm": 2527.2000000000003,
+    "saleableSqm": 13972.569999999992,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 16665.6,
+    "firstCost": {
+      "high": {
+        "services": 316646400,
+        "substructure": 199987199.99999997,
+        "superstructure": 399974399.99999994,
+      },
+      "low": {
+        "services": 216652799.99999997,
+        "substructure": 133324799.99999999,
+        "superstructure": 283315200,
+      },
+    },
+    "grossSqm": 16665.6,
+    "grossValue": 2061052800,
+    "id": "slab",
+    "landValue": {
+      "high": 949410259.2,
+      "low": 623597779.2000003,
+    },
+    "landValuePerUnit": {
+      "high": 1898820.5184276318,
+      "low": 1247195.5584181498,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 2548.8,
+    "saleableSqm": 14116.8,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9791.25,
+    "firstCost": {
+      "high": {
+        "services": 186033750,
+        "substructure": 58747500,
+        "superstructure": 176242500,
+      },
+      "low": {
+        "services": 127286250,
+        "substructure": 39165000,
+        "superstructure": 127286250,
+      },
+    },
+    "grossSqm": 9791.25,
+    "grossValue": 1208770500,
+    "id": "low-rise",
+    "landValue": {
+      "high": 646141062.0000001,
+      "low": 499761874.5000002,
+    },
+    "landValuePerUnit": {
+      "high": 1292282.1240188056,
+      "low": 999523.7490145455,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1512,
+    "saleableSqm": 8279.25,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, condo, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29528,
+    "firstCost": {
+      "high": {
+        "services": 295280000,
+        "substructure": 354336000,
+        "superstructure": 708672000,
+      },
+      "low": {
+        "services": 206696000,
+        "substructure": 236224000,
+        "superstructure": 501976000,
+      },
+    },
+    "grossSqm": 29528,
+    "grossValue": 4539968399.999999,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2608903877.5999994,
+      "low": 2133503077.5999997,
+    },
+    "landValuePerUnit": {
+      "high": 2174086.5646426864,
+      "low": 1777919.2313137227,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4514.400000000001,
+    "saleableSqm": 18760.199999999997,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29760,
+    "firstCost": {
+      "high": {
+        "services": 297600000,
+        "substructure": 357120000,
+        "superstructure": 714240000,
+      },
+      "low": {
+        "services": 208320000,
+        "substructure": 238080000,
+        "superstructure": 505920000,
+      },
+    },
+    "grossSqm": 29760,
+    "grossValue": 4574235600.000001,
+    "id": "slab",
+    "landValue": {
+      "high": 2628259778.400001,
+      "low": 2149123778.4000015,
+    },
+    "landValuePerUnit": {
+      "high": 2190216.481975843,
+      "low": 1790936.4819802474,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4557.6,
+    "saleableSqm": 18901.800000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 812361.0008160397,
+      "low": 716527.7633170967,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, condo, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29947.86,
+    "firstCost": {
+      "high": {
+        "services": 299478600,
+        "substructure": 359374320,
+        "superstructure": 718748640,
+      },
+      "low": {
+        "services": 209635020,
+        "substructure": 239582880,
+        "superstructure": 509113620,
+      },
+    },
+    "grossSqm": 29947.86,
+    "grossValue": 4604411790,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 2645909949.0600004,
+      "low": 2163749403.0600004,
+    },
+    "landValuePerUnit": {
+      "high": 2204924.9575256803,
+      "low": 1803124.5025301122,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4579.200000000001,
+    "saleableSqm": 19026.495,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29760,
+    "firstCost": {
+      "high": {
+        "services": 297600000,
+        "substructure": 357120000,
+        "superstructure": 714240000,
+      },
+      "low": {
+        "services": 208320000,
+        "substructure": 238080000,
+        "superstructure": 505920000,
+      },
+    },
+    "grossSqm": 29760,
+    "grossValue": 4574235600.000001,
+    "id": "slab",
+    "landValue": {
+      "high": 2628259778.400001,
+      "low": 2149123778.4000015,
+    },
+    "landValuePerUnit": {
+      "high": 2190216.481975843,
+      "low": 1790936.4819802474,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4557.6,
+    "saleableSqm": 18901.800000000003,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 99999900,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 69999930,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1536649785,
+    "id": "low-rise",
+    "landValue": {
+      "high": 974833200.99,
+      "low": 859833315.99,
+    },
+    "landValuePerUnit": {
+      "high": 812361.0008160397,
+      "low": 716527.7633170967,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 6349.7925,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, office, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29792,
+    "firstCost": {
+      "high": {
+        "services": 417088000,
+        "substructure": 357504000,
+        "superstructure": 715008000,
+      },
+      "low": {
+        "services": 297920000,
+        "substructure": 238336000,
+        "superstructure": 506464000,
+      },
+    },
+    "grossSqm": 29792,
+    "grossValue": 2823160556.0000005,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1098924692.5840006,
+      "low": 585012692.5840008,
+    },
+    "landValuePerUnit": {
+      "high": 915770.5771432329,
+      "low": 487510.5771479568,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 6177.6,
+    "saleableSqm": 17120.440000000002,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 30000,
+    "firstCost": {
+      "high": {
+        "services": 416908800,
+        "substructure": 367286400,
+        "superstructure": 714700800,
+      },
+      "low": {
+        "services": 297792000,
+        "substructure": 244857600,
+        "superstructure": 506246400,
+      },
+    },
+    "grossSqm": 30000,
+    "grossValue": 2842862807.9999995,
+    "id": "slab",
+    "landValue": {
+      "high": 1107859925.712,
+      "low": 590359925.7120001,
+    },
+    "landValuePerUnit": {
+      "high": 923216.6047498169,
+      "low": 491966.6047545738,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 220.80000000000018,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 6220.8,
+    "saleableSqm": 17239.92,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 306891.95795328176,
+      "low": 222558.6246208786,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, office, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29792,
+    "firstCost": {
+      "high": {
+        "services": 417088000,
+        "substructure": 357504000,
+        "superstructure": 715008000,
+      },
+      "low": {
+        "services": 297920000,
+        "substructure": 238336000,
+        "superstructure": 506464000,
+      },
+    },
+    "grossSqm": 29792,
+    "grossValue": 2823160556.0000005,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1098924692.5840006,
+      "low": 585012692.5840008,
+    },
+    "landValuePerUnit": {
+      "high": 915770.5771432329,
+      "low": 487510.5771479568,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 6177.6,
+    "saleableSqm": 17120.440000000002,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 30000,
+    "firstCost": {
+      "high": {
+        "services": 416908800,
+        "substructure": 367286400,
+        "superstructure": 714700800,
+      },
+      "low": {
+        "services": 297792000,
+        "substructure": 244857600,
+        "superstructure": 506246400,
+      },
+    },
+    "grossSqm": 30000,
+    "grossValue": 2842862807.9999995,
+    "id": "slab",
+    "landValue": {
+      "high": 1107859925.712,
+      "low": 590359925.7120001,
+    },
+    "landValuePerUnit": {
+      "high": 923216.6047498169,
+      "low": 491966.6047545738,
+    },
+    "parking": {
+      "basementLevels": 1,
+      "basementSqm": 220.80000000000018,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 6220.8,
+    "saleableSqm": 17239.92,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 8000,
+    "firstCost": {
+      "high": {
+        "services": 112000000,
+        "substructure": 48000000,
+        "superstructure": 144000000,
+      },
+      "low": {
+        "services": 80000000,
+        "substructure": 32000000,
+        "superstructure": 104000000,
+      },
+    },
+    "grossSqm": 8000,
+    "grossValue": 757580282,
+    "id": "low-rise",
+    "landValue": {
+      "high": 368270349.5480001,
+      "low": 267070349.5480001,
+    },
+    "landValuePerUnit": {
+      "high": 306891.95795328176,
+      "low": 222558.6246208786,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 1,
+    },
+    "parkingSqm": 1663.2,
+    "saleableSqm": 4594.18,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, hotel, FAR standard 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29528,
+    "firstCost": {
+      "high": {
+        "services": 561032000,
+        "substructure": 354336000,
+        "superstructure": 708672000,
+      },
+      "low": {
+        "services": 383864000,
+        "substructure": 236224000,
+        "superstructure": 501976000,
+      },
+    },
+    "grossSqm": 29528,
+    "grossValue": 3651985600,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1682342678.4,
+      "low": 1105070278.4000003,
+    },
+    "landValuePerUnit": {
+      "high": 1401952.2319845366,
+      "low": 920891.8986565096,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4514.400000000001,
+    "saleableSqm": 25013.6,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29760,
+    "firstCost": {
+      "high": {
+        "services": 565440000,
+        "substructure": 357120000,
+        "superstructure": 714240000,
+      },
+      "low": {
+        "services": 386880000,
+        "substructure": 238080000,
+        "superstructure": 505920000,
+      },
+    },
+    "grossSqm": 29760,
+    "grossValue": 3679550400,
+    "id": "slab",
+    "landValue": {
+      "high": 1694642025.6000004,
+      "low": 1112834025.6000006,
+    },
+    "landValuePerUnit": {
+      "high": 1412201.687984424,
+      "low": 927361.6879897718,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4557.6,
+    "saleableSqm": 25202.4,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 550983.3317939228,
+      "low": 426400.123045297,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
+
+exports[`Bangkok money estimates stay byte-identical across engine refactors near a station 60x80 on a 10 m road, hotel, FAR bonus 1`] = `
+[
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29947.86,
+    "firstCost": {
+      "high": {
+        "services": 569009340,
+        "substructure": 359374320,
+        "superstructure": 718748640,
+      },
+      "low": {
+        "services": 389322180,
+        "substructure": 239582880,
+        "superstructure": 509113620,
+      },
+    },
+    "grossSqm": 29947.86,
+    "grossValue": 3703824360,
+    "id": "podium-tower",
+    "landValue": {
+      "high": 1706191547.0400004,
+      "low": 1120710884.0400007,
+    },
+    "landValuePerUnit": {
+      "high": 1421826.2891843177,
+      "low": 933925.7366896995,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 4579.200000000001,
+    "saleableSqm": 25368.66,
+  },
+  {
+    "buildClass": "highRise",
+    "builtSqm": 29760,
+    "firstCost": {
+      "high": {
+        "services": 565440000,
+        "substructure": 357120000,
+        "superstructure": 714240000,
+      },
+      "low": {
+        "services": 386880000,
+        "substructure": 238080000,
+        "superstructure": 505920000,
+      },
+    },
+    "grossSqm": 29760,
+    "grossValue": 3679550400,
+    "id": "slab",
+    "landValue": {
+      "high": 1694642025.6000004,
+      "low": 1112834025.6000006,
+    },
+    "landValuePerUnit": {
+      "high": 1412201.687984424,
+      "low": 927361.6879897718,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 5,
+    },
+    "parkingSqm": 4557.6,
+    "saleableSqm": 25202.4,
+  },
+  {
+    "buildClass": "lowRise",
+    "builtSqm": 9999.99,
+    "firstCost": {
+      "high": {
+        "services": 189999810,
+        "substructure": 59999940,
+        "superstructure": 179999820,
+      },
+      "low": {
+        "services": 129999870,
+        "substructure": 39999960,
+        "superstructure": 129999870,
+      },
+    },
+    "grossSqm": 9999.99,
+    "grossValue": 1236092940,
+    "id": "low-rise",
+    "landValue": {
+      "high": 661179998.1600001,
+      "low": 511680147.66000015,
+    },
+    "landValuePerUnit": {
+      "high": 550983.3317939228,
+      "low": 426400.123045297,
+    },
+    "parking": {
+      "basementLevels": 0,
+      "basementSqm": 0,
+      "levelsAboveGround": 2,
+    },
+    "parkingSqm": 1533.6000000000001,
+    "saleableSqm": 8466.39,
+  },
+]
+`;
