@@ -42,3 +42,9 @@ export async function mockZoneStrips(page: Page, region: ZoneRegionId, strips: r
 export async function mockZoneDown(page: Page, region: ZoneRegionId) {
   await page.route(layerPattern(region), (route) => route.fulfill({ status: 503, headers: ALLOW_ANY_ORIGIN }))
 }
+
+export const SNAPSHOT_DOWN_MESSAGE = 'Failed to load resource: the server responded with a status of 503 (Service Unavailable)'
+
+export async function mockZoneSnapshotDown(page: Page, region: ZoneRegionId) {
+  await page.route(`**${ZONE_SOURCES[region].snapshot}`, (route) => route.fulfill({ status: 503 }))
+}

@@ -5,7 +5,7 @@ import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
-import { BLUE_ZONE, BROWN_ZONE, mockZoneDown, mockZoneStrips } from './zone-layers'
+import { BLUE_ZONE, BROWN_ZONE, mockZoneDown, mockZoneSnapshotDown, mockZoneStrips } from './zone-layers'
 
 const recorded = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.bkk.transit)
 
@@ -417,7 +417,10 @@ async function openWithZone(page: Page, mockZone: (page: Page) => Promise<void>,
 }
 
 test('an unchecked zone holds the figures back until the user confirms it, and the link keeps the confirmation', async ({ page }) => {
-  await openWithZone(page, (p) => mockZoneDown(p, 'bkk'))
+  await openWithZone(page, async (p) => {
+    await mockZoneSnapshotDown(p, 'bkk')
+    await mockZoneDown(p, 'bkk')
+  })
   const held = page.getByRole('region', { name: 'Zone check' })
   await expect(held).toContainText('The city-plan service did not answer')
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toHaveCount(0)
