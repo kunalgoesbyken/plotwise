@@ -43,8 +43,8 @@ describe('plot URL fuzz', () => {
   it('never throws and only yields plots that satisfy the schema', () => {
     fc.assert(
       fc.property(hashes, (fragment) => {
-        const plot = decodePlot(fragment)
-        if (plot) expect(PlotSchema.safeParse(plot).success).toBe(true)
+        const link = decodePlot(fragment)
+        if (link?.ok) expect(PlotSchema.safeParse(link.plot).success).toBe(true)
       }),
       { numRuns: 3000 },
     )
@@ -53,8 +53,9 @@ describe('plot URL fuzz', () => {
   it('opens whatever it decodes without a crash or an unexplained failure', () => {
     fc.assert(
       fc.property(hashes, (fragment) => {
-        const plot = decodePlot(fragment)
-        if (!plot) return
+        const link = decodePlot(fragment)
+        if (!link?.ok) return
+        const { plot } = link
         const state = reduceEditor(initialEditorState(plot.buildingType), { type: 'load', plot })
         if (!state.plot) return expect(state.notice).not.toBeNull()
         const result = feasibility(state.plot)
@@ -65,6 +66,6 @@ describe('plot URL fuzz', () => {
   })
 
   it('reads the fragment its own encoder wrote', () => {
-    expect(decodePlot(valid)).not.toBeNull()
+    expect(decodePlot(valid)?.ok).toBe(true)
   })
 })

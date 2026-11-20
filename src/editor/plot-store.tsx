@@ -44,8 +44,13 @@ function writeUrl(plot: Plot | null) {
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
-    const plot = decodePlot(location.hash)
-    if (plot && fragmentFor(store.getState().plot) !== location.hash) store.dispatch({ type: 'load', plot })
+    const link = decodePlot(location.hash)
+    if (!link) return
+    if (!link.ok) {
+      store.dispatch({ type: 'reject-link', problem: link.problem })
+      return
+    }
+    if (fragmentFor(store.getState().plot) !== location.hash) store.dispatch({ type: 'load', plot: link.plot })
   }
   loadFromUrl()
   let written = store.getState().plot

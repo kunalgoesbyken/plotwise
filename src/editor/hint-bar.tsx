@@ -2,14 +2,14 @@
 
 import type { ReactNode } from 'react'
 import { t } from '@/text/messages'
-import { nextStep, type EditorState } from './editor-state'
+import { nextStep, type EditorState, type Notice } from './editor-state'
 import { cornerName, edgeName } from './map-features'
-import { MAX_CORNERS, type Rejection } from './plot-draft'
+import { MAX_CORNERS } from './plot-draft'
 import { useEditorState, useEditorStore } from './plot-store'
 import { Button } from '@/ui/button'
 import { PointerText } from './ui'
 
-function rejection(reason: Rejection): string {
+function rejection(reason: Notice): string {
   return reason === 'too-many-corners' ? t('rejection.too-many-corners', { count: MAX_CORNERS }) : t(`rejection.${reason}`)
 }
 
@@ -17,7 +17,7 @@ type Hint = { label: string; text: ReactNode; alert?: boolean; settled?: boolean
 
 function hintFor(state: EditorState): Hint {
   const { draft, selection, notice } = state
-  if (notice) return { label: t('hint.label.not-allowed'), text: rejection(notice), alert: true }
+  if (notice) return { label: t('hint.label.notice'), text: rejection(notice), alert: true }
   if (selection.kind === 'corner' && draft.status === 'closed') {
     return { label: t('hint.label.corner', { name: cornerName(selection.index) }), text: t('hint.corner') }
   }

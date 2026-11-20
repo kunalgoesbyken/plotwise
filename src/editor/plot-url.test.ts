@@ -46,29 +46,37 @@ describe('plot URL encoding', () => {
 
   it('adds the station flag only when it is set, so links made before it existed still open', () => {
     expect(encodePlot({ ...plot, nearStation: true })).toBe(`${encodePlot(plot)}&station=1`)
-    expect(decodePlot(encodePlot(plot))?.nearStation).toBe(false)
-    expect(decodePlot(`${encodePlot(plot)}&station=1`)?.nearStation).toBe(true)
+    expect(decodePlot(encodePlot(plot))).toMatchObject({ ok: true, plot: { nearStation: false } })
+    expect(decodePlot(`${encodePlot(plot)}&station=1`)).toMatchObject({ ok: true, plot: { nearStation: true } })
   })
 
   it('decodes what it encodes, with or without the leading #', () => {
-    expect(decodePlot(encodePlot(plot))).toEqual(plot)
-    expect(decodePlot(`#${encodePlot(plot)}`)).toEqual(plot)
+    expect(decodePlot(encodePlot(plot))).toEqual({ ok: true, plot })
+    expect(decodePlot(`#${encodePlot(plot)}`)).toEqual({ ok: true, plot })
   })
 
   it('round-trips any plot exactly', () => {
     fc.assert(
       fc.property(plots, (p) => {
-        expect(decodePlot(encodePlot(p))).toEqual(p)
+        expect(decodePlot(encodePlot(p))).toEqual({ ok: true, plot: p })
       }),
     )
   })
 
-  it('returns null for malformed fragments', () => {
+  it('ignores a fragment that is not a plot link', () => {
+    for (const hash of ['', '#', '#section', '%E0%A4%A']) expect(decodePlot(hash)).toBeNull()
+  })
+
+  it('says a link is incomplete when part of the plot is missing', () => {
+    const good = encodePlot(plot)
+    for (const hash of [good.replace('&type=hotel', ''), good.replace('&roads=0:16;3:6.5', ''), 'plot=100.53,13.724']) {
+      expect(decodePlot(hash)).toEqual({ ok: false, problem: 'link-incomplete' })
+    }
+  })
+
+  it('says a link is invalid when its plot breaks the contract', () => {
     const good = encodePlot(plot)
     const broken = [
-      '',
-      '#',
-      'plot=',
       good.replace('type=hotel', 'type=castle'),
       good.replace('roads=0:16;3:6.5', 'roads='),
       good.replace('roads=0:16;3:6.5', 'roads=0:'),
@@ -80,12 +88,10 @@ describe('plot URL encoding', () => {
       good.replace('100.53,13.724;', ',13.724;'),
       good.replace('100.53,13.724;', '1e999,13.724;'),
       good.replace('100.53,13.724;', '100.53,95;'),
-      good.replace('&type=hotel', ''),
       `${good}&station=yes`,
       `${good}&station=0`,
-      '%E0%A4%A',
     ]
-    for (const hash of broken) expect(decodePlot(hash)).toBeNull()
+    for (const hash of broken) expect(decodePlot(hash)).toEqual({ ok: false, problem: 'link-invalid' })
   })
 
   it('never throws on arbitrary input', () => {

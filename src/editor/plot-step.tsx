@@ -10,20 +10,18 @@ import { useEditorState, useEditorStore } from './plot-store'
 
 const BMA_CITY_PLAN_URL = 'https://webportal.bangkok.go.th/cpud'
 
-function Outline() {
+function Start() {
   const store = useEditorStore()
-  const { draft } = useEditorState()
-  const count = draft.status === 'closed' ? draft.corners.length : draft.points.length
-  if (count === 0) {
-    return (
-      <div className="flex items-center gap-3 px-(--pad) pb-5">
-        <span className="text-sm text-muted-foreground">{t('plot.or')}</span>
-        <Button variant="outline" onClick={() => store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })}>
-          {t('plot.example')}
-        </Button>
-      </div>
-    )
-  }
+  return (
+    <div className="flex flex-col items-start gap-3 px-(--pad) pt-5 pb-5">
+      <p className="text-base leading-snug font-medium text-pretty">{t('plot.framing')}</p>
+      <Button onClick={() => store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })}>{t('plot.example')}</Button>
+    </div>
+  )
+}
+
+function Outline({ count }: { count: number }) {
+  const store = useEditorStore()
   return (
     <PanelSection title={t('plot.title')} aside={t('plot.corners', { count })}>
       <Button variant="outline" className="text-destructive hover:text-destructive" onClick={() => store.dispatch({ type: 'clear' })}>
@@ -51,10 +49,13 @@ function Zone() {
 }
 
 export function PlotStep() {
+  const { draft } = useEditorState()
+  const count = draft.status === 'closed' ? draft.corners.length : draft.points.length
   return (
     <>
+      {count === 0 && <Start />}
       <PlaceSearch />
-      <Outline />
+      {count > 0 && <Outline count={count} />}
       <Zone />
     </>
   )

@@ -115,12 +115,12 @@ function Results({ summary, rules, designs, tab, onTab, sceneId }: ResultsProps)
   return (
     <>
       <BuildingTypePicker />
-      {summary && <div className={cn('sticky top-0 z-10 border-y bg-background px-(--pad) py-4', tab === 'view3d' && 'max-lg:hidden')}>{summary}</div>}
+      {summary && <div className={cn('sticky top-0 z-10 border-y bg-background px-(--pad) py-4', tab === 'view3d' && 'max-xl:hidden')}>{summary}</div>}
       <Tabs value={tab} onValueChange={(value) => isResultTab(value) && onTab(value)} className="gap-4 px-(--pad) pt-4 pb-5">
         <TabsList variant="line" aria-label={t('tab.label')} className="w-full justify-start border-b">
           <TabsTrigger value="designs">{t('tab.designs')}</TabsTrigger>
           <TabsTrigger value="rules">{t('tab.rules')}</TabsTrigger>
-          <TabsTrigger value="view3d" aria-controls={sceneId} className="lg:hidden">
+          <TabsTrigger value="view3d" aria-controls={sceneId} className="xl:hidden">
             {t('tab.view3d')}
           </TabsTrigger>
         </TabsList>
@@ -152,7 +152,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
     setStep(next)
     setOpen(true)
   }
-  const sceneOnPhone = step === 'results' && tab === 'view3d'
+  const sceneInPanel = step === 'results' && tab === 'view3d'
 
   return (
     <main className="relative h-dvh w-full overflow-clip [--panel-w:24rem] 2xl:[--panel-w:27rem]">
@@ -160,7 +160,8 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
       <aside
         ref={panel}
         aria-label={t('shell.panel')}
-        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px] shadow-foreground/25 [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-[26rem] md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
+        data-scene={sceneInPanel}
+        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col max-lg:data-[scene=true]:max-h-[85dvh] rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px] shadow-foreground/25 [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-[26rem] md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
       >
         <header className="hidden h-14 shrink-0 items-center border-b px-(--pad) lg:flex">
           <Wordmark />
@@ -187,8 +188,8 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
             id={sceneId}
             aria-label={t('section.view3d')}
             className={cn(
-              sceneOnPhone ? 'max-lg:h-[50dvh]' : 'max-lg:hidden',
-              ready && view3d ? 'lg:fixed lg:bottom-3 lg:left-3 lg:h-[48vh] lg:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] lg:overflow-hidden lg:rounded-xl lg:border lg:bg-background lg:shadow-xl' : 'lg:hidden',
+              sceneInPanel ? 'max-xl:h-[50dvh]' : 'max-xl:hidden',
+              ready && view3d ? 'xl:fixed xl:bottom-3 xl:left-3 xl:h-[48vh] xl:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] xl:overflow-hidden xl:rounded-xl xl:border xl:bg-background xl:shadow-xl' : 'xl:hidden',
             )}
           >
             {ready && view3d}

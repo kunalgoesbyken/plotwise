@@ -47,6 +47,10 @@ const en = {
   'flow.next.plot': 'Next: roads',
   'flow.next.roads': 'See what you can build',
   'flow.back': 'Back',
+  'plot.framing': 'Check what a Bangkok plot can hold before you buy it.',
+  'rejection.link-incomplete': 'This link is missing part of the plot, so it could not be opened.',
+  'rejection.link-invalid': 'This link’s plot is not valid, so it could not be opened.',
+  'frontage.right-of-way': 'Right-of-way: the full width between property lines across the road, not just the paved lanes.',
   'tab.label': 'Result details',
   'tab.rules': 'Rules',
   'tab.designs': 'Designs',
@@ -59,7 +63,7 @@ const en = {
   'rejection.too-few-corners': 'A plot needs at least 3 corners.',
   'rejection.too-many-corners': ({ count }: Count) => `A plot can have up to ${count} corners.`,
 
-  'hint.label.not-allowed': 'Not allowed',
+  'hint.label.notice': 'Notice',
   'hint.label.corner': ({ name }: { name: string }) => `Corner ${name}`,
   'hint.label.outline': 'Plot',
   'hint.label.frontage': 'Roads',
@@ -84,8 +88,7 @@ const en = {
 
   'plot.title': 'Plot',
   'plot.corners': ({ count }: Count) => plural(count, 'corner', 'corners'),
-  'plot.or': 'or',
-  'plot.example': 'Use an example plot',
+  'plot.example': 'Try an example plot',
   'plot.clear': 'Clear and redraw',
 
   'frontage.title': 'Road frontage',
@@ -97,7 +100,7 @@ const en = {
   'frontage.width-label': ({ edge }: { edge: string }) => `Road width on edge ${edge}, in metres`,
   'frontage.width-placeholder': 'width',
   'frontage.metres': 'm',
-  'frontage.estimated': 'Estimated from OpenStreetMap. Check it on site.',
+  'frontage.estimated': 'Estimated from OpenStreetMap, check on site.',
   'frontage.estimated-tag': 'est.',
   'frontage.boundary': 'Neighbour',
   'frontage.remove': 'Remove',

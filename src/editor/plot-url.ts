@@ -20,14 +20,20 @@ export function encodePlot(plot: Plot) {
   return `plot=${ring}&roads=${roads}&type=${plot.buildingType}${station}`
 }
 
-export function decodePlot(fragment: string): Plot | null {
+export type LinkProblem = 'link-incomplete' | 'link-invalid'
+export type DecodedLink = { ok: true; plot: Plot } | { ok: false; problem: LinkProblem }
+
+const rejected = (problem: LinkProblem): DecodedLink => ({ ok: false, problem })
+
+export function decodePlot(fragment: string): DecodedLink | null {
   const params = new URLSearchParams(fragment.replace(/^#/, ''))
   const ring = params.get('plot')
   const roads = params.get('roads')
   const buildingType = params.get('type')
   const station = params.get('station')
-  if (ring === null || roads === null || buildingType === null) return null
-  if (station !== null && station !== STATION) return null
+  if (ring === null && roads === null && buildingType === null) return null
+  if (ring === null || roads === null || buildingType === null) return rejected('link-incomplete')
+  if (station !== null && station !== STATION) return rejected('link-invalid')
   const parsed = PlotSchema.safeParse({
     ring: ring.split(LIST).map((p) => numbers(p, PAIR)),
     roads: roads.split(LIST).map((r) => {
@@ -37,5 +43,5 @@ export function decodePlot(fragment: string): Plot | null {
     buildingType,
     nearStation: station === STATION,
   })
-  return parsed.success ? parsed.data : null
+  return parsed.success ? { ok: true, plot: parsed.data } : rejected('link-invalid')
 }
