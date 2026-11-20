@@ -27,7 +27,13 @@ export const ZONE_SLIVER_SHARE: Assumption<number> = {
 export const ZONE_GENERALISATION_DEGREES: Assumption<number> = {
   value: 0.000002,
   source:
-    'assumption: the layer is asked to simplify zone boundaries by at most 0.000002 degrees (about 0.2 m), which keeps the answer small and moves a share of a plot at least 40 m across by under 1%, the sliver share, so a simplified boundary cannot turn an inside plot into a straddling one',
+    'assumption: the layer is asked to simplify zone boundaries by at most 0.000002 degrees (about 0.2 m), which keeps the answer small. A straight boundary across a convex plot is at most half its perimeter long, so a shift of d metres moves at most d × half the perimeter ÷ the area of the plot; a plot too narrow for 0.2 m to stay within the sliver share asks for less, with the coordinate rounding counted in, so a simplified boundary cannot turn a plot a metre or more across from inside to straddling',
+}
+
+export const ZONE_COORDINATE_DECIMALS: Assumption<number> = {
+  value: 7,
+  source:
+    'assumption: the layer answers in seven decimal degrees, about 1 cm, so rounding its coordinates moves a boundary by under the sliver share of any plot a metre or more across',
 }
 
 export const ZONE_RING_DECIMALS: Assumption<number> = {
