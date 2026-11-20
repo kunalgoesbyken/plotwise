@@ -108,6 +108,11 @@ describe('checkPack on the Mumbai draft', () => {
     expect(change((p) => void (table(p)[4].permissible!.value = 2.3))).toContain('permissible decreases')
   })
 
+  it('flags carpet ratios that disagree or would make carpet larger than built-up area', () => {
+    expect(change((p) => void (p.carpetArea!.builtUpPerCarpet[1].value = 1.1))).toContain('carpetArea.builtUpPerCarpet')
+    expect(change((p) => p.carpetArea!.builtUpPerCarpet.forEach((ratio) => void (ratio.value = 0.9)))).toContain('carpetArea.builtUpPerCarpet.0')
+  })
+
   it('flags a gap between the plot sizes of the low-rise table', () => {
     expect(change((p) => void (p.lowRiseOpenSpaces!.rows[1].plotAreaSqm.min!.value = 31))).toContain('lowRiseOpenSpaces.rows')
   })

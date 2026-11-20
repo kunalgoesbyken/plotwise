@@ -1348,6 +1348,37 @@
       }
     }
   ],
+  "carpetArea": {
+    "builtUpPerCarpet": [
+      {
+        "value": 1.2,
+        "cite": {
+          "source": "dcpr2034-mcgm",
+          "clause": "Reg 15 Note 3 (printed page 38)",
+          "page": 81,
+          "line": 28,
+          "quote": "3) For arriving at number of tenements, ratio of BUA to carpet area shall be considered as 1.2"
+        }
+      },
+      {
+        "value": 1.2,
+        "cite": {
+          "source": "dcpr2034-mcgm",
+          "clause": "Reg 17(1) Note (g) (printed page 59)",
+          "page": 102,
+          "line": 14,
+          "quote": "be considered as 1.2."
+        }
+      }
+    ],
+    "definition": {
+      "source": "dcpr2034-mcgm",
+      "clause": "Reg 2(22)",
+      "page": 49,
+      "line": 7,
+      "quote": "(22) \"Carpet area\" would have the same meaning as defined in Real Estate (Regulation and"
+    }
+  },
   "questions": [],
   "gaps": [
     {

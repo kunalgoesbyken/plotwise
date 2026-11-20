@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { BUILDING_TYPES } from '@/plot/plot'
-import { containsEntered, CiteSchema } from './cite'
+import { containsEntered, CiteSchema, CitedSchema } from './cite'
 import { PlotSetbacksSchema, PlotSpecificSchema } from './entered'
 import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, LowRiseOpenSpacesSchema, RoadSetbackSchema } from './setbacks'
 import { BuildingClassesSchema, ClassificationsSchema, HighRiseSchema, UseConditionsSchema } from './classes'
@@ -51,6 +51,7 @@ export const RulePackSchema = z
     classification: ClassificationsSchema.optional(),
     highRise: HighRiseSchema.optional(),
     parking: z.array(ParkingRuleSchema),
+    carpetArea: z.object({ builtUpPerCarpet: z.array(CitedSchema).min(1), definition: CiteSchema }).optional(),
     questions: z.array(QuestionSchema),
     gaps: z.array(GapSchema),
   })

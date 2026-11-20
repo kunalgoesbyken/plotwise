@@ -1621,6 +1621,37 @@
       }
     }
   ],
+  "carpetArea": {
+    "builtUpPerCarpet": [
+      {
+        "$num": {
+          "src": "dcpr2034-mcgm",
+          "page": 81,
+          "line": 28,
+          "token": "1.2",
+          "clause": "Reg 15 Note 3 (printed page 38)"
+        }
+      },
+      {
+        "$num": {
+          "src": "dcpr2034-mcgm",
+          "page": 102,
+          "line": 14,
+          "token": "1.2",
+          "clause": "Reg 17(1) Note (g) (printed page 59)"
+        }
+      }
+    ],
+    "definition": {
+      "$cite": {
+        "src": "dcpr2034-mcgm",
+        "page": 49,
+        "line": 7,
+        "token": "\"Carpet area\" would have the same meaning as defined in Real Estate",
+        "clause": "Reg 2(22)"
+      }
+    }
+  },
   "questions": [],
   "gaps": [
     {

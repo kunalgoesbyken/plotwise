@@ -214,7 +214,11 @@ const checkBonus: Check = (pack) => {
   })
 }
 
-const checkAgreement: Check = (pack) => allEqual('height.roadMultiple.maxMultipleOfDistance', pack.height.roadMultiple?.maxMultipleOfDistance ?? [])
+const checkAgreement: Check = (pack) => [
+  ...allEqual('height.roadMultiple.maxMultipleOfDistance', pack.height.roadMultiple?.maxMultipleOfDistance ?? []),
+  ...allEqual('carpetArea.builtUpPerCarpet', pack.carpetArea?.builtUpPerCarpet ?? []),
+  ...(pack.carpetArea?.builtUpPerCarpet ?? []).flatMap((ratio, i) => outOfRange(`carpetArea.builtUpPerCarpet.${i}`, ratio.value - 1, SHARE)),
+]
 
 const checkUseConditions: Check = ({ useConditions }) => {
   if (!useConditions) return []

@@ -201,12 +201,11 @@ exports[`pack bkk-y9 keeps every sourced value lists the same cited values and q
 
 exports[`pack dxb-ap keeps every sourced value lists the same cited values and quotes as before 1`] = `[]`;
 
-exports[`pack custom keeps every sourced value lists the same cited values and quotes as before 1`] = `[]`;
-
 exports[`pack mum-suburbs-res keeps every sourced value lists the same cited values and quotes as before 1`] = `
 [
   "{"source":"dcpr2034-mcgm","clause":"Reg 16","page":82,"line":16,"quote":"The Owner shall hand over the area required for road widening or roads proposed under the"}",
   "{"source":"dcpr2034-mcgm","clause":"Reg 16","page":82,"line":23,"quote":"(3) of section 288 of the MMC Act, 1888. The FSI / TDR in lieu of land so surrendered shall be"}",
+  "{"source":"dcpr2034-mcgm","clause":"Reg 2(22)","page":49,"line":7,"quote":"(22) \\"Carpet area\\" would have the same meaning as defined in Real Estate (Regulation and"}",
   "{"source":"dcpr2034-mcgm","clause":"Reg 30(A)(1) Table 12 Sr II(iii)","page":127,"line":24,"quote":"iii The remaining area in Suburbs Residential/ Less                           1.0           -   - 1.0"}",
   "{"source":"dcpr2034-mcgm","clause":"Reg 30(A)(1) Table 12 Sr II(iii)","page":127,"line":24,"quote":"iii The remaining area in Suburbs Residential/ Less                           1.0           -   - 1.0"}",
   "{"source":"dcpr2034-mcgm","clause":"Reg 30(A)(1) Table 12 Sr II(iii)","page":127,"line":24,"quote":"iii The remaining area in Suburbs Residential/ Less                           1.0           -   - 1.0"}",
@@ -255,6 +254,8 @@ exports[`pack mum-suburbs-res keeps every sourced value lists the same cited val
   "{"value":1,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 41(3)(a)","page":290,"line":10,"quote":"below, if the number of storeys are restricted to Ground and one upper floor or Stilt and two upper"}}",
   "{"value":1,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 44 Table No 21 Sr 1 (c)","page":299,"line":24,"quote":"c) 1 tenement with carpet area exceeding 60sq.m but not"}}",
   "{"value":1,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 44 Table No 21 Sr 1","page":299,"line":32,"quote":"subject to minimum of one."}}",
+  "{"value":1.2,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 15 Note 3 (printed page 38)","page":81,"line":28,"quote":"3) For arriving at number of tenements, ratio of BUA to carpet area shall be considered as 1.2"}}",
+  "{"value":1.2,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 17(1) Note (g) (printed page 59)","page":102,"line":14,"quote":"be considered as 1.2."}}",
   "{"value":1.5,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 41(3)(a) Table No 17","page":290,"line":24,"quote":"1       21 and above but less than 30                   Row           0.75 1.5    ....."}}",
   "{"value":1.5,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 41(3)(a) Table No 17","page":290,"line":36,"quote":"4.      60 and above but less than 125                  Row/Semi- 1.5 3.0         1.0 (i)"}}",
   "{"value":1.5,"cite":{"source":"dcpr2034-mcgm","clause":"Reg 41(3)(a) Table No 17","page":290,"line":40,"quote":"5.      125 and above but less than 250                 Row/Semi-     3.0 3.0     1.5 (i)"}}",
@@ -317,3 +318,5 @@ exports[`pack mum-suburbs-res keeps every sourced value lists the same cited val
   "{"value":90,"cmp":"lte","cite":{"source":"dcpr2034-mcgm","clause":"Reg 44 Table No 21 Sr 1 (c)","page":299,"line":25,"quote":"exceeding 90sq.m"}}",
 ]
 `;
+
+exports[`pack custom keeps every sourced value lists the same cited values and quotes as before 1`] = `[]`;

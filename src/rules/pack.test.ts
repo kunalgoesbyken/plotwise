@@ -161,6 +161,11 @@ describe('mum-suburbs-res draft values, read by hand from DCPR 2034 as sanctione
     ])
   })
 
+  it('relates built-up area to carpet area as 1.2 in Reg 15 Note 3 and Reg 17(1) Note (g), with carpet area as defined by RERA', () => {
+    expect(pack.carpetArea?.builtUpPerCarpet.map((ratio) => ratio.value)).toEqual([1.2, 1.2])
+    expect(pack.carpetArea?.definition).toMatchObject({ clause: 'Reg 2(22)' })
+  })
+
   it('takes side and rear open spaces per plot, FSI on the plot left after widening and twice the handed-over land in lieu', () => {
     expect(pack.plotSetbacks).toMatchObject({ kind: 'plotSpecific', edges: 'boundary' })
     expect(pack.reservations).toMatchObject([{ target: { kind: 'perFrontage' }, farOn: 'net', inLieu: { multipleOfReserved: { value: 2 } } }])
