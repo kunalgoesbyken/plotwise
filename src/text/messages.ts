@@ -205,6 +205,7 @@ const en = {
   'report.title': ({ region }: { region: string }) => `Plotwise · ${region} plot summary`,
   'report.plot': ({ area, allowed }: { area: string; allowed: string }) => `Plot ${area}. Up to ${allowed} of floor area allowed.`,
   'report.open': 'Not passed yet',
+  'report.transcribed': ({ name }: { name: string }) => `${name}: transcribed from a scanned page, double-checked.`,
   'report.assumptions': 'Assumptions used (estimated, editable)',
   'report.disclaimer': 'Money figures are estimates on editable assumptions, not a valuation. Rule figures come from the cited sources. Link:',
   'section.view3d': '3D view',
@@ -411,6 +412,8 @@ const en = {
   'source.entered': 'Entered by you',
   'source.toggle': ({ count }: Count) => (count === 1 ? 'Source' : `Sources (${count})`),
   'source.location': ({ page, line }: { page: number; line: number }) => `Page ${page}, line ${line}`,
+  'source.location.transcribed': ({ page, line }: { page: number; line: number }) => `Page ${page}; line ${line} of the transcription`,
+  'source.transcribed': 'Transcribed from a scanned page, double-checked',
   'source.open': ({ language }: { language: SourceLanguage }) => `Official text (PDF, in ${LANGUAGE_NAMES[language]})`,
 
   'range.between': ({ min, max }: { min: string; max: string }) => `${min} and ${max}`,
@@ -441,8 +444,9 @@ const en = {
   'rules.group.high-rise': 'High-rise access',
   'rules.group.use': ({ building }: { building: string }) => `Use · ${building}`,
   'rules.group.parking': 'Parking',
+  'rules.group.side-rear': 'Side and rear open space',
   'rules.group.interpretations': 'Interpretations',
-  'rules.setbacks.detail': 'Distance the building keeps from each edge at ground level. Above that, the height-to-road rule steps it back further.',
+  'rules.setbacks.detail': 'Distance the building keeps from each edge at ground level. Above that, rules that grow with height step it back further.',
   'rules.setbacks.edge': 'Edge',
   'rules.setbacks.faces': 'Faces',
   'rules.setbacks.ordinary': ({ height }: { height: string }) => `Under ${height}`,
@@ -509,6 +513,16 @@ const en = {
   'limit.envelope-top.ordinary.detail': 'The tallest whole floor that stays below the high-rise threshold.',
   'limit.envelope-top.highRise': 'Envelope top, high-rise',
   'limit.envelope-top.highRise.detail': 'Where the height-to-road rule closes the envelope.',
+  'limit.side-rear.column': 'Table A column for this plot',
+  'limit.side-rear.class.small': 'Smaller plots',
+  'limit.side-rear.class.large': 'Larger plots',
+  'limit.side-rear.column.small': ({ area, width }: { area: string; width: string }) =>
+    `Plots ${area}, or ${width} wide or deep on average. Kept on every side but the front, at the height of each floor; every side is taken to have windows.`,
+  'limit.side-rear.column.large': ({ area, width }: { area: string; width: string }) =>
+    `Plots ${area} and ${width} wide and deep on average. Kept on every side but the front, at the height of each floor; every side is taken to have windows.`,
+  'limit.side-rear.row': ({ height }: { height: string }) => `Building ${height} tall`,
+  'value.side-rear.share': ({ divisor, min, max }: { divisor: string; min?: string; max?: string }) =>
+    [`H/${divisor}`, min && `at least ${min}`, max && `at most ${max}`].filter(Boolean).join(', '),
   'limit.high-rise-access': ({ area }: Area) => `Floor area ${area}`,
   'limit.high-rise-access.detail': ({ road, frontage }: { road: string; frontage: string }) =>
     `Needs a road ${road} wide with frontage ${frontage} on it.`,

@@ -121,6 +121,7 @@ export function PrintSummary() {
   const { site, farCap } = result.solution
   const area = region.areaUnit
   const toCheck = design.checks.filter((check) => check.status !== 'pass')
+  const transcribed = Object.values(result.solution.pack.sources).filter((source) => source.textLayer === 'transcribedScan')
   return (
     <article className="hidden flex-col gap-6 p-8 text-foreground print:flex">
       <header className="flex items-baseline justify-between border-b pb-3">
@@ -129,6 +130,11 @@ export function PrintSummary() {
       </header>
       <ZoneStatus />
       <VerificationNote solution={result.solution} detailed />
+      {transcribed.map((source) => (
+        <p key={source.name} className="text-xs text-muted-foreground">
+          {t('report.transcribed', { name: source.name })}
+        </p>
+      ))}
       <section className="flex gap-8">
         <PlotDrawing ring={site.ring} footprint={design.plates.footprint} />
         <div className="flex-1">

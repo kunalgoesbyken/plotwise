@@ -1,15 +1,7 @@
-import type { Bound, Cite, ParkingDemand, Range } from '@/rules'
-import { formatComparator, formatList, formatQuantity } from '@/text/format'
+import type { Cite, ParkingDemand } from '@/rules'
+import { formatComparator, formatList, formatQuantity, formatRange } from '@/text/format'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
-
-const bound = ({ cmp, value }: Bound, area: AreaUnit) => `${formatComparator(cmp)} ${formatQuantity(value, area)}`
-
-function sizeText({ min, max }: Range, area: AreaUnit): string {
-  if (min && max) return t('range.between', { min: bound(min, area), max: bound(max, area) })
-  const only = min ?? max
-  return only ? bound(only, area) : t('range.any')
-}
 
 type RoomTier = Extract<ParkingDemand, { kind: 'perRoomTiers' }>['tiers'][number]
 
@@ -28,11 +20,11 @@ export function demandText(demand: ParkingDemand, area: AreaUnit): string {
       })
     case 'perUnitBySize':
       return t('parking.per-unit-by-size', {
-        bands: formatList(demand.bands.map((band) => t('parking.unit-band', { size: sizeText(band.unitSqm, area), spaces: band.spacesPerUnit.value }))),
+        bands: formatList(demand.bands.map((band) => t('parking.unit-band', { size: formatRange(band.unitSqm, area), spaces: band.spacesPerUnit.value }))),
       })
     case 'unitsPerSpaceBySize':
       return t('parking.units-per-space-by-size', {
-        bands: formatList(demand.bands.map((band) => t('parking.units-band', { size: sizeText(band.unitSqm, area), units: band.unitsPerSpace.value }))),
+        bands: formatList(demand.bands.map((band) => t('parking.units-band', { size: formatRange(band.unitSqm, area), units: band.unitsPerSpace.value }))),
       })
     case 'perGrossArea':
       return t('parking.per-gross-area', { area: sqm(demand.sqmPerSpace.value) })
