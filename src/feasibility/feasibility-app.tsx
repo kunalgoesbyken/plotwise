@@ -8,6 +8,7 @@ import { LandLine } from '@/finance/land-line'
 import { PrintSummary } from '@/report/print-summary'
 import { t } from '@/text/messages'
 import { Disclosure } from '@/ui/disclosure'
+import { ZoneStatus } from '@/zone'
 import { DesignsPanel } from './designs-panel'
 import { FarBonusToggle } from './far-bonus-toggle'
 import { FeasibilityProvider, useFeasibility } from './feasibility-provider'
@@ -52,6 +53,16 @@ function usePanels(): readonly ResultPanel[] {
   ]
 }
 
+function PlotZone() {
+  const { plot } = useFeasibility()
+  if (!plot) return null
+  return (
+    <div className="mt-2">
+      <ZoneStatus ring={plot.ring} />
+    </div>
+  )
+}
+
 function Workspace() {
   const { result, design, layers } = useFeasibility()
   const panels = usePanels()
@@ -66,6 +77,7 @@ function Workspace() {
           summary={
             <ResultsSummary>
               <LandLine />
+              <PlotZone />
             </ResultsSummary>
           }
           panels={panels}

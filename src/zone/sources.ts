@@ -1,5 +1,7 @@
+import { REGIONS } from '@/region/regions'
 import { loadPack } from '@/rules'
 import type { Bbox } from '@/site/bbox'
+import type { RegionId } from '@/solve'
 
 export type ZoneEntry = {
   readonly sourceCode: string
@@ -18,16 +20,16 @@ export type ZoneSource = {
   readonly zones: readonly ZoneEntry[]
 }
 
-export const ZONE_SOURCES: Readonly<Record<string, ZoneSource>> = {
+export const ZONE_SOURCES: Readonly<Record<RegionId, ZoneSource>> = {
   bkk: {
-    plan: { name: 'BMA city plan', url: 'https://webportal.bangkok.go.th/cpud' },
+    plan: REGIONS.bkk.cityPlan,
     layerUrl: 'https://cityplangis.bangkok.go.th/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8',
     zoneField: 'LUP_ZONE',
     coverage: [100.326, 13.485, 100.94, 13.953],
     licence:
       'Public ArcGIS REST layer of the Bangkok Metropolitan Administration (BMA). It publishes no licence text, so Plotwise queries it live, stores no copy and shows only the zone name.',
     attribution: 'Bangkok Comprehensive Plan B.E. 2556 land-use plan, BMA City Planning and Urban Development Department (cityplangis.bangkok.go.th)',
-    coveredCode: loadPack('bkk-y9').zone.code,
+    coveredCode: loadPack(REGIONS.bkk.packId).zone.code,
     zones: [
       { sourceCode: 'ก.๑', packCode: 'ก.1', name: 'green-hatched zone 1 (agricultural)' },
       { sourceCode: 'ก.๒', packCode: 'ก.2', name: 'green-hatched zone 2 (agricultural)' },

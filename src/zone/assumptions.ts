@@ -26,3 +26,8 @@ export const ZONE_DEBOUNCE_MS: Assumption<number> = {
   value: 400,
   source: 'assumption: waits for a dragged corner to settle, so one drag sends one request rather than dozens',
 }
+
+export const ZONE_MAX_SIDE_M: Assumption<number> = {
+  value: 1000,
+  source: 'assumption: wider than any single plot the tool is meant for, and small enough to keep each query to the city-plan layer cheap',
+}

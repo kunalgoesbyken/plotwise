@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import type { GeoJSONSource, Map as MapLibreMap, Marker } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import type { LngLat } from '@/geo/projection'
+import { REGION } from '@/region/regions'
 import { fitPadding, insideClearArea } from './fit-padding'
 import { bindInteractions } from './map-interactions'
 import { mapFeatures, mapLabels, type MapLabel } from './map-features'
@@ -11,7 +11,6 @@ import { addEditorLayers, EMPTY_OVERLAY, labelInEnglish, OVERLAY_SOURCE, PLOT_SO
 import { useEditorState, useEditorStore } from './plot-store'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
-const BANGKOK_CENTRE: LngLat = [100.5268, 13.7236]
 const START_ZOOM = 17
 const MAX_FIT_ZOOM = 19
 const PLACE_ZOOM = 18
@@ -75,7 +74,7 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       const created = new maplibre.Map({
         container: element,
         style: STYLE_URL,
-        center: [...BANGKOK_CENTRE],
+        center: [...REGION.mapStart.value],
         zoom: START_ZOOM,
         attributionControl: false,
         dragRotate: false,

@@ -40,7 +40,7 @@ function ZoneText({ verdict }: { verdict: ZoneVerdict }) {
         {plan && (
           <>
             {' '}
-            <a href={plan.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+            <a href={plan.url} target="_blank" rel="noreferrer" className="underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground">
               {t('zone.confirm', { plan: plan.name })}
             </a>
           </>
@@ -53,7 +53,7 @@ function ZoneText({ verdict }: { verdict: ZoneVerdict }) {
 export function ZoneStatus({ ring }: { readonly ring: readonly LngLat[] }) {
   const verdict = useZone(ring)
   return (
-    <p role="status" className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm leading-relaxed">
+    <p role="status" className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs leading-relaxed">
       {verdict ? <ZoneText verdict={verdict} /> : <span className="text-muted-foreground">{t('zone.checking')}</span>}
     </p>
   )
