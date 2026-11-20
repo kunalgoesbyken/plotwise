@@ -17,6 +17,7 @@ import { PlotMap } from './plot-map'
 import { PlotStep } from './plot-step'
 import { useEditorState, useEditorStore, useRegion, type EditorStore } from './plot-store'
 import { StationToggle } from './station-toggle'
+import { StepChoiceContext } from './step-choice'
 import { Stepper } from './stepper'
 import { followEdits, furthestStep, isOpen, shownStep, STEPS, type Step } from './steps'
 
@@ -173,51 +174,53 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const sceneInPanel = step === 'results' && tab === VIEW_3D
 
   return (
-    <main data-workspace className="relative h-dvh w-full overflow-clip">
-      <PlotMap covers={covers} overlay={overlay} />
-      <aside
-        ref={panel}
-        aria-label={t('shell.panel')}
-        data-scene={sceneInPanel}
-        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col max-lg:data-[scene=true]:max-h-[85dvh] rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-sheet [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-sheet md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
-      >
-        <header className="hidden h-14 shrink-0 items-center border-b px-(--pad) lg:flex">
-          <Wordmark />
-        </header>
-        <div className="flex shrink-0 items-center gap-1 px-2 pt-2 lg:px-(--pad) lg:pt-3">
-          <Stepper step={step} state={state} onChoose={choose} />
-          <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t(open ? 'shell.hide' : 'shell.show')} aria-expanded={open} onClick={() => setOpen(!open)}>
-            <CaretDownIcon aria-hidden="true" weight="bold" className={cn('transition-transform', !open && 'rotate-180')} />
-          </Button>
-        </div>
-        <HintBar />
-        <div ref={scroller} className={cn('thin-scroll min-h-0 flex-1 scroll-pt-40 overflow-y-auto overscroll-contain', !open && 'max-lg:hidden')}>
-          {step === 'plot' && <PlotStep />}
-          {step === 'roads' && (
-            <>
-              {ready && summary && <div className="sticky top-0 z-10 border-b bg-background px-(--pad) py-3">{summary}</div>}
-              <Frontage />
-              <StationToggle />
-              <LimitsForm />
-            </>
-          )}
-          {step === 'results' && <Results summary={summary} panels={panels} tab={tab} onTab={setTab} sceneId={sceneId} />}
-          <section
-            ref={inset}
-            id={sceneId}
-            aria-label={t('section.view3d')}
-            className={cn(
-              sceneInPanel ? 'max-xl:h-[50dvh]' : 'max-xl:hidden',
-              ready && view3d ? 'xl:fixed xl:bottom-3 xl:left-3 xl:h-[48vh] xl:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] xl:overflow-hidden xl:rounded-xl xl:border xl:bg-background xl:shadow-xl' : 'xl:hidden',
+    <StepChoiceContext value={{ step, choose }}>
+      <main data-workspace className="relative h-dvh w-full overflow-clip">
+        <PlotMap covers={covers} overlay={overlay} />
+        <aside
+          ref={panel}
+          aria-label={t('shell.panel')}
+          data-scene={sceneInPanel}
+          className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col max-lg:data-[scene=true]:max-h-[85dvh] rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-sheet [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-sheet md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
+        >
+          <header className="hidden h-14 shrink-0 items-center border-b px-(--pad) lg:flex">
+            <Wordmark />
+          </header>
+          <div className="flex shrink-0 items-center gap-1 px-2 pt-2 lg:px-(--pad) lg:pt-3">
+            <Stepper step={step} state={state} onChoose={choose} />
+            <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t(open ? 'shell.hide' : 'shell.show')} aria-expanded={open} onClick={() => setOpen(!open)}>
+              <CaretDownIcon aria-hidden="true" weight="bold" className={cn('transition-transform', !open && 'rotate-180')} />
+            </Button>
+          </div>
+          <HintBar />
+          <div ref={scroller} className={cn('thin-scroll min-h-0 flex-1 scroll-pt-40 overflow-y-auto overscroll-contain', !open && 'max-lg:hidden')}>
+            {step === 'plot' && <PlotStep />}
+            {step === 'roads' && (
+              <>
+                {ready && summary && <div className="sticky top-0 z-10 border-b bg-background px-(--pad) py-3">{summary}</div>}
+                <Frontage />
+                <StationToggle />
+                <LimitsForm />
+              </>
             )}
-          >
-            {ready && view3d}
-          </section>
-        </div>
-        <div className={cn(!open && 'max-lg:hidden')}>
-          <StepFooter step={step} state={state} onChoose={choose} />
-        </div>
-      </aside>
-    </main>
+            {step === 'results' && <Results summary={summary} panels={panels} tab={tab} onTab={setTab} sceneId={sceneId} />}
+            <section
+              ref={inset}
+              id={sceneId}
+              aria-label={t('section.view3d')}
+              className={cn(
+                sceneInPanel ? 'max-xl:h-[50dvh]' : 'max-xl:hidden',
+                ready && view3d ? 'xl:fixed xl:bottom-3 xl:left-3 xl:h-[48vh] xl:w-[min(40rem,calc((100vw-var(--panel-w))*0.5))] xl:overflow-hidden xl:rounded-xl xl:border xl:bg-background xl:shadow-xl' : 'xl:hidden',
+              )}
+            >
+              {ready && view3d}
+            </section>
+          </div>
+          <div className={cn(!open && 'max-lg:hidden')}>
+            <StepFooter step={step} state={state} onChoose={choose} />
+          </div>
+        </aside>
+      </main>
+    </StepChoiceContext>
   )
 }
