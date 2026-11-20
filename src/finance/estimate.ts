@@ -2,7 +2,8 @@ import type { Metrics } from '@/designs'
 import type { BuildingType } from '@/plot/plot'
 import type { RulePack } from '@/rules'
 import { isHighRiseOrExtraLarge, type MoneyRegion, type Solution } from '@/solve'
-import type { Bound, RateRow } from './parameters'
+import { placementOf, type Placement } from './area'
+import type { Basis, Bound, RateRow } from './parameters'
 import type { Values } from './values'
 
 export type BuildClass = 'lowRise' | 'highRise'
@@ -10,6 +11,7 @@ export type BuildClass = 'lowRise' | 'highRise'
 export type FinanceSite = {
   readonly pack: RulePack
   readonly use: BuildingType
+  readonly area: Placement
   readonly plotAreaSqm: number
   readonly landUnitSqm: number
 }
@@ -17,9 +19,12 @@ export type FinanceSite = {
 export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSite => ({
   pack: solution.pack,
   use: solution.plot.buildingType,
+  area: placementOf(solution.site.frame.origin, region.areas),
   plotAreaSqm: solution.site.areaSqm,
   landUnitSqm: region.landUnit.sqm.value,
 })
+
+export const basisOf = ({ use, area }: FinanceSite): Basis => ({ use, tier: area.tier })
 
 export type CostSplit = { readonly substructure: number; readonly superstructure: number; readonly services: number }
 export type Range = { readonly low: number; readonly high: number }
@@ -44,6 +49,13 @@ const LEVEL_TOLERANCE = 1e-6
 const levelsFor = (areaSqm: number, plateSqm: number) => (plateSqm > 0 ? Math.max(0, Math.ceil(areaSqm / plateSqm - LEVEL_TOLERANCE)) : 0)
 
 export const totalOf = ({ substructure, superstructure, services }: CostSplit) => substructure + superstructure + services
+
+export const acquisitionShare = ({ transferCosts, holdingCost, landFinance }: Values) => transferCosts + holdingCost + landFinance
+
+export function landResidual(grossValue: number, buildCost: number, values: Values) {
+  const afterBuild = grossValue * (1 - values.margin) - buildCost * (1 + values.softCost)
+  return afterBuild < 0 ? afterBuild : afterBuild / (1 + acquisitionShare(values))
+}
 
 function parkingFor(metrics: Metrics, plotAreaSqm: number, maxAboveGround: number): Parking {
   const needed = levelsFor(metrics.parkingSqm, metrics.footprintSqm)
@@ -75,8 +87,8 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values): E
   const firstCost = totalOf(atLow) <= totalOf(atHigh) ? { low: atLow, high: atHigh } : { low: atHigh, high: atLow }
   const saleableSqm = Math.max(0, metrics.builtSqm - metrics.parkingSqm) * values.saleableShare
   const grossValue = saleableSqm * values.salePrice
-  const landAfter = (cost: CostSplit) => grossValue * (1 - values.margin) - totalOf(cost) * (1 + values.softCost)
-  const landValue = { low: landAfter(firstCost.high), high: landAfter(firstCost.low) }
+  const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values)
+  const landValue = { low: landFor(firstCost.high), high: landFor(firstCost.low) }
   const landUnits = site.plotAreaSqm / site.landUnitSqm
   return {
     buildClass,
