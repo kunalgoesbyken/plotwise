@@ -21,7 +21,7 @@ async function expectExampleResults(page: Page, { region, name, plot, allowed, l
   await goTo(page, 'Results')
   await expect(summary(page)).toContainText(allowed, { timeout: READY_TIMEOUT })
   await expect(summary(page)).toContainText(label)
-  expect(await designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ }).count()).toBeGreaterThanOrEqual(2)
+  expect(await designTable(page).getByRole('columnheader').getByRole('button').count()).toBeGreaterThanOrEqual(2)
   await goTo(page, 'Plot')
   await expect(rulesPicker(page).getByRole('radio', { name })).toBeChecked()
 }

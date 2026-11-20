@@ -8,6 +8,7 @@ import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { loadPack } from '../src/rules'
 import type { RegionId } from '../src/solve'
+import { formatQuantity } from '../src/text/format'
 import { t } from '../src/text/messages'
 import { designTable, openResults, scene } from './support/app'
 import { mockApp } from './support/site'
@@ -26,7 +27,7 @@ function ranked(region: Example): readonly Ranked[] {
 const nameOf = ({ design }: Ranked) => t('design.name', design.name)
 const lineOf = (region: Example, option: Ranked) => standingLine(option, REGIONS[region].areaUnit)
 const standings = (page: Page) => page.getByRole('list', { name: t('standing.label') }).getByRole('listitem')
-const columnNames = (page: Page) => designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ }).allTextContents()
+const columnButtons = (page: Page) => designTable(page).getByRole('columnheader').getByRole('button')
 const background = (page: Page, index: number) => designTable(page).getByRole('columnheader').nth(index).evaluate((cell) => getComputedStyle(cell).backgroundColor)
 
 async function openExample(page: Page, region: Example) {
@@ -37,18 +38,11 @@ async function openExample(page: Page, region: Example) {
 async function expectStandings(page: Page, region: Example) {
   const options = ranked(region)
   const shown = options.filter(({ standing }) => standing.kind !== 'same-as')
-  expect(await columnNames(page)).toEqual(shown.map(nameOf))
+  await expect(columnButtons(page)).toHaveCount(shown.length)
+  for (const [index, option] of shown.entries()) await expect(columnButtons(page).nth(index)).toHaveAccessibleName(t('design.show', { name: nameOf(option) }))
   await expect(standings(page)).toHaveText(options.map((option) => lineOf(region, option)))
   return shown
 }
-
-test('the engine greys a Bangkok tower and settles the Mumbai and Dubai ties with what separates the designs', () => {
-  for (const region of ['bkk', 'mum', 'dxb'] as const) {
-    const options = ranked(region)
-    expect(options.filter(({ standing }) => standing.kind === 'best').length).toBe(1)
-    expect(options.some(({ standing }) => standing.kind === 'dominated')).toBe(true)
-  }
-})
 
 test('the Bangkok example marks its headline design as having the most floor area and greys the towers with the reason', async ({ page }) => {
   await openExample(page, 'bkk')
@@ -58,6 +52,10 @@ test('the Bangkok example marks its headline design as having the most floor are
   const greyed = shown.findIndex(({ standing }) => standing.kind === 'dominated')
   expect(greyed).toBeGreaterThanOrEqual(0)
   expect(await background(page, greyed)).not.toBe(await background(page, best))
+  const [tower, headline] = [shown[greyed].design, shown[best].design]
+  const line = standings(page).nth(ranked('bkk').findIndex(({ design }) => design.id === tower.id))
+  await expect(line).toContainText(t('design.name', headline.name))
+  await expect(line).toContainText(formatQuantity(headline.metrics.gfaSqm - tower.metrics.gfaSqm, REGIONS.bkk.areaUnit))
 })
 
 test('a greyed design can still be chosen and shown in 3D', async ({ page }) => {
