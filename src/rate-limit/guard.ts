@@ -1,5 +1,8 @@
-import { CLIENT_ADDRESS } from './assumptions'
+import { CLIENT_ADDRESS, type RateLimitedRoute } from './assumptions'
 import { createRateLimiter, type RateLimiterOptions, type RateLimitPolicy } from './limiter'
+import { type Environment, sharedStoreCredentials, type SharedStoreCredentials } from './shared-credentials'
+import { createSharedRateLimiter, type RemoteLimit } from './shared-limiter'
+import { connectUpstash } from './upstash'
 
 export function clientKey(request: Request): string {
   const { headers, fallback } = CLIENT_ADDRESS.value
@@ -17,10 +20,21 @@ function tooManyRequests(retryAfterS: number): Response {
   )
 }
 
-export function createRateLimitGuard(policy: RateLimitPolicy, options?: RateLimiterOptions) {
-  const limiter = createRateLimiter(policy, options)
-  return (request: Request): Response | undefined => {
-    const decision = limiter.check(clientKey(request))
+export type GuardOptions = RateLimiterOptions & {
+  readonly env?: Environment
+  readonly connect?: (credentials: SharedStoreCredentials, route: RateLimitedRoute, policy: RateLimitPolicy) => RemoteLimit
+}
+
+function createLimiter(route: RateLimitedRoute, policy: RateLimitPolicy, { env = process.env, connect = connectUpstash, ...options }: GuardOptions) {
+  const local = createRateLimiter(policy, options)
+  const credentials = sharedStoreCredentials(env)
+  return credentials ? createSharedRateLimiter(connect(credentials, route, policy), local, options.now) : local
+}
+
+export function createRateLimitGuard(route: RateLimitedRoute, policy: RateLimitPolicy, options: GuardOptions = {}) {
+  const limiter = createLimiter(route, policy, options)
+  return async (request: Request): Promise<Response | undefined> => {
+    const decision = await limiter.check(clientKey(request))
     return decision.allowed ? undefined : tooManyRequests(decision.retryAfterS)
   }
 }

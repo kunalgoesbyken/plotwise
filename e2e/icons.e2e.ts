@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test'
 
 const ICON_FILES = [
-  { rel: 'icon', pathname: '/favicon.ico', contentType: 'image/x-icon' },
-  { rel: 'icon', pathname: '/icon.svg', contentType: 'image/svg+xml' },
-  { rel: 'apple-touch-icon', pathname: '/apple-icon.png', contentType: 'image/png' },
+  { rel: 'icon', pathname: '/favicon.ico', contentTypes: ['image/x-icon', 'image/vnd.microsoft.icon'] },
+  { rel: 'icon', pathname: '/icon.svg', contentTypes: ['image/svg+xml'] },
+  { rel: 'apple-touch-icon', pathname: '/apple-icon.png', contentTypes: ['image/png'] },
 ] as const
 
 for (const path of ['/', '/app']) {
-  for (const { rel, pathname, contentType } of ICON_FILES) {
-    test(`${path} links ${pathname}, which is served as ${contentType}`, async ({ page, request }) => {
+  for (const { rel, pathname, contentTypes } of ICON_FILES) {
+    test(`${path} links ${pathname}, which is served as ${contentTypes.join(' or ')}`, async ({ page, request }) => {
       await page.goto(path)
       const links = await page.locator(`head link[rel="${rel}"]`).evaluateAll((nodes) => nodes.map((node) => (node as HTMLLinkElement).href))
       const href = links.find((link) => new URL(link).pathname === pathname)
@@ -16,7 +16,8 @@ for (const path of ['/', '/app']) {
 
       const response = await request.get(href!)
       expect(response.status()).toBe(200)
-      expect(response.headers()['content-type']).toContain(contentType)
+      const served = response.headers()['content-type']
+      expect(contentTypes.some((contentType) => served.includes(contentType)), served).toBe(true)
       expect((await response.body()).length).toBeGreaterThan(0)
     })
   }

@@ -12,7 +12,7 @@ export const maxDuration = 60
 const { browser, cdn, staleWhileRevalidate } = SITE_CACHE_S.value
 const CACHEABLE = `public, max-age=${browser}, s-maxage=${cdn}, stale-while-revalidate=${staleWhileRevalidate}`
 const UNCACHEABLE = 'no-store'
-const rateLimited = createRateLimitGuard(ROUTE_RATE_LIMITS.value.site)
+const rateLimited = createRateLimitGuard('site', ROUTE_RATE_LIMITS.value.site)
 
 const issuesOf = (error: z.ZodError) => error.issues.map((issue) => issue.message).join('; ')
 
@@ -21,7 +21,7 @@ function failure(status: number, error: string): Response {
 }
 
 export async function GET(request: NextRequest): Promise<Response> {
-  const refused = rateLimited(request)
+  const refused = await rateLimited(request)
   if (refused) return refused
   const { searchParams } = request.nextUrl
   const region = regionParam(searchParams.get('region'))

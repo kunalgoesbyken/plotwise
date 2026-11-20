@@ -13,7 +13,7 @@ const { browser, cdn, staleWhileRevalidate } = PLACES_CACHE_S.value
 const CACHEABLE = `public, max-age=${browser}, s-maxage=${cdn}, stale-while-revalidate=${staleWhileRevalidate}`
 const UNCACHEABLE = 'no-store'
 const UNAVAILABLE = 'Place search is unavailable right now; try again shortly'
-const rateLimited = createRateLimitGuard(ROUTE_RATE_LIMITS.value.geocode)
+const rateLimited = createRateLimitGuard('geocode', ROUTE_RATE_LIMITS.value.geocode)
 
 const issuesOf = (error: z.ZodError) => error.issues.map((issue) => issue.message).join('; ')
 
@@ -22,7 +22,7 @@ function failure(status: number, error: string): Response {
 }
 
 export async function GET(request: NextRequest): Promise<Response> {
-  const refused = rateLimited(request)
+  const refused = await rateLimited(request)
   if (refused) return refused
   const { searchParams } = request.nextUrl
   const region = regionParam(searchParams.get('region'))

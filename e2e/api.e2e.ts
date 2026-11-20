@@ -1,13 +1,15 @@
-import type { APIResponse } from '@playwright/test'
+import type { APIRequestContext, APIResponse } from '@playwright/test'
 import { expect, test } from '@playwright/test'
+import { PLACES_CACHE_S } from '../src/geocode/assumptions'
 import { ROUTE_RATE_LIMITS } from '../src/rate-limit/assumptions'
+import { SITE_CACHE_S } from '../src/site/assumptions'
+import { type CacheTimes, expectCdnToCache, expectPublicCacheControl } from './support/cdn-cache'
 
 const BANGKOK_BBOX = '100.5671,13.7632,100.5709,13.7668'
 const BURSTING_CLIENT = '203.0.113.77'
 const EXTRA_REQUESTS = 5
 
 const MUST_NOT_BE_CACHED = 'no-store'
-const PUBLICLY_CACHED = /^public, max-age=\d+, s-maxage=\d+, stale-while-revalidate=\d+$/
 
 const rejections = [
   { route: '/api/site', query: '', message: 'bbox is required' },
@@ -31,10 +33,13 @@ async function expectJsonError(response: APIResponse, message: string) {
   expect(body.error).toContain(message)
 }
 
-function expectCachingToFollowOutcome(response: APIResponse, cacheable: boolean) {
-  const header = response.headers()['cache-control']
-  if (cacheable) expect(header).toMatch(PUBLICLY_CACHED)
-  else expect(header).toBe(MUST_NOT_BE_CACHED)
+async function expectCachingToFollowOutcome(request: APIRequestContext, url: string, response: APIResponse, times: CacheTimes) {
+  if (!response.ok()) {
+    expect(response.headers()['cache-control']).toBe(MUST_NOT_BE_CACHED)
+    return
+  }
+  expectPublicCacheControl(response, times)
+  await expectCdnToCache(request, url)
 }
 
 test.describe('input validation', () => {
@@ -51,16 +56,18 @@ test.describe('input validation', () => {
 
 test.describe('caching headers', () => {
   test('/api/site caches a successful answer publicly and never a failed one', async ({ request }) => {
-    const response = await request.get(`/api/site?bbox=${BANGKOK_BBOX}`)
+    const url = `/api/site?bbox=${BANGKOK_BBOX}`
+    const response = await request.get(url)
     expect([200, 502]).toContain(response.status())
-    expectCachingToFollowOutcome(response, response.ok())
+    await expectCachingToFollowOutcome(request, url, response, SITE_CACHE_S.value)
     if (response.ok()) expect((await response.json()).bbox).toHaveLength(4)
   })
 
   test('/api/geocode caches a successful answer publicly and never a failed one', async ({ request }) => {
-    const response = await request.get('/api/geocode?q=asok')
+    const url = '/api/geocode?q=asok'
+    const response = await request.get(url)
     expect([200, 502]).toContain(response.status())
-    expectCachingToFollowOutcome(response, response.ok())
+    await expectCachingToFollowOutcome(request, url, response, PLACES_CACHE_S.value)
     if (response.ok()) expect(Array.isArray(await response.json())).toBe(true)
   })
 
