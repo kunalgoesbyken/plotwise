@@ -28,7 +28,7 @@ describe('parking spaces', () => {
 
   it('asks a large building for one space per 120 m² when that is more than the per-use count', () => {
     const condo = need({ units: 100, unitSqm: 35, floorAreaSqm: 12000, large: true })
-    expect(parkingSpaces([bylaw], condo)).toMatchObject({ value: 100, cites: expect.arrayContaining([bylaw.largeBuildingSqmPerSpace.cite]) })
+    expect(parkingSpaces([bylaw], condo)).toMatchObject({ value: 100, cites: expect.arrayContaining([bylaw.largeBuildingSqmPerSpace!.cite]) })
     expect(parkingSpaces([bylaw], { ...condo, units: 150, unitSqm: 60 }).value).toBe(150)
   })
 

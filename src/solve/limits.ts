@@ -1,19 +1,15 @@
-import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
+import { BUILDING_TYPES, type BuildingType, type PlotLimits } from '@/plot/plot'
 import type { Site, SiteEdge } from '@/plot/site'
-import type { Bound, Cite, FarBonus, ParkingRule, Range, RulePack } from '@/rules'
+import { isSourceCite, type Bound, type Cite, type ParkingRule, type Range, type RulePack } from '@/rules'
 import { inRange, satisfies } from './bound'
-import { isMember, readingCites, readingSources, type Interpretations } from './interpretations'
+import { classesFor, type ClassMembership, type Classes } from './classes'
+import { coverageLimit, type CoverageLimit } from './coverage'
+import { farLimits, type FarLimits } from './far'
+import { planHeight } from './height'
+import { posesQuestion, readingCites, readingSources, type Interpretations } from './interpretations'
 import { heightVsRoadMultiple } from './setbacks'
 
 export type Sourced = { readonly value: number; readonly cites: readonly Cite[] }
-export type ClassMembership = { readonly member: boolean; readonly cites: readonly Cite[] }
-
-export type BonusMeasure = {
-  readonly kind: FarBonus['kind']
-  readonly eligible: boolean
-  readonly maxShare: number
-  readonly cites: readonly Cite[]
-}
 
 export type OpenSpaceMinimum = {
   readonly scope: 'anyBuilding' | 'highRiseOrExtraLarge'
@@ -22,7 +18,7 @@ export type OpenSpaceMinimum = {
   readonly cites: readonly Cite[]
 }
 
-type RoadAccessTier = RulePack['useConditions']['roadAccessTiers'][number]
+type RoadAccessTier = NonNullable<RulePack['useConditions']>['roadAccessTiers'][number]
 
 export type Exemption =
   | { readonly kind: 'none' }
@@ -47,39 +43,26 @@ export type HighRiseAccessBand = {
   readonly qualifies: boolean
 }
 
-export type Limits = {
-  readonly far: { readonly ratio: number; readonly maxGfaSqm: number; readonly cites: readonly Cite[] }
-  readonly farBonus: {
-    readonly measures: readonly BonusMeasure[]
-    readonly maxShare: number
-    readonly extraGfaSqm: number
-    readonly maxGfaSqm: number
-    readonly cites: readonly Cite[]
-  }
-  readonly classes: { readonly residential: ClassMembership; readonly publicBuilding: ClassMembership }
-  readonly openSpace: {
-    readonly ratio: Sourced
-    readonly permeable: Sourced & { readonly base: Interpretations['permeable-base'] }
-    readonly minimums: readonly OpenSpaceMinimum[]
-  }
-  readonly height: { readonly planLimitM: null; readonly cites: readonly Cite[]; readonly vsRoadMultiple: Sourced }
-  readonly use: UseLimit
-  readonly highRise: {
-    readonly fromHeightM: Bound
-    readonly extraLargeFromFloorAreaSqm: Bound
-    readonly access: readonly HighRiseAccessBand[]
-    readonly fireLaneWidthM: Bound
-    readonly farMax: Sourced
-  }
-  readonly parking: { readonly rules: readonly ParkingRule[]; readonly cites: readonly Cite[] }
+export type HighRiseLimits = {
+  readonly fromHeightM: Bound
+  readonly extraLargeFromFloorAreaSqm: Bound
+  readonly access: readonly HighRiseAccessBand[]
+  readonly fireLaneWidthM: Bound | null
+  readonly farMax: Sourced | null
 }
 
-export type FarMode = 'standard' | 'bonus'
-
-export type FarCap = {
-  readonly mode: FarMode
-  readonly maxGfaSqm: number
-  readonly cites: readonly Cite[]
+export type Limits = FarLimits & {
+  readonly classes: Classes
+  readonly openSpace: {
+    readonly ratio: Sourced | null
+    readonly permeable: (Sourced & { readonly base: Interpretations['permeable-base'] }) | null
+    readonly minimums: readonly OpenSpaceMinimum[]
+  }
+  readonly height: { readonly planLimitM: number | null; readonly cites: readonly Cite[]; readonly vsRoadMultiple: Sourced | null }
+  readonly coverage: CoverageLimit | null
+  readonly use: UseLimit
+  readonly highRise: HighRiseLimits | null
+  readonly parking: { readonly rules: readonly ParkingRule[]; readonly cites: readonly Cite[] }
 }
 
 export type LimitsInput = {
@@ -88,96 +71,50 @@ export type LimitsInput = {
   readonly site: Site
   readonly buildingType: BuildingType
   readonly nearStation: boolean
-}
-
-function bonusMeasure(measure: FarBonus, classes: Limits['classes'], nearStation: boolean): BonusMeasure {
-  switch (measure.kind) {
-    case 'affordableHousing':
-      return {
-        kind: measure.kind,
-        eligible: classes.residential.member,
-        maxShare: measure.maxShare.value,
-        cites: [measure.maxShare.cite, ...classes.residential.cites],
-      }
-    case 'publicOpenSpace':
-      return {
-        kind: measure.kind,
-        eligible: classes.publicBuilding.member,
-        maxShare: measure.maxShare.value,
-        cites: [measure.zones, measure.maxShare.cite, ...classes.publicBuilding.cites],
-      }
-    case 'publicParking':
-      return {
-        kind: measure.kind,
-        eligible: classes.publicBuilding.member && nearStation,
-        maxShare: measure.maxShare.value,
-        cites: [measure.maxStationDistanceM.cite, measure.maxShare.cite, ...classes.publicBuilding.cites],
-      }
-    case 'floodRetention':
-      return { kind: measure.kind, eligible: true, maxShare: measure.maxShare.value, cites: [measure.maxShare.cite] }
-    case 'energyRating': {
-      const top = measure.levels.reduce((best, level) => (level.share.value > best.share.value ? level : best))
-      return { kind: measure.kind, eligible: true, maxShare: top.share.value, cites: [top.share.cite] }
-    }
-  }
-}
-
-function farLimits({ pack, site, nearStation }: LimitsInput, classes: Limits['classes']): Pick<Limits, 'far' | 'farBonus'> {
-  const ratio = pack.far.max.value
-  const maxGfaSqm = ratio * site.areaSqm
-  const measures = pack.farBonus.measures.map((m) => bonusMeasure(m, classes, nearStation))
-  const eligibleShare = measures.filter((m) => m.eligible).reduce((sum, m) => sum + m.maxShare, 0)
-  const maxShare = Math.min(pack.farBonus.combinedMaxShare.value, eligibleShare)
-  return {
-    far: { ratio, maxGfaSqm, cites: [pack.far.max.cite, pack.far.definition, pack.far.subdividedPlotsShareCap] },
-    farBonus: {
-      measures,
-      maxShare,
-      extraGfaSqm: maxGfaSqm * maxShare,
-      maxGfaSqm: maxGfaSqm * (1 + maxShare),
-      cites: [pack.farBonus.combinedMaxShare.cite],
-    },
-  }
-}
-
-export function farCapFor({ far, farBonus }: Limits, mode: FarMode): FarCap {
-  if (mode === 'standard' || farBonus.extraGfaSqm <= 0) return { mode: 'standard', maxGfaSqm: far.maxGfaSqm, cites: far.cites }
-  return { mode, maxGfaSqm: farBonus.maxGfaSqm, cites: [...far.cites, ...farBonus.cites] }
+  readonly floorToFloorM: number
+  readonly plotLimits: PlotLimits | undefined
 }
 
 function openSpaceLimits({ pack, readings }: LimitsInput, residential: ClassMembership): Limits['openSpace'] {
   const osr = pack.openSpaceRatio
   const base = readings['open-space-base']
   const sources = readingSources(pack, 'open-space-base', base)
+  const filtered = posesQuestion(pack, 'open-space-base')
   const use = residential.member ? 'residential' : 'nonResidential'
   const minimums = pack.openSpaceMinimums
-    .filter((m) => m.use === use && sources.has(m.minShare.cite.source))
+    .filter((m) => m.use === use && (!filtered || (isSourceCite(m.minShare.cite) && sources.has(m.minShare.cite.source))))
     .map((m) => ({
       scope: m.scope,
       base: m.base,
       share: m.minShare.value,
-      cites: [m.minShare.cite, osr.notBelowBuildingControl, ...residential.cites, ...readingCites(pack, 'open-space-base', base)],
+      cites: [m.minShare.cite, ...(osr ? [osr.notBelowBuildingControl] : []), ...residential.cites, ...readingCites(pack, 'open-space-base', base)],
     }))
   const permeableBase = readings['permeable-base']
   return {
-    ratio: { value: osr.minShareOfFloorArea.value, cites: [osr.minShareOfFloorArea.cite, osr.definition] },
-    permeable: {
-      value: osr.permeableShareOfOpenSpace.value,
-      base: permeableBase,
-      cites: [osr.permeableShareOfOpenSpace.cite, ...readingCites(pack, 'permeable-base', permeableBase)],
-    },
+    ratio: osr ? { value: osr.minShareOfFloorArea.value, cites: [osr.minShareOfFloorArea.cite, osr.definition] } : null,
+    permeable: osr
+      ? {
+          value: osr.permeableShareOfOpenSpace.value,
+          base: permeableBase,
+          cites: [osr.permeableShareOfOpenSpace.cite, ...readingCites(pack, 'permeable-base', permeableBase)],
+        }
+      : null,
     minimums,
   }
 }
 
-function accessTierFor(pack: RulePack, roadWidthM: Bound): RoadAccessTier | null {
-  const tiers = pack.useConditions.roadAccessTiers.filter((tier) => satisfies(roadWidthM.value, tier.roadWidthM))
+function accessTierFor(conditions: NonNullable<RulePack['useConditions']>, roadWidthM: Bound): RoadAccessTier | null {
+  const tiers = conditions.roadAccessTiers.filter((tier) => satisfies(roadWidthM.value, tier.roadWidthM))
   return tiers.reduce<RoadAccessTier | null>((best, tier) => (!best || tier.roadWidthM.value > best.roadWidthM.value ? tier : best), null)
 }
 
-function roadExemption({ pack, readings, site }: LimitsInput, roadWidthM: Bound): Exemption {
+function roadExemption(
+  { pack, readings, site }: LimitsInput,
+  conditions: NonNullable<RulePack['useConditions']>,
+  roadWidthM: Bound,
+): Exemption {
   const reading = readings['road-access-tiers']
-  const tier = reading === 'frontage-and-row' ? accessTierFor(pack, roadWidthM) : null
+  const tier = reading === 'frontage-and-row' ? accessTierFor(conditions, roadWidthM) : null
   const qualifies = (edge: SiteEdge) =>
     edge.roadWidthM !== null && satisfies(edge.roadWidthM, roadWidthM) && (!tier || satisfies(edge.lengthM, tier.frontageM))
   const edge = site.edges.findIndex(qualifies)
@@ -188,68 +125,68 @@ function roadExemption({ pack, readings, site }: LimitsInput, roadWidthM: Bound)
 
 function conditionLimit(input: LimitsInput): UseLimit {
   const { pack, buildingType, nearStation } = input
-  const condition = pack.useConditions[buildingType]
+  if (!pack.useConditions) return { kind: 'permitted', cites: [] }
+  const conditions = pack.useConditions
+  const condition = conditions[buildingType]
   if (condition.kind === 'notListed') return { kind: 'permitted', cites: [condition.absent.from, condition.absent.to] }
-  const station: Exemption = {
-    kind: 'station',
-    cites: [condition.unlessStationDistanceM.cite, pack.useConditions.stationDistanceFrom],
-  }
+  const station = { kind: 'station', cites: [condition.unlessStationDistanceM.cite, conditions.stationDistanceFrom] } as const
   return {
     kind: 'restricted',
     measure: condition.measure,
     threshold: condition.threshold,
     roadWidthM: condition.unlessRoadWidthM,
-    exemption: nearStation ? station : roadExemption(input, condition.unlessRoadWidthM),
+    exemption: nearStation ? station : roadExemption(input, conditions, condition.unlessRoadWidthM),
     cites: [condition.threshold.cite],
   }
 }
 
-function highRiseLimits({ pack, site }: LimitsInput): Limits['highRise'] {
+function highRiseLimits({ pack, site }: LimitsInput): HighRiseLimits | null {
+  const { buildingClasses, highRise } = pack
+  if (!buildingClasses) return null
   const qualifies = (roadWidthM: Bound, frontageM: Bound) =>
     site.edges.some((e) => e.roadWidthM !== null && satisfies(e.roadWidthM, roadWidthM) && satisfies(e.lengthM, frontageM))
   return {
-    fromHeightM: pack.buildingClasses.highRiseFromHeightM,
-    extraLargeFromFloorAreaSqm: pack.buildingClasses.extraLargeFromFloorAreaSqm,
-    access: pack.highRise.access.map((band) => ({ ...band, qualifies: qualifies(band.roadWidthM, band.frontageM) })),
-    fireLaneWidthM: pack.highRise.fireLaneWidthM,
-    farMax: { value: pack.highRise.farMax.value, cites: [pack.highRise.farMax.cite] },
+    fromHeightM: buildingClasses.highRiseFromHeightM,
+    extraLargeFromFloorAreaSqm: buildingClasses.extraLargeFromFloorAreaSqm,
+    access: (highRise?.access ?? []).map((band) => ({ ...band, qualifies: qualifies(band.roadWidthM, band.frontageM) })),
+    fireLaneWidthM: highRise?.fireLaneWidthM ?? null,
+    farMax: highRise ? { value: highRise.farMax.value, cites: [highRise.farMax.cite] } : null,
   }
 }
 
 function parkingLimits({ pack, readings }: LimitsInput): Limits['parking'] {
   const reading = readings['parking-source']
   const sources = readingSources(pack, 'parking-source', reading)
-  const rules = pack.parking.filter((rule) => sources.has(rule.appliesWhere.source))
+  const rules = posesQuestion(pack, 'parking-source')
+    ? pack.parking.filter((rule) => isSourceCite(rule.appliesWhere) && sources.has(rule.appliesWhere.source))
+    : pack.parking
   return { rules, cites: [...rules.map((r) => r.appliesWhere), ...readingCites(pack, 'parking-source', reading)] }
 }
 
 export function limitsFor(input: LimitsInput): Limits {
-  const { pack, readings, buildingType } = input
-  const { residential, publicBuilding } = pack.classification[buildingType]
-  const classes = { residential: isMember(pack, residential, readings), publicBuilding: isMember(pack, publicBuilding, readings) }
+  const { pack, readings, buildingType, site, plotLimits, floorToFloorM, nearStation } = input
+  const classes = classesFor(pack, readings, buildingType)
+  const plan = planHeight(pack, plotLimits, floorToFloorM)
   return {
-    ...farLimits(input, classes),
+    ...farLimits({ pack, site, plotLimits, classes, nearStation }),
     classes,
     openSpace: openSpaceLimits(input, classes.residential),
-    height: {
-      planLimitM: null,
-      cites: [pack.zone.noPlanHeightLimit.from, pack.zone.noPlanHeightLimit.to],
-      vsRoadMultiple: heightVsRoadMultiple(pack),
-    },
+    height: { planLimitM: plan.limitM, cites: plan.cites, vsRoadMultiple: heightVsRoadMultiple(pack) },
+    coverage: coverageLimit(pack, plotLimits, site.areaSqm),
     use: conditionLimit(input),
     highRise: highRiseLimits(input),
     parking: parkingLimits(input),
   }
 }
 
-export function stationDistance(pack: RulePack): Bound {
+export function stationDistance(pack: RulePack): Bound | null {
   for (const type of BUILDING_TYPES) {
-    const condition = pack.useConditions[type]
-    if (condition.kind === 'restrictedAbove') return condition.unlessStationDistanceM
+    const condition = pack.useConditions?.[type]
+    if (condition?.kind === 'restrictedAbove') return condition.unlessStationDistanceM
   }
-  throw new Error('the pack has no use condition with a station distance')
+  return null
 }
 
 export function highRiseAllows(limits: Limits, floorAreaSqm: number): boolean {
-  return limits.highRise.access.some((band) => band.qualifies && inRange(floorAreaSqm, band.floorAreaSqm))
+  return limits.highRise?.access.some((band) => band.qualifies && inRange(floorAreaSqm, band.floorAreaSqm)) ?? false
 }

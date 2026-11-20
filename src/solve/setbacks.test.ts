@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { loadPack } from '@/rules'
+import { enteredCite, isSourceCite, loadPack } from '@/rules'
 import { boundarySetback, frontOpenSpaceDepth, heightVsRoadSetback, roadSetback, strictest } from './setbacks'
 
 const pack = loadPack('bkk-y9')
@@ -22,7 +22,7 @@ describe('boundary setbacks for walls with openings, by building height', () => 
 
   it('cites every rule that reaches the governing distance and no other', () => {
     const { cites } = boundarySetback(pack, building(18), 'boundary')
-    expect(cites.map((c) => `${c.source} ${c.clause}`).sort()).toEqual(['bb44-03 ข้อ 54', 'mr43-55-upd68 ข้อ 50 (2)'])
+    expect(cites.filter(isSourceCite).map((c) => `${c.source} ${c.clause}`).sort()).toEqual(['bb44-03 ข้อ 54', 'mr43-55-upd68 ข้อ 50 (2)'])
   })
 
   it('applies only the rules measured from a public road to a road edge', () => {
@@ -61,7 +61,7 @@ describe('road setbacks by road width', () => {
   })
 
   it('cites both the ministerial regulation and the Bangkok bylaw when they agree', () => {
-    expect(new Set(roadSetback(pack, tall, 12).cites.map((c) => c.source))).toEqual(new Set(['mr43-55-upd68', 'bb44-03']))
+    expect(new Set(roadSetback(pack, tall, 12).cites.filter(isSourceCite).map((c) => c.source))).toEqual(new Set(['mr43-55-upd68', 'bb44-03']))
   })
 })
 
@@ -83,15 +83,16 @@ describe('height against the far side of the road', () => {
 
 describe('front open space and combining setbacks', () => {
   it('is 6 m deep, or 12 m above three storeys', () => {
-    expect(frontOpenSpaceDepth(pack, 3).distanceM).toBe(6)
-    expect(frontOpenSpaceDepth(pack, 4).distanceM).toBe(12)
+    expect(frontOpenSpaceDepth(pack.frontOpenSpace!, 3).distanceM).toBe(6)
+    expect(frontOpenSpaceDepth(pack.frontOpenSpace!, 4).distanceM).toBe(12)
   })
 
   it('keeps the largest distance with the cites of every rule that sets it', () => {
-    const a = { distanceM: 2, cites: [pack.far.definition] }
-    const b = { distanceM: 3, cites: [pack.far.max.cite] }
-    const c = { distanceM: 3, cites: [pack.zone.cite] }
-    expect(strictest([a, b, c])).toEqual({ distanceM: 3, cites: [pack.far.max.cite, pack.zone.cite] })
+    const [first, second, third] = ['a', 'b', 'c'].map(enteredCite)
+    const a = { distanceM: 2, cites: [first] }
+    const b = { distanceM: 3, cites: [second] }
+    const c = { distanceM: 3, cites: [third] }
+    expect(strictest([a, b, c])).toEqual({ distanceM: 3, cites: [second, third] })
     expect(strictest([])).toEqual({ distanceM: 0, cites: [] })
   })
 })

@@ -1,5 +1,6 @@
 {
   "id": "bkk-y9",
+  "verification": "verified",
   "sources": {
     "mr56-bma": {
       "name": "Bangkok Comprehensive Plan, B.E. 2556 (2013)",
@@ -60,21 +61,15 @@
   },
   "zone": {
     "code": "ย.9",
-    "cite": { "$cite": { "src": "mr56-bma", "page": 33, "line": 4, "token": "ย. ๙", "clause": "ข้อ 16" } },
-    "noPlanHeightLimit": {
-      "$absent": {
-        "src": "mr56-bma",
-        "clause": "ข้อ 16",
-        "from": { "page": 33, "line": 4 },
-        "to": { "page": 35, "line": 15 },
-        "term": "ความสูง"
-      }
-    }
+    "cite": { "$cite": { "src": "mr56-bma", "page": 33, "line": 4, "token": "ย. ๙", "clause": "ข้อ 16" } }
   },
   "far": {
+    "kind": "zone",
     "max": { "$num": { "src": "mr56-bma", "page": 35, "line": 8, "token": "๗ : ๑", "clause": "ข้อ 16 วรรคสาม (1)" } },
-    "definition": { "$cite": { "src": "mr56-bma", "page": 2, "line": 5, "token": "ทใ่ี ช้เปน็ ท่ตี ง้ั อาคาร", "clause": "ข้อ 4" } },
-    "subdividedPlotsShareCap": { "$cite": { "src": "mr56-bma", "page": 35, "line": 10, "token": "รวมกันต้องไมเ่ กนิ ๗ : ๑", "clause": "ข้อ 16 วรรคสาม (1)" } }
+    "notes": [
+      { "$cite": { "src": "mr56-bma", "page": 2, "line": 5, "token": "ทใ่ี ช้เปน็ ท่ตี ง้ั อาคาร", "clause": "ข้อ 4" } },
+      { "$cite": { "src": "mr56-bma", "page": 35, "line": 10, "token": "รวมกันต้องไมเ่ กนิ ๗ : ๑", "clause": "ข้อ 16 วรรคสาม (1)" } }
+    ]
   },
   "openSpaceRatio": {
     "minShareOfFloorArea": { "$num": { "src": "mr56-bma", "page": 35, "line": 11, "token": "ร้อยละส่จี ดุ ห้า", "clause": "ข้อ 16 วรรคสาม (2)" } },
@@ -367,23 +362,37 @@
     "minDistanceM": { "$num": { "src": "mr43-55-upd68", "page": 11, "line": 13, "token": "50", "unit": "เซนตเิ มตร", "unitLine": 14, "clause": "ข้อ 50 วรรคสอง" } },
     "onBoundaryMaxHeightM": { "$bound": { "src": "mr43-55-upd68", "page": 11, "line": 14, "token": "15 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 50 วรรคสอง" } }
   },
-  "heightVsRoad": {
-    "maxMultipleOfDistance": [
-      { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 47, "token": "สองเท่า", "clause": "ข้อ 44" } },
-      { "$num": { "src": "bb44-03", "page": 14, "line": 44, "token": "2 เท่า", "clause": "ข้อ 49" } }
-    ],
-    "measuredTo": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 48, "token": "ดา้ นตรงขา้ มของถนนสาธารณะ", "clause": "ข้อ 44" } },
-    "heightToHighestPoint": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 50, "token": "ส่วนของอาคารทสี งู ทสี ุด", "clause": "ข้อ 44 วรรคสอง" } },
-    "rooftopStructuresExcluded": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 54, "token": "ไม่ตอ้ งนําความสงู", "clause": "ข้อ 44 วรรคสาม" } },
-    "parallelRoads": {
-      "maxRoadSpacingM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } },
-      "maxBuildingWidthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } }
+  "height": {
+    "planLimit": {
+      "kind": "none",
+      "absent": {
+        "$absent": {
+          "src": "mr56-bma",
+          "clause": "ข้อ 16",
+          "from": { "page": 33, "line": 4 },
+          "to": { "page": 35, "line": 15 },
+          "term": "ความสูง"
+        }
+      }
     },
-    "cornerNarrowerRoadMaxLengthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 9, "token": "60 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 46" } },
-    "wideRoadException": {
-      "roadWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "80 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } },
-      "withinM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "100 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 49 วรรคสอง" } },
-      "accessWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 48, "token": "12 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } }
+    "roadMultiple": {
+      "maxMultipleOfDistance": [
+        { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 47, "token": "สองเท่า", "clause": "ข้อ 44" } },
+        { "$num": { "src": "bb44-03", "page": 14, "line": 44, "token": "2 เท่า", "clause": "ข้อ 49" } }
+      ],
+      "measuredTo": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 48, "token": "ดา้ นตรงขา้ มของถนนสาธารณะ", "clause": "ข้อ 44" } },
+      "heightToHighestPoint": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 50, "token": "ส่วนของอาคารทสี งู ทสี ุด", "clause": "ข้อ 44 วรรคสอง" } },
+      "rooftopStructuresExcluded": { "$cite": { "src": "mr43-55-upd68", "page": 9, "line": 54, "token": "ไม่ตอ้ งนําความสงู", "clause": "ข้อ 44 วรรคสาม" } },
+      "parallelRoads": {
+        "maxRoadSpacingM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } },
+        "maxBuildingWidthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 4, "token": "60 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 45" } }
+      },
+      "cornerNarrowerRoadMaxLengthM": { "$bound": { "src": "mr43-55-upd68", "page": 10, "line": 9, "token": "60 เมตร", "op": "ไมเ่ กนิ", "clause": "ข้อ 46" } },
+      "wideRoadException": {
+        "roadWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "80 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } },
+        "withinM": { "$bound": { "src": "bb44-03", "page": 14, "line": 47, "token": "100 เมตร", "op": "ไม่เกนิ", "clause": "ข้อ 49 วรรคสอง" } },
+        "accessWidthM": { "$bound": { "src": "bb44-03", "page": 14, "line": 48, "token": "12 เมตร", "op": "ไม่น้อยกว่า", "clause": "ข้อ 49 วรรคสอง" } }
+      }
     }
   },
   "frontOpenSpace": {

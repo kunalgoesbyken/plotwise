@@ -570,7 +570,7 @@
    }
   ]
  },
- "heightVsRoad.maxMultipleOfDistance[0]": {
+ "height.roadMultiple.maxMultipleOfDistance[0]": {
   "value": 2,
   "sources": [
    {
@@ -580,7 +580,7 @@
    }
   ]
  },
- "heightVsRoad.parallelRoads.maxRoadSpacingM": {
+ "height.roadMultiple.parallelRoads.maxRoadSpacingM": {
   "value": 60,
   "sources": [
    {
@@ -590,7 +590,7 @@
    }
   ]
  },
- "heightVsRoad.parallelRoads.maxBuildingWidthM": {
+ "height.roadMultiple.parallelRoads.maxBuildingWidthM": {
   "value": 60,
   "sources": [
    {
@@ -600,7 +600,7 @@
    }
   ]
  },
- "heightVsRoad.cornerNarrowerRoadMaxLengthM": {
+ "height.roadMultiple.cornerNarrowerRoadMaxLengthM": {
   "value": 60,
   "sources": [
    {

@@ -1,7 +1,7 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
 import type { BuildingType } from '@/plot/plot'
-import type { EnvelopeKind } from '@/solve'
+import type { EnvelopeKind, SolveErrorReason } from '@/solve'
 
 export const LOCALE = 'en'
 
@@ -19,7 +19,7 @@ type Authority = { authority: string }
 type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
   Record<`building.${BuildingType}`, string> &
-  Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
+  Record<`feasibility.failed.${GeometryErrorReason | SolveErrorReason | 'unknown'}`, string> &
   Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
 
 const en = {
@@ -215,8 +215,11 @@ const en = {
   'feasibility.failed.invalid-tiers': 'The allowed envelope could not be built for this outline. Try reshaping the plot.',
   'feasibility.failed.invalid-floor-height': 'The floor heights for this building type are invalid. Pick another building type.',
   'feasibility.failed.invalid-cap': 'The floor-area limit could not be applied to this plot. Try reshaping it.',
+  'feasibility.failed.invalid-reservation': 'The road-widening strip does not fit this plot. Check the road widths or reshape the plot.',
+  'feasibility.failed.plot-limit-missing': 'This area’s rules need limits given for each plot. Enter them to continue.',
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
+  'source.entered': 'Entered by you',
   'source.toggle': ({ count }: Count) => (count === 1 ? 'Source' : `Sources (${count})`),
   'source.location': ({ page, line }: { page: number; line: number }) => `Page ${page}, line ${line}`,
   'source.open': 'Official text (PDF, in Thai)',
@@ -310,8 +313,12 @@ const en = {
   'limit.use.exemption.road': ({ edge }: { edge: string }) => `The road on edge ${edge} qualifies.`,
 
   'parking.scope.bangkokBylaw': 'Bangkok building bylaw',
+  'parking.scope.entered': 'Entered by you',
   'parking.scope.ministerialInnerBangkok': 'Ministerial Regulation 7, inner Bangkok',
   'parking.per-unit': ({ spaces, unit }: { spaces: number; unit: string }) => `${spaces} per unit of ${unit}.`,
+  'parking.per-unit-by-size': ({ bands }: { bands: string }) => `Per unit by its size: ${bands}.`,
+  'parking.unit-band': ({ size, spaces }: { size: string; spaces: number }) => `${spaces} per unit of ${size}`,
+  'parking.per-gross-area': ({ area }: Area) => `1 per ${area} of floor area.`,
   'parking.per-floor-area': ({ area, from }: Area & { from: string }) => `1 per ${area} of floor area, for offices of ${from}.`,
   'parking.per-room-tiers': ({ spaces, rooms, then }: { spaces: number; rooms: number; then: string }) =>
     `${spaces} for the first ${rooms} rooms, then ${then}.`,
@@ -425,6 +432,9 @@ const en = {
   'check.manual': 'Check on site or with the authority',
   'check.far': 'Floor area within the FAR limit',
   'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
+  'check.far-purchase': 'Extra floor area bought as the rules allow',
+  'check.coverage': 'Ground coverage',
+  'check.height-cap': 'Height within the limit',
   'check.high-rise-far': 'FAR within the high-rise cap',
   'check.open-space-ratio': 'Open space ratio',
   'check.permeable': 'Permeable ground',
@@ -446,6 +456,8 @@ const en = {
   'to-check.why.road-access-network': 'The road must stay wide enough all the way to a main road. The map only knows the stretch at your plot.',
   'to-check.why.high-rise-road-network': 'A high-rise needs a wide road all the way to a main road. The map only knows the stretch at your plot.',
   'to-check.why.far-bonus-measures': 'The extra floor area depends on measures in the design, such as public open space, that Plotwise can’t see.',
+  'to-check.why.far-purchase': 'The extra floor area has to be bought from the authority or the market, and its price is not known to Plotwise.',
+  'to-check.who.far-purchase': ({ authority }: Authority) => `Your architect applies; ${authority} sells and approves it with the permit.`,
   'to-check.who.use-station': ({ authority }: Authority) => `A surveyor measures it; ${authority} confirms.`,
   'to-check.who.road-access-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
   'to-check.who.high-rise-road-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,

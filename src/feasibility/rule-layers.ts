@@ -1,6 +1,6 @@
 import { tieredEnvelope, type Prism } from '@/geometry'
 import type { Site } from '@/plot/site'
-import type { Cite, Cited, RulePack } from '@/rules'
+import { isSourceCite, type BoundarySetbackRule, type Cite, type Cited, type RulePack } from '@/rules'
 import type { Envelope, EnvelopeTier, Setback } from '@/solve'
 
 export const RULE_STEPS = ['plot', 'setbacks', 'height-vs-road', 'high-rise'] as const
@@ -10,7 +10,7 @@ export type CarvingRule = Exclude<RuleStep, 'plot'>
 
 export type CarvingRules = ReadonlyMap<string, CarvingRule>
 
-export const citeKey = ({ source, clause, page, line }: Cite) => `${source}|${clause}|${page}|${line}`
+export const citeKey = (cite: Cite) => (isSourceCite(cite) ? `${cite.source}|${cite.clause}|${cite.page}|${cite.line}` : `entered|${cite.field}`)
 
 function roadSetbackCites(pack: RulePack): Cite[] {
   return pack.roadSetbacks.flatMap((rule) =>
@@ -18,7 +18,7 @@ function roadSetbackCites(pack: RulePack): Cite[] {
   )
 }
 
-function boundarySetbackCites(pack: RulePack, scope: RulePack['boundarySetbacks'][number]['scope']): Cite[] {
+function boundarySetbackCites(pack: RulePack, scope: BoundarySetbackRule['scope']): Cite[] {
   return pack.boundarySetbacks.filter((rule) => rule.scope === scope).flatMap((rule) => rule.bands.map((band) => band.distanceM.cite))
 }
 
@@ -31,10 +31,10 @@ export function carvingRules(pack: RulePack): CarvingRules {
       [
         ...roadSetbackCites(pack),
         ...boundarySetbackCites(pack, 'anyBuilding'),
-        ...citesOf([pack.frontOpenSpace.depthM, pack.frontOpenSpace.tallDepthM]),
+        ...citesOf(pack.frontOpenSpace ? [pack.frontOpenSpace.depthM, pack.frontOpenSpace.tallDepthM] : []),
       ],
     ],
-    ['height-vs-road', citesOf(pack.heightVsRoad.maxMultipleOfDistance)],
+    ['height-vs-road', citesOf(pack.height.roadMultiple?.maxMultipleOfDistance ?? [])],
     ['high-rise', boundarySetbackCites(pack, 'highRiseOrExtraLarge')],
   ]
   return new Map(groups.flatMap(([rule, cites]) => cites.map((cite) => [citeKey(cite), rule] as const)))

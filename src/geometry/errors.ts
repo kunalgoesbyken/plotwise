@@ -7,6 +7,7 @@ export type GeometryErrorReason =
   | 'invalid-tiers'
   | 'invalid-floor-height'
   | 'invalid-cap'
+  | 'invalid-reservation'
 
 export class GeometryError extends Error {
   readonly reason: GeometryErrorReason

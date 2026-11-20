@@ -7,8 +7,9 @@ import { PACK } from './compute'
 const metres = (value: number) => formatQuantity(value, 'm')
 
 function sizeConditionText({ use }: Limits): string {
-  if (use.kind === 'permitted') return t('limited-by.use')
-  return t('limited-by.use-unless', { road: metres(use.roadWidthM.value), station: metres(stationDistance(PACK).value) })
+  const station = stationDistance(PACK)
+  if (use.kind === 'permitted' || !station) return t('limited-by.use')
+  return t('limited-by.use-unless', { road: metres(use.roadWidthM.value), station: metres(station.value) })
 }
 
 export function limiterText(limiter: Limiter, limits: Limits): string {
@@ -16,7 +17,7 @@ export function limiterText(limiter: Limiter, limits: Limits): string {
     case 'far':
       return t('limited-by.far')
     case 'building-class':
-      return t('limited-by.building-class', { height: metres(limits.highRise.fromHeightM.value) })
+      return t('limited-by.building-class', { height: metres(limits.highRise?.fromHeightM.value ?? 0) })
     case 'use':
       return sizeConditionText(limits)
     case 'envelope':

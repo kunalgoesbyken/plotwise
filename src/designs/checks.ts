@@ -1,6 +1,6 @@
 import type { Vec2 } from '@/geo/projection'
 import { dot, edgeLengths, segmentDistance, subtract, type FloorPlates, type Loop, type Polygon } from '@/geometry'
-import type { Comparator, Cite } from '@/rules'
+import type { Cite, Comparator, FrontOpenSpace } from '@/rules'
 import {
   boundarySetback,
   buildingControlOpenSpace,
@@ -24,6 +24,9 @@ import type { Programme } from './programme'
 export type CheckId =
   | 'far'
   | 'far-bonus-measures'
+  | 'far-purchase'
+  | 'coverage'
+  | 'height-cap'
   | 'high-rise-far'
   | 'open-space-ratio'
   | 'permeable'
@@ -41,7 +44,7 @@ export type CheckId =
   | 'high-rise-road-network'
   | 'fire-lane'
 
-export type ManualCheckId = Extract<CheckId, 'far-bonus-measures' | 'use-station' | 'road-access-network' | 'high-rise-road-network'>
+export type ManualCheckId = Extract<CheckId, 'far-bonus-measures' | 'far-purchase' | 'use-station' | 'road-access-network' | 'high-rise-road-network'>
 
 export type Unit = 'sqm' | 'm' | 'ratio' | 'rooms'
 
@@ -136,9 +139,9 @@ function openSpaceChecks(facts: DesignFacts): Check[] {
   const minimum = buildingControlOpenSpace(limits, need)
   return [
     measured('far', need.farSqm, 'lte', farCap.maxGfaSqm, 'sqm', farCap.cites),
-    measured('open-space-ratio', openSqm, 'gte', ratio.value, 'sqm', ratio.cites),
-    measured('permeable', openSqm, 'gte', permeable.value, 'sqm', permeable.cites),
-    measured('open-space-minimum', openSqm, 'gte', minimum.value, 'sqm', minimum.cites),
+    ...(limits.openSpace.ratio ? [measured('open-space-ratio', openSqm, 'gte', ratio.value, 'sqm', ratio.cites)] : []),
+    ...(limits.openSpace.permeable ? [measured('permeable', openSqm, 'gte', permeable.value, 'sqm', permeable.cites)] : []),
+    ...(limits.openSpace.minimums.length > 0 ? [measured('open-space-minimum', openSqm, 'gte', minimum.value, 'sqm', minimum.cites)] : []),
   ]
 }
 
@@ -161,6 +164,7 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const worstRoad = roadMargins.reduce((worst, r) => (r.margin < worst.margin ? r : worst))
   checks.push(measured('road-setback', worstRoad.actual, 'gte', worstRoad.required.distanceM, 'm', worstRoad.required.cites))
   const multiple = solution.limits.height.vsRoadMultiple
+  if (!multiple) return checks
   const heights = roads.flatMap((e) =>
     levels.map((level) => {
       const allowed = multiple.value * (e.roadWidthM + level.clearanceM[e.i])
@@ -176,14 +180,14 @@ function outwardNormal([p, q]: Segment): Vec2 {
   return [q[1] - p[1], p[0] - q[0]]
 }
 
-function roadFacingShare({ solution, plates }: DesignFacts): number {
-  const { site, pack } = solution
+function roadFacingShare({ solution, plates }: DesignFacts, frontOpenSpace: FrontOpenSpace): number {
+  const { site } = solution
   const roads = site.edges.flatMap((e, i) => (e.roadWidthM === null ? [] : [siteEdge(solution, i)]))
   const outline = outerSegments(plates.footprint)
   const facesRoad = (segment: Segment) =>
     roads.some(
       (road) =>
-        satisfies(segmentDistance(segment[0], segment[1], road[0], road[1]), pack.frontOpenSpace.exemptIfWithinRoadM) &&
+        satisfies(segmentDistance(segment[0], segment[1], road[0], road[1]), frontOpenSpace.exemptIfWithinRoadM) &&
         dot(outwardNormal(segment), outwardNormal(road)) > 0,
     )
   const perimeter = plates.footprint.flatMap((p) => edgeLengths(p.outer)).reduce((sum, m) => sum + m, 0)
@@ -191,17 +195,18 @@ function roadFacingShare({ solution, plates }: DesignFacts): number {
   return perimeter > 0 ? facing / perimeter : 0
 }
 
-function frontOpenSpaceCheck(facts: Context): Check {
+function frontOpenSpaceChecks(facts: Context): Check[] {
   const { solution, building, ground } = facts
-  const { pack, readings } = solution
-  const depth = frontOpenSpaceDepth(pack, building.storeys)
+  const { frontOpenSpace } = solution.pack
+  if (!frontOpenSpace) return []
+  const depth = frontOpenSpaceDepth(frontOpenSpace, building.storeys)
   const front = ground.clearanceM[mainRoad(solution.site)]
-  const required = measured('front-open-space', front, 'gte', depth.distanceM, 'm', [pack.frontOpenSpace.appliesTo, ...depth.cites])
-  if (readings['front-open-space'] === 'always') return required
-  const exemption = pack.frontOpenSpace.exemptIfFrontageShareOfPerimeter
-  const share = roadFacingShare(facts)
-  if (!satisfies(share, exemption)) return required
-  return measured('front-open-space', share, exemption.cmp, exemption.value, 'ratio', [exemption.cite, pack.frontOpenSpace.exemptIfWithinRoadM.cite])
+  const required = measured('front-open-space', front, 'gte', depth.distanceM, 'm', [frontOpenSpace.appliesTo, ...depth.cites])
+  if (solution.readings['front-open-space'] === 'always') return [required]
+  const exemption = frontOpenSpace.exemptIfFrontageShareOfPerimeter
+  const share = roadFacingShare(facts, frontOpenSpace)
+  if (!satisfies(share, exemption)) return [required]
+  return [measured('front-open-space', share, exemption.cmp, exemption.value, 'ratio', [exemption.cite, frontOpenSpace.exemptIfWithinRoadM.cite])]
 }
 
 function conditionChecks({ solution, programme }: DesignFacts): Check[] {
@@ -233,23 +238,41 @@ function conditionChecks({ solution, programme }: DesignFacts): Check[] {
 
 function highRiseChecks({ solution, building, programme, ground }: Context): Check[] {
   const { limits, site, pack } = solution
-  if (!isHighRiseOrExtraLarge(pack, building)) return []
-  const { access } = pack.highRise
+  const { highRise } = pack
+  if (!highRise || !limits.highRise?.farMax || !limits.highRise.fireLaneWidthM || !isHighRiseOrExtraLarge(pack, building)) return []
+  const { farMax, fireLaneWidthM } = limits.highRise
+  const { access } = highRise
   const band = access.find((b) => inRange(building.floorAreaSqm, b.floorAreaSqm)) ?? access[access.length - 1]
   const frontage = Math.max(0, ...site.edges.map((e) => (e.roadWidthM !== null && satisfies(e.roadWidthM, band.roadWidthM) ? e.lengthM : 0)))
   const fireLane = Math.min(...ground.clearanceM)
   return [
-    measured('high-rise-far', programme.farSqm / site.areaSqm, 'lte', limits.highRise.farMax.value, 'ratio', limits.highRise.farMax.cites),
+    measured('high-rise-far', programme.farSqm / site.areaSqm, 'lte', farMax.value, 'ratio', farMax.cites),
     measured('high-rise-access', frontage, band.frontageM.cmp, band.frontageM.value, 'm', [band.frontageM.cite, band.roadWidthM.cite]),
-    manual('high-rise-road-network', [band.roadWidthM.cite, pack.highRise.accessStripWidthM.cite]),
-    measured('fire-lane', fireLane, limits.highRise.fireLaneWidthM.cmp, limits.highRise.fireLaneWidthM.value, 'm', [limits.highRise.fireLaneWidthM.cite]),
+    manual('high-rise-road-network', [band.roadWidthM.cite, highRise.accessStripWidthM.cite]),
+    measured('fire-lane', fireLane, fireLaneWidthM.cmp, fireLaneWidthM.value, 'm', [fireLaneWidthM.cite]),
   ]
 }
 
-function farBonusChecks({ solution }: DesignFacts): Check[] {
-  if (solution.farCap.mode === 'standard') return []
-  const cites = solution.limits.farBonus.measures.filter((m) => m.eligible).flatMap((m) => m.cites)
-  return [manual('far-bonus-measures', cites)]
+function farExtraChecks({ solution }: DesignFacts): Check[] {
+  const { farCap, limits } = solution
+  switch (farCap.mode) {
+    case 'standard':
+      return []
+    case 'bonus':
+      return [manual('far-bonus-measures', limits.farBonus.measures.filter((m) => m.eligible).flatMap((m) => m.cites))]
+    case 'purchased':
+      return [manual('far-purchase', limits.farPurchase.cites)]
+  }
+}
+
+function coverageChecks({ solution, plates }: DesignFacts): Check[] {
+  const { coverage } = solution.limits
+  return coverage ? [measured('coverage', plates.footprintSqm, 'lte', coverage.maxFootprintSqm, 'sqm', coverage.cites)] : []
+}
+
+function heightCapChecks({ solution, building }: DesignFacts): Check[] {
+  const { planLimitM, cites } = solution.limits.height
+  return planLimitM === null ? [] : [measured('height-cap', building.heightM, 'lte', planLimitM, 'm', cites)]
 }
 
 export function checksFor(facts: DesignFacts): Check[] {
@@ -257,9 +280,11 @@ export function checksFor(facts: DesignFacts): Check[] {
   const context = { ...facts, ground, levels: [ground, ...upper] }
   return [
     ...openSpaceChecks(context),
-    ...farBonusChecks(context),
+    ...farExtraChecks(context),
+    ...coverageChecks(context),
+    ...heightCapChecks(context),
     ...setbackChecks(context),
-    frontOpenSpaceCheck(context),
+    ...frontOpenSpaceChecks(context),
     ...conditionChecks(context),
     ...highRiseChecks(context),
   ]

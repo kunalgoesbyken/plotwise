@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import fc from 'fast-check'
-import { RulePackSchema } from '../src/rules/types'
+import { RulePackSchema } from '../src/rules'
+import { zoneFar } from '../src/rules/zone-far'
 import type { Field, Truth } from './inputs'
 import { accuracy, agreement, coverage, invariantErrors, pointAnswers, sameValue, valueAt, withValues, writeAnswers } from './metrics'
 import { renderResults } from './report'
@@ -49,9 +50,9 @@ describe('sameValue', () => {
 
 describe('reading and writing pack values by path', () => {
   it('reads a cited value, a bound and an indexed band', () => {
-    expect(valueAt(pack, 'far.max')).toBe(pack.far.max.value)
+    expect(valueAt(pack, 'far.max')).toBe(zoneFar(pack).max.value)
     expect(valueAt(pack, 'roadSetbacks[0].bands[1].roadWidthM.max')).toBe(pack.roadSetbacks[0].bands[1].roadWidthM.max!.value)
-    expect(valueAt(pack, 'heightVsRoad.maxMultipleOfDistance[1]')).toBe(pack.heightVsRoad.maxMultipleOfDistance[1].value)
+    expect(valueAt(pack, 'height.roadMultiple.maxMultipleOfDistance[1]')).toBe(pack.height.roadMultiple!.maxMultipleOfDistance[1].value)
   })
 
   it('returns null for a path the pack does not have', () => {
@@ -60,11 +61,11 @@ describe('reading and writing pack values by path', () => {
   })
 
   it('writes into a copy, skips unresolved answers and leaves the pack untouched', () => {
-    const before = pack.blindWall.minDistanceM.value
+    const before = pack.blindWall!.minDistanceM.value
     const changed = withValues(pack, { 'blindWall.minDistanceM': before + 1, 'far.max': null })
     expect(valueAt(changed, 'blindWall.minDistanceM')).toBe(before + 1)
-    expect(valueAt(changed, 'far.max')).toBe(pack.far.max.value)
-    expect(pack.blindWall.minDistanceM.value).toBe(before)
+    expect(valueAt(changed, 'far.max')).toBe(zoneFar(pack).max.value)
+    expect(pack.blindWall!.minDistanceM.value).toBe(before)
   })
 
   it('refuses to write a path the pack does not have', () => {
@@ -75,9 +76,9 @@ describe('reading and writing pack values by path', () => {
 describe('answers per method', () => {
   it('reads every field from the pack for the point method', () => {
     expect(pointAnswers(pack, FIELDS)).toEqual({
-      'far.max': pack.far.max.value,
-      'openSpaceRatio.minShareOfFloorArea': pack.openSpaceRatio.minShareOfFloorArea.value,
-      'blindWall.minDistanceM': pack.blindWall.minDistanceM.value,
+      'far.max': zoneFar(pack).max.value,
+      'openSpaceRatio.minShareOfFloorArea': pack.openSpaceRatio!.minShareOfFloorArea.value,
+      'blindWall.minDistanceM': pack.blindWall!.minDistanceM.value,
     })
   })
 
@@ -199,7 +200,7 @@ describe('renderResults', () => {
   })
 
   it('lists every disagreement with the point value, the write values and the truth', () => {
-    expect(markdown).toContain(`| far.max | src-a | ${pack.far.max.value} | 6 | 7 | 7 |`)
+    expect(markdown).toContain(`| far.max | src-a | ${zoneFar(pack).max.value} | 6 | 7 | 7 |`)
   })
 
   it('lists the ungrounded write answers', () => {

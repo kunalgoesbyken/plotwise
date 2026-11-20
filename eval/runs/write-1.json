@@ -452,42 +452,42 @@
    "page": 11,
    "quote": "เซนตเิ มตร เวน้ แต่จะก่อสรา้ งชดิ เขตทดี นิ และอาคารดงั กล่าวจะก่อสรา้ งไดส้ งู ไม่เกนิ 15 เมตร"
   },
-  "heightVsRoad.maxMultipleOfDistance[0]": {
+  "height.roadMultiple.maxMultipleOfDistance[0]": {
    "value": 2,
    "page": 9,
    "quote": "ความสงู ของอาคารไมว่ ่าจากจดุ หนึงจดุ ใด ตอ้ งไม่เกนิ สองเท่าของระยะราบ วดั จากจดุ นนั ไปตงั ฉากกบั แนว"
   },
-  "heightVsRoad.maxMultipleOfDistance[1]": {
+  "height.roadMultiple.maxMultipleOfDistance[1]": {
    "value": 2,
    "page": 14,
    "quote": "ความสงู ของอาคารไม่วา่ จากจุดหนึงจดุ ใด ตอ้ งไม่เกนิ 2 เท่าของระยะราบ วดั จากจุดนนั ไปตงั ฉากกบั แนว"
   },
-  "heightVsRoad.parallelRoads.maxRoadSpacingM": {
+  "height.roadMultiple.parallelRoads.maxRoadSpacingM": {
    "value": 60,
    "page": 10,
    "quote": "สองสายนนั ไม่เกนิ 60 เมตร และส่วนกวา้ งของอาคารตามแนวถนนสาธารณะทกี วา้ งกว่าไม่เกนิ 60 เมตร ความสงู ของอาคาร"
   },
-  "heightVsRoad.parallelRoads.maxBuildingWidthM": {
+  "height.roadMultiple.parallelRoads.maxBuildingWidthM": {
    "value": 60,
    "page": 10,
    "quote": "สองสายนนั ไม่เกนิ 60 เมตร และส่วนกวา้ งของอาคารตามแนวถนนสาธารณะทกี วา้ งกว่าไม่เกนิ 60 เมตร ความสงู ของอาคาร"
   },
-  "heightVsRoad.cornerNarrowerRoadMaxLengthM": {
+  "height.roadMultiple.cornerNarrowerRoadMaxLengthM": {
    "value": 60,
    "page": 10,
    "quote": "สายทกี วา้ งกว่า และความ ยาวของอาคารตามแนวถนนสาธารณะทแี คบกวา่ ตอ้ งไมเ่ กนิ 60 เมตร"
   },
-  "heightVsRoad.wideRoadException.roadWidthM": {
+  "height.roadMultiple.wideRoadException.roadWidthM": {
    "value": 80,
    "page": 14,
    "quote": "กรณีอาคารตงั อย่รู มิ หรอื ห่างไม่เกนิ 100 เมตร จากถนนสาธารณะทกี วา้ งไม่น้อยกว่า 80 เมตร และมที างเขา้ ออก"
   },
-  "heightVsRoad.wideRoadException.withinM": {
+  "height.roadMultiple.wideRoadException.withinM": {
    "value": 100,
    "page": 14,
    "quote": "กรณีอาคารตงั อย่รู มิ หรอื ห่างไม่เกนิ 100 เมตร จากถนนสาธารณะทกี วา้ งไม่น้อยกว่า 80 เมตร และมที างเขา้ ออก"
   },
-  "heightVsRoad.wideRoadException.accessWidthM": {
+  "height.roadMultiple.wideRoadException.accessWidthM": {
    "value": 12,
    "page": 14,
    "quote": "จากอาคารสู่ทางสาธารณะนันกวา้ งไม่น้อยกว่า 12 เมตร ใหค้ ดิ ความสูงของอาคารจากความกวา้ งของถนนสาธารณะทกี วา้ ง"

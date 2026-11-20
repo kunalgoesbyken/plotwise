@@ -542,49 +542,49 @@
    "page": 11
   },
   {
-   "path": "heightVsRoad.maxMultipleOfDistance[0]",
+   "path": "height.roadMultiple.maxMultipleOfDistance[0]",
    "source": "mr43-55-upd68",
    "clause": "ข้อ 44",
    "page": 9
   },
   {
-   "path": "heightVsRoad.maxMultipleOfDistance[1]",
+   "path": "height.roadMultiple.maxMultipleOfDistance[1]",
    "source": "bb44-03",
    "clause": "ข้อ 49",
    "page": 14
   },
   {
-   "path": "heightVsRoad.parallelRoads.maxRoadSpacingM",
+   "path": "height.roadMultiple.parallelRoads.maxRoadSpacingM",
    "source": "mr43-55-upd68",
    "clause": "ข้อ 45",
    "page": 10
   },
   {
-   "path": "heightVsRoad.parallelRoads.maxBuildingWidthM",
+   "path": "height.roadMultiple.parallelRoads.maxBuildingWidthM",
    "source": "mr43-55-upd68",
    "clause": "ข้อ 45",
    "page": 10
   },
   {
-   "path": "heightVsRoad.cornerNarrowerRoadMaxLengthM",
+   "path": "height.roadMultiple.cornerNarrowerRoadMaxLengthM",
    "source": "mr43-55-upd68",
    "clause": "ข้อ 46",
    "page": 10
   },
   {
-   "path": "heightVsRoad.wideRoadException.roadWidthM",
+   "path": "height.roadMultiple.wideRoadException.roadWidthM",
    "source": "bb44-03",
    "clause": "ข้อ 49 วรรคสอง",
    "page": 14
   },
   {
-   "path": "heightVsRoad.wideRoadException.withinM",
+   "path": "height.roadMultiple.wideRoadException.withinM",
    "source": "bb44-03",
    "clause": "ข้อ 49 วรรคสอง",
    "page": 14
   },
   {
-   "path": "heightVsRoad.wideRoadException.accessWidthM",
+   "path": "height.roadMultiple.wideRoadException.accessWidthM",
    "source": "bb44-03",
    "clause": "ข้อ 49 วรรคสอง",
    "page": 14

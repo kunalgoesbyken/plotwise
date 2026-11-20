@@ -47,7 +47,7 @@ function caption({ envelope, layers, limits }: CaptionInput): string {
     case 'height-vs-road':
       return t('step.height-vs-road.caption', {
         from: metres(firstTierOf(envelope, step, CARVING)?.fromM ?? 0),
-        multiple: formatQuantity(limits.height.vsRoadMultiple.value, 'ratio'),
+        multiple: formatQuantity(limits.height.vsRoadMultiple?.value ?? 0, 'ratio'),
         top,
       })
     case 'high-rise':

@@ -35,8 +35,8 @@ describe('interpretations', () => {
 
   it('resolves a stated class from its cite and a contested class from the chosen reading', () => {
     const readings = packInterpretations(pack)
-    expect(isMember(pack, pack.classification.condo.residential, readings)).toMatchObject({ member: true })
-    const hotel = pack.classification.hotel.residential
+    expect(isMember(pack, pack.classification!.condo.residential, readings)).toMatchObject({ member: true })
+    const hotel = pack.classification!.hotel.residential
     expect(isMember(pack, hotel, { ...readings, 'hotel-residential': 'residential' }).member).toBe(true)
     const asPublic = isMember(pack, hotel, { ...readings, 'hotel-residential': 'public-building' })
     expect(asPublic.member).toBe(false)
