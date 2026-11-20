@@ -49,8 +49,8 @@ export const RulePackSchema = z
     message: 'a verified pack cannot hold values entered by a user',
     path: ['verification'],
   })
-  .refine((pack) => !pack.highRise || pack.buildingClasses, {
-    message: 'high-rise rules need the building classes that define a high-rise',
+  .refine((pack) => !pack.highRise === !pack.buildingClasses, {
+    message: 'high-rise rules and the building classes that define a high-rise come together',
     path: ['highRise'],
   })
 

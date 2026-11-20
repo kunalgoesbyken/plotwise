@@ -15,7 +15,9 @@ export function SetbackTable({ plot, solution }: Pick<Ready, 'plot' | 'solution'
     const setbacks = groundSetbacks(envelope)
     return setbacks ? [{ kind: envelope.kind, setbacks }] : []
   })
-  const highRiseFrom = formatQuantity(limits.highRise?.fromHeightM.value ?? 0, 'm')
+  const { highRise } = limits
+  const heading = (kind: Envelope['kind']) =>
+    highRise ? t(`rules.setbacks.${kind}`, { height: formatQuantity(highRise.fromHeightM.value, 'm') }) : t('rules.setbacks.any-height')
   return (
     <RuleSection title={t('rules.group.setbacks')} intro={t('rules.setbacks.detail')}>
       <table className="mt-3 w-full text-left text-sm tabular-nums">
@@ -29,7 +31,7 @@ export function SetbackTable({ plot, solution }: Pick<Ready, 'plot' | 'solution'
             </th>
             {columns.map(({ kind }) => (
               <th key={kind} scope="col" className="pb-1.5 pl-3 text-right font-normal">
-                {t(`rules.setbacks.${kind}`, { height: highRiseFrom })}
+                {heading(kind)}
               </th>
             ))}
           </tr>

@@ -48,8 +48,8 @@ export type HighRiseLimits = {
   readonly fromHeightM: Bound
   readonly extraLargeFromFloorAreaSqm: Bound
   readonly access: readonly HighRiseAccessBand[]
-  readonly fireLaneWidthM: Bound | null
-  readonly farMax: Sourced | null
+  readonly fireLaneWidthM: Bound
+  readonly farMax: Sourced
 }
 
 export type Limits = FarLimits & {
@@ -144,15 +144,15 @@ function conditionLimit(input: LimitsInput): UseLimit {
 
 function highRiseLimits({ pack, site }: LimitsInput): HighRiseLimits | null {
   const { buildingClasses, highRise } = pack
-  if (!buildingClasses) return null
+  if (!buildingClasses || !highRise) return null
   const qualifies = (roadWidthM: Bound, frontageM: Bound) =>
     site.edges.some((e) => e.roadWidthM !== null && satisfies(e.roadWidthM, roadWidthM) && satisfies(e.lengthM, frontageM))
   return {
     fromHeightM: buildingClasses.highRiseFromHeightM,
     extraLargeFromFloorAreaSqm: buildingClasses.extraLargeFromFloorAreaSqm,
-    access: (highRise?.access ?? []).map((band) => ({ ...band, qualifies: qualifies(band.roadWidthM, band.frontageM) })),
-    fireLaneWidthM: highRise?.fireLaneWidthM ?? null,
-    farMax: highRise ? { value: highRise.farMax.value, cites: [highRise.farMax.cite] } : null,
+    access: highRise.access.map((band) => ({ ...band, qualifies: qualifies(band.roadWidthM, band.frontageM) })),
+    fireLaneWidthM: highRise.fireLaneWidthM,
+    farMax: { value: highRise.farMax.value, cites: [highRise.farMax.cite] },
   }
 }
 

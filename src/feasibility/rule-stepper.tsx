@@ -44,12 +44,15 @@ function caption({ envelope, layers, limits }: CaptionInput): string {
   switch (step) {
     case 'setbacks':
       return t('step.setbacks.caption', { range: least === most ? metres(least) : t('range.span', { min: metres(least), max: metres(most) }) })
-    case 'height-vs-road':
+    case 'height-vs-road': {
+      const multiple = limits.height.vsRoadMultiple
+      if (!multiple) throw new Error('the road-height step needs the pack’s road-height rule')
       return t('step.height-vs-road.caption', {
         from: metres(firstTierOf(envelope, step, CARVING)?.fromM ?? 0),
-        multiple: formatQuantity(limits.height.vsRoadMultiple?.value ?? 0, 'ratio'),
+        multiple: formatQuantity(multiple.value, 'ratio'),
         top,
       })
+    }
     case 'high-rise':
       return t('step.high-rise.caption', { distance: metres(most) })
   }

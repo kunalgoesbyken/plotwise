@@ -271,6 +271,7 @@ const en = {
   'rules.setbacks.faces': 'Faces',
   'rules.setbacks.ordinary': ({ height }: { height: string }) => `Under ${height}`,
   'rules.setbacks.highRise': ({ height }: { height: string }) => `${height} and up`,
+  'rules.setbacks.any-height': 'Any height',
   'rules.setbacks.boundary': 'Neighbour',
   'rules.setbacks.road': ({ width }: { width: string }) => `Road ${width}`,
 

@@ -189,17 +189,13 @@ function HighRise({ limits }: { limits: Limits }) {
           cites={[band.roadWidthM.cite, band.frontageM.cite]}
         />
       ))}
-      {fireLaneWidthM && (
-        <LimitRow label={t('limit.fire-lane')} value={bound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
-      )}
-      {farMax && (
-        <LimitRow
-          label={t('limit.high-rise-far')}
-          value={t('value.far', { ratio: formatQuantity(farMax.value, 'ratio') })}
-          detail={t('limit.high-rise-far.detail')}
-          cites={farMax.cites}
-        />
-      )}
+      <LimitRow label={t('limit.fire-lane')} value={bound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
+      <LimitRow
+        label={t('limit.high-rise-far')}
+        value={t('value.far', { ratio: formatQuantity(farMax.value, 'ratio') })}
+        detail={t('limit.high-rise-far.detail')}
+        cites={farMax.cites}
+      />
     </LimitGroup>
   )
 }

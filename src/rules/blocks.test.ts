@@ -61,6 +61,11 @@ describe('the rule pack', () => {
     expect(result.error?.issues.map((issue) => issue.path)).toEqual([['highRise']])
   })
 
+  it('refuses building classes without the high-rise rules that apply to them', () => {
+    const result = RulePackSchema.safeParse({ ...BANGKOK, highRise: undefined })
+    expect(result.error?.issues.map((issue) => issue.path)).toEqual([['highRise']])
+  })
+
   it('keeps Bangkok verified', () => {
     expect(BANGKOK.verification).toBe('verified')
   })

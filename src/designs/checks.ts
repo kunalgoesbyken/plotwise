@@ -237,16 +237,15 @@ function conditionChecks({ solution, programme }: DesignFacts): Check[] {
 }
 
 function highRiseChecks({ solution, building, programme, ground }: Context): Check[] {
-  const { limits, site, pack } = solution
+  const { site, pack } = solution
   const { highRise } = pack
-  if (!highRise || !limits.highRise?.farMax || !limits.highRise.fireLaneWidthM || !isHighRiseOrExtraLarge(pack, building)) return []
-  const { farMax, fireLaneWidthM } = limits.highRise
-  const { access } = highRise
+  if (!highRise || !isHighRiseOrExtraLarge(pack, building)) return []
+  const { access, farMax, fireLaneWidthM } = highRise
   const band = access.find((b) => inRange(building.floorAreaSqm, b.floorAreaSqm)) ?? access[access.length - 1]
   const frontage = Math.max(0, ...site.edges.map((e) => (e.roadWidthM !== null && satisfies(e.roadWidthM, band.roadWidthM) ? e.lengthM : 0)))
   const fireLane = Math.min(...ground.clearanceM)
   return [
-    measured('high-rise-far', programme.farSqm / solution.farAreaSqm, 'lte', farMax.value, 'ratio', farMax.cites),
+    measured('high-rise-far', programme.farSqm / solution.farAreaSqm, 'lte', farMax.value, 'ratio', [farMax.cite]),
     measured('high-rise-access', frontage, band.frontageM.cmp, band.frontageM.value, 'm', [band.frontageM.cite, band.roadWidthM.cite]),
     manual('high-rise-road-network', [band.roadWidthM.cite, highRise.accessStripWidthM.cite]),
     measured('fire-lane', fireLane, fireLaneWidthM.cmp, fireLaneWidthM.value, 'm', [fireLaneWidthM.cite]),

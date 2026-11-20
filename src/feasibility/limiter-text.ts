@@ -6,6 +6,11 @@ import { PACK } from './compute'
 
 const metres = (value: number) => formatQuantity(value, 'm')
 
+function buildingClassText({ highRise }: Limits): string {
+  if (!highRise) throw new Error('a design limited by its building class needs the pack’s high-rise rules')
+  return t('limited-by.building-class', { height: metres(highRise.fromHeightM.value) })
+}
+
 function sizeConditionText({ use }: Limits): string {
   const station = stationDistance(PACK)
   if (use.kind === 'permitted' || !station) return t('limited-by.use')
@@ -17,7 +22,7 @@ export function limiterText(limiter: Limiter, limits: Limits): string {
     case 'far':
       return t('limited-by.far')
     case 'building-class':
-      return t('limited-by.building-class', { height: metres(limits.highRise?.fromHeightM.value ?? 0) })
+      return buildingClassText(limits)
     case 'use':
       return sizeConditionText(limits)
     case 'envelope':
