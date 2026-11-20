@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import type { Cite, Membership, RulePack } from '@/rules'
+import { isSourceCite, type Cite, type Membership, type RulePack } from '@/rules'
+import { DEFAULT_READINGS } from './assumptions'
 
 export const InterpretationsSchema = z.object({
   'hotel-residential': z.enum(['public-building', 'residential']),
@@ -26,20 +27,26 @@ const MEMBER_READING = {
 
 type ClassQuestion = keyof typeof MEMBER_READING
 
+const DEFAULTS = Object.fromEntries(Object.entries(DEFAULT_READINGS).map(([id, { value }]) => [id, value]))
+
 export function packInterpretations(pack: RulePack): Interpretations {
   const undecided = pack.questions.filter((q) => q.decision === null).map((q) => q.id)
   if (undecided.length) throw new Error(`the pack has undecided questions: ${undecided.join(', ')}`)
-  return InterpretationsSchema.parse(Object.fromEntries(pack.questions.map((q) => [q.id, q.decision])))
+  return InterpretationsSchema.parse({ ...DEFAULTS, ...Object.fromEntries(pack.questions.map((q) => [q.id, q.decision])) })
 }
 
+export const posesQuestion = (pack: RulePack, questionId: QuestionId) => pack.questions.some((q) => q.id === questionId)
+
 export function readingCites(pack: RulePack, questionId: QuestionId, readingId: string): readonly Cite[] {
-  const reading = pack.questions.find((q) => q.id === questionId)?.readings.find((r) => r.id === readingId)
+  const question = pack.questions.find((q) => q.id === questionId)
+  if (!question) return []
+  const reading = question.readings.find((r) => r.id === readingId)
   if (!reading) throw new Error(`the pack has no reading ${readingId} for question ${questionId}`)
   return reading.cites
 }
 
 export function readingSources(pack: RulePack, questionId: QuestionId, readingId: string): ReadonlySet<string> {
-  return new Set(readingCites(pack, questionId, readingId).map((c) => c.source))
+  return new Set(readingCites(pack, questionId, readingId).filter(isSourceCite).map((c) => c.source))
 }
 
 const isClassQuestion = (id: string): id is ClassQuestion => id in MEMBER_READING

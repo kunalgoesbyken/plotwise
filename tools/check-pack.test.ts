@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { RulePackSchema, type RulePack } from '../src/rules/types'
+import { RulePackSchema, type RulePack, type SourceCite } from '../src/rules'
+import { zoneFar } from '../src/rules/zone-far'
 import { checkPack } from './check-pack'
 
 const shipped = RulePackSchema.parse(await Bun.file(`${import.meta.dir}/../src/rules/packs/bkk-y9.json`).json())
@@ -22,8 +23,18 @@ describe('checkPack', () => {
   })
 
   it('flags a value outside its plausible range', () => {
-    expect(errorsOf(mutate((p) => void (p.far.max.value = 70)))).toContain('far.max')
-    expect(errorsOf(mutate((p) => void (p.openSpaceRatio.minShareOfFloorArea.value = 4.5)))).toContain('openSpaceRatio')
+    expect(errorsOf(mutate((p) => void (zoneFar(p).max.value = 70)))).toContain('far.max')
+    expect(errorsOf(mutate((p) => void (p.openSpaceRatio!.minShareOfFloorArea.value = 4.5)))).toContain('openSpaceRatio')
+  })
+
+  it('flags a purchasable FAR cap or price outside its plausible range', () => {
+    const cite = shipped.far.kind === 'zone' ? shipped.far.max.cite : shipped.zone!.cite
+    const withPurchase = (cap: unknown, price: unknown) => mutate((p) => void (p.farPurchases = [{ kind: 'premium', cap, price, notes: [] } as never]))
+    const banded = { kind: 'extraRatioByRoadWidth', bands: [{ kind: 'ratio', roadWidthM: {}, ratio: { value: 70, cite } }] }
+    expect(errorsOf(withPurchase(banded, { kind: 'userSupplied' }))).toContain('farPurchases.0.cap.bands.0')
+    const fungible = { kind: 'shareOf', of: 'permissible', share: { value: 0.35, cite } }
+    expect(errorsOf(withPurchase(fungible, { kind: 'shareOfLandRate', share: { value: 1.5, cite } }))).toContain('farPurchases.0.price')
+    expect(errorsOf(withPurchase(fungible, { kind: 'shareOfLandRate', share: { value: 0.5, cite } }))).not.toContain('farPurchases')
   })
 
   it('flags a gap between road-width bands', () => {
@@ -43,25 +54,25 @@ describe('checkPack', () => {
   })
 
   it('flags sources that disagree on the same rule', () => {
-    expect(errorsOf(mutate((p) => void (p.heightVsRoad.maxMultipleOfDistance[1].value = 3)))).toContain('heightVsRoad')
+    expect(errorsOf(mutate((p) => void (p.height.roadMultiple!.maxMultipleOfDistance[1].value = 3)))).toContain('height.roadMultiple')
   })
 
   it('flags a bonus larger than the combined cap', () => {
-    expect(errorsOf(mutate((p) => void (p.farBonus.combinedMaxShare.value = 0.1)))).toContain('farBonus')
+    expect(errorsOf(mutate((p) => void (p.farBonus!.combinedMaxShare.value = 0.1)))).toContain('farBonus')
   })
 
   it('flags a use condition whose road width has no ข้อ 36 tier', () => {
-    expect(errorsOf(mutate((p) => void (p.useConditions.hotel.kind === 'restrictedAbove' && (p.useConditions.hotel.unlessRoadWidthM.value = 14))))).toContain(
+    expect(errorsOf(mutate((p) => void (p.useConditions!.hotel.kind === 'restrictedAbove' && (p.useConditions!.hotel.unlessRoadWidthM.value = 14))))).toContain(
       'useConditions.hotel',
     )
   })
 
   it('flags a value read from a garbled source', () => {
-    expect(errorsOf(mutate((p) => void (p.far.max.cite.source = 'bb69-bma')))).toContain('garbled')
+    expect(errorsOf(mutate((p) => void ((zoneFar(p).max.cite as SourceCite).source = 'bb69-bma')))).toContain('garbled')
   })
 
   it('flags a cite to an unlisted source', () => {
-    expect(errorsOf(mutate((p) => void (p.zone.cite.source = 'nope')))).toContain('nope')
+    expect(errorsOf(mutate((p) => void ((p.zone!.cite as SourceCite).source = 'nope')))).toContain('nope')
   })
 
   it('flags a classification that points to a missing question', () => {

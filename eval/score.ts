@@ -1,5 +1,5 @@
 import { basename } from 'node:path'
-import { RulePackSchema, type RulePack } from '../src/rules/types'
+import { RulePackSchema, type RulePack } from '../src/rules'
 import { checkPack } from '../tools/check-pack'
 import { compilePack } from '../tools/compile-pack'
 import { readSource } from '../tools/pages'

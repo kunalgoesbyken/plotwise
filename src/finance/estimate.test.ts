@@ -1,7 +1,9 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { MONEY_REGIONS } from '@/solve'
-import { acquisitionShare, landResidual } from './estimate'
+import { unverified, value } from '@/rules/test-packs'
+import { MONEY_REGIONS, packInterpretations, solve } from '@/solve'
+import { plotFromMetres, rectangle } from '@/solve/test-plots'
+import { acquisitionShare, financeSite, landResidual } from './estimate'
 import { landCheck } from './land-check'
 import { resolveValues } from './values'
 
@@ -72,5 +74,16 @@ describe('landCheck', () => {
     const zero = { ...defaults, landReferenceLow: 0, landReferenceHigh: 0 }
     expect(landCheck({ low: 0, high: 1 }, zero, 2).exceeds).toBe(true)
     expect(landCheck({ low: 0, high: 0 }, zero, 2).exceeds).toBe(false)
+  })
+})
+
+describe('financeSite', () => {
+  it('prices the whole plot the owner buys, including a strip handed over for road widening', () => {
+    for (const farOn of ['gross', 'net'] as const) {
+      const pack = unverified({ reservations: [{ kind: 'roadWidening', targetWidthM: value(12), farOn, notes: [] }] })
+      const solution = solve(plotFromMetres(rectangle(40, 50), [{ edge: 0, widthM: 8 }]), pack, packInterpretations(pack))
+      expect(solution.site.areaSqm).toBeCloseTo(1920, 6)
+      expect(financeSite(solution, region).plotAreaSqm).toBeCloseTo(2000, 6)
+    }
   })
 })

@@ -7,11 +7,12 @@ export type OpenSpaceNeed = {
   readonly highRiseOrExtraLarge: boolean
 }
 
+const NONE: Sourced = { value: 0, cites: [] }
+
 const applies = (minimum: OpenSpaceMinimum, highRiseOrExtraLarge: boolean) =>
   minimum.scope === 'anyBuilding' || highRiseOrExtraLarge
 
-const largest = (needs: readonly Sourced[]): Sourced =>
-  needs.reduce((best, need) => (need.value > best.value ? need : best), { value: 0, cites: [] })
+const largest = (needs: readonly Sourced[]): Sourced => needs.reduce((best, need) => (need.value > best.value ? need : best), NONE)
 
 export function buildingControlOpenSpace(limits: Limits, need: OpenSpaceNeed): Sourced {
   return largest(
@@ -22,11 +23,13 @@ export function buildingControlOpenSpace(limits: Limits, need: OpenSpaceNeed): S
 }
 
 export function ratioOpenSpace(limits: Limits, farSqm: number): Sourced {
-  return { value: limits.openSpace.ratio.value * farSqm, cites: limits.openSpace.ratio.cites }
+  const { ratio } = limits.openSpace
+  return ratio ? { value: ratio.value * farSqm, cites: ratio.cites } : NONE
 }
 
 export function permeableArea(limits: Limits, need: OpenSpaceNeed, openSpaceSqm: number): Sourced {
   const { permeable } = limits.openSpace
+  if (!permeable) return NONE
   const base = permeable.base === 'required' ? ratioOpenSpace(limits, need.farSqm).value : openSpaceSqm
   return { value: permeable.value * base, cites: permeable.cites }
 }

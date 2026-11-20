@@ -2,6 +2,7 @@ export { intersection, shrink } from './clip'
 export { GeometryError, type GeometryErrorReason } from './errors'
 export { floorPlates, type Floor, type FloorPlates, type FootprintLimits } from './floors'
 export { minAreaRect, type OrientedRect } from './obb'
+export { offsetEdges } from './offset'
 export {
   centroid,
   contains,

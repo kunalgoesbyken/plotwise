@@ -123,12 +123,13 @@ Scope: the brown zone (very high-density residential, coded ย.9) of the Bangko
 
 - **Region.** Everything specific to a jurisdiction lives in one record, `src/region/regions.ts`:
   - the rule pack, city and country names, zone label and authority;
-  - city-plan link, map start, search bounds and bias;
+  - city-plan link and version, and the local name for the floor area ratio;
+  - map start, search bounds and bias;
   - OSM transit tags.
 
-  Money defaults are in `MONEY_REGIONS` in `src/solve/assumptions.ts`, and the zone layer is in `src/zone/sources.ts`, both keyed by region. `NEXT_PUBLIC_REGION` picks the active region.
+  Money defaults, with the currency and the land unit, are in `MONEY_REGIONS` in `src/solve/assumptions.ts`, and the zone layer is in `src/zone/sources.ts`, both keyed by region. `NEXT_PUBLIC_REGION` picks the active region.
 
-  Adding a city whose rules have the same shape is a data change: a rule pack, a region record, money defaults and a zone source. The pack schema still has Thai-law shapes, such as height-banded setbacks and the parking scopes. Rules of a different kind would need schema and solver work.
+  A rule pack is built from blocks in `src/rules`: FAR from the zone, from a road width × plot size table or given per plot, a capped bonus, purchasable FAR (premium, transferable rights), height caps in metres or storeys, road and boundary setbacks by height and road width, coverage, open space, parking, road widening and use conditions. Most blocks are optional. A value the user enters carries its own cite and makes the result unverified, and a verified pack cannot hold one. Adding a city is a data change when its rules fit these blocks: a rule pack, a region record, money defaults and a zone source.
 - **Design tokens.** Colours, fonts, radii, type scale, shadows and motion are defined once in `src/app/globals.css` (`@theme`). The map and the 3D scene read the same tokens at runtime. Components use token names only. The UI uses Geist, Phosphor icons and shadcn/ui on Radix.
 
 ## Setup
@@ -159,7 +160,7 @@ Feature-first folders under `src/`:
 |---|---|
 | `editor` | The three-step panel, drawing and editing the plot on MapLibre, roads, building type, live place search, URL state |
 | `plot`, `geo` | The validated plot contract and the local metric projection |
-| `rules` | Rule pack types and loader |
+| `rules` | Rule pack building blocks, schema and loader |
 | `solve` | Rules → limits, setbacks by height, envelopes; `assumptions.ts` holds every engineering and money assumption with its source |
 | `geometry` | Polygon normalization, per-edge setback envelopes, tiers, floor plates |
 | `designs` | Concept designs, metrics and checklists |

@@ -5,6 +5,7 @@ import { basisOf, estimate, financeSite } from '@/finance/estimate'
 import { resolveValues } from '@/finance/values'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { REGION } from '@/region/regions'
+import { isSourceCite } from '@/rules'
 import { MONEY_REGIONS } from '@/solve'
 
 export const EXAMPLE_LINK = `/app#${EXAMPLE_FRAGMENT}`
@@ -20,9 +21,12 @@ export function exampleFigures() {
   const site = financeSite(solution, region)
   const money = estimate(design.metrics, site, resolveValues(region, basisOf(site), {}))
   const cited = design.checks
-    .filter((check) => check.status === 'pass' && check.cites.length > 0)
+    .filter((check) => check.status === 'pass')
+    .flatMap((check) => {
+      const cite = check.cites.find(isSourceCite)
+      return cite ? [{ id: check.id, cite, source: PACK.sources[cite.source]?.name ?? cite.source }] : []
+    })
     .slice(0, CITED_CHECKS)
-    .map((check) => ({ id: check.id, cite: check.cites[0], source: PACK.sources[check.cites[0].source]?.name ?? check.cites[0].source }))
   const toCheck = [...new Set(designs.flatMap((d) => d.checks.filter((check) => check.status === 'manual').map((check) => check.id)))]
   return {
     plotSqm: solution.site.areaSqm,

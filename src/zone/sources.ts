@@ -1,6 +1,7 @@
 import { REGIONS } from '@/region/regions'
-import { loadPack } from '@/rules'
+import { loadPack, type PackId } from '@/rules'
 import type { Bbox } from '@/site/bbox'
+import type { RegionId } from '@/solve'
 import { BMA_LAYER_ORIGIN } from './layer-origin'
 
 export type ZoneEntry = {
@@ -56,6 +57,12 @@ const BANGKOK_ZONES: readonly ZoneEntry[] = [
   { sourceCode: 'อ.๓', packCode: 'อ.3', name: 'pale-orange zone 3 (industrial)' },
 ]
 
+function zoneCode(packId: PackId): string {
+  const { zone } = loadPack(packId)
+  if (!zone) throw new Error(`pack ${packId} names no zone`)
+  return zone.code
+}
+
 const BMA_LAYER_URL = `${BMA_LAYER_ORIGIN}/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8`
 
 export const ZONE_SOURCES = {
@@ -71,8 +78,8 @@ export const ZONE_SOURCES = {
       url: BMA_LAYER_URL,
     },
     coverage: [100.326, 13.485, 100.94, 13.953],
-    naming: { zones: BANGKOK_ZONES, coveredCode: loadPack(REGIONS.bkk.packId).zone.code },
+    naming: { zones: BANGKOK_ZONES, coveredCode: zoneCode(REGIONS.bkk.packId) },
   },
-} satisfies Record<string, ZoneSource>
+} satisfies Record<RegionId, ZoneSource>
 
 export type ZoneRegionId = keyof typeof ZONE_SOURCES
