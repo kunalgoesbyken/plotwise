@@ -1,12 +1,12 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { DUBAI_EXAMPLE_LIMITS_SOURCE, DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_LAND_RATE, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
+import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { BuildingType, Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
 import type { RegionId } from '@/solve'
-import { AFFECTION_PLAN_TERMS } from '@/solve/assumptions'
+import { AFFECTION_PLAN_TERMS, DCPR_RESIDENTIAL_USE, DUBAI_EXAMPLE_LIMITS_SOURCE, MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 
@@ -164,7 +164,7 @@ export const REGIONS = {
     zone: null,
     authority: 'MCGM',
     cityPlan: MUMBAI_PLAN,
-    covers: { use: 'Residential (R zone), Suburbs and Extended Suburbs', document: MUMBAI_PLAN.name },
+    covers: { use: DCPR_RESIDENTIAL_USE.value, document: MUMBAI_PLAN.name },
     areaTerms: { ratio: 'FSI', ratioName: 'Floor space index', saleable: 'carpet area', landRate: 'ASR land rate' },
     buildingNames: { ...BUILDING_NAMES, condo: t('building.apartments') },
     mapStart: {

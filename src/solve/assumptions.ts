@@ -440,3 +440,20 @@ export const AFFECTION_PLAN_TERMS = {
     },
   },
 } as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }
+
+const DCPR_2034 =
+  'Greater Mumbai Development Control and Promotion Regulations 2034, sanctioned text of 8 May 2018 (MCGM), https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf'
+
+export const DCPR_RESIDENTIAL_USE = {
+  value: 'Residential (R zone), Suburbs and Extended Suburbs',
+  source: `${DCPR_2034}, PDF page 127, Reg 30(A)(1) Table 12 Sr II(iii): "The remaining area in Suburbs and Extended Suburbs, Residential/ Commercial"`,
+} as const satisfies Term
+
+export const MUMBAI_EXAMPLE_LAND_RATE: Assumption = {
+  value: 64_240,
+  source:
+    'Department of Registration and Stamps, Government of Maharashtra, Annual Statement of Rates (Ready Reckoner) 2026-27, Mumbai Suburban district, village Mulund (W), open land ₹64,240 per m² in zone 123/567. The zone is matched by position and not confirmed for this plot: on OpenStreetMap the plot lies between L.B.S. Marg and Purushottam Kheraj Road, which zone 123/567 covers: "एल.बी.एस.मार्ग व पुरूषोत्तम खेराज रोड या मधील विभाग क्रमांक 123/568 मधील मिळकती सोडून उर्वरीत सर्व मिळकती" (all properties between L.B.S. Marg and Purushottam Kheraj Road except those of zone 123/568); if it lies in zone 123/568 the rate is ₹63,400. https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains, fetched 2026-11-20',
+}
+
+export const DUBAI_EXAMPLE_LIMITS_SOURCE =
+  'Setbacks and plot coverage copied from a public Nakheel affection plan, not this plot’s own: Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only and refers parking to the Trakhees regulations, so height in metres and parking stay blank. Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20'
