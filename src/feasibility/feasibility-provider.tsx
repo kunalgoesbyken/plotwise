@@ -24,7 +24,6 @@ export type FeasibilityView = {
   readonly farBonus: boolean
   readonly setFarBonus: (on: boolean) => void
   readonly far: FarChoice
-  readonly purchase: PurchaseRatios
   readonly buy: (kind: FarPurchase['kind'], ratio: number) => void
   readonly selectDesign: (id: TypologyId) => void
   readonly chooseStep: (step: RuleStep) => void
@@ -67,8 +66,8 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const strip = useMemo(() => (solution?.widening ? wideningStrip(solution.widening, solution.site.ring) : NO_STRIP), [solution])
   const layers = useMemo(() => (envelope && solution && carving ? envelopeLayers(envelope, solution.site, step, carving) : null), [envelope, solution, step, carving])
   const view = useMemo(
-    () => ({ pack, plot, result, design, envelope, carving, layers, strip, farBonus, setFarBonus, far, purchase, buy, selectDesign: setDesignId, chooseStep: setStep }),
-    [pack, plot, result, design, envelope, carving, layers, strip, farBonus, setFarBonus, far, purchase, buy],
+    () => ({ pack, plot, result, design, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy, selectDesign: setDesignId, chooseStep: setStep }),
+    [pack, plot, result, design, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy],
   )
   return <FeasibilityContext value={view}>{children}</FeasibilityContext>
 }
