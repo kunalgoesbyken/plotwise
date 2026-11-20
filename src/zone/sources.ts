@@ -79,7 +79,7 @@ export const ZONE_SOURCES = {
     snapshot: '/zone/bma-2556-y9.json',
     licence: {
       summary:
-        'Plotwise keeps a dated copy of the brown zone 9 polygons of this ArcGIS REST layer, which the BMA publishes without licence text, and checks the live layer against it. The polygons are the BMA rendering of the land-use map annexed to the Ministerial Regulation enforcing the Bangkok Comprehensive Plan B.E. 2556; section 7 of the Copyright Act B.E. 2537 does not treat the constitution and legislation, or regulations, bylaws, notifications and orders of government and local units, as copyright works.',
+        'Plotwise keeps a dated copy of the brown zone 9 polygons of this ArcGIS REST layer, which the BMA publishes without licence text, checks plots against that copy and checks the live layer against it. The polygons are the BMA rendering of the land-use map annexed to the Ministerial Regulation enforcing the Bangkok Comprehensive Plan B.E. 2556; section 7 of the Copyright Act B.E. 2537 does not treat the constitution and legislation (2), regulations, bylaws, notifications and orders of government and local units (3), or translations and compilations of those made by government or local units (5) as copyright works.',
       url: 'https://www.ipthailand.go.th/images/3534/2565/Copyright/Copyright_Act2_TH.pdf',
     },
     coverage: [100.326, 13.485, 100.94, 13.953],
@@ -88,3 +88,5 @@ export const ZONE_SOURCES = {
 } satisfies Partial<Record<RegionId, ZoneSource>>
 
 export type ZoneRegionId = keyof typeof ZONE_SOURCES
+
+export const hasZoneSource = (id: RegionId): id is ZoneRegionId => id in ZONE_SOURCES

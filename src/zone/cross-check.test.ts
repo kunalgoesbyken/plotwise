@@ -30,16 +30,18 @@ describe('zoneCheck', () => {
     for (const live of [unreachable, noZone]) expect(zoneCheck(snapshot, live)).toEqual({ verdict: inside, note: { kind: 'as-of', snapshot } })
   })
 
-  it('takes the live answer without a note when it agrees, so the live layer can name the zone', () => {
-    expect(zoneCheck(fromSnapshot(inside), inside)).toEqual({ verdict: inside, note: null })
-    expect(zoneCheck(fromSnapshot(outsideUnnamed), outsideBlue)).toEqual({ verdict: outsideBlue, note: null })
+  it('changes nothing but the zone names when the live layer agrees, so the live layer can name the zone', () => {
+    const snapshot = fromSnapshot(inside)
+    expect(zoneCheck(snapshot, inside)).toEqual(zoneCheck(snapshot, null))
+    const outside = fromSnapshot(outsideUnnamed)
+    expect(zoneCheck(outside, outsideBlue)).toEqual({ verdict: outsideBlue, note: { kind: 'as-of', snapshot: outside } })
   })
 
-  it('follows the live layer and says so when it differs from the snapshot', () => {
+  it('keeps the snapshot verdict and notes the difference when the live layer differs', () => {
     const snapshot = fromSnapshot(inside)
-    expect(zoneCheck(snapshot, outsideBlue)).toEqual({ verdict: outsideBlue, note: { kind: 'live-differs', snapshot } })
+    expect(zoneCheck(snapshot, outsideBlue)).toEqual({ verdict: inside, note: { kind: 'live-differs', snapshot } })
     const outside = fromSnapshot(outsideUnnamed)
-    expect(zoneCheck(outside, inside)).toEqual({ verdict: inside, note: { kind: 'live-differs', snapshot: outside } })
+    expect(zoneCheck(outside, inside)).toEqual({ verdict: outsideUnnamed, note: { kind: 'live-differs', snapshot: outside } })
   })
 
   it('gives the live answer alone where there is no snapshot', () => {

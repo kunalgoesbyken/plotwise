@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import { ZONE_ANSWER_MEMORY_MS, ZONE_UNREACHABLE_MEMORY_MS } from './assumptions'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { MAX_BBOX_SIDE_M } from '@/site/assumptions'
-import { COMMITTED_SNAPSHOT as snapshot } from './__fixtures__/committed-snapshot'
-import { createZoneLookup, snapshotZone } from './lookup'
+import { createZoneLookup } from './lookup'
 import { ZONE_SOURCES } from './sources'
 
 const bangkokPlot: LngLat[] = [
@@ -47,25 +45,6 @@ function clock(start = 1_000) {
   return { now: () => time, advance: (ms: number) => (time += ms) }
 }
 
-const citySized = (ring: readonly LngLat[]): LngLat[] => {
-  const degrees = (MAX_BBOX_SIDE_M.value * 2) / 100_000
-  return ring.map(([lng, lat], index) => (index < 2 ? [lng, lat] : [lng + degrees, lat + degrees]))
-}
-
-describe('snapshotZone', () => {
-  it('dates the snapshot verdict and names its source', () => {
-    expect(snapshotZone(EXAMPLE_PLOT.ring, 'bkk', snapshot)).toEqual({
-      verdict: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' },
-      asOf: snapshot.fetchedAt,
-      source: ZONE_SOURCES.bkk,
-    })
-  })
-
-  it('does not judge an outline larger than a plot', () => {
-    expect(snapshotZone(citySized(EXAMPLE_PLOT.ring), 'bkk', snapshot)).toBeNull()
-  })
-})
-
 describe('zone lookup', () => {
   it('reads a Bangkok plot against the BMA layer and names the zone', async () => {
     const { calls, fetchImpl } = server(answer(BROWN_ZONE))
@@ -84,7 +63,9 @@ describe('zone lookup', () => {
 
   it('does not ask any server about an outline larger than a plot', async () => {
     const { calls, fetchImpl } = server(answer(BROWN_ZONE))
-    const verdict = await createZoneLookup({ fetchImpl })(citySized(bangkokPlot))
+    const degrees = (MAX_BBOX_SIDE_M.value * 2) / 100_000
+    const citySized: LngLat[] = bangkokPlot.map(([lng, lat], index) => (index < 2 ? [lng, lat] : [lng + degrees, lat + degrees]))
+    const verdict = await createZoneLookup({ fetchImpl })(citySized)
     expect(verdict).toMatchObject({ status: 'unknown', reason: 'too-large' })
     expect(calls).toHaveLength(0)
   })

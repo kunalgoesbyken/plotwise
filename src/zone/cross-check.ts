@@ -10,6 +10,6 @@ export type ZoneCheck = { readonly verdict: ZoneVerdict; readonly note: ZoneNote
 export function zoneCheck(snapshot: SnapshotVerdict | null, live: ZoneVerdict | null): ZoneCheck | null {
   if (!snapshot) return live && { verdict: live, note: null }
   if (!live || live.status === 'unknown') return { verdict: snapshot.verdict, note: { kind: 'as-of', snapshot } }
-  if (live.status === snapshot.verdict.status) return { verdict: live, note: null }
-  return { verdict: live, note: { kind: 'live-differs', snapshot } }
+  if (live.status === snapshot.verdict.status) return { verdict: live, note: { kind: 'as-of', snapshot } }
+  return { verdict: snapshot.verdict, note: { kind: 'live-differs', snapshot } }
 }

@@ -352,7 +352,7 @@ const en = {
   'zone.confirmed': ({ zone }: { zone: string }) => `You checked the city plan and confirmed the plot is in the ${zone}.`,
   'zone.as-of': ({ layer, date }: { layer: string; date: string }) => `${layer} as of ${date}.`,
   'zone.live-differs': ({ layer, date }: { layer: string; date: string }) =>
-    `The live ${layer} differs from Plotwise's copy of ${date}, so this follows the live layer.`,
+    `The live ${layer} answers differently from Plotwise's copy of ${date}, which this check follows.`,
   'zone.straddles': ({ parts, covered }: { parts: string; covered: string }) =>
     `This plot spans more than one zone: ${parts}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
   'zone.unknown.no-region': 'Plotwise has no zone data for this location, so it could not check the zone.',
