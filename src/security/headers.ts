@@ -1,3 +1,5 @@
+import { BMA_LAYER_ORIGIN } from '../zone/layer-origin'
+
 const MAP_TILE_ORIGIN = 'https://tiles.openfreemap.org'
 
 const PERMISSIONS_POLICY = ['camera', 'microphone', 'geolocation', 'payment', 'usb'].map((feature) => `${feature}=()`).join(', ')
@@ -9,7 +11,7 @@ function contentSecurityPolicy(development: boolean): string {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
-    `connect-src 'self' ${MAP_TILE_ORIGIN}`,
+    `connect-src 'self' ${MAP_TILE_ORIGIN} ${BMA_LAYER_ORIGIN}`,
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",

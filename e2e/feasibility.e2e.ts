@@ -4,6 +4,7 @@ import type { Plot } from '../src/plot/plot'
 import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { parseOverpass } from '../src/site/parse'
+import { BLUE_ZONE, BROWN_ZONE, mockZoneDown, mockZoneStrips } from './zone-layers'
 
 const recorded = parseOverpass(OverpassResponseSchema.parse(fixture))
 
@@ -30,7 +31,7 @@ async function open(page: Page, plot: Plot = PLOT, hash = '') {
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   await page.route('**/api/site?**', fulfilSite)
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+  await mockZoneStrips(page, 'bkk', [{ code: BROWN_ZONE, width: 1 }])
   await page.goto(`/app#${encodePlot(plot)}${hash}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
@@ -407,17 +408,15 @@ test('widening the window from the 3D tab falls back to the designs, not an empt
   await expect(designTable(page)).toBeVisible()
 })
 
-async function openWithZone(page: Page, verdict: object, hash = '') {
+async function openWithZone(page: Page, mockZone: (page: Page) => Promise<void>, hash = '') {
   await page.route('**/api/site?**', fulfilSite)
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: verdict }))
+  await mockZone(page)
   await page.goto(`/app#${encodePlot(PLOT)}${hash}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
 }
 
-const UNREACHABLE = { status: 'unknown', reason: 'unreachable', plan: { name: 'BMA city plan', url: 'https://webportal.bangkok.go.th/cpud' } }
-
 test('an unchecked zone holds the figures back until the user confirms it, and the link keeps the confirmation', async ({ page }) => {
-  await openWithZone(page, UNREACHABLE)
+  await openWithZone(page, (p) => mockZoneDown(p, 'bkk'))
   const held = page.getByRole('region', { name: 'Zone check' })
   await expect(held).toContainText('The city-plan service did not answer')
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toHaveCount(0)
@@ -428,8 +427,17 @@ test('an unchecked zone holds the figures back until the user confirms it, and t
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
 })
 
+test('a plot straddling two zones names each share and shows no figures', async ({ page }) => {
+  await openWithZone(page, (p) => mockZoneStrips(p, 'bkk', [{ code: BROWN_ZONE, width: 3 }, { code: BLUE_ZONE, width: 1 }]), '&zone=confirmed')
+  const held = page.getByRole('region', { name: 'Zone check' })
+  await expect(held).toContainText('This plot spans more than one zone')
+  await expect(held).toContainText('blue zone (')
+  await expect(held.getByRole('button')).toHaveCount(0)
+  await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toHaveCount(0)
+})
+
 test('a plot outside the covered zone shows no figures and offers no override', async ({ page }) => {
-  await openWithZone(page, { status: 'outside', zone: 'blue zone', covered: 'brown zone 9 (very high-density residential)' }, '&zone=confirmed')
+  await openWithZone(page, (p) => mockZoneStrips(p, 'bkk', [{ code: BLUE_ZONE, width: 1 }]), '&zone=confirmed')
   const held = page.getByRole('region', { name: 'Zone check' })
   await expect(held).toContainText('This plot is in the blue zone')
   await expect(held.getByRole('button')).toHaveCount(0)

@@ -1,9 +1,10 @@
 'use client'
 
 import { createContext, use, useDeferredValue, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react'
+import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
 import { initialEditorState, reduceEditor, type EditorAction, type EditorState } from './editor-state'
-import { decodePlot, encodePlot } from './plot-url'
+import { decodePlot, encodePlot, EXAMPLE_FRAGMENT, isExampleLink } from './plot-url'
 import { syncSite } from './site-sync'
 import { writeHash } from './url-hash'
 
@@ -33,7 +34,7 @@ function createEditorStore(): EditorStore {
   }
 }
 
-const PLOT_PARAMS = ['plot', 'roads', 'type', 'station'] as const
+const PLOT_PARAMS = ['plot', 'roads', 'type', 'station', EXAMPLE_FRAGMENT] as const
 
 const fragmentFor = (plot: Plot | null) => (plot ? encodePlot(plot) : '')
 
@@ -41,6 +42,11 @@ const writeUrl = (plot: Plot | null) => writeHash(PLOT_PARAMS, fragmentFor(plot)
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
+    if (isExampleLink(location.hash)) {
+      store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })
+      writeUrl(store.getState().plot)
+      return
+    }
     const link = decodePlot(location.hash)
     if (!link) return
     if (!link.ok) {

@@ -20,6 +20,10 @@ export function encodePlot(plot: Plot) {
   return `plot=${ring}&roads=${roads}&type=${plot.buildingType}${station}`
 }
 
+export const EXAMPLE_FRAGMENT = 'example'
+
+export const isExampleLink = (fragment: string) => new URLSearchParams(fragment.replace(/^#/, '')).has(EXAMPLE_FRAGMENT)
+
 export type LinkProblem = 'link-incomplete' | 'link-invalid'
 export type DecodedLink = { ok: true; plot: Plot } | { ok: false; problem: LinkProblem }
 

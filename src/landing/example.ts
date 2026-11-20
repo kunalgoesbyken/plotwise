@@ -1,4 +1,4 @@
-import { encodePlot } from '@/editor/plot-url'
+import { EXAMPLE_FRAGMENT } from '@/editor/plot-url'
 import { feasibility, PACK } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
 import { basisOf, estimate, financeSite } from '@/finance/estimate'
@@ -8,7 +8,7 @@ import { REGION } from '@/region/regions'
 import { isSourceCite } from '@/rules'
 import { MONEY_REGIONS } from '@/solve'
 
-export const EXAMPLE_LINK = `/app#${encodePlot(EXAMPLE_PLOT)}`
+export const EXAMPLE_LINK = `/app#${EXAMPLE_FRAGMENT}`
 
 const CITED_CHECKS = 3
 

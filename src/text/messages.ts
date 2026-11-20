@@ -110,7 +110,7 @@ const en = {
   'flow.roads': 'Roads',
   'flow.results': 'Results',
   'flow.next.plot': 'Next: roads',
-  'flow.next.roads': 'See what you can build',
+  'flow.next.roads': 'See results',
   'flow.back': 'Back',
   'plot.framing': ({ city }: { city: string }) => `Check what a ${city} plot can hold before you buy it.`,
   'rejection.link-incomplete': 'This link is missing part of the plot, so it could not be opened.',
@@ -203,10 +203,11 @@ const en = {
   'zone.inside': ({ zone }: { zone: string }) => `Inside the ${zone}. Plotwise covers this zone.`,
   'zone.outside': ({ zone, covered }: { zone: string; covered: string }) =>
     `This plot is in the ${zone}. Plotwise covers only the ${covered} for now.`,
-  'zone.mixed': ({ zones, covered }: { zones: string; covered: string }) =>
-    `This plot spans more than one zone: ${zones}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
+  'zone.straddles': ({ parts, covered }: { parts: string; covered: string }) =>
+    `This plot spans more than one zone: ${parts}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
   'zone.unknown.no-region': 'Plotwise has no zone data for this location, so it could not check the zone.',
-  'zone.unknown.no-zone': 'The city plan maps no zone under this plot, so Plotwise could not check it.',
+  'zone.unknown.too-large': 'This outline is larger than a plot, so Plotwise did not check the zone.',
+  'zone.unknown.no-zone': 'The city plan maps no zone under all of this plot, so Plotwise could not check it.',
   'zone.unknown.unrecognised': 'The city plan uses a zone code Plotwise does not know, so it could not check the zone.',
   'zone.unknown.unreachable': 'The city-plan service did not answer, so Plotwise could not check the zone here.',
   'zone.confirm': ({ plan }: { plan: string }) => `Confirm it on the ${plan}.`,
