@@ -15,7 +15,11 @@ const NOTE = 'rounded-md bg-background px-2.5 py-1.5 text-xs text-muted-foregrou
 
 const SceneView = dynamic(() => import('./scene-view'), {
   ssr: false,
-  loading: () => <p className="grid size-full place-items-center bg-muted text-sm text-muted-foreground">{t('scene.loading')}</p>,
+  loading: () => (
+    <div role="status" className="grid size-full animate-pulse place-items-center bg-muted text-sm text-muted-foreground">
+      {t('scene.loading')}
+    </div>
+  ),
 })
 
 type PlotSceneProps = {

@@ -7,7 +7,7 @@ import { REGION } from '@/region/regions'
 import { fitPadding, insideClearArea } from './fit-padding'
 import { bindInteractions } from './map-interactions'
 import { mapFeatures, mapLabels, type MapLabel } from './map-features'
-import { addEditorLayers, EMPTY_OVERLAY, labelInEnglish, OVERLAY_SOURCE, PLOT_SOURCE, readPalette, type MapOverlay } from './map-layers'
+import { addEditorLayers, EMPTY_OVERLAY, labelInEnglish, OVERLAY_SOURCE, PLOT_SOURCE, readPalette, withoutUnusedBaseLayers, type MapOverlay } from './map-layers'
 import { useEditorState, useEditorStore } from './plot-store'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
@@ -74,6 +74,7 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       const created = new maplibre.Map({
         container: element,
         style: STYLE_URL,
+        transformStyle: withoutUnusedBaseLayers,
         center: [...REGION.mapStart.value],
         zoom: START_ZOOM,
         attributionControl: false,
