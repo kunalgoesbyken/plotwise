@@ -44,6 +44,7 @@ function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
     if (isExampleLink(location.hash)) {
       store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })
+      writeUrl(store.getState().plot)
       return
     }
     const link = decodePlot(location.hash)
