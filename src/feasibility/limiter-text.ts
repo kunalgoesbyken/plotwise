@@ -11,6 +11,11 @@ function buildingClassText({ highRise }: Limits): string {
   return t('limited-by.building-class', { height: metres(highRise.fromHeightM.value) })
 }
 
+function heightText({ height }: Limits): string {
+  if (height.planLimitM === null) throw new Error('a design limited by height needs a height limit')
+  return t('limited-by.height', { height: metres(height.planLimitM) })
+}
+
 function sizeConditionText({ use }: Limits, pack: RulePack): string {
   const station = stationDistance(pack)
   if (use.kind === 'permitted' || !station) return t('limited-by.use')
@@ -25,6 +30,8 @@ export function limiterText(limiter: Limiter, { limits, pack }: Solution): strin
       return buildingClassText(limits)
     case 'use':
       return sizeConditionText(limits, pack)
+    case 'height':
+      return heightText(limits)
     case 'envelope':
       return t('limited-by.envelope')
   }

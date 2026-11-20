@@ -1,3 +1,4 @@
+import { headline } from '@/designs'
 import { EXAMPLE_FRAGMENT } from '@/editor/plot-url'
 import { feasibility } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
@@ -17,7 +18,8 @@ export function exampleFigures() {
   const result = feasibility(EXAMPLE_PLOT, pack)
   if (result.status !== 'ready') throw new Error(`The example plot no longer solves: ${result.reason}`)
   const { solution, designs } = result
-  const [design] = designs
+  const design = headline(designs)
+  if (!design) throw new Error('The example plot no longer has a design')
   const region = MONEY_REGIONS[DEFAULT_REGION.id]
   const site = financeSite(solution, region)
   const money = estimate(design.metrics, site, resolveValues(region.prices, basisOf(site, region.prices), {}))

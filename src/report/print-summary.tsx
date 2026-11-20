@@ -130,7 +130,7 @@ export function PrintSummary() {
       <section className="flex gap-8">
         <PlotDrawing ring={site.ring} footprint={design.plates.footprint} />
         <div className="flex-1">
-          <h2 className="text-sm font-semibold">{t(design.nameKey)}</h2>
+          <h2 className="text-sm font-semibold">{t('design.name', design.name)}</h2>
           <p className="mb-2 text-xs text-muted-foreground">
             {t('report.plot', { area: formatQuantity(site.areaSqm, area), allowed: formatQuantity(farCap.maxGfaSqm, area) })}
           </p>

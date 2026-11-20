@@ -34,9 +34,10 @@ function envelopeReport({ kind, floorToFloorM, tiers, prisms }: Solution['envelo
   return { kind, floorToFloorM, tiers, prisms }
 }
 
-function designReport({ id, envelope, limitedBy, metrics, checks, plates }: Design) {
+function designReport({ id, name, envelope, limitedBy, metrics, checks, plates }: Design) {
   return {
     id,
+    name,
     envelope,
     limitedBy,
     metrics,

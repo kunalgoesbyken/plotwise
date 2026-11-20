@@ -4,13 +4,24 @@ import type { Vec2 } from '@/geo/projection'
 import { convexPolygon, starPolygon } from '@/geometry/arbitraries'
 import { intersection } from '@/geometry/clip'
 import { totalArea } from '@/geometry'
-import type { BuildingType } from '@/plot/plot'
-import { loadPack } from '@/rules'
+import type { BuildingType, Plot, PlotLimits } from '@/plot/plot'
+import { loadPack, type PackId } from '@/rules'
 import { zoneFar } from '@/rules/zone-far'
-import { buildingControlOpenSpace, isHighRiseOrExtraLarge, packInterpretations, ratioOpenSpace, solve, type Interpretations } from '@/solve'
+import {
+  buildingControlOpenSpace,
+  isHighRiseOrExtraLarge,
+  packInterpretations,
+  ratioOpenSpace,
+  satisfies,
+  solve,
+  type Interpretations,
+  type Solution,
+} from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
-import { designs, type Design } from './designs'
+import { SQM_PER_SQFT } from '@/units/area'
+import { AREA_TOLERANCE_SQM, designs, type Design } from './designs'
+import { headline } from './headline'
 
 const pack = loadPack('bkk-y9')
 const readings = packInterpretations(pack)
@@ -38,10 +49,11 @@ function assertInsideEnvelope(solution: ReturnType<typeof solve>, design: Design
 }
 
 describe('concept designs', () => {
-  it('offers a podium tower, a slab on the main road and a low-rise block on a typical plot', () => {
+  it('offers a podium tower, a slab on the main road and a low-rise block on a typical plot, each named from what it became', () => {
     const { options } = designed(lot(50, 70, 16))
     expect(options.map((d) => d.id)).toEqual(['podium-tower', 'slab', 'low-rise'])
-    expect(options.map((d) => d.nameKey)).toEqual(['design.podium-tower', 'design.slab', 'design.low-rise'])
+    expect(options.map((d) => d.name.form)).toEqual(['podium-tower', 'slab', 'block'])
+    for (const d of options) expect(d.name.storeys).toBe(d.metrics.storeys)
   })
 
   it('still offers two designs where a high-rise is not allowed', () => {
@@ -157,7 +169,7 @@ describe('podium and tower', () => {
     expect(office.limitedBy).toBe('use')
     expect(nearStation.limitedBy).not.toBe('use')
     const lowRise = byId(designed(lot(60, 80, 12)).options, 'low-rise')!
-    expect(['building-class', 'envelope']).toContain(lowRise.limitedBy)
+    expect(lowRise.limitedBy).toBe('building-class')
   })
 
   it('stops an office on a narrow soi at the zone office-size condition, not at the envelope', () => {
@@ -197,6 +209,167 @@ describe('design invariants on any plot', () => {
         },
       ),
       { numRuns: 30 },
+    )
+  })
+})
+
+function designedUnder(packId: PackId, plot: Plot) {
+  const regionPack = loadPack(packId)
+  const solution = solve(plot, regionPack, packInterpretations(regionPack))
+  return { solution, options: designs(solution) }
+}
+
+const squareOf = (areaSqm: number) => rectangle(Math.sqrt(areaSqm), Math.sqrt(areaSqm))
+const MUMBAI_PLOT = plotFromMetres(squareOf(20_118 * SQM_PER_SQFT), [
+  { edge: 0, widthM: 5 },
+  { edge: 1, widthM: 5 },
+])
+const DUBAI_PLOT: Plot = { ...lot(40, 30, 12), limits: { maxFar: 3.5, maxStoreys: 9 } }
+
+const shortOfCap = ({ farCap }: Solution, d: Design) => farCap.maxGfaSqm - d.metrics.gfaSqm
+const reachesCap = (solution: Solution, d: Design) => shortOfCap(solution, d) <= AREA_TOLERANCE_SQM
+
+function assertHonestLimit(solution: Solution, d: Design) {
+  expect(shortOfCap(solution, d)).toBeGreaterThanOrEqual(-0.01)
+  expect(d.limitedBy === 'far').toBe(reachesCap(solution, d))
+  const { planLimitM } = solution.limits.height
+  if (d.limitedBy === 'height') expect(planLimitM !== null && d.metrics.heightM + solution.floorToFloorM > planLimitM).toBe(true)
+  if (d.limitedBy === 'building-class') expect(solution.pack.buildingClasses).toBeDefined()
+  if (d.limitedBy === 'use') expect(solution.limits.use.kind).not.toBe('permitted')
+}
+
+function assertNamedFromResult({ pack }: Solution, d: Design) {
+  const threshold = pack.buildingClasses?.highRiseFromHeightM
+  expect(d.name.storeys).toBe(d.metrics.storeys)
+  expect(d.name.highRise).toBe(threshold !== undefined && satisfies(d.metrics.heightM, threshold))
+  if (d.name.form === 'podium-tower') expect(d.plates.floors.at(-1)!.areaSqm).toBeLessThan(d.plates.footprintSqm)
+}
+
+describe('designs reach the floor area cap when the envelope has room', () => {
+  it('fills a 20,118 sq ft Mumbai plot on 5 m roads to the cap, stepping the slab’s top floor back', () => {
+    const { solution, options } = designedUnder('mum-suburbs-res', MUMBAI_PLOT)
+    expect(options.length).toBeGreaterThanOrEqual(2)
+    for (const d of options) {
+      expect(reachesCap(solution, d)).toBe(true)
+      expect(d.limitedBy).toBe('far')
+      expect(computed(d).filter((c) => c.status === 'fail')).toEqual([])
+    }
+    const slab = byId(options, 'slab')!
+    const [top, below] = [slab.plates.floors.at(-1)!, slab.plates.floors.at(-2)!]
+    expect(top.areaSqm).toBeLessThan(below.areaSqm)
+    expect(totalArea(intersection(top.polygons, below.polygons))).toBeCloseTo(totalArea(top.polygons), 2)
+  })
+
+  it('fills a Dubai plot with FAR 3.5 and G+8 to the cap without passing G+8', () => {
+    const { solution, options } = designedUnder('dxb-ap', DUBAI_PLOT)
+    expect(options.length).toBeGreaterThanOrEqual(2)
+    for (const d of options) {
+      expect(reachesCap(solution, d)).toBe(true)
+      expect(d.limitedBy).toBe('far')
+      expect(d.metrics.storeys).toBeLessThanOrEqual(9)
+    }
+  })
+
+  it('counts a stepped-back top floor as a full storey for height', () => {
+    const slab = byId(designedUnder('mum-suburbs-res', MUMBAI_PLOT).options, 'slab')!
+    expect(slab.metrics.heightM).toBeCloseTo(slab.metrics.storeys * slab.plates.floors[0].topM, 9)
+  })
+
+  it('either reaches the cap or names the limit that stopped it first, for any plot and entered limits', () => {
+    const entered = fc.record<PlotLimits>({
+      maxFar: fc.double({ min: 0.2, max: 8, noNaN: true }),
+      maxStoreys: fc.integer({ min: 1, max: 40 }),
+      maxCoverageShare: fc.option(fc.double({ min: 0.2, max: 1, noNaN: true }), { nil: undefined }),
+      boundarySetbackM: fc.option(fc.double({ min: 0, max: 6, noNaN: true }), { nil: undefined }),
+    })
+    fc.assert(
+      fc.property(
+        fc.oneof(convexPolygon(10), starPolygon(16)),
+        fc.double({ min: 4, max: 40, noNaN: true }),
+        fc.constantFrom<PackId>('dxb-ap', 'custom', 'mum-suburbs-res', 'bkk-y9'),
+        entered,
+        (points: Vec2[], roadWidthM, packId, limits) => {
+          const plot = { ...plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]), limits }
+          const { solution, options } = designedUnder(packId, plot)
+          const lowRiseSetbacksUnmodelled = packId === 'mum-suburbs-res'
+          for (const d of options) {
+            assertInsideEnvelope(solution, d)
+            if (!lowRiseSetbacksUnmodelled) expect(computed(d).filter((c) => c.status === 'fail' && c.id !== 'front-open-space')).toEqual([])
+            assertHonestLimit(solution, d)
+            assertNamedFromResult(solution, d)
+          }
+        },
+      ),
+      { numRuns: 40 },
+    )
+  })
+})
+
+describe('what stops a design', () => {
+  it('on the Bangkok example, says the high-rise threshold stops the block and the envelope stops the tower, short of the cap', () => {
+    const { solution, options } = designedUnder('bkk-y9', EXAMPLE_PLOT)
+    expect(byId(options, 'low-rise')!.limitedBy).toBe('building-class')
+    expect(byId(options, 'podium-tower')!.limitedBy).toBe('envelope')
+    for (const d of options) expect(reachesCap(solution, d)).toBe(false)
+  })
+
+  it('says the height limit stops a design that runs out of storeys before the cap', () => {
+    const { solution, options } = designedUnder('dxb-ap', { ...DUBAI_PLOT, limits: { maxFar: 6, maxStoreys: 3 } })
+    for (const d of options) {
+      expect(d.limitedBy).toBe('height')
+      expect(shortOfCap(solution, d)).toBeGreaterThan(AREA_TOLERANCE_SQM)
+    }
+  })
+})
+
+describe('design names follow the result', () => {
+  it('calls the 13-storey Bangkok tower high-rise and the 7-storey block not', () => {
+    const { solution, options } = designedUnder('bkk-y9', EXAMPLE_PLOT)
+    expect(byId(options, 'podium-tower')!.name).toEqual({ form: 'podium-tower', storeys: 13, highRise: true })
+    expect(byId(options, 'low-rise')!.name).toEqual({ form: 'block', storeys: 7, highRise: false })
+    for (const d of options) assertNamedFromResult(solution, d)
+  })
+
+  it('names a 9-storey, 27.9 m Dubai block by its storeys, with no class word the rules do not define', () => {
+    const block = byId(designedUnder('dxb-ap', DUBAI_PLOT).options, 'low-rise')!
+    expect(block.metrics.heightM).toBeCloseTo(27.9, 6)
+    expect(block.name).toEqual({ form: 'block', storeys: 9, highRise: false })
+  })
+})
+
+describe('headline design', () => {
+  it('is the design with the most floor area', () => {
+    const { options } = designedUnder('bkk-y9', EXAMPLE_PLOT)
+    const most = Math.max(...options.map((d) => d.metrics.gfaSqm))
+    expect(headline(options)!.metrics.gfaSqm).toBe(most)
+    expect(headline(options)!.id).toBe('low-rise')
+  })
+
+  it('breaks a tie at the cap with the lower design, and reaches the cap on the Mumbai and Dubai plots', () => {
+    for (const { solution, options } of [designedUnder('mum-suburbs-res', MUMBAI_PLOT), designedUnder('dxb-ap', DUBAI_PLOT)]) {
+      const top = headline(options)!
+      expect(top.limitedBy).toBe('far')
+      expect(reachesCap(solution, top)).toBe(true)
+      expect(top.metrics.heightM).toBe(Math.min(...options.map((d) => d.metrics.heightM)))
+    }
+  })
+
+  it('is nothing when no design fits', () => {
+    expect(headline([])).toBeNull()
+  })
+
+  it('never passes over a design with more floor area, nor a lower one with as much', () => {
+    const [template] = designedUnder('bkk-y9', EXAMPLE_PLOT).options
+    const variant = fc.record({ gfaSqm: fc.double({ min: 0, max: 20_000, noNaN: true }), heightM: fc.double({ min: 3, max: 200, noNaN: true }) })
+    fc.assert(
+      fc.property(fc.array(variant, { minLength: 1, maxLength: 6 }), (variants) => {
+        const options = variants.map((v): Design => ({ ...template, metrics: { ...template.metrics, ...v } }))
+        const top = headline(options)!
+        for (const d of options) {
+          expect(d.metrics.gfaSqm).toBeLessThanOrEqual(top.metrics.gfaSqm + AREA_TOLERANCE_SQM)
+          if (d.metrics.gfaSqm >= top.metrics.gfaSqm) expect(d.metrics.heightM).toBeGreaterThanOrEqual(top.metrics.heightM)
+        }
+      }),
     )
   })
 })

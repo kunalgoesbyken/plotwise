@@ -17,7 +17,11 @@ import { programme } from './programme'
 
 export type TypologyId = 'podium-tower' | 'slab' | 'low-rise'
 
-export type Massing = { readonly envelope: Envelope; readonly plates: FloorPlates }
+export type Form = 'podium-tower' | 'slab' | 'block'
+
+export type Shape = { readonly form: Exclude<Form, 'podium-tower'> } | { readonly form: 'podium-tower'; readonly podiumStoreys: number }
+
+export type Massing = { readonly envelope: Envelope; readonly plates: FloorPlates; readonly shape: Shape }
 
 type RoadFrame = { readonly origin: Vec2; readonly along: Vec2; readonly inward: Vec2 }
 type Extent = { readonly minAlong: number; readonly maxAlong: number; readonly minIn: number; readonly maxIn: number }
@@ -92,10 +96,10 @@ function above(prisms: readonly Prism[], heightM: number): Prism[] {
   return prisms.filter((p) => p.topM > heightM).map((p) => ({ ...p, baseM: Math.max(p.baseM, heightM) }))
 }
 
-export function stack(footprint: FloorPlates, floors: readonly Floor[]): FloorPlates {
+export function stack(floors: readonly Floor[]): FloorPlates {
   const levelled = floors.map((floor, level) => (floor.level === level ? floor : { ...floor, level }))
   const builtCents = levelled.reduce((sum, floor) => sum + Math.round(floor.areaSqm * 100), 0)
-  return { footprint: footprint.footprint, footprintSqm: footprint.footprintSqm, floors: levelled, gfaSqm: builtCents / 100 }
+  return { footprint: levelled[0]?.polygons ?? [], footprintSqm: levelled[0]?.areaSqm ?? 0, floors: levelled, gfaSqm: builtCents / 100 }
 }
 
 function lowRise(solution: Solution): Massing | null {
@@ -108,7 +112,7 @@ function lowRise(solution: Solution): Massing | null {
   const middle: Vec2 = [(ground.minAlong + ground.maxAlong) / 2, (ground.minIn + ground.maxIn) / 2]
   const block = centred(frame, middle, half * lengthM, half * depthM)
   const limits = { footprint: [block], maxFootprintSqm: footprintCap(solution, envelope) }
-  return { envelope, plates: floorPlates(envelope.prisms, envelope.floorToFloorM, limits) }
+  return { envelope, plates: floorPlates(envelope.prisms, envelope.floorToFloorM, limits), shape: { form: 'block' } }
 }
 
 function slab(solution: Solution): Massing | null {
@@ -122,7 +126,7 @@ function slab(solution: Solution): Massing | null {
   const front = Math.max(ground.minIn, Math.min(extentOf(frame, reaching.polygons).minIn, ground.maxIn - depthM))
   const bar = rectangle(frame, ground.minAlong, ground.maxAlong, front, front + depthM)
   const plates = floorPlates(envelope.prisms, envelope.floorToFloorM, { footprint: [bar], maxFootprintSqm: footprintCap(solution, envelope) })
-  return { envelope, plates }
+  return { envelope, plates, shape: { form: 'slab' } }
 }
 
 function podiumStoreys(solution: Solution, podium: FloorPlates): number {
@@ -206,8 +210,9 @@ function podiumTower(solution: Solution): Massing | null {
   const storeys = podiumStoreys(solution, podium)
   const towerVolume = above(envelope.prisms, storeys * f)
   const footprint = towerVolume.length > 0 ? towerFootprint(solution, envelope, podium.footprint) : null
-  const tower = footprint ? floorPlates(towerVolume, f, { footprint: [footprint] }) : null
-  return { envelope, plates: stack(podium, [...podium.floors.slice(0, storeys), ...(tower?.floors ?? [])]) }
+  const towerFloors = footprint ? floorPlates(towerVolume, f, { footprint: [footprint] }).floors : []
+  const shape: Shape = towerFloors.length > 0 ? { form: 'podium-tower', podiumStoreys: storeys } : { form: 'block' }
+  return { envelope, plates: stack([...podium.floors.slice(0, storeys), ...towerFloors]), shape }
 }
 
 export const TYPOLOGIES: Readonly<Record<TypologyId, (solution: Solution) => Massing | null>> = {

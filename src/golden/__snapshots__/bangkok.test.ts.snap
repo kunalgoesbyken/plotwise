@@ -165,6 +165,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -698,6 +703,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 35,
+      },
       "plates": {
         "floors": [
           {
@@ -1219,7 +1229,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7722.47,
         "far": 4.89510098399,
@@ -1234,6 +1244,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "count": 140,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -2301,6 +2316,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -2845,6 +2865,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 35,
+      },
       "plates": {
         "floors": [
           {
@@ -3377,7 +3402,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7722.47,
         "far": 4.89510098399,
@@ -3392,6 +3417,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "count": 140,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -4460,6 +4490,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "sqm": 5314.888,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 24,
+      },
       "plates": {
         "floors": [
           {
@@ -4927,6 +4962,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "sqm": 5427.08175,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -5371,7 +5411,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5902.1,
         "far": 3.74120916204,
@@ -5386,6 +5426,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "netArea",
           "sqm": 3386.4025,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -6457,6 +6502,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "sqm": 5314.888,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 24,
+      },
       "plates": {
         "floors": [
           {
@@ -6933,6 +6983,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "sqm": 5427.08175,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -7386,7 +7441,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5902.1,
         "far": 3.74120916204,
@@ -7401,6 +7456,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "netArea",
           "sqm": 3386.4025,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -8488,6 +8548,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -9056,6 +9121,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 35,
+      },
       "plates": {
         "floors": [
           {
@@ -9612,7 +9682,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7722.47,
         "far": 4.89510098399,
@@ -9627,6 +9697,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "count": 130,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -10781,6 +10856,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -11364,6 +11444,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 35,
+      },
       "plates": {
         "floors": [
           {
@@ -11935,7 +12020,7 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7722.47,
         "far": 4.89510098399,
@@ -11950,6 +12035,11 @@ exports[`Bangkok results stay byte-identical across engine refactors example plo
           "count": 130,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -12896,7 +12986,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
     {
       "checks": [
         {
-          "actual": 29914.98,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -12916,7 +13006,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1346.1741,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -12928,7 +13018,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 673.08705,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -12995,7 +13085,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "ratio",
         },
         {
-          "actual": 6.84809595479,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -13008,8 +13098,8 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
         {
           "actual": 59.4008958459,
           "cites": [
-            "mr35-33-upd69 p2 l13 ข้อ 2",
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l17 ข้อ 2 วรรคสอง",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
           ],
           "cmp": "gte",
           "id": "high-rise-access",
@@ -13019,7 +13109,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
         },
         {
           "cites": [
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
             "mr35-33-upd69 p2 l20 ข้อ 2 วรรคสาม",
           ],
           "id": "high-rise-road-network",
@@ -13041,19 +13131,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29914.98,
-        "far": 6.84809595479,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 2957.49,
-        "gfaSqm": 29914.98,
-        "heightM": 80.6,
+        "gfaSqm": 30578.54,
+        "heightM": 83.7,
         "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 212,
-        "parkingSqm": 4579.2,
-        "storeys": 26,
+        "parkingSpaces": 216,
+        "parkingSqm": 4665.6,
+        "storeys": 27,
         "yield": {
-          "count": 542,
+          "count": 555,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
       },
       "plates": {
         "floors": [
@@ -13343,6 +13438,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             ],
             "topM": 80.6,
           },
+          {
+            "areaSqm": 663.56,
+            "baseM": 80.6,
+            "level": 26,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 83.7,
+          },
         ],
         "footprint": [
           {
@@ -13372,13 +13478,13 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           },
         ],
         "footprintSqm": 2957.49,
-        "gfaSqm": 29914.98,
+        "gfaSqm": 30578.54,
       },
     },
     {
       "checks": [
         {
-          "actual": 29616.25,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -13398,7 +13504,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1332.73125,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -13410,7 +13516,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 666.365625,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -13453,14 +13559,14 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "m",
         },
         {
-          "actual": 89.9,
+          "actual": 93,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 108.5,
+          "limit": 109.33886,
           "status": "pass",
           "unit": "m",
         },
@@ -13477,7 +13583,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "m",
         },
         {
-          "actual": 6.77971109528,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -13490,8 +13596,8 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
         {
           "actual": 59.4008958459,
           "cites": [
-            "mr35-33-upd69 p2 l13 ข้อ 2",
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l17 ข้อ 2 วรรคสอง",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
           ],
           "cmp": "gte",
           "id": "high-rise-access",
@@ -13501,7 +13607,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
         },
         {
           "cites": [
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
             "mr35-33-upd69 p2 l20 ข้อ 2 วรรคสาม",
           ],
           "id": "high-rise-road-network",
@@ -13523,19 +13629,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29616.25,
-        "far": 6.77971109528,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 1021.25,
-        "gfaSqm": 29616.25,
-        "heightM": 89.9,
+        "gfaSqm": 30578.54,
+        "heightM": 93,
         "openSpaceSqm": 3347.11460784,
-        "parkingSpaces": 210,
-        "parkingSqm": 4536,
-        "storeys": 29,
+        "parkingSpaces": 216,
+        "parkingSqm": 4665.6,
+        "storeys": 30,
         "yield": {
-          "count": 537,
+          "count": 555,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 30,
       },
       "plates": {
         "floors": [
@@ -13858,6 +13969,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             ],
             "topM": 89.9,
           },
+          {
+            "areaSqm": 962.29,
+            "baseM": 89.9,
+            "level": 29,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 93,
+          },
         ],
         "footprint": [
           {
@@ -13883,7 +14005,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           },
         ],
         "footprintSqm": 1021.25,
-        "gfaSqm": 29616.25,
+        "gfaSqm": 30578.54,
       },
     },
     {
@@ -13992,7 +14114,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.28918391612,
@@ -14007,6 +14129,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -15049,7 +15176,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
     {
       "checks": [
         {
-          "actual": 36398.54,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -15063,31 +15190,31 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1637.9343,
-          "status": "fail",
+          "limit": 1651.24125,
+          "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 818.96715,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "bb44-03 p15 l26 ข้อ 52 (1)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -15113,7 +15240,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "status": "manual",
         },
         {
-          "actual": 5.99999922959,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -15124,7 +15251,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "m",
         },
         {
-          "actual": 6,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -15135,19 +15262,19 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "m",
         },
         {
-          "actual": 102.3,
+          "actual": 99.2,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 108.5,
+          "limit": 109.561,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.422129973767,
+          "actual": 0.421176301745,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -15159,7 +15286,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "ratio",
         },
         {
-          "actual": 8.33230356611,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -15190,7 +15317,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "status": "manual",
         },
         {
-          "actual": 5.99999922959,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l23 ข้อ 3",
           ],
@@ -15205,24 +15332,29 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36398.54,
-        "far": 8.33230356611,
-        "footprintSqm": 2957.49,
-        "gfaSqm": 36398.54,
-        "heightM": 102.3,
-        "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 258,
-        "parkingSqm": 5572.8,
-        "storeys": 33,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
+        "footprintSqm": 2714.41,
+        "gfaSqm": 36694.25,
+        "heightM": 99.2,
+        "openSpaceSqm": 1653.95460784,
+        "parkingSpaces": 260,
+        "parkingSqm": 5616,
+        "storeys": 32,
         "yield": {
-          "count": 660,
+          "count": 665,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 32,
       },
       "plates": {
         "floors": [
           {
-            "areaSqm": 2957.49,
+            "areaSqm": 2714.41,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -15233,7 +15365,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             "topM": 3.1,
           },
           {
-            "areaSqm": 2957.49,
+            "areaSqm": 2714.41,
             "baseM": 3.1,
             "level": 1,
             "loops": [
@@ -15244,12 +15376,12 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             "topM": 6.2,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 2714.41,
             "baseM": 6.2,
             "level": 2,
             "loops": [
               [
-                4,
+                5,
               ],
             ],
             "topM": 9.3,
@@ -15563,7 +15695,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             "topM": 96.1,
           },
           {
-            "areaSqm": 870.89,
+            "areaSqm": 809.24,
             "baseM": 96.1,
             "level": 31,
             "loops": [
@@ -15573,53 +15705,42 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             ],
             "topM": 99.2,
           },
-          {
-            "areaSqm": 870.89,
-            "baseM": 99.2,
-            "level": 32,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 102.3,
-          },
         ],
         "footprint": [
           {
             "holes": [],
             "outer": [
               [
-                58.49668,
-                47.54099,
+                57.27088,
+                47.05551,
               ],
               [
-                30.63468,
-                71.44586,
+                30.29133,
+                70.20326,
               ],
               [
-                6,
-                67.21867,
+                7.16663,
+                66.23518,
               ],
               [
-                6,
-                6,
+                7.16663,
+                7.16663,
               ],
               [
-                54.01357,
-                6,
+                52.96607,
+                7.16663,
               ],
             ],
           },
         ],
-        "footprintSqm": 2957.49,
-        "gfaSqm": 36398.54,
+        "footprintSqm": 2714.41,
+        "gfaSqm": 36694.25,
       },
     },
     {
       "checks": [
         {
-          "actual": 36295.49,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -15640,7 +15761,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1633.29705,
+          "limit": 1651.24125,
           "status": "pass",
           "unit": "sqm",
         },
@@ -15652,7 +15773,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 816.648525,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
@@ -15729,7 +15850,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "unit": "m",
         },
         {
-          "actual": 8.30871350227,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -15775,19 +15896,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36295.49,
-        "far": 8.30871350227,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
         "footprintSqm": 1021.25,
-        "gfaSqm": 36295.49,
-        "heightM": 111.6,
+        "gfaSqm": 36694.25,
+        "heightM": 114.7,
         "openSpaceSqm": 3347.11460784,
-        "parkingSpaces": 257,
-        "parkingSqm": 5551.2,
-        "storeys": 36,
+        "parkingSpaces": 260,
+        "parkingSqm": 5616,
+        "storeys": 37,
         "yield": {
-          "count": 658,
+          "count": 665,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 37,
       },
       "plates": {
         "floors": [
@@ -16187,6 +16313,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
             ],
             "topM": 111.6,
           },
+          {
+            "areaSqm": 398.76,
+            "baseM": 111.6,
+            "level": 36,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 114.7,
+          },
         ],
         "footprint": [
           {
@@ -16212,7 +16349,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           },
         ],
         "footprintSqm": 1021.25,
-        "gfaSqm": 36295.49,
+        "gfaSqm": 36694.25,
       },
     },
     {
@@ -16332,7 +16469,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.28918391612,
@@ -16347,6 +16484,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, c
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -17390,7 +17532,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
     {
       "checks": [
         {
-          "actual": 30023.81,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -17410,7 +17552,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1351.07145,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -17422,7 +17564,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 675.535725,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -17523,7 +17665,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "status": "manual",
         },
         {
-          "actual": 6.87300916826,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -17569,19 +17711,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 30023.81,
-        "far": 6.87300916826,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 2957.49,
-        "gfaSqm": 30023.81,
-        "heightM": 66.3,
+        "gfaSqm": 30578.54,
+        "heightM": 70.2,
         "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 288,
-        "parkingSqm": 6220.8,
-        "storeys": 17,
+        "parkingSpaces": 294,
+        "parkingSqm": 6350.4,
+        "storeys": 18,
         "yield": {
           "kind": "netArea",
-          "sqm": 17257.18225,
+          "sqm": 17565.4015,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 18,
       },
       "plates": {
         "floors": [
@@ -17772,6 +17919,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
             ],
             "topM": 66.3,
           },
+          {
+            "areaSqm": 554.73,
+            "baseM": 66.3,
+            "level": 17,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 70.2,
+          },
         ],
         "footprint": [
           {
@@ -17801,13 +17959,13 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           },
         ],
         "footprintSqm": 2957.49,
-        "gfaSqm": 30023.81,
+        "gfaSqm": 30578.54,
       },
     },
     {
       "checks": [
         {
-          "actual": 29475.65,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -17827,7 +17985,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1326.40425,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -17839,7 +17997,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 663.202125,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -17882,14 +18040,14 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "unit": "m",
         },
         {
-          "actual": 89.7,
+          "actual": 93.6,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 109.2,
+          "limit": 111.63508,
           "status": "pass",
           "unit": "m",
         },
@@ -17940,7 +18098,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "status": "manual",
         },
         {
-          "actual": 6.74752513723,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -17953,8 +18111,8 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
         {
           "actual": 59.4008958459,
           "cites": [
-            "mr35-33-upd69 p2 l13 ข้อ 2",
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l17 ข้อ 2 วรรคสอง",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
           ],
           "cmp": "gte",
           "id": "high-rise-access",
@@ -17964,7 +18122,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
         },
         {
           "cites": [
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
             "mr35-33-upd69 p2 l20 ข้อ 2 วรรคสาม",
           ],
           "id": "high-rise-road-network",
@@ -17986,19 +18144,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29475.65,
-        "far": 6.74752513723,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 1281.55,
-        "gfaSqm": 29475.65,
-        "heightM": 89.7,
+        "gfaSqm": 30578.54,
+        "heightM": 93.6,
         "openSpaceSqm": 3086.81460784,
-        "parkingSpaces": 283,
-        "parkingSqm": 6112.8,
-        "storeys": 23,
+        "parkingSpaces": 294,
+        "parkingSqm": 6350.4,
+        "storeys": 24,
         "yield": {
           "kind": "netArea",
-          "sqm": 16938.06625,
+          "sqm": 17565.4015,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 24,
       },
       "plates": {
         "floors": [
@@ -18255,6 +18418,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
             ],
             "topM": 89.7,
           },
+          {
+            "areaSqm": 1102.89,
+            "baseM": 89.7,
+            "level": 23,
+            "loops": [
+              [
+                5,
+              ],
+            ],
+            "topM": 93.6,
+          },
         ],
         "footprint": [
           {
@@ -18284,7 +18458,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           },
         ],
         "footprintSqm": 1281.55,
-        "gfaSqm": 29475.65,
+        "gfaSqm": 30578.54,
       },
     },
     {
@@ -18404,7 +18578,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9877.05,
         "far": 2.26104066091,
@@ -18419,6 +18593,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "kind": "netArea",
           "sqm": 5673.16125,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -19430,7 +19609,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
     {
       "checks": [
         {
-          "actual": 36067.05,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -19451,7 +19630,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1623.01725,
+          "limit": 1651.24125,
           "status": "fail",
           "unit": "sqm",
         },
@@ -19463,7 +19642,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 811.508625,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
@@ -19572,7 +19751,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "status": "manual",
         },
         {
-          "actual": 8.25641933259,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -19618,19 +19797,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36067.05,
-        "far": 8.25641933259,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
         "footprintSqm": 2957.49,
-        "gfaSqm": 36067.05,
-        "heightM": 81.9,
+        "gfaSqm": 36694.25,
+        "heightM": 85.8,
         "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 346,
-        "parkingSqm": 7473.6,
-        "storeys": 21,
+        "parkingSpaces": 352,
+        "parkingSqm": 7603.2,
+        "storeys": 22,
         "yield": {
           "kind": "netArea",
-          "sqm": 20730.25125,
+          "sqm": 21091.01125,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 22,
       },
       "plates": {
         "floors": [
@@ -19865,6 +20049,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
             ],
             "topM": 81.9,
           },
+          {
+            "areaSqm": 627.2,
+            "baseM": 81.9,
+            "level": 21,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 85.8,
+          },
         ],
         "footprint": [
           {
@@ -19894,13 +20089,13 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           },
         ],
         "footprintSqm": 2957.49,
-        "gfaSqm": 36067.05,
+        "gfaSqm": 36694.25,
       },
     },
     {
       "checks": [
         {
-          "actual": 36672.11,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -19921,7 +20116,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1650.24495,
+          "limit": 1651.24125,
           "status": "pass",
           "unit": "sqm",
         },
@@ -19933,7 +20128,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 825.122475,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
@@ -20042,7 +20237,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "status": "manual",
         },
         {
-          "actual": 8.39492883313,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -20088,19 +20283,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36672.11,
-        "far": 8.39492883313,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
         "footprintSqm": 1281.55,
-        "gfaSqm": 36672.11,
-        "heightM": 113.1,
+        "gfaSqm": 36694.25,
+        "heightM": 117,
         "openSpaceSqm": 3086.81460784,
         "parkingSpaces": 352,
         "parkingSqm": 7603.2,
-        "storeys": 29,
+        "storeys": 30,
         "yield": {
           "kind": "netArea",
-          "sqm": 21074.95975,
+          "sqm": 21091.01125,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 30,
       },
       "plates": {
         "floors": [
@@ -20423,6 +20623,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
             ],
             "topM": 113.1,
           },
+          {
+            "areaSqm": 22.14,
+            "baseM": 113.1,
+            "level": 29,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 117,
+          },
         ],
         "footprint": [
           {
@@ -20452,7 +20663,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           },
         ],
         "footprintSqm": 1281.55,
-        "gfaSqm": 36672.11,
+        "gfaSqm": 36694.25,
       },
     },
     {
@@ -20581,7 +20792,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9877.05,
         "far": 2.26104066091,
@@ -20596,6 +20807,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, o
           "kind": "netArea",
           "sqm": 5673.16125,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -21608,7 +21824,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
     {
       "checks": [
         {
-          "actual": 29914.98,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -21628,7 +21844,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1346.1741,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -21640,7 +21856,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 673.08705,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -21742,7 +21958,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 6.84809595479,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -21755,8 +21971,8 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
         {
           "actual": 59.4008958459,
           "cites": [
-            "mr35-33-upd69 p2 l13 ข้อ 2",
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l17 ข้อ 2 วรรคสอง",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
           ],
           "cmp": "gte",
           "id": "high-rise-access",
@@ -21766,7 +21982,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
         },
         {
           "cites": [
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
             "mr35-33-upd69 p2 l20 ข้อ 2 วรรคสาม",
           ],
           "id": "high-rise-road-network",
@@ -21788,19 +22004,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29914.98,
-        "far": 6.84809595479,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 2957.49,
-        "gfaSqm": 29914.98,
-        "heightM": 80.6,
+        "gfaSqm": 30578.54,
+        "heightM": 83.7,
         "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 212,
-        "parkingSqm": 4579.2,
-        "storeys": 26,
+        "parkingSpaces": 216,
+        "parkingSqm": 4665.6,
+        "storeys": 27,
         "yield": {
-          "count": 506,
+          "count": 518,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
       },
       "plates": {
         "floors": [
@@ -22090,6 +22311,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             ],
             "topM": 80.6,
           },
+          {
+            "areaSqm": 663.56,
+            "baseM": 80.6,
+            "level": 26,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 83.7,
+          },
         ],
         "footprint": [
           {
@@ -22119,13 +22351,13 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           },
         ],
         "footprintSqm": 2957.49,
-        "gfaSqm": 29914.98,
+        "gfaSqm": 30578.54,
       },
     },
     {
       "checks": [
         {
-          "actual": 29616.25,
+          "actual": 30578.54,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -22145,7 +22377,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1332.73125,
+          "limit": 1376.0343,
           "status": "pass",
           "unit": "sqm",
         },
@@ -22157,7 +22389,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 666.365625,
+          "limit": 688.01715,
           "status": "pass",
           "unit": "sqm",
         },
@@ -22201,14 +22433,14 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "unit": "m",
         },
         {
-          "actual": 89.9,
+          "actual": 93,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 108.5,
+          "limit": 109.33886,
           "status": "pass",
           "unit": "m",
         },
@@ -22259,7 +22491,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 6.77971109528,
+          "actual": 6.99999719463,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -22272,8 +22504,8 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
         {
           "actual": 59.4008958459,
           "cites": [
-            "mr35-33-upd69 p2 l13 ข้อ 2",
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l17 ข้อ 2 วรรคสอง",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
           ],
           "cmp": "gte",
           "id": "high-rise-access",
@@ -22283,7 +22515,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
         },
         {
           "cites": [
-            "mr35-33-upd69 p2 l14 ข้อ 2",
+            "mr35-33-upd69 p2 l18 ข้อ 2 วรรคสอง",
             "mr35-33-upd69 p2 l20 ข้อ 2 วรรคสาม",
           ],
           "id": "high-rise-road-network",
@@ -22305,19 +22537,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29616.25,
-        "far": 6.77971109528,
+        "builtSqm": 30578.54,
+        "far": 6.99999719463,
         "footprintSqm": 1021.25,
-        "gfaSqm": 29616.25,
-        "heightM": 89.9,
+        "gfaSqm": 30578.54,
+        "heightM": 93,
         "openSpaceSqm": 3347.11460784,
-        "parkingSpaces": 210,
-        "parkingSqm": 4536,
-        "storeys": 29,
+        "parkingSpaces": 216,
+        "parkingSqm": 4665.6,
+        "storeys": 30,
         "yield": {
-          "count": 501,
+          "count": 518,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 30,
       },
       "plates": {
         "floors": [
@@ -22640,6 +22877,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             ],
             "topM": 89.9,
           },
+          {
+            "areaSqm": 962.29,
+            "baseM": 89.9,
+            "level": 29,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 93,
+          },
         ],
         "footprint": [
           {
@@ -22665,7 +22913,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           },
         ],
         "footprintSqm": 1021.25,
-        "gfaSqm": 29616.25,
+        "gfaSqm": 30578.54,
       },
     },
     {
@@ -22809,7 +23057,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.28918391612,
@@ -22824,6 +23072,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -23914,7 +24167,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
     {
       "checks": [
         {
-          "actual": 36398.54,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -23928,31 +24181,31 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1637.9343,
-          "status": "fail",
+          "limit": 1651.24125,
+          "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 818.96715,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1410.87460784,
+          "actual": 1653.95460784,
           "cites": [
             "bb44-03 p15 l26 ข้อ 52 (1)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -23983,7 +24236,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 5.99999922959,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -23994,7 +24247,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "unit": "m",
         },
         {
-          "actual": 6,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -24005,19 +24258,19 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "unit": "m",
         },
         {
-          "actual": 102.3,
+          "actual": 99.2,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 108.5,
+          "limit": 109.561,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.422129973767,
+          "actual": 0.421176301745,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -24063,7 +24316,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 8.33230356611,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -24094,7 +24347,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 5.99999922959,
+          "actual": 7.16663,
           "cites": [
             "mr35-33-upd69 p2 l23 ข้อ 3",
           ],
@@ -24109,24 +24362,29 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36398.54,
-        "far": 8.33230356611,
-        "footprintSqm": 2957.49,
-        "gfaSqm": 36398.54,
-        "heightM": 102.3,
-        "openSpaceSqm": 1410.87460784,
-        "parkingSpaces": 258,
-        "parkingSqm": 5572.8,
-        "storeys": 33,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
+        "footprintSqm": 2714.41,
+        "gfaSqm": 36694.25,
+        "heightM": 99.2,
+        "openSpaceSqm": 1653.95460784,
+        "parkingSpaces": 260,
+        "parkingSqm": 5616,
+        "storeys": 32,
         "yield": {
-          "count": 616,
+          "count": 621,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 32,
       },
       "plates": {
         "floors": [
           {
-            "areaSqm": 2957.49,
+            "areaSqm": 2714.41,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -24137,7 +24395,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             "topM": 3.1,
           },
           {
-            "areaSqm": 2957.49,
+            "areaSqm": 2714.41,
             "baseM": 3.1,
             "level": 1,
             "loops": [
@@ -24148,12 +24406,12 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             "topM": 6.2,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 2714.41,
             "baseM": 6.2,
             "level": 2,
             "loops": [
               [
-                4,
+                5,
               ],
             ],
             "topM": 9.3,
@@ -24467,7 +24725,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             "topM": 96.1,
           },
           {
-            "areaSqm": 870.89,
+            "areaSqm": 809.24,
             "baseM": 96.1,
             "level": 31,
             "loops": [
@@ -24477,53 +24735,42 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             ],
             "topM": 99.2,
           },
-          {
-            "areaSqm": 870.89,
-            "baseM": 99.2,
-            "level": 32,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 102.3,
-          },
         ],
         "footprint": [
           {
             "holes": [],
             "outer": [
               [
-                58.49668,
-                47.54099,
+                57.27088,
+                47.05551,
               ],
               [
-                30.63468,
-                71.44586,
+                30.29133,
+                70.20326,
               ],
               [
-                6,
-                67.21867,
+                7.16663,
+                66.23518,
               ],
               [
-                6,
-                6,
+                7.16663,
+                7.16663,
               ],
               [
-                54.01357,
-                6,
+                52.96607,
+                7.16663,
               ],
             ],
           },
         ],
-        "footprintSqm": 2957.49,
-        "gfaSqm": 36398.54,
+        "footprintSqm": 2714.41,
+        "gfaSqm": 36694.25,
       },
     },
     {
       "checks": [
         {
-          "actual": 36295.49,
+          "actual": 36694.25,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -24544,7 +24791,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1633.29705,
+          "limit": 1651.24125,
           "status": "pass",
           "unit": "sqm",
         },
@@ -24556,7 +24803,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 816.648525,
+          "limit": 825.620625,
           "status": "pass",
           "unit": "sqm",
         },
@@ -24672,7 +24919,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "status": "manual",
         },
         {
-          "actual": 8.30871350227,
+          "actual": 8.39999709139,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -24718,19 +24965,24 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 36295.49,
-        "far": 8.30871350227,
+        "builtSqm": 36694.25,
+        "far": 8.39999709139,
         "footprintSqm": 1021.25,
-        "gfaSqm": 36295.49,
-        "heightM": 111.6,
+        "gfaSqm": 36694.25,
+        "heightM": 114.7,
         "openSpaceSqm": 3347.11460784,
-        "parkingSpaces": 257,
-        "parkingSqm": 5551.2,
-        "storeys": 36,
+        "parkingSpaces": 260,
+        "parkingSqm": 5616,
+        "storeys": 37,
         "yield": {
-          "count": 614,
+          "count": 621,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 37,
       },
       "plates": {
         "floors": [
@@ -25130,6 +25382,17 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
             ],
             "topM": 111.6,
           },
+          {
+            "areaSqm": 398.76,
+            "baseM": 111.6,
+            "level": 36,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 114.7,
+          },
         ],
         "footprint": [
           {
@@ -25155,7 +25418,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           },
         ],
         "footprintSqm": 1021.25,
-        "gfaSqm": 36295.49,
+        "gfaSqm": 36694.25,
       },
     },
     {
@@ -25314,7 +25577,7 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.28918391612,
@@ -25329,6 +25592,11 @@ exports[`Bangkok results stay byte-identical across engine refactors e2e plot, h
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -26420,7 +26688,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 24408,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -26440,7 +26708,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1098.36,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -26452,7 +26720,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 549.18,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -26519,7 +26787,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "ratio",
         },
         {
-          "actual": 6.9737142856,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -26565,19 +26833,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 24408,
-        "far": 6.9737142856,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 2204,
-        "gfaSqm": 24408,
-        "heightM": 68.2,
+        "gfaSqm": 24499.99,
+        "heightM": 71.3,
         "openSpaceSqm": 1296.00000006,
-        "parkingSpaces": 173,
-        "parkingSqm": 3736.8,
-        "storeys": 22,
+        "parkingSpaces": 174,
+        "parkingSqm": 3758.4,
+        "storeys": 23,
         "yield": {
-          "count": 442,
+          "count": 444,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 23,
       },
       "plates": {
         "floors": [
@@ -26823,6 +27096,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 68.2,
           },
+          {
+            "areaSqm": 91.99,
+            "baseM": 68.2,
+            "level": 22,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 71.3,
+          },
         ],
         "footprint": [
           {
@@ -26848,13 +27132,13 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 2204,
-        "gfaSqm": 24408,
+        "gfaSqm": 24499.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 24320,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -26874,7 +27158,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1094.4,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -26886,7 +27170,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 547.2,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -26953,7 +27237,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "m",
         },
         {
-          "actual": 6.94857142846,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -26999,19 +27283,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 24320,
-        "far": 6.94857142846,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 760,
-        "gfaSqm": 24320,
-        "heightM": 99.2,
+        "gfaSqm": 24499.99,
+        "heightM": 102.3,
         "openSpaceSqm": 2740.00000006,
-        "parkingSpaces": 172,
-        "parkingSqm": 3715.2,
-        "storeys": 32,
+        "parkingSpaces": 174,
+        "parkingSqm": 3758.4,
+        "storeys": 33,
         "yield": {
-          "count": 441,
+          "count": 444,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 33,
       },
       "plates": {
         "floors": [
@@ -27367,6 +27656,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 99.2,
           },
+          {
+            "areaSqm": 179.99,
+            "baseM": 99.2,
+            "level": 32,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 102.3,
+          },
         ],
         "footprint": [
           {
@@ -27392,7 +27692,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 760,
-        "gfaSqm": 24320,
+        "gfaSqm": 24499.99,
       },
     },
     {
@@ -27501,7 +27801,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.85713999995,
@@ -27516,6 +27816,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -28417,7 +28722,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 29241.62,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -28431,31 +28736,31 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1315.8729,
-          "status": "fail",
+          "limit": 1322.99955,
+          "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 657.93645,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "bb44-03 p15 l26 ข้อ 52 (1)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -28481,7 +28786,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -28492,7 +28797,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "m",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -28510,12 +28815,12 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 88.67722,
+          "limit": 90.71574,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.197916666667,
+          "actual": 0.197584791035,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -28527,7 +28832,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "ratio",
         },
         {
-          "actual": 8.35474857129,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -28558,7 +28863,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l23 ข้อ 3",
           ],
@@ -28573,24 +28878,29 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29241.62,
-        "far": 8.35474857129,
-        "footprintSqm": 2204,
-        "gfaSqm": 29241.62,
-        "heightM": 83.7,
-        "openSpaceSqm": 1296.00000006,
-        "parkingSpaces": 207,
-        "parkingSqm": 4471.2,
-        "storeys": 27,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
+        "footprintSqm": 2174.92,
+        "gfaSqm": 29399.99,
+        "heightM": 80.6,
+        "openSpaceSqm": 1325.08000006,
+        "parkingSpaces": 208,
+        "parkingSqm": 4492.8,
+        "storeys": 26,
         "yield": {
-          "count": 530,
+          "count": 533,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 26,
       },
       "plates": {
         "floors": [
           {
-            "areaSqm": 2204,
+            "areaSqm": 2174.92,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -28601,7 +28911,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 3.1,
           },
           {
-            "areaSqm": 2204,
+            "areaSqm": 2174.92,
             "baseM": 3.1,
             "level": 1,
             "loops": [
@@ -28612,7 +28922,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 6.2,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 2174.92,
             "baseM": 6.2,
             "level": 2,
             "loops": [
@@ -28865,7 +29175,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 77.5,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 875.23,
             "baseM": 77.5,
             "level": 25,
             "loops": [
@@ -28875,49 +29185,38 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 80.6,
           },
-          {
-            "areaSqm": 833.62,
-            "baseM": 80.6,
-            "level": 26,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 83.7,
-          },
         ],
         "footprint": [
           {
             "holes": [],
             "outer": [
               [
-                44,
-                64,
+                43.84804,
+                63.84804,
               ],
               [
-                6,
-                64,
+                6.15196,
+                63.84804,
               ],
               [
-                6,
-                6,
+                6.15196,
+                6.15196,
               ],
               [
-                44,
-                6,
+                43.84804,
+                6.15196,
               ],
             ],
           },
         ],
-        "footprintSqm": 2204,
-        "gfaSqm": 29241.62,
+        "footprintSqm": 2174.92,
+        "gfaSqm": 29399.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 29328.4,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -28938,7 +29237,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1319.778,
+          "limit": 1322.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -28950,7 +29249,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 659.889,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -29027,7 +29326,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "m",
         },
         {
-          "actual": 8.37954285701,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -29073,19 +29372,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29328.4,
-        "far": 8.37954285701,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
         "footprintSqm": 760,
-        "gfaSqm": 29328.4,
-        "heightM": 120.9,
+        "gfaSqm": 29399.99,
+        "heightM": 124,
         "openSpaceSqm": 2740.00000006,
         "parkingSpaces": 208,
         "parkingSqm": 4492.8,
-        "storeys": 39,
+        "storeys": 40,
         "yield": {
-          "count": 532,
+          "count": 533,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 40,
       },
       "plates": {
         "floors": [
@@ -29518,6 +29822,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 120.9,
           },
+          {
+            "areaSqm": 71.59,
+            "baseM": 120.9,
+            "level": 39,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 124,
+          },
         ],
         "footprint": [
           {
@@ -29543,7 +29858,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 760,
-        "gfaSqm": 29328.4,
+        "gfaSqm": 29399.99,
       },
     },
     {
@@ -29663,7 +29978,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.85713999995,
@@ -29678,6 +29993,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -30580,7 +30900,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 23936.04,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -30600,7 +30920,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1077.1218,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -30612,7 +30932,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 538.5609,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -30713,7 +31033,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6.83886857132,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -30759,19 +31079,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 23936.04,
-        "far": 6.83886857132,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 2204,
-        "gfaSqm": 23936.04,
-        "heightM": 58.5,
+        "gfaSqm": 24499.99,
+        "heightM": 62.4,
         "openSpaceSqm": 1296.00000006,
-        "parkingSpaces": 230,
-        "parkingSqm": 4968,
-        "storeys": 15,
+        "parkingSpaces": 235,
+        "parkingSqm": 5076,
+        "storeys": 16,
         "yield": {
           "kind": "netArea",
-          "sqm": 13751.829,
+          "sqm": 14082.39275,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 16,
       },
       "plates": {
         "floors": [
@@ -30940,6 +31265,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 58.5,
           },
+          {
+            "areaSqm": 563.95,
+            "baseM": 58.5,
+            "level": 15,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 62.4,
+          },
         ],
         "footprint": [
           {
@@ -30965,13 +31301,13 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 2204,
-        "gfaSqm": 23936.04,
+        "gfaSqm": 24499.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 23750,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -30991,7 +31327,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1068.75,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -31003,7 +31339,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 534.375,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -31046,14 +31382,14 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "m",
         },
         {
-          "actual": 97.5,
+          "actual": 101.4,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 101.4,
+          "limit": 104.75324,
           "status": "pass",
           "unit": "m",
         },
@@ -31104,7 +31440,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6.7857142856,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -31150,19 +31486,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 23750,
-        "far": 6.7857142856,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 950,
-        "gfaSqm": 23750,
-        "heightM": 97.5,
+        "gfaSqm": 24499.99,
+        "heightM": 101.4,
         "openSpaceSqm": 2550.00000006,
-        "parkingSpaces": 228,
-        "parkingSqm": 4924.8,
-        "storeys": 25,
+        "parkingSpaces": 235,
+        "parkingSqm": 5076,
+        "storeys": 26,
         "yield": {
           "kind": "netArea",
-          "sqm": 13648.27,
+          "sqm": 14082.39275,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 26,
       },
       "plates": {
         "floors": [
@@ -31441,6 +31782,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 97.5,
           },
+          {
+            "areaSqm": 749.99,
+            "baseM": 97.5,
+            "level": 25,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 101.4,
+          },
         ],
         "footprint": [
           {
@@ -31466,7 +31818,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 950,
-        "gfaSqm": 23750,
+        "gfaSqm": 24499.99,
       },
     },
     {
@@ -31601,6 +31953,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -32516,7 +32873,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 29253.24,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -32537,7 +32894,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1316.3958,
+          "limit": 1322.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -32549,7 +32906,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 658.1979,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -32658,7 +33015,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 8.35806857129,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -32704,19 +33061,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29253.24,
-        "far": 8.35806857129,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
         "footprintSqm": 2174.92,
-        "gfaSqm": 29253.24,
-        "heightM": 74.1,
+        "gfaSqm": 29399.99,
+        "heightM": 78,
         "openSpaceSqm": 1325.08000006,
-        "parkingSpaces": 281,
-        "parkingSqm": 6069.6,
-        "storeys": 19,
+        "parkingSpaces": 282,
+        "parkingSqm": 6091.2,
+        "storeys": 20,
         "yield": {
           "kind": "netArea",
-          "sqm": 16808.139,
+          "sqm": 16898.87275,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 20,
       },
       "plates": {
         "floors": [
@@ -32929,6 +33291,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 74.1,
           },
+          {
+            "areaSqm": 146.75,
+            "baseM": 74.1,
+            "level": 19,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 78,
+          },
         ],
         "footprint": [
           {
@@ -32954,13 +33327,13 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 2174.92,
-        "gfaSqm": 29253.24,
+        "gfaSqm": 29399.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 29159.3,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -32981,7 +33354,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1312.1685,
+          "limit": 1322.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -32993,7 +33366,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 656.08425,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -33102,7 +33475,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 8.33122857129,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -33148,19 +33521,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29159.3,
-        "far": 8.33122857129,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
         "footprintSqm": 950,
-        "gfaSqm": 29159.3,
-        "heightM": 128.7,
+        "gfaSqm": 29399.99,
+        "heightM": 132.6,
         "openSpaceSqm": 2550.00000006,
-        "parkingSpaces": 280,
-        "parkingSqm": 6048,
-        "storeys": 33,
+        "parkingSpaces": 282,
+        "parkingSqm": 6091.2,
+        "storeys": 34,
         "yield": {
           "kind": "netArea",
-          "sqm": 16755.6925,
+          "sqm": 16898.87275,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 34,
       },
       "plates": {
         "floors": [
@@ -33527,6 +33905,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 128.7,
           },
+          {
+            "areaSqm": 240.69,
+            "baseM": 128.7,
+            "level": 33,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 132.6,
+          },
         ],
         "footprint": [
           {
@@ -33552,7 +33941,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 950,
-        "gfaSqm": 29159.3,
+        "gfaSqm": 29399.99,
       },
     },
     {
@@ -33696,6 +34085,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -34612,7 +35006,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 24408,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -34632,7 +35026,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1098.36,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -34644,7 +35038,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 549.18,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -34746,7 +35140,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6.9737142856,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -34792,19 +35186,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 24408,
-        "far": 6.9737142856,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 2204,
-        "gfaSqm": 24408,
-        "heightM": 68.2,
+        "gfaSqm": 24499.99,
+        "heightM": 71.3,
         "openSpaceSqm": 1296.00000006,
-        "parkingSpaces": 173,
-        "parkingSqm": 3736.8,
-        "storeys": 22,
+        "parkingSpaces": 174,
+        "parkingSqm": 3758.4,
+        "storeys": 23,
         "yield": {
-          "count": 413,
+          "count": 414,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 23,
       },
       "plates": {
         "floors": [
@@ -35050,6 +35449,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 68.2,
           },
+          {
+            "areaSqm": 91.99,
+            "baseM": 68.2,
+            "level": 22,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 71.3,
+          },
         ],
         "footprint": [
           {
@@ -35075,13 +35485,13 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 2204,
-        "gfaSqm": 24408,
+        "gfaSqm": 24499.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 24320,
+          "actual": 24499.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -35101,7 +35511,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1094.4,
+          "limit": 1102.49955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -35113,7 +35523,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 547.2,
+          "limit": 551.249775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -35215,7 +35625,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6.94857142846,
+          "actual": 6.99999714274,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -35261,19 +35671,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 24320,
-        "far": 6.94857142846,
+        "builtSqm": 24499.99,
+        "far": 6.99999714274,
         "footprintSqm": 760,
-        "gfaSqm": 24320,
-        "heightM": 99.2,
+        "gfaSqm": 24499.99,
+        "heightM": 102.3,
         "openSpaceSqm": 2740.00000006,
-        "parkingSpaces": 172,
-        "parkingSqm": 3715.2,
-        "storeys": 32,
+        "parkingSpaces": 174,
+        "parkingSqm": 3758.4,
+        "storeys": 33,
         "yield": {
-          "count": 412,
+          "count": 414,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 33,
       },
       "plates": {
         "floors": [
@@ -35629,6 +36044,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 99.2,
           },
+          {
+            "areaSqm": 179.99,
+            "baseM": 99.2,
+            "level": 32,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 102.3,
+          },
         ],
         "footprint": [
           {
@@ -35654,7 +36080,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 760,
-        "gfaSqm": 24320,
+        "gfaSqm": 24499.99,
       },
     },
     {
@@ -35798,7 +36224,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.85713999995,
@@ -35813,6 +36239,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -36762,7 +37193,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
     {
       "checks": [
         {
-          "actual": 29241.62,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -36776,31 +37207,31 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1315.8729,
-          "status": "fail",
+          "limit": 1322.99955,
+          "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 657.93645,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1296.00000006,
+          "actual": 1325.08000006,
           "cites": [
             "bb44-03 p15 l26 ข้อ 52 (1)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -36831,7 +37262,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -36842,7 +37273,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "unit": "m",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -36860,12 +37291,12 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 88.67722,
+          "limit": 90.71574,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.197916666667,
+          "actual": 0.197584791035,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -36911,7 +37342,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 8.35474857129,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -36942,7 +37373,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 6,
+          "actual": 6.15196,
           "cites": [
             "mr35-33-upd69 p2 l23 ข้อ 3",
           ],
@@ -36957,24 +37388,29 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29241.62,
-        "far": 8.35474857129,
-        "footprintSqm": 2204,
-        "gfaSqm": 29241.62,
-        "heightM": 83.7,
-        "openSpaceSqm": 1296.00000006,
-        "parkingSpaces": 207,
-        "parkingSqm": 4471.2,
-        "storeys": 27,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
+        "footprintSqm": 2174.92,
+        "gfaSqm": 29399.99,
+        "heightM": 80.6,
+        "openSpaceSqm": 1325.08000006,
+        "parkingSpaces": 208,
+        "parkingSqm": 4492.8,
+        "storeys": 26,
         "yield": {
-          "count": 495,
+          "count": 498,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 26,
       },
       "plates": {
         "floors": [
           {
-            "areaSqm": 2204,
+            "areaSqm": 2174.92,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -36985,7 +37421,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 3.1,
           },
           {
-            "areaSqm": 2204,
+            "areaSqm": 2174.92,
             "baseM": 3.1,
             "level": 1,
             "loops": [
@@ -36996,7 +37432,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 6.2,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 2174.92,
             "baseM": 6.2,
             "level": 2,
             "loops": [
@@ -37249,7 +37685,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             "topM": 77.5,
           },
           {
-            "areaSqm": 1000,
+            "areaSqm": 875.23,
             "baseM": 77.5,
             "level": 25,
             "loops": [
@@ -37259,49 +37695,38 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 80.6,
           },
-          {
-            "areaSqm": 833.62,
-            "baseM": 80.6,
-            "level": 26,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 83.7,
-          },
         ],
         "footprint": [
           {
             "holes": [],
             "outer": [
               [
-                44,
-                64,
+                43.84804,
+                63.84804,
               ],
               [
-                6,
-                64,
+                6.15196,
+                63.84804,
               ],
               [
-                6,
-                6,
+                6.15196,
+                6.15196,
               ],
               [
-                44,
-                6,
+                43.84804,
+                6.15196,
               ],
             ],
           },
         ],
-        "footprintSqm": 2204,
-        "gfaSqm": 29241.62,
+        "footprintSqm": 2174.92,
+        "gfaSqm": 29399.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 29328.4,
+          "actual": 29399.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -37322,7 +37747,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 1319.778,
+          "limit": 1322.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -37334,7 +37759,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 659.889,
+          "limit": 661.499775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -37450,7 +37875,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "status": "manual",
         },
         {
-          "actual": 8.37954285701,
+          "actual": 8.39999714272,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -37496,19 +37921,24 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 29328.4,
-        "far": 8.37954285701,
+        "builtSqm": 29399.99,
+        "far": 8.39999714272,
         "footprintSqm": 760,
-        "gfaSqm": 29328.4,
-        "heightM": 120.9,
+        "gfaSqm": 29399.99,
+        "heightM": 124,
         "openSpaceSqm": 2740.00000006,
         "parkingSpaces": 208,
         "parkingSqm": 4492.8,
-        "storeys": 39,
+        "storeys": 40,
         "yield": {
-          "count": 496,
+          "count": 498,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 40,
       },
       "plates": {
         "floors": [
@@ -37941,6 +38371,17 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
             ],
             "topM": 120.9,
           },
+          {
+            "areaSqm": 71.59,
+            "baseM": 120.9,
+            "level": 39,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 124,
+          },
         ],
         "footprint": [
           {
@@ -37966,7 +38407,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           },
         ],
         "footprintSqm": 760,
-        "gfaSqm": 29328.4,
+        "gfaSqm": 29399.99,
       },
     },
     {
@@ -38125,7 +38566,7 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.85713999995,
@@ -38140,6 +38581,11 @@ exports[`Bangkok results stay byte-identical across engine refactors typical 50x
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -39249,6 +39695,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 36,
+      },
       "plates": {
         "floors": [
           {
@@ -40165,6 +40616,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -40814,7 +41270,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5116.09,
         "far": 2.15414315789,
@@ -40829,6 +41285,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "count": 92,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -42978,6 +43439,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 36,
+      },
       "plates": {
         "floors": [
           {
@@ -43905,6 +44371,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -44565,7 +45036,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5116.09,
         "far": 2.15414315789,
@@ -44580,6 +45051,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "count": 92,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -46690,6 +47166,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "sqm": 2493.71,
         },
       },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
+      },
       "plates": {
         "floors": [
           {
@@ -47264,6 +47745,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "netArea",
           "sqm": 4024.71425,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 29,
       },
       "plates": {
         "floors": [
@@ -47875,7 +48361,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5535.5,
         "far": 2.3307368421,
@@ -47890,6 +48376,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "netArea",
           "sqm": 3167.5975,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -49975,6 +50466,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "sqm": 2493.71,
         },
       },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
+      },
       "plates": {
         "floors": [
           {
@@ -50558,6 +51054,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "netArea",
           "sqm": 4024.71425,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 29,
       },
       "plates": {
         "floors": [
@@ -51178,7 +51679,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5535.5,
         "far": 2.3307368421,
@@ -51193,6 +51694,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "netArea",
           "sqm": 3167.5975,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -53334,6 +53840,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 36,
+      },
       "plates": {
         "floors": [
           {
@@ -54285,6 +54796,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -54969,7 +55485,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5116.09,
         "far": 2.15414315789,
@@ -54984,6 +55500,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "count": 86,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -57220,6 +57741,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 36,
+      },
       "plates": {
         "floors": [
           {
@@ -58186,6 +58712,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
+      },
       "plates": {
         "floors": [
           {
@@ -58885,7 +59416,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 5116.09,
         "far": 2.15414315789,
@@ -58900,6 +59431,11 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "count": 86,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -61031,7 +61567,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 840,
         "far": 0.875000000035,
@@ -61046,6 +61582,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -61260,7 +61801,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 3144.9,
         "far": 3.27593750013,
@@ -61275,6 +61816,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 56,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -61938,7 +62484,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 840,
         "far": 0.875000000035,
@@ -61953,6 +62499,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -62178,7 +62729,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 3144.9,
         "far": 3.27593750013,
@@ -62193,6 +62744,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 56,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -62857,7 +63413,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 750,
         "far": 0.781250000031,
@@ -62872,6 +63428,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "kind": "netArea",
           "sqm": 418.47,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -63075,7 +63636,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 2250,
         "far": 2.34375000009,
@@ -63090,6 +63651,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "kind": "netArea",
           "sqm": 1286.73,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -63696,7 +64262,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 750,
         "far": 0.781250000031,
@@ -63711,6 +64277,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "kind": "netArea",
           "sqm": 418.47,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -63923,7 +64494,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 2250,
         "far": 2.34375000009,
@@ -63938,6 +64509,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "kind": "netArea",
           "sqm": 1286.73,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -64537,7 +65113,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 840,
         "far": 0.875000000035,
@@ -64552,6 +65128,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 11,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -64778,7 +65359,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 3144.9,
         "far": 3.27593750013,
@@ -64793,6 +65374,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 52,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -65490,7 +66076,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 840,
         "far": 0.875000000035,
@@ -65505,6 +66091,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 11,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -65746,7 +66337,7 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 3144.9,
         "far": 3.27593750013,
@@ -65761,6 +66352,11 @@ exports[`Bangkok results stay byte-identical across engine refactors narrow deep
           "count": 52,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -66488,6 +67084,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -66977,6 +67578,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -67410,7 +68016,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 4.16666250006,
@@ -67425,6 +68031,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -68562,6 +69173,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -69062,6 +69678,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -69506,7 +70127,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 4.16666250006,
@@ -69521,6 +70142,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -70682,6 +71308,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "sqm": 6714.0945,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 19,
+      },
       "plates": {
         "floors": [
           {
@@ -71094,6 +71725,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "sqm": 5175.2675,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 19,
+      },
       "plates": {
         "floors": [
           {
@@ -71450,7 +72086,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9695,
         "far": 4.03958333339,
@@ -71465,6 +72101,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "netArea",
           "sqm": 5572.495,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -72480,6 +73121,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "sqm": 7042.01925,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 19,
+      },
       "plates": {
         "floors": [
           {
@@ -72901,6 +73547,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "sqm": 5175.2675,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 19,
+      },
       "plates": {
         "floors": [
           {
@@ -73266,7 +73917,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9695,
         "far": 4.03958333339,
@@ -73281,6 +73932,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "netArea",
           "sqm": 5572.495,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -74289,6 +74945,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -74813,6 +75474,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -75281,7 +75947,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 4.16666250006,
@@ -75296,6 +75962,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -76520,6 +77191,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -77059,6 +77735,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 27,
+      },
       "plates": {
         "floors": [
           {
@@ -77542,7 +78223,7 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 4.16666250006,
@@ -77557,6 +78238,11 @@ exports[`Bangkok results stay byte-identical across engine refactors corner 40x6
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -78732,6 +79418,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -79573,6 +80264,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -80358,7 +81054,7 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 0.555555000002,
@@ -80373,6 +81069,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -81332,6 +82033,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -82184,6 +82890,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "units",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -82980,7 +83691,7 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 0.555555000002,
@@ -82995,6 +83706,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -83978,6 +84694,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "sqm": 59694.41925,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 39,
+      },
       "plates": {
         "floors": [
           {
@@ -84633,6 +85354,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "sqm": 60525.9,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 39,
+      },
       "plates": {
         "floors": [
           {
@@ -85224,6 +85950,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -86170,6 +86901,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "sqm": 59694.41925,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 39,
+      },
       "plates": {
         "floors": [
           {
@@ -86834,6 +87570,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "sqm": 60525.9,
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 39,
+      },
       "plates": {
         "floors": [
           {
@@ -87434,6 +88175,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -88373,6 +89119,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -89249,6 +90000,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -90069,7 +90825,7 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 0.555555000002,
@@ -90084,6 +90840,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -91130,6 +91891,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -92021,6 +92787,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 59,
+      },
       "plates": {
         "floors": [
           {
@@ -92856,7 +93627,7 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 0.555555000002,
@@ -92871,6 +93642,11 @@ exports[`Bangkok results stay byte-identical across engine refactors large 120x1
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -93812,7 +94588,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -93827,6 +94603,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -94041,7 +94822,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -94056,6 +94837,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -94780,7 +95566,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -94795,6 +95581,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -95020,7 +95811,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -95035,6 +95826,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 18,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -95760,7 +96556,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 623.25,
         "far": 2.07750000003,
@@ -95775,6 +96571,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "kind": "netArea",
           "sqm": 357.89625,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -95978,7 +96779,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 623.25,
         "far": 2.07750000003,
@@ -95993,6 +96794,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "kind": "netArea",
           "sqm": 357.89625,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -96660,7 +97466,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 623.25,
         "far": 2.07750000003,
@@ -96675,6 +97481,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "kind": "netArea",
           "sqm": 357.89625,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -96887,7 +97698,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 623.25,
         "far": 2.07750000003,
@@ -96902,6 +97713,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "kind": "netArea",
           "sqm": 357.89625,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -97562,7 +98378,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -97577,6 +98393,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 12,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -97803,7 +98624,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -97818,6 +98639,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 12,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -98576,7 +99402,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "slab",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -98591,6 +99417,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 12,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -98832,7 +99663,7 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 862.65,
         "far": 2.87550000004,
@@ -98847,6 +99678,11 @@ exports[`Bangkok results stay byte-identical across engine refactors small 15x20
           "count": 12,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -99476,7 +100312,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 13368.53,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -99496,7 +100332,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 601.58385,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -99508,7 +100344,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 300.791925,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -99551,14 +100387,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 49.6,
+          "actual": 52.7,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 82.02126,
+          "limit": 84.87114,
           "status": "pass",
           "unit": "m",
         },
@@ -99575,7 +100411,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "ratio",
         },
         {
-          "actual": 6.6842650001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -99621,19 +100457,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13368.53,
-        "far": 6.6842650001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 1064,
-        "gfaSqm": 13368.53,
-        "heightM": 49.6,
+        "gfaSqm": 13999.99,
+        "heightM": 52.7,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 95,
-        "parkingSqm": 2052,
-        "storeys": 16,
+        "parkingSpaces": 99,
+        "parkingSqm": 2138.4,
+        "storeys": 17,
         "yield": {
-          "count": 242,
+          "count": 254,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 17,
       },
       "plates": {
         "floors": [
@@ -99813,6 +100654,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 49.6,
           },
+          {
+            "areaSqm": 631.46,
+            "baseM": 49.6,
+            "level": 16,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 52.7,
+          },
         ],
         "footprint": [
           {
@@ -99838,13 +100690,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 13368.53,
+        "gfaSqm": 13999.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 13440,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -99864,7 +100716,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 604.8,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -99876,7 +100728,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 302.4,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -99919,14 +100771,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 74.4,
+          "actual": 77.5,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 83.7,
+          "limit": 83.70024,
           "status": "pass",
           "unit": "m",
         },
@@ -99943,7 +100795,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "ratio",
         },
         {
-          "actual": 6.7200000001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -99989,19 +100841,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13440,
-        "far": 6.7200000001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 560,
-        "gfaSqm": 13440,
-        "heightM": 74.4,
+        "gfaSqm": 13999.99,
+        "heightM": 77.5,
         "openSpaceSqm": 1439.99999997,
-        "parkingSpaces": 95,
-        "parkingSqm": 2052,
-        "storeys": 24,
+        "parkingSpaces": 99,
+        "parkingSqm": 2138.4,
+        "storeys": 25,
         "yield": {
-          "count": 244,
+          "count": 254,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 25,
       },
       "plates": {
         "floors": [
@@ -100269,6 +101126,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 74.4,
           },
+          {
+            "areaSqm": 559.99,
+            "baseM": 74.4,
+            "level": 24,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 77.5,
+          },
         ],
         "footprint": [
           {
@@ -100294,7 +101162,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 560,
-        "gfaSqm": 13440,
+        "gfaSqm": 13999.99,
       },
     },
     {
@@ -100403,7 +101271,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9791.25,
         "far": 4.89562500007,
@@ -100418,6 +101286,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "count": 177,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -101319,7 +102192,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 16499.77,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -101340,7 +102213,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 742.48965,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -101352,7 +102225,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 371.244825,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -101429,7 +102302,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "ratio",
         },
         {
-          "actual": 8.24988500012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -101475,19 +102348,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16499.77,
-        "far": 8.24988500012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 1064,
-        "gfaSqm": 16499.77,
-        "heightM": 62,
+        "gfaSqm": 16799.99,
+        "heightM": 65.1,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 117,
-        "parkingSqm": 2527.2,
-        "storeys": 20,
+        "parkingSpaces": 119,
+        "parkingSqm": 2570.4,
+        "storeys": 21,
         "yield": {
-          "count": 299,
+          "count": 304,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 21,
       },
       "plates": {
         "floors": [
@@ -101711,6 +102589,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 62,
           },
+          {
+            "areaSqm": 300.22,
+            "baseM": 62,
+            "level": 20,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 65.1,
+          },
         ],
         "footprint": [
           {
@@ -101736,13 +102625,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 16499.77,
+        "gfaSqm": 16799.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 16665.6,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -101763,7 +102652,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 749.952,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -101775,7 +102664,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 374.976,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -101817,7 +102706,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 11.85,
+          "actual": 18.05,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -101828,14 +102717,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 96.1,
+          "actual": 93,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 96.1,
+          "limit": 96.10024,
           "status": "pass",
           "unit": "m",
         },
@@ -101852,7 +102741,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "ratio",
         },
         {
-          "actual": 8.33280000012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -101898,19 +102787,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16665.6,
-        "far": 8.33280000012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 560,
-        "gfaSqm": 16665.6,
-        "heightM": 96.1,
+        "gfaSqm": 16799.99,
+        "heightM": 93,
         "openSpaceSqm": 1439.99999997,
-        "parkingSpaces": 118,
-        "parkingSqm": 2548.8,
-        "storeys": 31,
+        "parkingSpaces": 119,
+        "parkingSqm": 2570.4,
+        "storeys": 30,
         "yield": {
-          "count": 302,
+          "count": 304,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 30,
       },
       "plates": {
         "floors": [
@@ -102212,7 +103106,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 83.7,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 560,
             "baseM": 83.7,
             "level": 27,
             "loops": [
@@ -102223,7 +103117,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 86.8,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 560,
             "baseM": 86.8,
             "level": 28,
             "loops": [
@@ -102234,7 +103128,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 89.9,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 559.99,
             "baseM": 89.9,
             "level": 29,
             "loops": [
@@ -102244,17 +103138,6 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 93,
           },
-          {
-            "areaSqm": 386.4,
-            "baseM": 93,
-            "level": 30,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 96.1,
-          },
         ],
         "footprint": [
           {
@@ -102262,25 +103145,25 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "outer": [
               [
                 34,
-                31.85,
+                38.05,
               ],
               [
                 6,
-                31.85,
+                38.05,
               ],
               [
                 6,
-                11.85,
+                18.05,
               ],
               [
                 34,
-                11.85,
+                18.05,
               ],
             ],
           },
         ],
         "footprintSqm": 560,
-        "gfaSqm": 16665.6,
+        "gfaSqm": 16799.99,
       },
     },
     {
@@ -102400,7 +103283,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9791.25,
         "far": 4.89562500007,
@@ -102415,6 +103298,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "count": 177,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -103317,7 +104205,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 13522.88,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -103337,7 +104225,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 608.5296,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -103349,7 +104237,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 304.2648,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -103450,7 +104338,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 6.7614400001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -103496,19 +104384,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13522.88,
-        "far": 6.7614400001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 1064,
-        "gfaSqm": 13522.88,
-        "heightM": 66.3,
+        "gfaSqm": 13999.99,
+        "heightM": 70.2,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 130,
-        "parkingSqm": 2808,
-        "storeys": 17,
+        "parkingSpaces": 135,
+        "parkingSqm": 2916,
+        "storeys": 18,
         "yield": {
           "kind": "netArea",
-          "sqm": 7768.288,
+          "sqm": 8035.89275,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 18,
       },
       "plates": {
         "floors": [
@@ -103699,6 +104592,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 66.3,
           },
+          {
+            "areaSqm": 477.11,
+            "baseM": 66.3,
+            "level": 17,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 70.2,
+          },
         ],
         "footprint": [
           {
@@ -103724,13 +104628,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 13522.88,
+        "gfaSqm": 13999.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 13300,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -103750,7 +104654,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 598.5,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -103762,7 +104666,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 299.25,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -103805,14 +104709,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 74.1,
+          "actual": 78,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 81.9,
+          "limit": 81.9002,
           "status": "pass",
           "unit": "m",
         },
@@ -103863,7 +104767,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 6.6500000001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -103909,19 +104813,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13300,
-        "far": 6.6500000001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 700,
-        "gfaSqm": 13300,
-        "heightM": 74.1,
+        "gfaSqm": 13999.99,
+        "heightM": 78,
         "openSpaceSqm": 1299.99999997,
-        "parkingSpaces": 128,
-        "parkingSqm": 2764.8,
-        "storeys": 19,
+        "parkingSpaces": 135,
+        "parkingSqm": 2916,
+        "storeys": 20,
         "yield": {
           "kind": "netArea",
-          "sqm": 7638.02,
+          "sqm": 8035.89275,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 20,
       },
       "plates": {
         "floors": [
@@ -104134,6 +105043,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 74.1,
           },
+          {
+            "areaSqm": 699.99,
+            "baseM": 74.1,
+            "level": 19,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 78,
+          },
         ],
         "footprint": [
           {
@@ -104159,7 +105079,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 700,
-        "gfaSqm": 13300,
+        "gfaSqm": 13999.99,
       },
     },
     {
@@ -104279,7 +105199,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7650,
         "far": 3.82500000006,
@@ -104294,6 +105214,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "kind": "netArea",
           "sqm": 4387.41,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -105220,7 +106145,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 16474.56,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -105241,7 +106166,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 741.3552,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -105253,7 +106178,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 370.6776,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -105311,7 +106236,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 93.63526,
+          "limit": 93.64726,
           "status": "pass",
           "unit": "m",
         },
@@ -105362,7 +106287,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 8.23728000012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -105408,19 +106333,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16474.56,
-        "far": 8.23728000012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 1064,
-        "gfaSqm": 16474.56,
+        "gfaSqm": 16799.99,
         "heightM": 81.9,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 158,
-        "parkingSqm": 3412.8,
+        "parkingSpaces": 161,
+        "parkingSqm": 3477.6,
         "storeys": 21,
         "yield": {
           "kind": "netArea",
-          "sqm": 9469.776,
+          "sqm": 9658.73275,
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 21,
       },
       "plates": {
         "floors": [
@@ -105458,7 +106388,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 11.7,
           },
           {
-            "areaSqm": 737.92,
+            "areaSqm": 1064,
             "baseM": 11.7,
             "level": 3,
             "loops": [
@@ -105645,7 +106575,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 78,
           },
           {
-            "areaSqm": 737.92,
+            "areaSqm": 737.27,
             "baseM": 78,
             "level": 20,
             "loops": [
@@ -105680,13 +106610,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 16474.56,
+        "gfaSqm": 16799.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 16681,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -105707,7 +106637,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 750.645,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -105719,7 +106649,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 375.3225,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -105828,7 +106758,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 8.34050000012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -105874,19 +106804,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16681,
-        "far": 8.34050000012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 700,
-        "gfaSqm": 16681,
-        "heightM": 97.5,
+        "gfaSqm": 16799.99,
+        "heightM": 101.4,
         "openSpaceSqm": 1299.99999997,
-        "parkingSpaces": 160,
-        "parkingSqm": 3456,
-        "storeys": 25,
+        "parkingSpaces": 161,
+        "parkingSqm": 3477.6,
+        "storeys": 26,
         "yield": {
           "kind": "netArea",
-          "sqm": 9588.125,
+          "sqm": 9658.73275,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 26,
       },
       "plates": {
         "floors": [
@@ -106165,6 +107100,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 97.5,
           },
+          {
+            "areaSqm": 118.99,
+            "baseM": 97.5,
+            "level": 25,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 101.4,
+          },
         ],
         "footprint": [
           {
@@ -106190,7 +107136,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 700,
-        "gfaSqm": 16681,
+        "gfaSqm": 16799.99,
       },
     },
     {
@@ -106319,7 +107265,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 7650,
         "far": 3.82500000006,
@@ -106334,6 +107280,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "kind": "netArea",
           "sqm": 4387.41,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 5,
       },
       "plates": {
         "floors": [
@@ -107261,7 +108212,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 13368.53,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -107281,7 +108232,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 601.58385,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -107293,7 +108244,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 300.791925,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -107337,14 +108288,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 49.6,
+          "actual": 52.7,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 82.02126,
+          "limit": 84.87114,
           "status": "pass",
           "unit": "m",
         },
@@ -107395,7 +108346,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 6.6842650001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -107441,19 +108392,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13368.53,
-        "far": 6.6842650001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 1064,
-        "gfaSqm": 13368.53,
-        "heightM": 49.6,
+        "gfaSqm": 13999.99,
+        "heightM": 52.7,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 95,
-        "parkingSqm": 2052,
-        "storeys": 16,
+        "parkingSpaces": 99,
+        "parkingSqm": 2138.4,
+        "storeys": 17,
         "yield": {
-          "count": 226,
+          "count": 237,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 17,
       },
       "plates": {
         "floors": [
@@ -107633,6 +108589,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 49.6,
           },
+          {
+            "areaSqm": 631.46,
+            "baseM": 49.6,
+            "level": 16,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 52.7,
+          },
         ],
         "footprint": [
           {
@@ -107658,13 +108625,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 13368.53,
+        "gfaSqm": 13999.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 13440,
+          "actual": 13999.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -107684,7 +108651,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 604.8,
+          "limit": 629.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -107696,7 +108663,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 302.4,
+          "limit": 314.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -107740,14 +108707,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 74.4,
+          "actual": 77.5,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 83.7,
+          "limit": 83.70024,
           "status": "pass",
           "unit": "m",
         },
@@ -107798,7 +108765,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 6.7200000001,
+          "actual": 6.9999950001,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -107844,19 +108811,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 13440,
-        "far": 6.7200000001,
+        "builtSqm": 13999.99,
+        "far": 6.9999950001,
         "footprintSqm": 560,
-        "gfaSqm": 13440,
-        "heightM": 74.4,
+        "gfaSqm": 13999.99,
+        "heightM": 77.5,
         "openSpaceSqm": 1439.99999997,
-        "parkingSpaces": 95,
-        "parkingSqm": 2052,
-        "storeys": 24,
+        "parkingSpaces": 99,
+        "parkingSqm": 2138.4,
+        "storeys": 25,
         "yield": {
-          "count": 227,
+          "count": 237,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 25,
       },
       "plates": {
         "floors": [
@@ -108124,6 +109096,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 74.4,
           },
+          {
+            "areaSqm": 559.99,
+            "baseM": 74.4,
+            "level": 24,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 77.5,
+          },
         ],
         "footprint": [
           {
@@ -108149,7 +109132,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 560,
-        "gfaSqm": 13440,
+        "gfaSqm": 13999.99,
       },
     },
     {
@@ -108293,7 +109276,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9791.25,
         "far": 4.89562500007,
@@ -108308,6 +109291,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "count": 165,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -109257,7 +110245,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
     {
       "checks": [
         {
-          "actual": 16499.77,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -109278,7 +110266,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 742.48965,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -109290,7 +110278,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 371.244825,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -109406,7 +110394,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 8.24988500012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -109452,19 +110440,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "podium-tower",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16499.77,
-        "far": 8.24988500012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 1064,
-        "gfaSqm": 16499.77,
-        "heightM": 62,
+        "gfaSqm": 16799.99,
+        "heightM": 65.1,
         "openSpaceSqm": 935.999999971,
-        "parkingSpaces": 117,
-        "parkingSqm": 2527.2,
-        "storeys": 20,
+        "parkingSpaces": 119,
+        "parkingSqm": 2570.4,
+        "storeys": 21,
         "yield": {
-          "count": 279,
+          "count": 284,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 21,
       },
       "plates": {
         "floors": [
@@ -109688,6 +110681,17 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 62,
           },
+          {
+            "areaSqm": 300.22,
+            "baseM": 62,
+            "level": 20,
+            "loops": [
+              [
+                4,
+              ],
+            ],
+            "topM": 65.1,
+          },
         ],
         "footprint": [
           {
@@ -109713,13 +110717,13 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           },
         ],
         "footprintSqm": 1064,
-        "gfaSqm": 16499.77,
+        "gfaSqm": 16799.99,
       },
     },
     {
       "checks": [
         {
-          "actual": 16665.6,
+          "actual": 16799.99,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -109740,7 +110744,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 749.952,
+          "limit": 755.99955,
           "status": "pass",
           "unit": "sqm",
         },
@@ -109752,7 +110756,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 374.976,
+          "limit": 377.999775,
           "status": "pass",
           "unit": "sqm",
         },
@@ -109799,7 +110803,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 11.85,
+          "actual": 18.05,
           "cites": [
             "mr35-33-upd69 p2 l33 ข้อ 4",
           ],
@@ -109810,14 +110814,14 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "unit": "m",
         },
         {
-          "actual": 96.1,
+          "actual": 93,
           "cites": [
             "mr43-55-upd68 p9 l47 ข้อ 44",
             "bb44-03 p14 l44 ข้อ 49",
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 96.1,
+          "limit": 96.10024,
           "status": "pass",
           "unit": "m",
         },
@@ -109868,7 +110872,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "status": "manual",
         },
         {
-          "actual": 8.33280000012,
+          "actual": 8.39999500012,
           "cites": [
             "mr35-33-upd69 p2 l37 ข้อ 5",
           ],
@@ -109914,19 +110918,24 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       "id": "slab",
       "limitedBy": "far",
       "metrics": {
-        "builtSqm": 16665.6,
-        "far": 8.33280000012,
+        "builtSqm": 16799.99,
+        "far": 8.39999500012,
         "footprintSqm": 560,
-        "gfaSqm": 16665.6,
-        "heightM": 96.1,
+        "gfaSqm": 16799.99,
+        "heightM": 93,
         "openSpaceSqm": 1439.99999997,
-        "parkingSpaces": 118,
-        "parkingSqm": 2548.8,
-        "storeys": 31,
+        "parkingSpaces": 119,
+        "parkingSqm": 2570.4,
+        "storeys": 30,
         "yield": {
-          "count": 282,
+          "count": 284,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 30,
       },
       "plates": {
         "floors": [
@@ -110228,7 +111237,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 83.7,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 560,
             "baseM": 83.7,
             "level": 27,
             "loops": [
@@ -110239,7 +111248,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 86.8,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 560,
             "baseM": 86.8,
             "level": 28,
             "loops": [
@@ -110250,7 +111259,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "topM": 89.9,
           },
           {
-            "areaSqm": 386.4,
+            "areaSqm": 559.99,
             "baseM": 89.9,
             "level": 29,
             "loops": [
@@ -110260,17 +111269,6 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             ],
             "topM": 93,
           },
-          {
-            "areaSqm": 386.4,
-            "baseM": 93,
-            "level": 30,
-            "loops": [
-              [
-                4,
-              ],
-            ],
-            "topM": 96.1,
-          },
         ],
         "footprint": [
           {
@@ -110278,25 +111276,25 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
             "outer": [
               [
                 34,
-                31.85,
+                38.05,
               ],
               [
                 6,
-                31.85,
+                38.05,
               ],
               [
                 6,
-                11.85,
+                18.05,
               ],
               [
                 34,
-                11.85,
+                18.05,
               ],
             ],
           },
         ],
         "footprintSqm": 560,
-        "gfaSqm": 16665.6,
+        "gfaSqm": 16799.99,
       },
     },
     {
@@ -110455,7 +111453,7 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9791.25,
         "far": 4.89562500007,
@@ -110470,6 +111468,11 @@ exports[`Bangkok results stay byte-identical across engine refactors wide road 4
           "count": 165,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -111579,6 +112582,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 25,
+      },
       "plates": {
         "floors": [
           {
@@ -112045,6 +113053,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 540,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
       },
       "plates": {
         "floors": [
@@ -112523,7 +113536,7 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.08333124998,
@@ -112538,6 +113551,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -113667,6 +114685,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "units",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 24,
+      },
       "plates": {
         "floors": [
           {
@@ -114133,6 +115156,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 540,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
       },
       "plates": {
         "floors": [
@@ -114622,7 +115650,7 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.08333124998,
@@ -114637,6 +115665,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 181,
           "kind": "units",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -115764,6 +116797,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "sqm": 17120.44,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 13,
+      },
       "plates": {
         "floors": [
           {
@@ -116106,6 +117144,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "netArea",
           "sqm": 17239.92,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 25,
       },
       "plates": {
         "floors": [
@@ -116544,6 +117587,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -117667,6 +118715,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "sqm": 17120.44,
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 13,
+      },
       "plates": {
         "floors": [
           {
@@ -118018,6 +119071,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "netArea",
           "sqm": 17239.92,
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 25,
       },
       "plates": {
         "floors": [
@@ -118465,6 +119523,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "netArea",
           "sqm": 4594.18,
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 4,
       },
       "plates": {
         "floors": [
@@ -119581,6 +120644,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 25,
+      },
       "plates": {
         "floors": [
           {
@@ -120056,6 +121124,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 504,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
       },
       "plates": {
         "floors": [
@@ -120543,7 +121616,7 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.08333124998,
@@ -120558,6 +121631,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [
@@ -121725,6 +122803,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "kind": "rooms",
         },
       },
+      "name": {
+        "form": "podium-tower",
+        "highRise": true,
+        "storeys": 24,
+      },
       "plates": {
         "floors": [
           {
@@ -122207,6 +123290,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 504,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "slab",
+        "highRise": true,
+        "storeys": 31,
       },
       "plates": {
         "floors": [
@@ -122712,7 +123800,7 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
       ],
       "envelope": "ordinary",
       "id": "low-rise",
-      "limitedBy": "envelope",
+      "limitedBy": "building-class",
       "metrics": {
         "builtSqm": 9999.99,
         "far": 2.08333124998,
@@ -122727,6 +123815,11 @@ exports[`Bangkok results stay byte-identical across engine refactors near a stat
           "count": 169,
           "kind": "rooms",
         },
+      },
+      "name": {
+        "form": "block",
+        "highRise": false,
+        "storeys": 7,
       },
       "plates": {
         "floors": [

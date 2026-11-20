@@ -19,7 +19,7 @@ export function ResultsSummary({ children }: { children?: ReactNode }) {
   if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{failureText(result, region)}</p>
   if (!design) return <p className="text-sm leading-snug text-muted-foreground">{t('designs.none')}</p>
   const { solution } = result
-  const best = t('summary.best', { name: t(design.nameKey), area: formatQuantity(design.metrics.gfaSqm, areaUnit) })
+  const best = t('summary.best', { name: t('design.name', design.name), area: formatQuantity(design.metrics.gfaSqm, areaUnit) })
   return (
     <section aria-label={t('summary.label')}>
       <div className="flex items-start justify-between gap-2">
