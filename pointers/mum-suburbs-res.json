@@ -22,6 +22,15 @@
       "kind": "consolidated",
       "textLayer": "readable",
       "language": "en"
+    },
+    "dcpr2034-mcgm-p288-table-a": {
+      "name": "DCPR 2034, Table A (side and rear open spaces)",
+      "title": "Greater Mumbai Development Plan-2034, Development Control and Promotion Regulations-2034, Reg 41(2)(i)(a) Table A, PDF page 288",
+      "url": "https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf",
+      "published": "Maharashtra Government Gazette, UDD notification No. TPB. 4317/629/CR-118/2017/DP/UD-11, 8 May 2018; MCGM-published sanctioned text. Later modifications are not in this file",
+      "kind": "consolidated",
+      "textLayer": "transcribedScan",
+      "language": "en"
     }
   },
   "buildingTypes": [
@@ -1185,21 +1194,6 @@
     }
   ],
   "boundarySetbacks": [],
-  "plotSetbacks": {
-    "kind": "plotSpecific",
-    "edges": "boundary",
-    "notes": [
-      {
-        "$cite": {
-          "src": "dcpr2034-mcgm",
-          "page": 288,
-          "line": 30,
-          "token": "The open spaces on all sides except the front side of a building shall be as follows",
-          "clause": "Reg 41(2)(i)(a)"
-        }
-      }
-    ]
-  },
   "lowRiseOpenSpaces": {
     "appliesTo": {
       "$cite": {
@@ -1459,6 +1453,274 @@
       }
     ]
   },
+  "sideRearOpenSpaces": {
+    "appliesTo": {
+      "$cite": {
+        "src": "dcpr2034-mcgm",
+        "page": 288,
+        "line": 30,
+        "token": "The open spaces on all sides except the front side of a building shall be as follows",
+        "clause": "Reg 41(2)(i)(a)"
+      }
+    },
+    "smallPlot": {
+      "areaSqm": {
+        "$bound": {
+          "src": "dcpr2034-mcgm-p288-table-a",
+          "page": 288,
+          "line": 3,
+          "token": "1000",
+          "clause": "Reg 41(2)(i)(a) Table A",
+          "op": "up to"
+        }
+      },
+      "averageWidthOrDepthM": {
+        "$bound": {
+          "src": "dcpr2034-mcgm-p288-table-a",
+          "page": 288,
+          "line": 3,
+          "token": "20",
+          "clause": "Reg 41(2)(i)(a) Table A",
+          "op": "less than"
+        }
+      }
+    },
+    "smallPlotRows": [
+      {
+        "heightM": {
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 7,
+              "token": "32",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "up to"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 8,
+              "token": "H/5",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          },
+          "minM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 8,
+              "token": "3.6",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 13,
+              "token": "32",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "more than"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 13,
+              "token": "70",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "up to"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 14,
+              "token": "H/5",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          },
+          "maxM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 14,
+              "token": "12",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      }
+    ],
+    "largePlotRows": [
+      {
+        "heightM": {
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 7,
+              "token": "32",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "up to"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 10,
+              "token": "H/4",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          },
+          "minM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 10,
+              "token": "3.6",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 13,
+              "token": "32",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "more than"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 13,
+              "token": "70",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "up to"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 16,
+              "token": "H/4",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          },
+          "maxM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 16,
+              "token": "12",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 19,
+              "token": "70",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "more than"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 19,
+              "token": "120",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "up to"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 21,
+              "token": "H/4",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          },
+          "maxM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 21,
+              "token": "16",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 24,
+              "token": "120",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "op": "more than"
+            }
+          }
+        },
+        "distance": {
+          "kind": "fixed",
+          "distanceM": {
+            "$num": {
+              "src": "dcpr2034-mcgm-p288-table-a",
+              "page": 288,
+              "line": 26,
+              "token": "20",
+              "clause": "Reg 41(2)(i)(a) Table A"
+            }
+          }
+        }
+      }
+    ]
+  },
   "parking": [
     {
       "scope": "mumbaiTable21",
@@ -1660,14 +1922,9 @@
       "why": "The only machine-readable official text is the 2018 sanctioned text. The 2024 notification PDF has a garbled legacy-font text layer, and Table 12 Note 2 lets the Government change the premium and TDR split. This pack is a draft as sanctioned in 2018."
     },
     {
-      "id": "table-a-side-rear",
-      "what": "Side and rear open spaces by building height and plot size (Reg 41(2)(i)(a), Table A, p288)",
-      "why": "The text layer merges and dashes the cells of Table A, so which cell holds which value cannot be read. The side and rear open space is entered for each plot."
-    },
-    {
       "id": "table-a-tower-rules",
-      "what": "Tower open spaces and step-backs above 32 m, 70 m and 120 m (p289) and the dead-wall column of Table A",
-      "why": "Part of the unreadable Table A layout; not applied."
+      "what": "Step-backs at upper levels and tower-like structures (Reg 41(2)(b) and (c), p289), the dead-wall column of Table A and its minimum for commercial buildings",
+      "why": "H in Table A is the height of the building, and Reg 41(1)(a) relates the side and rear open spaces to the height needed to consume the full FSI, so Plotwise keeps the open space for a design's full height on every floor. Smaller step-backs at upper levels, and the step-backs of a tower-like structure with their ground-level minimums and their limited number, are a relaxation the Commissioner may grant; Plotwise does not apply them. Every side is taken to have windows, so the smaller dead-wall open space is never used."
     },
     {
       "id": "height-exemptions",
@@ -1723,6 +1980,21 @@
       "id": "low-rise-scope",
       "what": "Whether Table No 17 replaces Table A and Table 18 A or only relaxes them",
       "why": "Reg 41(3)(a) says the open spaces may be relaxed to Table No 17; Plotwise applies it to the checks of a building of ground and one upper floor on a plot it covers, and keeps the envelope on the stricter open spaces. The rear is taken as the boundary edge farthest from the main road."
+    },
+    {
+      "id": "table-a-plot-class",
+      "what": "How Table A measures the average width and depth of a plot, and a plot of more than 1000 m² whose average width or depth is exactly 20 m",
+      "why": "DCPR 2034 does not define them. Plotwise measures the plot left after any road-widening strip, along and across its main road (area over its depth, area over its width), and puts a plot that is not up to 1000 m² and not under 20 m wide or deep in the larger plot class, whose open spaces are larger. Table A leaves buildings above 70 m on the smaller plot class blank, so Plotwise draws none."
+    },
+    {
+      "id": "table-a-row-1",
+      "what": "How the minimum and the share of the height combine in the first row of Table A",
+      "why": "The cell reads \"Min - … in case of Residential building … subject to H/5\" (H/4 for larger plots). Plotwise takes the larger of the two: \"Min\" makes the stated distance a floor, and the share of the height applies once it is more."
+    },
+    {
+      "id": "table-a-row-3",
+      "what": "\"H/4 or 16 m Max.\" in the third row of Table A (larger plots)",
+      "why": "Plotwise reads \"Max.\" as a cap on H/4. In that row H/4 is always more than the cap, so the open space is the cap."
     }
   ]
 }

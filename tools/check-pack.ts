@@ -2,6 +2,8 @@ import { bandGaps, endsOpen, meets } from '../src/rules/bands'
 import { isSourceCite, type Cited, type Range, type SourceCite } from '../src/rules/cite'
 import type { FarPurchase, FarRule } from '../src/rules/far'
 import { RulePackSchema, type RulePack } from '../src/rules/pack'
+import type { SideRearRow } from '../src/rules/setbacks'
+import { rowDistanceM } from '../src/solve/side-rear'
 
 export type CheckResult = { errors: string[]; info: string[] }
 
@@ -200,6 +202,27 @@ const checkLowRise: Check = ({ lowRiseOpenSpaces }) => {
   ]
 }
 
+const edgeHeights = ({ min, max }: Range) => (max ? [min?.value ?? 0, max.value] : [min?.value ?? 0])
+
+const edgeDistances = (row: SideRearRow) => edgeHeights(row.heightM).map((heightM) => rowDistanceM(row, heightM))
+
+function sideRearRows(path: string, rows: readonly SideRearRow[]): string[] {
+  return [
+    ...contiguous(path, rows.map((row) => row.heightM)),
+    ...rows.flatMap((row, i) =>
+      citedValues(row.distance).flatMap(({ path: leaf, value }) => outOfRange(`${path}.${i}.${leaf}`, value.value, leaf === 'share' ? SHARE : DISTANCE_M)),
+    ),
+    ...nonDecreasing(path, rows.flatMap(edgeDistances)),
+  ]
+}
+
+const checkSideRear: Check = ({ sideRearOpenSpaces }) => {
+  if (!sideRearOpenSpaces) return []
+  const { smallPlotRows, largePlotRows } = sideRearOpenSpaces
+  const open = endsOpen(largePlotRows.map((row) => row.heightM)) ? [] : ['sideRearOpenSpaces.largePlotRows does not cover the tallest buildings']
+  return [...open, ...sideRearRows('sideRearOpenSpaces.smallPlotRows', smallPlotRows), ...sideRearRows('sideRearOpenSpaces.largePlotRows', largePlotRows)]
+}
+
 const checkBonus: Check = (pack) => {
   if (!pack.farBonus) return []
   const cap = pack.farBonus.combinedMaxShare.value
@@ -254,7 +277,7 @@ const checkQuestions: Check = (pack) => {
 const checkDecided: Check = (pack) =>
   pack.questions.filter((q) => q.decision === null).map((q) => `question ${q.id} awaits a decision (recommended: ${q.recommendation})`)
 
-const CHECKS: Check[] = [checkRanges, checkBands, checkFarTable, checkLowRise, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
+const CHECKS: Check[] = [checkRanges, checkBands, checkFarTable, checkLowRise, checkSideRear, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
 
 export function checkPack(pack: RulePack): CheckResult {
   const planFar = pack.far.kind === 'zone' ? pack.far.max.value : null

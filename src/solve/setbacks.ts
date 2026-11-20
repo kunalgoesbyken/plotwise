@@ -1,9 +1,8 @@
 import { segmentDistance } from '@/geometry'
-import type { Site, SiteEdge } from '@/plot/site'
+import { mainRoad, type Site, type SiteEdge } from '@/plot/site'
 import type { Cite, Cited, FrontOpenSpace, RoadMultiple, RoadSetbackDistance, RoadSetbackRule, RulePack } from '@/rules'
 import { inRange, satisfies } from './bound'
 import { isHighRiseOrExtraLarge, type Building } from './building'
-import { mainRoad } from './envelope'
 
 export type Setback = { readonly distanceM: number; readonly cites: readonly Cite[] }
 export type EdgeKind = 'road' | 'boundary'
@@ -55,10 +54,13 @@ export function roadSetback(pack: RulePack, building: Building, roadWidthM: numb
 
 export type LowRiseSetbacks = { readonly front: Setback; readonly rear: Setback; readonly side: Setback }
 
+export const lowRiseRow = ({ lowRiseOpenSpaces }: RulePack, plotAreaSqm: number) =>
+  lowRiseOpenSpaces?.rows.find((r) => inRange(plotAreaSqm, r.plotAreaSqm)) ?? null
+
 export function lowRiseSetbacks(pack: RulePack, plotAreaSqm: number, building: Building): LowRiseSetbacks | null {
   const rule = pack.lowRiseOpenSpaces
   if (!rule || building.storeys > rule.maxUpperFloors.value + 1) return null
-  const row = rule.rows.find((r) => inRange(plotAreaSqm, r.plotAreaSqm))
+  const row = lowRiseRow(pack, plotAreaSqm)
   if (!row) return null
   const scope = [rule.appliesTo]
   const of = ({ value, cite }: Cited): Setback => ({ distanceM: value, cites: [cite, ...scope] })

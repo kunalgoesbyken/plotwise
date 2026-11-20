@@ -1,5 +1,6 @@
 import type { Vec2 } from '@/geo/projection'
 import type { PlotLimitField } from '@/plot/plot'
+import { mainRoad } from '@/plot/site'
 import { dot, edgeLengths, segmentDistance, subtract, type FloorPlates, type Loop, type Polygon } from '@/geometry'
 import type { Cite, Comparator, FrontOpenSpace } from '@/rules'
 import {
@@ -12,12 +13,12 @@ import {
   isUnentered,
   lowRiseSetbacks,
   rearEdge,
-  mainRoad,
   negate,
   permeableArea,
   ratioOpenSpace,
   roadSetback,
   satisfies,
+  sideRearOpenSpace,
   streetHeightLimitM,
   strictest,
   type Building,
@@ -181,8 +182,9 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const plotSetback = (id: EnteredCheckId, check: Check) => (lowRise ? [check] : unlessUnentered(id, check, solution, pack.plotSetbacks?.notes ?? []))
   const rear = rearEdge(site)
   if (boundaries.length > 0) {
+    const ordinary = () => strictest([boundarySetback(pack, building, 'boundary'), sideRearOpenSpace(solution.limits.sideRear, building.heightM)])
     const margins = boundaries.map((e) => {
-      const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : boundarySetback(pack, building, 'boundary')
+      const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : ordinary()
       const actual = nearest(e.i)
       return { actual, required, margin: actual - required.distanceM }
     })

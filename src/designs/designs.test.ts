@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test'
 import type { Vec2 } from '@/geo/projection'
 import { convexPolygon, starPolygon } from '@/geometry/arbitraries'
 import { intersection } from '@/geometry/clip'
-import { totalArea } from '@/geometry'
+import { segmentDistance, totalArea } from '@/geometry'
 import type { BuildingType, Plot, PlotLimits } from '@/plot/plot'
 import { loadPack, type PackId } from '@/rules'
 import { zoneFar } from '@/rules/zone-far'
@@ -13,6 +13,7 @@ import {
   packInterpretations,
   ratioOpenSpace,
   satisfies,
+  sideRearOpenSpace,
   solve,
   type Interpretations,
   type Solution,
@@ -291,10 +292,9 @@ describe('designs reach the floor area cap when the envelope has room', () => {
         (points: Vec2[], roadWidthM, packId, limits) => {
           const plot = { ...plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]), limits }
           const { solution, options } = designedUnder(packId, plot)
-          const lowRiseSetbacksUnmodelled = packId === 'mum-suburbs-res'
           for (const d of options) {
             assertInsideEnvelope(solution, d)
-            if (!lowRiseSetbacksUnmodelled) expect(computed(d).filter((c) => c.status === 'fail' && c.id !== 'front-open-space')).toEqual([])
+            expect(computed(d).filter((c) => c.status === 'fail' && c.id !== 'front-open-space')).toEqual([])
             assertHonestLimit(solution, d)
             assertNamedFromResult(solution, d)
           }
@@ -334,6 +334,78 @@ describe('design names follow the result', () => {
     const block = byId(designedUnder('dxb-ap', DUBAI_PLOT).options, 'low-rise')!
     expect(block.metrics.heightM).toBeCloseTo(27.9, 6)
     expect(block.name).toEqual({ form: 'block', storeys: 9, highRise: false })
+  })
+})
+
+describe('Mumbai side and rear open spaces (Table A) carved out of the envelope', () => {
+  const MUMBAI = loadPack('mum-suburbs-res')
+  const withoutTableA: typeof MUMBAI = { ...MUMBAI, sideRearOpenSpaces: undefined }
+  const designedWith = (regionPack: typeof MUMBAI, plot: Plot) => {
+    const solution = solve(plot, regionPack, packInterpretations(regionPack))
+    return { solution, options: designs(solution) }
+  }
+  const SMALL_PLOT = plotFromMetres(rectangle(10, 12), [{ edge: 0, widthM: 9 }])
+
+  function clearanceM(solution: Solution, polygons: Design['plates']['footprint'], edge: number): number {
+    const { ring } = solution.site
+    const [a, b] = [ring[edge], ring[(edge + 1) % ring.length]]
+    return Math.min(...polygons.flatMap((polygon) => polygon.outer.map((p, i) => segmentDistance(p, polygon.outer[(i + 1) % polygon.outer.length], a, b))))
+  }
+
+  const lowestClearanceM = (solution: Solution, d: Design) => {
+    const boundaries = solution.site.edges.flatMap((edge, i) => (edge.roadWidthM === null ? [i] : []))
+    return Math.min(...d.plates.floors.flatMap((floor) => boundaries.map((edge) => clearanceM(solution, floor.polygons, edge))))
+  }
+
+  it('keeps every floor of every design outside the side and rear open space Table A asks for the design’s full height', () => {
+    fc.assert(
+      fc.property(fc.oneof(convexPolygon(10), starPolygon(16)), fc.double({ min: 4, max: 40, noNaN: true }), (points: Vec2[], roadWidthM) => {
+        const { solution, options } = designedWith(MUMBAI, plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]))
+        for (const d of options) {
+          const requiredM = sideRearOpenSpace(solution.limits.sideRear, d.metrics.heightM).distanceM
+          expect(lowestClearanceM(solution, d)).toBeGreaterThanOrEqual(requiredM - 1e-3)
+        }
+      }),
+      { numRuns: 40 },
+    )
+  })
+
+  it('holds the slab on the 20,118 sq ft plot on 5 m roads 3.6 m off both neighbours, so its footprint shrinks and it still reaches the cap', () => {
+    const before = byId(designedWith(withoutTableA, MUMBAI_PLOT).options, 'slab')!
+    const { solution, options } = designedWith(MUMBAI, MUMBAI_PLOT)
+    const after = byId(options, 'slab')!
+    expect(solution.limits.sideRear?.plotClass).toBe('large')
+    expect(solution.envelopes[0].tiers[0].setbacks.map((s) => s.distanceM)).toEqual([4.5, 4.5, 3.6, 3.6])
+    expect(after.metrics.footprintSqm).toBeLessThan(before.metrics.footprintSqm - 50)
+    expect([before.limitedBy, after.limitedBy]).toEqual(['far', 'far'])
+    expect(after.checks.find((c) => c.id === 'boundary-setback')).toMatchObject({ status: 'pass', limit: 3.6 })
+  })
+
+  it('holds a tall design on a 10 m × 12 m plot H/5 off its neighbours on every floor, not 3.6 m on the lower ones', () => {
+    const before = designedWith(withoutTableA, SMALL_PLOT).options
+    const { solution, options } = designedWith(MUMBAI, SMALL_PLOT)
+    expect(solution.limits.sideRear?.plotClass).toBe('small')
+    expect(before.map((d) => d.limitedBy)).toEqual(['far', 'far'])
+    expect(byId(before, 'slab')!.checks.find((c) => c.id === 'boundary-setback')?.status).toBe('fail')
+    expect(options.map((d) => [d.metrics.storeys, d.limitedBy])).toEqual([
+      [6, 'envelope'],
+      [6, 'envelope'],
+    ])
+    for (const d of options) {
+      expect(lowestClearanceM(solution, d)).toBeGreaterThanOrEqual(d.metrics.heightM / 5 - 1e-3)
+      expect(lowestClearanceM(solution, d)).toBeGreaterThan(3.6)
+      expect(d.metrics.gfaSqm).toBeLessThan(solution.farCap.maxGfaSqm)
+      const check = d.checks.find((c) => c.id === 'boundary-setback')
+      expect(check?.status).toBe('pass')
+      expect(check && 'limit' in check ? check.limit : 0).toBeCloseTo(d.metrics.heightM / 5, 9)
+      expect(computed(d).filter((c) => c.status === 'fail')).toEqual([])
+    }
+  })
+
+  it('draws nothing above 70 m on the smaller plot class, where Table A is blank', () => {
+    const { solution } = designedWith(MUMBAI, plotFromMetres(rectangle(30, 30), [{ edge: 0, widthM: 40 }]))
+    expect(solution.limits.sideRear?.plotClass).toBe('small')
+    expect(solution.envelopes[0].prisms.at(-1)!.topM).toBeLessThanOrEqual(70)
   })
 })
 

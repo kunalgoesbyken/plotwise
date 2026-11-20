@@ -167,8 +167,19 @@ function bestPlacement(solution: Solution, id: TypologyId): Placed | null {
   return placements.reduce<Placed | null>((best, next) => (!best || next.fit.programme.farSqm > best.fit.programme.farSqm ? next : best), null)
 }
 
+function heldPlacement(solution: Solution, id: TypologyId): Placed | null {
+  if (solution.holds.length === 0) return bestPlacement(solution, id)
+  let best: Placed | null = null
+  for (const { envelopes } of solution.holds) {
+    const placed = bestPlacement({ ...solution, envelopes }, id)
+    if (placed && (!best || placed.fit.programme.farSqm > best.fit.programme.farSqm + AREA_TOLERANCE_SQM)) best = placed
+    if (best && reachesCap(solution, best.fit)) break
+  }
+  return best
+}
+
 function design(solution: Solution, id: TypologyId): Design | null {
-  const placed = bestPlacement(solution, id)
+  const placed = heldPlacement(solution, id)
   if (!placed) return null
   const { massing, fit } = placed
   const plates = stack(fit.floors)

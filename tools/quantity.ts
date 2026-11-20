@@ -114,6 +114,13 @@ const PERCENT = 'รอยละ'
 const PERCENT_AFTER = ['%', 'percent']
 const TIMES = ['เทา', 'times']
 
+const SHARE_OF_HEIGHT = /^h\/(\d+(?:\.\d+)?)$/
+
+function shareOfHeight(s: string): number | undefined {
+  const divisor = Number(SHARE_OF_HEIGHT.exec(s)?.[1])
+  return divisor > 0 ? 1 / divisor : undefined
+}
+
 const suffix = (s: string, endings: readonly string[]) => endings.find((ending) => s.endsWith(ending) && s.length > ending.length)
 
 export function parseQuantity(token: string): number {
@@ -123,6 +130,8 @@ export function parseQuantity(token: string): number {
   if (percent) return parseNumber(s.slice(0, -percent.length)) / 100
   const times = suffix(s, TIMES)
   if (times) return parseNumber(s.slice(0, -times.length))
+  const ofHeight = shareOfHeight(s)
+  if (ofHeight !== undefined) return ofHeight
   if (s.startsWith(ORDINAL)) return parseNumber(s.slice(ORDINAL.length))
   const pair = /^(\d+(?:\.\d+)?)(ใน|:|ตอ|\/)(\d+(?:\.\d+)?)$/.exec(s)
   if (pair) return Number(pair[1]) / Number(pair[3])

@@ -47,12 +47,12 @@ describe('regions', () => {
     expect([REGIONS.custom.areaUnit, MONEY_REGIONS.custom.currency]).toEqual(['sqm', null])
   })
 
-  it('reads Mumbai from the DCPR 2034 draft: unverified, side and rear open space entered, FSI, INR, sq ft and carpet area', () => {
+  it('reads Mumbai from the DCPR 2034 draft: unverified, nothing entered for the plot, FSI, INR, sq ft and carpet area', () => {
     const { mum } = REGIONS
     const pack = loadPack(mum.packId)
     expect([mum.rules, pack.verification]).toEqual(['draftPack', 'unverified'])
-    expect(plotLimitFields(pack)).toEqual(['boundarySetbackM'])
-    expect(mum.limitTerms.fields.boundarySetbackM.value).toBe('Side and rear open space')
+    expect(plotLimitFields(pack)).toEqual([])
+    expect(mum.limitTerms).toBeNull()
     expect(mum.areaTerms).toMatchObject({ ratio: 'FSI', saleable: 'carpet area' })
     expect([mum.areaUnit, MONEY_REGIONS.mum.currency, MONEY_REGIONS.mum.prices]).toEqual(['sqft', 'INR', null])
     expect(mum.cityPlan.version).toBe('DCPR 2034 as sanctioned in 2018')

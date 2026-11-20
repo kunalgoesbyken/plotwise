@@ -81,8 +81,14 @@ describe('parseQuantity', () => {
     expect(parseQuantity('1/2')).toBe(0.5)
   })
 
+  it('reads a share of the building height written as H over a number', () => {
+    expect(parseQuantity('H/5')).toBe(0.2)
+    expect(parseQuantity('H/4')).toBe(0.25)
+    expect(parseQuantity('h / 4')).toBe(0.25)
+  })
+
   it('rejects anything it cannot read', () => {
-    for (const bad of ['', 'banana', '%', 'per cent', 'times', '1/', 'eleven', 'เมตร', 'สบิ สบิ', '1 ใน', 'ร้อยละ', '๗ : ']) expect(() => parseQuantity(bad)).toThrow()
+    for (const bad of ['', 'banana', '%', 'per cent', 'times', '1/', 'H/', 'H/0', 'W/5', 'eleven', 'เมตร', 'สบิ สบิ', '1 ใน', 'ร้อยละ', '๗ : ']) expect(() => parseQuantity(bad)).toThrow()
   })
 
   it('round-trips integers written in Thai digits', () => {

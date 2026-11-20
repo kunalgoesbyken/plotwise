@@ -1,4 +1,4 @@
-import type { Comparator } from '@/rules'
+import type { Comparator, Range } from '@/rules'
 import { areaToDisplay, type AreaUnit } from '@/units/area'
 import { LOCALE, t } from './messages'
 
@@ -41,6 +41,15 @@ export function formatQuantity(value: number, quantity: Quantity): string {
 }
 
 export const formatComparator = (cmp: Comparator) => COMPARATORS[cmp]
+
+export const formatBound = ({ cmp, value }: { readonly cmp: Comparator; readonly value: number }, quantity: Quantity) =>
+  `${formatComparator(cmp)} ${formatQuantity(value, quantity)}`
+
+export function formatRange({ min, max }: Range, quantity: Quantity): string {
+  if (min && max) return t('range.between', { min: formatBound(min, quantity), max: formatBound(max, quantity) })
+  const only = min ?? max
+  return only ? formatBound(only, quantity) : t('range.any')
+}
 
 export const formatList = (items: readonly string[]) => LIST_FORMAT.format(items)
 

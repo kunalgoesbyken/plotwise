@@ -368,31 +368,11 @@ export type RegionId = keyof typeof MONEY_REGIONS
 
 type Term = { readonly value: string; readonly source: string }
 
-const DCPR_2034 =
-  'Greater Mumbai Development Control and Promotion Regulations 2034, sanctioned text of 8 May 2018 (MCGM), https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf'
-
 export const PURCHASE_USE_ORDER =
   'assumption: a design pays only for the floor area it uses above the free cap (basic FSI and any area in lieu of a road strip), up to what is bought. Premium FSI and TDR may be used in any order, so that area is split between them in proportion to what is bought; fungible area, which sits on top of the permissible total, is used last'
 
 export const CARPET_RATIO_NOTE =
   'For comparison only: the IGR Maharashtra Ready Reckoner guidelines for 2025-26 and 2026-27 (instruction 5) take built-up area as 1.1 × carpet area when valuing a flat for stamp duty, with balconies valued separately. That is a valuation rule, not a building rule, so it is not used here'
-
-export const DCPR_TERMS = {
-  document: {
-    value: 'DCPR 2034, Table A',
-    source: `${DCPR_2034}, PDF page 288, Reg 41(2)(i)(a): "The open spaces on all sides except the front side of a building shall be as follows: Table A". The text layer of Table A merges its cells, so its values are entered for each plot`,
-  },
-  use: {
-    value: 'Residential (R zone), Suburbs and Extended Suburbs',
-    source: `${DCPR_2034}, PDF page 127, Reg 30(A)(1) Table 12 Sr II(iii): "The remaining area in Suburbs and Extended Suburbs, Residential/ Commercial"`,
-  },
-  fields: {
-    boundarySetbackM: {
-      value: 'Side and rear open space',
-      source: `${DCPR_2034}, PDF page 288, Table A: "Side & rear marginal open space", by building height and plot size`,
-    },
-  },
-} as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }
 
 const DUBAI_BUILDING_CODE =
   'Dubai Municipality, Dubai Building Code, 2021 Edition, https://dmpmedia.dm.gov.ae/uploads/2021/12/Dubai%20Building%20Code_English_2021%20Edition_compressed.pdf'

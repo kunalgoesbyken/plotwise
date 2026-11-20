@@ -1,5 +1,5 @@
 import { segmentDistance, tieredEnvelope, type Prism, type Tier } from '@/geometry'
-import type { Site } from '@/plot/site'
+import { mainRoad, type Site } from '@/plot/site'
 import type { Bound, RulePack } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
 import { satisfies } from './bound'
@@ -15,6 +15,7 @@ import {
   strictest,
   type Setback,
 } from './setbacks'
+import { sideRearCeilingM, sideRearOpenSpace, type SideRearLimit } from './side-rear'
 
 const STOREY_TOLERANCE = 1e-9
 
@@ -35,22 +36,19 @@ export type EnvelopeInput = {
   readonly site: Site
   readonly floorToFloorM: number
   readonly planLimitM: number | null
+  readonly sideRear: SideRearLimit | null
+  readonly heldStoreys: number | null
 }
 
-export function mainRoad({ edges }: Site): number {
-  return edges.reduce((best, edge, i) => {
-    const current = edges[best]
-    if (edge.roadWidthM === null) return best
-    if (current.roadWidthM === null || edge.roadWidthM > current.roadWidthM) return i
-    return edge.roadWidthM === current.roadWidthM && edge.lengthM > current.lengthM ? i : best
-  }, 0)
-}
+const heldTo = ({ heldStoreys }: EnvelopeInput, storeys: number) => Math.min(storeys, heldStoreys ?? storeys)
 
-function baseSetbacks({ pack, readings, site }: EnvelopeInput, building: Building): Setback[] {
+function baseSetbacks(input: EnvelopeInput, building: Building): Setback[] {
+  const { pack, readings, site, sideRear, floorToFloorM, heldStoreys } = input
   const { frontOpenSpace } = pack
   const front = frontOpenSpace && readings['front-open-space'] === 'always' ? mainRoad(site) : -1
+  const sideRearSpace = sideRearOpenSpace(sideRear, (heldStoreys ?? 1) * floorToFloorM)
   return site.edges.map((edge, i) => {
-    if (edge.roadWidthM === null) return boundarySetback(pack, building, 'boundary')
+    if (edge.roadWidthM === null) return strictest([boundarySetback(pack, building, 'boundary'), sideRearSpace])
     const frontSpace = frontOpenSpace && i === front ? [frontOpenSpaceDepth(frontOpenSpace, building.storeys)] : []
     return strictest([roadSetback(pack, building, edge.roadWidthM), boundarySetback(pack, building, 'road'), ...frontSpace])
   })
@@ -109,7 +107,7 @@ function roadHeightLimitM(input: EnvelopeInput): number {
 }
 
 function ceilingM(input: EnvelopeInput): number {
-  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input))
+  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input), sideRearCeilingM(input.sideRear))
   return Number.isFinite(ceiling) ? ceiling : ASSUMPTIONS.unboundedHeightStoreys.value * input.floorToFloorM
 }
 
@@ -122,11 +120,11 @@ function belowHighRiseStoreys(input: EnvelopeInput, highRise: Bound): number {
 export function ordinaryEnvelope(input: EnvelopeInput): Envelope {
   const f = input.floorToFloorM
   const { buildingClasses } = input.pack
-  const storeys = buildingClasses ? belowHighRiseStoreys(input, buildingClasses.highRiseFromHeightM) : storeysWithin(ceilingM(input), f)
+  const storeys = heldTo(input, buildingClasses ? belowHighRiseStoreys(input, buildingClasses.highRiseFromHeightM) : storeysWithin(ceilingM(input), f))
   return envelope(input, 'ordinary', { heightM: storeys * f, storeys, floorAreaSqm: 0 })
 }
 
 export function highRiseEnvelope(input: EnvelopeInput): Envelope {
-  const storeys = storeysWithin(ceilingM(input), input.floorToFloorM)
+  const storeys = heldTo(input, storeysWithin(ceilingM(input), input.floorToFloorM))
   return envelope(input, 'highRise', { heightM: storeys * input.floorToFloorM, storeys, floorAreaSqm: Infinity })
 }

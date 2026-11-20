@@ -117,6 +117,19 @@ describe('checkPack on the Mumbai draft', () => {
     expect(change((p) => void (p.lowRiseOpenSpaces!.rows[1].plotAreaSqm.min!.value = 31))).toContain('lowRiseOpenSpaces.rows')
   })
 
+  it('flags Table A rows with a gap in height, an open space that shrinks as the building grows, or a share out of range', () => {
+    const rows = (pack: RulePack) => pack.sideRearOpenSpaces!.largePlotRows
+    const share = (pack: RulePack, i: number) => {
+      const { distance } = rows(pack)[i]
+      if (distance.kind !== 'shareOfHeight') throw new Error('a share of the height')
+      return distance
+    }
+    expect(change((p) => void (rows(p)[1].heightM.min!.value = 35))).toContain('sideRearOpenSpaces.largePlotRows has a gap')
+    expect(change((p) => void (share(p, 2).maxM!.value = 10))).toContain('sideRearOpenSpaces.largePlotRows decreases')
+    expect(change((p) => void (share(p, 0).share.value = 4))).toContain('sideRearOpenSpaces.largePlotRows.0.share')
+    expect(change((p) => void (rows(p)[3].heightM.max = { ...rows(p)[2].heightM.max!, value: 200 }))).toContain('does not cover the tallest buildings')
+  })
+
   it('flags parking that asks more tenements per space as tenements grow', () => {
     expect(change((p) => void (p.parking[0].condo?.kind === 'unitsPerSpaceBySize' && (p.parking[0].condo.bands[3].unitsPerSpace.value = 2)))).toContain('increases')
   })

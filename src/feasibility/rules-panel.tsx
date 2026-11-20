@@ -5,31 +5,22 @@ import { edgeName } from '@/editor/map-features'
 import { useEditorState, useRegion } from '@/editor/plot-store'
 import { WarningCircleIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
-import type { Bound, Range } from '@/rules'
 import { isParkingUnset, negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
-import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
+import { formatBound, formatList, formatQuantity, formatRange } from '@/text/format'
 import { t } from '@/text/messages'
-import type { AreaUnit } from '@/units/area'
 import { useFeasibility } from './feasibility-provider'
 import { Interpretations } from './interpretations'
 import { LimitGroup, LimitRow } from './limit-row'
+import { LowRiseNote } from './low-rise-note'
 import { demandCites, demandText } from './parking-text'
 import { WhenReady, type Ready } from './ready'
 import { SetbackTable } from './setback-table'
+import { SideRearGroup } from './side-rear-group'
 import { siteEdgeNames } from './site-edges'
 import { Sources } from './sources'
 import { VerificationNote } from './verification-note'
 
-const bound = ({ cmp, value }: Pick<Bound, 'cmp' | 'value'>, quantity: Quantity) =>
-  `${formatComparator(cmp)} ${formatQuantity(value, quantity)}`
-
 const percent = (share: number) => formatQuantity(share, 'percent')
-
-function rangeText({ min, max }: Range, area: AreaUnit): string {
-  if (min && max) return t('range.between', { min: bound(min, area), max: bound(max, area) })
-  const only = min ?? max
-  return only ? bound(only, area) : t('range.any')
-}
 
 function Caution({ title, children }: { title?: string; children: ReactNode }) {
   return (
@@ -106,7 +97,7 @@ function FloorArea({ solution }: Pick<Ready, 'solution'>) {
         <LimitRow
           key={option.kind}
           label={t(`limit.purchase.${option.kind}`)}
-          value={option.maxExtraGfaSqm > 0 ? bound({ cmp: 'lte', value: option.maxExtraGfaSqm / farAreaSqm }, 'ratio') : t('value.none')}
+          value={option.maxExtraGfaSqm > 0 ? formatBound({ cmp: 'lte', value: option.maxExtraGfaSqm / farAreaSqm }, 'ratio') : t('value.none')}
           detail={
             option.maxExtraGfaSqm > 0
               ? t('limit.purchase.detail', { area: formatQuantity(option.maxExtraGfaSqm, areaUnit), chosen: formatQuantity(option.chosenGfaSqm, areaUnit) })
@@ -134,7 +125,7 @@ function FloorArea({ solution }: Pick<Ready, 'solution'>) {
       {limits.coverage && (
         <LimitRow
           label={t('limit.coverage')}
-          value={bound({ cmp: 'lte', value: limits.coverage.share }, 'percent')}
+          value={formatBound({ cmp: 'lte', value: limits.coverage.share }, 'percent')}
           detail={t('limit.coverage.detail', { area: formatQuantity(limits.coverage.maxFootprintSqm, areaUnit) })}
           cites={limits.coverage.cites}
         />
@@ -151,7 +142,7 @@ function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number })
       {ratio && (
         <LimitRow
           label={t('limit.open-space-ratio')}
-          value={bound({ cmp: 'gte', value: ratio.value }, 'percent')}
+          value={formatBound({ cmp: 'gte', value: ratio.value }, 'percent')}
           detail={t('limit.open-space-ratio.detail', { area: formatQuantity(ratioOpenSpace(limits, maxGfaSqm).value, areaUnit) })}
           cites={ratio.cites}
         />
@@ -159,7 +150,7 @@ function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number })
       {permeable && (
         <LimitRow
           label={t('limit.permeable')}
-          value={bound({ cmp: 'gte', value: permeable.value }, 'percent')}
+          value={formatBound({ cmp: 'gte', value: permeable.value }, 'percent')}
           detail={t(`limit.permeable.${permeable.base}`)}
           cites={permeable.cites}
         />
@@ -168,7 +159,7 @@ function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number })
         <LimitRow
           key={i}
           label={t('limit.open-space-minimum')}
-          value={bound({ cmp: 'gte', value: minimum.share }, 'percent')}
+          value={formatBound({ cmp: 'gte', value: minimum.share }, 'percent')}
           detail={t(`limit.open-space-minimum.${minimum.base}.${minimum.scope}`)}
           cites={minimum.cites}
         />
@@ -198,7 +189,7 @@ function Height({ solution }: Pick<Ready, 'solution'>) {
       {highRise && (
         <LimitRow
           label={t('limit.high-rise-from')}
-          value={bound(highRise.fromHeightM, 'm')}
+          value={formatBound(highRise.fromHeightM, 'm')}
           detail={t('limit.high-rise-from.detail')}
           cites={[highRise.fromHeightM.cite]}
         />
@@ -225,13 +216,13 @@ function HighRise({ limits }: { limits: Limits }) {
       {access.map((band, i) => (
         <LimitRow
           key={i}
-          label={t('limit.high-rise-access', { area: rangeText(band.floorAreaSqm, areaUnit) })}
+          label={t('limit.high-rise-access', { area: formatRange(band.floorAreaSqm, areaUnit) })}
           value={t(band.qualifies ? 'value.met' : 'value.not-met')}
-          detail={t('limit.high-rise-access.detail', { road: bound(band.roadWidthM, 'm'), frontage: bound(band.frontageM, 'm') })}
+          detail={t('limit.high-rise-access.detail', { road: formatBound(band.roadWidthM, 'm'), frontage: formatBound(band.frontageM, 'm') })}
           cites={[band.roadWidthM.cite, band.frontageM.cite]}
         />
       ))}
-      <LimitRow label={t('limit.fire-lane')} value={bound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
+      <LimitRow label={t('limit.fire-lane')} value={formatBound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
       <LimitRow
         label={t('limit.high-rise-far', areaTerms)}
         value={t('value.far', { ratio: formatQuantity(farMax.value, 'ratio') })}
@@ -271,10 +262,10 @@ function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
     <LimitGroup title={title}>
       <LimitRow
         label={t(`limit.use.${use.measure}`)}
-        value={bound({ cmp: negate(use.threshold.cmp), value: use.threshold.value }, quantity)}
+        value={formatBound({ cmp: negate(use.threshold.cmp), value: use.threshold.value }, quantity)}
         detail={t('limit.use.unless', {
-          road: bound(use.roadWidthM, 'm'),
-          station: bound(station, 'm'),
+          road: formatBound(use.roadWidthM, 'm'),
+          station: formatBound(station, 'm'),
           status: exemptionText(use, siteEdgeNames(plot, solution.site)),
         })}
         cites={[...use.cites, ...exemptionCites]}
@@ -348,6 +339,8 @@ function Rules({ plot, solution }: Ready) {
       <FloorArea solution={solution} />
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />
+      <SideRearGroup limit={limits.sideRear} />
+      <LowRiseNote solution={solution} className="mt-3" />
       <Height solution={solution} />
       <HighRise limits={limits} />
       <Use plot={plot} solution={solution} />

@@ -1,0 +1,56 @@
+Greater Mumbai Development Control and Promotion Regulations 2034 (DCPR 2034), sanctioned text, Table A of Reg 41(2)(i)(a)
+Transcribed from the page image, double-checked against it.
+
+Source PDF: https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf
+Source PDF SHA-256: b417e528b717c76f26a1e4ad9acfebb503e5e3069a8ce4456abccc7b10b15d43 (same file as sources/raw/dcpr2034-mcgm.pdf; downloaded again 2026-11-20 and compared)
+Page: PDF page 288 (printed page 245). The table does not continue on page 289.
+
+Why this file exists: the PDF text layer of page 288 (sources/dcpr2034-mcgm.txt, page 288, lines 32-59) merges and dashes the cells of Table A, so which cell holds which value cannot be read from it.
+
+How it was made, 2026-11-20:
+1. Rendered PDF page 288, table area only (PDF points x 67.4-528.8, y 429.4-737.5), at 400 dpi with PyMuPDF 1.27.2 (MuPDF 1.27.2).
+2. OCR with tesseract.js 7.0.0 (Tesseract LSTM engine, English model "eng"), page segmentation mode 6, interword spaces preserved. Raw output, unedited: sources/raw/dcpr2034-mcgm-p288-table-a.ocr.txt
+3. Double-checked against the page image: every cell of the OCR output was compared with the rendered page image, and the transcription below lays out one cell per line.
+
+Corrections to the raw OCR:
+- Row 1, second plot column, light and ventilation: OCR read "45 m in case of"; the page reads "4.5 m in case of".
+- Row 1, height: OCR read "Upto32m"; the page reads "Up to 32 m".
+- Row 1, both dead-wall cells: OCR read "3.6m"; the page reads "3.6 m".
+- Row 2, height: OCR read "More than32 | m & up to | 70m"; the page reads "More than 32 m & up to 70 m".
+- Row 2, first plot column, dead wall: OCR read "6m"; the page reads "6 m".
+- Row 2, second plot column, light and ventilation: OCR read "maximum ... 12m"; the page reads "maximum 12 m".
+- Rows 3 and 4, height: OCR read "120m"; the page reads "120 m".
+- Rows 3 and 4, first plot column: OCR missed the dashes; the page shows "------------------" across the merged light-and-ventilation and dead-wall cells of that column.
+- Rows 3 and 4, second plot column, dead wall: OCR read "9m"; the page reads "9 m".
+- Row 4, second plot column, light and ventilation: OCR read "20m"; the page reads "20 m".
+- Header: OCR read "20m" under the second plot column; the page reads "20 m". OCR noise "y", "Co" and the cell borders read as "|" were dropped.
+- Line breaks inside a cell were joined, so each cell is on one line.
+
+Layout of the transcription on page 288 of this file: the column headings first, then one line per height row and one line per cell, as "row | plot column | open space | cell text". Plot column A is "Plot up to 1000 sq. m or where average width/depth of plot is less than 20 m"; plot column B is "Plot size more than 1000 sq. m and average width/depth of plot more 20 m". Pages 2 to 287 of this file are empty so that page numbers match the PDF.
+Table A
+Columns: Sr. No. | Ht. of Building (H) | Side & rear marginal open space
+Plot column A: Plot up to 1000 sq. m or where average width/depth of plot is less than 20 m
+Plot column B: Plot size more than 1000 sq. m and average width/depth of plot more 20 m
+Open space columns under each plot column: Light & ventilation | Dead wall
+
+1 | Ht. of Building (H) | Up to 32 m
+1 | A | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/5
+1 | A | Dead wall | 3.6 m
+1 | B | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/4
+1 | B | Dead wall | 3.6 m
+
+2 | Ht. of Building (H) | More than 32 m & up to 70 m
+2 | A | Light & ventilation | H/5 subject to maximum 12 m
+2 | A | Dead wall | 6 m
+2 | B | Light & ventilation | H/4 subject to maximum 12 m
+2 | B | Dead wall | 6m
+
+3 | Ht. of Building (H) | More than 70m & up to 120 m
+3 | A | Light & ventilation and Dead wall (one merged cell) | ------------------
+3 | B | Light & ventilation | H/4 or 16 m Max.
+3 | B | Dead wall | 9 m
+
+4 | Ht. of Building (H) | More than 120 m
+4 | A | Light & ventilation and Dead wall (one merged cell) | ------------------
+4 | B | Light & ventilation | 20 m
+4 | B | Dead wall | 9 m

@@ -6,7 +6,7 @@ import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
 import type { RegionId } from '@/solve'
-import { AFFECTION_PLAN_TERMS, DCPR_TERMS } from '@/solve/assumptions'
+import { AFFECTION_PLAN_TERMS } from '@/solve/assumptions'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 
@@ -157,7 +157,7 @@ export const REGIONS = {
     country: 'India',
     packId: 'mum-suburbs-res',
     rules: 'draftPack',
-    limitTerms: DCPR_TERMS,
+    limitTerms: null,
     floors: 'storeys',
     example: { plot: MUMBAI_EXAMPLE_PLOT, roadsEstimated: true, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
     areaUnit: 'sqft',

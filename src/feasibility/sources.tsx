@@ -24,10 +24,12 @@ function CiteItem({ cite }: { cite: Cite }) {
   const { pack } = useFeasibility()
   if (!isSourceCite(cite)) return <EnteredItem field={cite.field} />
   const source = pack.sources[cite.source]
+  const transcribed = source?.textLayer === 'transcribedScan'
   return (
     <li className="flex flex-col gap-0.5 py-1.5 text-xs">
       <p className="font-medium text-foreground">{source?.name ?? cite.source}</p>
-      <p className="text-muted-foreground">{t('source.location', { page: cite.page, line: cite.line })}</p>
+      {transcribed && <p className="w-fit rounded-sm bg-muted px-1.5 py-0.5 font-medium text-foreground">{t('source.transcribed')}</p>}
+      <p className="text-muted-foreground">{t(transcribed ? 'source.location.transcribed' : 'source.location', { page: cite.page, line: cite.line })}</p>
       {source && (
         <a
           href={`${source.url}#page=${cite.page}`}

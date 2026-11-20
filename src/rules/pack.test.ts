@@ -105,7 +105,7 @@ describe('mum-suburbs-res draft values, read by hand from DCPR 2034 as sanctione
   }
 
   it('names the language of each official text, so links say English for Mumbai and Thai for Bangkok', () => {
-    expect(Object.values(pack.sources).map((source) => source.language)).toEqual(['en'])
+    expect(Object.values(pack.sources).map((source) => source.language)).toEqual(['en', 'en'])
     expect(new Set(Object.values(loadPack('bkk-y9').sources).map((source) => source.language))).toEqual(new Set(['th']))
   })
 
@@ -166,8 +166,27 @@ describe('mum-suburbs-res draft values, read by hand from DCPR 2034 as sanctione
     expect(pack.carpetArea?.definition).toMatchObject({ clause: 'Reg 2(22)' })
   })
 
-  it('takes side and rear open spaces per plot, FSI on the plot left after widening and twice the handed-over land in lieu', () => {
-    expect(pack.plotSetbacks).toMatchObject({ kind: 'plotSpecific', edges: 'boundary' })
+  it('reads Table A side and rear open spaces from the page transcribed from the scan, by plot class and building height', () => {
+    const rule = pack.sideRearOpenSpaces!
+    const distance = ({ distance: d }: (typeof rule.smallPlotRows)[number]) =>
+      d.kind === 'fixed' ? d.distanceM.value : [d.share.value, d.minM?.value, d.maxM?.value]
+    expect([rule.smallPlot.areaSqm, rule.smallPlot.averageWidthOrDepthM].map((b) => `${b.cmp} ${b.value}`)).toEqual(['lte 1000', 'lt 20'])
+    expect(rule.smallPlotRows.map((row) => [...edges(row.heightM), distance(row)])).toEqual([
+      [undefined, 'lte 32', [0.2, 3.6, undefined]],
+      ['gt 32', 'lte 70', [0.2, undefined, 12]],
+    ])
+    expect(rule.largePlotRows.map((row) => [...edges(row.heightM), distance(row)])).toEqual([
+      [undefined, 'lte 32', [0.25, 3.6, undefined]],
+      ['gt 32', 'lte 70', [0.25, undefined, 12]],
+      ['gt 70', 'lte 120', [0.25, undefined, 16]],
+      ['gt 120', undefined, 20],
+    ])
+    const transcribed = cites([rule.smallPlot, rule.smallPlotRows, rule.largePlotRows])
+    expect(new Set(transcribed.map((cite) => pack.sources[cite.source].textLayer))).toEqual(new Set(['transcribedScan']))
+    expect(pack.plotSetbacks).toBeUndefined()
+  })
+
+  it('takes FSI on the plot left after widening and twice the handed-over land in lieu', () => {
     expect(pack.reservations).toMatchObject([{ target: { kind: 'perFrontage' }, farOn: 'net', inLieu: { multipleOfReserved: { value: 2 } } }])
   })
 
