@@ -140,12 +140,7 @@ function Limits({ region, fields }: { region: Region; fields: readonly PlotLimit
           <LimitInput key={field} field={field} value={draft.limits[field]} region={region} areaUnit={areaUnit} />
         ))}
       </ul>
-      {terms && (
-        <>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('limits.use', { use: terms.use.value, document: terms.document.value })}</p>
-          <TermSources terms={terms} />
-        </>
-      )}
+      {terms && <TermSources terms={terms} />}
     </PanelSection>
   )
 }

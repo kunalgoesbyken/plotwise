@@ -161,7 +161,6 @@ const en = {
   'limits.intro.affectionPlan':
     'Enter the values printed on the plot’s affection plan. Floor area or ratio, and height or floors, are needed; leave the rest blank if the plan does not state them.',
   'limits.intro.custom': 'Enter the limits you know. Floor area or ratio, and height or storeys, are needed; leave the rest blank to skip them.',
-  'limits.use': ({ use, document }: { use: string; document: string }) => `Pick the building type above that matches the ${use} on the ${document}.`,
   'input.comma': 'Use a point for decimals, as in 2.5. A comma may only group thousands, as in 5,000.',
   'limits.out-of-range': 'Out of range for a real plot, so it is not used. Check the number and its unit.',
   'limits.terms': 'Where these terms come from',
@@ -335,6 +334,9 @@ const en = {
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',
+  'building-type.hint': 'Pick the building type that matches your plot.',
+  'building-type.hint.covered': ({ region, use, document }: { region: string; use: string; document: string }) =>
+    `Pick the building type that matches your plot. ${region} rules: ${use} (${document}).`,
   'zone.check': 'Check your plot is in it',
   'transit.title': 'Mass transit',
   'transit.near': ({ distance }: { distance: string }) => `Within ${distance} of a BTS/MRT station`,

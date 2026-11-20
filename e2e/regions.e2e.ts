@@ -170,6 +170,22 @@ for (const viewport of [DESKTOP, PHONE]) {
   })
 }
 
+const BUILDING_TYPE_HINTS = [
+  { region: 'bkk', plot: lotAt([100.5268, 13.7236]), hint: 'Pick the building type that matches your plot. Bangkok rules: Brown zone · very high-density residential (BMA city plan).' },
+  { region: 'dxb', plot: DUBAI, hint: 'Pick the building type that matches your plot. Dubai rules: Authorized use (Affection plan).' },
+  { region: 'custom', plot: LONDON, hint: 'Pick the building type that matches your plot.' },
+] as const
+
+for (const { region, plot, hint } of BUILDING_TYPE_HINTS) {
+  test(`the building type under the ${region} rules says which rules it matches in one plain sentence`, async ({ page }) => {
+    await openLink(page, region, plot)
+    await goTo(page, 'Results')
+    const buildingType = page.getByRole('region', { name: 'Building type' })
+    await expect(buildingType).toContainText(hint)
+    await expect(buildingType).not.toContainText('above')
+  })
+}
+
 test('a link with limits beyond any real plot is refused with a message, on every reload', async ({ page }) => {
   const errors = collectErrors(page)
   await mockSite(page)
