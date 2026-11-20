@@ -43,7 +43,7 @@ function PlanLink({ plan }: { plan: Link }) {
   return (
     <>
       {' '}
-      <a href={plan.url} target="_blank" rel="noreferrer" className="underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground">
+      <a href={plan.url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground lg:min-h-0">
         {t('zone.confirm', { plan: plan.name })}
       </a>
     </>
