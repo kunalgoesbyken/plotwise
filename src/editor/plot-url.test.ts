@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
 import { roundLngLat } from './plot-draft'
-import { decodePlot, encodePlot } from './plot-url'
+import { decodePlot, encodePlot, isExampleLink } from './plot-url'
 
 const plot: Plot = {
   ring: [
@@ -101,5 +101,10 @@ describe('plot URL encoding', () => {
         decodePlot(`plot=${s}&roads=${s}&type=condo`)
       }),
     )
+  })
+
+  it('recognises the example link, with or without the leading # and beside the zone confirmation', () => {
+    for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(isExampleLink(hash)).toBe(true)
+    for (const hash of ['', '#', encodePlot(plot), '#examples']) expect(isExampleLink(hash)).toBe(false)
   })
 })
