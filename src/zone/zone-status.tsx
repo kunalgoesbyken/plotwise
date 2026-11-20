@@ -4,10 +4,13 @@ import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Button } from '@/ui/button'
-import type { ZoneVerdict } from './schema'
+import type { ZonePart, ZoneVerdict } from './verdict'
 import { useZoneGate } from './zone-gate'
 
 type Presentation = { readonly badge: string; readonly variant: 'default' | 'destructive' | 'secondary'; readonly text: string }
+
+const formatParts = (parts: readonly ZonePart[]) =>
+  parts.length === 1 ? parts[0].zone : parts.map(({ zone, share }) => `${zone} (${Math.round(share * 100)}%)`).join(', ')
 
 function presentationOf(verdict: ZoneVerdict): Presentation {
   switch (verdict.status) {
@@ -19,12 +22,14 @@ function presentationOf(verdict: ZoneVerdict): Presentation {
         variant: 'destructive',
         text: t('zone.outside', { zone: verdict.zone, covered: verdict.covered }),
       }
-    case 'mixed':
+    case 'straddles':
       return {
         badge: t('zone.badge.not-covered'),
         variant: 'destructive',
-        text: t('zone.mixed', { zones: verdict.zones.join(', '), covered: verdict.covered }),
+        text: t('zone.straddles', { parts: formatParts(verdict.parts), covered: verdict.covered }),
       }
+    case 'unsupported':
+      return { badge: t('zone.badge.not-covered'), variant: 'destructive', text: t('zone.unsupported', { parts: formatParts(verdict.parts) }) }
     case 'unknown':
       return { badge: t('zone.badge.unchecked'), variant: 'secondary', text: t(`zone.unknown.${verdict.reason}`) }
   }
@@ -61,11 +66,12 @@ export function ZoneStatus() {
 }
 
 export function ZoneHold() {
-  const { confirmable, confirm } = useZoneGate()
+  const { verdict, confirmable, confirm } = useZoneGate()
+  const refusal = verdict?.status === 'unsupported' ? t('zone.hold.unsupported') : t('zone.hold.refused')
   return (
     <section aria-label={t('zone.hold.label')} className="flex flex-col gap-3">
       <ZoneStatus />
-      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : t('zone.hold.refused')}</p>
+      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : refusal}</p>
       {confirmable && (
         <Button size="sm" variant="outline" className="self-start" onClick={confirm}>
           {t('zone.hold.confirm')}

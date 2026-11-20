@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test'
 import { encodePlot } from '../src/editor/plot-url'
 import { EXAMPLE_PLOT } from '../src/plot/example-plot'
+import { BROWN_ZONE, mockZoneStrips } from './zone-layers'
 
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+  await mockZoneStrips(page, 'bkk', [{ code: BROWN_ZONE, width: 1 }])
 })
 
 test('the landing page says what Plotwise does and opens the example in the app', async ({ page }) => {
@@ -13,6 +14,7 @@ test('the landing page says what Plotwise does and opens the example in the app'
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('See what a plot can hold before you buy it')
   await page.getByRole('link', { name: 'Try the example plot' }).first().click()
   await expect(page).toHaveURL(/\/app#plot=/)
+  await page.getByRole('button', { name: 'See results' }).click()
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
   expect(errors).toEqual([])
 })

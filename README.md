@@ -33,7 +33,7 @@ Thai legal PDFs ─► pointers ─► compiled rule pack ─► solve ─► li
                               │                                        │
 OpenStreetMap (Overpass) ─► /api/site ─────────────────────────────────┴─► map + 3D view
 Photon (OSM place search) ─► /api/geocode ─► live suggestions while typing
-BMA city-plan layer (ArcGIS) ─► /api/zone ─► is the plot in the covered zone?
+BMA city-plan layer (ArcGIS, queried from the browser) ─► share of the plot in each zone ─► is the plot in the covered zone?
 ```
 
 1. **Rules are compiled, never typed.**
@@ -53,7 +53,7 @@ BMA city-plan layer (ArcGIS) ─► /api/zone ─► is the plot in the covered 
    - the land value each design supports (a residual).
 
    Every rate and price is an editable assumption with its source, shown as "estimated". None of it is law.
-7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass), Photon and the BMA city-plan layer, with caching and input validation at the boundary. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
+7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass) and Photon, with caching and input validation at the boundary; the browser queries the BMA city-plan layer itself, because the BMA servers do not answer requests from outside Thailand. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
 
 ## Region and design system
 

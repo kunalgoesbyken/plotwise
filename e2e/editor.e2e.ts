@@ -97,7 +97,7 @@ test('draws a concave plot, marks a road, picks a type and restores it all from 
   const width = page.getByLabel('Road width on edge A–B, in metres')
   await expect(width).toBeFocused()
   await width.fill('16')
-  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await page.getByRole('button', { name: 'See results' }).click()
   await page.getByRole('radio', { name: 'Hotel' }).click()
 
   const plot = await plotInUrl(page)
@@ -176,6 +176,11 @@ test('the example plot opens on the roads step with its road selected and its wi
   await expect(page.getByRole('region', { name: 'Road frontage' })).toBeVisible()
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toHaveValue('12')
   await expect(page.getByRole('listitem').filter({ hasText: 'A–B' })).toHaveAttribute('aria-current', 'true')
+  await expect(page).toHaveURL(/#plot=/)
+  await page.getByRole('button', { name: 'See results' }).click()
+  await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
+  await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).click()
+  await expect(page.getByRole('region', { name: 'Road frontage' })).toBeVisible()
 })
 
 test('a plot opened from a link goes straight to the results', async ({ page }) => {
@@ -205,7 +210,7 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.type('8')
   await expect(site(page).getByText('Estimated from OpenStreetMap')).toBeHidden()
-  await page.getByRole('button', { name: 'See what you can build' }).focus()
+  await page.getByRole('button', { name: 'See results' }).focus()
   await page.keyboard.press('Enter')
   await page.getByRole('radio', { name: 'Condominium' }).focus()
   await page.keyboard.press('ArrowRight')
@@ -327,7 +332,7 @@ test('phone layout at 375 px: bottom sheet, no overflow, 44 px targets, drawing 
   await page.mouse.click(60, 260)
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeVisible()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
-  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await page.getByRole('button', { name: 'See results' }).click()
   await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
   await page.getByRole('tab', { name: 'Rules' }).click()
   await expect(page.getByRole('tabpanel', { name: 'Rules' })).toBeVisible()
