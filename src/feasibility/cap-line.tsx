@@ -5,21 +5,21 @@ import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import type { AreaUnit } from '@/units/area'
 
-export type CapFigures = {
-  readonly capSqm: number
-  readonly reached: boolean
-  readonly highRiseCostSqm: number | null
+export type CapFigures =
+  | { readonly kind: 'reached'; readonly capSqm: number }
+  | { readonly kind: 'short'; readonly capSqm: number; readonly highRiseCostSqm: number | null }
+
+export function capFigures(design: Design, { farCap }: Solution, highRiseCostSqm: number | null): CapFigures {
+  const capSqm = farCap.maxGfaSqm
+  return design.limitedBy === 'far' ? { kind: 'reached', capSqm } : { kind: 'short', capSqm, highRiseCostSqm }
 }
 
-export const capFigures = (design: Design, { farCap }: Solution, highRiseCostSqm: number | null): CapFigures => ({
-  capSqm: farCap.maxGfaSqm,
-  reached: design.limitedBy === 'far',
-  highRiseCostSqm,
-})
-
-export function capSentences({ capSqm, reached, highRiseCostSqm }: CapFigures, unit: AreaUnit) {
+export function capSentences(figures: CapFigures, unit: AreaUnit) {
+  const area = formatQuantity(figures.capSqm, unit)
+  if (figures.kind === 'reached') return { cap: t('cap.reached', { area }), cost: null }
+  const { highRiseCostSqm } = figures
   return {
-    cap: t(reached ? 'cap.reached' : 'cap.legal', { area: formatQuantity(capSqm, unit) }),
+    cap: t('cap.legal', { area }),
     cost: highRiseCostSqm === null ? null : t('cap.high-rise-cost', { area: formatQuantity(highRiseCostSqm, unit) }),
   }
 }

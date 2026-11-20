@@ -35,7 +35,7 @@ export function ResultsSummary({ children }: { children?: ReactNode }) {
       </p>
       <CapLine figures={cap} unit={areaUnit} className="mt-1" />
       <VerificationNote solution={solution} className="mt-1" />
-      {!cap.reached && (
+      {cap.kind === 'short' && (
         <p key={design.limitedBy} className="mt-1 animate-flash rounded text-xs leading-snug text-muted-foreground">
           {limiterText(design.limitedBy, solution)}
         </p>

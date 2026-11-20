@@ -9,11 +9,12 @@ import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
 const figures = exampleFigures()
+const costSqm = figures.cap.kind === 'short' ? figures.cap.highRiseCostSqm : null
 const sqm = (value: number) => formatQuantity(value, 'sqm')
 const buildable = sqm(figures.buildableSqm)
 const name = t('design.name', figures.designName)
 const capLine = `Legal cap ${sqm(figures.cap.capSqm)}.`
-const costLine = `High-rise rules cost this plot ${sqm(figures.cap.highRiseCostSqm ?? 0)}.`
+const costLine = `High-rise rules cost this plot ${sqm(costSqm ?? 0)}.`
 
 const fontSize = (locator: Locator) => locator.evaluate((element) => parseFloat(getComputedStyle(element).fontSize))
 
@@ -23,8 +24,8 @@ async function openBangkokExample(page: Page) {
 }
 
 test('the engine finds that the high-rise rules cost the Bangkok example floor area', () => {
-  expect(figures.cap.reached).toBe(false)
-  expect(figures.cap.highRiseCostSqm).toBeGreaterThan(0)
+  expect(figures.cap.kind).toBe('short')
+  expect(costSqm).toBeGreaterThan(0)
 })
 
 test('the Bangkok example leads with its largest design’s floor area, then the legal cap and what the high-rise rules cost it', async ({ page }) => {
