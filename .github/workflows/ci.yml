@@ -26,6 +26,17 @@ jobs:
       - run: bun run lint
       - run: bun test --path-ignore-patterns '**/performance.test.ts'
 
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile
+      - run: bun test src/designs/performance.test.ts src/geometry/performance.test.ts
+
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
