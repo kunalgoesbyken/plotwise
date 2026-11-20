@@ -9,11 +9,14 @@ export {
   type QuestionId,
 } from './interpretations'
 export {
+  farCapFor,
   highRiseAllows,
   stationDistance,
   type BonusMeasure,
   type ClassMembership,
   type Exemption,
+  type FarCap,
+  type FarMode,
   type HighRiseAccessBand,
   type Limits,
   type OpenSpaceMinimum,

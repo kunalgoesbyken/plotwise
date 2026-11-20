@@ -61,8 +61,8 @@ function envelopeOf(solution: Solution, kind: Envelope['kind']): Envelope | null
 
 const CAP_SEARCH_STEPS = 30
 
-function reachableSqm({ limits }: Solution, envelope: Envelope): number {
-  const maxGfaSqm = limits.far.maxGfaSqm
+function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number {
+  const maxGfaSqm = farCap.maxGfaSqm
   return envelope.kind === 'highRise' ? maxGfaSqm : Math.min(maxGfaSqm, limits.highRise.extraLargeFromFloorAreaSqm.value)
 }
 
@@ -125,7 +125,7 @@ function slab(solution: Solution): Massing | null {
 function podiumStoreys(solution: Solution, podium: FloorPlates): number {
   const top = podium.floors.at(-1)
   if (!top || podium.footprintSqm === 0) return 0
-  const building = { heightM: top.topM, storeys: podium.floors.length, floorAreaSqm: solution.limits.far.maxGfaSqm }
+  const building = { heightM: top.topM, storeys: podium.floors.length, floorAreaSqm: solution.farCap.maxGfaSqm }
   const parkingSqm = programme(solution, building).parkingSqm
   return Math.min(podium.floors.length, Math.max(1, Math.ceil(parkingSqm / podium.footprintSqm)))
 }

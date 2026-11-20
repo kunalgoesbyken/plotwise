@@ -23,6 +23,7 @@ import type { Programme } from './programme'
 
 export type CheckId =
   | 'far'
+  | 'far-bonus-measures'
   | 'high-rise-far'
   | 'open-space-ratio'
   | 'permeable'
@@ -124,14 +125,14 @@ function openSpaceNeed({ solution, plates, programme, building }: DesignFacts): 
 }
 
 function openSpaceChecks(facts: DesignFacts): Check[] {
-  const { limits, site } = facts.solution
+  const { limits, site, farCap } = facts.solution
   const need = openSpaceNeed(facts)
   const openSqm = site.areaSqm - facts.plates.footprintSqm
   const ratio = ratioOpenSpace(limits, need.farSqm)
   const permeable = permeableArea(limits, need, openSqm)
   const minimum = buildingControlOpenSpace(limits, need)
   return [
-    measured('far', need.farSqm, 'lte', limits.far.maxGfaSqm, 'sqm', limits.far.cites),
+    measured('far', need.farSqm, 'lte', farCap.maxGfaSqm, 'sqm', farCap.cites),
     measured('open-space-ratio', openSqm, 'gte', ratio.value, 'sqm', ratio.cites),
     measured('permeable', openSqm, 'gte', permeable.value, 'sqm', permeable.cites),
     measured('open-space-minimum', openSqm, 'gte', minimum.value, 'sqm', minimum.cites),
@@ -242,11 +243,18 @@ function highRiseChecks({ solution, building, programme, ground }: Context): Che
   ]
 }
 
+function farBonusChecks({ solution }: DesignFacts): Check[] {
+  if (solution.farCap.mode === 'standard') return []
+  const cites = solution.limits.farBonus.measures.filter((m) => m.eligible).flatMap((m) => m.cites)
+  return [manual('far-bonus-measures', cites)]
+}
+
 export function checksFor(facts: DesignFacts): Check[] {
   const [ground, ...upper] = levelsOf(facts)
   const context = { ...facts, ground, levels: [ground, ...upper] }
   return [
     ...openSpaceChecks(context),
+    ...farBonusChecks(context),
     ...setbackChecks(context),
     frontOpenSpaceCheck(context),
     ...conditionChecks(context),

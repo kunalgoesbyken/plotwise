@@ -178,7 +178,11 @@ const en = {
   'limit.far.detail': ({ area }: Area) => `At most ${area} of total floor area on this plot.`,
   'limit.far-bonus': 'FAR bonus',
   'limit.far-bonus.detail': ({ area, measures }: Area & { measures: string }) =>
-    `Up to ${area} if the plan’s bonus measures are provided (${measures}). The designs below do not use it.`,
+    `Up to ${area} if the plan’s bonus measures are provided (${measures}).`,
+  'limit.far-bonus.designs.on': 'The designs aim at it.',
+  'limit.far-bonus.designs.off': 'The designs stay under the base limit unless you use the bonus.',
+  'far-bonus.label': ({ area }: Area) => `Use the FAR bonus (+${area})`,
+  'far-bonus.needs': ({ measures }: { measures: string }) => `Needs the plan’s bonus measures: ${measures}.`,
   'bonus.affordableHousing': 'affordable housing',
   'bonus.publicOpenSpace': 'public open space',
   'bonus.publicParking': 'public parking near a station',
@@ -287,6 +291,7 @@ const en = {
 
   'check.manual': 'Verify on site or with the authority',
   'check.far': 'Floor area within the FAR limit',
+  'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
   'check.high-rise-far': 'FAR within the high-rise cap',
   'check.open-space-ratio': 'Open space ratio',
   'check.permeable': 'Permeable ground',

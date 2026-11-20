@@ -52,6 +52,7 @@ export type Limits = {
   readonly farBonus: {
     readonly measures: readonly BonusMeasure[]
     readonly maxShare: number
+    readonly extraGfaSqm: number
     readonly maxGfaSqm: number
     readonly cites: readonly Cite[]
   }
@@ -71,6 +72,14 @@ export type Limits = {
     readonly farMax: Sourced
   }
   readonly parking: { readonly rules: readonly ParkingRule[]; readonly cites: readonly Cite[] }
+}
+
+export type FarMode = 'standard' | 'bonus'
+
+export type FarCap = {
+  readonly mode: FarMode
+  readonly maxGfaSqm: number
+  readonly cites: readonly Cite[]
 }
 
 export type LimitsInput = {
@@ -121,8 +130,19 @@ function farLimits({ pack, site, nearStation }: LimitsInput, classes: Limits['cl
   const maxShare = Math.min(pack.farBonus.combinedMaxShare.value, eligibleShare)
   return {
     far: { ratio, maxGfaSqm, cites: [pack.far.max.cite, pack.far.definition, pack.far.subdividedPlotsShareCap] },
-    farBonus: { measures, maxShare, maxGfaSqm: maxGfaSqm * (1 + maxShare), cites: [pack.farBonus.combinedMaxShare.cite] },
+    farBonus: {
+      measures,
+      maxShare,
+      extraGfaSqm: maxGfaSqm * maxShare,
+      maxGfaSqm: maxGfaSqm * (1 + maxShare),
+      cites: [pack.farBonus.combinedMaxShare.cite],
+    },
   }
+}
+
+export function farCapFor({ far, farBonus }: Limits, mode: FarMode): FarCap {
+  if (mode === 'standard' || farBonus.extraGfaSqm <= 0) return { mode: 'standard', maxGfaSqm: far.maxGfaSqm, cites: far.cites }
+  return { mode, maxGfaSqm: farBonus.maxGfaSqm, cites: [...far.cites, ...farBonus.cites] }
 }
 
 function openSpaceLimits({ pack, readings }: LimitsInput, residential: ClassMembership): Limits['openSpace'] {
