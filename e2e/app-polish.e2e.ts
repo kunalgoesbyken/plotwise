@@ -3,7 +3,7 @@ import { mockSite, mockZoneInside, openExample } from './app-fixtures'
 
 const PHONE = { width: 375, height: 812 }
 
-const GL_DRIVER_NOTICE = 'GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels'
+const LIBRARY_NOTICES = ['GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels', 'THREE.Clock: This module has been deprecated']
 
 const stepper = (page: Page, step: 'Plot' | 'Roads' | 'Results') => page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: step })
 const sheet = (page: Page) => page.locator('.thin-scroll')
@@ -14,7 +14,7 @@ function collectConsoleProblems(page: Page) {
   page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
   page.on('console', (message) => {
     const text = message.text()
-    if (['error', 'warning'].includes(message.type()) && !text.includes(GL_DRIVER_NOTICE)) problems.push(`${message.type()}: ${text}`)
+    if (['error', 'warning'].includes(message.type()) && !LIBRARY_NOTICES.some((notice) => text.includes(notice))) problems.push(`${message.type()}: ${text}`)
   })
   return problems
 }
@@ -63,6 +63,7 @@ test('keeps the console free of errors and warnings from the app and the map sty
   await page.goto('/app')
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await page.getByRole('button', { name: 'Try an example plot' }).click()
+  await stepper(page, 'Results').click()
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
   await expect(page.locator('[data-scene-ready="true"]')).toBeAttached({ timeout: 30_000 })
   for (const tab of ['Money', 'Rules', 'Designs']) await page.getByRole('tab', { name: tab, exact: true }).click()
@@ -92,7 +93,7 @@ test('the print summary is one clean page with the figures and the link', async 
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByRole('heading', { level: 1, name: /plot summary/ })).toBeVisible()
   await expect(page.getByRole('navigation', { name: 'Steps' })).toBeHidden()
-  await expect(page.getByText('Floor area', { exact: true })).toBeVisible()
+  await expect(page.getByRole('term').filter({ hasText: 'Floor area' })).toBeVisible()
   const pdf = await page.pdf({ format: 'A4', printBackground: true })
   const pages = pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []
   expect(pages).toHaveLength(1)

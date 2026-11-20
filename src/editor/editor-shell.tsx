@@ -160,7 +160,9 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const firstPanel = panels[0]?.id ?? VIEW_3D
   const tab = chosenTab === VIEW_3D && sceneInset ? firstPanel : (chosenTab ?? firstPanel)
   useShortcuts(store)
-  useEffect(() => scroller.current?.scrollTo({ top: 0 }), [step])
+  useEffect(() => {
+    scroller.current?.scrollTo({ top: 0 })
+  }, [step])
 
   const ready = state.plot !== null
   const choose = (next: Step) => {
