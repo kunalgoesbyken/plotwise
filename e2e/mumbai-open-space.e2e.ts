@@ -28,7 +28,6 @@ const LARGE_PLOT: Plot = {
 }
 
 const sideRear = (page: Page) => rulesRegion(page).getByRole('region', { name: 'Side and rear open space' })
-const limitsInLink = (page: Page) => new URLSearchParams(new URL(page.url()).hash.slice(1)).get('limits')
 
 async function open(page: Page, hash: string) {
   await mockApp(page)
@@ -69,16 +68,26 @@ test('the design checklist passes the side and rear open space against the Table
   await designsRegion(page).getByRole('button', { name: /^Checklist for / }).first().click()
   const check = designsRegion(page).getByRole('listitem').filter({ hasText: 'Setback from neighbours' })
   await expect(check).toContainText('Pass')
-  await expect(check).toContainText(/≥ 3\.6 m/)
+  await expect(check).toContainText(/≥\s3\.6\sm/)
   await check.getByRole('button', { name: /^Sources? / }).click()
   await expect(check.getByText(TRANSCRIBED).first()).toBeVisible()
 })
 
-test('an old Mumbai link that carries a side and rear open space still opens, on Table A, and drops the entry', async ({ page }) => {
+test('an old Mumbai link that carries a side and rear open space still opens and checks against Table A, not the old entry', async ({ page }) => {
   await open(page, `${encodeRegion('mum')}&${encodePlot({ ...LARGE_PLOT, limits: { boundarySetbackM: 6 } })}`)
   await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
-  await expect.poll(() => limitsInLink(page)).toBeNull()
-  await expect(page.getByRole('status')).not.toContainText('not valid')
+  await expect(page.getByText('This link’s plot is not valid')).toHaveCount(0)
+  await showTab(page, 'Designs')
+  await designsRegion(page).getByRole('button', { name: /^Checklist for / }).first().click()
+  const check = designsRegion(page).getByRole('listitem').filter({ hasText: 'Setback from neighbours' })
+  await expect(check).toContainText(/≥\s3\.6\sm/)
   await showTab(page, 'Rules')
   await expect(sideRear(page)).toContainText('H/4, at least 3.6 m')
+})
+
+test('the Mumbai print summary says Table A is transcribed from a scanned page', async ({ page }) => {
+  await open(page, `${encodeRegion('mum')}&${encodePlot(LARGE_PLOT)}`)
+  await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
+  await page.emulateMedia({ media: 'print' })
+  await expect(page.locator('article').getByText('DCPR 2034, Table A (side and rear open spaces): transcribed from a scanned page, double-checked.')).toBeVisible()
 })
