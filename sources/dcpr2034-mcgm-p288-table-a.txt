@@ -18,6 +18,7 @@ Corrections to the raw OCR:
 - Row 1, both dead-wall cells: OCR read "3.6m"; the page reads "3.6 m".
 - Row 2, height: OCR read "More than32 | m & up to | 70m"; the page reads "More than 32 m & up to 70 m".
 - Row 2, first plot column, dead wall: OCR read "6m"; the page reads "6 m".
+- Row 2, second plot column, dead wall: OCR read "6m" and the page also reads "6m", without the space, so it is kept as printed.
 - Row 2, second plot column, light and ventilation: OCR read "maximum ... 12m"; the page reads "maximum 12 m".
 - Rows 3 and 4, height: OCR read "120m"; the page reads "120 m".
 - Rows 3 and 4, first plot column: OCR missed the dashes; the page shows "------------------" across the merged light-and-ventilation and dead-wall cells of that column.
