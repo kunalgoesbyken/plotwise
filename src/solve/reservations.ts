@@ -1,41 +1,72 @@
-import { edgeLengths, offsetEdges, polygonArea } from '@/geometry'
+import { difference, edgeLengths, offsetEdges, polygonArea, type Polygon, type Ring } from '@/geometry'
 import type { Site, SiteEdge } from '@/plot/site'
 import type { Cite, Reservation } from '@/rules'
+import { ASSUMPTIONS } from './assumptions'
 
 export type Widening = {
+  readonly grossRing: Ring
   readonly grossAreaSqm: number
   readonly reservedSqm: number
   readonly depthsM: readonly number[]
   readonly farOn: Reservation['farOn']
+  readonly inLieuGfaSqm: number
+  readonly inLieuCites: readonly Cite[]
   readonly cites: readonly Cite[]
 }
 
+export const wideningStrip = ({ grossRing }: Widening, netRing: Ring): Polygon[] =>
+  difference([{ outer: grossRing, holes: [] }], [{ outer: netRing, holes: [] }])
+
 export type Reserved = { readonly site: Site; readonly widening: Widening | null }
 
-type Strip = { readonly depthM: number; readonly roadWidthM: number | null }
+type Strip = { readonly depthM: number; readonly roadWidthM: number | null; readonly by: Reservation | null }
 
-function stripOf({ roadWidthM }: SiteEdge, reservations: readonly Reservation[]): Strip {
-  if (roadWidthM === null) return { depthM: 0, roadWidthM }
-  const widenedM = Math.max(roadWidthM, ...reservations.map((r) => r.targetWidthM.value))
-  return { depthM: (widenedM - roadWidthM) / 2, roadWidthM: widenedM }
+function widenedWidth({ target }: Reservation, edge: SiteEdge): number | null {
+  return target.kind === 'width' ? target.widthM.value : edge.prescribedWidthM
+}
+
+function stripOf(edge: SiteEdge, reservations: readonly Reservation[]): Strip {
+  const { roadWidthM } = edge
+  const none: Strip = { depthM: 0, roadWidthM, by: null }
+  if (roadWidthM === null) return none
+  return reservations.reduce<Strip>((widest, reservation) => {
+    const widthM = widenedWidth(reservation, edge)
+    if (widthM === null || widthM <= (widest.roadWidthM ?? roadWidthM)) return widest
+    return { depthM: (widthM - roadWidthM) * ASSUMPTIONS.wideningShareOnPlotSide.value, roadWidthM: widthM, by: reservation }
+  }, none)
+}
+
+const targetCite = ({ target }: Reservation): Cite => (target.kind === 'width' ? target.widthM.cite : target.cite)
+
+function inLieu(governing: Reservation, reservedSqm: number): Pick<Widening, 'inLieuGfaSqm' | 'inLieuCites'> {
+  if (!governing.inLieu) return { inLieuGfaSqm: 0, inLieuCites: [] }
+  const { multipleOfReserved, notes } = governing.inLieu
+  return { inLieuGfaSqm: multipleOfReserved.value * reservedSqm, inLieuCites: [multipleOfReserved.cite, ...notes] }
 }
 
 export function reserveRoadWidening(site: Site, reservations: readonly Reservation[]): Reserved {
   const strips = site.edges.map((edge) => stripOf(edge, reservations))
-  if (strips.every(({ depthM }) => depthM === 0)) return { site, widening: null }
+  const biting = [...new Set(strips.flatMap(({ by }) => (by ? [by] : [])))]
+  const governing = strips.reduce((deepest, strip) => (strip.depthM > deepest.depthM ? strip : deepest)).by
+  if (!governing) return { site, widening: null }
   const ring = offsetEdges(site.ring, strips.map(({ depthM }) => depthM))
   const areaSqm = polygonArea({ outer: ring, holes: [] })
-  const bites = (r: Reservation) => site.edges.some((edge) => edge.roadWidthM !== null && edge.roadWidthM < r.targetWidthM.value)
-  const biting = reservations.filter(bites)
-  const governing = biting.reduce((widest, r) => (r.targetWidthM.value > widest.targetWidthM.value ? r : widest))
+  const reservedSqm = site.areaSqm - areaSqm
   return {
-    site: { ...site, ring, areaSqm, edges: edgeLengths(ring).map((lengthM, i) => ({ lengthM, roadWidthM: strips[i].roadWidthM })) },
+    site: {
+      ...site,
+      ring,
+      areaSqm,
+      edges: edgeLengths(ring).map((lengthM, i) => ({ lengthM, roadWidthM: strips[i].roadWidthM, prescribedWidthM: null })),
+    },
     widening: {
+      grossRing: site.ring,
       grossAreaSqm: site.areaSqm,
-      reservedSqm: site.areaSqm - areaSqm,
+      reservedSqm,
       depthsM: strips.map(({ depthM }) => depthM),
       farOn: governing.farOn,
-      cites: biting.flatMap((r) => [r.targetWidthM.cite, ...r.notes]),
+      ...inLieu(governing, reservedSqm),
+      cites: biting.flatMap((r) => [targetCite(r), ...r.notes]),
     },
   }
 }

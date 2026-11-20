@@ -88,3 +88,42 @@ describe('parking demand shapes beyond Bangkok', () => {
     expect(parkingSpaces([bySize], need({ use: 'office', floorAreaSqm: 1001 })).value).toBe(11)
   })
 })
+
+describe('parking by tenements per space, with visitors', () => {
+  const cite = value(0).cite
+  const byTenements: ParkingRule = {
+    scope: 'mumbaiTable21',
+    appliesWhere: cite,
+    condo: {
+      kind: 'unitsPerSpaceBySize',
+      bands: [
+        { unitSqm: band(undefined, 45), unitsPerSpace: value(4) },
+        { unitSqm: band(45, 90), unitsPerSpace: value(1) },
+        { unitSqm: band(90), unitsPerSpace: value(0.5) },
+      ],
+    },
+    visitors: { share: value(0.25), min: value(1) },
+    fractionsAboveHalfRoundUp: cite,
+  }
+
+  it('gives one space for every so many tenements of the size, plus a visitor share of at least one', () => {
+    expect(parkingSpaces([byTenements], need({ units: 40, unitSqm: 35 })).value).toBe(10 + 2)
+    expect(parkingSpaces([byTenements], need({ units: 2, unitSqm: 35 })).value).toBe(0 + 1)
+    expect(parkingSpaces([byTenements], need({ units: 10, unitSqm: 100 })).value).toBe(20 + 5)
+    expect(parkingSpaces([byTenements], need({ units: 0, unitSqm: 35 })).value).toBe(0)
+  })
+
+  it('rounds a fraction up only when it is more than half', () => {
+    expect(parkingSpaces([byTenements], need({ units: 10, unitSqm: 35 })).value).toBe(2 + 1)
+    expect(parkingSpaces([byTenements], need({ units: 11, unitSqm: 35 })).value).toBe(3 + 1)
+  })
+
+  it('never asks for fewer spaces as tenements are added', () => {
+    fc.assert(
+      fc.property(fc.nat(500), fc.double({ min: 20, max: 150, noNaN: true }), (units, unitSqm) => {
+        const fewer = parkingSpaces([byTenements], need({ units, unitSqm })).value
+        expect(parkingSpaces([byTenements], need({ units: units + 1, unitSqm })).value).toBeGreaterThanOrEqual(fewer)
+      }),
+    )
+  })
+})

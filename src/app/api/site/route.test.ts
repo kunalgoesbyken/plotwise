@@ -44,7 +44,7 @@ describe('GET /api/site', () => {
     ['?bbox=1,2,3', 'four numbers'],
     ['?bbox=77.58,12.97,77.59,12.98', 'Thailand'],
     ['?bbox=100.5671,13.7632,100.5709,13.7668&region=dxb', 'the Emirate of Dubai'],
-    ['?bbox=100.5671,13.7632,100.5709,13.7668&region=mumbai', 'region must be one of bkk, dxb, custom'],
+    ['?bbox=100.5671,13.7632,100.5709,13.7668&region=mumbai', 'region must be one of bkk, dxb, mum, custom'],
     ['?bbox=100.5,13.7,100.6,13.8', 'too large'],
     ['?bbox=-0.20,51.50,-0.10,51.60&region=custom', 'too large'],
   ])('rejects %p with a 400 and a clear message', async (query, expected) => {

@@ -9,21 +9,23 @@ import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import type { CostSplit } from './estimate'
 import { firstCostRange, parkingText, rangeText } from './figures'
+import { formatMoney } from './format-money'
 import { useFinance } from './use-finance'
 
 export type MoneyRow = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
 export function useMoneyRows(): readonly MoneyRow[] {
   const finance = useFinance()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   const priced = finance?.priced
   if (!finance || !priced) return []
   const { currency } = finance.region
   return [
     { label: t('money.built-up'), cell: (design) => formatQuantity(priced.estimateFor(design).builtSqm, areaUnit) },
-    { label: t('money.saleable'), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
+    { label: t('money.saleable', areaTerms), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
     { label: t('money.parking-levels'), cell: (design) => parkingText(priced.estimateFor(design).parking) },
     { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(priced.estimateFor(design)), currency) },
+    ...(finance.purchasePrices.length > 0 ? [{ label: t('money.purchase'), cell: (design: Design) => formatMoney(priced.estimateFor(design).purchaseCost, currency) }] : []),
     { label: t('money.land-value'), cell: (design) => rangeText(priced.estimateFor(design).landValue, currency) },
   ]
 }
@@ -46,7 +48,7 @@ function Figure({ label, value }: { readonly label: string; readonly value: Reac
 export function DesignMoney() {
   const { design } = useFeasibility()
   const finance = useFinance()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (!design || !finance?.priced) return null
   const estimate = finance.priced.estimateFor(design)
   const { currency } = finance.region
@@ -59,7 +61,7 @@ export function DesignMoney() {
       <dl className="divide-y">
         <Figure label={t('money.built-up')} value={formatQuantity(estimate.builtSqm, areaUnit)} />
         <Figure label={t('money.gross')} value={formatQuantity(estimate.grossSqm, areaUnit)} />
-        <Figure label={t('money.saleable')} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
+        <Figure label={t('money.saleable', areaTerms)} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
         <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, areaUnit)} />
         <Figure label={t('money.parking-levels')} value={parkingText(estimate.parking)} />
         <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />
@@ -67,6 +69,7 @@ export function DesignMoney() {
           <Figure key={part} label={label} value={rangeText({ low: estimate.firstCost.low[part], high: estimate.firstCost.high[part] }, currency)} />
         ))}
         <Figure label={t('money.first-cost')} value={<strong className="font-semibold">{rangeText(firstCostRange(estimate), currency)}</strong>} />
+        {estimate.purchaseCost > 0 && <Figure label={t('money.purchase')} value={formatMoney(estimate.purchaseCost, currency)} />}
       </dl>
     </section>
   )

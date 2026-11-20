@@ -3,19 +3,20 @@
 import { useId, type ReactNode } from 'react'
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
+import type { Region } from '@/region/regions'
 import type { Solution } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import { Disclosure } from '@/ui/disclosure'
 import { Placeholder } from '@/ui/section'
-import type { AreaUnit } from '@/units/area'
 import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { useFeasibility } from './feasibility-provider'
 import { WhenReady } from './ready'
 import { Sources } from './sources'
 import { Tally } from './tally'
 import { ToCheck } from './to-check'
+import { checkLabel } from './check-label'
 import { VerificationNote } from './verification-note'
 import { yieldFigure } from './yield-figure'
 
@@ -27,13 +28,13 @@ const STATUS_TONE: Readonly<Record<CheckStatus, string>> = {
 
 export type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
-function rowsFor([first]: readonly Design[], area: AreaUnit, showChecks: (design: Design) => void): readonly Row[] {
+function rowsFor([first]: readonly Design[], { areaUnit: area, areaTerms }: Region, showChecks: (design: Design) => void): readonly Row[] {
   return [
     { label: t('metric.floor-area'), cell: (d) => formatQuantity(d.metrics.gfaSqm, area) },
     { label: t('metric.height'), cell: (d) => formatQuantity(d.metrics.heightM, 'm') },
     { label: t('metric.storeys'), cell: (d) => formatQuantity(d.metrics.storeys, 'count') },
     { label: yieldFigure(first.metrics.yield, area).label, cell: (d) => yieldFigure(d.metrics.yield, area).value },
-    { label: t('metric.far'), cell: (d) => formatQuantity(d.metrics.far, 'ratio') },
+    { label: t('metric.far', areaTerms), cell: (d) => formatQuantity(d.metrics.far, 'ratio') },
     { label: t('metric.parking'), cell: (d) => formatQuantity(d.metrics.parkingSpaces, 'count') },
     { label: t('metric.open-space'), cell: (d) => formatQuantity(d.metrics.openSpaceSqm, area) },
     { label: t('metric.limited-by'), cell: (d) => t(`limiter.${d.limitedBy}`) },
@@ -42,12 +43,13 @@ function rowsFor([first]: readonly Design[], area: AreaUnit, showChecks: (design
 }
 
 function CheckItem({ row }: { row: CheckRow }) {
+  const { areaTerms } = useRegion()
   const failed = row.status === 'fail'
   return (
     <li className="flex gap-3 py-2.5">
       <span className={cn('w-10 shrink-0 pt-px text-xs font-semibold', STATUS_TONE[row.status])}>{t(`status.${row.status}`)}</span>
       <div className="min-w-0 flex-1">
-        <p className={cn('text-sm leading-snug', failed && 'font-medium text-destructive')}>{t(`check.${row.id}`)}</p>
+        <p className={cn('text-sm leading-snug', failed && 'font-medium text-destructive')}>{checkLabel(row.id, areaTerms)}</p>
         <p className={cn('mt-0.5 text-xs', failed ? 'text-destructive' : 'text-muted-foreground')}>{row.reading ?? t('check.manual')}</p>
         <Sources cites={row.cites} />
       </div>
@@ -59,7 +61,7 @@ type DesignTableProps = { readonly designs: readonly Design[]; readonly solution
 
 function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
   const { design: selected, selectDesign } = useFeasibility()
-  const { areaUnit } = useRegion()
+  const region = useRegion()
   const toCheckId = useId()
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
   const shown = (design: Design) => design.id === selected.id
@@ -92,7 +94,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y">
-          {[...rowsFor(designs, areaUnit, showChecks), ...extraRows].map(({ label, cell }) => (
+          {[...rowsFor(designs, region, showChecks), ...extraRows].map(({ label, cell }) => (
             <tr key={label}>
               <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
                 {label}
@@ -112,7 +114,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
       <Disclosure label={t('design.checklist', { name: t(selected.nameKey) })}>
         <ul className="divide-y">
           {selected.checks.map((check) => (
-            <CheckItem key={check.id} row={checkRow(check, areaUnit)} />
+            <CheckItem key={check.id} row={checkRow(check, region.areaUnit)} />
           ))}
         </ul>
       </Disclosure>

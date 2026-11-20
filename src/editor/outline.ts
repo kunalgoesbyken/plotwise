@@ -2,7 +2,8 @@ import { localFrame, type LngLat } from '@/geo/projection'
 import { GeometryError, normalizeRing, type GeometryErrorReason } from '@/geometry'
 import { LngLatSchema } from '@/plot/plot'
 
-export type Edge = { road: false; touched: boolean } | { road: true; widthM: number | null; estimated: boolean }
+export type RoadEdge = { road: true; widthM: number | null; estimated: boolean; prescribedWidthM?: number }
+export type Edge = { road: false; touched: boolean } | RoadEdge
 export type Corner = { at: LngLat; edge: Edge }
 
 export type OutlineRejection = 'crossing' | 'degenerate' | 'out-of-range'

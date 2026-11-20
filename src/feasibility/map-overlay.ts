@@ -12,6 +12,9 @@ function feature(frame: LocalFrame, kind: OverlayKind, polygons: readonly Polygo
   }
 }
 
-export function mapOverlay(frame: LocalFrame, envelope: readonly Polygon[], building: readonly Polygon[]): MapOverlay {
-  return { type: 'FeatureCollection', features: [feature(frame, 'envelope', envelope), feature(frame, 'building', building)] }
+export function mapOverlay(frame: LocalFrame, envelope: readonly Polygon[], building: readonly Polygon[], strip: readonly Polygon[]): MapOverlay {
+  return {
+    type: 'FeatureCollection',
+    features: [feature(frame, 'strip', strip), feature(frame, 'envelope', envelope), feature(frame, 'building', building)],
+  }
 }

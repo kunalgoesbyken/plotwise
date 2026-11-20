@@ -1,6 +1,6 @@
 import type { PlotLimitField } from '@/plot/plot'
 
-export type SolveErrorReason = 'plot-limit-missing'
+export type SolveErrorReason = 'plot-limit-missing' | 'building-type-not-covered'
 
 export class SolveError extends Error {
   readonly reason: SolveErrorReason

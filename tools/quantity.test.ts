@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import fc from 'fast-check'
-import { parseComparator, parseQuantity, thaiSkeleton } from './quantity'
+import { comparatorSide, parseComparator, parseQuantity, thaiSkeleton, unitToMetres } from './quantity'
 
 const THAI_DIGITS = '๐๑๒๓๔๕๖๗๘๙'
 const DIGIT_WORDS = ['ศูนย์', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า']
@@ -72,8 +72,17 @@ describe('parseQuantity', () => {
     expect(parseQuantity('๑ ลกู บาศกเ์ มตร')).toBe(1)
   })
 
+  it('reads English percentages, number words, multiples and halves', () => {
+    expect(parseQuantity('50%')).toBe(0.5)
+    expect(parseQuantity('25 per cent')).toBe(0.25)
+    expect(parseQuantity('one')).toBe(1)
+    expect(parseQuantity('three times')).toBe(3)
+    expect(parseQuantity('Two')).toBe(2)
+    expect(parseQuantity('1/2')).toBe(0.5)
+  })
+
   it('rejects anything it cannot read', () => {
-    for (const bad of ['', 'banana', 'เมตร', 'สบิ สบิ', '1 ใน', 'ร้อยละ', '๗ : ']) expect(() => parseQuantity(bad)).toThrow()
+    for (const bad of ['', 'banana', '%', 'per cent', 'times', '1/', 'eleven', 'เมตร', 'สบิ สบิ', '1 ใน', 'ร้อยละ', '๗ : ']) expect(() => parseQuantity(bad)).toThrow()
   })
 
   it('round-trips integers written in Thai digits', () => {
@@ -110,7 +119,30 @@ describe('parseComparator', () => {
     expect(parseComparator('มากกวา่')).toBe('gt')
   })
 
+  it('maps English comparison words whatever the case, and knows which side of the value they stand', () => {
+    expect(parseComparator('Less than')).toBe('lt')
+    expect(parseComparator('up to')).toBe('lte')
+    expect(parseComparator('not exceeding')).toBe('lte')
+    expect(parseComparator('exceeding')).toBe('gt')
+    expect(parseComparator('wider than')).toBe('gt')
+    expect(parseComparator('& above')).toBe('gte')
+    expect(parseComparator('and above')).toBe('gte')
+    expect(comparatorSide('less than')).toBe('before')
+    expect(comparatorSide('ไม่เกิน')).toBe('before')
+    expect(comparatorSide('& above')).toBe('after')
+  })
+
   it('rejects unknown words', () => {
     expect(() => parseComparator('ประมาณ')).toThrow()
+    expect(() => parseComparator('about')).toThrow()
+  })
+})
+
+describe('unitToMetres', () => {
+  it('reads metres written in Thai or as m', () => {
+    expect(unitToMetres('เมตร')).toBe(1)
+    expect(unitToMetres('m')).toBe(1)
+    expect(unitToMetres('M')).toBe(1)
+    expect(() => unitToMetres('sq.m')).toThrow()
   })
 })

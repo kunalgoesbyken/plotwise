@@ -20,7 +20,8 @@
   "boundarySetbacks": [],
   "plotSetbacks": {
     "kind": "plotSpecific",
-    "notes": []
+    "notes": [],
+    "edges": "roadAndBoundary"
   },
   "plotOpenSpace": {
     "kind": "plotSpecific",

@@ -26,10 +26,10 @@ function OutcomeCells({ row, areaUnit }: { row: WidthRow; areaUnit: AreaUnit }) 
 }
 
 export function WidthSensitivity() {
-  const { plot, pack, result, farBonus } = useFeasibility()
+  const { plot, pack, result, far } = useFeasibility()
   const { areaUnit } = useRegion()
   const ready = result?.status === 'ready'
-  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot, pack, farBonus ? 'bonus' : 'standard') : null), [plot, pack, ready, farBonus])
+  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot, pack, far) : null), [plot, pack, ready, far])
   if (!rows) return null
   return (
     <section aria-label={t('sensitivity.label')}>

@@ -16,7 +16,7 @@ const REQUIRED: PlotLimits = { maxGfaSqm: 5000, maxStoreys: 10 }
 
 const lot = (limits: PlotLimits, widthM = 40, depthM = 50) => ({ ...plotFromMetres(rectangle(widthM, depthM), [{ edge: 0, widthM: 12 }]), limits })
 
-const solveWith = (pack: RulePack, limits: PlotLimits) => solve(lot(limits), pack, packInterpretations(pack), 'standard')
+const solveWith = (pack: RulePack, limits: PlotLimits) => solve(lot(limits), pack, packInterpretations(pack))
 
 function sourceCites(node: unknown): Cite[] {
   if (Array.isArray(node)) return node.flatMap(sourceCites)

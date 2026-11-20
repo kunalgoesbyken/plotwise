@@ -25,7 +25,7 @@ export const PER_PLOT: RulePack = RulePackSchema.parse({
   far: { kind: 'plotSpecific', notes: [] },
   height: { planLimit: { kind: 'plotSpecific' } },
   coverage: { kind: 'plotSpecific', required: true },
-  plotSetbacks: { kind: 'plotSpecific', notes: [] },
+  plotSetbacks: { kind: 'plotSpecific', edges: 'roadAndBoundary', notes: [] },
   openSpaceMinimums: [],
   roadSetbacks: [],
   boundarySetbacks: [],

@@ -5,7 +5,7 @@ import { BoundSchema, CiteSchema, CitedSchema, RangeSchema } from './cite'
 const PlotSizeRowSchema = z.object({ plotAreaSqm: RangeSchema, ratio: CitedSchema })
 
 const RoadWidthBandSchema = z
-  .object({ roadWidthM: RangeSchema, byPlotSize: z.array(PlotSizeRowSchema).min(1) })
+  .object({ roadWidthM: RangeSchema, byPlotSize: z.array(PlotSizeRowSchema).min(1), permissible: CitedSchema.optional() })
   .refine((band) => bandsCoverEverything(band.byPlotSize.map((row) => row.plotAreaSqm)), {
     message: 'plot sizes must run from 0 without gaps to unlimited',
     path: ['byPlotSize'],

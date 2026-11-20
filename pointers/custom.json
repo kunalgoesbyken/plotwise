@@ -5,7 +5,7 @@
   "far": { "kind": "plotSpecific", "notes": [] },
   "height": { "planLimit": { "kind": "plotSpecific" } },
   "coverage": { "kind": "plotSpecific", "required": false },
-  "plotSetbacks": { "kind": "plotSpecific", "notes": [] },
+  "plotSetbacks": { "kind": "plotSpecific", "edges": "roadAndBoundary", "notes": [] },
   "plotOpenSpace": { "kind": "plotSpecific", "notes": [] },
   "plotParking": { "kind": "plotSpecific", "notes": [] },
   "openSpaceMinimums": [],

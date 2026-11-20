@@ -3,7 +3,8 @@ import { siteOf, type Site } from '@/plot/site'
 import type { RulePack } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
 import { highRiseEnvelope, ordinaryEnvelope, type Envelope } from './envelope'
-import { farCapFor, type FarCap, type FarMode } from './far'
+import { SolveError } from './errors'
+import { farCapFor, purchaseRatios, STANDARD, type FarCap, type FarChoice } from './far'
 import type { Interpretations } from './interpretations'
 import { limitsFor, type Limits } from './limits'
 import { plotLimitFields, withPlotLimits } from './plot-limits'
@@ -24,13 +25,28 @@ export type Solution = {
   readonly envelopes: readonly Envelope[]
 }
 
-export function solve(plot: Plot, authored: RulePack, readings: Interpretations, farMode: FarMode = 'standard'): Solution {
+export const coversBuildingType = (pack: RulePack, plot: Plot) => !pack.buildingTypes || pack.buildingTypes.includes(plot.buildingType)
+
+export function solve(plot: Plot, authored: RulePack, readings: Interpretations, far: FarChoice = STANDARD): Solution {
+  if (!coversBuildingType(authored, plot)) throw new SolveError('building-type-not-covered', [])
   const pack = withPlotLimits(authored, plot.limits)
   const { site, widening } = reserveRoadWidening(siteOf(plot), pack.reservations ?? [])
   const floorToFloorM = ASSUMPTIONS.floorToFloorM[plot.buildingType].value
   const { buildingType, nearStation } = plot
   const farAreaSqm = widening?.farOn === 'gross' ? widening.grossAreaSqm : site.areaSqm
-  const limits = limitsFor({ pack, readings, site, farAreaSqm, buildingType, nearStation, floorToFloorM, plotLimits: plot.limits })
+  const inLieu = widening && widening.inLieuGfaSqm > 0 ? { gfaSqm: widening.inLieuGfaSqm, cites: widening.inLieuCites } : null
+  const limits = limitsFor({
+    pack,
+    readings,
+    site,
+    farAreaSqm,
+    buildingType,
+    nearStation,
+    floorToFloorM,
+    plotLimits: plot.limits,
+    purchase: purchaseRatios(far),
+    inLieu,
+  })
   const input = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM }
   const highRisePermitted = limits.highRise?.access.some((band) => band.qualifies) ?? false
   const envelopes = [ordinaryEnvelope(input), ...(highRisePermitted ? [highRiseEnvelope(input)] : [])]
@@ -46,7 +62,7 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     farAreaSqm,
     floorToFloorM,
     limits,
-    farCap: farCapFor(limits, farMode),
+    farCap: farCapFor(limits, far.mode),
     envelopes,
   }
 }

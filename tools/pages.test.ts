@@ -43,6 +43,12 @@ describe('splitPages', () => {
     expect(rawToken('ไม่น้อยกว่า ๑๘ เมตร', '๘ เมตร')).toBeUndefined()
     expect(rawToken('10,000 ตารางเมตร', '0,000')).toBeUndefined()
     expect(rawToken('ไม่ถึง 23 เมตร ไม่น้อยกว่า 3', '3')).toBe('3')
+    expect(rawToken('ratio 1.25', '1.2')).toBeUndefined()
+  })
+
+  it('reads a number that ends a sentence, without taking the full stop into it', () => {
+    expect(rawToken('be considered as 1.2.', '1.2')).toBe('1.2')
+    expect(rawToken('as 1.2.5 here', '1.2')).toBeUndefined()
   })
 
   it('keeps every line of every page', () => {

@@ -1,0 +1,1728 @@
+{
+  "id": "mum-suburbs-res",
+  "verification": "unverified",
+  "zone": {
+    "code": "R, Suburbs and Extended Suburbs",
+    "cite": {
+      "$cite": {
+        "src": "dcpr2034-mcgm",
+        "page": 127,
+        "line": 24,
+        "token": "Residential/",
+        "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+      }
+    }
+  },
+  "sources": {
+    "dcpr2034-mcgm": {
+      "name": "Greater Mumbai Development Control and Promotion Regulations 2034 (sanctioned text)",
+      "title": "Greater Mumbai Development Plan-2034, Development Control and Promotion Regulations-2034",
+      "url": "https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf",
+      "published": "Maharashtra Government Gazette, UDD notification No. TPB. 4317/629/CR-118/2017/DP/UD-11, 8 May 2018; MCGM-published sanctioned text. Later modifications are not in this file",
+      "kind": "consolidated",
+      "textLayer": "readable",
+      "language": "en"
+    }
+  },
+  "buildingTypes": [
+    "condo"
+  ],
+  "far": {
+    "kind": "byRoadWidthAndPlotSize",
+    "roadWidthBands": [
+      {
+        "roadWidthM": {
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 26,
+              "token": "9",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "less than",
+              "cell": [
+                {
+                  "line": 24,
+                  "text": "Less"
+                },
+                {
+                  "line": 26,
+                  "text": "than 9m"
+                }
+              ]
+            }
+          }
+        },
+        "byPlotSize": [
+          {
+            "plotAreaSqm": {},
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 24,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ],
+        "permissible": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 127,
+            "line": 24,
+            "token": "1.0",
+            "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 28,
+              "token": "9",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "& above",
+              "unit": "m",
+              "cell": [
+                {
+                  "line": 28,
+                  "text": "9m &"
+                },
+                {
+                  "line": 29,
+                  "text": "above"
+                }
+              ]
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 32,
+              "token": "12.00",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "less than",
+              "cell": [
+                {
+                  "line": 30,
+                  "text": "but less"
+                },
+                {
+                  "line": 31,
+                  "text": "than"
+                },
+                {
+                  "line": 32,
+                  "text": "12.00m"
+                }
+              ]
+            }
+          }
+        },
+        "byPlotSize": [
+          {
+            "plotAreaSqm": {},
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 28,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ],
+        "permissible": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 127,
+            "line": 28,
+            "token": "2.0",
+            "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 34,
+              "token": "12.00",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "& above",
+              "unit": "m",
+              "unitLine": 36,
+              "cell": [
+                {
+                  "line": 34,
+                  "text": "12.00"
+                },
+                {
+                  "line": 36,
+                  "text": "m&"
+                },
+                {
+                  "line": 38,
+                  "text": "above"
+                }
+              ]
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 44,
+              "token": "18.00",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "less than",
+              "cell": [
+                {
+                  "line": 40,
+                  "text": "but less"
+                },
+                {
+                  "line": 42,
+                  "text": "than"
+                },
+                {
+                  "line": 44,
+                  "text": "18.00m"
+                }
+              ]
+            }
+          }
+        },
+        "byPlotSize": [
+          {
+            "plotAreaSqm": {},
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 34,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ],
+        "permissible": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 127,
+            "line": 34,
+            "token": "2.2",
+            "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 46,
+              "token": "18.00",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "& above",
+              "unit": "m",
+              "cell": [
+                {
+                  "line": 46,
+                  "text": "18.00m"
+                },
+                {
+                  "line": 48,
+                  "text": "& above"
+                }
+              ]
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 54,
+              "token": "27",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "less than",
+              "cell": [
+                {
+                  "line": 50,
+                  "text": "but less"
+                },
+                {
+                  "line": 52,
+                  "text": "than"
+                },
+                {
+                  "line": 54,
+                  "text": "27m"
+                }
+              ]
+            }
+          }
+        },
+        "byPlotSize": [
+          {
+            "plotAreaSqm": {},
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 46,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ],
+        "permissible": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 127,
+            "line": 46,
+            "token": "2.4",
+            "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+          }
+        }
+      },
+      {
+        "roadWidthM": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 127,
+              "line": 56,
+              "token": "27",
+              "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+              "op": "and above",
+              "unit": "m",
+              "cell": [
+                {
+                  "line": 56,
+                  "text": "27 m"
+                },
+                {
+                  "line": 58,
+                  "text": "and"
+                },
+                {
+                  "line": 60,
+                  "text": "above"
+                }
+              ]
+            }
+          }
+        },
+        "byPlotSize": [
+          {
+            "plotAreaSqm": {},
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 56,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ],
+        "permissible": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 127,
+            "line": 56,
+            "token": "2.5",
+            "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+          }
+        }
+      }
+    ],
+    "notes": [
+      {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 128,
+          "line": 3,
+          "token": "The permissible FSI shall be on plot area excluding area under DP roads",
+          "clause": "Reg 30(A)(2)"
+        }
+      },
+      {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 127,
+          "line": 66,
+          "token": "existing width of minimum 6m",
+          "clause": "Table 12 Note 1"
+        }
+      },
+      {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 127,
+          "line": 70,
+          "token": "TDR & additional FSI on payment of premium Ratio can be change by Government",
+          "clause": "Table 12 Note 2"
+        }
+      }
+    ]
+  },
+  "farPurchases": [
+    {
+      "kind": "premium",
+      "cap": {
+        "kind": "extraRatioByRoadWidth",
+        "bands": [
+          {
+            "kind": "none",
+            "roadWidthM": {
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 26,
+                  "token": "9",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 24,
+                      "text": "Less"
+                    },
+                    {
+                      "line": 26,
+                      "text": "than 9m"
+                    }
+                  ]
+                }
+              }
+            },
+            "cite": {
+              "$cite": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 24,
+                "token": "-",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 28,
+                  "token": "9",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 28,
+                      "text": "9m &"
+                    },
+                    {
+                      "line": 29,
+                      "text": "above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 32,
+                  "token": "12.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 30,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 31,
+                      "text": "than"
+                    },
+                    {
+                      "line": 32,
+                      "text": "12.00m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 28,
+                "token": "0.5",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 34,
+                  "token": "12.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "unitLine": 36,
+                  "cell": [
+                    {
+                      "line": 34,
+                      "text": "12.00"
+                    },
+                    {
+                      "line": 36,
+                      "text": "m&"
+                    },
+                    {
+                      "line": 38,
+                      "text": "above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 44,
+                  "token": "18.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 40,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 42,
+                      "text": "than"
+                    },
+                    {
+                      "line": 44,
+                      "text": "18.00m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 34,
+                "token": "0.5",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 46,
+                  "token": "18.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 46,
+                      "text": "18.00m"
+                    },
+                    {
+                      "line": 48,
+                      "text": "& above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 54,
+                  "token": "27",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 50,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 52,
+                      "text": "than"
+                    },
+                    {
+                      "line": 54,
+                      "text": "27m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 46,
+                "token": "0.5",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 56,
+                  "token": "27",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "and above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 56,
+                      "text": "27 m"
+                    },
+                    {
+                      "line": 58,
+                      "text": "and"
+                    },
+                    {
+                      "line": 60,
+                      "text": "above"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 56,
+                "token": "0.5",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ]
+      },
+      "price": {
+        "kind": "shareOfLandRate",
+        "share": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 43,
+            "token": "50%",
+            "clause": "Reg 30(A)(6)"
+          }
+        }
+      },
+      "notes": [
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 43,
+            "token": "land rates as per ASR (for FSI 1)",
+            "clause": "Reg 30(A)(6)"
+          }
+        },
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 48,
+            "token": "utilization of `additional FSI on payment of Premium' and TDR is optional",
+            "clause": "Reg 30(A)(6) proviso"
+          }
+        },
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 50,
+            "token": "non-transferable",
+            "clause": "Reg 30(A)(6) proviso"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "transferableRights",
+      "cap": {
+        "kind": "extraRatioByRoadWidth",
+        "bands": [
+          {
+            "kind": "none",
+            "roadWidthM": {
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 26,
+                  "token": "9",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 24,
+                      "text": "Less"
+                    },
+                    {
+                      "line": 26,
+                      "text": "than 9m"
+                    }
+                  ]
+                }
+              }
+            },
+            "cite": {
+              "$cite": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 24,
+                "token": "-",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 28,
+                  "token": "9",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 28,
+                      "text": "9m &"
+                    },
+                    {
+                      "line": 29,
+                      "text": "above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 32,
+                  "token": "12.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 30,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 31,
+                      "text": "than"
+                    },
+                    {
+                      "line": 32,
+                      "text": "12.00m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 28,
+                "token": "0.5",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 34,
+                  "token": "12.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "unitLine": 36,
+                  "cell": [
+                    {
+                      "line": 34,
+                      "text": "12.00"
+                    },
+                    {
+                      "line": 36,
+                      "text": "m&"
+                    },
+                    {
+                      "line": 38,
+                      "text": "above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 44,
+                  "token": "18.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 40,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 42,
+                      "text": "than"
+                    },
+                    {
+                      "line": 44,
+                      "text": "18.00m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 34,
+                "token": "0.7",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 46,
+                  "token": "18.00",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "& above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 46,
+                      "text": "18.00m"
+                    },
+                    {
+                      "line": 48,
+                      "text": "& above"
+                    }
+                  ]
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 54,
+                  "token": "27",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "less than",
+                  "cell": [
+                    {
+                      "line": 50,
+                      "text": "but less"
+                    },
+                    {
+                      "line": 52,
+                      "text": "than"
+                    },
+                    {
+                      "line": 54,
+                      "text": "27m"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 46,
+                "token": "0.9",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          },
+          {
+            "kind": "ratio",
+            "roadWidthM": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 127,
+                  "line": 56,
+                  "token": "27",
+                  "clause": "Reg 30(A)(1) Table 12 Sr II(iii)",
+                  "op": "and above",
+                  "unit": "m",
+                  "cell": [
+                    {
+                      "line": 56,
+                      "text": "27 m"
+                    },
+                    {
+                      "line": 58,
+                      "text": "and"
+                    },
+                    {
+                      "line": 60,
+                      "text": "above"
+                    }
+                  ]
+                }
+              }
+            },
+            "ratio": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 127,
+                "line": 56,
+                "token": "1.0",
+                "clause": "Reg 30(A)(1) Table 12 Sr II(iii)"
+              }
+            }
+          }
+        ]
+      },
+      "price": {
+        "kind": "userSupplied"
+      },
+      "notes": [
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 10,
+            "token": "TDR as per regulation 32",
+            "clause": "Reg 30(A)(3)(a)"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "fungible",
+      "cap": {
+        "kind": "shareOf",
+        "of": "permissible",
+        "share": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 134,
+            "line": 63,
+            "token": "35%",
+            "clause": "Reg 31(3)"
+          }
+        }
+      },
+      "price": {
+        "kind": "shareOfLandRate",
+        "share": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 135,
+            "line": 4,
+            "token": "50%",
+            "clause": "Reg 31(3)"
+          }
+        }
+      },
+      "notes": [
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 129,
+            "line": 32,
+            "token": "Fungible Compensatory Area/BUA shall be permissible over and above permissible FSI",
+            "clause": "Reg 30(A)(11)"
+          }
+        }
+      ]
+    }
+  ],
+  "height": {
+    "planLimit": {
+      "kind": "none",
+      "absent": {
+        "$absent": {
+          "src": "dcpr2034-mcgm",
+          "clause": "Reg 43(1)",
+          "from": {
+            "page": 297,
+            "line": 44
+          },
+          "to": {
+            "page": 298,
+            "line": 4
+          },
+          "term": "maximum height"
+        }
+      }
+    },
+    "roadMultiple": {
+      "distance": "streetPlusFrontSpace",
+      "maxMultipleOfDistance": [
+        {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 297,
+            "line": 46,
+            "token": "three times",
+            "clause": "Reg 43(1)"
+          }
+        }
+      ],
+      "measuredTo": {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 297,
+          "line": 47,
+          "token": "existing or prescribed width of the street",
+          "clause": "Reg 43(1)"
+        }
+      },
+      "widestStreetGoverns": {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 298,
+          "line": 3,
+          "token": "it shall be deemed for the purpose of this",
+          "clause": "Reg 43(1) Explanation (ii)"
+        }
+      }
+    }
+  },
+  "reservations": [
+    {
+      "kind": "roadWidening",
+      "target": {
+        "kind": "perFrontage",
+        "cite": {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 82,
+            "line": 16,
+            "token": "The Owner shall hand over the area required for road widening",
+            "clause": "Reg 16"
+          }
+        }
+      },
+      "farOn": "net",
+      "inLieu": {
+        "multipleOfReserved": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 137,
+            "line": 63,
+            "token": "2 times",
+            "clause": "Reg 32 Table No. 12A Sr 1(a)"
+          }
+        },
+        "notes": [
+          {
+            "$cite": {
+              "src": "dcpr2034-mcgm",
+              "page": 82,
+              "line": 23,
+              "token": "The FSI / TDR in lieu of land so surrendered shall be",
+              "clause": "Reg 16"
+            }
+          },
+          {
+            "$cite": {
+              "src": "dcpr2034-mcgm",
+              "page": 128,
+              "line": 17,
+              "token": "FSI equivalent to TDR as per Table 12 A",
+              "clause": "Reg 30(A)(3)(a) proviso"
+            }
+          }
+        ]
+      },
+      "notes": [
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 128,
+            "line": 3,
+            "token": "The permissible FSI shall be on plot area excluding area under DP roads",
+            "clause": "Reg 30(A)(2)"
+          }
+        },
+        {
+          "$cite": {
+            "src": "dcpr2034-mcgm",
+            "page": 288,
+            "line": 17,
+            "token": "Manner of computing front open space/setback where the street is to be widened",
+            "clause": "Reg 41(1)(b)"
+          }
+        }
+      ]
+    }
+  ],
+  "openSpaceMinimums": [],
+  "roadSetbacks": [
+    {
+      "bands": [
+        {
+          "roadWidthM": {
+            "max": {
+              "$bound": {
+                "src": "dcpr2034-mcgm",
+                "page": 291,
+                "line": 22,
+                "token": "52",
+                "clause": "Reg 41(4) Table No 18 A Sr 1",
+                "op": "wider than",
+                "negate": true
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundary",
+            "distanceM": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 291,
+                "line": 28,
+                "token": "4.5",
+                "clause": "Reg 41(4) Table No 18 A Sr 2"
+              }
+            }
+          }
+        },
+        {
+          "roadWidthM": {
+            "min": {
+              "$bound": {
+                "src": "dcpr2034-mcgm",
+                "page": 291,
+                "line": 22,
+                "token": "52",
+                "clause": "Reg 41(4) Table No 18 A Sr 1",
+                "op": "wider than"
+              }
+            }
+          },
+          "setback": {
+            "kind": "fromRoadBoundary",
+            "distanceM": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 291,
+                "line": 22,
+                "token": "6.0",
+                "clause": "Reg 41(4) Table No 18 A Sr 1"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "boundarySetbacks": [],
+  "plotSetbacks": {
+    "kind": "plotSpecific",
+    "edges": "boundary",
+    "notes": [
+      {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 288,
+          "line": 30,
+          "token": "The open spaces on all sides except the front side of a building shall be as follows",
+          "clause": "Reg 41(2)(i)(a)"
+        }
+      }
+    ]
+  },
+  "lowRiseOpenSpaces": {
+    "appliesTo": {
+      "$cite": {
+        "src": "dcpr2034-mcgm",
+        "page": 290,
+        "line": 10,
+        "token": "Ground and one upper floor",
+        "clause": "Reg 41(3)(a)"
+      }
+    },
+    "maxUpperFloors": {
+      "$num": {
+        "src": "dcpr2034-mcgm",
+        "page": 290,
+        "line": 10,
+        "token": "one",
+        "clause": "Reg 41(3)(a)"
+      }
+    },
+    "rows": [
+      {
+        "plotAreaSqm": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 24,
+              "token": "21",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "and above"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 24,
+              "token": "30",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "less than"
+            }
+          }
+        },
+        "frontM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 24,
+            "token": "0.75",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "rearM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 24,
+            "token": "1.5",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        }
+      },
+      {
+        "plotAreaSqm": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 28,
+              "token": "30",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "and above"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 28,
+              "token": "40",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "less than"
+            }
+          }
+        },
+        "frontM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 28,
+            "token": "0.75",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "rearM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 28,
+            "token": "2.25",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        }
+      },
+      {
+        "plotAreaSqm": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 32,
+              "token": "40",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "and above"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 32,
+              "token": "60",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "less than"
+            }
+          }
+        },
+        "frontM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 32,
+            "token": "1.00",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "rearM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 32,
+            "token": "2.25",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "sideM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 32,
+            "token": "1.0",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        }
+      },
+      {
+        "plotAreaSqm": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 36,
+              "token": "60",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "and above"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 36,
+              "token": "125",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "less than"
+            }
+          }
+        },
+        "frontM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 36,
+            "token": "1.5",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "rearM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 36,
+            "token": "3.0",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "sideM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 36,
+            "token": "1.0",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        }
+      },
+      {
+        "plotAreaSqm": {
+          "min": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 40,
+              "token": "125",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "and above"
+            }
+          },
+          "max": {
+            "$bound": {
+              "src": "dcpr2034-mcgm",
+              "page": 290,
+              "line": 40,
+              "token": "250",
+              "clause": "Reg 41(3)(a) Table No 17",
+              "op": "less than"
+            }
+          }
+        },
+        "frontM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 40,
+            "token": "3.0",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "rearM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 40,
+            "token": "3.0",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        },
+        "sideM": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 290,
+            "line": 40,
+            "token": "1.5",
+            "clause": "Reg 41(3)(a) Table No 17"
+          }
+        }
+      }
+    ]
+  },
+  "parking": [
+    {
+      "scope": "mumbaiTable21",
+      "appliesWhere": {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 299,
+          "line": 10,
+          "token": "In the Island City areas, Suburbs and Extended Suburbs",
+          "clause": "Reg 44 Table No 21 Sr 1"
+        }
+      },
+      "condo": {
+        "kind": "unitsPerSpaceBySize",
+        "bands": [
+          {
+            "unitSqm": {
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 15,
+                  "token": "45",
+                  "clause": "Reg 44 Table No 21 Sr 1 (a)",
+                  "op": "up to"
+                }
+              }
+            },
+            "unitsPerSpace": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 299,
+                "line": 15,
+                "token": "4",
+                "clause": "Reg 44 Table No 21 Sr 1 (a)"
+              }
+            }
+          },
+          {
+            "unitSqm": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 17,
+                  "token": "45",
+                  "clause": "Reg 44 Table No 21 Sr 1 (b)",
+                  "op": "exceeding"
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 18,
+                  "token": "60",
+                  "clause": "Reg 44 Table No 21 Sr 1 (b)",
+                  "op": "not exceeding",
+                  "opLine": 17
+                }
+              }
+            },
+            "unitsPerSpace": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 299,
+                "line": 17,
+                "token": "2",
+                "clause": "Reg 44 Table No 21 Sr 1 (b)"
+              }
+            }
+          },
+          {
+            "unitSqm": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 24,
+                  "token": "60",
+                  "clause": "Reg 44 Table No 21 Sr 1 (c)",
+                  "op": "exceeding"
+                }
+              },
+              "max": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 25,
+                  "token": "90",
+                  "clause": "Reg 44 Table No 21 Sr 1 (c)",
+                  "op": "not exceeding",
+                  "opLine": 24
+                }
+              }
+            },
+            "unitsPerSpace": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 299,
+                "line": 24,
+                "token": "1",
+                "clause": "Reg 44 Table No 21 Sr 1 (c)"
+              }
+            }
+          },
+          {
+            "unitSqm": {
+              "min": {
+                "$bound": {
+                  "src": "dcpr2034-mcgm",
+                  "page": 299,
+                  "line": 27,
+                  "token": "90",
+                  "clause": "Reg 44 Table No 21 Sr 1 (d)",
+                  "op": "exceeding"
+                }
+              }
+            },
+            "unitsPerSpace": {
+              "$num": {
+                "src": "dcpr2034-mcgm",
+                "page": 299,
+                "line": 27,
+                "token": "1/2",
+                "clause": "Reg 44 Table No 21 Sr 1 (d)"
+              }
+            }
+          }
+        ]
+      },
+      "visitors": {
+        "share": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 299,
+            "line": 31,
+            "token": "25 per cent",
+            "clause": "Reg 44 Table No 21 Sr 1"
+          }
+        },
+        "min": {
+          "$num": {
+            "src": "dcpr2034-mcgm",
+            "page": 299,
+            "line": 32,
+            "token": "one",
+            "clause": "Reg 44 Table No 21 Sr 1"
+          }
+        }
+      },
+      "fractionsAboveHalfRoundUp": {
+        "$cite": {
+          "src": "dcpr2034-mcgm",
+          "page": 298,
+          "line": 55,
+          "token": "any fractional space of more than half",
+          "clause": "Reg 44(2)"
+        }
+      }
+    }
+  ],
+  "carpetArea": {
+    "builtUpPerCarpet": [
+      {
+        "$num": {
+          "src": "dcpr2034-mcgm",
+          "page": 81,
+          "line": 28,
+          "token": "1.2",
+          "clause": "Reg 15 Note 3 (printed page 38)"
+        }
+      },
+      {
+        "$num": {
+          "src": "dcpr2034-mcgm",
+          "page": 102,
+          "line": 14,
+          "token": "1.2",
+          "clause": "Reg 17(1) Note (g) (printed page 59)"
+        }
+      }
+    ],
+    "definition": {
+      "$cite": {
+        "src": "dcpr2034-mcgm",
+        "page": 49,
+        "line": 7,
+        "token": "\"Carpet area\" would have the same meaning as defined in Real Estate",
+        "clause": "Reg 2(22)"
+      }
+    }
+  },
+  "questions": [],
+  "gaps": [
+    {
+      "id": "later-modifications",
+      "what": "Modifications to DCPR 2034 after 8 May 2018, among them the 14 Oct 2024 notification on premium and TDR and the Reg 30(A) road-widening order",
+      "why": "The only machine-readable official text is the 2018 sanctioned text. The 2024 notification PDF has a garbled legacy-font text layer, and Table 12 Note 2 lets the Government change the premium and TDR split. This pack is a draft as sanctioned in 2018."
+    },
+    {
+      "id": "table-a-side-rear",
+      "what": "Side and rear open spaces by building height and plot size (Reg 41(2)(i)(a), Table A, p288)",
+      "why": "The text layer merges and dashes the cells of Table A, so which cell holds which value cannot be read. The side and rear open space is entered for each plot."
+    },
+    {
+      "id": "table-a-tower-rules",
+      "what": "Tower open spaces and step-backs above 32 m, 70 m and 120 m (p289) and the dead-wall column of Table A",
+      "why": "Part of the unreadable Table A layout; not applied."
+    },
+    {
+      "id": "height-exemptions",
+      "what": "The road-height rule ceasing for plots with a 9 m or 12 m front margin, and aerodrome height limits (Reg 43(1), Reg 43(B))",
+      "why": "Not modelled; the road-height rule is applied to every plot."
+    },
+    {
+      "id": "road-width-meaning",
+      "what": "Whether the Table 12 road width is the existing or the prescribed width",
+      "why": "Table 12 Note 1 moves a 6 m to 9 m road proposed to be widened to the 9 m row. Plotwise reads every band, and the height rule, from the widened width once a prescribed width is entered."
+    },
+    {
+      "id": "asr-land-rate",
+      "what": "Annual Schedule of Rates land value for the plot",
+      "why": "Published only through the eASR web form at easr.igrmaharashtra.gov.in, one zone at a time. It is entered by the user."
+    },
+    {
+      "id": "tdr-market-price",
+      "what": "Market price of TDR",
+      "why": "No official price; Reg 32 fixes how much TDR is generated, not its price. It is entered by the user."
+    },
+    {
+      "id": "zone-and-road-maps",
+      "what": "Which plots are in the R zone of the suburbs, and the DP road widths and regular lines",
+      "why": "They are on the development plan maps, not in the DCPR text. The user confirms the zone and enters any prescribed road width."
+    },
+    {
+      "id": "other-uses",
+      "what": "Offices, hotels and other occupancies",
+      "why": "This draft covers residential buildings in the R zone only."
+    },
+    {
+      "id": "coverage",
+      "what": "Ground coverage",
+      "why": "Reg 41(1) to (3) set no general coverage share for this zone; coverage follows from the open spaces and FSI."
+    },
+    {
+      "id": "inclusive-housing-and-amenities",
+      "what": "Inclusive housing on plots of 4000 m² or more (Reg 15), layout open space and amenity handover (Reg 27, Reg 14), and FSI-exempt areas (Reg 31(1))",
+      "why": "Not modelled in this draft."
+    },
+    {
+      "id": "charges",
+      "what": "Development cess and the development charge",
+      "why": "Reg 30(A)(7) sets a cess of 100% of the development charge, whose rate was not read."
+    },
+    {
+      "id": "table-12-columns",
+      "what": "The column of each repeated Table 12 value (0.5 premium and 0.5 TDR on the 9 m row, 1.0 basic and 1.0 TDR on the 27 m row)",
+      "why": "The text layer cannot say which column a repeated value sits in; the values are equal, so the numbers are right but the cite is to the line."
+    },
+    {
+      "id": "low-rise-scope",
+      "what": "Whether Table No 17 replaces Table A and Table 18 A or only relaxes them",
+      "why": "Reg 41(3)(a) says the open spaces may be relaxed to Table No 17; Plotwise applies it to the checks of a building of ground and one upper floor on a plot it covers, and keeps the envelope on the stricter open spaces. The rear is taken as the boundary edge farthest from the main road."
+    }
+  ]
+}

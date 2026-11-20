@@ -6,14 +6,14 @@ import { ZONE_SOURCES } from '@/zone/sources'
 import { DEFAULT_REGION, REGION_IDS, RegionIdSchema, REGIONS } from './regions'
 
 describe('regions', () => {
-  it('offers Bangkok, Dubai and custom rules, with Bangkok for links that name none', () => {
-    expect(REGION_IDS).toEqual(['bkk', 'dxb', 'custom'])
+  it('offers Bangkok, Dubai, Mumbai and custom rules, with Bangkok for links that name none', () => {
+    expect(REGION_IDS).toEqual(['bkk', 'dxb', 'mum', 'custom'])
     expect(DEFAULT_REGION.id).toBe('bkk')
   })
 
   it('accepts only known region ids at the boundary', () => {
     for (const id of REGION_IDS) expect(RegionIdSchema.parse(id)).toBe(id)
-    for (const bad of ['', 'BKK', 'dubai', 'mumbai', '__proto__']) expect(RegionIdSchema.safeParse(bad).success).toBe(false)
+    for (const bad of ['', 'BKK', 'dubai', 'mumbai', 'MUM', '__proto__']) expect(RegionIdSchema.safeParse(bad).success).toBe(false)
   })
 
   it('keeps verified rules for Bangkok only; Dubai and custom rules take every limit from the user', () => {
@@ -45,5 +45,16 @@ describe('regions', () => {
     expect([REGIONS.bkk.areaUnit, MONEY_REGIONS.bkk.currency]).toEqual(['sqm', 'THB'])
     expect([REGIONS.dxb.areaUnit, MONEY_REGIONS.dxb.currency]).toEqual(['sqft', 'AED'])
     expect([REGIONS.custom.areaUnit, MONEY_REGIONS.custom.currency]).toEqual(['sqm', null])
+  })
+
+  it('reads Mumbai from the DCPR 2034 draft: unverified, side and rear open space entered, FSI, INR, sq ft and carpet area', () => {
+    const { mum } = REGIONS
+    const pack = loadPack(mum.packId)
+    expect([mum.rules, pack.verification]).toEqual(['draftPack', 'unverified'])
+    expect(plotLimitFields(pack)).toEqual(['boundarySetbackM'])
+    expect(mum.limitTerms.fields.boundarySetbackM.value).toBe('Side and rear open space')
+    expect(mum.areaTerms).toMatchObject({ ratio: 'FSI', saleable: 'carpet area' })
+    expect([mum.areaUnit, MONEY_REGIONS.mum.currency, MONEY_REGIONS.mum.prices]).toEqual(['sqft', 'INR', null])
+    expect(mum.cityPlan.version).toBe('DCPR 2034 as sanctioned in 2018')
   })
 })

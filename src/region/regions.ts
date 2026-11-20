@@ -6,10 +6,10 @@ import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
 import type { RegionId } from '@/solve'
-import { AFFECTION_PLAN_TERMS } from '@/solve/assumptions'
+import { AFFECTION_PLAN_TERMS, DCPR_TERMS } from '@/solve/assumptions'
 import type { AreaUnit } from '@/units/area'
 
-export type RulesSource = 'pack' | 'affectionPlan' | 'custom'
+export type RulesSource = 'pack' | 'draftPack' | 'affectionPlan' | 'custom'
 
 export type Transit = {
   readonly platformModes: Assumption<readonly string[]>
@@ -26,6 +26,8 @@ export type LimitTerms = {
   readonly fields: Readonly<Partial<Record<PlotLimitField, Term>>>
 }
 
+export type AreaTerms = { readonly ratio: string; readonly ratioName: string; readonly saleable: string; readonly landRate: string }
+
 export type Region = {
   readonly id: RegionId
   readonly name: string
@@ -39,14 +41,14 @@ export type Region = {
   readonly zone: { readonly name: string; readonly scope: string } | null
   readonly authority: string
   readonly cityPlan: { readonly name: string; readonly version: string; readonly url: string } | null
-  readonly areaTerms: { readonly ratio: string; readonly ratioName: string }
+  readonly areaTerms: AreaTerms
   readonly mapStart: Assumption<{ readonly centre: LngLat; readonly zoom: number }>
   readonly bounds: Assumption<Bbox> | null
   readonly searchBias: Assumption<LngLat> | null
   readonly transit: Transit | null
 }
 
-const FAR_TERMS = { ratio: 'FAR', ratioName: 'Floor area ratio' } as const
+const FAR_TERMS = { ratio: 'FAR', ratioName: 'Floor area ratio', saleable: 'saleable area', landRate: 'land rate' } as const
 
 const STREET_ZOOM = 17
 
@@ -113,6 +115,35 @@ export const REGIONS = {
       value: [55.2744, 25.1972],
       source: 'assumption: Downtown Dubai, used only to rank nearer places first',
     },
+    transit: null,
+  },
+  mum: {
+    id: 'mum',
+    name: 'Mumbai',
+    country: 'India',
+    packId: 'mum-suburbs-res',
+    rules: 'draftPack',
+    limitTerms: DCPR_TERMS,
+    floors: 'storeys',
+    example: null,
+    areaUnit: 'sqft',
+    zone: null,
+    authority: 'MCGM',
+    cityPlan: {
+      name: 'DCPR 2034',
+      version: 'DCPR 2034 as sanctioned in 2018',
+      url: 'https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf',
+    },
+    areaTerms: { ratio: 'FSI', ratioName: 'Floor space index', saleable: 'carpet area', landRate: 'ASR land rate' },
+    mapStart: {
+      value: { centre: [72.8468, 19.1197], zoom: STREET_ZOOM },
+      source: 'assumption: opening map view over Andheri West, in the suburbs the draft rules cover',
+    },
+    bounds: {
+      value: [72.74, 18.85, 73.06, 19.33],
+      source: 'approximate extent of Greater Mumbai, island city and suburbs (minLng, minLat, maxLng, maxLat), slightly generous',
+    },
+    searchBias: { value: [72.8468, 19.1197], source: 'assumption: Andheri West, used only to rank nearer places first' },
     transit: null,
   },
   custom: {

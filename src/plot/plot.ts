@@ -11,11 +11,17 @@ export const MAX_CORNERS = 100
 
 export const RoadWidthSchema = z.number().positive().max(MAX_ROAD_WIDTH_M)
 
-const RoadSchema = z.object({
-  edge: z.int().nonnegative(),
-  widthM: RoadWidthSchema,
-  name: z.string().optional(),
-})
+const RoadSchema = z
+  .object({
+    edge: z.int().nonnegative(),
+    widthM: RoadWidthSchema,
+    prescribedWidthM: RoadWidthSchema.optional(),
+    name: z.string().optional(),
+  })
+  .refine((road) => road.prescribedWidthM === undefined || road.prescribedWidthM > road.widthM, {
+    message: 'a prescribed width widens the road',
+    path: ['prescribedWidthM'],
+  })
 
 export const MAX_PLOT_LIMIT = 1_000_000
 

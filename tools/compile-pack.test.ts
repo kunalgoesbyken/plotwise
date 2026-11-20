@@ -147,3 +147,72 @@ describe('compilePointers $absent', () => {
     expect(!result.ok && result.errors[0].reason).toBe('term_unknown')
   })
 })
+
+describe('compilePointers in English tables', () => {
+  const english = {
+    table: splitPages(
+      [
+        'iii The remaining area Residential/ Less       1.0     -   - 1.0',
+        '',
+        '    and Extended Suburbs Commercial than 9m',
+        '',
+        '                                   9m & 1.0    0.5 0.5 2.0',
+        '                                   above',
+        '                                   but less',
+        '                                   than',
+        '                                   12.00m',
+        '1   21 and above but less than 30   Row   0.75 1.5',
+        '1   On express highways or roads wider than 52 m 6.0',
+        'the rate of 50% of the land rates, visitors 25 per cent',
+      ].join('\n'),
+    ),
+  }
+  const at = (line: number, token: string) => ({ src: 'table', page: 1, line, token, clause: 'Table 12' })
+  const compile = (bound: object) => compilePointers({ edge: { $bound: bound } }, english)
+  const cell = (...fragments: [number, string][]) => fragments.map(([line, text]) => ({ line, text }))
+
+  it('reads a comparison that follows the value, with its unit between', () => {
+    expect(compile({ ...at(10, '21'), op: 'and above' })).toMatchObject({ ok: true, value: { edge: { value: 21, cmp: 'gte' } } })
+    expect(compile({ ...at(10, '30'), op: 'less than' })).toMatchObject({ ok: true, value: { edge: { value: 30, cmp: 'lt' } } })
+    expect(compile({ ...at(11, '52'), op: 'wider than' })).toMatchObject({ ok: true, value: { edge: { value: 52, cmp: 'gt' } } })
+  })
+
+  it('refuses a comparison on the wrong side of the value', () => {
+    const result = compile({ ...at(10, '30'), op: 'and above' })
+    expect(!result.ok && result.errors[0].reason).toBe('op_mismatch')
+  })
+
+  it('assembles a table cell that wraps over several lines from fragments found on each line', () => {
+    expect(compile({ ...at(5, '9'), unit: 'm', op: '& above', cell: cell([5, '9m &'], [6, 'above']) })).toMatchObject({
+      ok: true,
+      value: { edge: { value: 9, cmp: 'gte', cite: { line: 5 } } },
+    })
+    expect(compile({ ...at(9, '12.00'), op: 'less than', cell: cell([7, 'but less'], [8, 'than'], [9, '12.00m']) })).toMatchObject({
+      ok: true,
+      value: { edge: { value: 12, cmp: 'lt' } },
+    })
+    expect(compile({ ...at(3, '9'), op: 'less than', cell: cell([1, 'Less'], [3, 'than 9m']) })).toMatchObject({
+      ok: true,
+      value: { edge: { value: 9, cmp: 'lt' } },
+    })
+  })
+
+  it('refuses a cell whose fragment is not on its line, runs backwards, skips too far or misses the value', () => {
+    const reasons = [
+      compile({ ...at(9, '12.00'), op: 'less than', cell: cell([7, 'but more'], [8, 'than'], [9, '12.00m']) }),
+      compile({ ...at(9, '12.00'), op: 'less than', cell: cell([8, 'than'], [7, 'but less'], [9, '12.00m']) }),
+      compile({ ...at(9, '12.00'), op: 'less than', cell: cell([1, 'Less'], [9, 'than 12.00m']) }),
+      compile({ ...at(9, '12.00'), op: 'less than', cell: cell([7, 'but less'], [8, 'than']) }),
+    ].map((result) => !result.ok && result.errors[0].reason)
+    expect(reasons).toEqual(['token_not_on_line', 'cell_broken', 'cell_broken', 'cell_broken'])
+  })
+
+  it('negates a comparison for the band the text calls elsewhere', () => {
+    expect(compile({ ...at(11, '52'), op: 'wider than', negate: true })).toMatchObject({ ok: true, value: { edge: { value: 52, cmp: 'lte' } } })
+  })
+
+  it('reads English percentages as shares', () => {
+    const result = compilePointers({ premium: { $num: at(12, '50%') }, visitors: { $num: at(12, '25 per cent') } }, english)
+    expect(result).toMatchObject({ ok: true, value: { premium: { value: 0.5 }, visitors: { value: 0.25 } } })
+  })
+})

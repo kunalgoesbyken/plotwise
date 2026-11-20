@@ -9,6 +9,7 @@ export function thaiSkeleton(text: string): string {
     .replace(/\u0E33/g, '\u0E32')
     .replace(/[\u0E50-\u0E59]/g, (d) => String(d.charCodeAt(0) - THAI_DIGIT_ZERO))
     .replace(/,/g, '')
+    .toLowerCase()
 }
 
 const WORD_DIGITS: readonly (readonly [string, number])[] = [
@@ -82,10 +83,23 @@ function parseWords(skeleton: string): number {
   return Number(`${parseIntegerWords(tokens.slice(0, pointAt))}.${decimals.join('')}`)
 }
 
+const ENGLISH_NUMBERS: Readonly<Record<string, number>> = {
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
+}
+
 function parseNumber(skeleton: string): number {
   if (/^\d+(\.\d+)?$/.test(skeleton)) return Number(skeleton)
   if (!skeleton) throw new Error('empty number')
-  return parseWords(skeleton)
+  return ENGLISH_NUMBERS[skeleton] ?? parseWords(skeleton)
 }
 
 const UNITS = ['ลูกบาศก์เมตร', 'ตารางเมตร', 'เมตร', 'ห้อง', 'ชั้น', 'คัน'].map(thaiSkeleton)
@@ -97,14 +111,20 @@ const withoutUnit = (skeleton: string) => {
 
 const ORDINAL = 'ท'
 const PERCENT = 'รอยละ'
-const TIMES = 'เทา'
+const PERCENT_AFTER = ['%', 'percent']
+const TIMES = ['เทา', 'times']
+
+const suffix = (s: string, endings: readonly string[]) => endings.find((ending) => s.endsWith(ending) && s.length > ending.length)
 
 export function parseQuantity(token: string): number {
   const s = withoutUnit(thaiSkeleton(token))
   if (s.startsWith(PERCENT)) return parseNumber(s.slice(PERCENT.length)) / 100
-  if (s.endsWith(TIMES)) return parseNumber(s.slice(0, -TIMES.length))
+  const percent = suffix(s, PERCENT_AFTER)
+  if (percent) return parseNumber(s.slice(0, -percent.length)) / 100
+  const times = suffix(s, TIMES)
+  if (times) return parseNumber(s.slice(0, -times.length))
   if (s.startsWith(ORDINAL)) return parseNumber(s.slice(ORDINAL.length))
-  const pair = /^(\d+(?:\.\d+)?)(ใน|:|ตอ)(\d+(?:\.\d+)?)$/.exec(s)
+  const pair = /^(\d+(?:\.\d+)?)(ใน|:|ตอ|\/)(\d+(?:\.\d+)?)$/.exec(s)
   if (pair) return Number(pair[1]) / Number(pair[3])
   return parseNumber(s)
 }
@@ -112,6 +132,7 @@ export function parseQuantity(token: string): number {
 const METRES_PER_UNIT: Record<string, number> = {
   [thaiSkeleton('เมตร')]: 1,
   [thaiSkeleton('เซนติเมตร')]: 0.01,
+  m: 1,
 }
 
 export function unitToMetres(token: string): number {
@@ -120,22 +141,36 @@ export function unitToMetres(token: string): number {
   return factor
 }
 
-export const COMPARATOR_PHRASES: readonly (readonly [string, Comparator])[] = [
-  ['ไม่น้อยกว่า', 'gte'],
-  ['ไม่ต่ำกว่า', 'gte'],
-  ['ตั้งแต่', 'gte'],
-  ['ไม่เกิน', 'lte'],
-  ['เกิน', 'gt'],
-  ['น้อยกว่า', 'lt'],
-  ['ไม่ถึง', 'lt'],
-  ['ภายในระยะ', 'lte'],
-  ['มากกว่า', 'gt'],
+export type ComparatorSide = 'before' | 'after'
+
+export const COMPARATOR_PHRASES: readonly (readonly [string, Comparator, ComparatorSide])[] = [
+  ['ไม่น้อยกว่า', 'gte', 'before'],
+  ['ไม่ต่ำกว่า', 'gte', 'before'],
+  ['ตั้งแต่', 'gte', 'before'],
+  ['ไม่เกิน', 'lte', 'before'],
+  ['เกิน', 'gt', 'before'],
+  ['น้อยกว่า', 'lt', 'before'],
+  ['ไม่ถึง', 'lt', 'before'],
+  ['ภายในระยะ', 'lte', 'before'],
+  ['มากกว่า', 'gt', 'before'],
+  ['less than', 'lt', 'before'],
+  ['up to', 'lte', 'before'],
+  ['not exceeding', 'lte', 'before'],
+  ['exceeding', 'gt', 'before'],
+  ['more than', 'gt', 'before'],
+  ['wider than', 'gt', 'before'],
+  ['& above', 'gte', 'after'],
+  ['and above', 'gte', 'after'],
 ]
 
-const COMPARATORS = new Map(COMPARATOR_PHRASES.map(([phrase, cmp]) => [thaiSkeleton(phrase), cmp]))
+const COMPARATORS = new Map(COMPARATOR_PHRASES.map(([phrase, cmp, side]) => [thaiSkeleton(phrase), { cmp, side }]))
 
-export function parseComparator(token: string): Comparator {
+function comparatorOf(token: string) {
   const comparator = COMPARATORS.get(thaiSkeleton(token))
   if (!comparator) throw new Error(`not a comparison word: ${token}`)
   return comparator
 }
+
+export const parseComparator = (token: string): Comparator => comparatorOf(token).cmp
+
+export const comparatorSide = (token: string): ComparatorSide => comparatorOf(token).side

@@ -1,5 +1,5 @@
 import { MAX_ROAD_WIDTH_M, type Plot, type Road } from '@/plot/plot'
-import { ASSUMPTIONS, type FarMode } from '@/solve'
+import { ASSUMPTIONS, type FarChoice } from '@/solve'
 import type { RulePack } from '@/rules'
 import { feasibility, type Feasibility } from './compute'
 import { roadWidthThresholds } from './road-width-thresholds'
@@ -36,11 +36,11 @@ function bestOutcome(result: Feasibility): WidthOutcome | null {
   )
 }
 
-export function widthSensitivity(plot: Plot, pack: RulePack, farMode: FarMode): WidthRow[] {
+export function widthSensitivity(plot: Plot, pack: RulePack, far: FarChoice): WidthRow[] {
   const road = widestRoad(plot.roads)
   return sampleWidths(road.widthM, roadWidthThresholds(pack)).map((widthM) => ({
     widthM,
     current: widthM === road.widthM,
-    outcome: bestOutcome(feasibility(withRoadWidth(plot, road, widthM), pack, farMode)),
+    outcome: bestOutcome(feasibility(withRoadWidth(plot, road, widthM), pack, far)),
   }))
 }

@@ -22,6 +22,8 @@ export function findLines(pages: Pages, text: string): LineHit[] {
 
 const isDropped = (ch: string) => thaiSkeleton(ch) === ''
 const isNumeric = (ch: string | undefined) => ch !== undefined && (ch === ',' || /^[\d.]$/.test(thaiSkeleton(ch)))
+const isDigit = (ch: string | undefined) => ch !== undefined && /^\d$/.test(thaiSkeleton(ch))
+const continuesNumber = (chars: string[], at: number) => isNumeric(chars[at]) && (chars[at] !== '.' || isDigit(chars[at + 1]))
 const DIGIT_AT_START = /^\d/
 const DIGIT_AT_END = /\d$/
 
@@ -31,7 +33,7 @@ function matchFrom(chars: string[], start: number, target: string): string | und
   while (end < chars.length && skeleton.length < target.length) skeleton += thaiSkeleton(chars[end++])
   if (skeleton !== target) return undefined
   if (DIGIT_AT_START.test(target) && isNumeric(chars[start - 1])) return undefined
-  if (DIGIT_AT_END.test(target) && isNumeric(chars[end])) return undefined
+  if (DIGIT_AT_END.test(target) && continuesNumber(chars, end)) return undefined
   while (end < chars.length && chars[end] !== ' ' && isDropped(chars[end])) end++
   return chars.slice(start, end).join('')
 }

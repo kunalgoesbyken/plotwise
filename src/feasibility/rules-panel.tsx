@@ -67,21 +67,22 @@ function EstimatedRoads() {
   )
 }
 
-function FloorArea({ limits }: { limits: Limits }) {
-  const { areaUnit } = useRegion()
+function FloorArea({ solution }: Pick<Ready, 'solution'>) {
+  const { limits, widening, farAreaSqm } = solution
+  const { areaUnit, areaTerms } = useRegion()
   const { farBonus } = useFeasibility()
   const eligible = limits.farBonus.measures.filter((m) => m.eligible)
   return (
     <LimitGroup title={t('rules.group.floor-area')}>
       <LimitRow
-        label={t('limit.far')}
+        label={t('limit.far', areaTerms)}
         value={t('value.far', { ratio: formatQuantity(limits.far.ratio, 'ratio') })}
         detail={t('limit.far.detail', { area: formatQuantity(limits.far.maxGfaSqm, areaUnit) })}
         cites={limits.far.cites}
       />
       {limits.farBonus.measures.length > 0 && (
         <LimitRow
-          label={t('limit.far-bonus')}
+          label={t('limit.far-bonus', areaTerms)}
           value={t('value.bonus', { share: percent(limits.farBonus.maxShare) })}
           detail={
             <>
@@ -98,6 +99,35 @@ function FloorArea({ limits }: { limits: Limits }) {
             </>
           }
           cites={[...limits.farBonus.cites, ...eligible.flatMap((m) => m.cites)]}
+        />
+      )}
+      {limits.farPurchase.options.map((option) => (
+        <LimitRow
+          key={option.kind}
+          label={t(`limit.purchase.${option.kind}`)}
+          value={option.maxExtraGfaSqm > 0 ? bound({ cmp: 'lte', value: option.maxExtraGfaSqm / farAreaSqm }, 'ratio') : t('value.none')}
+          detail={
+            option.maxExtraGfaSqm > 0
+              ? t('limit.purchase.detail', { area: formatQuantity(option.maxExtraGfaSqm, areaUnit), chosen: formatQuantity(option.chosenGfaSqm, areaUnit) })
+              : t('limit.purchase.none')
+          }
+          cites={option.cites}
+        />
+      ))}
+      {widening && (
+        <LimitRow
+          label={t('limit.widening')}
+          value={formatQuantity(widening.reservedSqm, areaUnit)}
+          detail={t('limit.widening.detail', { area: formatQuantity(widening.reservedSqm, areaUnit), gross: formatQuantity(widening.grossAreaSqm, areaUnit) })}
+          cites={widening.cites}
+        />
+      )}
+      {limits.inLieu && (
+        <LimitRow
+          label={t('limit.in-lieu')}
+          value={formatQuantity(limits.inLieu.gfaSqm, areaUnit)}
+          detail={t('limit.in-lieu.detail', { area: formatQuantity(limits.inLieu.gfaSqm, areaUnit) })}
+          cites={limits.inLieu.cites}
         />
       )}
       {limits.coverage && (
@@ -186,7 +216,7 @@ function Height({ solution }: Pick<Ready, 'solution'>) {
 }
 
 function HighRise({ limits }: { limits: Limits }) {
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (!limits.highRise) return null
   const { access, farMax, fireLaneWidthM } = limits.highRise
   return (
@@ -202,7 +232,7 @@ function HighRise({ limits }: { limits: Limits }) {
       ))}
       <LimitRow label={t('limit.fire-lane')} value={bound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
       <LimitRow
-        label={t('limit.high-rise-far')}
+        label={t('limit.high-rise-far', areaTerms)}
         value={t('value.far', { ratio: formatQuantity(farMax.value, 'ratio') })}
         detail={t('limit.high-rise-far.detail')}
         cites={farMax.cites}
@@ -258,6 +288,7 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
     <LimitGroup title={t('rules.group.parking')}>
       {solution.limits.parking.rules.map((rule) => {
         const demand = rule[plot.buildingType]
+        if (!demand) return null
         return (
           <LimitRow
             key={rule.scope}
@@ -265,6 +296,12 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
             detail={
               <>
                 {demandText(demand, areaUnit)}
+                {rule.visitors && (
+                  <>
+                    <br />
+                    {t('parking.visitors', { share: formatQuantity(rule.visitors.share.value, 'percent'), min: rule.visitors.min.value })}
+                  </>
+                )}
                 {rule.largeBuildingSqmPerSpace && (
                   <>
                     <br />
@@ -273,7 +310,12 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
                 )}
               </>
             }
-            cites={[rule.appliesWhere, ...demandCites(demand), ...(rule.largeBuildingSqmPerSpace ? [rule.largeBuildingSqmPerSpace.cite] : [])]}
+            cites={[
+              rule.appliesWhere,
+              ...demandCites(demand),
+              ...(rule.visitors ? [rule.visitors.share.cite] : []),
+              ...(rule.largeBuildingSqmPerSpace ? [rule.largeBuildingSqmPerSpace.cite] : []),
+            ]}
           />
         )
       })}
@@ -298,7 +340,7 @@ function Rules({ plot, solution }: Ready) {
         </p>
         {region.cityPlan && <p className="mt-1 text-xs text-muted-foreground">{t('rules.plan', { plan: region.cityPlan.version })}</p>}
       </div>
-      <FloorArea limits={limits} />
+      <FloorArea solution={solution} />
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />
       <Height solution={solution} />

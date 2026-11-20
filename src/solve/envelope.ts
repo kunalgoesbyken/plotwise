@@ -11,6 +11,7 @@ import {
   heightVsRoadMultiple,
   heightVsRoadSetback,
   roadSetback,
+  streetHeightLimitM,
   strictest,
   type Setback,
 } from './setbacks'
@@ -101,6 +102,7 @@ function farthestReachM({ site }: EnvelopeInput, edge: number): number {
 function roadHeightLimitM(input: EnvelopeInput): number {
   const multiple = heightVsRoadMultiple(input.pack)
   if (!multiple) return Infinity
+  if (multiple.distance === 'streetPlusFrontSpace') return streetHeightLimitM(input.pack, input.site.edges, multiple.value)
   return Math.min(
     ...input.site.edges.flatMap((edge, i) => (edge.roadWidthM === null ? [] : [multiple.value * (edge.roadWidthM + farthestReachM(input, i))])),
   )

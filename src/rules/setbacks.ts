@@ -19,7 +19,8 @@ const RoadSetbackDistanceSchema = z.discriminatedUnion('kind', [
 export const RoadSetbackSchema = z.object({
   appliesAbove: z
     .object({ storeys: BoundSchema.optional(), heightM: BoundSchema.optional() })
-    .refine((above) => above.storeys || above.heightM, { message: 'a road setback must say the storeys or height it applies from' }),
+    .refine((above) => above.storeys || above.heightM, { message: 'a road setback must say the storeys or height it applies from' })
+    .optional(),
   bands: z.array(z.object({ roadWidthM: RangeSchema, setback: RoadSetbackDistanceSchema })).min(1),
 })
 
@@ -33,9 +34,18 @@ export const FrontOpenSpaceSchema = z.object({
   exemptIfWithinRoadM: BoundSchema,
 })
 
+export const LowRiseOpenSpacesSchema = z.object({
+  appliesTo: CiteSchema,
+  maxUpperFloors: CitedSchema,
+  rows: z
+    .array(z.object({ plotAreaSqm: RangeSchema, frontM: CitedSchema, rearM: CitedSchema, sideM: CitedSchema.optional() }))
+    .min(1),
+})
+
 export const BlindWallSchema = z.object({ minDistanceM: CitedSchema, onBoundaryMaxHeightM: BoundSchema })
 
 export type BoundarySetbackRule = z.infer<typeof BoundarySetbackSchema>
 export type RoadSetbackRule = z.infer<typeof RoadSetbackSchema>
 export type RoadSetbackDistance = z.infer<typeof RoadSetbackDistanceSchema>
 export type FrontOpenSpace = z.infer<typeof FrontOpenSpaceSchema>
+export type LowRiseOpenSpaces = z.infer<typeof LowRiseOpenSpacesSchema>

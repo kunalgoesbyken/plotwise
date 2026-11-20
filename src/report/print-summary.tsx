@@ -4,6 +4,8 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
+import { checkLabel } from '@/feasibility/check-label'
+import type { Region } from '@/region/regions'
 import { tally } from '@/feasibility/checklist'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { VerificationNote } from '@/feasibility/verification-note'
@@ -51,11 +53,12 @@ function valueText(finance: Finance, parameter: Parameter, area: AreaUnit) {
   return formatMoney(parameter.unit === 'money' ? perAreaToDisplay(value, area) : value, finance.region.currency)
 }
 
-function Assumptions({ finance, area }: { finance: Finance; area: AreaUnit }) {
+function Assumptions({ finance, region }: { finance: Finance; region: Region }) {
+  const area = region.areaUnit
   return (
     <dl className="columns-2 gap-8 text-xs">
       {(Object.keys(SCALARS) as ScalarId[]).map((id) => (
-        <Fact key={id} label={scalarLabel(id, area)}>
+        <Fact key={id} label={scalarLabel(id, region)}>
           {valueText(finance, SCALARS[id], area)}
         </Fact>
       ))}
@@ -70,12 +73,14 @@ function Assumptions({ finance, area }: { finance: Finance; area: AreaUnit }) {
 
 function MoneyFacts({ design, finance, priced, area }: { design: Design; finance: Finance; priced: Priced; area: AreaUnit }) {
   const estimate = priced.estimateFor(design)
+  const { areaTerms } = useRegion()
   const { currency } = finance.region
   return (
     <>
       <Fact label={t('money.built-up')}>{formatQuantity(estimate.builtSqm, area)}</Fact>
-      <Fact label={t('money.saleable')}>{formatQuantity(estimate.saleableSqm, area)}</Fact>
+      <Fact label={t('money.saleable', areaTerms)}>{formatQuantity(estimate.saleableSqm, area)}</Fact>
       <Fact label={t('money.first-cost')}>{rangeText(firstCostRange(estimate), currency)}</Fact>
+      {estimate.purchaseCost > 0 && <Fact label={t('money.purchase')}>{formatMoney(estimate.purchaseCost, currency)}</Fact>}
       <Fact label={t('money.land-value')}>{rangeText(estimate.landValue, currency)}</Fact>
     </>
   )
@@ -138,7 +143,7 @@ export function PrintSummary() {
           <ul className="text-xs">
             {toCheck.map((check) => (
               <li key={check.id} className="border-b border-dotted py-1">
-                {t(`status.${check.status}`)}: {t(`check.${check.id}`)}
+                {t(`status.${check.status}`)}: {checkLabel(check.id, region.areaTerms)}
               </li>
             ))}
           </ul>
@@ -146,7 +151,7 @@ export function PrintSummary() {
       )}
       <section>
         <h2 className="mb-1 text-sm font-semibold">{t('report.assumptions')}</h2>
-        <Assumptions finance={finance} area={area} />
+        <Assumptions finance={finance} region={region} />
       </section>
       <footer className="border-t pt-3 text-2xs break-all text-muted-foreground">
         {t('report.disclaimer')} {href}

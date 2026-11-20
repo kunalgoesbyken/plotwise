@@ -31,9 +31,9 @@ function Row({ label, source, children }: { readonly label: string; readonly sou
 }
 
 function ScalarRow({ finance, id }: { finance: Finance; id: ScalarId }) {
-  const { areaUnit } = useRegion()
+  const region = useRegion()
   const parameter = SCALARS[id]
-  const label = scalarLabel(id, areaUnit)
+  const label = scalarLabel(id, region)
   return (
     <Row label={label} source={finance.sourceOf(parameter)}>
       <ParameterInput finance={finance} parameter={parameter} label={label} hideLabel />

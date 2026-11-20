@@ -1,7 +1,7 @@
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType, Plot } from '@/plot/plot'
 import { DEFAULT_REGION, REGIONS } from '@/region/regions'
-import { loadPack } from '@/rules'
+import { loadPack, type RulePack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
 import { nearestStation, type NearestStation } from '@/site/nearest-station'
 import type { Road as SiteRoad, Station } from '@/site/schema'
@@ -89,6 +89,7 @@ function selectionAfter(action: DraftAction, current: Selection, before: Draft, 
     case 'set-near-station':
     case 'estimate-near-station':
     case 'set-limit':
+    case 'set-prescribed-width':
       return current
     default:
       return NONE
@@ -200,18 +201,38 @@ function reduceAction(state: EditorState, action: EditorAction): EditorState {
   }
 }
 
-function withRegionLimits(state: EditorState): EditorState {
-  const taken = new Set<string>(plotLimitFields(loadPack(REGIONS[state.region].packId)))
-  const { limits } = state.draft
-  const kept = Object.entries(limits).filter(([field]) => taken.has(field))
-  if (kept.length === Object.keys(limits).length) return state
-  const draft = { ...state.draft, limits: Object.fromEntries(kept) }
-  return { ...state, draft, plot: toPlot(draft) }
+function takenLimits(pack: RulePack, draft: Draft): Draft {
+  const taken = new Set<string>(plotLimitFields(pack))
+  const kept = Object.entries(draft.limits).filter(([field]) => taken.has(field))
+  return kept.length === Object.keys(draft.limits).length ? draft : { ...draft, limits: Object.fromEntries(kept) }
+}
+
+function coveredBuildingType(pack: RulePack, draft: Draft): Draft {
+  const covered = pack.buildingTypes
+  return !covered || covered.includes(draft.buildingType) ? draft : { ...draft, buildingType: covered[0] }
+}
+
+const widensPerFrontage = (pack: RulePack) => (pack.reservations ?? []).some((r) => r.target.kind === 'perFrontage')
+
+function takenWidenings(pack: RulePack, draft: Draft): Draft {
+  if (draft.status !== 'closed' || widensPerFrontage(pack) || !draft.corners.some((c) => c.edge.road && c.edge.prescribedWidthM !== undefined)) return draft
+  const corners = draft.corners.map((corner) => {
+    if (!corner.edge.road) return corner
+    const { prescribedWidthM: dropped, ...edge } = corner.edge
+    return dropped === undefined ? corner : { ...corner, edge }
+  })
+  return { ...draft, corners }
+}
+
+function withRegionInputs(state: EditorState): EditorState {
+  const pack = loadPack(REGIONS[state.region].packId)
+  const draft = takenWidenings(pack, coveredBuildingType(pack, takenLimits(pack, state.draft)))
+  return draft === state.draft ? state : { ...state, draft, plot: toPlot(draft) }
 }
 
 export function reduceEditor(state: EditorState, action: EditorAction): EditorState {
   const next = reduceAction(state, action)
-  return next === state ? state : withStationEstimate(state, withFrontageEstimates(state, withRegionLimits(next)))
+  return next === state ? state : withStationEstimate(state, withFrontageEstimates(state, withRegionInputs(next)))
 }
 
 export function nextStep({ draft }: EditorState): Step {

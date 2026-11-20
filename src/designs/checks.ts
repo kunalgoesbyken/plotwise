@@ -8,12 +8,15 @@ import {
   frontOpenSpaceDepth,
   inRange,
   isHighRiseOrExtraLarge,
+  lowRiseSetbacks,
+  rearEdge,
   mainRoad,
   negate,
   permeableArea,
   ratioOpenSpace,
   roadSetback,
   satisfies,
+  streetHeightLimitM,
   strictest,
   type Building,
   type OpenSpaceNeed,
@@ -152,12 +155,19 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const boundaries = edges.filter((e) => e.roadWidthM === null)
   const roads = edges.flatMap((e) => (e.roadWidthM === null ? [] : [{ ...e, roadWidthM: e.roadWidthM }]))
   const checks: Check[] = []
+  const lowRise = lowRiseSetbacks(pack, solution.landAreaSqm, building)
+  const rear = rearEdge(site)
   if (boundaries.length > 0) {
-    const required = boundarySetback(pack, building, 'boundary')
-    checks.push(measured('boundary-setback', Math.min(...boundaries.map((e) => nearest(e.i))), 'gte', required.distanceM, 'm', required.cites))
+    const margins = boundaries.map((e) => {
+      const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : boundarySetback(pack, building, 'boundary')
+      const actual = nearest(e.i)
+      return { actual, required, margin: actual - required.distanceM }
+    })
+    const worst = margins.reduce((least, m) => (m.margin < least.margin ? m : least))
+    checks.push(measured('boundary-setback', worst.actual, 'gte', worst.required.distanceM, 'm', worst.required.cites))
   }
   const roadMargins = roads.map((e) => {
-    const required = strictest([roadSetback(pack, building, e.roadWidthM), boundarySetback(pack, building, 'road')])
+    const required = lowRise ? lowRise.front : strictest([roadSetback(pack, building, e.roadWidthM), boundarySetback(pack, building, 'road')])
     const actual = nearest(e.i)
     return { actual, required, margin: actual - required.distanceM }
   })
@@ -165,6 +175,11 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   checks.push(measured('road-setback', worstRoad.actual, 'gte', worstRoad.required.distanceM, 'm', worstRoad.required.cites))
   const multiple = solution.limits.height.vsRoadMultiple
   if (!multiple) return checks
+  if (multiple.distance === 'streetPlusFrontSpace') {
+    const allowedM = streetHeightLimitM(pack, site.edges, multiple.value)
+    checks.push(measured('height-vs-road', building.heightM, 'lte', allowedM, 'm', multiple.cites))
+    return checks
+  }
   const heights = roads.flatMap((e) =>
     levels.map((level) => {
       const allowed = multiple.value * (e.roadWidthM + level.clearanceM[e.i])

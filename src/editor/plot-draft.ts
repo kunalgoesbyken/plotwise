@@ -1,6 +1,6 @@
 import type { LngLat } from '@/geo/projection'
 import { MAX_CORNERS, PlotLimitsSchema, PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type PlotLimitField, type PlotLimits, type Road } from '@/plot/plot'
-import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
+import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection, type RoadEdge } from './outline'
 import { isSimplePath } from './path'
 
 const COORDINATE_SCALE = 1e7
@@ -24,6 +24,7 @@ export type DraftAction =
   | { type: 'mark-road'; edge: number }
   | { type: 'unmark-road'; edge: number }
   | { type: 'set-road-width'; edge: number; widthM: number }
+  | { type: 'set-prescribed-width'; edge: number; prescribedWidthM: number | undefined }
   | { type: 'estimate-road-width'; edge: number; widthM: number }
   | { type: 'estimate-road'; edge: number; widthM: number | null }
   | { type: 'set-building-type'; buildingType: BuildingType }
@@ -54,6 +55,11 @@ export function roundLngLat([lng, lat]: LngLat): [number, number] {
 }
 
 const isRoadWidth = (widthM: number) => RoadWidthSchema.safeParse(widthM).success
+
+function roadOf(widthM: number | null, estimated: boolean, prescribedWidthM: number | undefined): RoadEdge {
+  const widens = prescribedWidthM !== undefined && (widthM === null || prescribedWidthM > widthM)
+  return widens ? { road: true, widthM, estimated, prescribedWidthM } : { road: true, widthM, estimated }
+}
 
 const accept = (draft: Draft): EditResult => ({ ok: true, draft })
 const reject = (reason: Rejection): EditResult => ({ ok: false, reason })
@@ -129,13 +135,19 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
       return replaceEdge(draft, action.edge, (edge) => (edge.road ? NEIGHBOUR : edge))
     case 'set-road-width':
       if (!isRoadWidth(action.widthM)) return accept(draft)
-      return replaceEdge(draft, action.edge, (edge) =>
-        edge.road ? { road: true, widthM: action.widthM, estimated: false } : edge,
-      )
+      return replaceEdge(draft, action.edge, (edge) => (edge.road ? roadOf(action.widthM, false, edge.prescribedWidthM) : edge))
+    case 'set-prescribed-width': {
+      const { prescribedWidthM } = action
+      if (prescribedWidthM !== undefined && !isRoadWidth(prescribedWidthM)) return accept(draft)
+      return replaceEdge(draft, action.edge, (edge) => {
+        if (!edge.road || (prescribedWidthM !== undefined && edge.widthM !== null && prescribedWidthM <= edge.widthM)) return edge
+        return roadOf(edge.widthM, edge.estimated, prescribedWidthM)
+      })
+    }
     case 'estimate-road-width':
       if (!isRoadWidth(action.widthM)) return accept(draft)
       return replaceEdge(draft, action.edge, (edge) =>
-        edge.road && edge.widthM === null ? { road: true, widthM: action.widthM, estimated: true } : edge,
+        edge.road && edge.widthM === null ? roadOf(action.widthM, true, edge.prescribedWidthM) : edge,
       )
     case 'estimate-road': {
       const { widthM } = action
@@ -152,10 +164,10 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
 }
 
 function fromPlot(plot: Plot, nearStationSource: NearStationSource): EditResult {
-  const widths = new Map(plot.roads.map((r) => [r.edge, r.widthM]))
+  const roads = new Map(plot.roads.map((r) => [r.edge, r]))
   const corners = plot.ring.map((at, i): Corner => {
-    const widthM = widths.get(i)
-    return { at, edge: widthM === undefined ? NEIGHBOUR : { road: true, widthM, estimated: false } }
+    const road = roads.get(i)
+    return { at, edge: road ? roadOf(road.widthM, false, road.prescribedWidthM) : NEIGHBOUR }
   })
   return closed({ ...plot, limits: plot.limits ?? {}, nearStationSource }, corners)
 }
@@ -200,7 +212,7 @@ export function toPlot(draft: Draft): Plot | null {
   for (const [edge, { edge: e }] of draft.corners.entries()) {
     if (!e.road) continue
     if (e.widthM === null) return null
-    roads.push({ edge, widthM: e.widthM })
+    roads.push({ edge, widthM: e.widthM, ...(e.prescribedWidthM !== undefined && { prescribedWidthM: e.prescribedWidthM }) })
   }
   const { buildingType, nearStation, limits } = draft
   const entered = Object.keys(limits).length > 0 ? { limits } : {}

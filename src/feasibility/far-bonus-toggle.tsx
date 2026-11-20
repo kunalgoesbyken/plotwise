@@ -8,7 +8,7 @@ import { useFeasibility } from './feasibility-provider'
 
 export function FarBonusToggle() {
   const { result, farBonus, setFarBonus } = useFeasibility()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (result?.status !== 'ready') return null
   const { extraGfaSqm, measures } = result.solution.limits.farBonus
   if (extraGfaSqm <= 0) return null
@@ -16,7 +16,7 @@ export function FarBonusToggle() {
   return (
     <div>
       <SwitchRow checked={farBonus} onCheckedChange={setFarBonus}>
-        {t('far-bonus.label', { area: formatQuantity(extraGfaSqm, areaUnit) })}
+        {t('far-bonus.label', { area: formatQuantity(extraGfaSqm, areaUnit), ratio: areaTerms.ratio })}
       </SwitchRow>
       <p className="text-xs leading-relaxed text-muted-foreground">{t('far-bonus.needs', { measures: formatList(needed) })}</p>
     </div>

@@ -4,12 +4,12 @@ import { Canvas } from '@react-three/fiber'
 import { useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Button } from '@/ui/button'
 import type { LocalFrame, Vec2 } from '@/geo/projection'
-import type { Floor, Loop, Prism } from '@/geometry'
+import type { Floor, Loop, Polygon, Prism } from '@/geometry'
 import type { Site } from '@/site/schema'
 import { t } from '@/text/messages'
 import { siteContext, standingBuildings } from './context'
 import { framingOf, needsReframe } from './framing'
-import { Buildings, Envelope, Ground, Massing, PlotMarks, Roads } from './layers'
+import { Buildings, Envelope, Ground, Massing, PlotMarks, Roads, Strip } from './layers'
 import { buildingTones, readPalette } from './palette'
 import { Orbit, Sun } from './rig'
 import { useFullscreen } from './use-fullscreen'
@@ -24,6 +24,7 @@ export type SceneViewProps = {
   readonly site: Site | null
   readonly envelope: readonly Prism[]
   readonly carved?: readonly Prism[] | null
+  readonly strip?: readonly Polygon[]
   readonly designs: readonly SceneDesign[]
   readonly selectedDesignId?: string
   readonly controls?: ReactNode
@@ -47,7 +48,7 @@ function describeScene(buildings: number | null, envelope: readonly Prism[], des
   return parts.join(' ')
 }
 
-export default function SceneView({ frame, plot, site, envelope, carved, designs, selectedDesignId, controls, children }: SceneViewProps) {
+export default function SceneView({ frame, plot, site, envelope, carved, strip, designs, selectedDesignId, controls, children }: SceneViewProps) {
   const root = useRef<HTMLDivElement>(null)
   const helpId = useId()
   const fullscreen = useFullscreen(root)
@@ -103,6 +104,7 @@ export default function SceneView({ frame, plot, site, envelope, carved, designs
             </group>
           )}
           <PlotMarks ring={plot.ring} roadEdges={plot.roadEdges} palette={palette} />
+          {strip && strip.length > 0 && <Strip polygons={strip} color={palette.road} />}
           {carved && <Envelope prisms={carved} color={palette.signal} faint />}
           <Envelope prisms={envelope} color={palette.plot} />
           {design && <Massing floors={design.floors} palette={palette} />}

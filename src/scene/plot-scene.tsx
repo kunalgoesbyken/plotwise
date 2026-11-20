@@ -5,7 +5,7 @@ import { useMemo, type ReactNode } from 'react'
 import { usePlot, useRegion } from '@/editor/plot-store'
 import { Button } from '@/ui/button'
 import { localFrame } from '@/geo/projection'
-import type { Prism } from '@/geometry'
+import type { Polygon, Prism } from '@/geometry'
 import type { Plot } from '@/plot/plot'
 import { t } from '@/text/messages'
 import type { SceneDesign } from './scene-view'
@@ -25,6 +25,7 @@ const SceneView = dynamic(() => import('./scene-view'), {
 type PlotSceneProps = {
   readonly envelope: readonly Prism[]
   readonly carved?: readonly Prism[] | null
+  readonly strip?: readonly Polygon[]
   readonly designs: readonly SceneDesign[]
   readonly selectedDesignId?: string
   readonly controls?: ReactNode

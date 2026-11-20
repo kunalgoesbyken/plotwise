@@ -35,7 +35,7 @@ function CiteItem({ cite }: { cite: Cite }) {
           rel="noreferrer"
           className="inline-flex min-h-11 w-fit items-center gap-1 text-foreground underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground lg:min-h-0"
         >
-          {t('source.open')}
+          {t('source.open', { language: source.language })}
           <ArrowSquareOutIcon aria-hidden="true" className="size-3.5" />
         </a>
       )}
