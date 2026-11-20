@@ -1,5 +1,7 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
+import type { DegreeOrder, UtmOrder } from '@/import/types'
+import type { LengthUnit } from '@/import/units'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import { REGION } from '@/region/regions'
 import type { EnvelopeKind } from '@/solve'
@@ -24,6 +26,8 @@ type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`building.${BuildingType}`, string> &
   Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
   Record<`plot-limit.${PlotLimitField}`, string> &
+  Record<`import.unit.${LengthUnit}`, string> &
+  Record<`import.order.${DegreeOrder | UtmOrder}`, string> &
   Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
 
 const en = {
@@ -166,6 +170,73 @@ const en = {
   'plot.corners': ({ count }: Count) => plural(count, 'corner', 'corners'),
   'plot.example': 'Try an example plot',
   'plot.clear': 'Clear and redraw',
+
+  'import.toggle': 'Import coordinates or a file',
+  'import.privacy': 'Read in your browser. Nothing is uploaded.',
+  'import.paste.label': 'Paste corner coordinates',
+  'import.paste.placeholder': '100.5754, 13.7787\n100.5757, 13.7787\n100.5757, 13.7791',
+  'import.paste.hint': 'One corner per line, or separated by semicolons. Degrees, or UTM metres.',
+  'import.file.label': 'Or choose a KML, GeoJSON or DXF file',
+  'import.file.reading': ({ name }: { name: string }) => `Reading ${name}…`,
+  'import.shape.label': 'Which shape is the plot?',
+  'import.shape.option': ({ name, corners }: { name: string; corners: string }) => `${name} · ${corners}`,
+  'import.shape.option-area': ({ name, corners, area }: { name: string; corners: string; area: string }) => `${name} · ${corners} · ${area}`,
+  'import.shape.curved': ({ label }: { label: string }) => `${label} · curved, cannot be used`,
+  'import.shape.unnamed': ({ number }: Num) => `Shape ${number}`,
+  'import.order.label': 'Which number comes first?',
+  'import.order.lng-lat': 'Longitude, then latitude',
+  'import.order.lat-lng': 'Latitude, then longitude',
+  'import.order.east-north': 'Easting, then northing',
+  'import.order.north-east': 'Northing, then easting',
+  'import.utm.zone': 'UTM zone',
+  'import.utm.hemisphere': 'Hemisphere',
+  'import.utm.choose': 'Choose',
+  'import.utm.hemisphere.N': 'North',
+  'import.utm.hemisphere.S': 'South',
+  'import.utm.hint': ({ city, zone }: { city: string; zone: string }) => `${city} is in zone ${zone}.`,
+  'import.unit.label': 'Units of the drawing',
+  'import.unit.choose': 'Choose a unit',
+  'import.unit.declared': 'The file states this unit. Check it is right.',
+  'import.unit.undeclared': 'The file does not say what its numbers measure.',
+  'import.unit.m': 'Metres',
+  'import.unit.mm': 'Millimetres',
+  'import.unit.cm': 'Centimetres',
+  'import.unit.ft': 'Feet',
+  'import.unit.in': 'Inches',
+  'import.locate.label': 'Where on Earth is the drawing?',
+  'import.locate.utm': 'Its coordinates are UTM',
+  'import.locate.reference': 'Put its first corner at a point',
+  'import.reference.lng': 'Longitude of the first corner',
+  'import.reference.lat': 'Latitude of the first corner',
+  'import.reference.hint': 'The top of the drawing is taken as north.',
+  'import.incomplete': 'Answer the questions above to see the outline.',
+  'import.result': ({ corners, area }: { corners: string; area: string }) => `${corners}, ${area}`,
+  'import.use': 'Use this outline',
+
+  'import.problem.bad-entry': ({ entry }: { entry: number }) => `Entry ${entry} is not a pair of numbers. Write one corner per line, like 100.5754, 13.7787.`,
+  'import.problem.unrecognised-coordinates': 'These numbers are not all degrees or all UTM metres. Use one system for every corner.',
+  'import.problem.out-of-range': 'Some coordinates are not positions on Earth. Check the order and the units.',
+  'import.problem.outside-region': ({ country }: { country: string }) =>
+    `These corners fall outside ${country}. Check the order of the numbers, and the UTM zone and hemisphere.`,
+  'import.problem.too-few-corners': 'A plot needs at least 3 corners.',
+  'import.problem.too-many-corners': ({ count }: Count) => `A plot can have up to ${count} corners. Simplify the outline and try again.`,
+  'import.problem.crossing': 'The outline crosses itself. Put the corners in order around the plot.',
+  'import.problem.degenerate': 'These corners are too close together or all in a line to make a plot.',
+  'import.problem.too-small': ({ area }: Area) => `This outline is smaller than ${area}, too small for a plot. Check the units.`,
+  'import.problem.too-large': ({ area }: Area) => `This outline is larger than ${area}, too large for one plot. Check the units.`,
+  'import.problem.open-ring': 'The outline is not closed. Its last corner must meet the first.',
+  'import.problem.file-too-large': ({ megabytes }: { megabytes: string }) => `That file is over ${megabytes} MB. Export only the plot boundary and try again.`,
+  'import.problem.file-unsupported': 'Only KML, GeoJSON and DXF files can be imported. Export a KMZ or DWG as one of those first.',
+  'import.problem.file-unreadable': 'That file could not be read.',
+  'import.problem.kml-invalid': 'That KML file is damaged or has coordinates that cannot be read.',
+  'import.problem.geojson-invalid': 'That is not valid GeoJSON, or its coordinates cannot be read.',
+  'import.problem.dxf-invalid': 'That is not a readable ASCII DXF file.',
+  'import.problem.dxf-binary': 'That is a binary DXF. Save it again as an ASCII DXF.',
+  'import.problem.dxf-curved': 'This polyline has curved segments, which a straight-edged plot cannot use. Convert the curves to straight segments in your CAD program and export again.',
+  'import.problem.too-many-shapes': ({ count }: Count) => `That file has more than ${count} shapes. Export only the plot’s layer and try again.`,
+  'import.problem.paste-too-large': 'That is more text than the corners of one plot. Paste only the corners.',
+  'import.problem.no-polygon': 'No polygon was found in that file.',
+  'import.problem.no-polyline': 'No polyline was found in that drawing. Draw the plot boundary as a closed polyline.',
 
   'frontage.title': 'Road frontage',
   'frontage.roads': ({ count }: Count) => plural(count, 'road', 'roads'),
