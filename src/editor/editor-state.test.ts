@@ -77,6 +77,15 @@ describe('reduceEditor', () => {
     expect(run({ type: 'load', plot }, { type: 'mark-road', edge: 2 }, { type: 'load', plot }).load).toEqual({ source: 'link', count: 2 })
   })
 
+  it('closes an imported outline with no roads, selects nothing and counts it as a load for the map to frame', () => {
+    const state = run({ type: 'add', at: [5, 5] }, { type: 'import', ring: plot.ring })
+    expect(state.draft.status).toBe('closed')
+    expect(state.plot).toBeNull()
+    expect(state.selection).toEqual({ kind: 'none' })
+    expect(state.load).toEqual({ source: 'import', count: 1 })
+    expect(nextStep(state)).toEqual({ step: 'road' })
+  })
+
   it('asks the map to go to a searched place, again even when it is the same place, without touching the plot', () => {
     const loaded = run({ type: 'load', plot })
     const first = reduceEditor(loaded, { type: 'focus', at: [100.53, 13.73] })
@@ -122,6 +131,12 @@ describe('road width estimates', () => {
       { edge: 0, widthM: 12 },
       { edge: 2, widthM: 8 },
     ])
+  })
+
+  it('marks the edges of an imported outline beside a mapped road like a drawn one', () => {
+    const imported = run({ type: 'import', ring: lot.ring }, { type: 'site', roads: [soi], stations: [] })
+    expect(imported.draft.status === 'closed' && imported.draft.corners[2].edge).toEqual({ road: true, widthM: 8, estimated: true })
+    expect(imported.plot?.roads).toEqual([{ edge: 2, widthM: 8 }])
   })
 
   it('marks untouched edges beside a mapped road when the outline closes or the roads arrive', () => {
@@ -278,6 +293,19 @@ describe('rules source and entered limits', () => {
     expect(bangkok.draft.limits).toEqual({})
     expect(run({ type: 'load', plot: { ...plot, limits: { maxFar: 3 } } }).plot).toEqual(plot)
     expect(run({ type: 'set-limit', field: 'maxFar', value: 3 }).draft.limits).toEqual({})
+  })
+
+  it('keeps the entered limits on an imported outline in every rules source that takes them', () => {
+    for (const region of ['custom', 'dxb'] as const) {
+      const imported = run(
+        { type: 'set-region', region },
+        { type: 'set-limit', field: 'maxFar', value: 2 },
+        { type: 'import', ring: plot.ring },
+        { type: 'mark-road', edge: 0 },
+        { type: 'set-road-width', edge: 0, widthM: 12 },
+      )
+      expect(imported.plot?.limits).toEqual({ maxFar: 2 })
+    }
   })
 
   it('sets and clears an entered limit, carried on the plot', () => {

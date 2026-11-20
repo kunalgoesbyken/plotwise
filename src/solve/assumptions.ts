@@ -55,6 +55,30 @@ export const ASSUMPTIONS = {
     source: 'engine resolution: where a pack sets no height limit of any kind the envelope is drawn this many storeys tall, and floor area, setbacks and the road-height rule carve it down',
   },
   roadWidthStepM: { value: 2, source: 'display choice: the road-width table shows the result this much narrower and wider than the width entered' },
+  importMinPlotSqm: {
+    value: 10,
+    source: 'input guard, not a rule: an imported outline smaller than a small room is a unit or coordinate mistake, not a plot',
+  },
+  importMaxPlotSqm: {
+    value: 1_000_000,
+    source: 'input guard, not a rule: 1 km² (625 rai) is far larger than any single plot checked here, so a bigger imported outline is a unit or coordinate mistake',
+  },
+  importMaxShapes: {
+    value: 200,
+    source: 'input guard: the picker lists every shape of a file, and a survey drawing with more than a few hundred closed shapes is a whole site, not one plot, so the user is asked to export only the plot layer',
+  },
+  importMaxPasteChars: {
+    value: 20_000,
+    source: 'input guard: a plot has at most 100 corners of about 40 characters each, so ten times that bounds what is parsed on every keystroke',
+  },
+  importMaxXmlDepth: {
+    value: 100,
+    source: 'input guard: real KML nests Document, Folder and Placemark a handful of levels deep, so a deeper file is malformed or hostile and is refused before it is walked',
+  },
+  importMaxFileBytes: {
+    value: 10_000_000,
+    source: 'input guard: the file is read whole in the browser, and a plot outline needs a few kilobytes, so this leaves room for a large survey drawing while bounding memory',
+  },
 } as const
 
 const UNPOSED = 'engine default for a pack that poses no such question, the strictest reading'

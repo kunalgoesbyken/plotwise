@@ -33,6 +33,7 @@ export type DraftAction =
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
   | { type: 'load-example'; plot: Plot }
+  | { type: 'import'; ring: readonly LngLat[] }
 
 export type Rejection = OutlineRejection | 'too-few-corners' | 'too-many-corners'
 export type EditResult = { ok: true; draft: Draft } | { ok: false; reason: Rejection }
@@ -186,6 +187,8 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
       return fromPlot(action.plot, 'user')
     case 'load-example':
       return fromPlot(action.plot, 'default')
+    case 'import':
+      return closed(draft, action.ring.map((at) => ({ at: roundLngLat(at), edge: SIDE })))
     default:
       return draft.status === 'drawing' ? editDrawing(draft, action) : editClosed(draft, action)
   }

@@ -296,6 +296,34 @@ describe('editing a closed plot', () => {
   })
 })
 
+describe('importing an outline', () => {
+  it('closes it into a draft with no roads, like a drawn outline', () => {
+    const draft = apply(emptyDraft('office'), { type: 'import', ring: lShape })
+    expect(draft.status).toBe('closed')
+    expect(toPlot(draft)).toBeNull()
+    expect(draft).toMatchObject({ buildingType: 'office', corners: lShape.map((at) => ({ at, edge: { road: false, touched: false } })) })
+  })
+
+  it('replaces whatever was drawn so far', () => {
+    const drawing = apply(emptyDraft('condo'), { type: 'add', at: [100.5, 13.7] })
+    expect(apply(drawing, { type: 'import', ring: lShape }).status).toBe('closed')
+  })
+
+  it('rounds corners to the map precision', () => {
+    const fine = lShape.map(([lng, lat]): LngLat => [lng + 1e-9, lat - 1e-9])
+    const draft = apply(emptyDraft('condo'), { type: 'import', ring: fine })
+    if (draft.status !== 'closed') throw new Error('not closed')
+    expect(new Set(draft.corners.map((c) => c.at.join()))).toEqual(new Set(lShape.map((p) => p.join())))
+  })
+
+  it('refuses a ring that crosses itself or has too few or too many corners', () => {
+    expect(editDraft(emptyDraft('condo'), { type: 'import', ring: [[0, 0], [1, 1], [1, 0], [0, 1]] })).toEqual({ ok: false, reason: 'crossing' })
+    expect(editDraft(emptyDraft('condo'), { type: 'import', ring: lShape.slice(0, 2) })).toEqual({ ok: false, reason: 'too-few-corners' })
+    const many = Array.from({ length: MAX_CORNERS + 1 }, (_, i): LngLat => [100.5 + Math.cos(i) * 0.001, 13.7 + Math.sin(i) * 0.001])
+    expect(editDraft(emptyDraft('condo'), { type: 'import', ring: many })).toEqual({ ok: false, reason: 'too-many-corners' })
+  })
+})
+
 describe('roundLngLat', () => {
   it('keeps 7 decimals so a coordinate survives a decimal round trip', () => {
     fc.assert(

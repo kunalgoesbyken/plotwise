@@ -166,6 +166,33 @@ for (const viewport of [DESKTOP, PHONE]) {
   })
 }
 
+const IMPORTS = [
+  { region: 'custom', origin: [151.2093, -33.8688], label: 'Unverified: your own rules', area: 'm²', storeys: 'Maximum storeys' },
+  { region: 'dxb', origin: [55.2744, 25.1972], label: 'Unverified: from your affection plan', area: 'sq ft', storeys: 'Floors' },
+] as const
+
+for (const { region, origin, label, area, storeys } of IMPORTS) {
+  test(`an imported plot works under the ${region} rules source`, async ({ page }) => {
+    const errors = collectErrors(page)
+    await mockSite(page)
+    await page.goto(`/app#${encodeRegion(region)}`)
+    await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+    await page.getByRole('button', { name: 'Import coordinates or a file' }).click()
+    const corners = lotAt(origin).ring.map(([lng, lat]) => `${lng}, ${lat}`).join('\n')
+    await page.getByLabel('Paste corner coordinates').fill(corners)
+    await expect(page.getByText(new RegExp(`^4 corners, [\\d,]+\\s${area}$`))).toBeVisible()
+    await page.getByRole('button', { name: 'Use this outline' }).click()
+    await page.getByRole('button', { name: 'Mark as road, edge A–B' }).click()
+    await page.getByLabel('Road width on edge A–B, in metres').fill('12')
+    await enterLimit(page, /^Floor area ratio \(FAR\)$/, '2')
+    await enterLimit(page, storeys, '5')
+    await goTo(page, 'Results')
+    await expect(summary(page)).toContainText(label, { timeout: 30_000 })
+    expect(decodeURIComponent(page.url())).toContain(`rules=${region}`)
+    expect(errors).toEqual([])
+  })
+}
+
 test('the print summary of custom rules carries the unverified label', async ({ page }) => {
   await openLink(page, 'custom', { ...LONDON, limits: { maxGfaSqm: 3000, maxStoreys: 6 } })
   await expect(summary(page)).toContainText('Unverified: your own rules', { timeout: 30_000 })
