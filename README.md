@@ -140,7 +140,7 @@ flowchart LR
   browser --> guard
   guard --> site --> overpass["Overpass<br/>OSM buildings, roads, stations"]
   guard --> geocode --> photon["Photon<br/>place search"]
-  browser -->|"plot outline, direct"| bma["BMA city-plan layer<br/>answers only from Thai networks"]
+  browser -->|"plot outline, direct"| bma["BMA city-plan layer<br/>cross-checks the dated snapshot;<br/>answers only from Thai networks"]
   browser -->|"tiles, direct"| tiles["OpenFreeMap"]
   csp["CSP connect-src:<br/>self, OpenFreeMap, BMA"] -.-> browser
 ```
@@ -170,7 +170,7 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 
 | Area | Limit |
 |---|---|
-| Zone | One zone. The BMA service answers only from Thai networks; elsewhere the app says the zone was not checked and links the official map. Other regions have no zone check |
+| Zone | One zone. The check reads a dated snapshot of the BMA brown-zone polygons (20 Nov 2026) and cross-checks the live BMA layer, which answers only from Thai networks; where the two differ, the live answer is followed and the app says so. Outside the brown zone the snapshot cannot name the zone. Other regions have no zone check |
 | Build cost | No published Bangkok rate per element (`NO_BKK_COST`); the total is only cross-checked against RHLB (Siam) Ltd.'s July 2025 residential condominium range |
 | Land and prices | Holding cost, land finance and area distances are unsourced. Condo prices are Knight Frank asking prices by area, the margin a listed developer's; office and hotel prices are not split by area. The land check compares asking prices. All editable, all in the link |
 | OSM | Heights exist for about a third of central Bangkok buildings; roads have no width tags, so widths are carriageway estimates. Station distance: BTS 52 of 64, MRT 15 of 52, monorail 1 of 55 |
@@ -238,6 +238,6 @@ Design tokens are defined once in `src/app/globals.css` (`@theme`); the map and 
 - Bangkok bylaw of 13 March 2026 amending the plan (text layer unreadable; treated as factory-only, shown with a note)
 - Ministerial Regulations 55 (building setbacks, open space, height vs road), 33 (high-rise and extra-large buildings) and 7 (parking)
 - Bangkok Building Control Bylaw B.E. 2544
-- BMA City Planning GIS, comprehensive plan 2556 land-use layer (queried live, not stored)
+- BMA City Planning GIS, comprehensive plan 2556 land-use layer: brown zone 9 polygons stored as a dated snapshot (`public/zone/bma-2556-y9.json`, built by `tools/zone-snapshot.ts`; not copyright works under section 7 of the Copyright Act B.E. 2537) and queried live as a cross-check
 - Greater Mumbai Development Control and Promotion Regulations (DCPR) 2034, as sanctioned in 2018 (MCGM)
 - © OpenStreetMap contributors (ODbL); base map by OpenFreeMap / OpenMapTiles
