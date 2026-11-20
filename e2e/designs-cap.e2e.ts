@@ -5,7 +5,7 @@ import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Plot } from '../src/plot/plot'
 import type { RegionId } from '../src/solve'
 import { SQM_PER_SQFT } from '../src/units/area'
-import { designTable, openResults, scene, summary } from './support/app'
+import { allowedText, buildableText, designTable, openResults, scene, summary } from './support/app'
 import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
@@ -56,13 +56,10 @@ function mostFloorArea(designs: readonly Column[]): Column {
   return designs.filter((d) => numberIn(d.area) === most).reduce((lowest, d) => (d.heightM < lowest.heightM ? d : lowest))
 }
 
-async function allowedText(page: Page) {
-  return (await summary(page).getByText(/^[\d,]+\s?(m²|sq ft)$/).first().textContent())!
-}
-
 async function expectHeadline(page: Page): Promise<Column> {
   const top = mostFloorArea(await columns(page))
-  await expect(summary(page)).toContainText(`${top.name} fits ${top.area}.`)
+  expect(await buildableText(page)).toBe(top.area)
+  await expect(summary(page)).toContainText(top.name)
   await expect(designTable(page).getByRole('button', { name: `Show ${top.name} in 3D` })).toHaveAttribute('aria-pressed', 'true')
   await expect(scene(page)).toHaveAttribute('data-scene-floors', top.storeys)
   return top
@@ -93,5 +90,5 @@ for (const { region, plot, title } of [
     expect(top.area).toBe(await allowedText(page))
     expect(top.limitedBy).toBe('Floor area cap')
     expect(top.name).not.toMatch(/low-rise|high-rise/i)
-    await expect(summary(page)).toContainText('Limited by the plot’s floor area cap.')
+    await expect(summary(page)).toContainText(`Reaches the legal cap of ${top.area}.`)
   })

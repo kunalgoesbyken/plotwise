@@ -24,7 +24,7 @@ test('the results sheet opens at the top on a phone and again after a scrolled s
   await openExample(page)
   expect(await sheetTop(page)).toBe(0)
   await expect(page.getByRole('heading', { name: 'Building type' })).toBeInViewport()
-  await expect(page.getByText('You can build up to')).toBeInViewport()
+  await expect(page.getByText('Buildable', { exact: true })).toBeInViewport()
 
   await stepper(page, 'Roads').click()
   await sheet(page).evaluate((element) => element.scrollTo({ top: element.scrollHeight }))

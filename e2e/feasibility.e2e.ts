@@ -6,6 +6,7 @@ import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
 import { mockZoneInside } from './app-fixtures'
+import { allowedArea } from './support/app'
 import { CHATUCHAK_PARK_PLOT } from './support/site'
 import { BLUE_ZONE, BROWN_ZONE, mockZoneDown, mockZoneSnapshotDown, mockZoneStrips } from './zone-layers'
 
@@ -136,7 +137,7 @@ for (const viewport of [
     await expect(designsRegion(page)).toContainText('Net area')
     await expect(summary).not.toHaveText(before!)
     await expect(summary).toBeInViewport()
-    await expect(summary).toContainText(/Limited by .+\./)
+    await expect(summary).toContainText(/Limited by .+\.|Reaches the legal cap of .+\./)
   })
 
 test('the rule stepper carves the envelope in 3D and on the map, and a chosen design shows in 3D', async ({ page }) => {
@@ -292,7 +293,7 @@ test('money: estimates are labelled, editable, and travel in the share link', as
 test('an old share link without the new parameters still opens with the defaults', async ({ page }) => {
   const errors = await open(page)
   expect(page.url()).not.toContain('assume=')
-  await expect(summary(page)).toContainText('of floor area')
+  await expect(summary(page)).toContainText(/legal cap/i)
   expect(errors).toEqual([])
 })
 
@@ -371,12 +372,11 @@ test('the new land assumptions are editable and travel in the share link', async
 
 test('the FAR bonus switch raises the allowed area and is kept in the link', async ({ page }) => {
   const errors = await open(page)
-  const allowed = async () => Number((await summary(page).locator('.text-2xl').textContent())!.replace(/\D/g, ''))
-  const standard = await allowed()
+  const standard = await allowedArea(page)
   const bonus = designsRegion(page).getByRole('switch', { name: /FAR bonus/ })
   test.skip((await bonus.count()) === 0, 'this plot has no FAR bonus')
   await bonus.click()
-  await expect.poll(allowed).toBeGreaterThan(standard)
+  await expect.poll(() => allowedArea(page)).toBeGreaterThan(standard)
   await expect.poll(() => page.url()).toContain('far=bonus')
   expect(errors).toEqual([])
 })

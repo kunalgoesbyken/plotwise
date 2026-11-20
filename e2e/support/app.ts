@@ -84,7 +84,12 @@ export async function plotInUrl(page: Page) {
   return link?.ok ? link.plot : null
 }
 
+const areaIn = (text: string) => text.match(/[\d,]+\s?(m²|sq ft)/)![0]
+
+export const buildableText = async (page: Page) => (await summary(page).getByText(/^[\d,]+\s?(m²|sq ft)$/).first().textContent())!
+
+export const allowedText = async (page: Page) => areaIn((await summary(page).getByText(/legal cap/i).first().textContent())!)
+
 export async function allowedArea(page: Page) {
-  const text = await summary(page).getByText(/^[\d,]+\s?m²$/).first().textContent()
-  return Number(text!.replace(/\D/g, ''))
+  return Number((await allowedText(page)).replace(/\D/g, ''))
 }

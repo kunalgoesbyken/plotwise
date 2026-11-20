@@ -4,9 +4,7 @@ import { rangeText } from '@/finance/figures'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import type { exampleFigures } from './example'
-
-type Figures = ReturnType<typeof exampleFigures>
+import type { ExampleFigures as Figures } from './example'
 
 function Claim({ title, body, children }: { title: string; body: string; children: ReactNode }) {
   return (
@@ -59,7 +57,7 @@ export function Proof({ figures }: { figures: Figures }) {
         <Cited cited={figures.cited} />
       </Claim>
       <Claim title={t('landing.envelope.title')} body={t('landing.envelope.body')}>
-        <p>{t('landing.envelope.evidence', { allowed: formatQuantity(figures.allowedSqm, 'sqm'), area: formatQuantity(figures.plotSqm, 'sqm') })}</p>
+        <p>{t('landing.envelope.evidence', { buildable: formatQuantity(figures.buildableSqm, 'sqm'), area: formatQuantity(figures.plotSqm, 'sqm') })}</p>
       </Claim>
       <Claim title={t('landing.check.title')} body={t('landing.check.body')}>
         <Unconfirmed toCheck={figures.toCheck} />
