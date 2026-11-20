@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { encodeRegion } from '@/editor/plot-url'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
@@ -73,12 +74,23 @@ function Steps() {
   )
 }
 
+const ENTERED_RULES = ['dxb', 'custom'] as const
+
 function Scope() {
   return (
-    <p className="reveal mt-8 text-sm leading-relaxed text-pretty">
-      <span className="font-medium">{t('landing.scope.title')}.</span>{' '}
-      <span className="text-muted-foreground">{t('landing.scope.body', { zone: DEFAULT_REGION.zone.name, city: DEFAULT_REGION.city, authority: DEFAULT_REGION.authority })}</span>
-    </p>
+    <div className="reveal mt-8 flex flex-col gap-5">
+      <p className="text-sm leading-relaxed text-pretty">
+        <span className="font-medium">{t('landing.scope.title')}.</span>{' '}
+        <span className="text-muted-foreground">{t('landing.scope.body', { zone: DEFAULT_REGION.zone.name, city: DEFAULT_REGION.city, authority: DEFAULT_REGION.authority })}</span>
+      </p>
+      <div className="flex flex-wrap gap-3">
+        {ENTERED_RULES.map((region) => (
+          <PillLink key={region} href={`${APP_PATH}#${encodeRegion(region)}`} quiet>
+            {t(`landing.regions.${region}`)}
+          </PillLink>
+        ))}
+      </div>
+    </div>
   )
 }
 

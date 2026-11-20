@@ -1,7 +1,7 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
-import { DEFAULT_REGION } from '@/region/regions'
+import { DEFAULT_REGION, type RulesSource } from '@/region/regions'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
@@ -23,7 +23,8 @@ type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
   Record<`building.${BuildingType}`, string> &
   Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
-  Record<`plot-limit.${PlotLimitField}`, string> &
+  Record<`plot-limit.${PlotLimitField}` | `limits.custom.${PlotLimitField}`, string> &
+  Record<`verification.${RulesSource}` | `region.${RulesSource}` | `limits.title.${RulesSource}` | `limits.intro.${RulesSource}`, string> &
   Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
 
 const en = {
@@ -77,6 +78,8 @@ const en = {
   'landing.scope.title': 'One verified zone, and rules you enter anywhere else',
   'landing.scope.body': ({ zone, city, authority }: { zone: string; city: string; authority: string }) =>
     `Plotwise reads the law for one zone of the ${city} plan: ${zone}. In Dubai you enter the limits from the plot’s affection plan, and anywhere else your own rules; those results are always marked unverified. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
+  'landing.regions.dxb': 'Use a Dubai affection plan',
+  'landing.regions.custom': 'Enter your own rules',
   'landing.faq.title': 'Questions',
   'landing.faq.sources.q': 'Where do the rules come from?',
   'landing.faq.sources.a':
