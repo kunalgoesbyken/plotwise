@@ -3,14 +3,14 @@ import { GeometryError, type GeometryErrorReason } from '@/geometry'
 import type { Plot } from '@/plot/plot'
 import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
-import { packInterpretations, solve, type FarMode, type Solution } from '@/solve'
+import { packInterpretations, solve, SolveError, type FarMode, type Solution, type SolveErrorReason } from '@/solve'
 import { carvingRules } from './rule-layers'
 
 export const PACK = loadPack(REGION.packId)
 export const CARVING = carvingRules(PACK)
 const READINGS = packInterpretations(PACK)
 
-export type FailureReason = GeometryErrorReason | 'unknown'
+export type FailureReason = GeometryErrorReason | SolveErrorReason | 'unknown'
 
 export type Feasibility =
   | { readonly status: 'ready'; readonly solution: Solution; readonly designs: readonly Design[] }
@@ -21,6 +21,7 @@ export function feasibility(plot: Plot, farMode: FarMode = 'standard'): Feasibil
     const solution = solve(plot, PACK, READINGS, farMode)
     return { status: 'ready', solution, designs: designs(solution) }
   } catch (error) {
-    return { status: 'failed', reason: error instanceof GeometryError ? error.reason : 'unknown' }
+    if (error instanceof GeometryError || error instanceof SolveError) return { status: 'failed', reason: error.reason }
+    return { status: 'failed', reason: 'unknown' }
   }
 }
