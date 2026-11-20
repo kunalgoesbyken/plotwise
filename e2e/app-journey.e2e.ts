@@ -39,7 +39,7 @@ for (const device of DEVICES)
       })
 
       await test.step('see what the plot can hold', async () => {
-        await page.getByRole('button', { name: 'See what you can build' }).click()
+        await page.getByRole('button', { name: 'See results' }).click()
         await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
         await expect(summary(page)).toContainText('You can build up to')
         expect(await allowedArea(page)).toBeGreaterThan(0)

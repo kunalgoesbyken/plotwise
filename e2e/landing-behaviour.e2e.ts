@@ -73,6 +73,7 @@ for (const device of DEVICES)
         await page.goto('/')
         await page.getByRole('link', { name: 'Try the example plot' }).nth(index).click()
         await expect(page).toHaveURL(/\/app#plot=/)
+        await page.getByRole('button', { name: 'See results' }).click()
         await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
       }
     })
