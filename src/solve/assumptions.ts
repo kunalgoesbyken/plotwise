@@ -158,6 +158,7 @@ export type MoneyPrices = {
 export type MoneyRegion = {
   readonly currency: string | null
   readonly landUnit: { readonly name: string; readonly sqm: Assumption }
+  readonly oldLinkLandUnitSqm: Assumption | null
   readonly landWarningFactor: Assumption
   readonly prices: MoneyPrices | null
 }
@@ -335,6 +336,7 @@ export const MONEY_REGIONS = {
       name: 'square wah',
       sqm: { value: 4, source: 'Thai land measure: 1 rai = 400 square wah = 1,600 m², so 1 square wah = 4 m²; stated conversion, not fetched in research' },
     },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: BANGKOK_PRICES,
   },
@@ -343,6 +345,10 @@ export const MONEY_REGIONS = {
     landUnit: {
       name: 'm²',
       sqm: { value: 1, source: 'one square metre, the unit Dubai affection plans state areas in, as in the Trakhees site plan for International City plot IC1-CTYL-16_013 (12 May 2026): "GFA=4804.84 Sq. m"' },
+    },
+    oldLinkLandUnitSqm: {
+      value: SQM_PER_SQFT,
+      source: 'one square foot, from the international foot of exactly 0.3048 m: share links written before 20 Nov 2026, when Dubai land prices were entered per sq ft, carry them per sq ft',
     },
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
@@ -353,12 +359,14 @@ export const MONEY_REGIONS = {
       name: 'sq ft',
       sqm: { value: SQM_PER_SQFT, source: 'one square foot, from the international foot of exactly 0.3048 m; Mumbai areas are shown in square feet' },
     },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
   },
   custom: {
     currency: null,
     landUnit: { name: 'm²', sqm: { value: 1, source: 'one square metre, the unit areas are shown in for custom rules' } },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
   },
