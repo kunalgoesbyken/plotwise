@@ -177,7 +177,7 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 | Road network | Continuity and planned widenings are in no open dataset used here; they appear in "to check" |
 | Bangkok bylaw 2026 | Body text could not be machine-read |
 | Mumbai | Draft; later amendments not applied, and every result says so. Side and rear open spaces (Table A) could not be read and are entered per plot; the ASR land rate and TDR price are yours |
-| Rate limits | Per server instance, so the real ceiling is higher. They shield the free upstreams from a runaway script; they are not an abuse defence |
+| Rate limits | Shared across server instances when the Upstash Redis variables are set, per server instance otherwise (so the real ceiling is higher), and per server instance for any request the store does not answer in time. They shield the free upstreams from a runaway script; they are not an abuse defence |
 | Security policy | Allows inline scripts |
 
 ## How I built this
@@ -202,7 +202,7 @@ I decided the scope (one Bangkok zone, three building types), which readings app
 
 ## Setup
 
-Requires [bun](https://bun.sh) 1.4 or later. No API keys or environment variables are needed.
+Requires [bun](https://bun.sh) 1.4 or later. No API keys or environment variables are needed. Two optional ones, `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (or `KV_REST_API_URL` and `KV_REST_API_TOKEN`, which the Upstash integration in the Vercel Marketplace sets), share the API rate limits across server instances through a free Upstash Redis database; see `.env.example`.
 
 ```sh
 bun install
