@@ -3,6 +3,7 @@ import { encodePlot } from '../src/editor/plot-url'
 import { PLACES_CACHE_S } from '../src/geocode/assumptions'
 import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 import { ROUTE_RATE_LIMITS } from '../src/rate-limit/assumptions'
+import { expectCdnToCache, expectPublicCacheControl } from './support/cdn-cache'
 import { BROWN_ZONE, mockZoneStrips } from './zone-layers'
 
 const ROUTES = {
@@ -117,11 +118,13 @@ for (const route of Object.keys(ROUTES) as (keyof typeof ROUTES)[]) {
 }
 
 test('/api/geocode answers a real query with the CDN cache headers', async ({ request }) => {
-  const response = await request.get(`${ROUTES.geocode}?q=asok`, { headers: { 'x-forwarded-for': clientFor('cache') } })
+  const url = `${ROUTES.geocode}?q=asok`
+  const headers = { 'x-forwarded-for': clientFor('cache') }
+  const response = await request.get(url, { headers })
   test.skip(response.status() === 502, 'Photon is unreachable from here')
   expect(response.status()).toBe(200)
-  const { browser, cdn, staleWhileRevalidate } = PLACES_CACHE_S.value
-  expect(response.headers()['cache-control']).toBe(`public, max-age=${browser}, s-maxage=${cdn}, stale-while-revalidate=${staleWhileRevalidate}`)
+  expectPublicCacheControl(response, PLACES_CACHE_S.value)
+  await expectCdnToCache(request, url, headers)
 })
 
 async function exhaust(request: APIRequestContext, route: keyof typeof ROUTES, client: string) {
