@@ -66,12 +66,19 @@ function baseFar(rule: FarRule, { areaSqm, roadWidthM, plotLimits }: FarInput): 
       const row = required(band.byPlotSize.find((r) => inRange(areaSqm, r.plotAreaSqm)), 'plot size bands')
       return { ratio: row.ratio.value, maxGfaSqm: row.ratio.value * areaSqm, cites: [row.ratio.cite, ...rule.notes] }
     }
-    case 'plotSpecific': {
-      const maxGfaSqm = plotLimits?.maxGfaSqm
-      if (maxGfaSqm === undefined) throw new SolveError('plot-limit-missing', ['maxGfaSqm'])
-      return { ratio: maxGfaSqm / areaSqm, maxGfaSqm, cites: [enteredCite('maxGfaSqm'), ...rule.notes] }
-    }
+    case 'plotSpecific':
+      return plotSpecificFar(plotLimits, areaSqm, rule.notes)
   }
+}
+
+function plotSpecificFar(plotLimits: PlotLimits | undefined, areaSqm: number, notes: readonly Cite[]): FarLimits['far'] {
+  const caps = [
+    ...(plotLimits?.maxGfaSqm === undefined ? [] : [{ gfaSqm: plotLimits.maxGfaSqm, cite: enteredCite('maxGfaSqm') }]),
+    ...(plotLimits?.maxFar === undefined ? [] : [{ gfaSqm: plotLimits.maxFar * areaSqm, cite: enteredCite('maxFar') }]),
+  ]
+  if (caps.length === 0) throw new SolveError('plot-limit-missing', ['maxGfaSqm', 'maxFar'])
+  const maxGfaSqm = Math.min(...caps.map((cap) => cap.gfaSqm))
+  return { ratio: maxGfaSqm / areaSqm, maxGfaSqm, cites: [...caps.map((cap) => cap.cite), ...notes] }
 }
 
 function bonusMeasure(measure: FarBonus, classes: Classes, nearStation: boolean): BonusMeasure {

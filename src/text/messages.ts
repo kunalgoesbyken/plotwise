@@ -239,11 +239,14 @@ const en = {
   'feasibility.failed.plot-limit-missing': ({ limits }: { limits: string }) =>
     `This area’s rules set some limits plot by plot. Enter ${limits} for this plot to continue.`,
   'plot-limit.maxGfaSqm': 'the maximum floor area',
+  'plot-limit.maxFar': 'the floor area ratio',
   'plot-limit.maxHeightM': 'the maximum height',
   'plot-limit.maxStoreys': 'the maximum number of storeys',
   'plot-limit.maxCoverageShare': 'the maximum ground coverage',
   'plot-limit.roadSetbackM': 'the setback from the road',
   'plot-limit.boundarySetbackM': 'the setback from neighbours',
+  'plot-limit.minOpenSpaceShare': 'the minimum open space',
+  'plot-limit.parkingSqmPerSpace': 'the parking requirement',
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
   'source.entered': 'Entered by you',

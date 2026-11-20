@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { containsEntered, CiteSchema } from './cite'
-import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, PlotSetbacksSchema, RoadSetbackSchema } from './setbacks'
+import { PlotSpecificSchema } from './entered'
+import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, RoadSetbackSchema } from './setbacks'
 import { BuildingClassesSchema, ClassificationsSchema, HighRiseSchema, UseConditionsSchema } from './classes'
 import { FarBonusBlockSchema, FarPurchaseSchema, FarRuleSchema } from './far'
 import { CoverageSchema, ReservationSchema } from './footprint'
@@ -34,7 +35,9 @@ export const RulePackSchema = z
     openSpaceMinimums: z.array(OpenSpaceMinimumSchema),
     roadSetbacks: z.array(RoadSetbackSchema),
     boundarySetbacks: z.array(BoundarySetbackSchema),
-    plotSetbacks: PlotSetbacksSchema.optional(),
+    plotSetbacks: PlotSpecificSchema.optional(),
+    plotOpenSpace: PlotSpecificSchema.optional(),
+    plotParking: PlotSpecificSchema.optional(),
     blindWall: BlindWallSchema.optional(),
     frontOpenSpace: FrontOpenSpaceSchema.optional(),
     useConditions: UseConditionsSchema.optional(),

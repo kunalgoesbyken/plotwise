@@ -35,8 +35,6 @@ export const FrontOpenSpaceSchema = z.object({
 
 export const BlindWallSchema = z.object({ minDistanceM: CitedSchema, onBoundaryMaxHeightM: BoundSchema })
 
-export const PlotSetbacksSchema = z.object({ kind: z.literal('plotSpecific'), notes: z.array(CiteSchema) })
-
 export type BoundarySetbackRule = z.infer<typeof BoundarySetbackSchema>
 export type RoadSetbackRule = z.infer<typeof RoadSetbackSchema>
 export type RoadSetbackDistance = z.infer<typeof RoadSetbackDistanceSchema>

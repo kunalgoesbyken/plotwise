@@ -198,3 +198,7 @@ exports[`pack bkk-y9 keeps every sourced value lists the same cited values and q
   "{"value":9,"cmp":"lte","cite":{"source":"mr43-55-upd68","clause":"ข้อ 50 (1)","page":11,"line":10,"quote":"(1) อาคารทมี คี วามสงู ไมเ่ กนิ 9 เมตร ผนงั หรอื ระเบยี งตอ้ งอย่หู า่ งเขตทดี นิ ไม่น้อยกวา่ 2 เมตร"}}",
 ]
 `;
+
+exports[`pack dxb-ap keeps every sourced value lists the same cited values and quotes as before 1`] = `[]`;
+
+exports[`pack custom keeps every sourced value lists the same cited values and quotes as before 1`] = `[]`;
