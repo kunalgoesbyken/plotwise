@@ -93,11 +93,12 @@ The app takes three steps:
 
 Every edit updates the results live. The share link holds the rules source, the plot, the roads, the building type, any limits you entered, the FAR bonus switch and any edited assumption. **Print** gives a one-page summary.
 
-Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Two more rules sources sit beside it, picked on the first step:
+Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Three more rules sources sit beside it, picked on the first step:
 - **Dubai.** You enter the limits from the plot's affection plan (GFA or FAR, height or G+ floors, setbacks, plot coverage, parking), labelled with the Dubai Building Code's terms. Areas show in sq ft and prices in AED.
+- **Mumbai (draft).** Residential buildings in the R zone of the suburbs, compiled line by line from DCPR 2034 as sanctioned in 2018 (`pointers/mum-suburbs-res.json`): FSI by road width, premium FSI, TDR and fungible area you choose with sliders, front open spaces, the street height rule, Table No 17 low-rise open spaces and Table No 21 parking. A road the development plan widens takes a prescribed width; FSI counts on the plot left, twice the handed-over land is granted in lieu, and land is priced on the whole plot. Side and rear open spaces (Table A) could not be read and are entered per plot. Every result carries "Draft: DCPR 2034 as sanctioned in 2018; later amendments not applied". Areas show in sq ft, sale prices per sq ft of carpet area, money in INR; the ASR land rate and TDR price are entered by you.
 - **Custom rules.** You enter the limits you know for a plot anywhere in the world.
 
-Both are always labelled unverified, in the results, the checklist and the print. They have no zone check and no sourced prices: every money input starts blank. The landing page is at `/` and the app is at `/app`. Old share links on the root still open in the app, and links without a rules source open as Bangkok.
+Dubai and custom rules are always labelled unverified, in the results, the checklist and the print. They have no zone check and no sourced prices: every money input starts blank. The landing page is at `/` and the app is at `/app`. Old share links on the root still open in the app, and links without a rules source open as Bangkok.
 
 ## How it works
 
@@ -125,9 +126,9 @@ Both are always labelled unverified, in the results, the checklist and the print
 
 ## Region and design system
 
-- **Region.** Everything specific to a jurisdiction lives in one record per region in `src/region/regions.ts` (Bangkok, Dubai and Custom rules):
+- **Region.** Everything specific to a jurisdiction lives in one record per region in `src/region/regions.ts` (Bangkok, Dubai, Mumbai and Custom rules):
   - the rule pack, how its limits are given (from the law, an affection plan or the user), city and country names, zone label and authority;
-  - the display area unit (m² or sq ft), city-plan link and version, and the local name for the floor area ratio;
+  - the display area unit (m² or sq ft), city-plan link and version, and the local terms for the floor area ratio (FAR or FSI), the sold area (saleable or carpet) and the land rate;
   - map start, search bounds and bias (none for custom rules, which search the whole world);
   - OSM transit tags, where a pack has station rules.
 
@@ -171,7 +172,7 @@ Feature-first folders under `src/`:
 | `designs` | Concept designs, metrics and checklists |
 | `finance` | Saleable area, parking levels, first cost, land value, the assumptions panel and their share-link encoding |
 | `feasibility` | Runs solve + designs once for every panel; Designs, Rules, to-check, road-width sensitivity, FAR bonus, share |
-| `region` | Each rules source (Bangkok, Dubai, custom) as data |
+| `region` | Each rules source (Bangkok, Dubai, Mumbai, custom) as data |
 | `units` | Display area units (m², sq ft) and their conversions |
 | `zone` | City-plan zone lookup through the BMA ArcGIS layer |
 | `site` | Overpass proxy, OSM parsing, height and width estimates, nearest-road and nearest-station suggestions |
