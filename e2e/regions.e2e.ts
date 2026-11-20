@@ -121,6 +121,7 @@ for (const viewport of [DESKTOP, PHONE]) {
     await designsPanel(page).getByRole('button', { name: /^Checklist for / }).click()
     await expect(designsPanel(page).getByText('Floor area within the FAR limit')).toBeAttached()
     await expect(designsPanel(page).getByText(/^Pass$/).first()).toBeAttached()
+    await expect(designsPanel(page).getByText('The setback from neighbours was left blank', { exact: false }).first()).toBeAttached()
 
     await showTab(page, 'Money')
     await expect(moneyPanel(page)).toContainText('Plotwise has no sourced prices or costs for Custom rules')
@@ -165,6 +166,19 @@ for (const viewport of [DESKTOP, PHONE]) {
     expect(errors).toEqual([])
   })
 }
+
+test('a link with limits beyond any real plot is refused with a message, on every reload', async ({ page }) => {
+  const errors = collectErrors(page)
+  await mockSite(page)
+  await page.goto(`/app#${encodeRegion('custom')}&${encodePlot(LONDON)}&limits=maxFar:100;maxHeightM:1000000`)
+  const refused = page.getByRole('status').filter({ hasText: 'This link’s plot limits are out of range for a real plot' })
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+  await expect(refused).toBeVisible()
+  await page.reload()
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+  await expect(refused).toBeVisible()
+  expect(errors).toEqual([])
+})
 
 const IMPORTS = [
   { region: 'custom', origin: [151.2093, -33.8688], label: 'Unverified: your own rules', area: 'm²', storeys: 'Maximum storeys' },

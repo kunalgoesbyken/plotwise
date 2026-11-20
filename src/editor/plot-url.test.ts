@@ -1,6 +1,7 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { BUILDING_TYPES, MAX_CORNERS, type Plot } from '@/plot/plot'
+import { ASSUMPTIONS } from '@/solve/assumptions'
 import { roundLngLat } from './plot-draft'
 import { decodePlot, decodeRegion, encodePlot, encodeRegion, isExampleLink } from './plot-url'
 
@@ -123,15 +124,15 @@ describe('plot URL encoding', () => {
 
 const limits = fc.record(
   {
-    maxGfaSqm: fc.double({ min: 1, max: 1e6, noNaN: true }),
-    maxFar: fc.double({ min: 0.1, max: 100, noNaN: true }),
-    maxHeightM: fc.double({ min: 1, max: 1000, noNaN: true }),
-    maxStoreys: fc.integer({ min: 1, max: 200 }),
+    maxGfaSqm: fc.double({ min: 1, max: ASSUMPTIONS.plotMaxGfaSqm.value, noNaN: true }),
+    maxFar: fc.double({ min: 0.1, max: ASSUMPTIONS.plotMaxFar.value, noNaN: true }),
+    maxHeightM: fc.double({ min: 1, max: ASSUMPTIONS.plotMaxHeightM.value, noNaN: true }),
+    maxStoreys: fc.integer({ min: 1, max: ASSUMPTIONS.plotMaxStoreys.value }),
     maxCoverageShare: fc.double({ min: 0.01, max: 1, noNaN: true }),
-    roadSetbackM: fc.double({ min: 0, max: 200, noNaN: true }),
-    boundarySetbackM: fc.double({ min: 0, max: 200, noNaN: true }),
+    roadSetbackM: fc.double({ min: 0, max: ASSUMPTIONS.plotMaxSetbackM.value, noNaN: true }),
+    boundarySetbackM: fc.double({ min: 0, max: ASSUMPTIONS.plotMaxSetbackM.value, noNaN: true }),
     minOpenSpaceShare: fc.double({ min: 0, max: 0.99, noNaN: true }),
-    parkingSqmPerSpace: fc.double({ min: 1, max: 1e6, noNaN: true }),
+    parkingSqmPerSpace: fc.double({ min: 1, max: ASSUMPTIONS.plotMaxParkingSqmPerSpace.value, noNaN: true }),
   },
   { requiredKeys: [] },
 )
@@ -154,10 +155,16 @@ describe('plot limits in the link', () => {
     )
   })
 
-  it('says a link is invalid when a limit is unknown, malformed or out of range', () => {
+  it('says a link is invalid when a limit is unknown or malformed', () => {
     const good = encodePlot(plot)
-    const broken = ['castle:3', 'maxGfaSqm', 'maxGfaSqm:', 'maxGfaSqm:abc', 'maxGfaSqm:-5', 'maxStoreys:2.5', 'maxCoverageShare:1.5', 'maxGfaSqm:1;maxGfaSqm:2', '']
+    const broken = ['castle:3', 'maxGfaSqm', 'maxGfaSqm:', 'maxGfaSqm:abc', 'maxGfaSqm:1;maxGfaSqm:2', '']
     for (const value of broken) expect(decodePlot(`${good}&limits=${value}`)).toEqual({ ok: false, problem: 'link-invalid' })
+  })
+
+  it('refuses limits out of range for a real plot, apart from a broken link', () => {
+    const good = encodePlot(plot)
+    const outOfRange = ['maxGfaSqm:-5', 'maxStoreys:2.5', 'maxCoverageShare:1.5', 'maxFar:100;maxHeightM:1000000', `maxStoreys:${ASSUMPTIONS.plotMaxStoreys.value + 1}`]
+    for (const value of outOfRange) expect(decodePlot(`${good}&limits=${value}`)).toEqual({ ok: false, problem: 'link-limits' })
   })
 
   it('refuses a link that gives the limits twice, as it refuses two rules sources', () => {

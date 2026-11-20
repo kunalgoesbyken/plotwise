@@ -13,6 +13,9 @@ export function plotLimitFields({ far, height, coverage, plotSetbacks, plotOpenS
   ]
 }
 
+export const isUnentered = (pack: RulePack, plotLimits: PlotLimits | undefined, field: PlotLimitField) =>
+  plotLimitFields(pack).includes(field) && plotLimits?.[field] === undefined
+
 const given = <T>(value: number | undefined, build: (value: number) => T): T[] => (value === undefined ? [] : [build(value)])
 
 export function withPlotLimits(pack: RulePack, plotLimits: PlotLimits | undefined): RulePack {

@@ -37,6 +37,11 @@ function affixOf(field: PlotLimitField, { area, floors }: LimitDisplay): Affix {
 const isAccepted = (field: PlotLimitField, read: ReadNumber) =>
   read.kind === 'blank' || (read.kind === 'number' && PlotLimitsSchema.shape[field].safeParse(read.value).success)
 
+function refusal(read: ReadNumber): string | null {
+  if (read.kind === 'number') return t('limits.out-of-range')
+  return read.kind === 'unreadable' && read.reason === 'comma' ? t('input.comma') : null
+}
+
 type LimitInputProps = { readonly field: PlotLimitField; readonly value: number | undefined; readonly region: Region }
 
 function LimitInput({ field, value, region }: LimitInputProps) {
@@ -49,7 +54,7 @@ function LimitInput({ field, value, region }: LimitInputProps) {
   const shown = draft ?? (value === undefined ? '' : shownLimit(field, value, display))
   const read = draft === null ? null : parseLimit(field, draft, display)
   const invalid = read !== null && !isAccepted(field, read)
-  const comma = read?.kind === 'unreadable' && read.reason === 'comma'
+  const hint = invalid ? refusal(read) : null
 
   function change(text: string) {
     setDraft(text)
@@ -72,7 +77,7 @@ function LimitInput({ field, value, region }: LimitInputProps) {
             autoComplete="off"
             value={shown}
             aria-invalid={invalid}
-            aria-describedby={comma ? hintId : undefined}
+            aria-describedby={hint ? hintId : undefined}
             onChange={(event) => change(event.target.value)}
             onBlur={() => setDraft(null)}
             className="w-24 text-right tabular-nums"
@@ -80,9 +85,9 @@ function LimitInput({ field, value, region }: LimitInputProps) {
           <span className="w-20 text-xs text-muted-foreground">{suffix}</span>
         </div>
       </div>
-      {comma && (
+      {hint && (
         <p id={hintId} className="text-right text-xs text-destructive">
-          {t('input.comma')}
+          {hint}
         </p>
       )}
     </li>

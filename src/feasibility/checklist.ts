@@ -30,7 +30,7 @@ function formatted(value: number, check: Extract<Check, { unit: Unit }>, area: A
 
 export function checkRow(check: Check, area: AreaUnit): CheckRow {
   const row = { id: check.id, status: check.status, cites: check.cites }
-  if (check.status === 'manual') return { ...row, reading: null }
+  if (check.status === 'manual') return { ...row, reading: 'unentered' in check ? t('check.unentered') : null }
   return { ...row, reading: `${formatted(check.actual, check, area)} ${formatComparator(check.cmp)} ${formatted(check.limit, check, area)}` }
 }
 

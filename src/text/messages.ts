@@ -49,6 +49,10 @@ const en = {
   'app.title': 'Plotwise · Plot feasibility',
   'app.description': ({ city }: { city: string }) =>
     `Trace a plot in ${city}, in Dubai from its affection plan, or anywhere with your own rules, and see the floor area allowed, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
+  'app.error.title': 'This plot could not be shown',
+  'app.error.body': 'Something in the plot or its link broke the page. Start a new plot, or try this one again.',
+  'app.error.restart': 'Start a new plot',
+  'app.error.retry': 'Try again',
   'share.image.alt': ({ city }: { city: string }) => `Plotwise: see what a ${city} plot can hold before you buy it`,
   'landing.nav.how': 'How it works',
   'landing.nav.faq': 'Questions',
@@ -151,6 +155,7 @@ const en = {
   'limits.intro.custom': 'Enter the limits you know. Floor area or ratio, and height or storeys, are needed; leave the rest blank to skip them.',
   'limits.use': ({ use, document }: { use: string; document: string }) => `Pick the building type above that matches the ${use} on the ${document}.`,
   'input.comma': 'Use a point for decimals, as in 2.5. A comma may only group thousands, as in 5,000.',
+  'limits.out-of-range': 'Out of range for a real plot, so it is not used. Check the number and its unit.',
   'limits.terms': 'Where these terms come from',
   'limits.unit.percent': '%',
   'limits.unit.m': 'm',
@@ -176,6 +181,7 @@ const en = {
   'verification.detail': 'Plotwise has not checked these limits against any law. Confirm them with the authority before you rely on them.',
   'rejection.link-incomplete': 'This link is missing part of the plot, so it could not be opened.',
   'rejection.link-invalid': 'This link’s plot is not valid, so it could not be opened.',
+  'rejection.link-limits': 'This link’s plot limits are out of range for a real plot, so it could not be opened.',
   'frontage.right-of-way': 'Right-of-way: the full width between property lines across the road, not just the paved lanes.',
   'tab.label': 'Result details',
   'tab.rules': 'Rules',
@@ -650,6 +656,7 @@ const en = {
   'tally.manual': ({ count }: Count) => `${count} to check`,
 
   'check.manual': 'Check on site or with the authority',
+  'check.unentered': 'Not checked: no limit entered',
   'check.far': ({ ratio }: Ratio) => `Floor area within the ${ratio} limit`,
   'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
   'check.far-purchase': 'Extra floor area bought as the rules allow',
@@ -682,6 +689,10 @@ const en = {
   'to-check.who.road-access-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
   'to-check.who.high-rise-road-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
   'to-check.who.far-bonus-measures': ({ authority }: Authority) => `Your architect designs them; ${authority} approves them with the permit.`,
+  'to-check.why.unentered': ({ limit }: { limit: string }) =>
+    `${upperFirst(limit)} was left blank, so the designs are drawn without it and not checked against it.`,
+  'to-check.who.unentered': ({ document }: { document: string }) => `Where it comes from: ${document}. Enter it in the Roads step to check the designs against it.`,
+  'to-check.document.own': 'the plot’s own planning documents',
 
   'step.label': 'Rules that carve the envelope',
   'step.plot': 'Plot',

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ASSUMPTIONS } from '@/solve/assumptions'
 
 export const BUILDING_TYPES = ['condo', 'office', 'hotel'] as const
 export type BuildingType = (typeof BUILDING_TYPES)[number]
@@ -23,26 +24,20 @@ const RoadSchema = z
     path: ['prescribedWidthM'],
   })
 
-export const MAX_PLOT_LIMIT = 1_000_000
+const { plotMaxGfaSqm, plotMaxFar, plotMaxHeightM, plotMaxStoreys, plotMaxSetbackM, plotMaxParkingSqmPerSpace } = ASSUMPTIONS
 
-export const MAX_STOREYS = 200
-
-export const MAX_FAR = 100
-
-const LimitSchema = z.number().positive().max(MAX_PLOT_LIMIT)
-
-const ShareSchema = z.number().positive().max(1)
+const SetbackSchema = z.number().min(0).max(plotMaxSetbackM.value)
 
 export const PlotLimitsSchema = z.object({
-  maxGfaSqm: LimitSchema.optional(),
-  maxFar: z.number().positive().max(MAX_FAR).optional(),
-  maxHeightM: LimitSchema.optional(),
-  maxStoreys: z.int().positive().max(MAX_STOREYS).optional(),
-  maxCoverageShare: ShareSchema.optional(),
-  roadSetbackM: z.number().min(0).max(MAX_ROAD_WIDTH_M).optional(),
-  boundarySetbackM: z.number().min(0).max(MAX_ROAD_WIDTH_M).optional(),
+  maxGfaSqm: z.number().positive().max(plotMaxGfaSqm.value).optional(),
+  maxFar: z.number().positive().max(plotMaxFar.value).optional(),
+  maxHeightM: z.number().positive().max(plotMaxHeightM.value).optional(),
+  maxStoreys: z.int().positive().max(plotMaxStoreys.value).optional(),
+  maxCoverageShare: z.number().positive().max(1).optional(),
+  roadSetbackM: SetbackSchema.optional(),
+  boundarySetbackM: SetbackSchema.optional(),
   minOpenSpaceShare: z.number().min(0).lt(1).optional(),
-  parkingSqmPerSpace: LimitSchema.optional(),
+  parkingSqmPerSpace: z.number().positive().max(plotMaxParkingSqmPerSpace.value).optional(),
 })
 
 export const PlotSchema = z

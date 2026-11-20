@@ -13,6 +13,18 @@ const EDITABLE = 'assumption, editable'
 const CTBUH =
   'CTBUH Height Calculator floor-to-floor heights by function, https://web.archive.org/web/20180420060414/http:/ctbuh.org/TallBuildings/HeightStatistics/HeightCalculator/tabid/1007/language/en-US/Default.aspx'
 
+const IMPORT_MAX_PLOT_SQM = {
+  value: 1_000_000,
+  source: 'input guard, not a rule: 1 km² (625 rai) is far larger than any single plot checked here, so a bigger imported outline is a unit or coordinate mistake',
+}
+
+const PLOT_MAX_FAR = {
+  value: 100,
+  source: 'input guard, not a rule: a floor area ratio of 100 is a 100-storey building over the whole plot, so a larger ratio entered for a plot is a typing slip',
+}
+
+const TALLEST_BUILDING = 'Burj Khalifa, the tallest building completed, is 828 m tall with 163 storeys above ground (CTBUH, https://www.skyscrapercenter.com/building/burj-khalifa/3)'
+
 export const ASSUMPTIONS = {
   floorToFloorM: {
     condo: { value: 3.1, source: CTBUH },
@@ -64,9 +76,21 @@ export const ASSUMPTIONS = {
     value: 10,
     source: 'input guard, not a rule: an imported outline smaller than a small room is a unit or coordinate mistake, not a plot',
   },
-  importMaxPlotSqm: {
-    value: 1_000_000,
-    source: 'input guard, not a rule: 1 km² (625 rai) is far larger than any single plot checked here, so a bigger imported outline is a unit or coordinate mistake',
+  importMaxPlotSqm: IMPORT_MAX_PLOT_SQM,
+  plotMaxFar: PLOT_MAX_FAR,
+  plotMaxGfaSqm: {
+    value: PLOT_MAX_FAR.value * IMPORT_MAX_PLOT_SQM.value,
+    source: 'input guard, not a rule: the largest floor area ratio accepted over the largest plot accepted, so a larger floor area entered for a plot is a typing slip',
+  },
+  plotMaxHeightM: { value: 1000, source: `input guard, not a rule: ${TALLEST_BUILDING}, so a taller limit entered for a plot is a typing slip` },
+  plotMaxStoreys: { value: 200, source: `input guard, not a rule: ${TALLEST_BUILDING}, so more storeys entered for a plot is a typing slip` },
+  plotMaxSetbackM: {
+    value: 200,
+    source: 'input guard, not a rule: setback rules ask for metres or tens of metres, so a setback longer than a city block entered for a plot is a typing slip',
+  },
+  plotMaxParkingSqmPerSpace: {
+    value: 10_000,
+    source: 'input guard, not a rule: one parking space per hectare of floor area is no parking requirement at all, so a larger figure entered for a plot is a typing slip',
   },
   importMaxShapes: {
     value: 200,

@@ -1,6 +1,8 @@
 import { WarningCircleIcon } from '@phosphor-icons/react'
-import type { Check, Design, ManualCheckId } from '@/designs'
+import type { Check, Design } from '@/designs'
+import { limitName } from '@/editor/limit-fields'
 import { useRegion } from '@/editor/plot-store'
+import type { Region } from '@/region/regions'
 import { t } from '@/text/messages'
 import { checkLabel } from './check-label'
 import { Sources } from './sources'
@@ -9,14 +11,25 @@ type ManualCheck = Extract<Check, { status: 'manual' }>
 
 const isManual = (check: Check): check is ManualCheck => check.status === 'manual'
 
-function ToCheckItem({ id, cites }: { id: ManualCheckId; cites: ManualCheck['cites'] }) {
-  const { authority, areaTerms } = useRegion()
+function reasons(check: ManualCheck, region: Region): readonly [why: string, who: string] {
+  if ('unentered' in check) {
+    return [
+      t('to-check.why.unentered', { limit: limitName(check.unentered, region) }),
+      t('to-check.who.unentered', { document: region.limitTerms?.document.value ?? t('to-check.document.own') }),
+    ]
+  }
+  return [t(`to-check.why.${check.id}`), t(`to-check.who.${check.id}`, { authority: region.authority })]
+}
+
+function ToCheckItem({ check }: { check: ManualCheck }) {
+  const region = useRegion()
+  const [why, who] = reasons(check, region)
   return (
     <li className="py-2.5">
-      <p className="text-sm font-medium leading-snug">{checkLabel(id, areaTerms)}</p>
-      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{t(`to-check.why.${id}`)}</p>
-      <p className="text-xs leading-relaxed text-muted-foreground">{t(`to-check.who.${id}`, { authority })}</p>
-      <Sources cites={cites} />
+      <p className="text-sm font-medium leading-snug">{checkLabel(check.id, region.areaTerms)}</p>
+      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{why}</p>
+      <p className="text-xs leading-relaxed text-muted-foreground">{who}</p>
+      <Sources cites={check.cites} />
     </li>
   )
 }
@@ -32,7 +45,7 @@ export function ToCheck({ design, id }: { design: Design; id: string }) {
       </h3>
       <ul className="divide-y">
         {items.map((check) => (
-          <ToCheckItem key={check.id} id={check.id} cites={check.cites} />
+          <ToCheckItem key={check.id} check={check} />
         ))}
       </ul>
     </section>
