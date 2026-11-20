@@ -3,7 +3,9 @@ import type { RateLimitPolicy } from './limiter'
 
 const MINUTE_MS = 60_000
 
-export const ROUTE_RATE_LIMITS: Assumption<Readonly<Record<'geocode' | 'site', RateLimitPolicy>>> = {
+export type RateLimitedRoute = 'geocode' | 'site'
+
+export const ROUTE_RATE_LIMITS: Assumption<Readonly<Record<RateLimitedRoute, RateLimitPolicy>>> = {
   value: {
     geocode: { limit: 60, windowMs: MINUTE_MS },
     site: { limit: 20, windowMs: MINUTE_MS },
