@@ -4,6 +4,7 @@ import {
   isHighRiseOrExtraLarge,
   negate,
   compare,
+  farCapFor,
   type Building,
   type EnvelopeKind,
   type Solution,
@@ -51,7 +52,7 @@ function fitsUse({ limits }: Solution, { conditionMeasure }: Programme): boolean
 }
 
 function limiter(solution: Solution, kind: EnvelopeKind, candidate: Candidate): Limiter | null {
-  if (candidate.programme.farSqm > solution.limits.far.maxGfaSqm) return 'far'
+  if (candidate.programme.farSqm > solution.farCap.maxGfaSqm) return 'far'
   if (!fitsClass(solution, kind, candidate.building)) return 'building-class'
   if (!fitsUse(solution, candidate.programme)) return 'use'
   return null
@@ -88,11 +89,26 @@ function metricsOf(solution: Solution, plates: FloorPlates, { building, programm
   }
 }
 
+type Placed = { readonly massing: Massing; readonly fit: Fit }
+
+function massingTargets(solution: Solution): Solution[] {
+  if (solution.farCap.mode === 'standard') return [solution]
+  return [solution, { ...solution, farCap: farCapFor(solution.limits, 'standard') }]
+}
+
+function bestPlacement(solution: Solution, id: TypologyId): Placed | null {
+  const placements = massingTargets(solution).flatMap((target) => {
+    const massing = TYPOLOGIES[id](target)
+    const fit = massing && tallestFit(solution, massing)
+    return massing && fit ? [{ massing, fit }] : []
+  })
+  return placements.reduce<Placed | null>((best, next) => (!best || next.fit.programme.farSqm > best.fit.programme.farSqm ? next : best), null)
+}
+
 function design(solution: Solution, id: TypologyId): Design | null {
-  const massing = TYPOLOGIES[id](solution)
-  if (!massing) return null
-  const fit = tallestFit(solution, massing)
-  if (!fit) return null
+  const placed = bestPlacement(solution, id)
+  if (!placed) return null
+  const { massing, fit } = placed
   const plates = stack(massing.plates, massing.plates.floors.slice(0, fit.storeys))
   return {
     id,

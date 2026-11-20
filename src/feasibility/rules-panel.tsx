@@ -8,6 +8,7 @@ import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } f
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { PACK } from './compute'
+import { useFeasibility } from './feasibility-provider'
 import { Interpretations } from './interpretations'
 import { LimitGroup, LimitRow } from './limit-row'
 import { demandCites, demandText } from './parking-text'
@@ -61,6 +62,7 @@ function EstimatedRoads() {
 }
 
 function FloorArea({ limits }: { limits: Limits }) {
+  const { farBonus } = useFeasibility()
   const eligible = limits.farBonus.measures.filter((m) => m.eligible)
   return (
     <LimitGroup title={t('rules.group.floor-area')}>
@@ -73,24 +75,34 @@ function FloorArea({ limits }: { limits: Limits }) {
       <LimitRow
         label={t('limit.far-bonus')}
         value={t('value.bonus', { share: percent(limits.farBonus.maxShare) })}
-        detail={t('limit.far-bonus.detail', {
-          area: formatQuantity(limits.farBonus.maxGfaSqm, 'sqm'),
-          measures: formatList(eligible.map((m) => t(`bonus.${m.kind}`))),
-        })}
+        detail={
+          <>
+            {t('limit.far-bonus.detail', {
+              area: formatQuantity(limits.farBonus.maxGfaSqm, 'sqm'),
+              measures: formatList(eligible.map((m) => t(`bonus.${m.kind}`))),
+            })}
+            {limits.farBonus.extraGfaSqm > 0 && (
+              <>
+                <br />
+                {t(farBonus ? 'limit.far-bonus.designs.on' : 'limit.far-bonus.designs.off')}
+              </>
+            )}
+          </>
+        }
         cites={[...limits.farBonus.cites, ...eligible.flatMap((m) => m.cites)]}
       />
     </LimitGroup>
   )
 }
 
-function OpenSpace({ limits }: { limits: Limits }) {
+function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number }) {
   const { ratio, permeable, minimums } = limits.openSpace
   return (
     <LimitGroup title={t('rules.group.open-space')}>
       <LimitRow
         label={t('limit.open-space-ratio')}
         value={bound({ cmp: 'gte', value: ratio.value }, 'percent')}
-        detail={t('limit.open-space-ratio.detail', { area: formatQuantity(ratioOpenSpace(limits, limits.far.maxGfaSqm).value, 'sqm') })}
+        detail={t('limit.open-space-ratio.detail', { area: formatQuantity(ratioOpenSpace(limits, maxGfaSqm).value, 'sqm') })}
         cites={ratio.cites}
       />
       <LimitRow
@@ -242,7 +254,7 @@ function Rules({ plot, solution }: Ready) {
         <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
       </p>
       <FloorArea limits={limits} />
-      <OpenSpace limits={limits} />
+      <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />
       <Height solution={solution} />
       <HighRise limits={limits} />

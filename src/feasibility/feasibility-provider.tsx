@@ -14,6 +14,8 @@ export type FeasibilityView = {
   readonly design: Design | null
   readonly envelope: Envelope | null
   readonly layers: EnvelopeLayers | null
+  readonly farBonus: boolean
+  readonly setFarBonus: (on: boolean) => void
   readonly selectDesign: (id: TypologyId) => void
   readonly chooseStep: (step: RuleStep) => void
 }
@@ -24,7 +26,8 @@ const ALL_RULES = RULE_STEPS[RULE_STEPS.length - 1]
 
 export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const plot = usePlot()
-  const result = useMemo(() => plot && feasibility(plot), [plot])
+  const [farBonus, setFarBonus] = useState(false)
+  const result = useMemo(() => plot && feasibility(plot, farBonus ? 'bonus' : 'standard'), [plot, farBonus])
   const [designId, setDesignId] = useState<TypologyId | null>(null)
   const [step, setStep] = useState<RuleStep>(ALL_RULES)
   const ready = result?.status === 'ready' ? result : null
@@ -33,8 +36,8 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const site = ready?.solution.site
   const layers = useMemo(() => (envelope && site ? envelopeLayers(envelope, site, step, CARVING) : null), [envelope, site, step])
   const view = useMemo(
-    () => ({ plot, result, design, envelope, layers, selectDesign: setDesignId, chooseStep: setStep }),
-    [plot, result, design, envelope, layers],
+    () => ({ plot, result, design, envelope, layers, farBonus, setFarBonus, selectDesign: setDesignId, chooseStep: setStep }),
+    [plot, result, design, envelope, layers, farBonus],
   )
   return <FeasibilityContext value={view}>{children}</FeasibilityContext>
 }
