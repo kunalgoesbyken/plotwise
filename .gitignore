@@ -46,6 +46,7 @@ next-env.d.ts
 .vercel
 
 public/maplibre-gl-worker.mjs
+public/maplibre-gl-worker.mjs.map
 e2e/.results
 playwright-report/
 .playwright-mcp
