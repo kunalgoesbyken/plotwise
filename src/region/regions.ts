@@ -13,7 +13,8 @@ export type Region = {
   readonly packId: PackId
   readonly zone: { readonly name: string; readonly scope: string }
   readonly authority: string
-  readonly cityPlan: { readonly name: string; readonly url: string }
+  readonly cityPlan: { readonly name: string; readonly version: string; readonly url: string }
+  readonly areaTerms: { readonly ratio: string; readonly ratioName: string }
   readonly mapStart: Assumption<LngLat>
   readonly bounds: Assumption<Bounds>
   readonly searchBias: Assumption<LngLat>
@@ -34,7 +35,8 @@ export const REGIONS = {
       scope: 'Plotwise covers only this zone of the Bangkok city plan.',
     },
     authority: 'the BMA',
-    cityPlan: { name: 'BMA city plan', url: 'https://webportal.bangkok.go.th/cpud' },
+    cityPlan: { name: 'BMA city plan', version: 'Bangkok Comprehensive Plan B.E. 2556 (2013)', url: 'https://webportal.bangkok.go.th/cpud' },
+    areaTerms: { ratio: 'FAR', ratioName: 'Floor area ratio' },
     mapStart: { value: [100.5268, 13.7236], source: 'assumption: opening map view over central Bangkok' },
     bounds: {
       value: [97.3, 5.6, 105.7, 20.5],

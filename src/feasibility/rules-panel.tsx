@@ -280,10 +280,13 @@ function Rules({ plot, solution }: Ready) {
         <BylawBanner solution={solution} />
         <EstimatedRoads />
       </div>
-      <p className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
-        <span className="font-medium">{REGION.zone.name}</span>
-        <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
-      </p>
+      <div className="mb-5">
+        <p className="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
+          <span className="font-medium">{REGION.zone.name}</span>
+          <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">{t('rules.plan', { plan: REGION.cityPlan.version })}</p>
+      </div>
       <FloorArea limits={limits} />
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />

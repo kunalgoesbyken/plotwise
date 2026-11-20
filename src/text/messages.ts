@@ -1,9 +1,12 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
 import type { BuildingType } from '@/plot/plot'
+import { REGION } from '@/region/regions'
 import type { EnvelopeKind, SolveErrorReason } from '@/solve'
 
 export const LOCALE = 'en'
+
+const { ratio, ratioName } = REGION.areaTerms
 
 type Message = string | ((params: never) => string)
 
@@ -242,6 +245,7 @@ const en = {
   'value.not-met': 'Not met',
   'value.permitted': 'Permitted',
 
+  'rules.plan': ({ plan }: { plan: string }) => `City plan: ${plan}`,
   'rules.plot-area': ({ area }: Area) => `Plot ${area}`,
   'rules.bylaw.title': '2026 plan amendment: read with care',
   'rules.bylaw.factories-only':
@@ -266,14 +270,14 @@ const en = {
   'rules.setbacks.boundary': 'Neighbour',
   'rules.setbacks.road': ({ width }: { width: string }) => `Road ${width}`,
 
-  'limit.far': 'Floor area ratio',
+  'limit.far': ratioName,
   'limit.far.detail': ({ area }: Area) => `At most ${area} of total floor area on this plot.`,
-  'limit.far-bonus': 'FAR bonus',
+  'limit.far-bonus': `${ratio} bonus`,
   'limit.far-bonus.detail': ({ area, measures }: Area & { measures: string }) =>
     `Up to ${area} if the plan’s bonus measures are provided (${measures}).`,
   'limit.far-bonus.designs.on': 'The designs aim at it.',
   'limit.far-bonus.designs.off': 'The designs stay under the base limit unless you use the bonus.',
-  'far-bonus.label': ({ area }: Area) => `Use the FAR bonus (+${area})`,
+  'far-bonus.label': ({ area }: Area) => `Use the ${ratio} bonus (+${area})`,
   'far-bonus.needs': ({ measures }: { measures: string }) => `Needs the plan’s bonus measures: ${measures}.`,
   'bonus.affordableHousing': 'affordable housing',
   'bonus.publicOpenSpace': 'public open space',
@@ -306,7 +310,7 @@ const en = {
     `Needs a road ${road} wide with frontage ${frontage} on it.`,
   'limit.fire-lane': 'Fire lane around the building',
   'limit.fire-lane.detail': 'Clear ground for fire engines on every side of a high-rise.',
-  'limit.high-rise-far': 'High-rise FAR cap',
+  'limit.high-rise-far': `High-rise ${ratio} cap`,
   'limit.high-rise-far.detail': 'The building-control cap; the plan’s lower ratio governs.',
   'limit.use.permitted': 'No size condition',
   'limit.use.permitted.detail': 'This use is not on the zone’s list of restricted uses.',
@@ -452,12 +456,12 @@ const en = {
   'tally.manual': ({ count }: Count) => `${count} to check`,
 
   'check.manual': 'Check on site or with the authority',
-  'check.far': 'Floor area within the FAR limit',
+  'check.far': `Floor area within the ${ratio} limit`,
   'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
   'check.far-purchase': 'Extra floor area bought as the rules allow',
   'check.coverage': 'Ground coverage',
   'check.height-cap': 'Height within the limit',
-  'check.high-rise-far': 'FAR within the high-rise cap',
+  'check.high-rise-far': `${ratio} within the high-rise cap`,
   'check.open-space-ratio': 'Open space ratio',
   'check.permeable': 'Permeable ground',
   'check.open-space-minimum': 'Building-control open space',
