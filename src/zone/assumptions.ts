@@ -24,6 +24,12 @@ export const ZONE_SLIVER_SHARE: Assumption<number> = {
     'assumption: a zone holding under 1% of the plot is a boundary sliver from map generalisation or a corner drawn a metre off, not a second zone, so it is ignored; the plot is inside a zone when that zone holds the other 99% or more',
 }
 
+export const ZONE_GENERALISATION_DEGREES: Assumption<number> = {
+  value: 0.000002,
+  source:
+    'assumption: the layer is asked to simplify zone boundaries by at most 0.000002 degrees (about 0.2 m), which keeps the answer small and moves a share of a plot at least 40 m across by under 1%, the sliver share, so a simplified boundary cannot turn an inside plot into a straddling one',
+}
+
 export const ZONE_RING_DECIMALS: Assumption<number> = {
   value: 5,
   source: 'assumption: five decimal degrees is about 1 m, finer than a zone boundary drawn at 1:10,000, and lets repeat checks share one cache entry',

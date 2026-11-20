@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import fixture from './__fixtures__/nyc-lexington.arcgis.json'
 import { RECORDED_LAYER } from './__fixtures__/recorded-layer'
+import { ZONE_GENERALISATION_DEGREES } from './assumptions'
 import { fetchZoneFeatures, parseZoneFeatures, zoneQueryUrl, ZoneServiceUnavailableError } from './arcgis'
 import { ZONE_SOURCES } from './sources'
 
@@ -27,6 +28,7 @@ describe('zoneQueryUrl', () => {
     expect(param('returnGeometry')).toBe('true')
     expect(param('outSR')).toBe('4326')
     expect(param('inSR')).toBe('4326')
+    expect(param('maxAllowableOffset')).toBe(String(ZONE_GENERALISATION_DEGREES.value))
   })
 
   it('sends the plot as a closed clockwise ring, however it was drawn', () => {
@@ -73,6 +75,30 @@ describe('fetchZoneFeatures', () => {
   it('returns the parsed features of a good answer', async () => {
     const features = await fetchZoneFeatures(RECORDED_LAYER, counterClockwise, { fetchImpl: respondWith(() => jsonResponse(fixture)) })
     expect(features).toHaveLength(4)
+  })
+
+  it('does not fail on browsers without AbortSignal.any', async () => {
+    const original = AbortSignal.any
+    Object.defineProperty(AbortSignal, 'any', { value: undefined, configurable: true })
+    try {
+      const features = await fetchZoneFeatures(RECORDED_LAYER, counterClockwise, {
+        fetchImpl: respondWith(() => jsonResponse(fixture)),
+        signal: new AbortController().signal,
+      })
+      expect(features).toHaveLength(4)
+    } finally {
+      Object.defineProperty(AbortSignal, 'any', { value: original, configurable: true })
+    }
+  })
+
+  it('stops the request when the caller cancels', async () => {
+    const silent = respondWith(
+      (init) => new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))),
+    )
+    const controller = new AbortController()
+    const pending = fetchZoneFeatures(RECORDED_LAYER, counterClockwise, { fetchImpl: silent, signal: controller.signal })
+    controller.abort()
+    await expect(pending).rejects.toBeInstanceOf(ZoneServiceUnavailableError)
   })
 
   it('reports a failing server as unavailable', async () => {

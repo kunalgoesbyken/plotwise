@@ -2,7 +2,7 @@ import type { LngLat } from '@/geo/projection'
 import { ZONE_RING_DECIMALS } from './assumptions'
 import type { Link } from './sources'
 
-export type UnknownReason = 'no-region' | 'no-zone' | 'unrecognised' | 'unreachable'
+export type UnknownReason = 'no-region' | 'too-large' | 'no-zone' | 'unrecognised' | 'unreachable'
 
 export type ZonePart = { readonly zone: string; readonly share: number }
 

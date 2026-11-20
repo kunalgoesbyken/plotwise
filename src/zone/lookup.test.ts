@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import { ZONE_ANSWER_MEMORY_MS, ZONE_UNREACHABLE_MEMORY_MS } from './assumptions'
+import { MAX_BBOX_SIDE_M } from '@/site/assumptions'
 import { createZoneLookup } from './lookup'
 import { ZONE_SOURCES } from './sources'
 
@@ -57,6 +58,15 @@ describe('zone lookup', () => {
     const { calls, fetchImpl } = server(answer(BROWN_ZONE))
     const verdict = await createZoneLookup({ fetchImpl })(bangalorePlot)
     expect(verdict).toEqual({ status: 'unknown', reason: 'no-region', plan: null })
+    expect(calls).toHaveLength(0)
+  })
+
+  it('does not ask any server about an outline larger than a plot', async () => {
+    const { calls, fetchImpl } = server(answer(BROWN_ZONE))
+    const degrees = (MAX_BBOX_SIDE_M.value * 2) / 100_000
+    const citySized: LngLat[] = bangkokPlot.map(([lng, lat], index) => (index < 2 ? [lng, lat] : [lng + degrees, lat + degrees]))
+    const verdict = await createZoneLookup({ fetchImpl })(citySized)
+    expect(verdict).toMatchObject({ status: 'unknown', reason: 'too-large' })
     expect(calls).toHaveLength(0)
   })
 

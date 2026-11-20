@@ -4,6 +4,7 @@ import type { LngLat } from '@/geo/projection'
 import fixture from './__fixtures__/nyc-lexington.arcgis.json'
 import { RECORDED_LAYER } from './__fixtures__/recorded-layer'
 import { parseZoneFeatures, type ZoneFeature } from './arcgis'
+import { ZONE_GENERALISATION_DEGREES, ZONE_SLIVER_SHARE } from './assumptions'
 import { zoneShares } from './shares'
 
 const WEST = 100.5755
@@ -52,6 +53,13 @@ describe('zoneShares', () => {
         expect(shareOf('east', shares)).toBeCloseTo(1 - fraction, 4)
       }),
     )
+  })
+
+  it('moves a share by less than the sliver when the server generalises a boundary by its largest offset', () => {
+    const cut = WEST + WIDTH / 2
+    const exact = zoneShares(plot, [feature('west', clockwiseBox(WEST - 0.01, cut))])
+    const generalised = zoneShares(plot, [feature('west', clockwiseBox(WEST - 0.01, cut + ZONE_GENERALISATION_DEGREES.value))])
+    expect(Math.abs(shareOf('west', generalised) - shareOf('west', exact))).toBeLessThan(ZONE_SLIVER_SHARE.value)
   })
 
   it('adds up the parts of a zone that has several features or rings', () => {

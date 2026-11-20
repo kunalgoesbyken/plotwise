@@ -196,6 +196,7 @@ const en = {
   'zone.straddles': ({ parts, covered }: { parts: string; covered: string }) =>
     `This plot spans more than one zone: ${parts}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
   'zone.unknown.no-region': 'Plotwise has no zone data for this location, so it could not check the zone.',
+  'zone.unknown.too-large': 'This outline is larger than a plot, so Plotwise did not check the zone.',
   'zone.unknown.no-zone': 'The city plan maps no zone under all of this plot, so Plotwise could not check it.',
   'zone.unknown.unrecognised': 'The city plan uses a zone code Plotwise does not know, so it could not check the zone.',
   'zone.unknown.unreachable': 'The city-plan service did not answer, so Plotwise could not check the zone here.',

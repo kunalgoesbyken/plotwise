@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { BUILDING_TYPES, type Plot } from '@/plot/plot'
+import { BUILDING_TYPES, MAX_CORNERS, type Plot } from '@/plot/plot'
 import { roundLngLat } from './plot-draft'
 import { decodePlot, encodePlot, isExampleLink } from './plot-url'
 
@@ -92,6 +92,16 @@ describe('plot URL encoding', () => {
       `${good}&station=0`,
     ]
     for (const hash of broken) expect(decodePlot(hash)).toEqual({ ok: false, problem: 'link-invalid' })
+  })
+
+  it('opens a plot with the most corners a drawing allows and refuses one with more', () => {
+    const corners = (count: number) =>
+      Array.from({ length: count }, (_, index) => {
+        const angle = (index / count) * 2 * Math.PI
+        return `${(100.53 + 0.001 * Math.cos(angle)).toFixed(6)},${(13.72 + 0.001 * Math.sin(angle)).toFixed(6)}`
+      }).join(';')
+    expect(decodePlot(`plot=${corners(MAX_CORNERS)}&roads=0:12&type=condo`)).toMatchObject({ ok: true })
+    expect(decodePlot(`plot=${corners(MAX_CORNERS + 1)}&roads=0:12&type=condo`)).toEqual({ ok: false, problem: 'link-invalid' })
   })
 
   it('never throws on arbitrary input', () => {

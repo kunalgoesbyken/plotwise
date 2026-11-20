@@ -19,7 +19,7 @@ const RoadSchema = z.object({
 
 export const PlotSchema = z
   .object({
-    ring: z.array(LngLatSchema).min(3),
+    ring: z.array(LngLatSchema).min(3).max(MAX_CORNERS),
     roads: z.array(RoadSchema).min(1),
     buildingType: z.enum(BUILDING_TYPES),
     nearStation: z.boolean().default(false),

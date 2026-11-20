@@ -1,6 +1,2 @@
-export { zoneRegionFor } from './classify'
-export { lookupZone } from './lookup'
-export { ZONE_SOURCES, type ZoneRegionId, type ZoneSource } from './sources'
-export type { ZoneVerdict } from './verdict'
 export { ZoneGateProvider, useZoneGate } from './zone-gate'
 export { ZoneHeld, ZoneHold, ZoneStatus } from './zone-status'

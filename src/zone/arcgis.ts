@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { ZONE_TIMEOUT_MS } from './assumptions'
+import { ZONE_GENERALISATION_DEGREES, ZONE_TIMEOUT_MS } from './assumptions'
 import type { ArcGisLayer } from './sources'
 
 const WGS84 = 4326
@@ -45,6 +45,7 @@ export function zoneQueryUrl({ url, zoneField }: ArcGisLayer, plot: readonly Lng
     spatialRel: 'esriSpatialRelIntersects',
     outFields: zoneField,
     returnGeometry: 'true',
+    maxAllowableOffset: String(ZONE_GENERALISATION_DEGREES.value),
     geometryPrecision: String(COORDINATE_DECIMALS),
   })
   return `${url}/query?${params}`
@@ -68,12 +69,19 @@ export async function fetchZoneFeatures(
   plot: readonly LngLat[],
   { signal, timeoutMs = ZONE_TIMEOUT_MS.value, fetchImpl = fetch }: FetchZoneFeaturesOptions = {},
 ): Promise<ZoneFeature[]> {
+  const request = new AbortController()
+  const cancel = () => request.abort()
+  const timer = setTimeout(cancel, timeoutMs)
+  signal?.addEventListener('abort', cancel, { once: true })
+  if (signal?.aborted) cancel()
   try {
-    const deadline = AbortSignal.timeout(timeoutMs)
-    const response = await fetchImpl(zoneQueryUrl(layer, plot), { signal: signal ? AbortSignal.any([signal, deadline]) : deadline })
+    const response = await fetchImpl(zoneQueryUrl(layer, plot), { signal: request.signal })
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     return parseZoneFeatures(layer, await response.json())
   } catch (error) {
     throw new ZoneServiceUnavailableError(`Zone service is unavailable: ${error instanceof Error ? error.message : String(error)}`)
+  } finally {
+    clearTimeout(timer)
+    signal?.removeEventListener('abort', cancel)
   }
 }

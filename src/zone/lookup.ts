@@ -1,10 +1,19 @@
 import type { LngLat } from '@/geo/projection'
+import { MAX_BBOX_SIDE_M } from '@/site/assumptions'
+import { bboxSideLengthsM } from '@/site/bbox'
 import { fetchZoneFeatures, ZoneServiceUnavailableError, type FetchZoneFeaturesOptions } from './arcgis'
 import { ZONE_ANSWER_MEMORY_MS, ZONE_UNREACHABLE_MEMORY_MS } from './assumptions'
 import { classifyShares, unknownVerdict, zoneRegionFor } from './classify'
 import { zoneShares } from './shares'
 import { ZONE_SOURCES, type ZoneRegionId } from './sources'
 import { ringKey, type ZoneVerdict } from './verdict'
+
+function isPlotSized(ring: readonly LngLat[]): boolean {
+  const lngs = ring.map(([lng]) => lng)
+  const lats = ring.map(([, lat]) => lat)
+  const { widthM, heightM } = bboxSideLengthsM([Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)])
+  return Math.max(widthM, heightM) <= MAX_BBOX_SIDE_M.value
+}
 
 export type ZoneLookup = (ring: readonly LngLat[], signal?: AbortSignal) => Promise<ZoneVerdict>
 
@@ -18,6 +27,7 @@ export function createZoneLookup({ now = Date.now, ...fetchOptions }: Omit<Fetch
     const region = zoneRegionFor(ring)
     if (!region) return unknownVerdict(undefined, 'no-region')
     const source = ZONE_SOURCES[region]
+    if (!isPlotSized(ring)) return unknownVerdict(source, 'too-large')
     const key = `${region}:${ringKey(ring)}`
     const answer = answers.get(key)
     if (answer && answer.until > now()) return answer.verdict
