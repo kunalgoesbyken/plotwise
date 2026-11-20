@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 import { PLACES_CACHE_S } from '@/geocode/assumptions'
 import { MAX_QUERY_LENGTH, PlaceErrorSchema, PlacesSchema, type Place } from '@/geocode/schema'
 
-const asok: Place = { id: 'N5391625873', label: 'Asok, Bangkok', labelTh: 'อโศก, กรุงเทพมหานคร', lngLat: [100.56, 13.737], kind: 'house' }
+const asok: Place = { id: 'N5391625873', label: 'Asok, Bangkok', lngLat: [100.56, 13.737], kind: 'house' }
 const requested: string[] = []
 let failure: Error | undefined
 

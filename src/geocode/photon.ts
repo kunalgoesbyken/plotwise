@@ -6,7 +6,6 @@ import { PLACE_KINDS, type Place } from './schema'
 
 const PHOTON_URL = 'https://photon.komoot.io/api'
 const TIMEOUT_MS = 6_000
-const THAI_SCRIPT = /\p{Script=Thai}/u
 
 const PropertiesSchema = z.object({
   osm_type: z.string(),
@@ -30,7 +29,6 @@ const PhotonResponseSchema = z.object({
   ),
 })
 
-type Language = 'en' | 'default'
 type Feature = z.infer<typeof PhotonResponseSchema>['features'][number]
 type Properties = Feature['properties']
 
@@ -38,11 +36,11 @@ export class PlaceSearchUnavailableError extends Error {}
 
 export type FetchPlacesOptions = { timeoutMs?: number; fetchImpl?: typeof fetch }
 
-function photonUrl(query: string, lang: Language): string {
+function photonUrl(query: string): string {
   const [lon, lat] = SEARCH_BIAS_LNGLAT.value
   const params = new URLSearchParams({
     q: query,
-    lang,
+    lang: 'en',
     lon: String(lon),
     lat: String(lat),
     bbox: THAILAND_BBOX.value.join(','),
@@ -51,8 +49,8 @@ function photonUrl(query: string, lang: Language): string {
   return `${PHOTON_URL}?${params}`
 }
 
-async function queryPhoton(query: string, lang: Language, timeoutMs: number, fetchImpl: typeof fetch): Promise<Feature[]> {
-  const response = await fetchImpl(photonUrl(query, lang), {
+async function queryPhoton(query: string, timeoutMs: number, fetchImpl: typeof fetch): Promise<Feature[]> {
+  const response = await fetchImpl(photonUrl(query), {
     headers: { 'User-Agent': USER_AGENT },
     signal: AbortSignal.timeout(timeoutMs),
   })
@@ -73,34 +71,17 @@ function labelOf(properties: Properties): string {
   return [...new Set(parts)].join(', ')
 }
 
-function thaiLabelOf(local: Feature | undefined, label: string): string | undefined {
-  if (!local?.properties.name) return undefined
-  const labelTh = labelOf(local.properties)
-  return labelTh !== label && THAI_SCRIPT.test(labelTh) ? labelTh : undefined
-}
-
-function toPlace(feature: Feature, localById: ReadonlyMap<string, Feature>): Place | undefined {
-  const { properties, geometry } = feature
+function toPlace({ properties, geometry }: Feature): Place | undefined {
   if (!properties.name && !properties.street) return undefined
-  const id = idOf(properties)
-  const label = labelOf(properties)
-  const labelTh = thaiLabelOf(localById.get(id), label)
-  return { id, label, ...(labelTh && { labelTh }), lngLat: geometry.coordinates, kind: properties.type }
+  return { id: idOf(properties), label: labelOf(properties), lngLat: geometry.coordinates, kind: properties.type }
 }
 
 export async function fetchPlaces(
   query: string,
   { timeoutMs = TIMEOUT_MS, fetchImpl = fetch }: FetchPlacesOptions = {},
 ): Promise<Place[]> {
-  const [english, local] = await Promise.all([
-    queryPhoton(query, 'en', timeoutMs, fetchImpl),
-    queryPhoton(query, 'default', timeoutMs, fetchImpl),
-  ]).catch((error: unknown) => {
+  const features = await queryPhoton(query, timeoutMs, fetchImpl).catch((error: unknown) => {
     throw new PlaceSearchUnavailableError(`Place search is unavailable: ${error instanceof Error ? error.message : String(error)}`)
   })
-  const localById = new Map(local.map((feature) => [idOf(feature.properties), feature]))
-  return english.flatMap((feature) => {
-    const place = toPlace(feature, localById)
-    return place ? [place] : []
-  })
+  return features.flatMap((feature) => toPlace(feature) ?? [])
 }

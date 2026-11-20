@@ -6,7 +6,7 @@ import type { Station, StationGeometry } from './schema'
 type Segment = readonly [Vec2, Vec2]
 type Shape = { points: readonly Vec2[]; closed: boolean }
 type Located = { station: Station; shape: Shape }
-type Names = Pick<Station, 'name' | 'nameTh'>
+type Names = Pick<Station, 'name'>
 
 export type NearestStation = Names & { distanceM: number; measuredFrom: Station['kind'] }
 
@@ -37,8 +37,8 @@ function shapeDistance(a: Shape, b: Shape): number {
   return Math.min(...segmentsOf(a).flatMap(([p, q]) => others.map(([r, s]) => segmentDistance(p, q, r, s))))
 }
 
-function namesOf({ name, nameTh }: Station): Names {
-  return { ...(name && { name }), ...(nameTh && { nameTh }) }
+function namesOf({ name }: Station): Names {
+  return name ? { name } : {}
 }
 
 function nodesServing(platform: Located, nodes: readonly Located[]): Located[] {

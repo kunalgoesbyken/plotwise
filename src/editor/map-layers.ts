@@ -29,10 +29,19 @@ const kind = (k: string): ExpressionSpecification => ['==', ['get', 'kind'], k]
 const flag = (name: string): ExpressionSpecification => ['==', ['get', name], true]
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
 
+const ENGLISH_LABEL: ExpressionSpecification = ['coalesce', ['get', 'name:en'], ['get', 'name:latin']]
+
+export function labelInEnglish(map: MapLibreMap) {
+  for (const layer of map.getStyle().layers) {
+    if (layer.type !== 'symbol' || !JSON.stringify(layer.layout?.['text-field'] ?? '').includes('name')) continue
+    map.setLayoutProperty(layer.id, 'text-field', ENGLISH_LABEL)
+  }
+}
+
 export function readPalette(element: Element): Palette {
   const style = getComputedStyle(element)
   const read = (name: string) => style.getPropertyValue(`--color-${name}`).trim()
-  return { plot: read('plot'), road: read('road'), ink: read('ink'), paper: read('paper') }
+  return { plot: read('primary'), road: read('road'), ink: read('foreground'), paper: read('background') }
 }
 
 export function addEditorLayers(map: MapLibreMap, palette: Palette) {

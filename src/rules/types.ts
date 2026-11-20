@@ -22,6 +22,7 @@ export const RangeSchema = z
   .refine((r) => !r.min || !r.max || r.min.value < r.max.value, { message: 'empty range' })
 
 const SourceSchema = z.object({
+  name: z.string().min(1),
   title: z.string().min(1),
   url: z.url(),
   published: z.string().min(1),

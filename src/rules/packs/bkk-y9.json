@@ -29,6 +29,7 @@
   },
   "sources": {
     "mr56-bma": {
+      "name": "Bangkok Comprehensive Plan, B.E. 2556 (2013)",
       "title": "กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
       "url": "http://download.asa.or.th/03media/04law/cpa/mr56-bma.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 41 ก, 16 May 2013 (PDF page 82 carries the 9 Oct 2013 correction)",
@@ -36,6 +37,7 @@
       "textLayer": "readable"
     },
     "mr56-correction": {
+      "name": "Correction to the Bangkok Comprehensive Plan (Oct 2013)",
       "title": "แก้คำผิด กฎกระทรวงให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2556",
       "url": "http://download.asa.or.th/03media/04law/cpa/mr56-correction.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 91 ก, 9 Oct 2013",
@@ -43,6 +45,7 @@
       "textLayer": "readable"
     },
     "bb69-bma": {
+      "name": "Bangkok bylaw amending the Comprehensive Plan (Mar 2026)",
       "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2569",
       "url": "https://download.asa.or.th/03media/04law/cpa/bb69-bma.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 143 ตอนพิเศษ 66 ง, 13 Mar 2026",
@@ -50,6 +53,7 @@
       "textLayer": "garbled"
     },
     "mr43-55-upd68": {
+      "name": "Ministerial Regulation 55 (2000) under the Building Control Act, amended to 2020",
       "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522, consolidated to ฉบับที่ 68 (พ.ศ. 2563)",
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr43-55-upd68.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 117 ตอนที่ 75 ก, 7 Aug 2000; amendments to 3 Dec 2020; ASA consolidation",
@@ -57,6 +61,7 @@
       "textLayer": "readable"
     },
     "mr35-33-upd69": {
+      "name": "Ministerial Regulation 33 (1992): high-rise and extra-large buildings, amended",
       "title": "กฎกระทรวง ฉบับที่ 33 (พ.ศ. 2535) อาคารสูง อาคารขนาดใหญ่พิเศษ, consolidated with ฉบับที่ 42, 50 and 64",
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr35-33-upd69.pdf",
       "published": "ASA consolidation of the gazetted text and its amendments",
@@ -64,6 +69,7 @@
       "textLayer": "readable"
     },
     "mr17-07-upd64": {
+      "name": "Ministerial Regulation 7 (1974): parking, amended",
       "title": "กฎกระทรวง ฉบับที่ 7 (พ.ศ. 2517) ที่จอดรถยนต์, consolidated with ฉบับที่ 41 and 64",
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr17-07-upd64.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 91 ตอนที่ 86, 21 May 1974; amendment ฉบับที่ 64 of 30 Nov 2012; ASA consolidation",
@@ -71,6 +77,7 @@
       "textLayer": "readable"
     },
     "bb44-03": {
+      "name": "Bangkok Building Control Bylaw (2001)",
       "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ควบคุมอาคาร พ.ศ. 2544",
       "url": "https://download.asa.or.th/03media/04law/cba/bb/bb44-03.pdf",
       "published": "ASA typeset text of the Bangkok building control bylaw",
@@ -1948,11 +1955,11 @@
   "questions": [
     {
       "id": "hotel-residential",
-      "question": "Is a hotel 'residential' for the building-control open-space minimum and the ข้อ 52 affordable-housing bonus?",
+      "question": "Is a hotel 'residential' for the building-control open-space minimum and the clause 52 affordable-housing bonus?",
       "readings": [
         {
           "id": "public-building",
-          "reading": "No. Reg 55 ข้อ 1 names โรงแรม as an อาคารสาธารณะ, and ข้อ 33 (2) gives public buildings 10 in 100.",
+          "reading": "No. Reg 55 clause 1 names hotels as public buildings, and clause 33 (2) gives public buildings 10 in 100.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -1972,7 +1979,7 @@
         },
         {
           "id": "residential",
-          "reading": "Yes. Reg 55 ข้อ 1 defines อาคารอยู่อาศัย as lived in day and night, permanently or temporarily, and ข้อ 33 (2) sends a building also used as a residence to the 30 in 100 rule.",
+          "reading": "Yes. Reg 55 clause 1 defines a residential building as one lived in day and night, permanently or temporarily, and clause 33 (2) sends a building also used as a residence to the 30 in 100 rule.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -1992,16 +1999,16 @@
         }
       ],
       "recommendation": "residential",
-      "why": "Feasibility should under-promise: the 30 in 100 reading gives the smaller footprint, and the ข้อ 33 (2) proviso reads as written for buildings people sleep in.",
+      "why": "Feasibility should under-promise: the 30 in 100 reading gives the smaller footprint, and the clause 33 (2) proviso reads as written for buildings people sleep in.",
       "decision": "residential"
     },
     {
       "id": "condo-public-building",
-      "question": "Is a condo an อาคารสาธารณะ, so that the ข้อ 53 public-open-space bonus and the ข้อ 54 public-parking bonus can apply?",
+      "question": "Is a condo a public building, so that the clause 53 public-open-space bonus and the clause 54 public-parking bonus can apply?",
       "readings": [
         {
           "id": "not-public",
-          "reading": "No. Reg 55 ข้อ 1 defines อาคารสาธารณะ as a building for public gathering, and ข้อ 33 treats อาคารอยู่อาศัยรวม as its own class.",
+          "reading": "No. Reg 55 clause 1 defines a public building as a building for public gathering, and clause 33 treats multi-unit residential buildings as their own class.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2021,7 +2028,7 @@
         },
         {
           "id": "public",
-          "reading": "Yes. The list of examples ends with เป็นต้น, so it is open, and the plan only says อาคารสาธารณะตามกฎหมายว่าด้วยการควบคุมอาคาร.",
+          "reading": "Yes. The list of examples ends with 'and so on', so it is open, and the plan only says 'public building under the building control law'.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2041,16 +2048,16 @@
         }
       ],
       "recommendation": "not-public",
-      "why": "Every listed example is a place where the public gathers; private homes are not, so a condo should get no ข้อ 53 or ข้อ 54 bonus.",
+      "why": "Every listed example is a place where the public gathers; private homes are not, so a condo should get no clause 53 or clause 54 bonus.",
       "decision": "not-public"
     },
     {
       "id": "office-public-building",
-      "question": "Is an office an อาคารสาธารณะ for the ข้อ 53 and ข้อ 54 FAR bonuses?",
+      "question": "Is an office a public building for the clause 53 and clause 54 FAR bonuses?",
       "readings": [
         {
           "id": "not-public",
-          "reading": "No. Reg 55 defines สำนักงาน separately and the public-building examples never name an office.",
+          "reading": "No. Reg 55 defines offices separately and the public-building examples never name an office.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2070,7 +2077,7 @@
         },
         {
           "id": "public",
-          "reading": "Yes. The definition covers gathering for การพาณิชยกรรม, which a large office arguably serves.",
+          "reading": "Yes. The definition covers gathering for commerce, which a large office arguably serves.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2092,7 +2099,7 @@
       "readings": [
         {
           "id": "all-stricter",
-          "reading": "Apply Reg 55 ข้อ 33 (share of the largest floor), the Bangkok bylaw ข้อ 52 (share of land) and, for high-rise or extra-large buildings, Reg 33 ข้อ 6 (share of land); the largest required area governs.",
+          "reading": "Apply Reg 55 clause 33 (share of the largest floor), the Bangkok bylaw clause 52 (share of land) and, for high-rise or extra-large buildings, Reg 33 clause 6 (share of land); the largest required area governs.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2119,7 +2126,7 @@
         },
         {
           "id": "ministerial-only",
-          "reading": "Apply Reg 55 ข้อ 33 to ordinary buildings and Reg 33 ข้อ 6 to high-rise; the bylaw's share of land is ignored where it differs, because a local bylaw cannot conflict with a ministerial regulation.",
+          "reading": "Apply Reg 55 clause 33 to ordinary buildings and Reg 33 clause 6 to high-rise; the bylaw's share of land is ignored where it differs, because a local bylaw cannot conflict with a ministerial regulation.",
           "cites": [
             {
               "source": "mr43-55-upd68",
@@ -2144,11 +2151,11 @@
     },
     {
       "id": "parking-source",
-      "question": "Which parking rule governs a ย.9 plot?",
+      "question": "Which parking rule governs a plot in this zone?",
       "readings": [
         {
           "id": "bylaw",
-          "reading": "The Bangkok bylaw ข้อ 83 to 85 (hotel by rooms, condo 1 per unit of 60 m² or more, office 1 per 60 m²).",
+          "reading": "The Bangkok bylaw clauses 83 to 85 (hotel by rooms, condo 1 per unit of 60 m² or more, office 1 per 60 m²).",
           "cites": [
             {
               "source": "bb44-03",
@@ -2161,7 +2168,7 @@
         },
         {
           "id": "ministerial",
-          "reading": "Reg 7 ข้อ 3 (1), which applies only inside the old เทศบาลนครหลวง area (hotel by lobby and commercial area).",
+          "reading": "Reg 7 clause 3 (1), which applies only inside the old Bangkok metropolitan municipality area (hotel by lobby and commercial area).",
           "cites": [
             {
               "source": "mr17-07-upd64",
@@ -2229,16 +2236,16 @@
         }
       ],
       "recommendation": "required",
-      "why": "The sentence sits inside the OSR rule and 'พื้นที่ว่าง' refers back to the open space that rule requires; the other reading would penalise leaving extra open space.",
+      "why": "The sentence sits inside the OSR rule and 'open space' refers back to the open space that rule requires; the other reading would penalise leaving extra open space.",
       "decision": "required"
     },
     {
       "id": "gfa-includes-parking",
-      "question": "Does parking floor area count in พื้นที่อาคารรวม for FAR and OSR?",
+      "question": "Does parking floor area count in the total building floor area for FAR and OSR?",
       "readings": [
         {
           "id": "counts",
-          "reading": "Yes. The definition counts every storey of every building, and ข้อ 54 has to exempt bonus public parking explicitly, which implies ordinary parking counts.",
+          "reading": "Yes. The definition counts every storey of every building, and clause 54 has to exempt bonus public parking explicitly, which implies ordinary parking counts.",
           "cites": [
             {
               "source": "mr56-bma",
@@ -2271,16 +2278,16 @@
         }
       ],
       "recommendation": "counts",
-      "why": "The plan defines its own term with no exclusion, and the explicit ข้อ 54 exemption only makes sense if parking otherwise counts.",
+      "why": "The plan defines its own term with no exclusion, and the explicit clause 54 exemption only makes sense if parking otherwise counts.",
       "decision": "counts"
     },
     {
       "id": "office-operating-area",
-      "question": "For the ย.9 office limit (operating area above 10,000 m² needs a 16 m road or a station within 500 m), is operating area the office's total floor area?",
+      "question": "For this zone's office limit (operating area above 10,000 m² needs a 16 m road or a station within 500 m), is operating area the office's total floor area?",
       "readings": [
         {
           "id": "gfa",
-          "reading": "Yes. ข้อ 4 defines พื้นที่ประกอบการ to include areas in continuous use for the business, inside or outside the building.",
+          "reading": "Yes. Clause 4 defines operating area to include areas in continuous use for the business, inside or outside the building.",
           "cites": [
             {
               "source": "mr56-bma",
@@ -2318,7 +2325,7 @@
     },
     {
       "id": "road-access-tiers",
-      "question": "When a hotel or office relies on the road-width exemption, what must the tool check under ข้อ 36 (as corrected on 9 Oct 2013)?",
+      "question": "When a hotel or office relies on the road-width exemption, what must the tool check under clause 36 (as corrected on 9 Oct 2013)?",
       "readings": [
         {
           "id": "frontage-and-row",
@@ -2342,7 +2349,7 @@
         },
         {
           "id": "row-only",
-          "reading": "Enforce only the right-of-way named in ข้อ 16; ข้อ 36 is for the permit officer.",
+          "reading": "Enforce only the right-of-way named in clause 16; clause 36 is for the permit officer.",
           "cites": [
             {
               "source": "mr56-bma",
@@ -2360,7 +2367,7 @@
     },
     {
       "id": "bylaw-2569-scope",
-      "question": "Does the 13 Mar 2026 Bangkok bylaw change anything in ข้อ 16 (ย.9) that this pack uses?",
+      "question": "Does the 13 Mar 2026 Bangkok bylaw change anything in clause 16, this zone's clause, that this pack uses?",
       "readings": [
         {
           "id": "factories-only",
@@ -2384,7 +2391,7 @@
         },
         {
           "id": "unverified",
-          "reading": "Unknown until a Thai reader or OCR reads the operative text; mark every ย.9 value as unverified against the 2026 amendment.",
+          "reading": "Unknown until a Thai reader or OCR reads the operative text; mark every value for this zone as unverified against the 2026 amendment.",
           "cites": [
             {
               "source": "bb69-bma",
@@ -2402,11 +2409,11 @@
     },
     {
       "id": "front-open-space",
-      "question": "Does a building on a public road need the bylaw ข้อ 52 (6) front open space (6 m, or 12 m above 3 storeys)?",
+      "question": "Does a building on a public road need the bylaw clause 52 (6) front open space (6 m, or 12 m above 3 storeys)?",
       "readings": [
         {
           "id": "exempt-on-road",
-          "reading": "No, if it meets ข้อ 53: the road-facing building line is longer than 1/8 of the perimeter and within 20 m of the road.",
+          "reading": "No, if it meets clause 53: the road-facing building line is longer than 1/8 of the perimeter and within 20 m of the road.",
           "cites": [
             {
               "source": "bb44-03",
@@ -2419,7 +2426,7 @@
         },
         {
           "id": "always",
-          "reading": "Yes. ข้อ 52 (6) applies to every public or taller building; ข้อ 53 only adds the road-facing conditions.",
+          "reading": "Yes. Clause 52 (6) applies to every public or taller building; clause 53 only adds the road-facing conditions.",
           "cites": [
             {
               "source": "bb44-03",
@@ -2432,7 +2439,7 @@
         }
       ],
       "recommendation": "exempt-on-road",
-      "why": "ข้อ 53 opens with 'อาคารอยู่ริมทางสาธารณะที่ไม่ต้องมีที่ว่างตามข้อ 52(3) และ 52(6)', which only makes sense as an exemption.",
+      "why": "Clause 53 opens with 'a building beside a public way that need not have the open space of clause 52(3) and 52(6)', which only makes sense as an exemption.",
       "decision": "exempt-on-road"
     }
   ],

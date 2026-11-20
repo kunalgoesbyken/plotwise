@@ -29,7 +29,7 @@ function platformLine(id: string, points: Vec2[]): Station {
   return { id, kind: 'platform', geometry: { type: 'line', line: points.map(at) } }
 }
 
-const asok = { name: 'Asok', nameTh: 'อโศก' }
+const asok = { name: 'Asok' }
 const platform = platformArea('platform', [100, 0, 250, 10])
 const node = stationNode('node', [175, 5], asok)
 
@@ -65,15 +65,14 @@ describe('nearestStation', () => {
     expect(nearestStation(plot, [beside, farPlatform])).toEqual({ name: 'Beside', distanceM: expect.closeTo(40, 3), measuredFrom: 'station' })
   })
 
-  it('keeps a platform name over the name of its station, and takes the rest from the station', () => {
+  it('keeps a platform name over the name of its station', () => {
     const named = platformArea('named', [100, 0, 250, 10], { name: 'Sukhumvit' })
     expect(nearestStation(plot, [named, node])?.name).toBe('Sukhumvit')
-    expect(nearestStation(plot, [named, node])?.nameTh).toBe(asok.nameTh)
   })
 
   it('fills a name the platform lacks from its station', () => {
-    const thaiOnly = platformArea('thai', [100, 0, 250, 10], { nameTh: 'สุขุมวิท' })
-    expect(nearestStation(plot, [thaiOnly, node])).toMatchObject({ name: asok.name, nameTh: 'สุขุมวิท' })
+    const unnamed = platformArea('unnamed', [100, 0, 250, 10])
+    expect(nearestStation(plot, [unnamed, node])).toMatchObject({ name: asok.name })
   })
 
   it('is zero when a platform touches, crosses or lies inside the plot', () => {

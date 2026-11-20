@@ -18,14 +18,14 @@ export function readPalette(): Palette {
   const style = getComputedStyle(document.documentElement)
   const read = (name: string) => style.getPropertyValue(`--color-${name}`).trim()
   return {
-    paper: read('paper'),
-    vellum: read('vellum'),
-    ink: read('ink'),
-    slate: read('slate'),
-    rule: read('rule'),
-    plot: read('plot'),
+    paper: read('background'),
+    vellum: read('muted'),
+    ink: read('foreground'),
+    slate: read('muted-foreground'),
+    rule: read('border'),
+    plot: read('primary'),
     road: read('road'),
-    signal: read('signal'),
+    signal: read('destructive'),
   }
 }
 

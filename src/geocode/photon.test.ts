@@ -2,7 +2,6 @@ import { describe, expect, it } from 'bun:test'
 import { THAILAND_BBOX } from '@/site/assumptions'
 import { USER_AGENT } from '@/site/user-agent'
 import english from './__fixtures__/asok.photon-en.json'
-import local from './__fixtures__/asok.photon-default.json'
 import { SEARCH_BIAS_LNGLAT, SEARCH_RESULT_LIMIT } from './assumptions'
 import { PlaceSearchUnavailableError, fetchPlaces } from './photon'
 import { PlacesSchema } from './schema'
@@ -19,13 +18,13 @@ function fakePhoton(handler: Handler): { fetchImpl: typeof fetch; calls: { url: 
   return { fetchImpl, calls }
 }
 
-const recorded = (url: URL) => Response.json(url.searchParams.get('lang') === 'en' ? english : local)
+const recorded = () => Response.json(english)
 
 describe('fetchPlaces', () => {
-  it('asks Photon in English and in local names, biased to Bangkok and limited to Thailand', async () => {
+  it('asks Photon once, in English, biased to Bangkok and limited to Thailand', async () => {
     const { fetchImpl, calls } = fakePhoton(recorded)
     await fetchPlaces('asok', { fetchImpl })
-    expect(calls.map(({ url }) => url.searchParams.get('lang')).sort()).toEqual(['default', 'en'])
+    expect(calls.map(({ url }) => url.searchParams.get('lang'))).toEqual(['en'])
     const { url, init } = calls[0]
     expect(url.origin + url.pathname).toBe('https://photon.komoot.io/api')
     expect(url.searchParams.get('q')).toBe('asok')
@@ -36,24 +35,18 @@ describe('fetchPlaces', () => {
     expect(new Headers(init.headers).get('user-agent')).toBe(USER_AGENT)
   })
 
-  it('labels each place in English with its Thai name alongside', async () => {
+  it('labels each place in English', async () => {
     const places = await fetchPlaces('asok', { fetchImpl: fakePhoton(recorded).fetchImpl })
     expect(PlacesSchema.safeParse(places).success).toBe(true)
     expect(places[0]).toEqual({
       id: 'N5391625873',
       label: 'Asok, Sukhumvit Road, Khlong Toei, Bangkok',
-      labelTh: 'อโศก, ถนนสุขุมวิท, คลองเตย, กรุงเทพมหานคร',
       lngLat: [100.5603571, 13.7370432],
       kind: 'house',
     })
   })
 
-  it('leaves out a Thai label that has no name of its own', async () => {
-    const places = await fetchPlaces('asok', { fetchImpl: fakePhoton(recorded).fetchImpl })
-    expect(places[1]).toEqual({ id: 'N2313566422', label: 'Asok, Vadhana, Bangkok', lngLat: [100.5614449, 13.7366488], kind: 'locality' })
-  })
-
-  it('leaves out a Thai label that matches the English one, and places with nothing to call them', async () => {
+  it('leaves out places with nothing to call them', async () => {
     const feature = (properties: Record<string, unknown>) => ({
       type: 'Feature',
       properties: { osm_type: 'W', osm_id: 1, ...properties },

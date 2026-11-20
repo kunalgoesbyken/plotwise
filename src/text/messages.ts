@@ -14,7 +14,6 @@ type Count = { count: number }
 type Verb = { verb: string }
 type Num = { number: string }
 type Area = { area: string }
-type Zone = { zone: string }
 
 type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
@@ -38,11 +37,16 @@ const en = {
   'building.hotel': 'Hotel',
 
   'shell.panel': 'Plot settings',
-  'shell.tabs': 'Panels',
-  'shell.waiting.rules': 'Once the outline is closed and every road has a width, the limits for this plot appear here, each with its legal source.',
-  'shell.waiting.designs': 'Once the outline is closed and every road has a width, at least two concept designs appear here, each with a pass/fail checklist.',
-  'shell.waiting.view3d': 'Once the outline is closed and every road has a width, the allowed envelope and the designs appear here in 3D.',
-  'tab.site': 'Site',
+  'shell.steps': 'Steps',
+  'shell.hide': 'Hide panel',
+  'shell.show': 'Show panel',
+  'flow.plot': 'Plot',
+  'flow.roads': 'Roads',
+  'flow.results': 'Results',
+  'flow.next.plot': 'Next: roads',
+  'flow.next.roads': 'See what you can build',
+  'flow.back': 'Back',
+  'tab.label': 'Result details',
   'tab.rules': 'Rules',
   'tab.designs': 'Designs',
   'tab.view3d': '3D',
@@ -56,30 +60,34 @@ const en = {
 
   'hint.label.not-allowed': 'Not allowed',
   'hint.label.corner': ({ name }: { name: string }) => `Corner ${name}`,
-  'hint.label.outline': 'Outline',
-  'hint.label.frontage': 'Frontage',
-  'hint.label.ready': 'Ready',
+  'hint.label.outline': 'Plot',
+  'hint.label.frontage': 'Roads',
+  'hint.label.ready': 'Done',
   'hint.corner': 'Drag to move it, or delete it.',
-  'hint.start': ({ verb }: Verb) => `${verb} the map to place the first corner of the plot.`,
-  'hint.place': ({ verb }: Verb) => `${verb} to place the next corner.`,
-  'hint.close': ({ verb }: Verb) => `${verb} corner A to close the outline.`,
+  'hint.start': ({ verb }: Verb) => `${verb} the map at each corner of your plot.`,
+  'hint.place': ({ verb }: Verb) => `${verb} the next corner.`,
+  'hint.close': ({ verb }: Verb) => `${verb} corner A to finish the outline.`,
   'hint.road': ({ verb }: Verb) => `${verb} each edge that faces a road.`,
-  'hint.width': ({ edge }: { edge: string }) => `Enter the width of the road on edge ${edge}.`,
-  'hint.done': 'Drag a corner to reshape the plot. Drag an edge’s midpoint to add a corner.',
+  'hint.width': ({ edge }: { edge: string }) => `Type the width of the road on edge ${edge}.`,
+  'hint.done': 'Drag a corner to reshape the plot.',
+  'legend.label': 'Map key',
+  'legend.road': 'Road',
+  'legend.buildable': 'Buildable at ground level',
+  'legend.footprint': 'Design footprint',
+  'legend.envelope': 'Allowed shape',
+  'legend.carved': 'Cut away by this rule',
+  'legend.design': 'Design',
   'action.undo-corner': 'Undo corner',
   'action.close-outline': 'Close outline',
   'action.delete-corner': 'Delete corner',
 
   'plot.title': 'Plot',
   'plot.corners': ({ count }: Count) => plural(count, 'corner', 'corners'),
-  'plot.start': ({ verb }: Verb) => `${verb} the map at each corner of the plot boundary, then close the outline on the first corner.`,
+  'plot.or': 'or',
   'plot.example': 'Use an example plot',
-  'plot.closed': 'Outline closed',
-  'plot.drawing': 'Drawing the outline',
   'plot.clear': 'Clear and redraw',
 
   'frontage.title': 'Road frontage',
-  'frontage.waiting': 'Close the outline, then mark the edges that face a road.',
   'frontage.roads': ({ count }: Count) => plural(count, 'road', 'roads'),
   'frontage.width-label': ({ edge }: { edge: string }) => `Road width on edge ${edge}, in metres`,
   'frontage.width-placeholder': 'width',
@@ -94,10 +102,9 @@ const en = {
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',
-  'zone.title': 'Zone',
-  'zone.name': ({ code }: { code: string }) => `${code} · very high-density residential (brown)`,
-  'zone.scope': 'Plotwise covers this one zone of the Bangkok Comprehensive Plan B.E. 2556. Confirm the plot sits in it before relying on the numbers.',
-  'zone.check': 'Check the zone on the BMA city plan',
+  'zone.name': 'Brown zone · very high-density residential',
+  'zone.scope': 'Plotwise covers only this zone of the Bangkok city plan.',
+  'zone.check': 'Check your plot is in it',
   'transit.title': 'Mass transit',
   'transit.near': ({ distance }: { distance: string }) => `Within ${distance} of a BTS/MRT station`,
   'transit.nearest-platform': ({ name, distance }: { name: string; distance: string }) =>
@@ -128,8 +135,8 @@ const en = {
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
   'source.toggle': ({ count }: Count) => (count === 1 ? 'Source' : `Sources (${count})`),
-  'source.location': ({ page, line }: { page: number; line: number }) => ` · p. ${page}, line ${line}`,
-  'source.quote': ({ quote }: { quote: string }) => `“${quote}”`,
+  'source.location': ({ page, line }: { page: number; line: number }) => `Page ${page}, line ${line}`,
+  'source.open': 'Official text (PDF, in Thai)',
 
   'range.between': ({ min, max }: { min: string; max: string }) => `${min} and ${max}`,
   'range.span': ({ min, max }: { min: string; max: string }) => `${min} to ${max}`,
@@ -143,13 +150,12 @@ const en = {
   'value.not-met': 'Not met',
   'value.permitted': 'Permitted',
 
-  'rules.zone': ({ zone }: { zone: string }) => `Zone ${zone} · high-density residential`,
   'rules.plot-area': ({ area }: Area) => `Plot ${area}`,
   'rules.bylaw.title': '2026 plan amendment: read with care',
-  'rules.bylaw.factories-only': ({ zone }: Zone) =>
-    `The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Its readable parts change only factory uses, so the ${zone} values below are treated as unchanged. Confirm with the BMA before relying on them.`,
-  'rules.bylaw.unverified': ({ zone }: Zone) =>
-    `The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Every ${zone} value below is unverified against it. Confirm with the BMA before relying on them.`,
+  'rules.bylaw.factories-only':
+    'The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Its readable parts change only factory uses, so the values below are treated as unchanged. Confirm with the BMA before relying on them.',
+  'rules.bylaw.unverified':
+    'The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Every value below is unverified against it. Confirm with the BMA before relying on them.',
   'rules.estimated-roads': ({ edges }: { edges: string }) =>
     `The road width on ${edges} is estimated from OpenStreetMap. Setbacks, height and use limits depend on it, so measure it on site.`,
   'rules.group.floor-area': 'Floor area',
@@ -189,7 +195,7 @@ const en = {
   'limit.open-space-minimum.landArea.anyBuilding': 'Of the land, for any building.',
   'limit.open-space-minimum.landArea.highRiseOrExtraLarge': 'Of the land, for a high-rise or extra-large building.',
   'limit.height-plan': 'Height limit in the plan',
-  'limit.height-plan.detail': ({ zone }: Zone) => `${zone} sets no height of its own; the rules below cap it.`,
+  'limit.height-plan.detail': 'The zone sets no height of its own; the rules below cap it.',
   'limit.height-vs-road': 'Height against road',
   'limit.height-vs-road.detail': ({ multiple }: { multiple: string }) =>
     `No point may be taller than ${multiple} times its distance to the far side of the road.`,
@@ -207,7 +213,7 @@ const en = {
   'limit.high-rise-far': 'High-rise FAR cap',
   'limit.high-rise-far.detail': 'The building-control cap; the plan’s lower ratio governs.',
   'limit.use.permitted': 'No size condition',
-  'limit.use.permitted.detail': ({ zone }: Zone) => `This use is not on the ${zone} list of restricted uses.`,
+  'limit.use.permitted.detail': 'This use is not on the zone’s list of restricted uses.',
   'limit.use.rooms': 'Rooms',
   'limit.use.operatingAreaSqm': 'Operating area',
   'limit.use.unless': ({ road, station, status }: { road: string; station: string; status: string }) =>
@@ -243,16 +249,16 @@ const en = {
   'design.checklist': 'Checklist',
   'designs.none': 'No design fits this plot under these rules. Try a wider road, a larger plot or another building type.',
 
-  'limited-by.far': 'Limited by the floor area ratio.',
+  'limited-by.far': 'Limited by the plot’s floor area cap.',
   'limited-by.building-class': ({ height }: { height: string }) =>
     `Limited by the high-rise rules, which apply from ${height} tall or to an extra-large floor area.`,
   'limited-by.use': 'Limited by the zone’s size condition for this use.',
   'limited-by.use-unless': ({ road, station }: { road: string; station: string }) =>
     `Limited by the zone’s size condition for this use: going larger needs a ${road} road or a station within ${station}.`,
-  'limited-by.envelope': 'Limited by the allowed envelope.',
+  'limited-by.envelope': 'Limited by setbacks and the height the road width allows.',
 
   'metric.gfa-of-max': ({ max }: { max: string }) => `of ${max} max floor area`,
-  'metric.far': 'FAR',
+  'metric.far': 'Floor area ratio',
   'metric.height': 'Height',
   'metric.storeys': 'Storeys',
   'metric.parking': 'Parking',
@@ -263,8 +269,9 @@ const en = {
   'metric.spaces': ({ count }: { count: string }) => `${count} spaces`,
 
   'summary.label': 'Results for the design shown in 3D',
-  'summary.floor-area': 'Floor area',
-  'summary.max-floor-area': 'Max allowed',
+  'summary.allowed': 'You can build up to',
+  'summary.allowed-unit': 'of floor area',
+  'summary.design': 'Best design',
 
   'status.pass': 'Pass',
   'status.fail': 'Fail',

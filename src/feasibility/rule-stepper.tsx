@@ -3,14 +3,35 @@
 import { totalArea } from '@/geometry'
 import type { Envelope, Limits } from '@/solve'
 import { formatQuantity } from '@/text/format'
-import { SEGMENT, SEGMENTS } from '@/editor/ui'
 import { t } from '@/text/messages'
+import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
 import { CARVING } from './compute'
 import { useFeasibility } from './feasibility-provider'
-import { firstTierOf, RULE_STEPS, setbacksOf, type EnvelopeLayers } from './rule-layers'
+import { firstTierOf, RULE_STEPS, setbacksOf, type EnvelopeLayers, type RuleStep } from './rule-layers'
 import { Sources } from './sources'
 
 const metres = (value: number) => formatQuantity(value, 'm')
+
+const isRuleStep = (value: string): value is RuleStep => (RULE_STEPS as readonly string[]).includes(value)
+
+const KEY = [
+  { key: 'legend.envelope', swatch: 'border-primary bg-primary/20' },
+  { key: 'legend.carved', swatch: 'border-dashed border-destructive' },
+  { key: 'legend.design', swatch: 'border-foreground/50 bg-background' },
+] as const
+
+function SceneKey() {
+  return (
+    <ul aria-label={t('legend.label')} className="flex flex-wrap gap-x-3 gap-y-1 text-2xs text-muted-foreground">
+      {KEY.map(({ key, swatch }) => (
+        <li key={key} className="flex items-center gap-1.5">
+          <span aria-hidden="true" className={`size-2.5 rounded-xs border ${swatch}`} />
+          {t(key)}
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 type CaptionInput = { readonly envelope: Envelope; readonly layers: EnvelopeLayers; readonly limits: Limits }
 
@@ -40,32 +61,38 @@ export function RuleStepper() {
   const footprint = totalArea(layers.shown[0]?.polygons ?? [])
   const cites = layers.step === 'plot' ? [] : setbacksOf(envelope, layers.step, CARVING).flatMap((s) => s.cites)
   return (
-    <div className="@container border-t border-rule bg-paper px-3 pt-3 pb-1.5" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
-      <div role="group" aria-label={t('step.label')} className={`${SEGMENTS} max-w-2xl grid-cols-2 @xs:grid-cols-4`}>
-        {RULE_STEPS.map((step, i) => {
+    <div className="@container flex flex-col gap-2 border-t bg-background px-3 pt-3 pb-1.5" data-rule-step={layers.step} data-envelope-footprint={Math.round(footprint)}>
+      <ToggleGroup
+        type="single"
+        variant="outline"
+        size="sm"
+        aria-label={t('step.label')}
+        value={layers.step}
+        onValueChange={(value) => isRuleStep(value) && chooseStep(value)}
+        className="grid w-full max-w-2xl grid-cols-2 @xs:grid-cols-4"
+      >
+        {RULE_STEPS.map((step) => {
           const available = layers.steps.includes(step)
           return (
-            <button
+            <ToggleGroupItem
               key={step}
-              type="button"
-              aria-pressed={layers.step === step}
+              value={step}
               disabled={!available}
               title={available ? undefined : t('step.not-binding')}
-              onClick={() => chooseStep(step)}
-              className={`${SEGMENT} group/step px-1 text-xs disabled:cursor-not-allowed disabled:opacity-40`}
+              className="w-full text-xs data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
             >
-              <span className="hidden font-mono text-2xs text-slate group-aria-pressed/step:text-plot @md:inline">{i + 1}</span>
               {t(`step.${step}`)}
-            </button>
+            </ToggleGroupItem>
           )
         })}
-      </div>
-      <div className="flex max-w-2xl flex-wrap items-baseline gap-x-3 px-0.5 pt-2">
+      </ToggleGroup>
+      <SceneKey />
+      <div className="flex max-w-2xl flex-wrap items-baseline gap-x-3 px-0.5">
         <p aria-live="polite" className="min-w-0 flex-1 basis-56 text-xs leading-snug">
           {caption({ envelope, layers, limits: result.solution.limits })}{' '}
-          <span className="font-mono whitespace-nowrap text-slate tabular-nums">{t('step.footprint', { area: formatQuantity(footprint, 'sqm') })}</span>
+          <span className="whitespace-nowrap text-muted-foreground">{t('step.footprint', { area: formatQuantity(footprint, 'sqm') })}</span>
         </p>
-        <Sources cites={cites} className="open:basis-full [&>ul]:max-h-36 [&>ul]:overflow-y-auto" />
+        <Sources cites={cites} className="data-[state=open]:basis-full [&_ul]:max-h-36 [&_ul]:overflow-y-auto" />
       </div>
     </div>
   )

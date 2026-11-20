@@ -26,7 +26,6 @@ export const PlaceQuerySchema = z
 export const PlaceSchema = z.object({
   id: z.string(),
   label: z.string().min(1),
-  labelTh: z.string().min(1).optional(),
   lngLat: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]).readonly(),
   kind: z.enum(PLACE_KINDS),
 })

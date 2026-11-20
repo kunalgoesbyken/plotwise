@@ -1,19 +1,34 @@
 @import "tailwindcss";
 
 @theme static {
-  --color-paper: #fbfcfb;
-  --color-vellum: #eef2f1;
-  --color-ink: #1a2228;
-  --color-slate: #56646c;
-  --color-rule: #d3dbd9;
-  --color-plot: #2c48c8;
-  --color-plot-wash: #e6eafa;
+  --color-background: #fbfcfb;
+  --color-foreground: #1a2228;
+  --color-card: #fbfcfb;
+  --color-card-foreground: #1a2228;
+  --color-popover: #fbfcfb;
+  --color-popover-foreground: #1a2228;
+  --color-primary: #2c48c8;
+  --color-primary-foreground: #fbfcfb;
+  --color-secondary: #eef2f1;
+  --color-secondary-foreground: #1a2228;
+  --color-muted: #eef2f1;
+  --color-muted-foreground: #56646c;
+  --color-accent: #e6eafa;
+  --color-accent-foreground: #2c48c8;
+  --color-destructive: #b8322a;
+  --color-border: #d3dbd9;
+  --color-input: #d3dbd9;
+  --color-ring: #2c48c8;
   --color-road: #e2a01b;
-  --color-road-ink: #6e4a00;
-  --color-signal: #b8322a;
+  --color-road-foreground: #6e4a00;
 }
 
 @theme {
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -21,16 +36,20 @@
 
   @keyframes flash {
     from {
-      background-color: var(--color-plot-wash);
-      color: var(--color-plot);
+      background-color: var(--color-accent);
+      color: var(--color-primary);
     }
   }
 }
 
 @theme inline {
-  --font-display: var(--font-bai-jamjuree), ui-sans-serif, sans-serif;
-  --font-sans: var(--font-anuphan), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
 }
 
 html,
@@ -41,24 +60,25 @@ body {
 }
 
 body {
-  background: var(--color-vellum);
-  color: var(--color-ink);
+  background: var(--color-muted);
+  color: var(--color-foreground);
+  font-variant-numeric: tabular-nums;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-plot);
+  outline: 2px solid var(--color-ring);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: var(--color-plot-wash);
+  background: var(--color-accent);
 }
 
 .thin-scroll {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--color-slate) 35%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-muted-foreground) 35%, transparent) transparent;
 }
 
 @media (width >= 64rem) {
@@ -69,8 +89,8 @@ body {
 
 .map-label {
   pointer-events: none;
-  font-family: var(--font-mono);
-  font-weight: 500;
+  font-family: var(--font-sans);
+  font-weight: 600;
   line-height: 1;
   white-space: nowrap;
 }
@@ -79,9 +99,9 @@ body {
   translate: 14px -14px;
   padding: 3px 4px;
   font-size: 11px;
-  color: var(--color-plot);
-  background: var(--color-paper);
-  border: 1px solid var(--color-plot);
+  color: var(--color-primary);
+  background: var(--color-background);
+  border: 1px solid var(--color-primary);
   border-radius: 3px;
 }
 
@@ -89,10 +109,10 @@ body {
   translate: 0 -20px;
   padding: 4px 7px;
   font-size: 12px;
-  color: var(--color-ink);
+  color: var(--color-foreground);
   background: var(--color-road);
   border-radius: 999px;
-  box-shadow: 0 0 0 2px var(--color-paper);
+  box-shadow: 0 0 0 2px var(--color-background);
 }
 
 .maplibregl-map {
@@ -101,7 +121,7 @@ body {
 
 .maplibregl-map .maplibregl-ctrl-group {
   border-radius: 0.5rem;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 12%, transparent), 0 0 0 1px var(--color-rule);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-foreground) 12%, transparent), 0 0 0 1px var(--color-border);
 }
 
 .maplibregl-map .maplibregl-ctrl-group button {
@@ -111,17 +131,17 @@ body {
 
 .maplibregl-map .maplibregl-ctrl-attrib {
   font-size: var(--text-2xs);
-  color: var(--color-slate);
-  background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+  color: var(--color-muted-foreground);
+  background: color-mix(in srgb, var(--color-background) 88%, transparent);
 }
 
 .maplibregl-map .maplibregl-ctrl-attrib a {
-  color: var(--color-ink);
+  color: var(--color-foreground);
 }
 
 .maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact {
   border-radius: 999px;
-  box-shadow: 0 0 0 1px var(--color-rule);
+  box-shadow: 0 0 0 1px var(--color-border);
 }
 
 .maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show {
@@ -135,10 +155,10 @@ body {
 }
 
 .maplibregl-ctrl-scale {
-  font-family: var(--font-mono);
-  border-color: var(--color-ink);
-  color: var(--color-ink);
-  background: color-mix(in srgb, var(--color-paper) 85%, transparent);
+  font-family: var(--font-sans);
+  border-color: var(--color-foreground);
+  color: var(--color-foreground);
+  background: color-mix(in srgb, var(--color-background) 85%, transparent);
 }
 
 @media (width >= 64rem) {

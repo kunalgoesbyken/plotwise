@@ -38,7 +38,7 @@ const PLATFORM_THROUGH_START_VIEW: Station = {
   },
 }
 
-const ASOK: Place = { id: 'N1', label: 'Asok, Watthana, Bangkok', labelTh: 'อโศก, วัฒนา, กรุงเทพมหานคร', lngLat: [100.5604, 13.7372], kind: 'locality' }
+const ASOK: Place = { id: 'N1', label: 'Asok, Watthana, Bangkok', lngLat: [100.5604, 13.7372], kind: 'locality' }
 
 async function open(page: Page, path = '/', roads: Road[] = [], stations: Station[] = []) {
   await page.route('**/api/site?**', (route) => {
@@ -82,18 +82,21 @@ async function settledCorner(page: Page, name: string): Promise<[number, number]
 
 const hint = (page: Page) => page.getByRole('status')
 const site = (page: Page) => page.getByRole('complementary', { name: 'Plot settings' })
+const goTo = (page: Page, step: 'Plot' | 'Roads' | 'Results') => page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: step }).click()
+const frontageRows = (page: Page) => page.getByRole('region', { name: 'Road frontage' }).getByRole('listitem')
 
 test('draws a concave plot, marks a road, picks a type and restores it all from the URL', async ({ page }) => {
   const errors = await open(page)
   await draw(page, L_SHAPE)
-  await expect(site(page).getByText('6 corners')).toBeVisible()
+  await expect(frontageRows(page)).toHaveCount(6)
   await expect(hint(page)).toContainText('edge that faces a road')
 
   await page.mouse.click(300, 365)
   const width = page.getByLabel('Road width on edge A–B, in metres')
   await expect(width).toBeFocused()
   await width.fill('16')
-  await page.getByText('Hotel', { exact: true }).click()
+  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await page.getByRole('radio', { name: 'Hotel' }).click()
 
   const plot = await plotInUrl(page)
   expect(plot?.ring).toHaveLength(6)
@@ -103,10 +106,11 @@ test('draws a concave plot, marks a road, picks a type and restores it all from 
 
   await page.reload()
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
-  await expect(site(page).getByText('6 corners')).toBeVisible()
-  await expect(page.getByLabel('Road width on edge A–B, in metres')).toHaveValue('16')
   await expect(page.getByRole('radio', { name: 'Hotel' })).toBeChecked()
   await expect(hint(page)).toContainText('Drag a corner')
+  await goTo(page, 'Roads')
+  await expect(frontageRows(page)).toHaveCount(6)
+  await expect(page.getByLabel('Road width on edge A–B, in metres')).toHaveValue('16')
   expect(page.url()).toBe(link)
   await page.screenshot({ path: 'e2e/.results/editor-1280.png' })
   expect(errors).toEqual([])
@@ -145,28 +149,29 @@ test('drags a corner, inserts one on an edge and deletes it again', async ({ pag
   await page.mouse.down()
   await page.mouse.move(mx, my - 40, { steps: 5 })
   await page.mouse.up()
-  await expect(site(page).getByText('7 corners')).toBeVisible()
+  await expect.poll(async () => (await plotInUrl(page))?.ring).toHaveLength(7)
   await expect(hint(page)).toContainText('Corner G')
   await page.keyboard.press('Delete')
-  await expect(site(page).getByText('6 corners')).toBeVisible()
   await expect.poll(async () => (await plotInUrl(page))?.ring).toHaveLength(6)
 })
 
 test('ignores a malformed link and starts empty', async ({ page }) => {
   const errors = await open(page, '/#plot=1,2;garbage&roads=0:-1&type=castle')
-  await expect(hint(page)).toContainText('first corner')
+  await expect(hint(page)).toContainText('each corner of your plot')
   expect(errors).toEqual([])
 })
 
 test('names the one zone it covers and links the official map to confirm it', async ({ page }) => {
   await open(page, '/')
-  await expect(page.getByText('ย.9 · very high-density residential')).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Check the zone on the BMA city plan' })).toHaveAttribute('href', /bangkok\.go\.th/)
+  await expect(page.getByText('Brown zone · very high-density residential')).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Check your plot is in it' })).toHaveAttribute('href', /bangkok\.go\.th/)
 })
 
 test('works from the keyboard, and suggests a mapped road width that stays editable', async ({ page }) => {
   await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
   await page.getByRole('button', { name: 'Use an example plot' }).focus()
+  await page.keyboard.press('Enter')
+  await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).focus()
   await page.keyboard.press('Enter')
   await page.getByRole('button', { name: 'Mark edge C–D as a road' }).focus()
   await page.keyboard.press('Enter')
@@ -177,8 +182,12 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.type('8')
   await expect(site(page).getByText('Estimated from OpenStreetMap')).toBeHidden()
+  await page.getByRole('button', { name: 'See what you can build' }).focus()
+  await page.keyboard.press('Enter')
   await page.getByRole('radio', { name: 'Condominium' }).focus()
   await page.keyboard.press('ArrowRight')
+  await expect(page.getByRole('radio', { name: 'Office' })).toBeFocused()
+  await page.keyboard.press('Space')
   await expect(page.getByRole('radio', { name: 'Office' })).toBeChecked()
   await expect.poll(async () => (await plotInUrl(page))?.roads).toEqual([
     { edge: 0, widthM: 12 },
@@ -187,8 +196,7 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
 })
 
 async function frontageColumns(page: Page) {
-  const rows = page.getByRole('region', { name: 'Road frontage' }).getByRole('listitem')
-  return rows.evaluateAll((items) =>
+  return frontageRows(page).evaluateAll((items) =>
     items.map((item) => {
       const [, width, action] = [...item.children].map((cell) => cell.getBoundingClientRect())
       return { width: Math.round(width.left), actionLeft: Math.round(action.left), actionRight: Math.round(action.right), height: Math.round(item.getBoundingClientRect().height) }
@@ -201,6 +209,7 @@ for (const width of [536, 1280])
     await page.setViewportSize({ width, height: 900 })
     await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
     await page.getByRole('button', { name: 'Use an example plot' }).click()
+    await goTo(page, 'Roads')
     await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
     await expect(site(page).getByText('Estimated from OpenStreetMap. Check it on site.')).toBeVisible()
     const rows = await frontageColumns(page)
@@ -211,14 +220,13 @@ for (const width of [536, 1280])
     expect(Math.round(roadInput!.x)).toBe(rows[0].width)
   })
 
-test('finds a place by name, in Thai or English, and draws the plot there', async ({ page }) => {
+test('finds a place by name and draws the plot there', async ({ page }) => {
   await page.route('**/api/geocode?**', (route) => route.fulfill({ json: [ASOK] }))
   const errors = await open(page)
-  await page.getByLabel('Search for an address or place in Thailand').fill('อโศก')
+  await page.getByLabel('Search for an address or place in Thailand').fill('asok')
   await page.getByRole('button', { name: 'Search', exact: true }).click()
   const result = page.getByRole('list', { name: 'Places found' }).getByRole('button')
-  await expect(result).toContainText('Asok, Watthana, Bangkok')
-  await expect(result).toContainText('อโศก, วัฒนา')
+  await expect(result).toHaveText('Asok, Watthana, Bangkok')
   await result.click()
   await expect(page.getByRole('list', { name: 'Places found' })).toBeHidden()
   await page.waitForTimeout(4_000)
@@ -284,7 +292,7 @@ test('phone layout at 375 px: bottom sheet, no overflow, 44 px targets, drawing 
   expect(l.panel.bottom).toBe(812)
   expect(l.smallestTarget).toBeGreaterThanOrEqual(44)
 
-  await page.getByRole('button', { name: 'Site', exact: true }).click()
+  await page.getByRole('button', { name: 'Hide panel' }).click()
   await draw(page, [
     [60, 200],
     [60, 420],
@@ -295,9 +303,11 @@ test('phone layout at 375 px: bottom sheet, no overflow, 44 px targets, drawing 
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeHidden()
   await page.mouse.click(60, 260)
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeVisible()
-  await page.getByRole('button', { name: 'Rules', exact: true }).click()
-  await expect(page.getByRole('region', { name: 'Rules' })).toBeVisible()
-  await expect(page.getByRole('region', { name: 'Building type' })).toBeHidden()
+  await page.getByLabel('Road width on edge A–B, in metres').fill('10')
+  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
+  await page.getByRole('tab', { name: 'Rules' }).click()
+  await expect(page.getByRole('tabpanel', { name: 'Rules' })).toBeVisible()
   await page.screenshot({ path: 'e2e/.results/editor-375.png' })
 })
 
@@ -309,7 +319,8 @@ test('desktop layout at 1280 px: side panel beside the map, nothing overflows', 
   expect(l.panel.right).toBeLessThanOrEqual(1280)
   expect(l.panel.left).toBeGreaterThan(800)
   expect(l.statusRight).toBeLessThan(l.panel.left)
-  await expect(page.getByRole('navigation', { name: 'Panels' })).toBeHidden()
-  for (const name of ['Plot', 'Road frontage', 'Building type', 'Rules', 'Designs'])
-    await expect(page.getByRole('region', { name, exact: true })).toBeVisible()
+  await expect(page.getByRole('navigation', { name: 'Steps' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Find the site' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Road frontage' })).toHaveCount(0)
+  await expect(page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' })).toBeDisabled()
 })

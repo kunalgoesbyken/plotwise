@@ -2,7 +2,7 @@
 
 import { edgeName } from '@/editor/map-features'
 import { useEditorState } from '@/editor/plot-store'
-import { Note } from '@/editor/ui'
+import { Alert, AlertDescription, AlertTitle } from '@/ui/alert'
 import type { Bound, Range } from '@/rules'
 import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
@@ -32,10 +32,13 @@ function BylawBanner({ solution }: Pick<Ready, 'solution'>) {
   const question = PACK.questions.find((q) => q.id === 'bylaw-2569-scope')
   const cites = question?.readings.find((r) => r.id === reading)?.cites ?? []
   return (
-    <Note title={t('rules.bylaw.title')}>
-      <p>{t(`rules.bylaw.${reading}`, { zone: PACK.zone.code })}</p>
-      <Sources cites={cites} />
-    </Note>
+    <Alert role="note" className="border-road/50 bg-road/10">
+      <AlertTitle className="line-clamp-none text-road-foreground">{t('rules.bylaw.title')}</AlertTitle>
+      <AlertDescription className="text-xs text-foreground">
+        <p>{t(`rules.bylaw.${reading}`)}</p>
+        <Sources cites={cites} />
+      </AlertDescription>
+    </Alert>
   )
 }
 
@@ -45,9 +48,9 @@ function EstimatedRoads() {
   const names = draft.corners.flatMap((c, i) => (c.edge.road && c.edge.estimated ? [edgeName(i, draft.corners.length)] : []))
   if (names.length === 0) return null
   return (
-    <Note>
-      <p>{t('rules.estimated-roads', { edges: formatList(names) })}</p>
-    </Note>
+    <Alert role="note" className="border-road/50 bg-road/10">
+      <AlertDescription className="text-xs text-foreground">{t('rules.estimated-roads', { edges: formatList(names) })}</AlertDescription>
+    </Alert>
   )
 }
 
@@ -107,7 +110,7 @@ function Height({ solution }: Pick<Ready, 'solution'>) {
   const { height, highRise } = solution.limits
   return (
     <LimitGroup title={t('rules.group.height')}>
-      <LimitRow label={t('limit.height-plan')} value={t('value.none')} detail={t('limit.height-plan.detail', { zone: PACK.zone.code })} cites={height.cites} />
+      <LimitRow label={t('limit.height-plan')} value={t('value.none')} detail={t('limit.height-plan.detail')} cites={height.cites} />
       <LimitRow
         label={t('limit.height-vs-road')}
         value={t('value.multiple', { multiple: formatQuantity(height.vsRoadMultiple.value, 'ratio') })}
@@ -174,7 +177,7 @@ function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
   if (use.kind === 'permitted') {
     return (
       <LimitGroup title={title}>
-        <LimitRow label={t('limit.use.permitted')} value={t('value.permitted')} detail={t('limit.use.permitted.detail', { zone: PACK.zone.code })} cites={use.cites} />
+        <LimitRow label={t('limit.use.permitted')} value={t('value.permitted')} detail={t('limit.use.permitted.detail')} cites={use.cites} />
       </LimitGroup>
     )
   }
@@ -229,8 +232,8 @@ function Rules({ plot, solution }: Ready) {
         <EstimatedRoads />
       </div>
       <p className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
-        <span className="font-medium">{t('rules.zone', { zone: PACK.zone.code })}</span>
-        <span className="font-mono text-slate tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
+        <span className="font-medium">{t('zone.name')}</span>
+        <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
       </p>
       <FloorArea limits={limits} />
       <OpenSpace limits={limits} />

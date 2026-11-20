@@ -20,7 +20,7 @@ export function SetbackTable({ plot, solution }: Pick<Ready, 'plot' | 'solution'
     <RuleSection title={t('rules.group.setbacks')} intro={t('rules.setbacks.detail')}>
       <table className="mt-3 w-full text-left text-sm tabular-nums">
         <thead>
-          <tr className="border-b border-rule text-xs text-slate">
+          <tr className="border-b border-border text-xs text-muted-foreground">
             <th scope="col" className="pb-1.5 font-normal">
               {t('rules.setbacks.edge')}
             </th>
@@ -34,17 +34,17 @@ export function SetbackTable({ plot, solution }: Pick<Ready, 'plot' | 'solution'
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-rule/70">
+        <tbody className="divide-y divide-border/70">
           {site.edges.map((edge, i) => (
             <tr key={i}>
-              <th scope="row" className="py-2 pr-3 font-mono font-normal">
+              <th scope="row" className="py-2 pr-3 font-normal">
                 {names[i]}
               </th>
-              <td className={`py-2 text-xs ${edge.roadWidthM === null ? 'text-slate' : 'text-road-ink'}`}>
+              <td className={`py-2 text-xs ${edge.roadWidthM === null ? 'text-muted-foreground' : 'text-road-foreground'}`}>
                 {edge.roadWidthM === null ? t('rules.setbacks.boundary') : t('rules.setbacks.road', { width: formatQuantity(edge.roadWidthM, 'm') })}
               </td>
               {columns.map(({ kind, setbacks }) => (
-                <td key={kind} className="py-2 pl-3 text-right font-mono">
+                <td key={kind} className="py-2 pl-3 text-right">
                   {formatQuantity(setbacks[i].distanceM, 'm')}
                 </td>
               ))}

@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber'
 import { useId, useMemo, useRef, useState, type ReactNode } from 'react'
-import { Button } from '@/editor/ui'
+import { Button } from '@/ui/button'
 import type { LocalFrame, Vec2 } from '@/geo/projection'
 import type { Floor, Loop, Prism } from '@/geometry'
 import type { Site } from '@/site/schema'
@@ -69,7 +69,7 @@ export default function SceneView({ frame, plot, site, envelope, carved, designs
   return (
     <div
       ref={root}
-      className="flex size-full flex-col bg-vellum"
+      className="flex size-full flex-col bg-muted"
       data-scene-ready={ready}
       data-scene-buildings={context ? standing.length : undefined}
       data-scene-hidden-buildings={context ? context.buildings.length - standing.length : undefined}
@@ -113,16 +113,16 @@ export default function SceneView({ frame, plot, site, envelope, carved, designs
         </p>
         <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-wrap items-start gap-2 p-3">
           <div className="pointer-events-auto mr-auto">{children}</div>
-          <Button className="pointer-events-auto shadow-sm" onClick={() => setResets((n) => n + 1)}>
+          <Button variant="outline" size="sm" className="pointer-events-auto shadow-sm" onClick={() => setResets((n) => n + 1)}>
             {t('scene.reset')}
           </Button>
           {fullscreen.supported && (
-            <Button className="pointer-events-auto shadow-sm" onClick={fullscreen.toggle}>
+            <Button variant="outline" size="sm" className="pointer-events-auto shadow-sm" onClick={fullscreen.toggle}>
               {t(fullscreen.active ? 'scene.fullscreen.exit' : 'scene.fullscreen.enter')}
             </Button>
           )}
         </div>
-        <p className="pointer-events-none absolute bottom-2 left-3 font-mono text-2xs text-slate">{site?.attribution}</p>
+        <p className="pointer-events-none absolute bottom-2 left-3 text-2xs text-muted-foreground">{site?.attribution}</p>
       </div>
       {controls}
     </div>

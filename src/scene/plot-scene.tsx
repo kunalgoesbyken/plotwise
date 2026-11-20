@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useMemo, type ReactNode } from 'react'
 import { usePlot } from '@/editor/plot-store'
-import { Button } from '@/editor/ui'
+import { Button } from '@/ui/button'
 import { localFrame } from '@/geo/projection'
 import type { Prism } from '@/geometry'
 import type { Plot } from '@/plot/plot'
@@ -11,11 +11,11 @@ import { t } from '@/text/messages'
 import type { SceneDesign } from './scene-view'
 import { useSite, type SiteStatus } from './use-site'
 
-const NOTE = 'rounded-md bg-paper px-2.5 py-1.5 text-xs text-slate shadow-sm ring-1 ring-rule'
+const NOTE = 'rounded-md bg-background px-2.5 py-1.5 text-xs text-muted-foreground shadow-sm ring-1 ring-border'
 
 const SceneView = dynamic(() => import('./scene-view'), {
   ssr: false,
-  loading: () => <p className="grid size-full place-items-center bg-vellum text-sm text-slate">{t('scene.loading')}</p>,
+  loading: () => <p className="grid size-full place-items-center bg-muted text-sm text-muted-foreground">{t('scene.loading')}</p>,
 })
 
 type PlotSceneProps = {
@@ -33,7 +33,7 @@ function SiteNotice({ status, retry }: { status: SiteStatus; retry: () => void }
       {status === 'failed' && (
         <div className={`flex items-center gap-2 ${NOTE}`}>
           <p>{t('scene.site.failed')}</p>
-          <Button onClick={retry}>{t('scene.site.retry')}</Button>
+          <Button variant="outline" size="sm" onClick={retry}>{t('scene.site.retry')}</Button>
         </div>
       )}
     </div>

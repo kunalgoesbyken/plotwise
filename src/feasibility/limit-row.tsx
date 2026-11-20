@@ -14,9 +14,9 @@ export function LimitRow({ label, value, detail, cites }: LimitRowProps) {
     <li className="flex flex-col gap-0.5 py-2.5">
       <div className="flex items-baseline justify-between gap-4">
         <span className="min-w-0 text-sm">{label}</span>
-        {value && <span className="shrink-0 text-right font-mono text-sm font-medium tabular-nums">{value}</span>}
+        {value && <span className="shrink-0 text-right text-sm font-medium tabular-nums">{value}</span>}
       </div>
-      {detail && <p className="max-w-prose text-xs leading-relaxed text-slate">{detail}</p>}
+      {detail && <p className="max-w-prose text-xs leading-relaxed text-muted-foreground">{detail}</p>}
       <Sources cites={cites} />
     </li>
   )
@@ -27,8 +27,8 @@ type RuleSectionProps = { readonly title: string; readonly intro?: string; reado
 export function RuleSection({ title, intro, children }: RuleSectionProps) {
   return (
     <section aria-label={title} className="mt-6 first:mt-0">
-      <h3 className="border-b border-rule pb-1.5 font-display text-sm font-semibold">{title}</h3>
-      {intro && <p className="mt-2 max-w-prose text-xs leading-relaxed text-slate">{intro}</p>}
+      <h3 className="border-b border-border pb-1.5 text-sm font-semibold">{title}</h3>
+      {intro && <p className="mt-2 max-w-prose text-xs leading-relaxed text-muted-foreground">{intro}</p>}
       {children}
     </section>
   )
@@ -37,7 +37,7 @@ export function RuleSection({ title, intro, children }: RuleSectionProps) {
 export function LimitGroup({ title, children }: { readonly title: string; readonly children: ReactNode }) {
   return (
     <RuleSection title={title}>
-      <ul className="flex flex-col divide-y divide-rule/70">{children}</ul>
+      <ul className="flex flex-col divide-y divide-border/70">{children}</ul>
     </RuleSection>
   )
 }

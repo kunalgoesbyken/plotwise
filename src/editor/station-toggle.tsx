@@ -1,24 +1,28 @@
 'use client'
 
+import { useId } from 'react'
 import { loadPack } from '@/rules'
 import type { NearestStation } from '@/site/nearest-station'
 import { stationDistance } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
+import { Checkbox } from '@/ui/checkbox'
+import { Label } from '@/ui/label'
+import { PanelSection } from '@/ui/section'
 import { useEditorState, useEditorStore } from './plot-store'
-import { EstimateTag, PanelSection } from './ui'
+import { EstimateTag } from './ui'
 
 const STATION_DISTANCE_M = stationDistance(loadPack('bkk-y9')).value
 
 function nearestText(nearest: NearestStation): string {
-  const name = nearest.name ?? nearest.nameTh ?? t('transit.unnamed')
+  const name = nearest.name ?? t('transit.unnamed')
   const distance = formatQuantity(nearest.distanceM, 'm')
   return t(nearest.measuredFrom === 'platform' ? 'transit.nearest-platform' : 'transit.nearest-station', { name, distance })
 }
 
 function NearestLine({ nearest, estimated }: { nearest: NearestStation | null; estimated: boolean }) {
   return (
-    <p className="mt-2 flex items-baseline gap-2 text-xs leading-relaxed text-slate">
+    <p className="mt-2 flex items-baseline gap-2 text-xs leading-relaxed text-muted-foreground">
       {estimated && <EstimateTag />}
       <span>{nearest ? nearestText(nearest) : t('transit.none', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}</span>
     </p>
@@ -27,20 +31,22 @@ function NearestLine({ nearest, estimated }: { nearest: NearestStation | null; e
 
 export function StationToggle() {
   const store = useEditorStore()
+  const id = useId()
   const { draft, siteStations, nearestStation } = useEditorState()
-  const known = draft.status === 'closed' && siteStations !== null
+  if (draft.status !== 'closed') return null
   return (
     <PanelSection title={t('transit.title')}>
-      <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm lg:min-h-9">
-        <input
-          type="checkbox"
+      <div className="flex min-h-11 items-center gap-3 lg:min-h-9">
+        <Checkbox
+          id={id}
           checked={draft.nearStation}
-          onChange={(e) => store.dispatch({ type: 'set-near-station', nearStation: e.target.checked })}
-          className="size-4.5 shrink-0 accent-plot"
+          onCheckedChange={(checked) => store.dispatch({ type: 'set-near-station', nearStation: checked === true })}
         />
-        {t('transit.near', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}
-      </label>
-      {known && <NearestLine nearest={nearestStation} estimated={draft.nearStationSource === 'estimate'} />}
+        <Label htmlFor={id} className="cursor-pointer font-normal">
+          {t('transit.near', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}
+        </Label>
+      </div>
+      {siteStations !== null && <NearestLine nearest={nearestStation} estimated={draft.nearStationSource === 'estimate'} />}
     </PanelSection>
   )
 }

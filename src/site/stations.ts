@@ -4,6 +4,11 @@ import type { OverpassNode, OverpassResponse, OverpassTags, OverpassWay } from '
 import { isClosed, toOpenRing } from './ring'
 import type { Station, StationGeometry } from './schema'
 
+const englishName = (tags: OverpassTags) => {
+  const { name } = namesOf(tags)
+  return name ? { name } : {}
+}
+
 type Element = OverpassResponse['elements'][number]
 
 function isPlatform(tags: OverpassTags): boolean {
@@ -31,12 +36,12 @@ function nodeKind(tags: OverpassTags): Station['kind'] | undefined {
 function fromNode(node: OverpassNode): Station | undefined {
   const kind = nodeKind(node.tags)
   if (!kind) return undefined
-  return { id: `node/${node.id}`, ...namesOf(node.tags), kind, geometry: { type: 'point', at: [node.lon, node.lat] } }
+  return { id: `node/${node.id}`, ...englishName(node.tags), kind, geometry: { type: 'point', at: [node.lon, node.lat] } }
 }
 
 function fromWay(way: OverpassWay): Station | undefined {
   const geometry = isPlatform(way.tags) ? wayGeometry(way) : undefined
-  return geometry && { id: `way/${way.id}`, ...namesOf(way.tags), kind: 'platform', geometry }
+  return geometry && { id: `way/${way.id}`, ...englishName(way.tags), kind: 'platform', geometry }
 }
 
 function toStation(element: Element): Station | undefined {

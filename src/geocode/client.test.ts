@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { PlaceSearchError, searchPlaces } from './client'
 import type { Place } from './schema'
 
-const places: Place[] = [{ id: 'N5391625873', label: 'Asok, Bangkok', labelTh: 'อโศก, กรุงเทพมหานคร', lngLat: [100.56, 13.737], kind: 'house' }]
+const places: Place[] = [{ id: 'N5391625873', label: 'Asok, Bangkok', lngLat: [100.56, 13.737], kind: 'house' }]
 
 function fetchReturning(response: Response): { fetchImpl: typeof fetch; calls: { url: string; init?: RequestInit }[] } {
   const calls: { url: string; init?: RequestInit }[] = []

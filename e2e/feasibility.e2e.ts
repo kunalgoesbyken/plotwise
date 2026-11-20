@@ -32,16 +32,18 @@ async function open(page: Page, plot: Plot = PLOT) {
   await page.route('**/api/site?**', fulfilSite)
   await page.goto(`/#${encodePlot(plot)}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
-  await expect(page.locator('section[aria-label="Designs"] li h3').first()).toBeAttached({ timeout: 30_000 })
+  await expect(page.getByRole('list', { name: 'Designs' }).getByRole('heading').first()).toBeAttached({ timeout: 30_000 })
   return errors
 }
 
-const rules = (page: Page) => page.getByRole('region', { name: 'Rules', exact: true })
-const designsRegion = (page: Page) => page.getByRole('region', { name: 'Designs', exact: true })
+const rules = (page: Page) => page.getByRole('tabpanel', { name: 'Rules', includeHidden: true })
+const designsRegion = (page: Page) => page.getByRole('tabpanel', { name: 'Designs', includeHidden: true })
+const showTab = (page: Page, name: 'Designs' | 'Rules' | '3D') => page.getByRole('tab', { name, exact: true }).click()
+const goTo = (page: Page, step: 'Roads' | 'Results') => page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: step }).click()
 const designCards = (page: Page) => designsRegion(page).getByRole('listitem').filter({ has: page.getByRole('heading') })
 const scene = (page: Page) => page.locator('[data-scene-ready="true"]')
 const stepper = (page: Page) => page.locator('[data-rule-step]')
-const steps = (page: Page) => page.getByRole('group', { name: 'Rules that carve the envelope' })
+const steps = (page: Page) => page.getByRole('radiogroup', { name: 'Rules that carve the envelope' })
 const limitValue = (page: Page, label: string) => rules(page).getByRole('listitem').filter({ hasText: label }).first()
 
 async function markSameDocument(page: Page) {
@@ -54,14 +56,16 @@ async function stillSameDocument(page: Page) {
 
 test('shows the rules that apply with their sources, and at least two designs with checklists', async ({ page }) => {
   const errors = await open(page)
+  await showTab(page, 'Rules')
   const far = limitValue(page, 'Floor area ratio')
   await expect(far).toContainText('7 : 1')
   await expect(far).toContainText('30,579 m²')
   await far.getByText('Sources (3)').click()
   const link = far.getByRole('link').first()
   await expect(link).toHaveAttribute('href', /\.pdf#page=\d+$/)
-  await expect(far.locator('blockquote[lang="th"]').first()).toBeVisible()
-  await expect(far).toContainText('ข้อ 16')
+  await expect(far).toContainText('Bangkok Comprehensive Plan')
+  await expect(far).toContainText(/Page \d+, line \d+/)
+  await expect(far).not.toContainText(/[\u0E00-\u0E7F]/)
 
   const setbacks = rules(page).getByRole('region', { name: 'Setbacks' })
   await expect(setbacks.getByRole('row')).toHaveCount(6)
@@ -70,6 +74,7 @@ test('shows the rules that apply with their sources, and at least two designs wi
   await expect(rules(page).getByText('Decided', { exact: true }).first()).toBeVisible()
   for (const label of ['Open space ratio', 'Height against road', 'Bangkok building bylaw']) await expect(limitValue(page, label)).toBeVisible()
 
+  await showTab(page, 'Designs')
   expect(await designCards(page).count()).toBeGreaterThanOrEqual(2)
   const first = designCards(page).first()
   await expect(first).toContainText('pass')
@@ -86,18 +91,23 @@ test('shows the rules that apply with their sources, and at least two designs wi
 test('updates every panel live when the road width or the building type changes', async ({ page }) => {
   await open(page)
   await markSameDocument(page)
+  await showTab(page, 'Rules')
   const setbackRow = rules(page).getByRole('region', { name: 'Setbacks' }).getByRole('row', { name: /A–B/ })
   await expect(setbackRow).toContainText('Road 30 m')
   const heightsBefore = await designsRegion(page).getByText(/^\d+(\.\d)?\sm$/).allTextContents()
 
+  await goTo(page, 'Roads')
   await page.getByLabel('Road width on edge A–B, in metres').fill('8')
+  await goTo(page, 'Results')
   await expect(setbackRow).toContainText('Road 8 m')
   await expect.poll(() => designsRegion(page).getByText(/^\d+(\.\d)?\sm$/).allTextContents()).not.toEqual(heightsBefore)
   await expect(rules(page).getByText('Envelope top, high-rise')).toBeHidden()
 
-  await page.getByText('Hotel', { exact: true }).click()
+  await page.getByRole('radio', { name: 'Hotel' }).click()
+  await showTab(page, 'Rules')
   await expect(rules(page).getByRole('region', { name: 'Use · Hotel' })).toBeVisible()
   await expect(limitValue(page, 'Rooms')).toContainText('≤ 80')
+  await showTab(page, 'Designs')
   await expect(designCards(page).first()).toContainText('Rooms')
   expect(await stillSameDocument(page)).toBe(true)
 })
@@ -114,7 +124,7 @@ for (const viewport of [
     await expect(summary).toContainText('Units')
     const before = await summary.textContent()
 
-    await page.getByText('Office', { exact: true }).click()
+    await page.getByRole('radio', { name: 'Office' }).click()
     await expect(summary).toContainText('Net area')
     await expect(summary).not.toHaveText(before!)
     await expect(summary).toBeInViewport()
@@ -127,16 +137,16 @@ test('the rule stepper carves the envelope in 3D and on the map, and a chosen de
   await expect(stepper(page)).toHaveAttribute('data-rule-step', 'high-rise')
   const carved = Number(await stepper(page).getAttribute('data-envelope-footprint'))
 
-  await steps(page).getByRole('button', { name: /Plot/ }).click()
+  await steps(page).getByRole('radio', { name: /Plot/ }).click()
   await expect(stepper(page)).toHaveAttribute('data-rule-step', 'plot')
   const whole = Number(await stepper(page).getAttribute('data-envelope-footprint'))
   expect(whole).toBeGreaterThan(carved)
-  await expect(steps(page).getByRole('button', { name: /Setbacks/ })).toBeDisabled()
+  await expect(steps(page).getByRole('radio', { name: /Setbacks/ })).toBeDisabled()
   await page.screenshot({ path: 'e2e/.results/feasibility-step-plot.png' })
 
-  await steps(page).getByRole('button', { name: /Road height/ }).click()
+  await steps(page).getByRole('radio', { name: /Road height/ }).click()
   await expect(stepper(page)).toContainText('steps back')
-  await steps(page).getByRole('button', { name: /High-rise/ }).click()
+  await steps(page).getByRole('radio', { name: /High-rise/ }).click()
   await expect(stepper(page)).toHaveAttribute('data-envelope-footprint', String(carved))
   await expect(stepper(page)).toContainText('6 m clear')
   await page.screenshot({ path: 'e2e/.results/feasibility-step-high-rise.png' })
@@ -154,7 +164,7 @@ test('the rule stepper carves the envelope in 3D and on the map, and a chosen de
 
 async function targets(page: Page) {
   return page.evaluate(() => {
-    const visible = [...document.querySelectorAll('aside button:not(:disabled), aside summary, aside a, aside input[type="text"]')]
+    const visible = [...document.querySelectorAll('aside button:not(:disabled), aside a, aside input[type="text"]')]
       .map((el) => el.getBoundingClientRect())
       .filter((r) => r.width > 0 && r.height > 0)
     return {
@@ -168,8 +178,8 @@ async function targets(page: Page) {
 test('phone layout at 375 px: each panel fits the sheet with 44 px targets', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await open(page)
-  for (const tab of ['Rules', 'Designs', '3D']) {
-    await page.getByRole('navigation', { name: 'Panels' }).getByRole('button', { name: tab, exact: true }).click()
+  for (const tab of ['Rules', 'Designs', '3D'] as const) {
+    await showTab(page, tab)
     if (tab === '3D') await expect(scene(page)).toHaveAttribute('data-scene-buildings', /\d+/, { timeout: 30_000 })
     const layout = await targets(page)
     expect(layout.scrollW, `overflow on ${tab}`).toBe(375)

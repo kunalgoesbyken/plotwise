@@ -42,7 +42,6 @@ export const StationSchema = z
   .object({
     id: z.string(),
     name: z.string().optional(),
-    nameTh: z.string().optional(),
     kind: z.enum(['platform', 'station']),
     geometry: StationGeometrySchema,
   })

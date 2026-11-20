@@ -99,7 +99,7 @@ test('phone layout at 375 px: the 3D tab fills the sheet and the view is keyboar
   await page.setViewportSize({ width: 375, height: 812 })
   await page.route('**/api/site?**', fulfilSite)
   const errors = await open(page, ON_A_MAPPED_BLOCK)
-  await page.getByRole('button', { name: '3D', exact: true }).click()
+  await page.getByRole('tab', { name: '3D', exact: true }).click()
   await expect(scene(page)).toBeVisible({ timeout: 30_000 })
   await expect(scene(page)).toHaveAttribute('data-scene-buildings', /\d+/)
   const box = (await canvas(page).boundingBox())!

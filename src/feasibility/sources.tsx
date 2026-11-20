@@ -1,7 +1,8 @@
+import { ExternalLink } from 'lucide-react'
 import type { Cite } from '@/rules'
 import { t } from '@/text/messages'
+import { Disclosure } from '@/ui/disclosure'
 import { PACK } from './compute'
-import { Disclosure } from './disclosure'
 import { citeKey } from './rule-layers'
 
 const unique = (cites: readonly Cite[]) => [...new Map(cites.map((cite) => [citeKey(cite), cite])).values()]
@@ -9,25 +10,18 @@ const unique = (cites: readonly Cite[]) => [...new Map(cites.map((cite) => [cite
 function CiteItem({ cite }: { cite: Cite }) {
   const source = PACK.sources[cite.source]
   return (
-    <li className="flex flex-col gap-1.5 rounded-lg bg-vellum px-3 py-2.5">
-      <p className="text-xs text-slate">
-        <span lang="th" className="font-medium text-ink">
-          {cite.clause}
-        </span>
-        <span className="font-mono tabular-nums">{t('source.location', { page: cite.page, line: cite.line })}</span>
-      </p>
-      <blockquote lang="th" className="text-sm leading-relaxed break-words text-ink">
-        {t('source.quote', { quote: cite.quote })}
-      </blockquote>
+    <li className="flex flex-col gap-0.5 rounded-lg bg-muted px-3 py-2.5 text-xs">
+      <p className="font-medium text-foreground">{source?.name ?? cite.source}</p>
+      <p className="text-muted-foreground">{t('source.location', { page: cite.page, line: cite.line })}</p>
       {source && (
         <a
           href={`${source.url}#page=${cite.page}`}
           target="_blank"
           rel="noreferrer"
-          lang="th"
-          className="inline-flex min-h-11 items-center text-xs break-words text-plot underline decoration-plot/30 underline-offset-2 transition-colors hover:decoration-plot lg:min-h-0"
+          className="inline-flex min-h-11 w-fit items-center gap-1 font-medium text-primary underline-offset-2 hover:underline lg:min-h-0"
         >
-          {source.title}
+          {t('source.open')}
+          <ExternalLink aria-hidden="true" className="size-3" />
         </a>
       )}
     </li>

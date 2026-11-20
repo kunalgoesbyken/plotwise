@@ -7,7 +7,7 @@ import type { LngLat } from '@/geo/projection'
 import { fitPadding, insideClearArea } from './fit-padding'
 import { bindInteractions } from './map-interactions'
 import { mapFeatures, mapLabels, type MapLabel } from './map-features'
-import { addEditorLayers, EMPTY_OVERLAY, OVERLAY_SOURCE, PLOT_SOURCE, readPalette, type MapOverlay } from './map-layers'
+import { addEditorLayers, EMPTY_OVERLAY, labelInEnglish, OVERLAY_SOURCE, PLOT_SOURCE, readPalette, type MapOverlay } from './map-layers'
 import { useEditorState, useEditorStore } from './plot-store'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
@@ -90,6 +90,7 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
       created.addControl(new maplibre.ScaleControl({ unit: 'metric' }), 'bottom-right')
       created.addControl(new maplibre.AttributionControl({ compact: matchMedia(PHONE_LAYOUT).matches }), 'bottom-right')
       created.on('load', () => {
+        labelInEnglish(created)
         addEditorLayers(created, readPalette(element))
         unbind = bindInteractions(created, store)
         setView({ map: created, createMarker: (el) => new maplibre.Marker({ element: el, anchor: 'center' }) })

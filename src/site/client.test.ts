@@ -33,7 +33,7 @@ const site: Site = {
       oneway: false,
     },
   ],
-  stations: [{ id: 'node/3', name: 'Asok', nameTh: 'อโศก', kind: 'station', geometry: { type: 'point', at: [100.56, 13.737] } }],
+  stations: [{ id: 'node/3', name: 'Asok', kind: 'station', geometry: { type: 'point', at: [100.56, 13.737] } }],
   attribution: OSM_ATTRIBUTION,
 }
 
