@@ -290,6 +290,9 @@ type Term = { readonly value: string; readonly source: string }
 const DCPR_2034 =
   'Greater Mumbai Development Control and Promotion Regulations 2034, sanctioned text of 8 May 2018 (MCGM), https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf'
 
+export const PURCHASE_USE_ORDER =
+  'assumption: a design pays only for the floor area it uses above the free cap (basic FSI and any area in lieu of a road strip), up to what is bought. Premium FSI and TDR may be used in any order, so that area is split between them in proportion to what is bought; fungible area, which sits on top of the permissible total, is used last'
+
 export const CARPET_RATIO_NOTE =
   'For comparison only: the IGR Maharashtra Ready Reckoner guidelines for 2025-26 and 2026-27 (instruction 5) take built-up area as 1.1 × carpet area when valuing a flat for stamp duty, with balconies valued separately. That is a valuation rule, not a building rule, so it is not used here'
 

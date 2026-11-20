@@ -2,7 +2,7 @@ import type { Metrics } from '@/designs'
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType } from '@/plot/plot'
 import type { FarPurchase, RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge, type MoneyPrices, type MoneyRegion, type PurchaseOption, type Solution } from '@/solve'
+import { isHighRiseOrExtraLarge, purchaseUse, type Limits, type MoneyPrices, type MoneyRegion, type Solution } from '@/solve'
 import { placementOf, type Placement } from './area'
 import type { Basis, Bound, PurchasePriceId, RateRow } from './parameters'
 import type { Values } from './values'
@@ -15,7 +15,7 @@ export type FinanceSite = {
   readonly origin: LngLat
   readonly plotAreaSqm: number
   readonly landUnitSqm: number
-  readonly purchases: readonly PurchaseOption[]
+  readonly farLimits: Limits
 }
 
 export type PurchasePrices = Readonly<Partial<Record<PurchasePriceId, number>>>
@@ -26,7 +26,7 @@ export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSit
   origin: solution.site.frame.origin,
   plotAreaSqm: solution.landAreaSqm,
   landUnitSqm: region.landUnit.sqm.value,
-  purchases: solution.limits.farPurchase.options.filter((option) => option.chosenGfaSqm > 0),
+  farLimits: solution.limits,
 })
 
 function priceInputOf(price: FarPurchase['price']): PurchasePriceId | null {
@@ -40,8 +40,8 @@ function priceInputOf(price: FarPurchase['price']): PurchasePriceId | null {
   }
 }
 
-export const neededPrices = ({ purchases }: FinanceSite): PurchasePriceId[] => [
-  ...new Set(purchases.flatMap((option) => priceInputOf(option.price) ?? [])),
+export const neededPrices = ({ farLimits }: FinanceSite): PurchasePriceId[] => [
+  ...new Set(farLimits.farPurchase.options.flatMap((option) => (option.chosenGfaSqm > 0 ? (priceInputOf(option.price) ?? []) : []))),
 ]
 
 function pricePerSqm(price: FarPurchase['price'], prices: PurchasePrices): number {
@@ -55,8 +55,8 @@ function pricePerSqm(price: FarPurchase['price'], prices: PurchasePrices): numbe
   }
 }
 
-const purchaseCost = ({ purchases }: FinanceSite, prices: PurchasePrices) =>
-  purchases.reduce((sum, option) => sum + option.chosenGfaSqm * pricePerSqm(option.price, prices), 0)
+const purchaseCost = (metrics: Metrics, { farLimits }: FinanceSite, prices: PurchasePrices) =>
+  purchaseUse(farLimits, metrics.gfaSqm).reduce((sum, use) => (use.usedGfaSqm > 0 ? sum + use.usedGfaSqm * pricePerSqm(use.price, prices) : sum), 0)
 
 export const placementIn = ({ origin }: FinanceSite, prices: MoneyPrices): Placement => placementOf(origin, prices.areas)
 
@@ -124,7 +124,7 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values, pr
   const firstCost = totalOf(atLow) <= totalOf(atHigh) ? { low: atLow, high: atHigh } : { low: atHigh, high: atLow }
   const saleableSqm = Math.max(0, metrics.builtSqm - metrics.parkingSqm) * values.saleableShare
   const grossValue = saleableSqm * values.salePrice
-  const bought = purchaseCost(site, prices)
+  const bought = purchaseCost(metrics, site, prices)
   const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values, bought)
   const landValue = { low: landFor(firstCost.high), high: landFor(firstCost.low) }
   const landUnits = site.plotAreaSqm / site.landUnitSqm

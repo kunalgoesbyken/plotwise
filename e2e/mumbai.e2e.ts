@@ -20,7 +20,9 @@ const RING = [
 const WIDENED: Plot = { ring: RING, roads: [{ edge: 0, widthM: 9, prescribedWidthM: 18 }], buildingType: 'condo', nearStation: false }
 
 const SAMPLE: Readonly<Record<Unit, number>> = { money: 150_000, landMoney: 2_000_000, share: 0.2, count: 3 }
-const EVERY_VALUE = encodeAssumptions(Object.fromEntries(PARAMETERS.map((parameter) => [storageKey(parameter, 'condo'), SAMPLE[parameter.unit]])))
+const enteredValues = (skip: string | null) =>
+  encodeAssumptions(Object.fromEntries(PARAMETERS.filter((parameter) => parameter.id !== skip).map((parameter) => [storageKey(parameter, 'condo'), SAMPLE[parameter.unit]])))
+const EVERY_VALUE = enteredValues(null)
 
 const summary = (page: Page) => page.getByRole('region', { name: 'Results for the design shown in 3D' })
 const goTo = (page: Page, step: 'Plot' | 'Roads' | 'Results') => page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: step }).click()
@@ -86,6 +88,10 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(panel(page, 'Rules').getByText('Road-widening strip')).toBeAttached()
     await expect(panel(page, 'Rules').getByText('Floor area for the road strip')).toBeAttached()
     await expect(panel(page, 'Rules').getByText('Floor space index', { exact: true })).toBeAttached()
+    const rules = panel(page, 'Rules')
+    await rules.getByRole('button', { name: /^Sources? / }).first().click()
+    await expect(rules.getByRole('link', { name: 'Official text (PDF, in English)' }).first()).toBeVisible()
+    await expect(rules.getByText('Official text (PDF, in Thai)')).toHaveCount(0)
 
     const link = page.url()
     const fresh = await page.context().newPage()
@@ -117,6 +123,30 @@ test('Mumbai money: premium asks for the ASR land rate, TDR for its price, and t
   await expect(land.getByLabel('TDR price per sq ft of floor area')).toHaveValue('')
   await land.getByLabel('TDR price per sq ft of floor area').fill('5000')
   await expect(money.getByText('Extra floor area bought, estimated').locator('..')).not.toHaveText(before ?? '')
+
+  await showTab(page, 'Designs')
+  const bought = panel(page, 'Designs').getByRole('table', { name: 'Designs compared' }).getByRole('row', { name: /Extra floor area bought/ }).getByRole('cell')
+  const cells = await bought.allTextContents()
+  expect(cells.length).toBeGreaterThanOrEqual(2)
+  expect(new Set(cells).size).toBe(cells.length)
+  expect(errors).toEqual([])
+})
+
+test('Mumbai carpet area starts at built-up area over 1.2 from DCPR 2034, editable, with the stamp-duty 1.1 explained', async ({ page }) => {
+  const errors = collectErrors(page)
+  await openApp(page, `${encodeRegion('mum')}&${encodePlot(WIDENED)}&assume-mum=${enteredValues('saleableShare')}`)
+  await expect(summary(page)).toContainText('Supports land worth', { timeout: 30_000 })
+  await showTab(page, 'Money')
+  const money = panel(page, 'Money')
+  await expect(money.getByText('still to enter')).toHaveCount(0)
+  await money.getByRole('button', { name: 'All money assumptions' }).click()
+  const share = money.getByLabel('Carpet area as a share of built-up area above parking')
+  await expect(share).toHaveValue('83.3333333333')
+  await money.getByRole('listitem').filter({ has: page.getByLabel('Carpet area as a share of built-up area above parking') }).getByRole('button', { name: 'Source' }).click()
+  await expect(money.getByText(/Reg 15 Note 3/)).toBeAttached()
+  await expect(money.getByText(/Ready Reckoner/)).toBeAttached()
+  await share.fill('80')
+  await expect.poll(() => decodeURIComponent(page.url())).toContain('saleableShare.condo:0.8')
   expect(errors).toEqual([])
 })
 

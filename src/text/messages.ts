@@ -441,7 +441,8 @@ const en = {
   'limit.widening.detail': ({ area, gross }: Area & { gross: string }) =>
     `${area} handed over to widen the road. Floor area is counted on the plot left; land is priced on the whole ${gross}.`,
   'purchase.title': 'Extra floor area to buy',
-  'purchase.hint': 'Choose how much to buy. The designs, checks and money follow.',
+  'purchase.hint': 'Choose how much you are willing to buy. Each design pays only for the part it uses.',
+  'purchase.cost-rule': 'How the cost is counted',
   'purchase.premium': 'Premium FSI',
   'purchase.transferableRights': 'TDR',
   'purchase.fungible': 'Fungible area',

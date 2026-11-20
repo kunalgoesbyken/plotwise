@@ -10,7 +10,7 @@ import { ASSUMPTIONS } from './assumptions'
 import { SolveError } from './errors'
 import { packInterpretations } from './interpretations'
 import { plotLimitFields } from './plot-limits'
-import type { FarChoice } from './far'
+import { purchaseUse, type FarChoice } from './far'
 import { wideningStrip } from './reservations'
 import { lowRiseSetbacks, rearEdge, roadSetback } from './setbacks'
 import { solve } from './solve'
@@ -385,6 +385,46 @@ describe('purchasable FSI from the Mumbai draft: premium and TDR by road width, 
     expect(solution.limits.farPurchase.extraGfaSqm).toBe(0)
     expect(solution.farCap).toMatchObject({ mode: 'standard', maxGfaSqm: expect.closeTo(2000, 6) })
     expect(solution.limits.farPurchase.options.map((o) => Math.round(o.maxExtraGfaSqm))).toEqual([1000, 1400, 700])
+  })
+
+  it('charges a design only for the floor area it uses above the free cap: premium and TDR in proportion to what was bought, fungible last', () => {
+    const chosen = { premium: 0.4, transferableRights: 0.6, fungible: 0.2 }
+    const { limits } = solveWith(MUMBAI, lot(40, 50, onRoad(16)), { mode: 'purchased', ratios: chosen })
+    const used = (farSqm: number) => purchaseUse(limits, farSqm).map((use) => Math.round(use.usedGfaSqm))
+    expect(used(1500)).toEqual([0, 0, 0])
+    expect(used(2000)).toEqual([0, 0, 0])
+    expect(used(2500)).toEqual([200, 300, 0])
+    expect(used(4000)).toEqual([800, 1200, 0])
+    expect(used(4300)).toEqual([800, 1200, 300])
+    expect(used(9000)).toEqual([800, 1200, 400])
+  })
+
+  it('never uses more than was bought, nor more than the design holds above the free cap', () => {
+    fc.assert(
+      fc.property(
+        fc.double({ min: 0, max: 1, noNaN: true }),
+        fc.double({ min: 0, max: 1, noNaN: true }),
+        fc.double({ min: 0, max: 1, noNaN: true }),
+        fc.double({ min: 0, max: 10_000, noNaN: true }),
+        (premium, transferableRights, fungible, farSqm) => {
+          const { limits } = solveWith(MUMBAI, lot(40, 50, onRoad(16)), { mode: 'purchased', ratios: { premium, transferableRights, fungible } })
+          const uses = purchaseUse(limits, farSqm)
+          const total = uses.reduce((sum, use) => sum + use.usedGfaSqm, 0)
+          const bought = limits.farPurchase.options.reduce((sum, option) => sum + option.chosenGfaSqm, 0)
+          expect(total).toBeCloseTo(Math.min(Math.max(0, farSqm - 2000), bought), 6)
+          uses.forEach((use, i) => expect(use.usedGfaSqm).toBeLessThanOrEqual(limits.farPurchase.options[i].chosenGfaSqm + 1e-9))
+        },
+      ),
+      { numRuns: 100 },
+    )
+  })
+
+  it('counts the floor area granted in lieu of a widening strip as free, before anything bought', () => {
+    const plot = lot(40, 50, [{ edge: 0, widthM: 16, prescribedWidthM: 20 }])
+    const { limits } = solveWith(MUMBAI, plot, { mode: 'purchased', ratios: { premium: 0.5 } })
+    const free = limits.far.maxGfaSqm + limits.inLieu!.gfaSqm
+    expect(purchaseUse(limits, free).map((use) => use.usedGfaSqm)).toEqual([0, 0, 0])
+    expect(purchaseUse(limits, free + 100)[0].usedGfaSqm).toBeCloseTo(100, 9)
   })
 
   it('refuses road-width caps with a gap between bands', () => {

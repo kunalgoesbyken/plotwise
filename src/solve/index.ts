@@ -2,6 +2,7 @@ export {
   AREA_TIERS,
   AFFECTION_PLAN_TERMS,
   CARPET_RATIO_NOTE,
+  PURCHASE_USE_ORDER,
   ASSUMPTIONS,
   DEFAULT_READINGS,
   MONEY_REGIONS,
@@ -19,7 +20,7 @@ export { type ClassMembership, type Classes } from './classes'
 export type { CoverageLimit } from './coverage'
 export { mainRoad, type Envelope, type EnvelopeKind, type EnvelopeTier } from './envelope'
 export { SolveError, type SolveErrorReason } from './errors'
-export { farCapFor, STANDARD, type BonusMeasure, type FarCap, type FarChoice, type FarMode, type PurchaseOption, type PurchaseRatios } from './far'
+export { farCapFor, purchaseUse, STANDARD, type PurchaseUse, type BonusMeasure, type FarCap, type FarChoice, type FarMode, type PurchaseOption, type PurchaseRatios } from './far'
 export {
   InterpretationsSchema,
   packInterpretations,

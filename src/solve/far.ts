@@ -31,9 +31,12 @@ export type PurchaseOption = {
   readonly kind: FarPurchase['kind']
   readonly maxExtraGfaSqm: number
   readonly chosenGfaSqm: number
+  readonly onPermissible: boolean
   readonly price: FarPurchase['price']
   readonly cites: readonly Cite[]
 }
+
+export type PurchaseUse = { readonly kind: FarPurchase['kind']; readonly price: FarPurchase['price']; readonly usedGfaSqm: number }
 
 export type InLieu = { readonly gfaSqm: number; readonly cites: readonly Cite[] }
 
@@ -177,6 +180,7 @@ function purchaseOption(purchase: FarPurchase, input: FarInput, baseSqm: number,
     kind: purchase.kind,
     maxExtraGfaSqm: extra.gfaSqm,
     chosenGfaSqm: Math.min(extra.gfaSqm, chosenRatio * input.areaSqm),
+    onPermissible: onPermissible(purchase),
     price: purchase.price,
     cites: [...extra.cites, ...priceCites(purchase.price), ...purchase.notes],
   }
@@ -196,6 +200,25 @@ function purchaseLimits(input: FarInput, base: FarLimits['far']): FarLimits['far
 export function farLimits(input: FarInput): FarLimits {
   const far = baseFar(input.pack.far, input)
   return { far, farBonus: bonusLimits(input, far), farPurchase: purchaseLimits(input, far), inLieu: input.inLieu }
+}
+
+const sumChosen = (options: readonly PurchaseOption[]) => options.reduce((sum, option) => sum + option.chosenGfaSqm, 0)
+
+export function purchaseUse({ far, farPurchase, inLieu }: FarLimits, farSqm: number): PurchaseUse[] {
+  const aboveFreeSqm = Math.max(0, farSqm - far.maxGfaSqm - (inLieu?.gfaSqm ?? 0))
+  const direct = farPurchase.options.filter((option) => !option.onPermissible)
+  const directSqm = sumChosen(direct)
+  const fromDirectSqm = Math.min(aboveFreeSqm, directSqm)
+  let restSqm = aboveFreeSqm - fromDirectSqm
+  return farPurchase.options.map((option) => {
+    if (!option.onPermissible) {
+      const usedGfaSqm = directSqm > 0 ? (fromDirectSqm * option.chosenGfaSqm) / directSqm : 0
+      return { kind: option.kind, price: option.price, usedGfaSqm }
+    }
+    const usedGfaSqm = Math.min(restSqm, option.chosenGfaSqm)
+    restSqm -= usedGfaSqm
+    return { kind: option.kind, price: option.price, usedGfaSqm }
+  })
 }
 
 export function farCapFor({ far, farBonus, farPurchase, inLieu }: FarLimits, mode: FarMode): FarCap {

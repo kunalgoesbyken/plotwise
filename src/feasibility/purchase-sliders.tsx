@@ -3,9 +3,10 @@
 import { useId } from 'react'
 import { useRegion } from '@/editor/plot-store'
 import type { FarPurchase } from '@/rules'
-import type { PurchaseOption } from '@/solve'
+import { PURCHASE_USE_ORDER, type PurchaseOption } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
+import { Disclosure } from '@/ui/disclosure'
 import { useFeasibility } from './feasibility-provider'
 
 const RATIO_STEP = 0.01
@@ -73,6 +74,9 @@ export function PurchaseSliders() {
     <section aria-label={t('purchase.title')} className="flex flex-col gap-1">
       <h3 className="text-sm font-semibold">{t('purchase.title')}</h3>
       <p className="text-xs text-muted-foreground">{t('purchase.hint')}</p>
+      <Disclosure label={t('purchase.cost-rule')} tone="muted">
+        <p className="pb-2 text-xs leading-relaxed text-muted-foreground">{PURCHASE_USE_ORDER}</p>
+      </Disclosure>
       <ul className="divide-y">
         {options.map((option) => (
           <PurchaseSlider key={option.kind} option={option} farAreaSqm={farAreaSqm} />
