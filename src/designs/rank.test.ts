@@ -7,7 +7,8 @@ import { packInterpretations, solve } from '@/solve'
 import type { Check } from './checks'
 import { designs, type Design } from './designs'
 import { headline } from './headline'
-import { dominates, rank, type Difference, type Measure, type Ranked } from './rank'
+import type { TypologyId } from './massing'
+import { dominates, rank, shownOption, type Difference, type Measure, type Ranked } from './rank'
 import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const designedUnder = (packId: PackId, plot: Plot) => {
@@ -43,6 +44,10 @@ function variant(value: (step: number) => fc.Arbitrary<number>): fc.Arbitrary<De
 }
 
 const options = fc.array(variant(near), { minLength: 1, maxLength: 5 })
+
+const IDS: readonly TypologyId[] = ['podium-tower', 'slab', 'low-rise']
+
+const named = fc.array(variant(near), { minLength: 1, maxLength: IDS.length }).map((all) => all.map((design, index) => ({ ...design, id: IDS[index] })))
 
 const standingOf = (ranked: readonly Ranked[], design: Design) => ranked.find((r) => r.design === design)!.standing
 const isShown = (ranked: readonly Ranked[], design: Design) => standingOf(ranked, design).kind !== 'same-as'
@@ -139,6 +144,43 @@ describe('ranking designs for the user to choose', () => {
     const [first, second] = rank([roomier, template])
     expect(first.standing.kind).toBe('best')
     expect(second.standing).toEqual({ kind: 'dominated', by: roomier, worse: [{ measure: 'open-space', amount: 50 }], better: [] })
+  })
+})
+
+describe('choosing the design to show', () => {
+  it('shows nothing when no design fits', () => {
+    expect(shownOption([], null)).toBeNull()
+  })
+
+  it('shows the best design when none is chosen or the chosen one no longer fits', () => {
+    fc.assert(
+      fc.property(named, (all) => {
+        const ranked = rank(all.slice(1))
+        if (ranked.length === 0) return
+        const best = ranked.find((r) => r.standing.kind === 'best')
+        expect(shownOption(ranked, null)).toBe(best!)
+        expect(shownOption(ranked, all[0].id)).toBe(best!)
+      }),
+    )
+  })
+
+  it('shows a chosen design as is, and a chosen duplicate as the design it duplicates', () => {
+    fc.assert(
+      fc.property(named, fc.nat(), (all, pick) => {
+        const ranked = rank(all)
+        const { design, standing } = ranked[pick % ranked.length]
+        const shown = shownOption(ranked, design.id)!
+        expect(shown.standing.kind).not.toBe('same-as')
+        expect(shown.design).toBe(standing.kind === 'same-as' ? standing.of : design)
+      }),
+    )
+  })
+
+  it('shows the design a chosen duplicate collapses into, so the pressed column, the 3D and the summary agree', () => {
+    const twin: Design = { ...template, id: IDS.find((id) => id !== template.id)! }
+    const ranked = rank([template, twin])
+    expect(standingOf(ranked, twin)).toEqual({ kind: 'same-as', of: template })
+    expect(shownOption(ranked, twin.id)!.design).toBe(template)
   })
 })
 

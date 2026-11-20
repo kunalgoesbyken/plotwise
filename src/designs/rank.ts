@@ -1,6 +1,7 @@
 import type { Check } from './checks'
 import type { Design } from './designs'
 import { headline } from './headline'
+import type { TypologyId } from './massing'
 import { AREA_TOLERANCE_SQM, HEIGHT_TOLERANCE_M } from './tolerance'
 
 export type Measure = 'floor-area' | 'height' | 'high-rise' | 'failing-checks' | 'to-check' | 'open-space'
@@ -67,4 +68,11 @@ export function rank(designs: readonly Design[]): readonly Ranked[] {
   if (!best) return []
   const shown = designs.reduce<readonly Design[]>((kept, design) => (kept.some((other) => alike(other, design)) ? kept : [...kept, design]), [best])
   return designs.map((design) => ({ design, standing: standingOf(design, best, shown) }))
+}
+
+export function shownOption(ranked: readonly Ranked[], chosen: TypologyId | null): Ranked | null {
+  const option = ranked.find(({ design }) => design.id === chosen) ?? ranked.find(({ standing }) => standing.kind === 'best')
+  if (option?.standing.kind !== 'same-as') return option ?? null
+  const { of } = option.standing
+  return ranked.find(({ design }) => design === of) ?? null
 }

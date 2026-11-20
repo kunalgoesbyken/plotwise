@@ -1,7 +1,7 @@
 'use client'
 
 import { useId, type ReactNode } from 'react'
-import { rank, type Design, type Ranked, type Standing } from '@/designs'
+import { rank, type Design, type Standing } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import type { Region } from '@/region/regions'
 import { isParkingUnset, type Solution } from '@/solve'
@@ -66,9 +66,6 @@ function CheckItem({ row }: { row: CheckRow }) {
 
 const greyed = (standing: Standing) => standing.kind === 'dominated' && 'bg-muted'
 
-const twinsOf = (ranked: readonly Ranked[], design: Design) =>
-  ranked.flatMap(({ design: twin, standing }) => (standing.kind === 'same-as' && standing.of === design ? [twin] : []))
-
 type DesignTableProps = { readonly designs: readonly Design[]; readonly solution: Solution; readonly extraRows: readonly Row[] }
 
 function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
@@ -78,7 +75,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
   const ranked = rank(designs)
   const columns = ranked.filter(({ standing }) => standing.kind !== 'same-as')
-  const shown = (design: Design) => design.id === selected.id || twinsOf(ranked, design).includes(selected)
+  const shown = (design: Design) => design.id === selected.id
   const showChecks = (design: Design) => {
     selectDesign(design.id)
     requestAnimationFrame(() => document.getElementById(toCheckId)?.focus())
