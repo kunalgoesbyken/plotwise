@@ -205,7 +205,7 @@ const en = {
   'report.title': ({ region }: { region: string }) => `Plotwise · ${region} plot summary`,
   'report.plot': ({ area, allowed }: { area: string; allowed: string }) => `Plot ${area}. Up to ${allowed} of floor area allowed.`,
   'report.open': 'Not passed yet',
-  'report.transcribed': ({ name }: { name: string }) => `${name}: transcribed from a scanned page, double-checked.`,
+  'report.transcribed': ({ name }: { name: string }) => `${name}: transcribed from the page image, double-checked.`,
   'report.assumptions': 'Assumptions used (estimated, editable)',
   'report.disclaimer': 'Money figures are estimates on editable assumptions, not a valuation. Rule figures come from the cited sources. Link:',
   'section.view3d': '3D view',
@@ -413,7 +413,7 @@ const en = {
   'source.toggle': ({ count }: Count) => (count === 1 ? 'Source' : `Sources (${count})`),
   'source.location': ({ page, line }: { page: number; line: number }) => `Page ${page}, line ${line}`,
   'source.location.transcribed': ({ page, line }: { page: number; line: number }) => `Page ${page}; line ${line} of the transcription`,
-  'source.transcribed': 'Transcribed from a scanned page, double-checked',
+  'source.transcribed': 'Transcribed from the page image, double-checked',
   'source.open': ({ language }: { language: SourceLanguage }) => `Official text (PDF, in ${LANGUAGE_NAMES[language]})`,
 
   'range.between': ({ min, max }: { min: string; max: string }) => `${min} and ${max}`,
@@ -517,9 +517,11 @@ const en = {
   'limit.side-rear.class.small': 'Smaller plots',
   'limit.side-rear.class.large': 'Larger plots',
   'limit.side-rear.column.small': ({ area, width }: { area: string; width: string }) =>
-    `Plots ${area}, or ${width} wide or deep on average. Kept on every side but the front, at the height of each floor; every side is taken to have windows.`,
+    `Plots ${area}, or ${width} wide or deep on average. Kept on every side but the front, on every floor, for the building’s full height; every side is taken to have windows.`,
   'limit.side-rear.column.large': ({ area, width }: { area: string; width: string }) =>
-    `Plots ${area} and ${width} wide and deep on average. Kept on every side but the front, at the height of each floor; every side is taken to have windows.`,
+    `Plots ${area} and ${width} wide and deep on average. Kept on every side but the front, on every floor, for the building’s full height; every side is taken to have windows.`,
+  'limit.side-rear.low-rise':
+    'Table No 17 relaxes the open spaces on a plot of this size for a building of ground and one upper floor. Plotwise checks such a design against it but draws every design inside Table A, so it can show less floor area than the law allows.',
   'limit.side-rear.row': ({ height }: { height: string }) => `Building ${height} tall`,
   'value.side-rear.share': ({ divisor, min, max }: { divisor: string; min?: string; max?: string }) =>
     [`H/${divisor}`, min && `at least ${min}`, max && `at most ${max}`].filter(Boolean).join(', '),

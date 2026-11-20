@@ -18,6 +18,7 @@ import { Sources } from './sources'
 import { Tally } from './tally'
 import { ToCheck } from './to-check'
 import { checkLabel } from './check-label'
+import { LowRiseNote } from './low-rise-note'
 import { VerificationNote } from './verification-note'
 import { yieldFigure } from './yield-figure'
 
@@ -116,6 +117,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
       <p className="text-xs leading-relaxed text-muted-foreground">{t(`design.summary.${selected.name.form}`)}</p>
       <ToCheck design={selected} id={toCheckId} />
       <VerificationNote solution={solution} detailed />
+      <LowRiseNote solution={solution} />
       <Disclosure label={t('design.checklist', { name: t('design.name', selected.name) })}>
         <div className="pt-2">
           <ZoneStatus />

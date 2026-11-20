@@ -11,6 +11,7 @@ import { t } from '@/text/messages'
 import { useFeasibility } from './feasibility-provider'
 import { Interpretations } from './interpretations'
 import { LimitGroup, LimitRow } from './limit-row'
+import { LowRiseNote } from './low-rise-note'
 import { demandCites, demandText } from './parking-text'
 import { WhenReady, type Ready } from './ready'
 import { SetbackTable } from './setback-table'
@@ -339,6 +340,7 @@ function Rules({ plot, solution }: Ready) {
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />
       <SideRearGroup limit={limits.sideRear} />
+      <LowRiseNote solution={solution} className="mt-3" />
       <Height solution={solution} />
       <HighRise limits={limits} />
       <Use plot={plot} solution={solution} />

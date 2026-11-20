@@ -176,7 +176,7 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 | OSM | Heights exist for about a third of central Bangkok buildings; roads have no width tags, so widths are carriageway estimates. Station distance: BTS 52 of 64, MRT 15 of 52, monorail 1 of 55 |
 | Road network | Continuity and planned widenings are in no open dataset used here; they appear in "to check" |
 | Bangkok bylaw 2026 | Body text could not be machine-read |
-| Mumbai | Draft; later amendments not applied, and every result says so. Side and rear open spaces (Table A) are transcribed from the scanned page and double-checked, labelled apart from machine-read values, and carved out of the envelope at the height of each floor; the ASR land rate and TDR price are yours |
+| Mumbai | Draft; later amendments not applied, and every result says so. Side and rear open spaces (Table A) are transcribed from the page image and double-checked, labelled apart from machine-read values, and carved out of the envelope for each design's full height on every floor; the ASR land rate and TDR price are yours |
 | Rate limits | Per server instance, so the real ceiling is higher. They shield the free upstreams from a runaway script; they are not an abuse defence |
 | Security policy | Allows inline scripts |
 

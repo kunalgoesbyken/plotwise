@@ -1,5 +1,5 @@
 Greater Mumbai Development Control and Promotion Regulations 2034 (DCPR 2034), sanctioned text, Table A of Reg 41(2)(i)(a)
-Transcribed from the scanned page, double-checked against the page image.
+Transcribed from the page image, double-checked against it.
 
 Source PDF: https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf
 Source PDF SHA-256: b417e528b717c76f26a1e4ad9acfebb503e5e3069a8ce4456abccc7b10b15d43 (same file as sources/raw/dcpr2034-mcgm.pdf; downloaded again 2026-11-20 and compared)

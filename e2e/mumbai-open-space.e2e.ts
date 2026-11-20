@@ -7,25 +7,30 @@ import { designsRegion, goTo, READY_TIMEOUT, rulesRegion, showTab, summary } fro
 import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
-const TRANSCRIBED = 'Transcribed from a scanned page, double-checked'
+const TRANSCRIBED = 'Transcribed from the page image, double-checked'
 const DRAFT = 'Draft: DCPR 2034'
 
 const frame = localFrame([72.8418, 19.117])
 const SIDE_M = Math.sqrt(areaFromDisplay(20_118, 'sqft'))
-const LARGE_PLOT: Plot = {
+
+const rectangle = (widthM: number, depthM: number, roads: Plot['roads']): Plot => ({
   ring: [
     [0, 0],
-    [SIDE_M, 0],
-    [SIDE_M, SIDE_M],
-    [0, SIDE_M],
+    [widthM, 0],
+    [widthM, depthM],
+    [0, depthM],
   ].map(([x, y]) => frame.toLngLat([x, y]).map((value) => Number(value.toFixed(7))) as [number, number]),
-  roads: [
-    { edge: 0, widthM: 5 },
-    { edge: 1, widthM: 5 },
-  ],
+  roads,
   buildingType: 'condo',
   nearStation: false,
-}
+})
+
+const LARGE_PLOT = rectangle(SIDE_M, SIDE_M, [
+  { edge: 0, widthM: 5 },
+  { edge: 1, widthM: 5 },
+])
+const SMALL_PLOT = rectangle(10, 12, [{ edge: 0, widthM: 9 }])
+const LOW_RISE_NOTE = /^Table No 17 relaxes the open spaces on a plot of this size/
 
 const sideRear = (page: Page) => rulesRegion(page).getByRole('region', { name: 'Side and rear open space' })
 
@@ -45,7 +50,7 @@ test('the Mumbai example asks for no side and rear open space: Table A comes fro
   await expect(page.getByRole('textbox', { name: /open space|setback/i })).toHaveCount(0)
 })
 
-test('the Rules tab lists Table A for the plot’s column, labelled as transcribed from a scanned page', async ({ page }) => {
+test('the Rules tab lists Table A for the plot’s column, labelled as transcribed from the page image', async ({ page }) => {
   await open(page, `${encodeRegion('mum')}&${encodePlot(LARGE_PLOT)}`)
   await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
   await showTab(page, 'Rules')
@@ -85,9 +90,30 @@ test('an old Mumbai link that carries a side and rear open space still opens and
   await expect(sideRear(page)).toContainText('H/4, at least 3.6 m')
 })
 
-test('the Mumbai print summary says Table A is transcribed from a scanned page', async ({ page }) => {
+test('the Mumbai print summary says Table A is transcribed from the page image', async ({ page }) => {
   await open(page, `${encodeRegion('mum')}&${encodePlot(LARGE_PLOT)}`)
   await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
   await page.emulateMedia({ media: 'print' })
-  await expect(page.locator('article').getByText('DCPR 2034, Table A (side and rear open spaces): transcribed from a scanned page, double-checked.')).toBeVisible()
+  await expect(page.locator('article').getByText('DCPR 2034, Table A (side and rear open spaces): transcribed from the page image, double-checked.')).toBeVisible()
+})
+
+test('a tall design on a 10 m × 12 m plot keeps H/5 off its neighbours on every floor, and Table No 17 is flagged', async ({ page }) => {
+  await open(page, `${encodeRegion('mum')}&${encodePlot(SMALL_PLOT)}`)
+  await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
+  await showTab(page, 'Designs')
+  await expect(designsRegion(page).getByText(LOW_RISE_NOTE)).toBeVisible()
+  await designsRegion(page).getByRole('button', { name: /^Checklist for / }).first().click()
+  const check = designsRegion(page).getByRole('listitem').filter({ hasText: 'Setback from neighbours' })
+  await expect(check).toContainText('Pass')
+  await expect(check).toContainText(/≥\s3\.7\sm/)
+  await showTab(page, 'Rules')
+  await expect(rulesRegion(page).getByText(LOW_RISE_NOTE)).toBeVisible()
+})
+
+test('a Mumbai plot above the Table No 17 sizes carries no low-rise note', async ({ page }) => {
+  await open(page, `${encodeRegion('mum')}&${encodePlot(LARGE_PLOT)}`)
+  await expect(summary(page)).toContainText(DRAFT, { timeout: READY_TIMEOUT })
+  await showTab(page, 'Rules')
+  await expect(sideRear(page)).toBeVisible()
+  await expect(page.getByText(LOW_RISE_NOTE)).toHaveCount(0)
 })
