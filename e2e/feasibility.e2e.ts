@@ -96,6 +96,23 @@ test('shows the rules that apply with their sources, and at least two designs wi
   expect(errors).toEqual([])
 })
 
+test('the Rules tab reads the 2026 bylaw as factory uses plus the state medical exemption, from the checked OCR source', async ({ page }) => {
+  const errors = await open(page)
+  await showTab(page, 'Rules')
+  const banner = rules(page).getByRole('note').filter({ hasText: '2026 plan amendment' })
+  await expect(banner).toContainText('changes the factory uses and exempts state medical and public-health land use')
+  await expect(banner).not.toContainText('machine-read')
+
+  const decision = rules(page).getByRole('listitem').filter({ hasText: 'Does the 13 Mar 2026 Bangkok bylaw change anything' })
+  await expect(decision).toContainText('article 19 adds a new clause 33/1')
+  await expect(decision).toContainText('So the amendment is not factory-only')
+  await expect(decision).not.toContainText('Unknown until')
+  await decision.getByText(/Sources \(\d+\)/).click()
+  await expect(decision).toContainText('OCR checked against the page images')
+  await expect(decision.getByText('Page 5, line 13')).toBeVisible()
+  expect(errors).toEqual([])
+})
+
 test('updates every panel live when the road width or the building type changes', async ({ page }) => {
   await open(page)
   await markSameDocument(page)

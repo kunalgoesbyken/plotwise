@@ -39,6 +39,15 @@
       "textLayer": "garbled",
       "language": "th"
     },
+    "bb69-bma-ocr": {
+      "name": "Bangkok bylaw amending the Comprehensive Plan (Mar 2026), OCR checked against the page images",
+      "title": "ข้อบัญญัติกรุงเทพมหานคร เรื่อง ให้ใช้บังคับผังเมืองรวมกรุงเทพมหานคร พ.ศ. 2569",
+      "url": "https://download.asa.or.th/03media/04law/cpa/bb69-bma.pdf",
+      "published": "ราชกิจจานุเบกษา เล่ม 143 ตอนพิเศษ 66 ง, 13 Mar 2026",
+      "kind": "gazette",
+      "textLayer": "readable",
+      "language": "th"
+    },
     "mr43-55-upd68": {
       "name": "Ministerial Regulation 55 (2000) under the Building Control Act, amended to 2020",
       "title": "กฎกระทรวง ฉบับที่ 55 (พ.ศ. 2543) ออกตามความในพระราชบัญญัติควบคุมอาคาร พ.ศ. 2522, consolidated to ฉบับที่ 68 (พ.ศ. 2563)",
@@ -2387,42 +2396,63 @@
       "question": "Does the 13 Mar 2026 Bangkok bylaw change anything in clause 16, this zone's clause, that this pack uses?",
       "readings": [
         {
-          "id": "factories-only",
-          "reading": "No. The readable parts (gazette header, digits, annex) show it rewrites the factory item of the prohibited-use lists and adds factory types 76 and 90 per zone; FAR, OSR and the hotel and office conditions are untouched.",
+          "id": "factories-and-state-medical",
+          "reading": "No value this pack uses changes. Of the bylaw's 21 articles, article 10 rewrites item (1), the factory item, of clause 16, this zone's prohibited uses (factories of up to 500 m² stay allowed and the annex's factory type 90, water-supply works, is added), and article 19 adds a new clause 33/1 that takes state medical and public-health land use out of the land-use rules of clauses 8 to 32. FAR, open space, and the hotel and office conditions are not touched. So the amendment is not factory-only, but its other change does not reach private condominiums, offices or hotels.",
           "cites": [
             {
-              "source": "bb69-bma",
-              "clause": "ข้อ 10 (garbled)",
+              "source": "bb69-bma-ocr",
+              "clause": "ข้อ 10 (amends plan ข้อ 16 วรรคสอง (1))",
               "page": 3,
-              "line": 10,
-              "quote": "\u0010Oอ _^ QหO0\u000fNล>\u000fค/@/Q% (_) \u0010อ\u000f/11ค2อ\u000f \u0010อ\u000f\u0010Oอ _d OหN\u000f\u000f\u0010\u000f1>#1/\u000fQหOQ\u0012O&?\u000fค?&"
+              "line": 8,
+              "quote": "ข้อ ๑๐ ให้ยกเลิกความใน (๑) ของวรรคสอง ของข้อ ๑๖ แห่งกฎกระทรวงให้ใช้บังคับ"
             },
             {
-              "source": "bb69-bma",
-              "clause": "บัญชีท้ายข้อบัญญัติ",
+              "source": "bb69-bma-ocr",
+              "clause": "ข้อ 10",
+              "page": 3,
+              "line": 14,
+              "quote": "ประกอบการไม่เกิน ๕๐๐ ตารางเมตร และโรงงานลำดับที่ ๙๐ ตามบัญชีท้ายข้อบัญญัติกรุงเทพมหานครนี้”"
+            },
+            {
+              "source": "bb69-bma-ocr",
+              "clause": "ข้อ 19",
+              "page": 5,
+              "line": 13,
+              "quote": "“ข้อ ๓๓/๑ การใช้ประโยชน์ที่ดินเพื่อกิจการการแพทย์และการสาธารณสุข ที่ดำเนินการ"
+            },
+            {
+              "source": "bb69-bma-ocr",
+              "clause": "ข้อ 19",
+              "page": 5,
+              "line": 15,
+              "quote": "ไม่อยู่ภายใต้ข้อกำหนดการใช้ประโยชน์ที่ดินที่กำหนดไว้ในข้อ ๘ ถึงข้อ ๓๒ ของกฎกระทรวงให้ใช้บังคับ"
+            },
+            {
+              "source": "bb69-bma-ocr",
+              "clause": "บัญชีท้ายข้อบัญญัติ ลำดับที่ 90",
               "page": 6,
               "line": 9,
-              "quote": "ท่ี  ของโรงงาน                        ย.๑ ย.๒ ย.๓ ย.๔ ย.๕ ย.๖ ย.๗ ย.๘ ย.๙ ย.๑๐ พ.๑ พ.๒ พ.๓ พ.๔ พ.๕ อ.๑      อ.๒ อ.๓ ก.๑ ก.๒ ก.๓ ก.๔ ก.5"
+              "quote": "ที่ดินประเภท ย.๑ ๓ ย.๒ ๓ ย.๓ ๓ ย.๔ ๓ ย.๕ ๓ ย.๖ ๓ ย.๗ ๓ ย.๘ ๓ ย.๙ ๓ ย.๑๐ ๓ พ.๑ ๓ พ.๒ ๓ พ.๓ ๓ พ.๔ ๓ พ.๕ ๓ อ.๑ ๓ อ.๒ ๓ ก.๔ ๓ ก.๕ ๓"
             }
           ]
         },
         {
           "id": "unverified",
-          "reading": "Unknown until a Thai reader or OCR reads the operative text; mark every value for this zone as unverified against the 2026 amendment.",
+          "reading": "Treat the amendment as unread: mark every value for this zone as unverified against it.",
           "cites": [
             {
-              "source": "bb69-bma",
+              "source": "bb69-bma-ocr",
               "clause": "header",
               "page": 1,
-              "line": 2,
-              "quote": "เลม ๑๔๓ ตอนพเิ ศษ ๖๖ ง ราชกิจจานุเบกษา"
+              "line": 6,
+              "quote": "เล่ม ๑๔๓ ตอนพิเศษ ๖๖ ง ราชกิจจานุเบกษา ๑๓ มีนาคม ๒๕๖๙"
             }
           ]
         }
       ],
-      "recommendation": "factories-only",
-      "why": "The decoded article numbers and the readable annex are all about factories, but show a banner saying the amendment's body text was not machine-readable.",
-      "decision": "factories-only"
+      "recommendation": "factories-and-state-medical",
+      "why": "The gazette's 6 pages were rendered at 300 dpi (PyMuPDF 1.27.2.3) and read with Tesseract OCR (tesseract.js 7.0.0, Thai data) on 20 Nov 2026, then every line was checked against the page images, because the OCR misreads Thai numerals. Articles 3 to 18 each replace the factory item of one zone's prohibited uses, article 19 adds clause 33/1, and articles 20 and 21 add factory type 90 to the plan's annex and replace its type 76 (1) with the bylaw's annex. Nothing else is amended.",
+      "decision": "factories-and-state-medical"
     },
     {
       "id": "front-open-space",
@@ -2461,11 +2491,6 @@
     }
   ],
   "gaps": [
-    {
-      "id": "bylaw-2569-text",
-      "what": "Operative text of the 13 Mar 2026 Bangkok bylaw amending the plan",
-      "why": "The PDF's fonts have no Unicode map: pdftotext and one Context.dev scrape both return cipher text. Nothing from it is in the pack."
-    },
     {
       "id": "large-building-road",
       "what": "Minimum road width for a large building (above 2,000 m² but below 10,000 m² and below 23 m)",

@@ -12,7 +12,7 @@ export const InterpretationsSchema = z.object({
   'gfa-includes-parking': z.enum(['counts', 'excluded']),
   'office-operating-area': z.enum(['gfa', 'net']),
   'road-access-tiers': z.enum(['frontage-and-row', 'row-only']),
-  'bylaw-2569-scope': z.enum(['factories-only', 'unverified']),
+  'bylaw-2569-scope': z.enum(['factories-and-state-medical', 'unverified']),
   'front-open-space': z.enum(['exempt-on-road', 'always']),
 })
 
