@@ -14,7 +14,7 @@ export type Selection = { kind: 'none' } | { kind: 'corner'; index: number } | {
 
 export type Notice = Rejection | LinkProblem
 
-export type Load = { source: 'link' | 'example'; count: number }
+export type Load = { source: 'link' | 'example' | 'import'; count: number }
 
 export type EditorState = {
   draft: Draft
@@ -106,8 +106,16 @@ function withEstimate(draft: Draft, action: DraftAction, siteRoads: readonly Sit
 
 function loadAfter(current: Load | null, action: DraftAction): Load | null {
   const count = (current?.count ?? 0) + 1
-  if (action.type === 'load') return { source: 'link', count }
-  return action.type === 'load-example' ? { source: 'example', count } : current
+  switch (action.type) {
+    case 'load':
+      return { source: 'link', count }
+    case 'load-example':
+      return { source: 'example', count }
+    case 'import':
+      return { source: 'import', count }
+    default:
+      return current
+  }
 }
 
 function applyDraft(state: EditorState, action: DraftAction): EditorState {

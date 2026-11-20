@@ -115,6 +115,18 @@ describe('parsePasted failures', () => {
     expect(problem('100.5 13.7\n670304 1523806\n100.6 13.8')).toEqual({ reason: 'unrecognised-coordinates' })
   })
 
+  it('reads back any corners written out one per line, in either order', () => {
+    const corner = fc.tuple(fc.double({ min: 98, max: 105, noNaN: true }), fc.double({ min: 6, max: 20, noNaN: true }))
+    fc.assert(
+      fc.property(fc.array(corner, { minLength: 3, maxLength: 20 }), fc.boolean(), (corners, swap) => {
+        const text = corners.map(([lng, lat]) => (swap ? `${lat}, ${lng}` : `${lng}, ${lat}`)).join('\n')
+        const { shape, question } = parsed(text)
+        expect(shape.points).toEqual(corners.map(([lng, lat]) => (swap ? [lat, lng] : [lng, lat])))
+        expect(question).toEqual({ kind: 'degrees', orders: [swap ? 'lat-lng' : 'lng-lat'] })
+      }),
+    )
+  })
+
   it('never throws on any text', () => {
     fc.assert(fc.property(fc.string(), (text) => void parsePasted(text, BANGKOK)))
   })

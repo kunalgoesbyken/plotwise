@@ -47,6 +47,6 @@ describe('readImportFile', () => {
   it('does not crash on a pathologically nested file', async () => {
     const depth = 200_000
     const nested = `${'{"type":"GeometryCollection","geometries":['.repeat(depth)}${']}'.repeat(depth)}`
-    expect(['geojson-invalid', 'file-unreadable']).toContain(await reasonOf(file('deep.geojson', nested)))
+    expect(['geojson-invalid', 'file-unreadable']).toContain(String(await reasonOf(file('deep.geojson', nested))))
   })
 })

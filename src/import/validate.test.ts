@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { localFrame } from '@/geo/projection'
+import { localFrame, type LngLat } from '@/geo/projection'
 import { starPolygon } from '@/geometry/arbitraries'
 import { MAX_CORNERS } from '@/plot/plot'
 import { ASSUMPTIONS } from '@/solve'
@@ -27,7 +27,7 @@ describe('checkShape', () => {
     const result = checkShape(shape(PLOT), DEGREES, BOUNDS)
     expect(result.ok).toBe(true)
     if (result.ok) {
-      expect(result.value.ring).toEqual(PLOT)
+      expect(result.value.ring).toEqual(PLOT.map(([lng, lat]): LngLat => [lng, lat]))
       expect(result.value.areaSqm).toBeGreaterThan(1500)
       expect(result.value.areaSqm).toBeLessThan(2000)
     }

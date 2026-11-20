@@ -19,7 +19,7 @@
 3. In **Rules**, step through the setbacks and the road-height rule and watch each one carve the allowed shape in 3D. Every limit links to the page and line of the regulation it comes from.
 4. In **Money**, change any assumption. Each shows its source, and the figures are labelled as estimates.
 5. Use **Share** to copy a link that holds the whole result, or **Print** for a one-page summary.
-6. Back at the start, search an address and click the corners of your own plot.
+6. Back at the start, search an address and click the corners of your own plot, or import its boundary from pasted coordinates or a KML, GeoJSON or DXF file.
 
 ### Architecture
 
@@ -81,7 +81,7 @@ Solid arrows are deterministic code that runs in the browser. Dotted arrows are 
 
 The app takes three steps:
 
-1. **Plot.** Find the site with live place search, then trace its outline on the map, or start from the example plot.
+1. **Plot.** Find the site with live place search, then trace its outline on the map, import it from pasted coordinates or a KML, GeoJSON or DXF file, or start from the example plot. Files are read in the browser and never uploaded; coordinates may be longitude and latitude or UTM, and a DXF always asks for its unit and where it sits.
 2. **Roads.** Edges beside a mapped road are pre-marked with an estimated width. You can change any of them.
 3. **Results.** The results show:
    - the floor area the rules allow, with the optional FAR bonus;
@@ -159,6 +159,7 @@ Feature-first folders under `src/`:
 | Folder | Responsibility |
 |---|---|
 | `editor` | The three-step panel, drawing and editing the plot on MapLibre, roads, building type, live place search, URL state |
+| `import` | Parses pasted coordinates, KML, GeoJSON and DXF into a checked plot outline, with UTM reprojection |
 | `plot`, `geo` | The validated plot contract and the local metric projection |
 | `rules` | Rule pack building blocks, schema and loader |
 | `solve` | Rules → limits, setbacks by height, envelopes; `assumptions.ts` holds every engineering and money assumption with its source |
