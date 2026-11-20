@@ -4,11 +4,14 @@ import type { DegreeOrder, UtmOrder } from '@/import/types'
 import type { LengthUnit } from '@/import/units'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import type { AreaTerms, RulesSource } from '@/region/regions'
+import type { SourceLanguage } from '@/rules'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
 
 type Message = string | ((params: never) => string)
+
+const LANGUAGE_NAMES: Readonly<Record<SourceLanguage, string>> = { th: 'Thai', en: 'English' }
 
 export type RatioCheckId = Extract<CheckId, 'far' | 'high-rise-far'>
 
@@ -385,7 +388,7 @@ const en = {
   'source.entered': 'Entered by you',
   'source.toggle': ({ count }: Count) => (count === 1 ? 'Source' : `Sources (${count})`),
   'source.location': ({ page, line }: { page: number; line: number }) => `Page ${page}, line ${line}`,
-  'source.open': 'Official text (PDF, in Thai)',
+  'source.open': ({ language }: { language: SourceLanguage }) => `Official text (PDF, in ${LANGUAGE_NAMES[language]})`,
 
   'range.between': ({ min, max }: { min: string; max: string }) => `${min} and ${max}`,
   'range.span': ({ min, max }: { min: string; max: string }) => `${min} to ${max}`,

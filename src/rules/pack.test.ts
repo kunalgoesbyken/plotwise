@@ -104,6 +104,11 @@ describe('mum-suburbs-res draft values, read by hand from DCPR 2034 as sanctione
     return cap.kind === 'extraRatioByRoadWidth' ? cap.bands.map((b) => (b.kind === 'ratio' ? b.ratio.value : 0)) : []
   }
 
+  it('names the language of each official text, so links say English for Mumbai and Thai for Bangkok', () => {
+    expect(Object.values(pack.sources).map((source) => source.language)).toEqual(['en'])
+    expect(new Set(Object.values(loadPack('bkk-y9').sources).map((source) => source.language))).toEqual(new Set(['th']))
+  })
+
   it('is a draft that never shows as verified and covers residential buildings only', () => {
     expect(pack.verification).toBe('unverified')
     expect(pack.buildingTypes).toEqual(['condo'])

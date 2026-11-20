@@ -18,7 +18,10 @@ const SourceSchema = z.object({
   published: z.string().min(1),
   kind: z.enum(['gazette', 'consolidated']),
   textLayer: z.enum(['readable', 'garbled']),
+  language: z.enum(['th', 'en']),
 })
+
+export type SourceLanguage = z.infer<typeof SourceSchema>['language']
 
 export const RulePackSchema = z
   .object({

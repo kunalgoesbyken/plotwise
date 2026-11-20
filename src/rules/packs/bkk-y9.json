@@ -18,7 +18,8 @@
       "url": "http://download.asa.or.th/03media/04law/cpa/mr56-bma.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 41 ก, 16 May 2013 (PDF page 82 carries the 9 Oct 2013 correction)",
       "kind": "gazette",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     },
     "mr56-correction": {
       "name": "Correction to the Bangkok Comprehensive Plan (Oct 2013)",
@@ -26,7 +27,8 @@
       "url": "http://download.asa.or.th/03media/04law/cpa/mr56-correction.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 130 ตอนที่ 91 ก, 9 Oct 2013",
       "kind": "gazette",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     },
     "bb69-bma": {
       "name": "Bangkok bylaw amending the Comprehensive Plan (Mar 2026)",
@@ -34,7 +36,8 @@
       "url": "https://download.asa.or.th/03media/04law/cpa/bb69-bma.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 143 ตอนพิเศษ 66 ง, 13 Mar 2026",
       "kind": "gazette",
-      "textLayer": "garbled"
+      "textLayer": "garbled",
+      "language": "th"
     },
     "mr43-55-upd68": {
       "name": "Ministerial Regulation 55 (2000) under the Building Control Act, amended to 2020",
@@ -42,7 +45,8 @@
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr43-55-upd68.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 117 ตอนที่ 75 ก, 7 Aug 2000; amendments to 3 Dec 2020; ASA consolidation",
       "kind": "consolidated",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     },
     "mr35-33-upd69": {
       "name": "Ministerial Regulation 33 (1992): high-rise and extra-large buildings, amended",
@@ -50,7 +54,8 @@
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr35-33-upd69.pdf",
       "published": "ASA consolidation of the gazetted text and its amendments",
       "kind": "consolidated",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     },
     "mr17-07-upd64": {
       "name": "Ministerial Regulation 7 (1974): parking, amended",
@@ -58,7 +63,8 @@
       "url": "https://download.asa.or.th/03media/04law/cba/mr/mr17-07-upd64.pdf",
       "published": "ราชกิจจานุเบกษา เล่ม 91 ตอนที่ 86, 21 May 1974; amendment ฉบับที่ 64 of 30 Nov 2012; ASA consolidation",
       "kind": "consolidated",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     },
     "bb44-03": {
       "name": "Bangkok Building Control Bylaw (2001)",
@@ -66,7 +72,8 @@
       "url": "https://download.asa.or.th/03media/04law/cba/bb/bb44-03.pdf",
       "published": "ASA typeset text of the Bangkok building control bylaw",
       "kind": "consolidated",
-      "textLayer": "readable"
+      "textLayer": "readable",
+      "language": "th"
     }
   },
   "far": {
