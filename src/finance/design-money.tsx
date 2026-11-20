@@ -15,13 +15,13 @@ export type MoneyRow = { readonly label: string; readonly cell: (design: Design)
 
 export function useMoneyRows(): readonly MoneyRow[] {
   const finance = useFinance()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   const priced = finance?.priced
   if (!finance || !priced) return []
   const { currency } = finance.region
   return [
     { label: t('money.built-up'), cell: (design) => formatQuantity(priced.estimateFor(design).builtSqm, areaUnit) },
-    { label: t('money.saleable'), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
+    { label: t('money.saleable', areaTerms), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
     { label: t('money.parking-levels'), cell: (design) => parkingText(priced.estimateFor(design).parking) },
     { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(priced.estimateFor(design)), currency) },
     { label: t('money.land-value'), cell: (design) => rangeText(priced.estimateFor(design).landValue, currency) },
@@ -46,7 +46,7 @@ function Figure({ label, value }: { readonly label: string; readonly value: Reac
 export function DesignMoney() {
   const { design } = useFeasibility()
   const finance = useFinance()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (!design || !finance?.priced) return null
   const estimate = finance.priced.estimateFor(design)
   const { currency } = finance.region
@@ -59,7 +59,7 @@ export function DesignMoney() {
       <dl className="divide-y">
         <Figure label={t('money.built-up')} value={formatQuantity(estimate.builtSqm, areaUnit)} />
         <Figure label={t('money.gross')} value={formatQuantity(estimate.grossSqm, areaUnit)} />
-        <Figure label={t('money.saleable')} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
+        <Figure label={t('money.saleable', areaTerms)} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
         <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, areaUnit)} />
         <Figure label={t('money.parking-levels')} value={parkingText(estimate.parking)} />
         <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />

@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { checkLabel } from '@/feasibility/check-label'
 import { rangeText } from '@/finance/figures'
+import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import type { exampleFigures } from './example'
@@ -21,7 +23,7 @@ function Claim({ title, body, children }: { title: string; body: string; childre
 function Cited({ cited }: Pick<Figures, 'cited'>) {
   return cited.map(({ id, cite, source }) => (
     <p key={id}>
-      <span className="font-medium">{t(`check.${id}`)}</span>
+      <span className="font-medium">{checkLabel(id, DEFAULT_REGION.areaTerms)}</span>
       <span className="text-muted-foreground">
         {' '}
         · {source}, {t('source.location', { page: cite.page, line: cite.line })}
@@ -32,7 +34,7 @@ function Cited({ cited }: Pick<Figures, 'cited'>) {
 
 function Unconfirmed({ toCheck }: Pick<Figures, 'toCheck'>) {
   if (toCheck.length === 0) return <p className="text-muted-foreground">{t('landing.check.none')}</p>
-  return <p>{formatList(toCheck.map((id) => t(`check.${id}`)))}</p>
+  return <p>{formatList(toCheck.map((id) => checkLabel(id, DEFAULT_REGION.areaTerms)))}</p>
 }
 
 function Ranges({ firstCost, landValue, currency }: Pick<Figures, 'firstCost' | 'landValue' | 'currency'>) {

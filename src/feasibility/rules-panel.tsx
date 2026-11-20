@@ -68,20 +68,20 @@ function EstimatedRoads() {
 }
 
 function FloorArea({ limits }: { limits: Limits }) {
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   const { farBonus } = useFeasibility()
   const eligible = limits.farBonus.measures.filter((m) => m.eligible)
   return (
     <LimitGroup title={t('rules.group.floor-area')}>
       <LimitRow
-        label={t('limit.far')}
+        label={t('limit.far', areaTerms)}
         value={t('value.far', { ratio: formatQuantity(limits.far.ratio, 'ratio') })}
         detail={t('limit.far.detail', { area: formatQuantity(limits.far.maxGfaSqm, areaUnit) })}
         cites={limits.far.cites}
       />
       {limits.farBonus.measures.length > 0 && (
         <LimitRow
-          label={t('limit.far-bonus')}
+          label={t('limit.far-bonus', areaTerms)}
           value={t('value.bonus', { share: percent(limits.farBonus.maxShare) })}
           detail={
             <>
@@ -186,7 +186,7 @@ function Height({ solution }: Pick<Ready, 'solution'>) {
 }
 
 function HighRise({ limits }: { limits: Limits }) {
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (!limits.highRise) return null
   const { access, farMax, fireLaneWidthM } = limits.highRise
   return (
@@ -202,7 +202,7 @@ function HighRise({ limits }: { limits: Limits }) {
       ))}
       <LimitRow label={t('limit.fire-lane')} value={bound(fireLaneWidthM, 'm')} detail={t('limit.fire-lane.detail')} cites={[fireLaneWidthM.cite]} />
       <LimitRow
-        label={t('limit.high-rise-far')}
+        label={t('limit.high-rise-far', areaTerms)}
         value={t('value.far', { ratio: formatQuantity(farMax.value, 'ratio') })}
         detail={t('limit.high-rise-far.detail')}
         cites={farMax.cites}

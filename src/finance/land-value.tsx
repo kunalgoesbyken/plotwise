@@ -36,10 +36,10 @@ function Supported({ finance, priced, design }: { finance: Finance; priced: Pric
 }
 
 function NeedsPrices({ finance }: { finance: Finance }) {
-  const { name, areaUnit } = useRegion()
+  const region = useRegion()
   return (
     <div role="note" className="flex flex-col gap-1 text-xs leading-relaxed">
-      <p className="text-foreground">{t('money.needs-prices', { region: name, values: formatList(everyValueLabel(areaUnit)) })}</p>
+      <p className="text-foreground">{t('money.needs-prices', { region: region.name, values: formatList(everyValueLabel(region)) })}</p>
       <p className="font-medium text-destructive">{t('money.missing', { count: finance.missing.length })}</p>
     </div>
   )
@@ -63,7 +63,7 @@ function PriceSources({ finance }: { finance: Finance }) {
 export function LandValue() {
   const { design } = useFeasibility()
   const finance = useFinance()
-  const { areaUnit } = useRegion()
+  const { areaUnit, areaTerms } = useRegion()
   if (!design || !finance) return null
   const area = areaText(finance)
   return (
@@ -74,7 +74,7 @@ export function LandValue() {
       </header>
       {area && <p className="text-xs text-muted-foreground">{area}</p>}
       <div className="flex flex-wrap gap-4">
-        <ParameterInput finance={finance} parameter={SCALARS.salePrice} label={t('land.sale-price', { unit: t(`area-unit.${areaUnit}`) })} />
+        <ParameterInput finance={finance} parameter={SCALARS.salePrice} label={t('land.sale-price', { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })} />
         <ParameterInput finance={finance} parameter={SCALARS.margin} label={t('land.margin')} />
       </div>
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}

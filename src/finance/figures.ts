@@ -1,3 +1,4 @@
+import type { Region } from '@/region/regions'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 import { formatMoney } from './format-money'
@@ -12,13 +13,15 @@ export const parkingText = ({ levelsAboveGround, basementLevels }: Parking) =>
 
 export const firstCostRange = ({ firstCost }: Estimate): Range => ({ low: totalOf(firstCost.low), high: totalOf(firstCost.high) })
 
-export const scalarLabel = (id: ScalarId, area: AreaUnit) =>
-  id === 'salePrice' ? t('assumptions.salePrice', { unit: t(`area-unit.${area}`) }) : t(`assumptions.${id}`)
+export function scalarLabel(id: ScalarId, { areaUnit, areaTerms }: Region): string {
+  if (id === 'salePrice') return t('assumptions.salePrice', { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })
+  return id === 'saleableShare' ? t('assumptions.saleableShare', areaTerms) : t(`assumptions.${id}`)
+}
 
-export const everyValueLabel = (area: AreaUnit) => [
-  ...(Object.keys(SCALARS) as ScalarId[]).map((id) => scalarLabel(id, area)),
-  ...RATES.map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, area) })),
+export const everyValueLabel = (region: Region) => [
+  ...(Object.keys(SCALARS) as ScalarId[]).map((id) => scalarLabel(id, region)),
+  ...RATES.map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, region.areaUnit) })),
 ]
 
-export const rateLabel =(row: RateRow, area: AreaUnit) =>
+export const rateLabel = (row: RateRow, area: AreaUnit) =>
   row === 'basement' ? t('assumptions.rate.basement', { unit: t(`area-unit.${area}`) }) : t(`assumptions.rate.${row}`)

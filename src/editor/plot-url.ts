@@ -26,7 +26,7 @@ function encodeLimits(limits: PlotLimits | undefined): string {
 
 export function encodePlot(plot: Plot) {
   const ring = plot.ring.map((p) => p.join(PAIR)).join(LIST)
-  const roads = plot.roads.map((r) => `${r.edge}${ROAD}${r.widthM}`).join(LIST)
+  const roads = plot.roads.map((r) => [r.edge, r.widthM, ...(r.prescribedWidthM === undefined ? [] : [r.prescribedWidthM])].join(ROAD)).join(LIST)
   const station = plot.nearStation ? `&station=${STATION}` : ''
   return `plot=${ring}&roads=${roads}&type=${plot.buildingType}${station}${encodeLimits(plot.limits)}`
 }
@@ -64,8 +64,8 @@ export function decodePlot(fragment: string): DecodedLink | null {
   const parsed = PlotSchema.safeParse({
     ring: ring.split(LIST).map((p) => numbers(p, PAIR)),
     roads: roads.split(LIST).map((r) => {
-      const [edge, widthM] = numbers(r, ROAD)
-      return { edge, widthM }
+      const [edge, widthM, ...rest] = numbers(r, ROAD)
+      return rest.length === 0 ? { edge, widthM } : { edge, widthM, prescribedWidthM: rest.length === 1 ? rest[0] : Number.NaN }
     }),
     buildingType,
     nearStation: station === STATION,

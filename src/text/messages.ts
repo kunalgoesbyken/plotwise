@@ -3,14 +3,14 @@ import type { GeometryErrorReason } from '@/geometry'
 import type { DegreeOrder, UtmOrder } from '@/import/types'
 import type { LengthUnit } from '@/import/units'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
-import { DEFAULT_REGION, type RulesSource } from '@/region/regions'
+import type { AreaTerms, RulesSource } from '@/region/regions'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
 
-const { ratio, ratioName } = DEFAULT_REGION.areaTerms
-
 type Message = string | ((params: never) => string)
+
+export type RatioCheckId = Extract<CheckId, 'far' | 'high-rise-far'>
 
 const pluralRules = new Intl.PluralRules(LOCALE)
 const plural = (count: number, one: string, other: string) => `${count} ${pluralRules.select(count) === 'one' ? one : other}`
@@ -21,13 +21,18 @@ type Num = { number: string }
 type Area = { area: string }
 type Authority = { authority: string }
 type Name = { name: string }
+type Ratio = Pick<AreaTerms, 'ratio'>
+type RatioName = Pick<AreaTerms, 'ratioName'>
+type Saleable = Pick<AreaTerms, 'saleable'>
 
-type EngineMessages = Record<`check.${CheckId}`, string> &
+const upperFirst = (text: string) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`
+
+type EngineMessages = Record<`check.${Exclude<CheckId, RatioCheckId>}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
   Record<`building.${BuildingType}`, string> &
   Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
   Record<`plot-limit.${PlotLimitField}` | `limits.custom.${PlotLimitField}`, string> &
-  Record<`verification.${RulesSource}` | `region.${RulesSource}` | `limits.title.${RulesSource}` | `limits.intro.${RulesSource}`, string> &
+  Record<`verification.${Exclude<RulesSource, 'draftPack'>}` | `region.${RulesSource}` | `limits.title.${RulesSource}` | `limits.intro.${RulesSource}`, string> &
   Record<`import.unit.${LengthUnit}`, string> &
   Record<`import.order.${DegreeOrder | UtmOrder}`, string> &
   Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
@@ -124,16 +129,20 @@ const en = {
   'flow.next.roads': 'See results',
   'flow.back': 'Back',
   'plot.framing.pack': ({ name }: Name) => `Check what a ${name} plot can hold before you buy it.`,
+  'plot.framing.draftPack': ({ name }: Name) => `Check what a ${name} plot can hold, on draft rules, before you buy it.`,
   'plot.framing.affectionPlan': ({ name }: Name) => `Check what a ${name} plot can hold, from the limits on its affection plan.`,
   'plot.framing.custom': ({ name }: Name) => `${name}: check what a plot anywhere can hold, from the limits you enter.`,
   'region.title': 'Rules',
   'region.pack': 'Rules read from the law, cited line by line.',
+  'region.draftPack': 'A draft read from the law, cited line by line, with later amendments not applied. Results are unverified.',
   'region.affectionPlan': 'You enter the limits from the plot’s affection plan. Results are unverified.',
   'region.custom': 'You enter the limits you know, for a plot anywhere. Results are unverified.',
   'limits.title.pack': 'Limits set for this plot',
+  'limits.title.draftPack': 'Limits set for this plot',
   'limits.title.affectionPlan': 'From the affection plan',
   'limits.title.custom': 'Your rules',
   'limits.intro.pack': 'These rules set some limits plot by plot. Enter them from the plot’s own documents.',
+  'limits.intro.draftPack': 'These values could not be read from the regulation’s text. Enter them from the plot’s approved drawings or your architect; leave them blank to skip them.',
   'limits.intro.affectionPlan':
     'Enter the values printed on the plot’s affection plan. Floor area or ratio, and height or floors, are needed; leave the rest blank if the plan does not state them.',
   'limits.intro.custom': 'Enter the limits you know. Floor area or ratio, and height or storeys, are needed; leave the rest blank to skip them.',
@@ -156,6 +165,9 @@ const en = {
   'limits.custom.minOpenSpaceShare': 'Minimum open space, share of the plot',
   'limits.custom.parkingSqmPerSpace': 'Parking, one space per floor area',
   'verification.pack': 'Unverified: includes limits you entered',
+  'verification.draftPack': ({ plan }: { plan: string }) => `Draft: ${plan}; later amendments not applied`,
+  'verification.detail.draftPack': ({ authority }: Authority) =>
+    `Read line by line from the sanctioned text, but amendments since, such as the 2024 notification on premium and TDR, are not applied. Confirm every limit with ${authority} and an architect.`,
   'verification.affectionPlan': 'Unverified: from your affection plan',
   'verification.custom': 'Unverified: your own rules',
   'verification.detail': 'Plotwise has not checked these limits against any law. Confirm them with the authority before you rely on them.',
@@ -292,6 +304,11 @@ const en = {
   'frontage.estimated': 'Estimated from OpenStreetMap, check on site.',
   'frontage.estimated-tag': 'est.',
   'frontage.boundary': 'Neighbour',
+  'frontage.prescribed-label': ({ edge }: { edge: string }) => `Prescribed width of the road on edge ${edge}, in metres`,
+  'frontage.prescribed-placeholder': 'widen to',
+  'frontage.prescribed-note': ({ share }: { share: string }) =>
+    `Where the development plan widens a road, enter its prescribed width under “widen to”. ${share} of the extra width is taken from the plot and handed over.`,
+  'frontage.prescribed-invalid': 'A prescribed width must be wider than the road.',
   'frontage.remove': 'Remove',
   'frontage.remove-label': ({ edge }: { edge: string }) => `Remove road on edge ${edge}`,
   'frontage.mark': 'Mark as road',
@@ -408,16 +425,36 @@ const en = {
   'rules.setbacks.boundary': 'Neighbour',
   'rules.setbacks.road': ({ width }: { width: string }) => `Road ${width}`,
 
-  'limit.far': ratioName,
+  'limit.far': ({ ratioName }: RatioName) => ratioName,
   'limit.far.detail': ({ area }: Area) => `At most ${area} of total floor area on this plot.`,
+  'limit.purchase.premium': 'Premium FSI',
+  'limit.purchase.transferableRights': 'TDR',
+  'limit.purchase.fungible': 'Fungible area',
+  'limit.purchase.detail': ({ area, chosen }: Area & { chosen: string }) => `Up to ${area} can be bought; ${chosen} chosen.`,
+  'limit.purchase.none': 'None on this road width.',
+  'limit.in-lieu': 'Floor area for the road strip',
+  'limit.in-lieu.detail': ({ area }: Area) => `${area} in lieu of the land handed over, on top of the permissible total.`,
+  'limit.widening': 'Road-widening strip',
+  'limit.widening.detail': ({ area, gross }: Area & { gross: string }) =>
+    `${area} handed over to widen the road. Floor area is counted on the plot left; land is priced on the whole ${gross}.`,
+  'purchase.title': 'Extra floor area to buy',
+  'purchase.hint': 'Choose how much to buy. The designs, checks and money follow.',
+  'purchase.premium': 'Premium FSI',
+  'purchase.transferableRights': 'TDR',
+  'purchase.fungible': 'Fungible area',
+  'purchase.value': ({ ratio, max, area }: { ratio: string; max: string; area: string }) => `${ratio} of ${max} (+${area})`,
+  'purchase.none': 'None on this road width',
+  'purchase.price.shareOfLandRate': ({ share, rate }: { share: string; rate: string }) => `Priced at ${share} of the ${rate}.`,
+  'purchase.price.userSupplied': 'Bought on the market at the price you enter.',
+  'purchase.price.perSqm': 'Priced per area by the rules.',
   'limit.coverage': 'Ground coverage',
   'limit.coverage.detail': ({ area }: Area) => `The building may cover at most ${area} of the plot.`,
-  'limit.far-bonus': `${ratio} bonus`,
+  'limit.far-bonus': ({ ratio }: Ratio) => `${ratio} bonus`,
   'limit.far-bonus.detail': ({ area, measures }: Area & { measures: string }) =>
     `Up to ${area} if the plan’s bonus measures are provided (${measures}).`,
   'limit.far-bonus.designs.on': 'The designs aim at it.',
   'limit.far-bonus.designs.off': 'The designs stay under the base limit unless you use the bonus.',
-  'far-bonus.label': ({ area }: Area) => `Use the ${ratio} bonus (+${area})`,
+  'far-bonus.label': ({ area, ratio }: Area & Ratio) => `Use the ${ratio} bonus (+${area})`,
   'far-bonus.needs': ({ measures }: { measures: string }) => `Needs the plan’s bonus measures: ${measures}.`,
   'bonus.affordableHousing': 'affordable housing',
   'bonus.publicOpenSpace': 'public open space',
@@ -450,7 +487,7 @@ const en = {
     `Needs a road ${road} wide with frontage ${frontage} on it.`,
   'limit.fire-lane': 'Fire lane around the building',
   'limit.fire-lane.detail': 'Clear ground for fire engines on every side of a high-rise.',
-  'limit.high-rise-far': `High-rise ${ratio} cap`,
+  'limit.high-rise-far': ({ ratio }: Ratio) => `High-rise ${ratio} cap`,
   'limit.high-rise-far.detail': 'The building-control cap; the plan’s lower ratio governs.',
   'limit.use.permitted': 'No size condition',
   'limit.use.permitted.detail': 'This use is not on the zone’s list of restricted uses.',
@@ -511,7 +548,7 @@ const en = {
   'limiter.building-class': 'High-rise rules',
   'limiter.use': 'Use size cap',
   'limiter.envelope': 'Setbacks, height',
-  'metric.far': 'Floor area ratio',
+  'metric.far': ({ ratioName }: RatioName) => ratioName,
   'metric.height': 'Height',
   'metric.storeys': 'Storeys',
   'metric.parking': 'Parking',
@@ -541,7 +578,7 @@ const en = {
   'assumptions.clear': 'Clear all values',
   'money.built-up': 'Built-up area',
   'money.gross': 'Gross floor area',
-  'money.saleable': 'Saleable area, estimated',
+  'money.saleable': ({ saleable }: Saleable) => `${upperFirst(saleable)}, estimated`,
   'money.parking-area': 'Parking area',
   'money.parking-levels': 'Parking levels',
   'money.parking-levels-value': ({ above, basement }: { above: number; basement: number }) =>
@@ -559,7 +596,7 @@ const en = {
   'area.cityFringe': 'city fringe',
   'area.suburban': 'suburban Bangkok',
   'land.title': 'Land value',
-  'land.sale-price': ({ unit }: { unit: string }) => `Sale price per ${unit} of saleable area`,
+  'land.sale-price': ({ unit, saleable }: { unit: string } & Saleable) => `Sale price per ${unit} of ${saleable}`,
   'land.margin': 'Target margin',
   'land.headline': ({ range }: { range: string }) => `This design supports land worth about ${range}.`,
   'land.per-unit': ({ range, unit }: { range: string; unit: string }) => `${range} per ${unit}`,
@@ -581,8 +618,8 @@ const en = {
   'assumptions.high': 'High',
   'assumptions.source': 'Source',
   'assumptions.reset': 'Reset to defaults',
-  'assumptions.salePrice': ({ unit }: { unit: string }) => `Sale price per ${unit} of saleable area`,
-  'assumptions.saleableShare': 'Saleable share of built-up area above parking',
+  'assumptions.salePrice': ({ unit, saleable }: { unit: string } & Saleable) => `Sale price per ${unit} of ${saleable}`,
+  'assumptions.saleableShare': ({ saleable }: Saleable) => `${upperFirst(saleable)} as a share of built-up area above parking`,
   'assumptions.margin': 'Developer margin on sales',
   'assumptions.softCost': 'Design fees, marketing and overheads, share of first cost',
   'assumptions.transferCosts': 'Transfer fee paid by the buyer, share of land price',
@@ -606,12 +643,12 @@ const en = {
   'tally.manual': ({ count }: Count) => `${count} to check`,
 
   'check.manual': 'Check on site or with the authority',
-  'check.far': `Floor area within the ${ratio} limit`,
+  'check.far': ({ ratio }: Ratio) => `Floor area within the ${ratio} limit`,
   'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
   'check.far-purchase': 'Extra floor area bought as the rules allow',
   'check.coverage': 'Ground coverage',
   'check.height-cap': 'Height within the limit',
-  'check.high-rise-far': `${ratio} within the high-rise cap`,
+  'check.high-rise-far': ({ ratio }: Ratio) => `${ratio} within the high-rise cap`,
   'check.open-space-ratio': 'Open space ratio',
   'check.permeable': 'Permeable ground',
   'check.open-space-minimum': 'Building-control open space',

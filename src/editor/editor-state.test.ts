@@ -337,6 +337,37 @@ describe('rules source and entered limits', () => {
   })
 })
 
+describe('Mumbai: building types and road widening', () => {
+  const mumbai: EditorAction = { type: 'set-region', region: 'mum' }
+  const widen = (prescribedWidthM: number | undefined): EditorAction => ({ type: 'set-prescribed-width', edge: 0, prescribedWidthM })
+
+  it('keeps a building type the rules cover and turns any other into the first they cover', () => {
+    const office = run({ type: 'load', plot: { ...plot, buildingType: 'office' } })
+    expect(reduceEditor(office, mumbai).plot?.buildingType).toBe('condo')
+    expect(run(mumbai, { type: 'load', plot: { ...plot, buildingType: 'hotel' } }).plot?.buildingType).toBe('condo')
+    expect(run(mumbai, { type: 'load', plot }, { type: 'set-building-type', buildingType: 'office' }).plot?.buildingType).toBe('condo')
+  })
+
+  it('takes a prescribed width wider than the road onto the plot, and clears it when emptied', () => {
+    const widened = run(mumbai, { type: 'load', plot }, widen(18))
+    expect(widened.plot?.roads).toEqual([{ edge: 0, widthM: 12, prescribedWidthM: 18 }])
+    expect(reduceEditor(widened, widen(undefined)).plot?.roads).toEqual([{ edge: 0, widthM: 12 }])
+    expect(reduceEditor(widened, widen(9)).plot?.roads).toEqual([{ edge: 0, widthM: 12, prescribedWidthM: 18 }])
+  })
+
+  it('keeps the prescribed width with the road when its width changes, and drops it once the road is as wide', () => {
+    const widened = run(mumbai, { type: 'load', plot }, widen(18))
+    expect(reduceEditor(widened, { type: 'set-road-width', edge: 0, widthM: 15 }).plot?.roads).toEqual([{ edge: 0, widthM: 15, prescribedWidthM: 18 }])
+    expect(reduceEditor(widened, { type: 'set-road-width', edge: 0, widthM: 18 }).plot?.roads).toEqual([{ edge: 0, widthM: 18 }])
+  })
+
+  it('drops prescribed widths under rules that take no road widening, so no hidden value rides in the link', () => {
+    const widened = run(mumbai, { type: 'load', plot }, widen(18))
+    expect(reduceEditor(widened, { type: 'set-region', region: 'bkk' }).plot?.roads).toEqual([{ edge: 0, widthM: 12 }])
+    expect(run({ type: 'load', plot: { ...plot, roads: [{ edge: 0, widthM: 12, prescribedWidthM: 18 }] } }).plot?.roads).toEqual([{ edge: 0, widthM: 12 }])
+  })
+})
+
 describe('nextStep', () => {
   it('walks from drawing to a complete plot', () => {
     expect(nextStep(run())).toEqual({ step: 'start' })

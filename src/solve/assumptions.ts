@@ -266,6 +266,15 @@ export const MONEY_REGIONS = {
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
   },
+  mum: {
+    currency: 'INR',
+    landUnit: {
+      name: 'sq ft',
+      sqm: { value: SQM_PER_SQFT, source: 'one square foot, from the international foot of exactly 0.3048 m; Mumbai areas are shown in square feet' },
+    },
+    landWarningFactor: LAND_WARNING_FACTOR,
+    prices: null,
+  },
   custom: {
     currency: null,
     landUnit: { name: 'm²', sqm: { value: 1, source: 'one square metre, the unit areas are shown in for custom rules' } },
@@ -277,6 +286,26 @@ export const MONEY_REGIONS = {
 export type RegionId = keyof typeof MONEY_REGIONS
 
 type Term = { readonly value: string; readonly source: string }
+
+const DCPR_2034 =
+  'Greater Mumbai Development Control and Promotion Regulations 2034, sanctioned text of 8 May 2018 (MCGM), https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf'
+
+export const DCPR_TERMS = {
+  document: {
+    value: 'DCPR 2034, Table A',
+    source: `${DCPR_2034}, PDF page 288, Reg 41(2)(i)(a): "The open spaces on all sides except the front side of a building shall be as follows: Table A". The text layer of Table A merges its cells, so its values are entered for each plot`,
+  },
+  use: {
+    value: 'Residential (R zone), Suburbs and Extended Suburbs',
+    source: `${DCPR_2034}, PDF page 127, Reg 30(A)(1) Table 12 Sr II(iii): "The remaining area in Suburbs and Extended Suburbs, Residential/ Commercial"`,
+  },
+  fields: {
+    boundarySetbackM: {
+      value: 'Side and rear open space',
+      source: `${DCPR_2034}, PDF page 288, Table A: "Side & rear marginal open space", by building height and plot size`,
+    },
+  },
+} as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }
 
 const DUBAI_BUILDING_CODE =
   'Dubai Municipality, Dubai Building Code, 2021 Edition, https://dmpmedia.dm.gov.ae/uploads/2021/12/Dubai%20Building%20Code_English_2021%20Edition_compressed.pdf'

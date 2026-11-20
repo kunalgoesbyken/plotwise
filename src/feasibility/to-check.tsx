@@ -2,6 +2,7 @@ import { WarningCircleIcon } from '@phosphor-icons/react'
 import type { Check, Design, ManualCheckId } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import { t } from '@/text/messages'
+import { checkLabel } from './check-label'
 import { Sources } from './sources'
 
 type ManualCheck = Extract<Check, { status: 'manual' }>
@@ -9,10 +10,10 @@ type ManualCheck = Extract<Check, { status: 'manual' }>
 const isManual = (check: Check): check is ManualCheck => check.status === 'manual'
 
 function ToCheckItem({ id, cites }: { id: ManualCheckId; cites: ManualCheck['cites'] }) {
-  const { authority } = useRegion()
+  const { authority, areaTerms } = useRegion()
   return (
     <li className="py-2.5">
-      <p className="text-sm font-medium leading-snug">{t(`check.${id}`)}</p>
+      <p className="text-sm font-medium leading-snug">{checkLabel(id, areaTerms)}</p>
       <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{t(`to-check.why.${id}`)}</p>
       <p className="text-xs leading-relaxed text-muted-foreground">{t(`to-check.who.${id}`, { authority })}</p>
       <Sources cites={cites} />

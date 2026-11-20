@@ -165,6 +165,29 @@ describe('plot limits in the link', () => {
   })
 })
 
+describe('prescribed road widths in the link', () => {
+  const widened: Plot = { ...plot, roads: [{ edge: 0, widthM: 9, prescribedWidthM: 18.3 }, { edge: 3, widthM: 6.5 }] }
+
+  it('writes a prescribed width after the road width, and old links without one still open', () => {
+    expect(encodePlot(widened)).toContain('roads=0:9:18.3;3:6.5')
+    expect(decodePlot(encodePlot(plot))).toEqual({ ok: true, plot })
+  })
+
+  it('round-trips any prescribed width wider than its road', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 1, max: 100, noNaN: true }), fc.double({ min: 0.01, max: 100, noNaN: true }), (widthM, extraM) => {
+        const one: Plot = { ...plot, roads: [{ edge: 0, widthM, prescribedWidthM: widthM + extraM }] }
+        expect(decodePlot(encodePlot(one))).toEqual({ ok: true, plot: one })
+      }),
+    )
+  })
+
+  it('says a link is invalid when a prescribed width does not widen the road or a road has extra parts', () => {
+    for (const roads of ['0:9:9', '0:9:6', '0:9:', '0:9:abc', '0:9:18:20', '0:9:999'])
+      expect(decodePlot(encodePlot(plot).replace(/roads=[^&]*/, `roads=${roads}`))).toEqual({ ok: false, problem: 'link-invalid' })
+  })
+})
+
 describe('rules source in the link', () => {
   it('leaves Bangkok out, so every link made before regions existed opens as Bangkok', () => {
     expect(encodeRegion('bkk')).toBe('')
@@ -172,10 +195,11 @@ describe('rules source in the link', () => {
     expect(decodeRegion('')).toEqual({ ok: true, region: 'bkk' })
   })
 
-  it('names Dubai and custom rules', () => {
+  it('names Dubai, Mumbai and custom rules', () => {
     expect(encodeRegion('dxb')).toBe('rules=dxb')
+    expect(encodeRegion('mum')).toBe('rules=mum')
     expect(encodeRegion('custom')).toBe('rules=custom')
-    for (const id of ['dxb', 'custom'] as const) expect(decodeRegion(`#${encodePlot(plot)}&${encodeRegion(id)}`)).toEqual({ ok: true, region: id })
+    for (const id of ['dxb', 'mum', 'custom'] as const) expect(decodeRegion(`#${encodePlot(plot)}&${encodeRegion(id)}`)).toEqual({ ok: true, region: id })
   })
 
   it('refuses a rules source it does not know', () => {
