@@ -67,3 +67,9 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     holds,
   }
 }
+
+export function withoutHighRiseRules(solution: Solution): Solution {
+  const limits = { ...solution.limits, highRise: null }
+  const pack = { ...solution.pack, buildingClasses: undefined, highRise: undefined }
+  return { ...solution, limits, ...allowedEnvelopes({ ...solution, pack, limits }) }
+}

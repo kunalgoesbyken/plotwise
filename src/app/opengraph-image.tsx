@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { localFrame } from '@/geo/projection'
+import { capSentences } from '@/feasibility/cap-line'
 import { exampleFigures } from '@/landing/example'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { DEFAULT_REGION } from '@/region/regions'
@@ -27,7 +28,9 @@ function outlinePoints(ring: typeof EXAMPLE_PLOT.ring): [number, number][] {
 
 export default function Image() {
   const colours = SHARE_PALETTE.value
-  const { plotSqm, allowedSqm } = exampleFigures()
+  const { plotSqm, buildableSqm, designName, cap } = exampleFigures()
+  const sentences = capSentences(cap, 'sqm')
+  const meta = t('landing.frame.meta', { area: formatQuantity(plotSqm, 'sqm'), buildable: formatQuantity(buildableSqm, 'sqm'), name: t('design.name', designName) })
   const points = outlinePoints(EXAMPLE_PLOT.ring)
   const roadEdges = EXAMPLE_PLOT.roads.map(({ edge }) => [points[edge], points[(edge + 1) % points.length]])
 
@@ -38,8 +41,10 @@ export default function Image() {
           <div style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-0.02em' }}>{t('app.name')}</div>
           <div style={{ marginTop: 40, fontSize: 78, fontWeight: 700, lineHeight: 1.04, letterSpacing: '-0.04em' }}>{t('landing.hero.title')}</div>
           <div style={{ marginTop: 40, fontSize: 30, color: colours.muted }}>
-            {`${t('landing.frame.place')}: ${t('landing.frame.meta', { area: formatQuantity(plotSqm, 'sqm'), allowed: formatQuantity(allowedSqm, 'sqm') })}`}
+            {`${t('landing.frame.place')}: ${meta}`}
           </div>
+          <div style={{ marginTop: 12, fontSize: 26, color: colours.muted }}>{sentences.cap}</div>
+          {sentences.cost && <div style={{ marginTop: 6, fontSize: 26, fontWeight: 700 }}>{sentences.cost}</div>}
         </div>
         <div style={{ display: 'flex', width: CARD_PX, height: CARD_PX, background: colours.card, border: `2px solid ${colours.border}`, borderRadius: 32 }}>
           <svg width={CARD_PX - 4} height={CARD_PX - 4} viewBox={`0 0 ${CARD_PX} ${CARD_PX}`}>

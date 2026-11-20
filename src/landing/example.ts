@@ -1,5 +1,6 @@
-import { headline } from '@/designs'
+import { headline, highRiseCost } from '@/designs'
 import { exampleFragment } from '@/editor/plot-url'
+import { capFigures } from '@/feasibility/cap-line'
 import { feasibility } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
 import { basisOf, estimate, financeSite } from '@/finance/estimate'
@@ -19,6 +20,8 @@ export const OTHER_EXAMPLES = Object.values(REGIONS)
   .map(({ id, name }) => ({ name, link: exampleLink(id) }))
 
 const CITED_CHECKS = 3
+
+export type ExampleFigures = ReturnType<typeof exampleFigures>
 
 export function exampleFigures() {
   const pack = loadPack(DEFAULT_REGION.packId)
@@ -40,7 +43,9 @@ export function exampleFigures() {
   const toCheck = [...new Set(designs.flatMap((d) => d.checks.filter((check) => check.status === 'manual').map((check) => check.id)))]
   return {
     plotSqm: solution.site.areaSqm,
-    allowedSqm: solution.farCap.maxGfaSqm,
+    buildableSqm: design.metrics.gfaSqm,
+    designName: design.name,
+    cap: capFigures(design, solution, highRiseCost(solution, designs)),
     currency: region.currency,
     firstCost: firstCostRange(money),
     landValue: money.landValue,

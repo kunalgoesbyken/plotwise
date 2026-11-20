@@ -69,7 +69,7 @@ async function expectSharedLinkReopens(page: Page, label: string) {
 test('an old Bangkok link with no rules key opens unchanged, with the verified rules and no unverified label', async ({ page }) => {
   const errors = collectErrors(page)
   await openLink(page, 'bkk', lotAt([100.5686, 13.7648]))
-  await expect(summary(page)).toContainText('of floor area', { timeout: 30_000 })
+  await expect(summary(page)).toContainText(/legal cap/i, { timeout: 30_000 })
   await expect(summary(page)).not.toContainText('Unverified')
   await goTo(page, 'Plot')
   await expect(rulesPicker(page).getByRole('radio', { name: 'Bangkok' })).toBeChecked()

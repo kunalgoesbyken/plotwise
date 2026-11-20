@@ -13,7 +13,8 @@ import {
   type Prism,
 } from '@/geometry'
 import { mainRoad } from '@/plot/site'
-import { ASSUMPTIONS, footprintCapSqm, type Envelope, type Solution } from '@/solve'
+import type { Bound } from '@/rules'
+import { ASSUMPTIONS, footprintCapSqm, satisfies, type Envelope, type Solution } from '@/solve'
 import { programme } from './programme'
 
 export type TypologyId = 'podium-tower' | 'slab' | 'low-rise'
@@ -66,10 +67,17 @@ function envelopeOf(solution: Solution, kind: Envelope['kind']): Envelope | null
 
 const CAP_SEARCH_STEPS = 30
 
-function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number {
-  const maxGfaSqm = farCap.maxGfaSqm
-  return envelope.kind === 'highRise' || !limits.highRise ? maxGfaSqm : Math.min(maxGfaSqm, limits.highRise.extraLargeFromFloorAreaSqm.value)
+type BlockTarget = { readonly kind: 'cap'; readonly sqm: number } | { readonly kind: 'class'; readonly bound: Bound }
+
+function blockTarget({ limits, farCap }: Solution): BlockTarget {
+  const extraLarge = limits.highRise?.extraLargeFromFloorAreaSqm
+  return extraLarge && extraLarge.value < farCap.maxGfaSqm ? { kind: 'class', bound: extraLarge } : { kind: 'cap', sqm: farCap.maxGfaSqm }
 }
+
+const goalOf = (target: BlockTarget) => (target.kind === 'cap' ? target.sqm : target.bound.value)
+
+const reachableSqm = (solution: Solution, envelope: Envelope) =>
+  envelope.kind === 'highRise' ? solution.farCap.maxGfaSqm : goalOf(blockTarget(solution))
 
 const storeysOf = (envelope: Envelope) => Math.round(envelope.prisms[envelope.prisms.length - 1].topM / envelope.floorToFloorM)
 
@@ -103,17 +111,57 @@ export function stack(floors: readonly Floor[]): FloorPlates {
   return { footprint: levelled[0]?.polygons ?? [], footprintSqm: levelled[0]?.areaSqm ?? 0, floors: levelled, gfaSqm: builtCents / 100 }
 }
 
+const BLOCK_SEARCH_STEPS = 8
+const BLOCK_PRECISION_FLOOR_SHARE = 0.05
+
+const crosses = (target: BlockTarget, gfaSqm: number) => (target.kind === 'cap' ? gfaSqm >= target.sqm : satisfies(gfaSqm, target.bound))
+
+type Probe = { readonly share: number; readonly root: number }
+
+function nextShare(previous: Probe | null, current: Probe, aimSqm: number, gfaSqm: number): number {
+  if (!previous || previous.root === current.root) return current.share * Math.sqrt(aimSqm / gfaSqm)
+  return current.share - (current.root * (current.share - previous.share)) / (current.root - previous.root)
+}
+
+function blockPlates(platesAt: (share: number) => FloorPlates, target: BlockTarget, guess: number, precisionSqm: number): FloorPlates {
+  const goalSqm = goalOf(target)
+  const aimSqm = target.kind === 'cap' ? goalSqm + precisionSqm : goalSqm - precisionSqm / 2
+  let [lowShare, highShare, share] = [0, Infinity, guess]
+  let best: FloorPlates | null = null
+  let previous: Probe | null = null
+  for (let count = 1; ; count++) {
+    const plates = platesAt(share)
+    if (crosses(target, plates.gfaSqm)) {
+      if (target.kind === 'cap') return plates
+      highShare = share
+    } else {
+      best = best && best.gfaSqm >= plates.gfaSqm ? best : plates
+      lowShare = share
+      if (share >= 1 || (target.kind === 'class' && goalSqm - plates.gfaSqm <= precisionSqm)) return best
+    }
+    if (count === BLOCK_SEARCH_STEPS) return best ?? plates
+    const current = { share, root: Math.sqrt(plates.gfaSqm) - Math.sqrt(aimSqm) }
+    const next = nextShare(previous, current, aimSqm, plates.gfaSqm)
+    previous = current
+    share = next > lowShare && next < highShare ? Math.min(1, next) : (lowShare + Math.min(1, highShare)) / 2
+  }
+}
+
 function lowRise(solution: Solution): Massing | null {
   const envelope = envelopeOf(solution, 'ordinary')
   if (!envelope) return null
   const frame = roadFrame(solution)
   const ground = extentOf(frame, envelope.prisms[0].polygons)
   const [lengthM, depthM] = [ground.maxAlong - ground.minAlong, ground.maxIn - ground.minIn]
-  const half = Math.min(1, Math.sqrt(reachableSqm(solution, envelope) / storeysOf(envelope) / (lengthM * depthM))) / 2
+  const target = blockTarget(solution)
+  const goalSqm = goalOf(target)
   const middle: Vec2 = [(ground.minAlong + ground.maxAlong) / 2, (ground.minIn + ground.maxIn) / 2]
-  const block = centred(frame, middle, half * lengthM, half * depthM)
-  const limits = { footprint: [block], maxFootprintSqm: footprintCap(solution, envelope) }
-  return { envelope, plates: floorPlates(envelope.prisms, envelope.floorToFloorM, limits), shape: { form: 'block' } }
+  const maxFootprintSqm = footprintCap(solution, envelope)
+  const platesAt = (share: number) =>
+    floorPlates(envelope.prisms, envelope.floorToFloorM, { footprint: [centred(frame, middle, (share * lengthM) / 2, (share * depthM) / 2)], maxFootprintSqm })
+  const floorSqm = goalSqm / storeysOf(envelope)
+  const guess = Math.min(1, Math.sqrt(floorSqm / (lengthM * depthM)))
+  return { envelope, plates: blockPlates(platesAt, target, guess, floorSqm * BLOCK_PRECISION_FLOOR_SHARE), shape: { form: 'block' } }
 }
 
 function slab(solution: Solution): Massing | null {

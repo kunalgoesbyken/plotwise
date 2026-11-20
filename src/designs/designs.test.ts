@@ -21,8 +21,10 @@ import {
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { SQM_PER_SQFT } from '@/units/area'
-import { AREA_TOLERANCE_SQM, designs, type Design } from './designs'
+import { designs, type Design } from './designs'
 import { headline } from './headline'
+import { TYPOLOGIES } from './massing'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const pack = loadPack('bkk-y9')
 const readings = packInterpretations(pack)
@@ -74,6 +76,20 @@ describe('concept designs', () => {
     const { options } = designed(lot(50, 70, 16))
     const low = byId(options, 'low-rise')!
     expect(isHighRiseOrExtraLarge(pack, { heightM: low.metrics.heightM, storeys: low.metrics.storeys, floorAreaSqm: low.metrics.builtSqm })).toBe(false)
+  })
+
+  it('fills the ground of an envelope too small for the floor area target, instead of a block sized for storeys it cannot use', () => {
+    const lShape: Vec2[] = [
+      [0, 0],
+      [60, 0],
+      [60, 25],
+      [25, 25],
+      [25, 60],
+      [0, 60],
+    ]
+    const { solution, options } = designed(plotFromMetres(lShape, [{ edge: 0, widthM: 12 }], 'office'))
+    const [ground] = solution.envelopes.find((e) => e.kind === 'ordinary')!.prisms
+    expect(byId(options, 'low-rise')!.plates.floors[0].areaSqm).toBeCloseTo(totalArea(ground.polygons), 1)
   })
 
   it('adds the network part of the high-rise access rule as a manual check', () => {
@@ -298,6 +314,57 @@ describe('designs reach the floor area cap when the envelope has room', () => {
             assertHonestLimit(solution, d)
             assertNamedFromResult(solution, d)
           }
+        },
+      ),
+      { numRuns: 40 },
+    )
+  })
+})
+
+describe('the low-rise block', () => {
+  it('never loses floor area when more storeys are allowed, however the envelope compares with the cap', () => {
+    fc.assert(
+      fc.property(
+        fc.oneof(convexPolygon(10), starPolygon(16)),
+        fc.double({ min: 4, max: 40, noNaN: true }),
+        fc.double({ min: 0.5, max: 6, noNaN: true }),
+        fc.integer({ min: 1, max: 15 }),
+        fc.integer({ min: 1, max: 10 }),
+        (points: Vec2[], roadWidthM, maxFar, storeys, more) => {
+          const plot = (maxStoreys: number) => ({ ...plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]), limits: { maxFar, maxStoreys } })
+          const lower = byId(designedUnder('dxb-ap', plot(storeys)).options, 'low-rise')
+          const taller = byId(designedUnder('dxb-ap', plot(storeys + more)).options, 'low-rise')
+          if (!lower || !taller) return
+          expect(taller.metrics.gfaSqm).toBeGreaterThanOrEqual(lower.metrics.gfaSqm - AREA_TOLERANCE_SQM)
+        },
+      ),
+      { numRuns: 40 },
+    )
+  })
+
+  it('gets within a tenth of a floor of the extra-large threshold without reaching it, unless the whole ground cannot', () => {
+    const CENT_SQM = 0.01
+    const unbounded = (solution: Solution, highRise: Solution['limits']['highRise']): Solution => ({
+      ...solution,
+      limits: { ...solution.limits, highRise },
+      farCap: { ...solution.farCap, maxGfaSqm: Infinity },
+    })
+    fc.assert(
+      fc.property(
+        fc.oneof(convexPolygon(10), starPolygon(16)),
+        fc.double({ min: 4, max: 40, noNaN: true }),
+        fc.double({ min: 0.3, max: 1.5, noNaN: true }),
+        (points: Vec2[], roadWidthM, share) => {
+          const scaled = points.map(([x, y]): Vec2 => [4 * x, 4 * y])
+          const solution = solve(plotFromMetres(scaled, [{ edge: 0, widthM: roadWidthM }]), pack, readings)
+          const fullSqm = TYPOLOGIES['low-rise'](unbounded(solution, null))?.plates.gfaSqm
+          if (!fullSqm) return
+          const highRise = solution.limits.highRise!
+          const threshold = { ...highRise.extraLargeFromFloorAreaSqm, value: share * fullSqm }
+          const block = TYPOLOGIES['low-rise'](unbounded(solution, { ...highRise, extraLargeFromFloorAreaSqm: threshold }))!
+          const floors = block.plates.floors.length
+          expect(satisfies(block.plates.gfaSqm, threshold)).toBe(false)
+          expect(block.plates.gfaSqm).toBeGreaterThanOrEqual(Math.min(threshold.value, fullSqm) - threshold.value / floors / 10 - floors * CENT_SQM)
         },
       ),
       { numRuns: 40 },

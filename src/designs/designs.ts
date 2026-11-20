@@ -13,8 +13,7 @@ import {
 import { checksFor, type Check } from './checks'
 import { stack, TYPOLOGIES, type Form, type Massing, type Shape, type TypologyId } from './massing'
 import { programme, type Programme, type Yield } from './programme'
-
-export const AREA_TOLERANCE_SQM = 0.1
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const HALF_CENT_SQM = 0.005
 
@@ -62,9 +61,9 @@ const overCap = ({ farCap }: Solution, { programme: p }: Candidate) => p.farSqm 
 
 const reachesCap = ({ farCap }: Solution, { programme: p }: Candidate) => farCap.maxGfaSqm - p.farSqm <= AREA_TOLERANCE_SQM
 
-function fitsClass(solution: Solution, kind: EnvelopeKind, building: Building): boolean {
-  if (!isHighRiseOrExtraLarge(solution.pack, building)) return true
-  return kind === 'highRise' && highRiseAllows(solution.limits, building.floorAreaSqm)
+function fitsClass({ pack, limits }: Solution, kind: EnvelopeKind, building: Building): boolean {
+  if (!limits.highRise || !isHighRiseOrExtraLarge(pack, building)) return true
+  return kind === 'highRise' && highRiseAllows(limits, building.floorAreaSqm)
 }
 
 function fitsUse({ limits }: Solution, { conditionMeasure }: Programme): boolean {

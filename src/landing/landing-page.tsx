@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import { encodeRegion } from '@/editor/plot-url'
+import { CapLine } from '@/feasibility/cap-line'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { EXAMPLE_LINK, exampleFigures, OTHER_EXAMPLES } from './example'
+import { EXAMPLE_LINK, exampleFigures, OTHER_EXAMPLES, type ExampleFigures } from './example'
 import { FaqItem } from './faq'
 import { Footer } from './footer'
 import { HeroMedia } from './hero-media'
@@ -37,7 +38,8 @@ function Section({ id, title, lede, children }: { id?: string; title: string; le
   )
 }
 
-function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) {
+function Hero({ figures }: { figures: ExampleFigures }) {
+  const name = t('design.name', figures.designName)
   return (
     <section className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
       <div className="mx-auto flex max-w-4xl animate-enter flex-col items-center text-center">
@@ -61,11 +63,12 @@ function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) 
             <span className="text-muted-foreground">
               {DEFAULT_REGION.name} <span className="px-1 text-border">/</span> <span className="text-foreground">{t('landing.frame.place')}</span>
             </span>
-            <span className="text-muted-foreground">
-              {t('landing.frame.meta', { area: formatQuantity(plotSqm, 'sqm'), allowed: formatQuantity(allowedSqm, 'sqm') })}
+            <span className="flex flex-col sm:items-end sm:text-right">
+              <span>{t('landing.frame.meta', { area: formatQuantity(figures.plotSqm, 'sqm'), buildable: formatQuantity(figures.buildableSqm, 'sqm'), name })}</span>
+              <CapLine figures={figures.cap} unit="sqm" />
             </span>
           </figcaption>
-          <HeroMedia alt={t('landing.frame.alt')} />
+          <HeroMedia alt={t('landing.frame.alt', { name })} />
         </div>
       </figure>
     </section>
@@ -127,7 +130,7 @@ export function LandingPage() {
       <LegacyLinkForward />
       <Nav sections />
       <main>
-        <Hero plotSqm={figures.plotSqm} allowedSqm={figures.allowedSqm} />
+        <Hero figures={figures} />
         <Section id="how" title={t('landing.how.title')} lede={t('landing.how.lede')}>
           <Steps />
         </Section>

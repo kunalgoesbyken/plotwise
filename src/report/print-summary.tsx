@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
+import { CapLine, capFigures } from '@/feasibility/cap-line'
 import { checkLabel } from '@/feasibility/check-label'
 import type { Region } from '@/region/regions'
 import { tally } from '@/feasibility/checklist'
@@ -114,13 +115,13 @@ function useLinkAtPrint() {
 }
 
 export function PrintSummary() {
-  const { result, design } = useFeasibility()
+  const { result, design, highRiseCostSqm } = useFeasibility()
   const finance = useFinance()
   const { askingPrice } = useAssumptions()
   const region = useRegion()
   const href = useLinkAtPrint()
   if (result?.status !== 'ready' || !design || !finance) return null
-  const { site, farCap } = result.solution
+  const { site } = result.solution
   const area = region.areaUnit
   const toCheck = design.checks.filter((check) => check.status !== 'pass')
   const transcribed = Object.values(result.solution.pack.sources).filter((source) => source.textLayer === 'transcribedScan')
@@ -141,9 +142,9 @@ export function PrintSummary() {
         <PlotDrawing ring={site.ring} footprint={design.plates.footprint} />
         <div className="flex-1">
           <h2 className="text-sm font-semibold">{t('design.name', design.name)}</h2>
-          <p className="mb-2 text-xs text-muted-foreground">
-            {t('report.plot', { area: formatQuantity(site.areaSqm, area), allowed: formatQuantity(farCap.maxGfaSqm, area) })}
-          </p>
+          <p className="text-xl font-semibold">{t('report.buildable', { area: formatQuantity(design.metrics.gfaSqm, area) })}</p>
+          <CapLine figures={capFigures(design, result.solution, highRiseCostSqm)} unit={area} />
+          <p className="mb-2 text-xs text-muted-foreground">{t('report.plot', { area: formatQuantity(site.areaSqm, area) })}</p>
           <DesignFacts design={design} finance={finance} area={area} />
           {askingPrice !== null && <p className="mt-2 text-sm font-medium">{askingText(askingPrice, finance, design)}</p>}
         </div>

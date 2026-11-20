@@ -4,9 +4,7 @@ import { rangeText } from '@/finance/figures'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import type { exampleFigures } from './example'
-
-type Figures = ReturnType<typeof exampleFigures>
+import type { ExampleFigures } from './example'
 
 function Claim({ title, body, children }: { title: string; body: string; children: ReactNode }) {
   return (
@@ -20,7 +18,7 @@ function Claim({ title, body, children }: { title: string; body: string; childre
   )
 }
 
-function Cited({ cited }: Pick<Figures, 'cited'>) {
+function Cited({ cited }: Pick<ExampleFigures, 'cited'>) {
   return cited.map(({ id, cite, source }) => (
     <p key={id}>
       <span className="font-medium">{checkLabel(id, DEFAULT_REGION.areaTerms)}</span>
@@ -32,12 +30,12 @@ function Cited({ cited }: Pick<Figures, 'cited'>) {
   ))
 }
 
-function Unconfirmed({ toCheck }: Pick<Figures, 'toCheck'>) {
+function Unconfirmed({ toCheck }: Pick<ExampleFigures, 'toCheck'>) {
   if (toCheck.length === 0) return <p className="text-muted-foreground">{t('landing.check.none')}</p>
   return <p>{formatList(toCheck.map((id) => checkLabel(id, DEFAULT_REGION.areaTerms)))}</p>
 }
 
-function Ranges({ firstCost, landValue, currency }: Pick<Figures, 'firstCost' | 'landValue' | 'currency'>) {
+function Ranges({ firstCost, landValue, currency }: Pick<ExampleFigures, 'firstCost' | 'landValue' | 'currency'>) {
   return (
     <>
       <p>
@@ -52,14 +50,14 @@ function Ranges({ firstCost, landValue, currency }: Pick<Figures, 'firstCost' | 
   )
 }
 
-export function Proof({ figures }: { figures: Figures }) {
+export function Proof({ figures }: { figures: ExampleFigures }) {
   return (
     <ul className="divide-y border-y">
       <Claim title={t('landing.sources.title')} body={t('landing.sources.body')}>
         <Cited cited={figures.cited} />
       </Claim>
       <Claim title={t('landing.envelope.title')} body={t('landing.envelope.body')}>
-        <p>{t('landing.envelope.evidence', { allowed: formatQuantity(figures.allowedSqm, 'sqm'), area: formatQuantity(figures.plotSqm, 'sqm') })}</p>
+        <p>{t('landing.envelope.evidence', { buildable: formatQuantity(figures.buildableSqm, 'sqm'), area: formatQuantity(figures.plotSqm, 'sqm') })}</p>
       </Claim>
       <Claim title={t('landing.check.title')} body={t('landing.check.body')}>
         <Unconfirmed toCheck={figures.toCheck} />
