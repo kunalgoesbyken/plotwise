@@ -4,7 +4,7 @@ import { irregularPlot } from '@/geometry/arbitraries'
 import { BUILDING_TYPES } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { packInterpretations, solve } from '@/solve'
-import { plotFromMetres } from '@/solve/test-plots'
+import { plotFromMetres, rectangle } from '@/solve/test-plots'
 import { designs } from './designs'
 
 const RUNS = 40
@@ -44,4 +44,16 @@ describe('performance', () => {
       })
     }
   }
+
+  it('solves and designs a narrow Mumbai plot that never reaches its cap, trying every Table A height, in under 30 ms', () => {
+    const mumbai = loadPack('mum-suburbs-res')
+    const plot = plotFromMetres(rectangle(18, 60), [{ edge: 0, widthM: 30 }])
+    const buyAll = { mode: 'purchased', ratios: { premium: Infinity, transferableRights: Infinity, fungible: Infinity } } as const
+    const run = () => designs(solve(plot, mumbai, packInterpretations(mumbai), buyAll))
+    const solution = solve(plot, mumbai, packInterpretations(mumbai), buyAll)
+    expect(run().every((d) => d.metrics.gfaSqm < solution.farCap.maxGfaSqm)).toBe(true)
+    const ms = medianMs(run)
+    console.log(`narrow Mumbai plot, ${solution.holds.length} Table A heights, solve + designs: median ${ms.toFixed(2)} ms`)
+    expect(ms).toBeLessThan(30)
+  })
 })
