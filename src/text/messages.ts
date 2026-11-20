@@ -644,6 +644,9 @@ const en = {
   'asking.within': ({ asking }: { asking: string }) => `Asking ${asking} → within range.`,
   'asking.above': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} over.`,
   'asking.below': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} under.`,
+  'asking.invalid': ({ max }: { max: string }) => `Enter a price above zero, up to ${max}, or leave it blank.`,
+  'asking.unsupported': ({ asking }: { asking: string }) =>
+    `Asking ${asking} → too high: at these prices and costs this design supports no land value.`,
   'asking.unavailable': ({ asking }: { asking: string }) => `Asking ${asking} → no verdict until every money value is entered.`,
 
   'assumptions.title': 'Money assumptions',

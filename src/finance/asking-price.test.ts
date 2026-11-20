@@ -41,13 +41,24 @@ describe('askingVerdict', () => {
     expect(askingVerdict(200_000_000, null)).toEqual({ kind: 'unavailable' })
   })
 
-  it('is over when the land supports nothing, by the price plus what the land costs to take on', () => {
-    expect(askingVerdict(200_000_000, { low: -20_000_000, high: -5_000_000 })).toEqual({ kind: 'above', margin: 205_000_000 })
+  it('says the design supports no land value when even the high end is zero or less', () => {
+    expect(askingVerdict(200_000_000, { low: -20_000_000, high: -5_000_000 })).toEqual({ kind: 'unsupported' })
+    expect(askingVerdict(200_000_000, { low: -20_000_000, high: 0 })).toEqual({ kind: 'unsupported' })
+    expect(askingVerdict(200_000_000, { low: -20_000_000, high: -0 })).toEqual({ kind: 'unsupported' })
   })
 
-  it('places every price below, within or above the range, with a positive margin outside it', () => {
+  it('compares as usual once the high end is above zero, even when the low end is not', () => {
+    expect(askingVerdict(200_000_000, { low: -20_000_000, high: Number.MIN_VALUE })).toEqual({ kind: 'above', margin: 200_000_000 - Number.MIN_VALUE })
+    expect(askingVerdict(1, { low: -20_000_000, high: 5_000_000 })).toEqual({ kind: 'within' })
+  })
+
+  it('is unsupported for every price exactly when the high end is zero or less', () => {
+    fc.assert(fc.property(price, range, (asking, supported) => (askingVerdict(asking, supported).kind === 'unsupported') === supported.high <= 0))
+  })
+
+  it('places every price below, within or above a range that reaches above zero, with a positive margin outside it', () => {
     fc.assert(
-      fc.property(price, range, (asking, supported) => {
+      fc.property(price, range.filter(({ high }) => high > 0), (asking, supported) => {
         const verdict = askingVerdict(asking, supported)
         switch (verdict.kind) {
           case 'below':
@@ -56,6 +67,7 @@ describe('askingVerdict', () => {
             return asking > supported.high && verdict.margin === asking - supported.high && verdict.margin > 0
           case 'within':
             return asking >= supported.low && asking <= supported.high
+          case 'unsupported':
           case 'unavailable':
             return false
         }

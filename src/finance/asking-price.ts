@@ -11,10 +11,12 @@ export type Verdict =
   | { readonly kind: 'below'; readonly margin: number }
   | { readonly kind: 'within' }
   | { readonly kind: 'above'; readonly margin: number }
+  | { readonly kind: 'unsupported' }
   | { readonly kind: 'unavailable' }
 
 export function askingVerdict(asking: number, supported: Range | null): Verdict {
   if (!supported) return { kind: 'unavailable' }
+  if (supported.high <= 0) return { kind: 'unsupported' }
   if (asking < supported.low) return { kind: 'below', margin: supported.low - asking }
   if (asking > supported.high) return { kind: 'above', margin: asking - supported.high }
   return { kind: 'within' }

@@ -21,6 +21,8 @@ export function askingText(asking: number, { priced, region }: Pick<Finance, 'pr
       return t('asking.above', { asking: shown, margin: formatMoney(verdict.margin, region.currency) })
     case 'below':
       return t('asking.below', { asking: shown, margin: formatMoney(verdict.margin, region.currency) })
+    case 'unsupported':
+      return t('asking.unsupported', { asking: shown })
     case 'unavailable':
       return t('asking.unavailable', { asking: shown })
   }
