@@ -130,7 +130,7 @@ function AreaUnitToggle({ value, onChange }: { value: AreaUnit; onChange: (unit:
 
 function Limits({ region, fields }: { region: Region; fields: readonly PlotLimitField[] }) {
   const { draft } = useEditorState()
-  const [areaUnit, setAreaUnit] = useState(region.limitAreaUnit)
+  const [areaUnit, setAreaUnit] = useState(region.areaUnit)
   const terms = region.limitTerms
   return (
     <PanelSection title={t(`limits.title.${region.rules}`)} description={t(`limits.intro.${region.rules}`)}>

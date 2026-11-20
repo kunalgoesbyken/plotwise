@@ -134,7 +134,7 @@ for (const viewport of [DESKTOP, PHONE]) {
 }
 
 for (const viewport of [DESKTOP, PHONE]) {
-  test(`Dubai affection plan at ${viewport.width} px: values in sq ft and G+ floors, AED prices, unverified, share round-trip`, async ({ page }) => {
+  test(`Dubai affection plan at ${viewport.width} px: a GFA typed in sq ft, G+ floors, results and AED prices in m², unverified, share round-trip`, async ({ page }) => {
     await page.setViewportSize(viewport)
     const errors = collectErrors(page)
     const zoneRequests = watchZoneRequests(page)
@@ -149,8 +149,9 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect.poll(() => decodeURIComponent(page.url())).toContain('maxStoreys:5')
 
     await goTo(page, 'Results')
-    await expect(summary(page)).toContainText('32,291', { timeout: 30_000 })
-    await expect(summary(page)).toContainText('sq ft')
+    await expect(summary(page)).toContainText('3,000', { timeout: 30_000 })
+    await expect(summary(page)).toContainText('m²')
+    await expect(summary(page)).not.toContainText('sq ft')
     await expect(summary(page)).toContainText('Unverified: from your affection plan')
     expect(await designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ }).count()).toBeGreaterThanOrEqual(2)
 
@@ -158,10 +159,10 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(moneyPanel(page)).toContainText('Superstructure build rate, low and high')
     await expect(moneyPanel(page)).not.toContainText('high-rise')
     const land = moneyPanel(page).getByRole('region', { name: 'Land value' })
-    await expect(land.getByLabel('Sale price per sq ft of saleable area')).toHaveValue('')
-    await expect(land.getByText('AED per sq ft')).toBeVisible()
-    await land.getByLabel('Sale price per sq ft of saleable area').fill('1500')
-    await expect.poll(() => decodeURIComponent(page.url())).toContain('assume-dxb=salePrice.condo:16145')
+    await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('')
+    await expect(land.getByText('AED per m²')).toBeVisible()
+    await land.getByLabel('Sale price per m² of saleable area').fill('16000')
+    await expect.poll(() => decodeURIComponent(page.url())).toContain('assume-dxb=salePrice.condo:16000')
 
     expect(zoneRequests).toEqual([])
     await expectSharedLinkReopens(page, 'Unverified: from your affection plan')
@@ -184,7 +185,7 @@ test('a link with limits beyond any real plot is refused with a message, on ever
 
 const IMPORTS = [
   { region: 'custom', origin: [151.2093, -33.8688], label: 'Unverified: your own rules', area: 'm²', storeys: 'Maximum storeys' },
-  { region: 'dxb', origin: [55.2744, 25.1972], label: 'Unverified: from your affection plan', area: 'sq ft', storeys: 'Floors' },
+  { region: 'dxb', origin: [55.2744, 25.1972], label: 'Unverified: from your affection plan', area: 'm²', storeys: 'Floors' },
 ] as const
 
 for (const { region, origin, label, area, storeys } of IMPORTS) {

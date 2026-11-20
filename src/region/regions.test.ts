@@ -41,9 +41,9 @@ describe('regions', () => {
     expect(REGIONS.custom.mapStart.value.zoom).toBeLessThan(REGIONS.bkk.mapStart.value.zoom)
   })
 
-  it('shows Dubai in sq ft and AED, Bangkok in m² and baht, custom rules in m² with no currency', () => {
+  it('shows Dubai in m² and AED, Bangkok in m² and baht, custom rules in m² with no currency', () => {
     expect([REGIONS.bkk.areaUnit, MONEY_REGIONS.bkk.currency]).toEqual(['sqm', 'THB'])
-    expect([REGIONS.dxb.areaUnit, MONEY_REGIONS.dxb.currency]).toEqual(['sqft', 'AED'])
+    expect([REGIONS.dxb.areaUnit, MONEY_REGIONS.dxb.landUnit.name, MONEY_REGIONS.dxb.currency]).toEqual(['sqm', 'm²', 'AED'])
     expect([REGIONS.custom.areaUnit, MONEY_REGIONS.custom.currency]).toEqual(['sqm', null])
   })
 

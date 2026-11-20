@@ -26,14 +26,14 @@ async function open(page: Page, hash: string) {
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: READY_TIMEOUT })
 }
 
-test('a Dubai GFA is typed in m² by default, can be typed in sq ft, and the link keeps square metres', async ({ page }) => {
+test('a Dubai GFA is typed in m² by default, can be typed in sq ft, and the link and the results keep square metres', async ({ page }) => {
   await open(page, dubaiLink({ maxStoreys: 9 }))
   await goTo(page, 'Roads')
   await expect(areaUnit(page, 'm²')).toBeChecked()
   await expect(gfaRow(page)).toContainText('m²')
   await gfa(page).fill('3,000')
   await expect.poll(() => limitsInLink(page)).toBe('maxGfaSqm:3000;maxStoreys:9')
-  await expect(summary(page)).toContainText('32,292 sq ft', { timeout: READY_TIMEOUT })
+  await expect(summary(page)).toContainText('3,000 m²', { timeout: READY_TIMEOUT })
 
   await gfa(page).blur()
   await areaUnit(page, 'sq ft').click()
@@ -41,12 +41,12 @@ test('a Dubai GFA is typed in m² by default, can be typed in sq ft, and the lin
   await expect(gfaRow(page)).toContainText('sq ft')
   await gfa(page).fill('10,763.91')
   await expect.poll(() => Math.round(Number(limitsInLink(page)?.match(/maxGfaSqm:([\d.]+)/)?.[1]))).toBe(1000)
-  await expect(summary(page)).toContainText('10,764 sq ft', { timeout: READY_TIMEOUT })
+  await expect(summary(page)).toContainText('1,000 m²', { timeout: READY_TIMEOUT })
 })
 
 test('an old Dubai link with a GFA opens on the same square metres, shown in m²', async ({ page }) => {
   await open(page, dubaiLink({ maxGfaSqm: 3000, maxStoreys: 9 }))
-  await expect(summary(page)).toContainText('32,292 sq ft', { timeout: READY_TIMEOUT })
+  await expect(summary(page)).toContainText('3,000 m²', { timeout: READY_TIMEOUT })
   await goTo(page, 'Roads')
   await expect(gfa(page)).toHaveValue('3000')
   expect(limitsInLink(page)).toBe('maxGfaSqm:3000;maxStoreys:9')
@@ -88,5 +88,5 @@ test('a missing height shows one alert, as a button that opens the Roads step', 
   await expect(notice.getByRole('button')).toHaveCount(0)
   await plan(page).getByLabel('Floors').fill('8')
   await expect(alerts(page)).toHaveCount(0)
-  await expect(summary(page)).toContainText('78,091 sq ft', { timeout: READY_TIMEOUT })
+  await expect(summary(page)).toContainText('7,255 m²', { timeout: READY_TIMEOUT })
 })
