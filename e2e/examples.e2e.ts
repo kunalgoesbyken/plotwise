@@ -1,6 +1,9 @@
 import type { Page } from '@playwright/test'
+import { edgeName } from '../src/editor/map-features'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
+import { formatList } from '../src/text/format'
+import { t } from '../src/text/messages'
 import { mockApp } from './support/site'
 import { designsRegion, designTable, frontageWidth, goTo, moneyRegion, READY_TIMEOUT, rulesRegion, showTab, summary } from './support/app'
 import { expect, test } from './support/test'
@@ -73,6 +76,16 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
   await expect(frontageWidth(page, 'A–B')).toHaveAttribute('data-estimated', 'true')
   await expect(frontageWidth(page, 'B–C')).toHaveValue('5')
   await expect(page.getByText('Estimated from OpenStreetMap, check on site.')).toBeVisible()
+})
+
+test('the Mumbai example’s roads stay marked as estimated after a reload of its link', async ({ page }) => {
+  await openExample(page, 'mum')
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toBe(`#${encodeRegion('mum')}&${encodePlot(MUMBAI_EXAMPLE_PLOT)}`)
+  await page.reload()
+  await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
+  await showTab(page, 'Rules')
+  const edges = MUMBAI_EXAMPLE_PLOT.roads.map(({ edge }) => edgeName(edge, MUMBAI_EXAMPLE_PLOT.ring.length))
+  await expect(rulesRegion(page)).toContainText(t('rules.estimated-roads', { edges: formatList(edges) }))
 })
 
 test('the Mumbai example’s ASR stays the user’s once typed, and is not offered for another plot', async ({ page }) => {

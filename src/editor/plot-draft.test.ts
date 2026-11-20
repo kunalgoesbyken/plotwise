@@ -25,7 +25,7 @@ function apply(draft: Draft, ...actions: DraftAction[]) {
 }
 
 function loaded(p: Plot = plot) {
-  return apply(emptyDraft('condo'), { type: 'load', plot: p })
+  return apply(emptyDraft('condo'), { type: 'load', plot: p, roadsEstimated: false })
 }
 
 function drawn(points: readonly LngLat[]) {
@@ -133,7 +133,7 @@ describe('editing a closed plot', () => {
         [0, 1],
       ],
     }
-    expect(editDraft(emptyDraft('condo'), { type: 'load', plot: bowTie })).toEqual({ ok: false, reason: 'crossing' })
+    expect(editDraft(emptyDraft('condo'), { type: 'load', plot: bowTie, roadsEstimated: false })).toEqual({ ok: false, reason: 'crossing' })
   })
 
   it('moves a corner but refuses a move that makes edges cross', () => {
@@ -292,7 +292,7 @@ describe('editing a closed plot', () => {
       expect(editDraft(loaded(), { type: 'insert', edge: 1, at })).toEqual({ ok: false, reason: 'out-of-range' })
     }
     const wrapped: Plot = { ...plot, ring: plot.ring.map(([lng, lat]): [number, number] => [lng + 180, lat]) }
-    expect(editDraft(emptyDraft('condo'), { type: 'load', plot: wrapped })).toEqual({ ok: false, reason: 'out-of-range' })
+    expect(editDraft(emptyDraft('condo'), { type: 'load', plot: wrapped, roadsEstimated: false })).toEqual({ ok: false, reason: 'out-of-range' })
   })
 })
 

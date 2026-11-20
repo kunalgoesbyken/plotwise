@@ -33,7 +33,7 @@ export type DraftAction =
   | { type: 'estimate-near-station'; nearStation: boolean }
   | { type: 'set-limit'; field: PlotLimitField; value: number | undefined }
   | { type: 'clear' }
-  | { type: 'load'; plot: Plot }
+  | { type: 'load'; plot: Plot; roadsEstimated: boolean }
   | { type: 'load-example'; example: Pick<RegionExample, 'plot' | 'roadsEstimated'> }
   | { type: 'import'; ring: readonly LngLat[] }
 
@@ -197,7 +197,7 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
     case 'clear':
       return accept({ ...emptyDraft(draft.buildingType), limits: draft.limits })
     case 'load':
-      return fromPlot(action.plot, 'user', false)
+      return fromPlot(action.plot, 'user', action.roadsEstimated)
     case 'load-example':
       return fromPlot(action.example.plot, 'default', action.example.roadsEstimated)
     case 'import':

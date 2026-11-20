@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { localFrame } from '@/geo/projection'
+import { EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { Plot } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import type { Road as SiteRoad, Station } from '@/site/schema'
@@ -359,6 +360,16 @@ describe('Mumbai: building types and road widening', () => {
     const widened = run(mumbai, { type: 'load', plot }, widen(18))
     expect(reduceEditor(widened, { type: 'set-road-width', edge: 0, widthM: 15 }).plot?.roads).toEqual([{ edge: 0, widthM: 15, prescribedWidthM: 18 }])
     expect(reduceEditor(widened, { type: 'set-road-width', edge: 0, widthM: 18 }).plot?.roads).toEqual([{ edge: 0, widthM: 18 }])
+  })
+
+  it('keeps the example’s roads estimated when its link is reloaded, and only on the example site of the region shown', () => {
+    const estimated = ({ draft }: EditorState) => (draft.status === 'closed' ? draft.corners.flatMap(({ edge }) => (edge.road ? [edge.estimated] : [])) : [])
+    const reloaded = run(mumbai, { type: 'load', plot: MUMBAI_EXAMPLE_PLOT })
+    expect(estimated(reloaded)).toEqual(MUMBAI_EXAMPLE_PLOT.roads.map(() => true))
+    expect(reloaded.load?.source).toBe('link')
+    expect(estimated(run({ type: 'load', plot: MUMBAI_EXAMPLE_PLOT }))).toEqual(MUMBAI_EXAMPLE_PLOT.roads.map(() => false))
+    expect(estimated(run({ type: 'load', plot: EXAMPLE_PLOT }))).toEqual(EXAMPLE_PLOT.roads.map(() => false))
+    expect(estimated(run(mumbai, { type: 'load', plot }))).toEqual([false])
   })
 
   it('drops prescribed widths under rules that take no road widening, so no hidden value rides in the link', () => {
