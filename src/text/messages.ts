@@ -30,6 +30,10 @@ const en = {
   'landing.title': ({ city }: { city: string }) => `Plotwise · What a ${city} plot can hold`,
   'landing.description': ({ city }: { city: string }) =>
     `Draw a plot in ${city}. See the floor area the rules allow, designs in 3D, what is left to check and a rough first cost.`,
+  'app.title': ({ city }: { city: string }) => `Plotwise · ${city} plot feasibility`,
+  'app.description': ({ city }: { city: string }) =>
+    `Trace a plot in ${city} and see the floor area the rules allow, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
+  'share.image.alt': ({ city }: { city: string }) => `Plotwise: see what a ${city} plot can hold before you buy it`,
   'landing.nav.how': 'How it works',
   'landing.nav.faq': 'Questions',
   'landing.nav.code': 'Source',
