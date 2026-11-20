@@ -47,8 +47,8 @@ const en = {
     `Draw a plot in ${city}. See the floor area the rules allow, designs in 3D, what is left to check and a rough first cost.`,
   'landing.nav.label': 'Main',
   'app.title': 'Plotwise · Plot feasibility',
-  'app.description': ({ city }: { city: string }) =>
-    `Trace a plot in ${city}, in Dubai from its affection plan, or anywhere with your own rules, and see the floor area allowed, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
+  'app.description': ({ city, elsewhere }: { city: string; elsewhere: string }) =>
+    `Trace a plot in ${city}, or work from ${elsewhere}, and see the floor area allowed, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
   'app.error.title': 'This plot could not be shown',
   'app.error.body': 'Something in the plot or its link broke the page. Start a new plot, or try this one again.',
   'app.error.restart': 'Start a new plot',
@@ -59,8 +59,11 @@ const en = {
   'landing.nav.code': 'Source',
   'landing.open': 'Open the app',
   'landing.hero.title': 'See what a plot can hold before you buy it',
-  'landing.hero.lede': ({ city }: { city: string }) =>
-    `Draw a plot in ${city}. Plotwise reads the city plan and the building law for it, then shows the floor area you can build, up to three designs in 3D and a rough cost. In Dubai, enter the limits from the plot’s affection plan; anywhere else, enter your own rules.`,
+  'landing.hero.lede': ({ city, elsewhere }: { city: string; elsewhere: string }) =>
+    `Draw a plot in ${city}. Plotwise reads the city plan and the building law for it, then shows the floor area you can build, up to three designs in 3D and a rough cost. Elsewhere it works from ${elsewhere}.`,
+  'landing.from.draftPack': ({ name, plan }: { name: string; plan: string }) => `a draft of ${name}’s rules read from ${plan}`,
+  'landing.from.affectionPlan': ({ name }: Name) => `the limits on a ${name} plot’s affection plan`,
+  'landing.from.custom': 'your own rules for a plot anywhere',
   'landing.hero.example': 'Try the example plot',
   'landing.hero.draw': 'Draw your own',
   'landing.frame.place': 'Example plot',
@@ -92,10 +95,11 @@ const en = {
   'landing.money.land': 'Land value supported',
   'landing.missing.title': 'This page is not on the map',
   'landing.missing.body': 'The address may be mistyped, or the page may have moved. The app and the example plot are one click away.',
-  'landing.scope.title': 'One verified zone, and rules you enter anywhere else',
-  'landing.scope.body': ({ zone, city, authority }: { zone: string; city: string; authority: string }) =>
-    `Plotwise reads the law for one zone of the ${city} plan: ${zone}. In Dubai you enter the limits from the plot’s affection plan, and anywhere else your own rules; those results are always marked unverified. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
-  'landing.regions.dxb': 'Use a Dubai affection plan',
+  'landing.scope.title': 'One verified zone, and unverified rules elsewhere',
+  'landing.scope.body': ({ zone, city, authority, elsewhere }: { zone: string; city: string; authority: string; elsewhere: string }) =>
+    `Plotwise reads the law for one zone of the ${city} plan: ${zone}. Elsewhere it works from ${elsewhere}; those results are always marked unverified. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
+  'landing.regions.draftPack': ({ name }: Name) => `Try the ${name} draft`,
+  'landing.regions.affectionPlan': ({ name }: Name) => `Use a ${name} affection plan`,
   'landing.regions.custom': 'Enter your own rules',
   'landing.faq.title': 'Questions',
   'landing.faq.sources.q': 'Where do the rules come from?',
@@ -106,9 +110,9 @@ const en = {
     'Treat them as a first look. Sale prices follow Knight Frank average asking prices for the plot’s area, and the margin is a listed developer’s. Build rates, fees, holding and finance costs are Plotwise estimates with no published source for each line; the build cost is only cross-checked against a Bangkok quantity surveyor’s range. Each figure shows where it comes from, and you can change every one.',
   'landing.faq.share.q': 'Can I share a result?',
   'landing.faq.share.a': 'Yes. The link holds the plot, the roads, the building type and any assumption you changed. You can also print a one-page summary.',
-  'landing.faq.region.q': 'Does it work outside Bangkok?',
-  'landing.faq.region.a':
-    'Yes, with limits you enter. Pick Dubai to enter the values from the plot’s affection plan, or Custom rules to type the limits you know for a plot anywhere. Plotwise draws the envelope and the designs from them, shows areas and prices in the region’s units, and marks every such result unverified. Only Bangkok’s rules are read from the law and cited line by line.',
+  'landing.faq.region.q': ({ city }: { city: string }) => `Does it work outside ${city}?`,
+  'landing.faq.region.a': ({ city, elsewhere }: { city: string; elsewhere: string }) =>
+    `Yes. Plotwise also works from ${elsewhere}. It draws the envelope and the designs from them, shows areas and prices in the region’s units, and marks every result outside ${city} unverified. A draft is cited line by line like ${city}’s rules but leaves later amendments out, and limits you enter are only as good as the document they come from. Only ${city}’s rules are verified.`,
   'landing.footer.data': 'Map data © OpenStreetMap contributors. Rules from the published city plan and building law.',
 
   'verb.click': 'Click',
