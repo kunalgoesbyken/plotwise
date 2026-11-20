@@ -4,7 +4,7 @@ import type { Site } from '@/plot/site'
 import type { Cite, RulePack, SideRearOpenSpaces, SideRearRow } from '@/rules'
 import { inRange, satisfies } from './bound'
 import { mainRoad } from './envelope'
-import type { Setback } from './setbacks'
+import { NO_SETBACK, type Setback } from './setbacks'
 
 export type PlotClass = 'small' | 'large'
 
@@ -50,9 +50,10 @@ export function rowCites({ distance }: SideRearRow): Cite[] {
   return [distance.share, distance.minM, distance.maxM].flatMap((cited) => (cited ? [cited.cite] : []))
 }
 
-export function sideRearOpenSpace(limit: SideRearLimit, heightM: number): Setback {
+export function sideRearOpenSpace(limit: SideRearLimit | null, heightM: number): Setback {
+  if (!limit) return NO_SETBACK
   const row = limit.rows.find((r) => inRange(heightM, r.heightM)) ?? limit.rows[limit.rows.length - 1]
   return { distanceM: rowDistanceM(row, heightM), cites: [limit.appliesTo, ...rowCites(row)] }
 }
 
-export const sideRearCeilingM = ({ rows }: SideRearLimit) => rows[rows.length - 1].heightM.max?.value ?? Infinity
+export const sideRearCeilingM = (limit: SideRearLimit | null) => (limit ? (limit.rows[limit.rows.length - 1].heightM.max?.value ?? Infinity) : Infinity)

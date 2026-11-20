@@ -23,7 +23,6 @@ import {
   strictest,
   type Building,
   type OpenSpaceNeed,
-  type Setback,
   type Solution,
 } from '@/solve'
 import type { Programme } from './programme'
@@ -172,11 +171,6 @@ function openSpaceChecks(facts: DesignFacts): Check[] {
   ]
 }
 
-function boundaryRequired({ pack, limits }: Solution, building: Building, heightM: number): Setback {
-  const { sideRear } = limits
-  return strictest([boundarySetback(pack, building, 'boundary'), ...(sideRear ? [sideRearOpenSpace(sideRear, heightM)] : [])])
-}
-
 function setbackChecks({ solution, building, levels }: Context): Check[] {
   const { pack, site } = solution
   const nearest = (edge: number) => Math.min(...levels.map((level) => level.clearanceM[edge]))
@@ -190,7 +184,8 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   if (boundaries.length > 0) {
     const margins = boundaries.flatMap((e) =>
       levels.map((level) => {
-        const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : boundaryRequired(solution, building, level.topM)
+        const ordinary = strictest([boundarySetback(pack, building, 'boundary'), sideRearOpenSpace(solution.limits.sideRear, level.topM)])
+        const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : ordinary
         const actual = level.clearanceM[e.i]
         return { actual, required, margin: actual - required.distanceM }
       }),

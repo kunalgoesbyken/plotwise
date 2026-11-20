@@ -51,16 +51,15 @@ export function mainRoad({ edges }: Site): number {
 function baseSetbacks({ pack, readings, site, sideRear, floorToFloorM }: EnvelopeInput, building: Building): Setback[] {
   const { frontOpenSpace } = pack
   const front = frontOpenSpace && readings['front-open-space'] === 'always' ? mainRoad(site) : -1
-  const sideRearSpace = sideRear ? [sideRearOpenSpace(sideRear, floorToFloorM)] : []
+  const sideRearSpace = sideRearOpenSpace(sideRear, floorToFloorM)
   return site.edges.map((edge, i) => {
-    if (edge.roadWidthM === null) return strictest([boundarySetback(pack, building, 'boundary'), ...sideRearSpace])
+    if (edge.roadWidthM === null) return strictest([boundarySetback(pack, building, 'boundary'), sideRearSpace])
     const frontSpace = frontOpenSpace && i === front ? [frontOpenSpaceDepth(frontOpenSpace, building.storeys)] : []
     return strictest([roadSetback(pack, building, edge.roadWidthM), boundarySetback(pack, building, 'road'), ...frontSpace])
   })
 }
 
 function boundaryAt({ sideRear }: EnvelopeInput, setback: Setback, heightM: number): Setback {
-  if (!sideRear) return setback
   const open = sideRearOpenSpace(sideRear, heightM)
   return open.distanceM > setback.distanceM ? open : setback
 }
@@ -118,7 +117,7 @@ function roadHeightLimitM(input: EnvelopeInput): number {
 }
 
 function ceilingM(input: EnvelopeInput): number {
-  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input), input.sideRear ? sideRearCeilingM(input.sideRear) : Infinity)
+  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input), sideRearCeilingM(input.sideRear))
   return Number.isFinite(ceiling) ? ceiling : ASSUMPTIONS.unboundedHeightStoreys.value * input.floorToFloorM
 }
 
