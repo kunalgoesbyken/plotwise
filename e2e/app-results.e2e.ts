@@ -18,6 +18,7 @@ import { expect, test } from './support/test'
 const SALE_PRICE = '300000'
 const PRINTED_SALE_PRICE = '฿300K'
 const NARROWER_ROAD_M = '24'
+const READY_TIMEOUT = 30_000
 
 const salePrice = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value' }).getByLabel('Sale price per m² of saleable area')
 const landValue = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value' }).getByText(/supports land worth/)
@@ -59,7 +60,7 @@ for (const device of DEVICES)
 
       if (device.isPhone) await showTab(page, '3D')
       else await expect(page.getByRole('tab', { name: '3D', exact: true })).toBeHidden()
-      await expect(scene(page)).toBeVisible({ timeout: 30_000 })
+      await expect(scene(page)).toBeVisible({ timeout: READY_TIMEOUT })
       await expect(page.getByRole('application', { name: /3D view of the plot/ })).toBeVisible()
     })
 
@@ -106,13 +107,15 @@ for (const device of DEVICES)
       const opened = await context.newPage()
       await mockApp(opened)
       await opened.goto(page.url())
-      await opened.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
-      await expect(designTable(opened)).toBeAttached({ timeout: 30_000 })
-      await expect.poll(async () => (await readState(opened)).salePrice).toBe(SALE_PRICE)
+      await opened.locator('[data-map-ready="true"]').waitFor({ timeout: READY_TIMEOUT })
+      await expect(designTable(opened)).toBeAttached({ timeout: READY_TIMEOUT })
+      await showTab(opened, 'Money')
+      await expect.poll(async () => (await readState(opened)).salePrice, { timeout: READY_TIMEOUT }).toBe(SALE_PRICE)
       expect(await readState(opened)).toEqual(shared)
 
       await opened.reload()
-      await expect(designTable(opened)).toBeAttached({ timeout: 30_000 })
+      await expect(designTable(opened)).toBeAttached({ timeout: READY_TIMEOUT })
+      await showTab(opened, 'Money')
       expect(await readState(opened)).toEqual(shared)
     })
 
@@ -134,7 +137,7 @@ for (const device of DEVICES)
       await expect(page.getByRole('heading', { name: 'Assumptions used (estimated, editable)' })).toBeVisible()
       await expect(page.getByRole('heading', { name: 'Not passed yet' })).toBeVisible()
       await expect(page.getByText(PRINTED_SALE_PRICE)).toBeVisible()
-      await expect(page.getByText('Land value supported, estimated')).toBeVisible()
+      await expect(page.getByRole('article').getByText('Land value supported, estimated')).toBeVisible()
       await expect(page.getByRole('complementary', { name: 'Plot settings' })).toBeHidden()
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(device.width)
     })
