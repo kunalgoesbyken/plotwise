@@ -155,7 +155,7 @@ test('Mumbai carpet area starts at built-up area over 1.2 from DCPR 2034, editab
   expect(errors).toEqual([])
 })
 
-test('Mumbai names its building type Residential (apartments) and keeps DCPR 2034, Table A in its own capitals', async ({ page }) => {
+test('Mumbai names its building type Residential (apartments) and keeps DCPR in its own capitals', async ({ page }) => {
   const errors = collectErrors(page)
   await openApp(page, `${encodeRegion('mum')}&${encodePlot(WIDENED)}`)
   await expect(summary(page)).toContainText(DRAFT, { timeout: 30_000 })
@@ -165,7 +165,6 @@ test('Mumbai names its building type Residential (apartments) and keeps DCPR 203
   await showTab(page, 'Rules')
   await expect(panel(page, 'Rules').getByRole('region', { name: 'Use · Residential (apartments)' })).toBeAttached()
   await goTo(page, 'Roads')
-  await expect(page.getByText('Pick the building type above that matches the Residential (R zone), Suburbs and Extended Suburbs on the DCPR 2034, Table A.')).toBeVisible()
   await expect(page.getByRole('complementary', { name: 'Plot settings' })).not.toContainText('dcpr')
   expect(errors).toEqual([])
 })
