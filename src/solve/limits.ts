@@ -9,6 +9,7 @@ import { planHeight } from './height'
 import { posesQuestion, readingCites, readingSources, type Interpretations } from './interpretations'
 import { mainRoad } from './envelope'
 import { heightVsRoadMultiple, type HeightVsRoad } from './setbacks'
+import { sideRearLimit, type SideRearLimit } from './side-rear'
 
 export type Sourced = { readonly value: number; readonly cites: readonly Cite[] }
 
@@ -60,6 +61,7 @@ export type Limits = FarLimits & {
     readonly minimums: readonly OpenSpaceMinimum[]
   }
   readonly height: { readonly planLimitM: number | null; readonly cites: readonly Cite[]; readonly vsRoadMultiple: HeightVsRoad | null }
+  readonly sideRear: SideRearLimit | null
   readonly coverage: CoverageLimit | null
   readonly use: UseLimit
   readonly highRise: HighRiseLimits | null
@@ -176,6 +178,7 @@ export function limitsFor(input: LimitsInput): Limits {
     classes,
     openSpace: openSpaceLimits(input, classes.residential),
     height: { planLimitM: plan.limitM, cites: plan.cites, vsRoadMultiple: heightVsRoadMultiple(pack) },
+    sideRear: sideRearLimit(pack, site),
     coverage: coverageLimit(pack, plotLimits, site.areaSqm),
     use: conditionLimit(input),
     highRise: highRiseLimits(input),

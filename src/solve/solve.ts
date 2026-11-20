@@ -47,7 +47,7 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     purchase: purchaseRatios(far),
     inLieu,
   })
-  const input = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM }
+  const input = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM, sideRear: limits.sideRear }
   const highRisePermitted = limits.highRise?.access.some((band) => band.qualifies) ?? false
   const envelopes = [ordinaryEnvelope(input), ...(highRisePermitted ? [highRiseEnvelope(input)] : [])]
   const entersValues = plotLimitFields(pack).length > 0

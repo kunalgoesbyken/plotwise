@@ -20,6 +20,15 @@
       "kind": "consolidated",
       "textLayer": "readable",
       "language": "en"
+    },
+    "dcpr2034-mcgm-p288-table-a": {
+      "name": "DCPR 2034, Table A (side and rear open spaces), transcribed from the scanned page",
+      "title": "Greater Mumbai Development Plan-2034, Development Control and Promotion Regulations-2034, Reg 41(2)(i)(a) Table A, PDF page 288",
+      "url": "https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf",
+      "published": "Maharashtra Government Gazette, UDD notification No. TPB. 4317/629/CR-118/2017/DP/UD-11, 8 May 2018; MCGM-published sanctioned text. Later modifications are not in this file",
+      "kind": "consolidated",
+      "textLayer": "transcribedScan",
+      "language": "en"
     }
   },
   "buildingTypes": [
@@ -886,19 +895,6 @@
     }
   ],
   "boundarySetbacks": [],
-  "plotSetbacks": {
-    "kind": "plotSpecific",
-    "notes": [
-      {
-        "source": "dcpr2034-mcgm",
-        "clause": "Reg 41(2)(i)(a)",
-        "page": 288,
-        "line": 30,
-        "quote": "(a)The open spaces on all sides except the front side of a building shall be as follows:"
-      }
-    ],
-    "edges": "boundary"
-  },
   "lowRiseOpenSpaces": {
     "appliesTo": {
       "source": "dcpr2034-mcgm",
@@ -1180,6 +1176,294 @@
       }
     ]
   },
+  "sideRearOpenSpaces": {
+    "appliesTo": {
+      "source": "dcpr2034-mcgm",
+      "clause": "Reg 41(2)(i)(a)",
+      "page": 288,
+      "line": 30,
+      "quote": "(a)The open spaces on all sides except the front side of a building shall be as follows:"
+    },
+    "smallPlot": {
+      "areaSqm": {
+        "value": 1000,
+        "cmp": "lte",
+        "cite": {
+          "source": "dcpr2034-mcgm-p288-table-a",
+          "clause": "Reg 41(2)(i)(a) Table A",
+          "page": 288,
+          "line": 3,
+          "quote": "Plot column A: Plot up to 1000 sq. m or where average width/depth of plot is less than 20 m"
+        }
+      },
+      "averageWidthOrDepthM": {
+        "value": 20,
+        "cmp": "lt",
+        "cite": {
+          "source": "dcpr2034-mcgm-p288-table-a",
+          "clause": "Reg 41(2)(i)(a) Table A",
+          "page": 288,
+          "line": 3,
+          "quote": "Plot column A: Plot up to 1000 sq. m or where average width/depth of plot is less than 20 m"
+        }
+      }
+    },
+    "smallPlotRows": [
+      {
+        "heightM": {
+          "max": {
+            "value": 32,
+            "cmp": "lte",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 7,
+              "quote": "1 | Ht. of Building (H) | Up to 32 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "value": 0.2,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 8,
+              "quote": "1 | A | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/5"
+            }
+          },
+          "minM": {
+            "value": 3.6,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 8,
+              "quote": "1 | A | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/5"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "value": 32,
+            "cmp": "gt",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 13,
+              "quote": "2 | Ht. of Building (H) | More than 32 m & up to 70 m"
+            }
+          },
+          "max": {
+            "value": 70,
+            "cmp": "lte",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 13,
+              "quote": "2 | Ht. of Building (H) | More than 32 m & up to 70 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "value": 0.2,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 14,
+              "quote": "2 | A | Light & ventilation | H/5 subject to maximum 12 m"
+            }
+          },
+          "maxM": {
+            "value": 12,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 14,
+              "quote": "2 | A | Light & ventilation | H/5 subject to maximum 12 m"
+            }
+          }
+        }
+      }
+    ],
+    "largePlotRows": [
+      {
+        "heightM": {
+          "max": {
+            "value": 32,
+            "cmp": "lte",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 7,
+              "quote": "1 | Ht. of Building (H) | Up to 32 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "value": 0.25,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 10,
+              "quote": "1 | B | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/4"
+            }
+          },
+          "minM": {
+            "value": 3.6,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 10,
+              "quote": "1 | B | Light & ventilation | Min - 3.6in case of Residential building & 4.5 m in case of commercial building subject to H/4"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "value": 32,
+            "cmp": "gt",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 13,
+              "quote": "2 | Ht. of Building (H) | More than 32 m & up to 70 m"
+            }
+          },
+          "max": {
+            "value": 70,
+            "cmp": "lte",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 13,
+              "quote": "2 | Ht. of Building (H) | More than 32 m & up to 70 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "value": 0.25,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 16,
+              "quote": "2 | B | Light & ventilation | H/4 subject to maximum 12 m"
+            }
+          },
+          "maxM": {
+            "value": 12,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 16,
+              "quote": "2 | B | Light & ventilation | H/4 subject to maximum 12 m"
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "value": 70,
+            "cmp": "gt",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 19,
+              "quote": "3 | Ht. of Building (H) | More than 70m & up to 120 m"
+            }
+          },
+          "max": {
+            "value": 120,
+            "cmp": "lte",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 19,
+              "quote": "3 | Ht. of Building (H) | More than 70m & up to 120 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "shareOfHeight",
+          "share": {
+            "value": 0.25,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 21,
+              "quote": "3 | B | Light & ventilation | H/4 or 16 m Max."
+            }
+          },
+          "maxM": {
+            "value": 16,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 21,
+              "quote": "3 | B | Light & ventilation | H/4 or 16 m Max."
+            }
+          }
+        }
+      },
+      {
+        "heightM": {
+          "min": {
+            "value": 120,
+            "cmp": "gt",
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 24,
+              "quote": "4 | Ht. of Building (H) | More than 120 m"
+            }
+          }
+        },
+        "distance": {
+          "kind": "fixed",
+          "distanceM": {
+            "value": 20,
+            "cite": {
+              "source": "dcpr2034-mcgm-p288-table-a",
+              "clause": "Reg 41(2)(i)(a) Table A",
+              "page": 288,
+              "line": 26,
+              "quote": "4 | B | Light & ventilation | 20 m"
+            }
+          }
+        }
+      }
+    ]
+  },
   "parking": [
     {
       "scope": "mumbaiTable21",
@@ -1387,14 +1671,9 @@
       "why": "The only machine-readable official text is the 2018 sanctioned text. The 2024 notification PDF has a garbled legacy-font text layer, and Table 12 Note 2 lets the Government change the premium and TDR split. This pack is a draft as sanctioned in 2018."
     },
     {
-      "id": "table-a-side-rear",
-      "what": "Side and rear open spaces by building height and plot size (Reg 41(2)(i)(a), Table A, p288)",
-      "why": "The text layer merges and dashes the cells of Table A, so which cell holds which value cannot be read. The side and rear open space is entered for each plot."
-    },
-    {
       "id": "table-a-tower-rules",
-      "what": "Tower open spaces and step-backs above 32 m, 70 m and 120 m (p289) and the dead-wall column of Table A",
-      "why": "Part of the unreadable Table A layout; not applied."
+      "what": "Tower open spaces and step-backs above 32 m, 70 m and 120 m (Reg 41(2)(c), p289), the dead-wall column of Table A and its 4.5 m minimum for commercial buildings",
+      "why": "Plotwise applies the light-and-ventilation column of Table A for a residential building on every side but the front, at the height of each floor, as a step-back would; it assumes every side has windows, so the smaller dead-wall open space is never used. The tower rules are not applied."
     },
     {
       "id": "height-exemptions",
@@ -1450,6 +1729,11 @@
       "id": "low-rise-scope",
       "what": "Whether Table No 17 replaces Table A and Table 18 A or only relaxes them",
       "why": "Reg 41(3)(a) says the open spaces may be relaxed to Table No 17; Plotwise applies it to the checks of a building of ground and one upper floor on a plot it covers, and keeps the envelope on the stricter open spaces. The rear is taken as the boundary edge farthest from the main road."
+    },
+    {
+      "id": "table-a-plot-class",
+      "what": "How Table A measures the average width and depth of a plot, and a plot of more than 1000 m² whose average width or depth is exactly 20 m",
+      "why": "DCPR 2034 does not define them. Plotwise measures the plot left after any road-widening strip, along and across its main road (area over its depth, area over its width), and puts a plot that is not up to 1000 m² and not under 20 m wide or deep in the larger plot class, whose open spaces are larger. Table A leaves buildings above 70 m on the smaller plot class blank, so Plotwise draws none."
     }
   ]
 }

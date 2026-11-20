@@ -18,10 +18,12 @@ import {
   ratioOpenSpace,
   roadSetback,
   satisfies,
+  sideRearOpenSpace,
   streetHeightLimitM,
   strictest,
   type Building,
   type OpenSpaceNeed,
+  type Setback,
   type Solution,
 } from '@/solve'
 import type { Programme } from './programme'
@@ -170,6 +172,11 @@ function openSpaceChecks(facts: DesignFacts): Check[] {
   ]
 }
 
+function boundaryRequired({ pack, limits }: Solution, building: Building, heightM: number): Setback {
+  const { sideRear } = limits
+  return strictest([boundarySetback(pack, building, 'boundary'), ...(sideRear ? [sideRearOpenSpace(sideRear, heightM)] : [])])
+}
+
 function setbackChecks({ solution, building, levels }: Context): Check[] {
   const { pack, site } = solution
   const nearest = (edge: number) => Math.min(...levels.map((level) => level.clearanceM[edge]))
@@ -181,11 +188,13 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const plotSetback = (id: EnteredCheckId, check: Check) => (lowRise ? [check] : unlessUnentered(id, check, solution, pack.plotSetbacks?.notes ?? []))
   const rear = rearEdge(site)
   if (boundaries.length > 0) {
-    const margins = boundaries.map((e) => {
-      const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : boundarySetback(pack, building, 'boundary')
-      const actual = nearest(e.i)
-      return { actual, required, margin: actual - required.distanceM }
-    })
+    const margins = boundaries.flatMap((e) =>
+      levels.map((level) => {
+        const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : boundaryRequired(solution, building, level.topM)
+        const actual = level.clearanceM[e.i]
+        return { actual, required, margin: actual - required.distanceM }
+      }),
+    )
     const worst = margins.reduce((least, m) => (m.margin < least.margin ? m : least))
     checks.push(...plotSetback('boundary-setback', measured('boundary-setback', worst.actual, 'gte', worst.required.distanceM, 'm', worst.required.cites)))
   }

@@ -15,6 +15,7 @@ import {
   strictest,
   type Setback,
 } from './setbacks'
+import { sideRearCeilingM, sideRearOpenSpace, type SideRearLimit } from './side-rear'
 
 const STOREY_TOLERANCE = 1e-9
 
@@ -35,6 +36,7 @@ export type EnvelopeInput = {
   readonly site: Site
   readonly floorToFloorM: number
   readonly planLimitM: number | null
+  readonly sideRear: SideRearLimit | null
 }
 
 export function mainRoad({ edges }: Site): number {
@@ -46,20 +48,27 @@ export function mainRoad({ edges }: Site): number {
   }, 0)
 }
 
-function baseSetbacks({ pack, readings, site }: EnvelopeInput, building: Building): Setback[] {
+function baseSetbacks({ pack, readings, site, sideRear, floorToFloorM }: EnvelopeInput, building: Building): Setback[] {
   const { frontOpenSpace } = pack
   const front = frontOpenSpace && readings['front-open-space'] === 'always' ? mainRoad(site) : -1
+  const sideRearSpace = sideRear ? [sideRearOpenSpace(sideRear, floorToFloorM)] : []
   return site.edges.map((edge, i) => {
-    if (edge.roadWidthM === null) return boundarySetback(pack, building, 'boundary')
+    if (edge.roadWidthM === null) return strictest([boundarySetback(pack, building, 'boundary'), ...sideRearSpace])
     const frontSpace = frontOpenSpace && i === front ? [frontOpenSpaceDepth(frontOpenSpace, building.storeys)] : []
     return strictest([roadSetback(pack, building, edge.roadWidthM), boundarySetback(pack, building, 'road'), ...frontSpace])
   })
 }
 
-function setbacksAt({ pack, site }: EnvelopeInput, base: readonly Setback[], heightM: number): Setback[] {
+function boundaryAt({ sideRear }: EnvelopeInput, setback: Setback, heightM: number): Setback {
+  if (!sideRear) return setback
+  const open = sideRearOpenSpace(sideRear, heightM)
+  return open.distanceM > setback.distanceM ? open : setback
+}
+
+function setbacksAt(input: EnvelopeInput, base: readonly Setback[], heightM: number): Setback[] {
   return base.map((setback, i) => {
-    const widthM = site.edges[i].roadWidthM
-    return widthM === null ? setback : strictest([setback, heightVsRoadSetback(pack, widthM, heightM)])
+    const widthM = input.site.edges[i].roadWidthM
+    return widthM === null ? boundaryAt(input, setback, heightM) : strictest([setback, heightVsRoadSetback(input.pack, widthM, heightM)])
   })
 }
 
@@ -109,7 +118,7 @@ function roadHeightLimitM(input: EnvelopeInput): number {
 }
 
 function ceilingM(input: EnvelopeInput): number {
-  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input))
+  const ceiling = Math.min(input.planLimitM ?? Infinity, roadHeightLimitM(input), input.sideRear ? sideRearCeilingM(input.sideRear) : Infinity)
   return Number.isFinite(ceiling) ? ceiling : ASSUMPTIONS.unboundedHeightStoreys.value * input.floorToFloorM
 }
 

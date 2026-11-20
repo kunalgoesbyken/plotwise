@@ -162,16 +162,16 @@ describe('a per-plot setback or open space left blank', () => {
     }
   })
 
-  it('leaves Mumbai side and rear open space to check, citing the table it comes from', () => {
-    const solution = solve(mumbaiLot({}), MUMBAI, packInterpretations(MUMBAI))
-    expect(designs(solution).length).toBeGreaterThan(0)
-    for (const design of designs(solution)) {
-      expect(checkOf(design, 'boundary-setback')).toEqual({
-        id: 'boundary-setback',
-        status: 'manual',
-        unentered: 'boundarySetbackM',
-        cites: MUMBAI.plotSetbacks!.notes,
-      })
+  it('checks Mumbai side and rear open space against Table A, asks for nothing and ignores a value an old link carries', () => {
+    expect(plotLimitFields(MUMBAI)).toEqual([])
+    const fresh = designs(solve(mumbaiLot({}), MUMBAI, packInterpretations(MUMBAI)))
+    const oldLink = designs(solve(mumbaiLot({ boundarySetbackM: 6 }), MUMBAI, packInterpretations(MUMBAI)))
+    expect(fresh.length).toBeGreaterThan(0)
+    expect(oldLink.map((design) => design.checks)).toEqual(fresh.map((design) => design.checks))
+    for (const design of fresh) {
+      const check = checkOf(design, 'boundary-setback')
+      expect(check).toMatchObject({ status: 'pass', cmp: 'gte' })
+      expect(check?.cites.some((cite) => isSourceCite(cite) && cite.source === 'dcpr2034-mcgm-p288-table-a')).toBe(true)
       expect(checkOf(design, 'road-setback')).toMatchObject({ status: 'pass' })
     }
   })
@@ -182,9 +182,6 @@ describe('a per-plot setback or open space left blank', () => {
       expect(checkOf(design, 'boundary-setback')).toMatchObject({ status: 'pass', limit: 3, cites: [enteredCite('boundarySetbackM')] })
       expect(checkOf(design, 'road-setback')).toMatchObject({ status: 'pass', limit: 4, cites: [enteredCite('roadSetbackM')] })
       expect(checkOf(design, 'open-space-minimum')).toMatchObject({ status: 'pass' })
-    }
-    for (const design of designs(solve(mumbaiLot({ boundarySetbackM: 6 }), MUMBAI, packInterpretations(MUMBAI)))) {
-      expect(checkOf(design, 'boundary-setback')).toMatchObject({ status: 'pass', limit: 6 })
     }
   })
 

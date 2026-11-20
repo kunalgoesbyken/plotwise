@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { BUILDING_TYPES } from '@/plot/plot'
 import { containsEntered, CiteSchema, CitedSchema } from './cite'
 import { PlotSetbacksSchema, PlotSpecificSchema } from './entered'
-import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, LowRiseOpenSpacesSchema, RoadSetbackSchema } from './setbacks'
+import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, LowRiseOpenSpacesSchema, RoadSetbackSchema, SideRearOpenSpacesSchema } from './setbacks'
 import { BuildingClassesSchema, ClassificationsSchema, HighRiseSchema, UseConditionsSchema } from './classes'
 import { FarBonusBlockSchema, FarPurchaseSchema, FarRuleSchema } from './far'
 import { CoverageSchema, ReservationSchema } from './footprint'
@@ -17,7 +17,7 @@ const SourceSchema = z.object({
   url: z.url(),
   published: z.string().min(1),
   kind: z.enum(['gazette', 'consolidated']),
-  textLayer: z.enum(['readable', 'garbled']),
+  textLayer: z.enum(['readable', 'garbled', 'transcribedScan']),
   language: z.enum(['th', 'en']),
 })
 
@@ -46,6 +46,7 @@ export const RulePackSchema = z
     blindWall: BlindWallSchema.optional(),
     frontOpenSpace: FrontOpenSpaceSchema.optional(),
     lowRiseOpenSpaces: LowRiseOpenSpacesSchema.optional(),
+    sideRearOpenSpaces: SideRearOpenSpacesSchema.optional(),
     useConditions: UseConditionsSchema.optional(),
     buildingClasses: BuildingClassesSchema.optional(),
     classification: ClassificationsSchema.optional(),
