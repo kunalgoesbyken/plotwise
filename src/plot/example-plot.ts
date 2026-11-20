@@ -35,7 +35,7 @@ export const MUMBAI_EXAMPLE_PLOT: Plot = {
 export const MUMBAI_EXAMPLE_LAND_RATE: Assumption = {
   value: 64_240,
   source:
-    'Department of Registration and Stamps, Government of Maharashtra, Annual Statement of Rates (Ready Reckoner) 2026-27, Mumbai Suburban district, village Mulund (W), zone 123/567: "एल.बी.एस.मार्ग व पुरूषोत्तम खेराज रोड या मधील विभाग क्रमांक 123/568 मधील मिळकती सोडून उर्वरीत सर्व मिळकती" (all properties between L.B.S. Marg and Purushottam Kheraj Road except those of zone 123/568), open land ₹64,240 per m², https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains, fetched 2026-11-20',
+    'Department of Registration and Stamps, Government of Maharashtra, Annual Statement of Rates (Ready Reckoner) 2026-27, Mumbai Suburban district, village Mulund (W), open land ₹64,240 per m² in zone 123/567. The zone is matched by position and not confirmed for this plot: on OpenStreetMap the plot lies between L.B.S. Marg and Purushottam Kheraj Road, which zone 123/567 covers: "एल.बी.एस.मार्ग व पुरूषोत्तम खेराज रोड या मधील विभाग क्रमांक 123/568 मधील मिळकती सोडून उर्वरीत सर्व मिळकती" (all properties between L.B.S. Marg and Purushottam Kheraj Road except those of zone 123/568); if it lies in zone 123/568 the rate is ₹63,400. https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains, fetched 2026-11-20',
 }
 
 export const DUBAI_EXAMPLE_PLOT: Plot = {

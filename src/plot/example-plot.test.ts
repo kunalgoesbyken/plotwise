@@ -49,6 +49,7 @@ describe('example plots', () => {
     expect(REGIONS.mum.example.landRate).toBe(MUMBAI_EXAMPLE_LAND_RATE)
     expect(MUMBAI_EXAMPLE_LAND_RATE.value).toBeGreaterThan(0)
     expect(MUMBAI_EXAMPLE_LAND_RATE.source).toContain('easr.igrmaharashtra.gov.in')
+    expect(MUMBAI_EXAMPLE_LAND_RATE.source).toContain('matched by position')
   })
 
   it('gives Dubai a plot whose affection plan allows FAR 3.5 and G+8, with every limit the plan states entered, so nothing is left to check', () => {
