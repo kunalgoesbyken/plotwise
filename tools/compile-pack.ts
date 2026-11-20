@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { SourceCite } from '../src/rules/cite'
 import { RulePackSchema, type RulePack } from '../src/rules/pack'
+import { negate } from '../src/solve/bound'
 import { lineAt, rawToken, readSource, type Pages } from './pages'
 import { COMPARATOR_PHRASES, parseComparator, parseQuantity, thaiSkeleton, unitToMetres, type Comparator } from './quantity'
 
@@ -12,6 +13,7 @@ export type CompileErrorReason =
   | 'unparseable'
   | 'op_missing'
   | 'op_mismatch'
+  | 'cell_broken'
   | 'term_present'
   | 'term_unknown'
   | 'schema'
@@ -27,7 +29,14 @@ const RefSchema = z.object({
   clause: z.string().min(1),
 })
 const ValueRefSchema = RefSchema.extend({ unit: z.string().min(1).optional(), unitLine: z.int().positive().optional() })
-const BoundRefSchema = ValueRefSchema.extend({ op: z.string().min(1), opLine: z.int().positive().optional() })
+const CELL_MAX_LINE_GAP = 2
+const FragmentSchema = z.object({ line: z.int().positive(), text: z.string().min(1) })
+const BoundRefSchema = ValueRefSchema.extend({
+  op: z.string().min(1),
+  opLine: z.int().positive().optional(),
+  cell: z.array(FragmentSchema).min(2).optional(),
+  negate: z.literal(true).optional(),
+})
 const AbsentRefSchema = z.object({
   src: z.string().min(1),
   clause: z.string().min(1),
@@ -38,6 +47,7 @@ const AbsentRefSchema = z.object({
 
 type Ref = z.infer<typeof RefSchema>
 type ValueRef = z.infer<typeof ValueRefSchema>
+type BoundRef = z.infer<typeof BoundRefSchema>
 type Sources = Readonly<Record<string, Pages>>
 
 class RefError extends Error {
@@ -98,30 +108,55 @@ function resolveNum(sources: Sources, raw: unknown) {
   return { value: readValue(sources, ref), cite: citeToken(sources, ref) }
 }
 
-function occurrences(skeletonText: string, phrase: string, token: string): number {
-  const needle = thaiSkeleton(`${phrase}${token}`).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+type Phrase = (typeof COMPARATOR_PHRASES)[number]
+
+const phraseNeedle = ([phrase, , side]: Phrase, token: string, unit: string) => (side === 'before' ? `${phrase}${token}` : `${token}${unit}${phrase}`)
+
+function occurrences(skeletonText: string, needleText: string): number {
+  const needle = thaiSkeleton(needleText).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const notInsideNumber = /\d$/.test(needle) ? '(?![\\d.])' : ''
   return [...skeletonText.matchAll(new RegExp(`${needle}${notInsideNumber}`, 'g'))].length
 }
 
-function comparatorsBefore(text: string, token: string): Comparator[] {
+const isInside = (shorter: Phrase, longer: Phrase) =>
+  longer[0] !== shorter[0] &&
+  longer[2] === shorter[2] &&
+  (shorter[2] === 'before' ? thaiSkeleton(longer[0]).endsWith(thaiSkeleton(shorter[0])) : thaiSkeleton(longer[0]).startsWith(thaiSkeleton(shorter[0])))
+
+function comparatorsAround(text: string, token: string, unit: string): Comparator[] {
   const skeletonText = thaiSkeleton(text)
-  return COMPARATOR_PHRASES.flatMap(([phrase, cmp]) => {
-    const longer = COMPARATOR_PHRASES.filter(([other]) => other !== phrase && thaiSkeleton(other).endsWith(thaiSkeleton(phrase)))
-    const insideLonger = longer.reduce((sum, [other]) => sum + occurrences(skeletonText, other, token), 0)
-    return occurrences(skeletonText, phrase, token) > insideLonger ? [cmp] : []
+  return COMPARATOR_PHRASES.flatMap((phrase) => {
+    const insideLonger = COMPARATOR_PHRASES.filter((other) => isInside(phrase, other)).reduce(
+      (sum, other) => sum + occurrences(skeletonText, phraseNeedle(other, token, unit)),
+      0,
+    )
+    return occurrences(skeletonText, phraseNeedle(phrase, token, unit)) > insideLonger ? [phrase[1]] : []
   })
+}
+
+function cellText(sources: Sources, ref: BoundRef, cell: NonNullable<BoundRef['cell']>): string {
+  const lines = cell.map((fragment) => fragment.line)
+  if (lines.some((line, i) => i > 0 && (line <= lines[i - 1] || line - lines[i - 1] > CELL_MAX_LINE_GAP))) {
+    throw new RefError('cell_broken', `cell lines ${lines.join(', ')} must run down the page at most ${CELL_MAX_LINE_GAP} lines apart`)
+  }
+  const holdsToken = cell.some((fragment) => fragment.line === ref.line && thaiSkeleton(fragment.text).includes(thaiSkeleton(ref.token)))
+  if (!holdsToken) throw new RefError('cell_broken', `no cell fragment on l${ref.line} holds "${ref.token}"`)
+  return cell.map((fragment) => findToken(sources, { ...ref, line: fragment.line }, fragment.text).raw).join(' ')
+}
+
+function boundText(sources: Sources, ref: BoundRef, quote: string): string {
+  if (ref.cell) return cellText(sources, ref, ref.cell)
+  return ref.opLine ? `${quoteLine(sources, ref.src, ref.page, ref.opLine, ref.clause).quote} ${quote}` : quote
 }
 
 function resolveBound(sources: Sources, raw: unknown) {
   const ref = strictParse(BoundRefSchema, raw)
   const cite = citeToken(sources, ref)
-  const text = ref.opLine ? `${quoteLine(sources, ref.src, ref.page, ref.opLine, ref.clause).quote} ${cite.quote}` : cite.quote
-  const found = comparatorsBefore(text, ref.token)
-  if (found.length === 0) throw new RefError('op_missing', `no comparison word directly before "${ref.token}" on ${ref.src} p${ref.page} l${ref.line}`)
+  const found = comparatorsAround(boundText(sources, ref, cite.quote), ref.token, ref.unit ?? '')
+  if (found.length === 0) throw new RefError('op_missing', `no comparison word directly around "${ref.token}" on ${ref.src} p${ref.page} l${ref.line}`)
   const cmp = parseWith(parseComparator, ref.op)
-  if (!found.includes(cmp)) throw new RefError('op_mismatch', `"${ref.op}" is ${cmp} but the text before "${ref.token}" reads ${found.join(' or ')}`)
-  return { value: readValue(sources, ref), cmp, cite }
+  if (!found.includes(cmp)) throw new RefError('op_mismatch', `"${ref.op}" is ${cmp} but the text around "${ref.token}" reads ${found.join(' or ')}`)
+  return { value: readValue(sources, ref), cmp: ref.negate ? negate(cmp) : cmp, cite }
 }
 
 function resolveCite(sources: Sources, raw: unknown) {
