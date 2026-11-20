@@ -1,4 +1,5 @@
-import type { Cite, Cited, FrontOpenSpace, RoadSetbackDistance, RoadSetbackRule, RulePack } from '@/rules'
+import type { SiteEdge } from '@/plot/site'
+import type { Cite, Cited, FrontOpenSpace, RoadMultiple, RoadSetbackDistance, RoadSetbackRule, RulePack } from '@/rules'
 import { inRange, satisfies } from './bound'
 import { isHighRiseOrExtraLarge, type Building } from './building'
 
@@ -36,8 +37,10 @@ function roadDistance(setback: RoadSetbackDistance, roadWidthM: number): Setback
   }
 }
 
-const appliesTo = ({ storeys, heightM }: RoadSetbackRule['appliesAbove'], building: Building) =>
-  (storeys !== undefined && satisfies(building.storeys, storeys)) || (heightM !== undefined && satisfies(building.heightM, heightM))
+const appliesTo = (above: RoadSetbackRule['appliesAbove'], building: Building) =>
+  !above ||
+  (above.storeys !== undefined && satisfies(building.storeys, above.storeys)) ||
+  (above.heightM !== undefined && satisfies(building.heightM, above.heightM))
 
 export function roadSetback(pack: RulePack, building: Building, roadWidthM: number): Setback {
   const applicable = pack.roadSetbacks.filter(({ appliesAbove }) => appliesTo(appliesAbove, building))
@@ -48,16 +51,26 @@ export function roadSetback(pack: RulePack, building: Building, roadWidthM: numb
   )
 }
 
-export function heightVsRoadMultiple(pack: RulePack): { readonly value: number; readonly cites: readonly Cite[] } | null {
-  const multiples = pack.height.roadMultiple?.maxMultipleOfDistance
-  if (!multiples) return null
-  const value = Math.min(...multiples.map((m) => m.value))
-  return { value, cites: multiples.filter((m) => m.value === value).map((m) => m.cite) }
+export type HeightVsRoad = { readonly value: number; readonly distance: RoadMultiple['distance']; readonly cites: readonly Cite[] }
+
+export function heightVsRoadMultiple(pack: RulePack): HeightVsRoad | null {
+  const rule = pack.height.roadMultiple
+  if (!rule) return null
+  const value = Math.min(...rule.maxMultipleOfDistance.map((m) => m.value))
+  const cites = rule.maxMultipleOfDistance.filter((m) => m.value === value).map((m) => m.cite)
+  return { value, distance: rule.distance, cites: [...cites, ...(rule.widestStreetGoverns ? [rule.widestStreetGoverns] : [])] }
+}
+
+const OPEN_GROUND: Building = { heightM: 0, storeys: 0, floorAreaSqm: 0 }
+
+export function streetHeightLimitM(pack: RulePack, edges: readonly SiteEdge[], multiple: number): number {
+  const widestM = Math.max(...edges.flatMap((edge) => (edge.roadWidthM === null ? [] : [edge.roadWidthM])))
+  return multiple * (widestM + roadSetback(pack, OPEN_GROUND, widestM).distanceM)
 }
 
 export function heightVsRoadSetback(pack: RulePack, roadWidthM: number, heightM: number): Setback {
   const multiple = heightVsRoadMultiple(pack)
-  if (!multiple) return NO_SETBACK
+  if (!multiple || multiple.distance !== 'toBuilding') return NO_SETBACK
   const distanceM = heightM / multiple.value - roadWidthM
   return distanceM > 0 ? { distanceM, cites: multiple.cites } : NO_SETBACK
 }

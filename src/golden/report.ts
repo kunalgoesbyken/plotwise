@@ -17,7 +17,17 @@ function parkingProbes({ limits, plot }: Solution) {
 
 function limitsReport(solution: Solution) {
   const { far, farBonus, classes, openSpace, height, use, highRise, parking } = solution.limits
-  return { far, farBonus, classes, openSpace, height, use, highRise, parking: { cites: parking.cites, probes: parkingProbes(solution) } }
+  const vsRoadMultiple = height.vsRoadMultiple && { value: height.vsRoadMultiple.value, cites: height.vsRoadMultiple.cites }
+  return {
+    far,
+    farBonus,
+    classes,
+    openSpace,
+    height: { ...height, vsRoadMultiple },
+    use,
+    highRise,
+    parking: { cites: parking.cites, probes: parkingProbes(solution) },
+  }
 }
 
 function envelopeReport({ kind, floorToFloorM, tiers, prisms }: Solution['envelopes'][number]) {
@@ -54,10 +64,10 @@ function citeKeys(node: unknown): unknown {
   return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, citeKeys(value)]))
 }
 
-export function scenarioReport(plot: Plot, farMode: FarMode) {
-  const solution = solve(plot, pack, readings, farMode)
+export function scenarioReport(plot: Plot, farMode: Exclude<FarMode, 'purchased'>) {
+  const solution = solve(plot, pack, readings, { mode: farMode })
   return citeKeys({
-    site: { areaSqm: solution.site.areaSqm, ring: solution.site.ring, edges: solution.site.edges },
+    site: { areaSqm: solution.site.areaSqm, ring: solution.site.ring, edges: solution.site.edges.map(({ lengthM, roadWidthM }) => ({ lengthM, roadWidthM })) },
     farCap: solution.farCap,
     limits: limitsReport(solution),
     envelopes: solution.envelopes.map(envelopeReport),

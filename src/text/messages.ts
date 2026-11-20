@@ -362,6 +362,7 @@ const en = {
   'plot-limit.boundarySetbackM': 'the setback from neighbours',
   'plot-limit.minOpenSpaceShare': 'the minimum open space',
   'plot-limit.parkingSqmPerSpace': 'the parking requirement',
+  'feasibility.failed.building-type-not-covered': 'These rules do not cover this building type. Pick another building type.',
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
   'source.entered': 'Entered by you',
@@ -464,6 +465,10 @@ const en = {
   'parking.scope.bangkokBylaw': 'Bangkok building bylaw',
   'parking.scope.entered': 'Entered by you',
   'parking.scope.ministerialInnerBangkok': 'Ministerial Regulation 7, inner Bangkok',
+  'parking.scope.mumbaiTable21': 'DCPR 2034 Table No 21',
+  'parking.units-per-space-by-size': ({ bands }: { bands: string }) => `One space for every ${bands}.`,
+  'parking.units-band': ({ size, units }: { size: string; units: number }) => `${units} ${units === 1 ? 'unit' : 'units'} of ${size}`,
+  'parking.visitors': ({ share, min }: { share: string; min: number }) => `Plus ${share} for visitors, at least ${min}.`,
   'parking.per-unit': ({ spaces, unit }: { spaces: number; unit: string }) => `${spaces} per unit of ${unit}.`,
   'parking.per-unit-by-size': ({ bands }: { bands: string }) => `Per unit by its size: ${bands}.`,
   'parking.unit-band': ({ size, spaces }: { size: string; spaces: number }) => `${spaces} per unit of ${size}`,

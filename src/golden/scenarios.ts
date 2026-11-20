@@ -60,9 +60,11 @@ const LAYOUTS: readonly Layout[] = [
   { name: 'near a station 60x80 on a 10 m road', points: rectangle(60, 80), roads: [{ edge: 0, widthM: 10 }], nearStation: true },
 ]
 
-export type Scenario = { readonly name: string; readonly plot: Plot; readonly farMode: FarMode }
+type GoldenFarMode = Exclude<FarMode, 'purchased'>
 
-const FAR_MODES: readonly FarMode[] = ['standard', 'bonus']
+export type Scenario = { readonly name: string; readonly plot: Plot; readonly farMode: GoldenFarMode }
+
+const FAR_MODES: readonly GoldenFarMode[] = ['standard', 'bonus']
 
 const withType = (plot: Plot, buildingType: BuildingType): Plot => ({ ...plot, buildingType })
 

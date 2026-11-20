@@ -9,9 +9,11 @@ const PlanHeightLimitSchema = z.discriminatedUnion('kind', [
 ])
 
 const RoadMultipleSchema = z.object({
+  distance: z.enum(['toBuilding', 'streetPlusFrontSpace']),
   maxMultipleOfDistance: z.array(CitedSchema).min(1),
   measuredTo: CiteSchema.optional(),
   heightToHighestPoint: CiteSchema.optional(),
+  widestStreetGoverns: CiteSchema.optional(),
   rooftopStructuresExcluded: CiteSchema.optional(),
   parallelRoads: z.object({ maxRoadSpacingM: BoundSchema, maxBuildingWidthM: BoundSchema }).optional(),
   cornerNarrowerRoadMaxLengthM: BoundSchema.optional(),

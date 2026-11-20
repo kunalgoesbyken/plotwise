@@ -14,6 +14,7 @@ import {
   ratioOpenSpace,
   roadSetback,
   satisfies,
+  streetHeightLimitM,
   strictest,
   type Building,
   type OpenSpaceNeed,
@@ -165,6 +166,11 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   checks.push(measured('road-setback', worstRoad.actual, 'gte', worstRoad.required.distanceM, 'm', worstRoad.required.cites))
   const multiple = solution.limits.height.vsRoadMultiple
   if (!multiple) return checks
+  if (multiple.distance === 'streetPlusFrontSpace') {
+    const allowedM = streetHeightLimitM(pack, site.edges, multiple.value)
+    checks.push(measured('height-vs-road', building.heightM, 'lte', allowedM, 'm', multiple.cites))
+    return checks
+  }
   const heights = roads.flatMap((e) =>
     levels.map((level) => {
       const allowed = multiple.value * (e.roadWidthM + level.clearanceM[e.i])

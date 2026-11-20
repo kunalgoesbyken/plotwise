@@ -11,6 +11,8 @@ const mutate = (change: (pack: RulePack) => void): RulePack => {
   return pack
 }
 
+const mumbai = RulePackSchema.parse(await Bun.file(`${import.meta.dir}/../src/rules/packs/mum-suburbs-res.json`).json())
+
 const errorsOf = (pack: RulePack) => checkPack(pack).errors.join('\n')
 
 describe('checkPack', () => {
@@ -79,5 +81,38 @@ describe('checkPack', () => {
     expect(errorsOf(mutate((p) => void (p.questions = p.questions.filter((q) => q.id !== 'hotel-residential'))))).toContain(
       'hotel-residential',
     )
+  })
+})
+
+describe('checkPack on the Mumbai draft', () => {
+  const change = (edit: (pack: RulePack) => void) => {
+    const pack = structuredClone(mumbai)
+    edit(pack)
+    return errorsOf(pack)
+  }
+  const table = (pack: RulePack) => {
+    if (pack.far.kind !== 'byRoadWidthAndPlotSize') throw new Error('Table 12 is by road width')
+    return pack.far.roadWidthBands
+  }
+
+  it('passes the compiled pack: columns 4 + 5 + 6 equal column 7 and FSI never falls as the road widens', () => {
+    expect(checkPack(mumbai).errors).toEqual([])
+  })
+
+  it('flags a permissible total that is not the base plus premium plus TDR', () => {
+    expect(change((p) => void (table(p)[2].permissible!.value = 2.3))).toContain('far.roadWidthBands.2')
+  })
+
+  it('flags FSI that falls as the road widens', () => {
+    expect(change((p) => void (table(p)[3].byPlotSize[0].ratio.value = 0.9))).toContain('decreases')
+    expect(change((p) => void (table(p)[4].permissible!.value = 2.3))).toContain('permissible decreases')
+  })
+
+  it('flags a gap between the plot sizes of the low-rise table', () => {
+    expect(change((p) => void (p.lowRiseOpenSpaces!.rows[1].plotAreaSqm.min!.value = 31))).toContain('lowRiseOpenSpaces.rows')
+  })
+
+  it('flags parking that asks more tenements per space as tenements grow', () => {
+    expect(change((p) => void (p.parking[0].condo?.kind === 'unitsPerSpaceBySize' && (p.parking[0].condo.bands[3].unitsPerSpace.value = 2)))).toContain('increases')
   })
 })

@@ -54,6 +54,11 @@ export const ASSUMPTIONS = {
     value: 50,
     source: 'engine resolution: where a pack sets no height limit of any kind the envelope is drawn this many storeys tall, and floor area, setbacks and the road-height rule carve it down',
   },
+  wideningShareOnPlotSide: {
+    value: 0.5,
+    source:
+      'assumption, editable: a road is widened equally on both sides of its centre line, so a plot gives up half the extra width along its frontage. A development plan may take the whole widening from one side; the strip then is deeper, so check the plan’s road line',
+  },
   roadWidthStepM: { value: 2, source: 'display choice: the road-width table shows the result this much narrower and wider than the width entered' },
   importMinPlotSqm: {
     value: 10,

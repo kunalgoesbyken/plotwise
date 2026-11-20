@@ -6,6 +6,8 @@ import type { BoundarySetbackRule, RoadSetbackRule } from './setbacks'
 
 export const PlotSpecificSchema = z.object({ kind: z.literal('plotSpecific'), notes: z.array(CiteSchema) })
 
+export const PlotSetbacksSchema = PlotSpecificSchema.extend({ edges: z.enum(['roadAndBoundary', 'boundary']) })
+
 export function enteredRoadSetback(distanceM: number, field: string): RoadSetbackRule {
   return {
     appliesAbove: { storeys: enteredBound(0, 'gte', field) },

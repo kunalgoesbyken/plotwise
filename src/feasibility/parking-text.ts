@@ -30,6 +30,10 @@ export function demandText(demand: ParkingDemand, area: AreaUnit): string {
       return t('parking.per-unit-by-size', {
         bands: formatList(demand.bands.map((band) => t('parking.unit-band', { size: sizeText(band.unitSqm, area), spaces: band.spacesPerUnit.value }))),
       })
+    case 'unitsPerSpaceBySize':
+      return t('parking.units-per-space-by-size', {
+        bands: formatList(demand.bands.map((band) => t('parking.units-band', { size: sizeText(band.unitSqm, area), units: band.unitsPerSpace.value }))),
+      })
     case 'perGrossArea':
       return t('parking.per-gross-area', { area: sqm(demand.sqmPerSpace.value) })
     case 'perFloorArea':
@@ -54,6 +58,8 @@ export function demandCites(demand: ParkingDemand): Cite[] {
       return [demand.spacesPerUnit.cite, demand.unitsFromSqm.cite]
     case 'perUnitBySize':
       return demand.bands.map((band) => band.spacesPerUnit.cite)
+    case 'unitsPerSpaceBySize':
+      return demand.bands.map((band) => band.unitsPerSpace.cite)
     case 'perGrossArea':
       return [demand.sqmPerSpace.cite]
     case 'perFloorArea':

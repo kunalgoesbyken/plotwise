@@ -258,6 +258,7 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
     <LimitGroup title={t('rules.group.parking')}>
       {solution.limits.parking.rules.map((rule) => {
         const demand = rule[plot.buildingType]
+        if (!demand) return null
         return (
           <LimitRow
             key={rule.scope}
@@ -265,6 +266,12 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
             detail={
               <>
                 {demandText(demand, areaUnit)}
+                {rule.visitors && (
+                  <>
+                    <br />
+                    {t('parking.visitors', { share: formatQuantity(rule.visitors.share.value, 'percent'), min: rule.visitors.min.value })}
+                  </>
+                )}
                 {rule.largeBuildingSqmPerSpace && (
                   <>
                     <br />
@@ -273,7 +280,12 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
                 )}
               </>
             }
-            cites={[rule.appliesWhere, ...demandCites(demand), ...(rule.largeBuildingSqmPerSpace ? [rule.largeBuildingSqmPerSpace.cite] : [])]}
+            cites={[
+              rule.appliesWhere,
+              ...demandCites(demand),
+              ...(rule.visitors ? [rule.visitors.share.cite] : []),
+              ...(rule.largeBuildingSqmPerSpace ? [rule.largeBuildingSqmPerSpace.cite] : []),
+            ]}
           />
         )
       })}

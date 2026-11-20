@@ -4,11 +4,11 @@ import { isSourceCite, type Bound, type Cite, type ParkingRule, type Range, type
 import { inRange, satisfies } from './bound'
 import { classesFor, type ClassMembership, type Classes } from './classes'
 import { coverageLimit, type CoverageLimit } from './coverage'
-import { farLimits, type FarLimits } from './far'
+import { farLimits, type FarLimits, type InLieu, type PurchaseRatios } from './far'
 import { planHeight } from './height'
 import { posesQuestion, readingCites, readingSources, type Interpretations } from './interpretations'
 import { mainRoad } from './envelope'
-import { heightVsRoadMultiple } from './setbacks'
+import { heightVsRoadMultiple, type HeightVsRoad } from './setbacks'
 
 export type Sourced = { readonly value: number; readonly cites: readonly Cite[] }
 
@@ -59,7 +59,7 @@ export type Limits = FarLimits & {
     readonly permeable: (Sourced & { readonly base: Interpretations['permeable-base'] }) | null
     readonly minimums: readonly OpenSpaceMinimum[]
   }
-  readonly height: { readonly planLimitM: number | null; readonly cites: readonly Cite[]; readonly vsRoadMultiple: Sourced | null }
+  readonly height: { readonly planLimitM: number | null; readonly cites: readonly Cite[]; readonly vsRoadMultiple: HeightVsRoad | null }
   readonly coverage: CoverageLimit | null
   readonly use: UseLimit
   readonly highRise: HighRiseLimits | null
@@ -75,6 +75,8 @@ export type LimitsInput = {
   readonly nearStation: boolean
   readonly floorToFloorM: number
   readonly plotLimits: PlotLimits | undefined
+  readonly purchase: PurchaseRatios
+  readonly inLieu: InLieu | null
 }
 
 function openSpaceLimits({ pack, readings }: LimitsInput, residential: ClassMembership): Limits['openSpace'] {
@@ -166,11 +168,11 @@ function parkingLimits({ pack, readings }: LimitsInput): Limits['parking'] {
 }
 
 export function limitsFor(input: LimitsInput): Limits {
-  const { pack, readings, buildingType, site, farAreaSqm, plotLimits, floorToFloorM, nearStation } = input
+  const { pack, readings, buildingType, site, farAreaSqm, plotLimits, floorToFloorM, nearStation, purchase, inLieu } = input
   const classes = classesFor(pack, readings, buildingType)
   const plan = planHeight(pack, plotLimits, floorToFloorM)
   return {
-    ...farLimits({ pack, areaSqm: farAreaSqm, roadWidthM: site.edges[mainRoad(site)].roadWidthM ?? 0, plotLimits, classes, nearStation }),
+    ...farLimits({ pack, areaSqm: farAreaSqm, roadWidthM: site.edges[mainRoad(site)].roadWidthM ?? 0, plotLimits, classes, nearStation, purchase, inLieu }),
     classes,
     openSpace: openSpaceLimits(input, classes.residential),
     height: { planLimitM: plan.limitM, cites: plan.cites, vsRoadMultiple: heightVsRoadMultiple(pack) },

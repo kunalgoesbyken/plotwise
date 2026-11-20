@@ -48,6 +48,13 @@ describe('PlotSchema', () => {
     expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: MAX_ROAD_WIDTH_M }] }).success).toBe(true)
   })
 
+  it('accepts a prescribed width only when it widens the road and stays within the widest street', () => {
+    const road = (prescribedWidthM: number) => PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: 9, prescribedWidthM }] }).success
+    expect(road(18)).toBe(true)
+    expect(road(MAX_ROAD_WIDTH_M)).toBe(true)
+    for (const bad of [9, 6, 0, -1, MAX_ROAD_WIDTH_M + 1, Infinity, Number.NaN]) expect(road(bad)).toBe(false)
+  })
+
   it('rejects a non-positive road width and an unknown building type', () => {
     expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: 0 }] }).success).toBe(false)
     expect(PlotSchema.safeParse({ ...valid, buildingType: 'castle' }).success).toBe(false)

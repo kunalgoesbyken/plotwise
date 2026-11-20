@@ -376,6 +376,7 @@
       }
     },
     "roadMultiple": {
+      "distance": "toBuilding",
       "maxMultipleOfDistance": [
         {
           "value": 2,

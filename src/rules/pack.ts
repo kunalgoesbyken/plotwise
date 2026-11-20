@@ -1,7 +1,8 @@
 import { z } from 'zod'
+import { BUILDING_TYPES } from '@/plot/plot'
 import { containsEntered, CiteSchema } from './cite'
-import { PlotSpecificSchema } from './entered'
-import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, RoadSetbackSchema } from './setbacks'
+import { PlotSetbacksSchema, PlotSpecificSchema } from './entered'
+import { BlindWallSchema, BoundarySetbackSchema, FrontOpenSpaceSchema, LowRiseOpenSpacesSchema, RoadSetbackSchema } from './setbacks'
 import { BuildingClassesSchema, ClassificationsSchema, HighRiseSchema, UseConditionsSchema } from './classes'
 import { FarBonusBlockSchema, FarPurchaseSchema, FarRuleSchema } from './far'
 import { CoverageSchema, ReservationSchema } from './footprint'
@@ -25,6 +26,7 @@ export const RulePackSchema = z
     verification: z.enum(['verified', 'unverified']),
     zone: z.object({ code: z.string().min(1), cite: CiteSchema }).optional(),
     sources: z.record(z.string(), SourceSchema),
+    buildingTypes: z.array(z.enum(BUILDING_TYPES)).min(1).optional(),
     far: FarRuleSchema,
     farBonus: FarBonusBlockSchema.optional(),
     farPurchases: z.array(FarPurchaseSchema).optional(),
@@ -35,11 +37,12 @@ export const RulePackSchema = z
     openSpaceMinimums: z.array(OpenSpaceMinimumSchema),
     roadSetbacks: z.array(RoadSetbackSchema),
     boundarySetbacks: z.array(BoundarySetbackSchema),
-    plotSetbacks: PlotSpecificSchema.optional(),
+    plotSetbacks: PlotSetbacksSchema.optional(),
     plotOpenSpace: PlotSpecificSchema.optional(),
     plotParking: PlotSpecificSchema.optional(),
     blindWall: BlindWallSchema.optional(),
     frontOpenSpace: FrontOpenSpaceSchema.optional(),
+    lowRiseOpenSpaces: LowRiseOpenSpacesSchema.optional(),
     useConditions: UseConditionsSchema.optional(),
     buildingClasses: BuildingClassesSchema.optional(),
     classification: ClassificationsSchema.optional(),
@@ -51,6 +54,10 @@ export const RulePackSchema = z
   .refine((pack) => pack.verification === 'unverified' || !containsEntered(pack), {
     message: 'a verified pack cannot hold values entered by a user',
     path: ['verification'],
+  })
+  .refine((pack) => pack.parking.every((rule) => (pack.buildingTypes ?? BUILDING_TYPES).every((type) => rule[type])), {
+    message: 'every parking rule covers every building type the pack covers',
+    path: ['parking'],
   })
   .refine((pack) => !pack.highRise === !pack.buildingClasses, {
     message: 'high-rise rules and the building classes that define a high-rise come together',

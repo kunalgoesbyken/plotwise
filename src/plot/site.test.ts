@@ -48,7 +48,15 @@ describe('siteOf', () => {
     const withMidpoint: Vec2[] = [lShape[0], [25, 0], ...lShape.slice(1)]
     const site = siteOf(plotOf(withMidpoint, [{ edge: 1, widthM: 16 }]))
     expect(site.edges).toHaveLength(6)
-    expect(site.edges[0]).toEqual({ lengthM: expect.closeTo(40, 2), roadWidthM: 16 })
+    expect(site.edges[0]).toEqual({ lengthM: expect.closeTo(40, 2), roadWidthM: 16, prescribedWidthM: null })
+  })
+
+  it('carries the prescribed width of a road to be widened onto its edge, whichever way the outline runs', () => {
+    for (const points of [lShape, [...lShape].reverse()]) {
+      const site = siteOf(plotOf(points, [{ edge: 0, widthM: 9, prescribedWidthM: 18 }, { edge: 2, widthM: 6 }]))
+      const widened = site.edges.filter((e) => e.prescribedWidthM !== null)
+      expect(widened).toEqual([{ lengthM: expect.closeTo(points === lShape ? 40 : 20, 2), roadWidthM: 9, prescribedWidthM: 18 }])
+    }
   })
 
   it('has one edge per ring corner and every frontage is positive', () => {

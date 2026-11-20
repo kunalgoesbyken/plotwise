@@ -6,6 +6,14 @@ import { SolveError } from './errors'
 
 export type FarMode = 'standard' | 'bonus' | 'purchased'
 
+export type PurchaseRatios = Readonly<Partial<Record<FarPurchase['kind'], number>>>
+
+export type FarChoice = { readonly mode: 'standard' } | { readonly mode: 'bonus' } | { readonly mode: 'purchased'; readonly ratios: PurchaseRatios }
+
+export const STANDARD: FarChoice = { mode: 'standard' }
+
+export const purchaseRatios = (choice: FarChoice): PurchaseRatios => (choice.mode === 'purchased' ? choice.ratios : {})
+
 export type FarCap = {
   readonly mode: FarMode
   readonly maxGfaSqm: number
@@ -22,9 +30,12 @@ export type BonusMeasure = {
 export type PurchaseOption = {
   readonly kind: FarPurchase['kind']
   readonly maxExtraGfaSqm: number
-  readonly price: FarPurchase['price']['kind']
+  readonly chosenGfaSqm: number
+  readonly price: FarPurchase['price']
   readonly cites: readonly Cite[]
 }
+
+export type InLieu = { readonly gfaSqm: number; readonly cites: readonly Cite[] }
 
 export type FarLimits = {
   readonly far: { readonly ratio: number; readonly maxGfaSqm: number; readonly cites: readonly Cite[] }
@@ -38,9 +49,9 @@ export type FarLimits = {
   readonly farPurchase: {
     readonly options: readonly PurchaseOption[]
     readonly extraGfaSqm: number
-    readonly maxGfaSqm: number
     readonly cites: readonly Cite[]
   }
+  readonly inLieu: InLieu | null
 }
 
 export type FarInput = {
@@ -50,6 +61,8 @@ export type FarInput = {
   readonly plotLimits: PlotLimits | undefined
   readonly classes: Classes
   readonly nearStation: boolean
+  readonly purchase: PurchaseRatios
+  readonly inLieu: InLieu | null
 }
 
 function required<T>(found: T | undefined, what: string): T {
@@ -159,37 +172,43 @@ const onPermissible = ({ cap }: FarPurchase) => cap.kind === 'shareOf' && cap.of
 
 function purchaseOption(purchase: FarPurchase, input: FarInput, baseSqm: number, permissibleSqm: number): PurchaseOption {
   const extra = capExtra(purchase.cap, input, baseSqm, permissibleSqm)
+  const chosenRatio = Math.max(0, input.purchase[purchase.kind] ?? 0)
   return {
     kind: purchase.kind,
     maxExtraGfaSqm: extra.gfaSqm,
-    price: purchase.price.kind,
+    chosenGfaSqm: Math.min(extra.gfaSqm, chosenRatio * input.areaSqm),
+    price: purchase.price,
     cites: [...extra.cites, ...priceCites(purchase.price), ...purchase.notes],
   }
 }
 
 function purchaseLimits(input: FarInput, base: FarLimits['far']): FarLimits['farPurchase'] {
   const purchases = input.pack.farPurchases ?? []
-  const permissibleSqm = purchases
-    .filter((purchase) => !onPermissible(purchase))
-    .reduce((sum, purchase) => sum + capExtra(purchase.cap, input, base.maxGfaSqm, 0).gfaSqm, base.maxGfaSqm)
-  const options = purchases.map((purchase) => purchaseOption(purchase, input, base.maxGfaSqm, permissibleSqm))
-  const extraGfaSqm = options.reduce((sum, option) => sum + option.maxExtraGfaSqm, 0)
-  return { options, extraGfaSqm, maxGfaSqm: base.maxGfaSqm + extraGfaSqm, cites: options.flatMap((option) => option.cites) }
+  const direct = purchases.filter((purchase) => !onPermissible(purchase)).map((purchase) => purchaseOption(purchase, input, base.maxGfaSqm, 0))
+  const permissibleSqm = direct.reduce((sum, option) => sum + option.chosenGfaSqm, base.maxGfaSqm)
+  const options = purchases.map(
+    (purchase) => direct.find((option) => option.kind === purchase.kind) ?? purchaseOption(purchase, input, base.maxGfaSqm, permissibleSqm),
+  )
+  const extraGfaSqm = options.reduce((sum, option) => sum + option.chosenGfaSqm, 0)
+  return { options, extraGfaSqm, cites: options.filter((option) => option.chosenGfaSqm > 0).flatMap((option) => option.cites) }
 }
 
 export function farLimits(input: FarInput): FarLimits {
   const far = baseFar(input.pack.far, input)
-  return { far, farBonus: bonusLimits(input, far), farPurchase: purchaseLimits(input, far) }
+  return { far, farBonus: bonusLimits(input, far), farPurchase: purchaseLimits(input, far), inLieu: input.inLieu }
 }
 
-export function farCapFor({ far, farBonus, farPurchase }: FarLimits, mode: FarMode): FarCap {
-  const standard: FarCap = { mode: 'standard', maxGfaSqm: far.maxGfaSqm, cites: far.cites }
+export function farCapFor({ far, farBonus, farPurchase, inLieu }: FarLimits, mode: FarMode): FarCap {
+  const inLieuSqm = inLieu?.gfaSqm ?? 0
+  const standard: FarCap = { mode: 'standard', maxGfaSqm: far.maxGfaSqm + inLieuSqm, cites: [...far.cites, ...(inLieu?.cites ?? [])] }
   switch (mode) {
     case 'standard':
       return standard
     case 'bonus':
-      return farBonus.extraGfaSqm > 0 ? { mode, maxGfaSqm: farBonus.maxGfaSqm, cites: [...far.cites, ...farBonus.cites] } : standard
+      return farBonus.extraGfaSqm > 0 ? { mode, maxGfaSqm: farBonus.maxGfaSqm + inLieuSqm, cites: [...standard.cites, ...farBonus.cites] } : standard
     case 'purchased':
-      return farPurchase.extraGfaSqm > 0 ? { mode, maxGfaSqm: farPurchase.maxGfaSqm, cites: [...far.cites, ...farPurchase.cites] } : standard
+      return farPurchase.extraGfaSqm > 0
+        ? { mode, maxGfaSqm: standard.maxGfaSqm + farPurchase.extraGfaSqm, cites: [...standard.cites, ...farPurchase.cites] }
+        : standard
   }
 }

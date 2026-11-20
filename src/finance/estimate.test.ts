@@ -80,7 +80,7 @@ describe('landCheck', () => {
 describe('financeSite', () => {
   it('prices the whole plot the owner buys, including a strip handed over for road widening', () => {
     for (const farOn of ['gross', 'net'] as const) {
-      const pack = unverified({ reservations: [{ kind: 'roadWidening', targetWidthM: value(12), farOn, notes: [] }] })
+      const pack = unverified({ reservations: [{ kind: 'roadWidening', target: { kind: 'width', widthM: value(12) }, farOn, notes: [] }] })
       const solution = solve(plotFromMetres(rectangle(40, 50), [{ edge: 0, widthM: 8 }]), pack, packInterpretations(pack))
       expect(solution.site.areaSqm).toBeCloseTo(1920, 6)
       expect(financeSite(solution, region).plotAreaSqm).toBeCloseTo(2000, 6)

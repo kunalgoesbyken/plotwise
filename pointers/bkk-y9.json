@@ -376,6 +376,7 @@
       }
     },
     "roadMultiple": {
+      "distance": "toBuilding",
       "maxMultipleOfDistance": [
         { "$num": { "src": "mr43-55-upd68", "page": 9, "line": 47, "token": "สองเท่า", "clause": "ข้อ 44" } },
         { "$num": { "src": "bb44-03", "page": 14, "line": 44, "token": "2 เท่า", "clause": "ข้อ 49" } }

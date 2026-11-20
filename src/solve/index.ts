@@ -18,7 +18,7 @@ export { type ClassMembership, type Classes } from './classes'
 export type { CoverageLimit } from './coverage'
 export { mainRoad, type Envelope, type EnvelopeKind, type EnvelopeTier } from './envelope'
 export { SolveError, type SolveErrorReason } from './errors'
-export { farCapFor, type BonusMeasure, type FarCap, type FarMode, type PurchaseOption } from './far'
+export { farCapFor, STANDARD, type BonusMeasure, type FarCap, type FarChoice, type FarMode, type PurchaseOption, type PurchaseRatios } from './far'
 export {
   InterpretationsSchema,
   packInterpretations,
@@ -40,5 +40,5 @@ export { buildingControlOpenSpace, footprintCapSqm, permeableArea, ratioOpenSpac
 export { parkingSpaces, type ParkingNeed } from './parking'
 export { plotLimitFields } from './plot-limits'
 export type { Widening } from './reservations'
-export { boundarySetback, frontOpenSpaceDepth, roadSetback, strictest, type Setback } from './setbacks'
-export { solve, type Solution } from './solve'
+export { boundarySetback, frontOpenSpaceDepth, roadSetback, streetHeightLimitM, strictest, type HeightVsRoad, type Setback } from './setbacks'
+export { coversBuildingType, solve, type Solution } from './solve'

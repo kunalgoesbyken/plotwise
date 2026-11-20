@@ -25,6 +25,10 @@ function nonDecreasing(path: string, values: number[]): string[] {
   return values.some((v, i) => i > 0 && v < values[i - 1]) ? [`${path} decreases: ${values.join(', ')}`] : []
 }
 
+function nonIncreasing(path: string, values: number[]): string[] {
+  return values.some((v, i) => i > 0 && v > values[i - 1]) ? [`${path} increases: ${values.join(', ')}`] : []
+}
+
 function allEqual(path: string, values: Cited[]): string[] {
   return new Set(values.map((v) => v.value)).size > 1
     ? [`${path}: sources disagree (${values.map((v) => `${isSourceCite(v.cite) ? v.cite.source : 'entered'} ${v.value}`).join(' vs ')})`]
@@ -92,7 +96,10 @@ const checkRanges: Check = (pack) => [
   ...(pack.coverage?.kind === 'maxShare' ? outOfRange('coverage.share', pack.coverage.share.value, SHARE) : []),
   ...(pack.height.planLimit.kind === 'maxMetres' ? outOfRange('height.planLimit.maxM', pack.height.planLimit.maxM.value, HEIGHT_M) : []),
   ...(pack.height.planLimit.kind === 'maxStoreys' ? outOfRange('height.planLimit.maxStoreys', pack.height.planLimit.maxStoreys.value, STOREYS) : []),
-  ...(pack.reservations ?? []).flatMap((reservation, i) => outOfRange(`reservations.${i}.targetWidthM`, reservation.targetWidthM.value, ROAD_WIDTH_M)),
+  ...(pack.reservations ?? []).flatMap((reservation, i) => [
+    ...(reservation.target.kind === 'width' ? outOfRange(`reservations.${i}.target.widthM`, reservation.target.widthM.value, ROAD_WIDTH_M) : []),
+    ...(reservation.inLieu ? outOfRange(`reservations.${i}.inLieu.multipleOfReserved`, reservation.inLieu.multipleOfReserved.value, FAR_RATIO) : []),
+  ]),
   ...(pack.openSpaceRatio
     ? [
         ...outOfRange('openSpaceRatio.minShareOfFloorArea', pack.openSpaceRatio.minShareOfFloorArea.value, SHARE),
@@ -144,9 +151,53 @@ function parkingBands({ parking }: RulePack): string[] {
   return parking.flatMap((rule, i) =>
     (['condo', 'office', 'hotel'] as const).flatMap((use) => {
       const demand = rule[use]
-      return demand.kind === 'perUnitBySize' ? contiguous(`parking.${i}.${use}`, demand.bands.map((band) => band.unitSqm)) : []
+      const path = `parking.${i}.${use}`
+      if (demand?.kind === 'perUnitBySize') return contiguous(path, demand.bands.map((band) => band.unitSqm))
+      if (demand?.kind === 'unitsPerSpaceBySize') return [...contiguous(path, demand.bands.map((band) => band.unitSqm)), ...nonIncreasing(path, demand.bands.map((band) => band.unitsPerSpace.value))]
+      return []
     }),
   )
+}
+
+const sameRange = (a: Range, b: Range) => a.min?.value === b.min?.value && a.max?.value === b.max?.value
+
+function purchaseRatioIn(purchase: FarPurchase, roadWidthM: Range): number {
+  if (purchase.cap.kind !== 'extraRatioByRoadWidth') return 0
+  const band = purchase.cap.bands.find((b) => sameRange(b.roadWidthM, roadWidthM))
+  return band?.kind === 'ratio' ? band.ratio.value : 0
+}
+
+const TOTAL_TOLERANCE = 1e-9
+
+const checkFarTable: Check = ({ far, farPurchases }) => {
+  if (far.kind !== 'byRoadWidthAndPlotSize') return []
+  const bands = far.roadWidthBands
+  const rows = Math.min(...bands.map((band) => band.byPlotSize.length))
+  const totals = bands.flatMap((band, i) => {
+    if (!band.permissible) return []
+    const base = Math.max(...band.byPlotSize.map((row) => row.ratio.value))
+    const total = (farPurchases ?? []).reduce((sum, purchase) => sum + purchaseRatioIn(purchase, band.roadWidthM), base)
+    return Math.abs(total - band.permissible.value) > TOTAL_TOLERANCE
+      ? [`far.roadWidthBands.${i}: base and purchases add to ${total}, but the permissible total reads ${band.permissible.value}`]
+      : []
+  })
+  return [
+    ...totals,
+    ...Array.from({ length: rows }, (_, j) => nonDecreasing(`far.roadWidthBands plot size row ${j}`, bands.map((band) => band.byPlotSize[j].ratio.value))).flat(),
+    ...nonDecreasing('far.roadWidthBands permissible', bands.flatMap((band) => (band.permissible ? [band.permissible.value] : []))),
+  ]
+}
+
+const checkLowRise: Check = ({ lowRiseOpenSpaces }) => {
+  if (!lowRiseOpenSpaces) return []
+  const { rows } = lowRiseOpenSpaces
+  const gaps = bandGaps(rows.map((row) => row.plotAreaSqm)).filter((problem) => problem !== 'does not start at 0')
+  return [
+    ...gaps.map((problem) => `lowRiseOpenSpaces.rows ${problem}`),
+    ...nonDecreasing('lowRiseOpenSpaces front', rows.map((row) => row.frontM.value)),
+    ...nonDecreasing('lowRiseOpenSpaces rear', rows.map((row) => row.rearM.value)),
+    ...rows.flatMap((row, i) => [row.frontM, row.rearM, ...(row.sideM ? [row.sideM] : [])].flatMap((m) => outOfRange(`lowRiseOpenSpaces.rows.${i}`, m.value, DISTANCE_M))),
+  ]
 }
 
 const checkBonus: Check = (pack) => {
@@ -199,7 +250,7 @@ const checkQuestions: Check = (pack) => {
 const checkDecided: Check = (pack) =>
   pack.questions.filter((q) => q.decision === null).map((q) => `question ${q.id} awaits a decision (recommended: ${q.recommendation})`)
 
-const CHECKS: Check[] = [checkRanges, checkBands, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
+const CHECKS: Check[] = [checkRanges, checkBands, checkFarTable, checkLowRise, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
 
 export function checkPack(pack: RulePack): CheckResult {
   const planFar = pack.far.kind === 'zone' ? pack.far.max.value : null
