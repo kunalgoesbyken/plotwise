@@ -7,12 +7,15 @@ import { encodeRing, type ZoneVerdict } from './schema'
 
 type Outcome = { readonly key: string; readonly verdict: ZoneVerdict }
 
-export function useZone(plotRing: readonly LngLat[]): ZoneVerdict | null {
+const keyOf = (ring: readonly LngLat[] | null) => (ring ? encodeRing(ring) : null)
+
+export function useZone(plotRing: readonly LngLat[] | null): ZoneVerdict | null {
   const [ring, setRing] = useState(plotRing)
-  if (encodeRing(ring) !== encodeRing(plotRing)) setRing(plotRing)
+  if (keyOf(ring) !== keyOf(plotRing)) setRing(plotRing)
   const [outcome, setOutcome] = useState<Outcome | null>(null)
 
   useEffect(() => {
+    if (!ring) return
     const key = encodeRing(ring)
     const controller = new AbortController()
     const timer = setTimeout(() => {
@@ -31,5 +34,5 @@ export function useZone(plotRing: readonly LngLat[]): ZoneVerdict | null {
     }
   }, [ring])
 
-  return outcome?.key === encodeRing(ring) ? outcome.verdict : null
+  return outcome && outcome.key === keyOf(ring) ? outcome.verdict : null
 }

@@ -63,8 +63,10 @@ Solid arrows are deterministic code that runs in the browser. Dotted arrows are 
 
 - **One zone.** The zone check needs the BMA city-plan service, which answers only from Thai networks. Elsewhere the app says the zone was not checked and links the official map.
 - **Money figures are first-look estimates, not valuations.**
-  - No published Bangkok construction cost per m² was found, so the build rates are labelled unsourced.
-  - Sale prices and the margin come from the cited market reports.
+  - The build rates are Plotwise estimates with no published source for each element (`NO_BKK_COST`). Their total is only cross-checked against RHLB (Siam) Ltd.'s July 2025 range for residential condominiums.
+  - The land costs (holding, finance on the land) and the area distances are Plotwise estimates, unsourced. The transfer fee comes from published fee rules.
+  - Condo sale prices come from Knight Frank's average asking prices by area, and the margin from a listed developer's report. Office and hotel prices are not split by area.
+  - The land check compares against listing and broker figures, which are asking prices.
   - Every value is editable and travels in the share link.
 - **OSM coverage.**
   - Heights exist for about a third of central Bangkok buildings, and roads carry no width tags, so widths come from lanes or road class.
@@ -114,7 +116,10 @@ Scope: the brown zone (very high-density residential, coded ย.9) of the Bangko
 6. **Money.** `src/finance` estimates:
    - saleable area, and parking levels above ground and in basements;
    - a first-cost range split into substructure, superstructure and services;
-   - the land value each design supports (a residual).
+   - the land value each design supports (a residual), after the buyer's transfer fee, holding cost and finance on the land;
+   - a check of that land value against typical asking prices for the plot's area.
+
+   The condo sale price and the asking-price reference depend on the plot's area: central Bangkok (CBD), city fringe or suburban, set by straight-line distance from Ratchaprasong. If the area cannot be told, the city fringe values are used.
 
    Every rate and price is an editable assumption with its source, shown as "estimated". None of it is law.
 7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass), Photon and the BMA city-plan layer, with input validation at the boundary, caching and a per-IP rate limit. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
