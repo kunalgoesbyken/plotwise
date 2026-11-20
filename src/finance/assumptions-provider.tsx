@@ -1,10 +1,9 @@
 'use client'
 
 import { createContext, use, useMemo, useState, type ReactNode } from 'react'
+import { REGION } from '@/region/regions'
 import { MONEY_REGIONS, type MoneyRegion, type RegionId } from '@/solve'
 import type { Overrides } from './values'
-
-export const DEFAULT_REGION: RegionId = 'bkk'
 
 export type AssumptionsView = {
   readonly region: MoneyRegion
@@ -17,7 +16,7 @@ const AssumptionsContext = createContext<AssumptionsView | null>(null)
 
 type ProviderProps = { readonly region?: RegionId; readonly initial?: Overrides; readonly children: ReactNode }
 
-export function AssumptionsProvider({ region = DEFAULT_REGION, initial = {}, children }: ProviderProps) {
+export function AssumptionsProvider({ region = REGION.id, initial = {}, children }: ProviderProps) {
   const [overrides, setOverrides] = useState<Overrides>(initial)
   const view = useMemo<AssumptionsView>(
     () => ({

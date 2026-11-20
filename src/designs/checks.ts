@@ -41,18 +41,21 @@ export type CheckId =
   | 'high-rise-road-network'
   | 'fire-lane'
 
+export type ManualCheckId = Extract<CheckId, 'far-bonus-measures' | 'use-station' | 'road-access-network' | 'high-rise-road-network'>
+
 export type Unit = 'sqm' | 'm' | 'ratio' | 'rooms'
 
-export type Check = { readonly id: CheckId; readonly cites: readonly Cite[] } & (
+export type Check =
   | {
+      readonly id: CheckId
+      readonly cites: readonly Cite[]
       readonly status: 'pass' | 'fail'
       readonly actual: number
       readonly cmp: Comparator
       readonly limit: number
       readonly unit: Unit
     }
-  | { readonly status: 'manual' }
-)
+  | { readonly id: ManualCheckId; readonly cites: readonly Cite[]; readonly status: 'manual' }
 
 export type DesignFacts = {
   readonly solution: Solution
@@ -68,7 +71,7 @@ function measured(id: CheckId, actual: number, cmp: Comparator, limit: number, u
   return { id, status: compare(actual, cmp, limit + slack) ? 'pass' : 'fail', actual, cmp, limit, unit, cites }
 }
 
-const manual = (id: CheckId, cites: readonly Cite[]): Check => ({ id, status: 'manual', cites })
+const manual = (id: ManualCheckId, cites: readonly Cite[]): Check => ({ id, status: 'manual', cites })
 
 type Segment = readonly [Vec2, Vec2]
 

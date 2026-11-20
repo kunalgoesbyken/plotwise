@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import type { EditorState } from './editor-state'
@@ -35,7 +34,7 @@ export function Stepper({ step, state, onChoose }: StepperProps) {
                     done && 'border-primary text-primary',
                   )}
                 >
-                  {done ? <Check className="size-3" strokeWidth={3} /> : index + 1}
+                  {index + 1}
                 </span>
                 {t(`flow.${id}`)}
               </button>

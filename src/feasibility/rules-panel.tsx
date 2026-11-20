@@ -3,6 +3,7 @@
 import { edgeName } from '@/editor/map-features'
 import { useEditorState } from '@/editor/plot-store'
 import type { ReactNode } from 'react'
+import { REGION } from '@/region/regions'
 import type { Bound, Range } from '@/rules'
 import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
@@ -250,7 +251,7 @@ function Rules({ plot, solution }: Ready) {
         <EstimatedRoads />
       </div>
       <p className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
-        <span className="font-medium">{t('zone.name')}</span>
+        <span className="font-medium">{REGION.zone.name}</span>
         <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
       </p>
       <FloorArea limits={limits} />

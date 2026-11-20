@@ -1,18 +1,19 @@
 'use client'
 
 import { useId } from 'react'
+import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
 import type { NearestStation } from '@/site/nearest-station'
 import { stationDistance } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { Checkbox } from '@/ui/checkbox'
 import { Label } from '@/ui/label'
 import { PanelSection } from '@/ui/section'
+import { Switch } from '@/ui/switch'
 import { useEditorState, useEditorStore } from './plot-store'
 import { EstimateTag } from './ui'
 
-const STATION_DISTANCE_M = stationDistance(loadPack('bkk-y9')).value
+const STATION_DISTANCE_M = stationDistance(loadPack(REGION.packId)).value
 
 function nearestText(nearest: NearestStation): string {
   const name = nearest.name ?? t('transit.unnamed')
@@ -37,11 +38,7 @@ export function StationToggle() {
   return (
     <PanelSection title={t('transit.title')}>
       <div className="flex min-h-11 items-center gap-3 lg:min-h-9">
-        <Checkbox
-          id={id}
-          checked={draft.nearStation}
-          onCheckedChange={(checked) => store.dispatch({ type: 'set-near-station', nearStation: checked === true })}
-        />
+        <Switch id={id} checked={draft.nearStation} onCheckedChange={(nearStation) => store.dispatch({ type: 'set-near-station', nearStation })} />
         <Label htmlFor={id} className="cursor-pointer font-normal">
           {t('transit.near', { distance: formatQuantity(STATION_DISTANCE_M, 'm') })}
         </Label>

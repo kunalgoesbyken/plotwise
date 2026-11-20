@@ -1,5 +1,5 @@
 export { AssumptionsPanel } from './assumptions-panel'
-export { AssumptionsProvider, DEFAULT_REGION, useAssumptions } from './assumptions-provider'
+export { AssumptionsProvider, useAssumptions } from './assumptions-provider'
 export { DesignMoney, useMoneyRows, type MoneyRow } from './design-money'
 export { LandValue } from './land-value'
 export { decodeAssumptions, encodeAssumptions } from './url'

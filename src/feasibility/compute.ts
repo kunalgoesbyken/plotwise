@@ -1,11 +1,12 @@
 import { designs, type Design } from '@/designs'
 import { GeometryError, type GeometryErrorReason } from '@/geometry'
 import type { Plot } from '@/plot/plot'
+import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
 import { packInterpretations, solve, type FarMode, type Solution } from '@/solve'
 import { carvingRules } from './rule-layers'
 
-export const PACK = loadPack('bkk-y9')
+export const PACK = loadPack(REGION.packId)
 export const CARVING = carvingRules(PACK)
 const READINGS = packInterpretations(PACK)
 

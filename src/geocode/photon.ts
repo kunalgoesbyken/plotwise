@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { THAILAND_BBOX } from '@/site/assumptions'
+import { REGION } from '@/region/regions'
 import { USER_AGENT } from '@/site/user-agent'
-import { SEARCH_BIAS_LNGLAT, SEARCH_RESULT_LIMIT } from './assumptions'
+import { SEARCH_RESULT_LIMIT } from './assumptions'
 import { PLACE_KINDS, type Place } from './schema'
 
 const PHOTON_URL = 'https://photon.komoot.io/api'
@@ -37,13 +37,13 @@ export class PlaceSearchUnavailableError extends Error {}
 export type FetchPlacesOptions = { timeoutMs?: number; fetchImpl?: typeof fetch }
 
 function photonUrl(query: string): string {
-  const [lon, lat] = SEARCH_BIAS_LNGLAT.value
+  const [lon, lat] = REGION.searchBias.value
   const params = new URLSearchParams({
     q: query,
     lang: 'en',
     lon: String(lon),
     lat: String(lat),
-    bbox: THAILAND_BBOX.value.join(','),
+    bbox: REGION.bounds.value.join(','),
     limit: String(SEARCH_RESULT_LIMIT.value),
   })
   return `${PHOTON_URL}?${params}`

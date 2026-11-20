@@ -1,4 +1,4 @@
-import { PLATFORM_MODES, STATION_NODE_TYPES } from './assumptions'
+import { REGION } from '@/region/regions'
 import { namesOf, toLine } from './geometry'
 import type { OverpassNode, OverpassResponse, OverpassTags, OverpassWay } from './overpass-response'
 import { isClosed, toOpenRing } from './ring'
@@ -13,11 +13,11 @@ type Element = OverpassResponse['elements'][number]
 
 function isPlatform(tags: OverpassTags): boolean {
   if (tags.railway === 'platform') return true
-  return tags.public_transport === 'platform' && PLATFORM_MODES.value.some((mode) => tags[mode] === 'yes')
+  return tags.public_transport === 'platform' && REGION.transit.platformModes.value.some((mode) => tags[mode] === 'yes')
 }
 
 function isStation(tags: OverpassTags): boolean {
-  return tags.railway === 'station' && STATION_NODE_TYPES.value.includes(tags.station ?? '')
+  return tags.railway === 'station' && REGION.transit.stationNodeTypes.value.includes(tags.station ?? '')
 }
 
 function wayGeometry(way: OverpassWay): StationGeometry | undefined {

@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react'
+import { ArrowSquareOutIcon } from '@phosphor-icons/react'
 import type { Cite } from '@/rules'
 import { t } from '@/text/messages'
 import { Disclosure } from '@/ui/disclosure'
@@ -21,7 +21,7 @@ function CiteItem({ cite }: { cite: Cite }) {
           className="inline-flex min-h-11 w-fit items-center gap-1 font-medium text-primary underline-offset-2 hover:underline lg:min-h-0"
         >
           {t('source.open')}
-          <ExternalLink aria-hidden="true" className="size-3" />
+          <ArrowSquareOutIcon aria-hidden="true" className="size-3.5" />
         </a>
       )}
     </li>

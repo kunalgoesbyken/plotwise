@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { localFrame, type LngLat } from '@/geo/projection'
-import { MAX_BBOX_SIDE_M, SITE_MARGIN_M, SNAP_CELLS_PER_DEGREE, THAILAND_BBOX } from './assumptions'
+import { REGION } from '@/region/regions'
+import { MAX_BBOX_SIDE_M, SITE_MARGIN_M, SNAP_CELLS_PER_DEGREE } from './assumptions'
 
 export type Bbox = readonly [minLng: number, minLat: number, maxLng: number, maxLat: number]
 
@@ -31,8 +32,8 @@ export function bboxSideLengthsM([minLng, minLat, maxLng, maxLat]: Bbox): { widt
   return { widthM: x, heightM: y }
 }
 
-function isInsideThailand([minLng, minLat, maxLng, maxLat]: Bbox): boolean {
-  const [westLimit, southLimit, eastLimit, northLimit] = THAILAND_BBOX.value
+function isInsideRegion([minLng, minLat, maxLng, maxLat]: Bbox): boolean {
+  const [westLimit, southLimit, eastLimit, northLimit] = REGION.bounds.value
   return minLng >= westLimit && minLat >= southLimit && maxLng <= eastLimit && maxLat <= northLimit
 }
 
@@ -43,7 +44,7 @@ function isSmallEnough(bbox: Bbox): boolean {
 
 const LimitedBboxSchema = z
   .custom<Bbox>()
-  .refine(isInsideThailand, { error: 'bbox must lie inside Thailand', abort: true })
+  .refine(isInsideRegion, { error: `bbox must lie inside ${REGION.country}`, abort: true })
   .refine(isSmallEnough, {
     error: `bbox is too large: after snapping, each side must be at most ${MAX_BBOX_SIDE_M.value} m`,
   })

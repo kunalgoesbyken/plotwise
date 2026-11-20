@@ -83,11 +83,6 @@ export const MAX_BBOX_SIDE_M: Assumption<number> = {
     'assumption: keeps one Overpass query small enough for a normal laptop to render and the public instances to answer',
 }
 
-export const THAILAND_BBOX: Assumption<readonly [number, number, number, number]> = {
-  value: [97.3, 5.6, 105.7, 20.5],
-  source: 'approximate extent of Thailand (minLng, minLat, maxLng, maxLat), slightly generous',
-}
-
 export const SITE_CACHE_S: Assumption<{ browser: number; cdn: number; staleWhileRevalidate: number }> = {
   value: { browser: 3600, cdn: 86_400, staleWhileRevalidate: 604_800 },
   source:
@@ -120,18 +115,6 @@ export const SITE_MARGIN_M: Assumption<number> = {
   value: 200,
   source:
     'assumption: 200 m around the plot covers the street block, the roads it faces and the towers that shade or overlook it; one margin for road suggestions and the 3D context so both share one cached request',
-}
-
-export const PLATFORM_MODES: Assumption<readonly string[]> = {
-  value: ['train', 'subway', 'light_rail', 'monorail'],
-  source:
-    'OSM public_transport=platform modes of Bangkok mass transit: BTS and MRT are tagged subway, the Gold Line light_rail, the Pink and Yellow lines monorail, the Airport Rail Link and Red Line train (Overpass, 2026-11-20). train also matches SRT intercity platforms, which OSM does not tag apart',
-}
-
-export const STATION_NODE_TYPES: Assumption<readonly string[]> = {
-  value: ['subway', 'light_rail', 'monorail'],
-  source:
-    'OSM station=* values on Bangkok BTS, MRT, Gold Line and monorail station nodes (Overpass, 2026-11-20); Airport Rail Link and Red Line nodes carry only train=yes, like SRT intercity stations, so they are not used',
 }
 
 export const STATION_PLATFORM_RADIUS_M: Assumption<number> = {

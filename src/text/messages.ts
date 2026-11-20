@@ -14,6 +14,7 @@ type Count = { count: number }
 type Verb = { verb: string }
 type Num = { number: string }
 type Area = { area: string }
+type Authority = { authority: string }
 
 type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
@@ -227,7 +228,7 @@ const en = {
   'limit.use.unless': ({ road, station, status }: { road: string; station: string; status: string }) =>
     `Larger needs a road ${road} wide or a station ${station} away. ${status}`,
   'limit.use.exemption.none': 'Neither applies here, so the designs keep to the limit.',
-  'limit.use.exemption.station': 'You marked a station nearby: verify the distance on site.',
+  'limit.use.exemption.station': 'You marked a station nearby: check the distance on site.',
   'limit.use.exemption.road': ({ edge }: { edge: string }) => `The road on edge ${edge} qualifies.`,
 
   'parking.scope.bangkokBylaw': 'Bangkok building bylaw',
@@ -337,12 +338,12 @@ const en = {
 
   'status.pass': 'Pass',
   'status.fail': 'Fail',
-  'status.manual': 'Verify',
+  'status.manual': 'Check',
   'tally.pass': ({ count }: Count) => `${count} pass`,
   'tally.fail': ({ count }: Count) => `${count} fail`,
-  'tally.manual': ({ count }: Count) => `${count} to verify`,
+  'tally.manual': ({ count }: Count) => `${count} to check`,
 
-  'check.manual': 'Verify on site or with the authority',
+  'check.manual': 'Check on site or with the authority',
   'check.far': 'Floor area within the FAR limit',
   'check.far-bonus-measures': 'Bonus measures provided as the plan requires',
   'check.high-rise-far': 'FAR within the high-rise cap',
@@ -361,6 +362,15 @@ const en = {
   'check.high-rise-access': 'High-rise road frontage',
   'check.high-rise-road-network': 'High-rise access road beyond the plot',
   'check.fire-lane': 'Fire lane around the building',
+  'to-check.title': ({ count }: Count) => `${count} to check before you buy`,
+  'to-check.why.use-station': 'The map can’t confirm the walking distance to the station.',
+  'to-check.why.road-access-network': 'The road must stay wide enough all the way to a main road. The map only knows the stretch at your plot.',
+  'to-check.why.high-rise-road-network': 'A high-rise needs a wide road all the way to a main road. The map only knows the stretch at your plot.',
+  'to-check.why.far-bonus-measures': 'The extra floor area depends on measures in the design, such as public open space, that Plotwise can’t see.',
+  'to-check.who.use-station': ({ authority }: Authority) => `A surveyor measures it; ${authority} confirms.`,
+  'to-check.who.road-access-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
+  'to-check.who.high-rise-road-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
+  'to-check.who.far-bonus-measures': ({ authority }: Authority) => `Your architect designs them; ${authority} approves them with the permit.`,
 
   'step.label': 'Rules that carve the envelope',
   'step.plot': 'Plot',

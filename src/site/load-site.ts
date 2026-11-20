@@ -1,4 +1,5 @@
 import { cacheLife } from 'next/cache'
+import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
 import { stationDistance } from '@/solve'
 import { OSM_ATTRIBUTION, STATION_PLATFORM_RADIUS_M } from './assumptions'
@@ -7,7 +8,7 @@ import { fetchOverpass, overpassQuery } from './overpass'
 import { parseOverpass } from './parse'
 import type { Site } from './schema'
 
-const STATION_SEARCH_MARGIN_M = stationDistance(loadPack('bkk-y9')).value + STATION_PLATFORM_RADIUS_M.value
+const STATION_SEARCH_MARGIN_M = stationDistance(loadPack(REGION.packId)).value + STATION_PLATFORM_RADIUS_M.value
 
 export async function loadSite(bbox: Bbox): Promise<Site> {
   'use cache'

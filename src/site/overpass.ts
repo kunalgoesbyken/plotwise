@@ -1,4 +1,5 @@
-import { HIGHWAY_CLASSES, PLATFORM_MODES, STATION_NODE_TYPES } from './assumptions'
+import { REGION } from '@/region/regions'
+import { HIGHWAY_CLASSES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassResponseSchema, type OverpassResponse } from './overpass-response'
 import { USER_AGENT } from './user-agent'
@@ -33,8 +34,8 @@ export function overpassQuery(siteBbox: Bbox, stationBbox: Bbox, timeoutS = SERV
     `relation["building:part"]["type"="multipolygon"]${area};`,
     `way["highway"~"^(${HIGHWAY_CLASSES.join('|')})$"]${area};`,
     `nw["railway"="platform"]${stationArea};`,
-    `nw["public_transport"="platform"][~"^(${PLATFORM_MODES.value.join('|')})$"~"^yes$"]${stationArea};`,
-    `node["railway"="station"]["station"~"^(${STATION_NODE_TYPES.value.join('|')})$"]${stationArea};`,
+    `nw["public_transport"="platform"][~"^(${REGION.transit.platformModes.value.join('|')})$"~"^yes$"]${stationArea};`,
+    `node["railway"="station"]["station"~"^(${REGION.transit.stationNodeTypes.value.join('|')})$"]${stationArea};`,
     `);out geom;`,
   ].join('')
 }

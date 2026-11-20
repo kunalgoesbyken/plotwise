@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'bun:test'
-import { THAILAND_BBOX } from '@/site/assumptions'
+import { REGION } from '@/region/regions'
 import { USER_AGENT } from '@/site/user-agent'
 import english from './__fixtures__/asok.photon-en.json'
-import { SEARCH_BIAS_LNGLAT, SEARCH_RESULT_LIMIT } from './assumptions'
+import { SEARCH_RESULT_LIMIT } from './assumptions'
 import { PlaceSearchUnavailableError, fetchPlaces } from './photon'
 import { PlacesSchema } from './schema'
 
@@ -21,16 +21,16 @@ function fakePhoton(handler: Handler): { fetchImpl: typeof fetch; calls: { url: 
 const recorded = () => Response.json(english)
 
 describe('fetchPlaces', () => {
-  it('asks Photon once, in English, biased to Bangkok and limited to Thailand', async () => {
+  it('asks Photon once, in English, biased to the region centre and limited to its bounds', async () => {
     const { fetchImpl, calls } = fakePhoton(recorded)
     await fetchPlaces('asok', { fetchImpl })
     expect(calls.map(({ url }) => url.searchParams.get('lang'))).toEqual(['en'])
     const { url, init } = calls[0]
     expect(url.origin + url.pathname).toBe('https://photon.komoot.io/api')
     expect(url.searchParams.get('q')).toBe('asok')
-    expect(url.searchParams.get('lon')).toBe(String(SEARCH_BIAS_LNGLAT.value[0]))
-    expect(url.searchParams.get('lat')).toBe(String(SEARCH_BIAS_LNGLAT.value[1]))
-    expect(url.searchParams.get('bbox')).toBe(THAILAND_BBOX.value.join(','))
+    expect(url.searchParams.get('lon')).toBe(String(REGION.searchBias.value[0]))
+    expect(url.searchParams.get('lat')).toBe(String(REGION.searchBias.value[1]))
+    expect(url.searchParams.get('bbox')).toBe(REGION.bounds.value.join(','))
     expect(url.searchParams.get('limit')).toBe(String(SEARCH_RESULT_LIMIT.value))
     expect(new Headers(init.headers).get('user-agent')).toBe(USER_AGENT)
   })

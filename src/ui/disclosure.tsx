@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight } from 'lucide-react'
+import { CaretRightIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 import { cn } from './cn'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible'
@@ -20,7 +20,7 @@ export function Disclosure({ label, tone = 'primary', className, children }: Dis
       <CollapsibleTrigger
         className={cn('inline-flex min-h-11 cursor-pointer items-center gap-1 rounded-sm text-xs font-medium transition-colors lg:min-h-7', TONES[tone])}
       >
-        <ChevronRight aria-hidden="true" className="size-3.5 transition-transform duration-150 group-data-[state=open]/disclosure:rotate-90" />
+        <CaretRightIcon aria-hidden="true" weight="bold" className="size-3.5 transition-transform duration-150 group-data-[state=open]/disclosure:rotate-90" />
         {label}
       </CollapsibleTrigger>
       <CollapsibleContent>{children}</CollapsibleContent>

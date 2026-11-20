@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { HIGHWAY_CLASSES, PLATFORM_MODES, STATION_NODE_TYPES } from './assumptions'
+import { REGION } from '@/region/regions'
+import { HIGHWAY_CLASSES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassUnavailableError, fetchOverpass, overpassQuery } from './overpass'
 import { USER_AGENT } from './user-agent'
@@ -42,10 +43,10 @@ describe('overpassQuery', () => {
 
   it('asks for mass-transit platforms and station nodes in the wider station box', () => {
     const stationArea = '(13.756,100.56,13.774,100.578)'
-    const modes = PLATFORM_MODES.value.join('|')
+    const modes = REGION.transit.platformModes.value.join('|')
     expect(query).toContain(`nw["railway"="platform"]${stationArea};`)
     expect(query).toContain(`nw["public_transport"="platform"][~"^(${modes})$"~"^yes$"]${stationArea};`)
-    expect(query).toContain(`node["railway"="station"]["station"~"^(${STATION_NODE_TYPES.value.join('|')})$"]${stationArea};`)
+    expect(query).toContain(`node["railway"="station"]["station"~"^(${REGION.transit.stationNodeTypes.value.join('|')})$"]${stationArea};`)
   })
 
   it('returns tags and geometry as JSON with a server timeout', () => {

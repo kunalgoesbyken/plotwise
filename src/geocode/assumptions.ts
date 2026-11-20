@@ -1,10 +1,4 @@
-import type { LngLat } from '@/geo/projection'
 import type { Assumption } from '@/site/assumptions'
-
-export const SEARCH_BIAS_LNGLAT: Assumption<LngLat> = {
-  value: [100.5018, 13.7563],
-  source: 'assumption: central Bangkok (Democracy Monument), used only to rank nearer places first',
-}
 
 export const SEARCH_RESULT_LIMIT: Assumption<number> = {
   value: 6,
