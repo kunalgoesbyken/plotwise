@@ -21,7 +21,7 @@ const pickedEdge = ({ selection: before }: EditorState, { selection: after }: Ed
   after.kind === 'edge' && (before.kind !== 'edge' || before.index !== after.index)
 
 export function followEdits(step: Step, before: EditorState, after: EditorState): Step {
-  if (after.loads !== before.loads) return furthestStep(after)
+  if (after.load !== before.load) return after.load?.source === 'example' ? 'roads' : furthestStep(after)
   if (after.draft.status !== before.draft.status) return after.draft.status === 'closed' ? 'roads' : 'plot'
   if (pickedEdge(before, after)) return 'roads'
   return step

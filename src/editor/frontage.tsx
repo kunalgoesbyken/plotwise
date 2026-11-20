@@ -107,7 +107,7 @@ export function Frontage() {
   const roads = draft.corners.filter((c) => c.edge.road).length
   const estimated = draft.corners.some((c) => c.edge.road && c.edge.estimated)
   return (
-    <PanelSection title={t('frontage.title')} aside={t('frontage.roads', { count: roads })}>
+    <PanelSection title={t('frontage.title')} aside={t('frontage.roads', { count: roads })} description={t('frontage.right-of-way')}>
       <ul className="-mx-(--pad) grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-4">
         {draft.corners.map((corner, index) => (
           <EdgeRow

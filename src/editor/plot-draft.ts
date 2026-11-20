@@ -1,6 +1,6 @@
 import type { LngLat } from '@/geo/projection'
 import { PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
-import { checkOutline, isOnEarth, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
+import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
 import { isSimplePath } from './path'
 
 export const MAX_CORNERS = 100
@@ -27,6 +27,7 @@ export type DraftAction =
   | { type: 'unmark-road'; edge: number }
   | { type: 'set-road-width'; edge: number; widthM: number }
   | { type: 'estimate-road-width'; edge: number; widthM: number }
+  | { type: 'estimate-road'; edge: number; widthM: number }
   | { type: 'set-building-type'; buildingType: BuildingType }
   | { type: 'set-near-station'; nearStation: boolean }
   | { type: 'estimate-near-station'; nearStation: boolean }
@@ -125,7 +126,7 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
     case 'mark-road':
       return replaceEdge(draft, action.edge, (edge) => (edge.road ? edge : { road: true, widthM: null, estimated: false }))
     case 'unmark-road':
-      return replaceEdge(draft, action.edge, (edge) => (edge.road ? SIDE : edge))
+      return replaceEdge(draft, action.edge, (edge) => (edge.road ? NEIGHBOUR : edge))
     case 'set-road-width':
       if (!isRoadWidth(action.widthM)) return accept(draft)
       return replaceEdge(draft, action.edge, (edge) =>
@@ -136,6 +137,11 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
       return replaceEdge(draft, action.edge, (edge) =>
         edge.road && edge.widthM === null ? { road: true, widthM: action.widthM, estimated: true } : edge,
       )
+    case 'estimate-road':
+      if (!isRoadWidth(action.widthM)) return accept(draft)
+      return replaceEdge(draft, action.edge, (edge) =>
+        edge.road || edge.touched ? edge : { road: true, widthM: action.widthM, estimated: true },
+      )
     default:
       return accept(draft)
   }
@@ -145,7 +151,7 @@ function fromPlot(plot: Plot, nearStationSource: NearStationSource): EditResult 
   const widths = new Map(plot.roads.map((r) => [r.edge, r.widthM]))
   const corners = plot.ring.map((at, i): Corner => {
     const widthM = widths.get(i)
-    return { at, edge: widthM === undefined ? SIDE : { road: true, widthM, estimated: false } }
+    return { at, edge: widthM === undefined ? NEIGHBOUR : { road: true, widthM, estimated: false } }
   })
   return closed({ ...plot, nearStationSource }, corners)
 }

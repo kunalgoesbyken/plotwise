@@ -60,7 +60,8 @@ async function draw(page: Page, points: readonly (readonly [number, number])[]) 
 
 async function plotInUrl(page: Page) {
   await expect.poll(() => new URL(page.url()).hash).toContain('plot=')
-  return decodePlot(new URL(page.url()).hash)
+  const link = decodePlot(new URL(page.url()).hash)
+  return link?.ok ? link.plot : null
 }
 
 async function settledCorner(page: Page, name: string): Promise<[number, number]> {
@@ -155,10 +156,31 @@ test('drags a corner, inserts one on an edge and deletes it again', async ({ pag
   await expect.poll(async () => (await plotInUrl(page))?.ring).toHaveLength(6)
 })
 
-test('ignores a malformed link and starts empty', async ({ page }) => {
+test('says why a link was not opened and still starts empty', async ({ page }) => {
   const errors = await open(page, '/#plot=1,2;garbage&roads=0:-1&type=castle')
-  await expect(hint(page)).toContainText('each corner of your plot')
+  await expect(hint(page)).toContainText('This link’s plot is not valid')
+  await expect(page.getByRole('button', { name: 'Try an example plot' })).toBeVisible()
   expect(errors).toEqual([])
+})
+
+test('says when a link is missing part of the plot', async ({ page }) => {
+  await open(page, '/#plot=100.5,13.7;100.51,13.7;100.51,13.71&roads=0:12')
+  await expect(hint(page)).toContainText('This link is missing part of the plot')
+})
+
+test('the example plot opens on the roads step with its road selected and its width shown', async ({ page }) => {
+  await open(page)
+  await expect(page.getByText('Check what a Bangkok plot can hold before you buy it.')).toBeVisible()
+  await page.getByRole('button', { name: 'Try an example plot' }).click()
+  await expect(page.getByRole('region', { name: 'Road frontage' })).toBeVisible()
+  await expect(page.getByLabel('Road width on edge A–B, in metres')).toHaveValue('12')
+  await expect(page.getByRole('listitem').filter({ hasText: 'A–B' })).toHaveAttribute('aria-current', 'true')
+})
+
+test('a plot opened from a link goes straight to the results', async ({ page }) => {
+  await open(page, '/#plot=100.5262,13.7228;100.526774,13.7228;100.526774,13.723052;100.526163,13.72325&roads=0:12&type=condo')
+  await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Road frontage' })).toHaveCount(0)
 })
 
 test('names the one zone it covers and links the official map to confirm it', async ({ page }) => {
@@ -169,7 +191,7 @@ test('names the one zone it covers and links the official map to confirm it', as
 
 test('works from the keyboard, and suggests a mapped road width that stays editable', async ({ page }) => {
   await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
-  await page.getByRole('button', { name: 'Use an example plot' }).focus()
+  await page.getByRole('button', { name: 'Try an example plot' }).focus()
   await page.keyboard.press('Enter')
   await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).focus()
   await page.keyboard.press('Enter')
@@ -208,10 +230,10 @@ for (const width of [536, 1280])
   test(`road frontage rows keep one column grid at ${width} px, with or without an estimated width`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
     await open(page, '/', [SOI_NORTH_OF_EXAMPLE])
-    await page.getByRole('button', { name: 'Use an example plot' }).click()
+    await page.getByRole('button', { name: 'Try an example plot' }).click()
     await goTo(page, 'Roads')
     await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
-    await expect(site(page).getByText('Estimated from OpenStreetMap. Check it on site.')).toBeVisible()
+    await expect(site(page).getByText('Estimated from OpenStreetMap, check on site.')).toBeVisible()
     const rows = await frontageColumns(page)
     expect(rows).toHaveLength(6)
     for (const key of ['width', 'actionLeft', 'actionRight', 'height'] as const)

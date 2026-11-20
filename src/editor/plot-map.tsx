@@ -16,7 +16,7 @@ const START_ZOOM = 17
 const MAX_FIT_ZOOM = 19
 const PLACE_ZOOM = 18
 const FIT_MARGIN_PX = 48
-const FIT_MARGIN = { top: FIT_MARGIN_PX * 2, bottom: FIT_MARGIN_PX, left: FIT_MARGIN_PX, right: FIT_MARGIN_PX }
+const FIT_MARGIN = { top: FIT_MARGIN_PX * 2.5, bottom: FIT_MARGIN_PX, left: FIT_MARGIN_PX, right: FIT_MARGIN_PX }
 const PHONE_LAYOUT = '(width < 64rem)'
 
 type View = { map: MapLibreMap; createMarker: (element: HTMLElement) => Marker }
@@ -117,7 +117,7 @@ export function PlotMap({ covers, overlay = EMPTY_OVERLAY }: PlotMapProps) {
     view?.map.getSource<GeoJSONSource>(OVERLAY_SOURCE)?.setData(overlay)
   }, [view, overlay])
 
-  const { loads } = state
+  const loads = state.load?.count ?? 0
   const closed = state.draft.status === 'closed'
   const ready = state.plot !== null
   const fittedLoads = useRef(0)

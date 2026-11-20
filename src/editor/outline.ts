@@ -2,13 +2,14 @@ import { localFrame, type LngLat } from '@/geo/projection'
 import { GeometryError, normalizeRing, type GeometryErrorReason } from '@/geometry'
 import { LngLatSchema } from '@/plot/plot'
 
-export type Edge = { road: false } | { road: true; widthM: number | null; estimated: boolean }
+export type Edge = { road: false; touched: boolean } | { road: true; widthM: number | null; estimated: boolean }
 export type Corner = { at: LngLat; edge: Edge }
 
 export type OutlineRejection = 'crossing' | 'degenerate' | 'out-of-range'
 export type OutlineResult = { ok: true; corners: Corner[] } | { ok: false; reason: OutlineRejection }
 
-export const SIDE: Edge = { road: false }
+export const SIDE: Edge = { road: false, touched: false }
+export const NEIGHBOUR: Edge = { road: false, touched: true }
 
 export const isOnEarth = (at: LngLat) => LngLatSchema.safeParse(at).success
 
@@ -41,7 +42,7 @@ function edgeOverSpan(corners: readonly Corner[], from: number, to: number): Edg
   for (let i = from; i !== to; i = (i + 1) % corners.length) {
     if (corners[i].edge.road) return corners[i].edge
   }
-  return SIDE
+  return corners[from].edge
 }
 
 export function checkOutline(corners: readonly Corner[]): OutlineRejection | null {

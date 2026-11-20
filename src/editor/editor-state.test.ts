@@ -74,7 +74,7 @@ describe('reduceEditor', () => {
   })
 
   it('counts loads so the map knows when to frame a new plot', () => {
-    expect(run({ type: 'load', plot }, { type: 'mark-road', edge: 2 }, { type: 'load', plot }).loads).toBe(2)
+    expect(run({ type: 'load', plot }, { type: 'mark-road', edge: 2 }, { type: 'load', plot }).load).toEqual({ source: 'link', count: 2 })
   })
 
   it('asks the map to go to a searched place, again even when it is the same place, without touching the plot', () => {
@@ -122,6 +122,38 @@ describe('road width estimates', () => {
       { edge: 0, widthM: 12 },
       { edge: 2, widthM: 8 },
     ])
+  })
+
+  it('marks untouched edges beside a mapped road when the outline closes or the roads arrive', () => {
+    const drawn: EditorAction[] = [...lot.ring.map((at): EditorAction => ({ type: 'add', at })), { type: 'close' }]
+    const after = run(...drawn, { type: 'site', roads: [soi], stations: [] })
+    expect(after.draft.status === 'closed' && after.draft.corners[2].edge).toEqual({ road: true, widthM: 8, estimated: true })
+    expect(after.plot?.roads).toEqual([{ edge: 2, widthM: 8 }])
+    const before = run({ type: 'site', roads: [soi], stations: [] }, ...drawn)
+    expect(before.draft).toEqual(after.draft)
+  })
+
+  it('never overrides what the user or a shared link decided about an edge', () => {
+    const link = run({ type: 'load', plot: lot }, { type: 'site', roads: [soi], stations: [] })
+    expect(link.plot?.roads).toEqual(lot.roads)
+    const drawn: EditorAction[] = [...lot.ring.map((at): EditorAction => ({ type: 'add', at })), { type: 'close' }]
+    const removed = run(...drawn, { type: 'site', roads: [soi], stations: [] }, { type: 'unmark-road', edge: 2 }, { type: 'site', roads: [soi], stations: [] })
+    expect(removed.plot).toBeNull()
+    const typed = run(...drawn, { type: 'site', roads: [soi], stations: [] }, { type: 'set-road-width', edge: 2, widthM: 11 }, { type: 'site', roads: [soi], stations: [] })
+    expect(typed.plot?.roads).toEqual([{ edge: 2, widthM: 11 }])
+  })
+
+  it('selects the example’s road and tells a link load from an example load', () => {
+    const example = run({ type: 'load-example', plot: lot })
+    expect(example.selection).toEqual({ kind: 'edge', index: 0 })
+    expect(example.load?.source).toBe('example')
+    expect(run({ type: 'load', plot: lot }).load?.source).toBe('link')
+  })
+
+  it('keeps a notice when a link’s outline cannot be loaded', () => {
+    const crossed = { ...lot, ring: [lot.ring[0], lot.ring[2], lot.ring[1], lot.ring[3]] }
+    expect(run({ type: 'load', plot: crossed }).notice).toBe('link-invalid')
+    expect(run({ type: 'reject-link', problem: 'link-incomplete' }).notice).toBe('link-incomplete')
   })
 
   it('leaves the width empty when no mapped road runs along the edge', () => {
@@ -190,7 +222,7 @@ describe('station distance estimates', () => {
     const ring = corners.map(([x, y]) => [...frame.toLngLat([x, y])] as [number, number])
     const state = run({ type: 'load-example', plot: { ...plot, ring } }, site([asok]))
     expect(state.draft).toMatchObject({ nearStation: true, nearStationSource: 'estimate' })
-    expect(state.loads).toBe(1)
+    expect(state.load).toEqual({ source: 'example', count: 1 })
   })
 
   it('makes no estimate until station data is known, and forgets it when the plot is cleared', () => {

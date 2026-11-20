@@ -93,7 +93,7 @@ export function PlaceSearch() {
             className="pl-9"
           />
         </div>
-        <Button type="submit" disabled={tooShort || search.status === 'searching'}>
+        <Button type="submit" variant="outline" disabled={tooShort || search.status === 'searching'}>
           {t('search.submit')}
         </Button>
       </form>
