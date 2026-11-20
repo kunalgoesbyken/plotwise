@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import fc from 'fast-check'
 import type { LngLat } from '@/geo/projection'
-import { classifyShares, unknownVerdict, zoneRegionFor } from './classify'
+import { loadPack } from '@/rules'
+import { REGIONS } from '@/region/regions'
+import { classifyShares, coveredEntry, unknownVerdict, zoneRegionFor } from './classify'
 import { ZONE_SOURCES } from './sources'
 
 const brown = 'ย.๙'
@@ -22,6 +24,21 @@ describe('zoneRegionFor', () => {
 
   it('finds no region for a plot outside every coverage', () => {
     expect(zoneRegionFor(square([77.59, 12.97]))).toBeUndefined()
+  })
+})
+
+const THAI_DIGITS = '๐๑๒๓๔๕๖๗๘๙'
+const withThaiDigits = (code: string) => code.replace(/\d/g, (digit) => THAI_DIGITS[Number(digit)])
+
+describe('the Bangkok zone codes', () => {
+  it('maps the pack zone ย.9, written with an Arabic nine, to the layer code ย.๙, written with a Thai nine', () => {
+    expect(loadPack(REGIONS.bkk.packId).zone?.code).toBe('ย.9')
+    expect(coveredEntry(bkk.naming)).toMatchObject({ packCode: 'ย.9', sourceCode: 'ย.๙' })
+  })
+
+  it('writes every layer code as its pack code with Thai digits', () => {
+    for (const { sourceCode, packCode } of bkk.naming.zones) expect(sourceCode).toBe(withThaiDigits(packCode))
+    expect(new Set(bkk.naming.zones.map(({ sourceCode }) => sourceCode)).size).toBe(bkk.naming.zones.length)
   })
 })
 
@@ -64,6 +81,18 @@ describe('classifyShares on the Bangkok layer', () => {
 
   it('refuses to guess when a zone code is not in the list', () => {
     expect(classifyShares(bkk, [{ code: 'ZZ', share: 1 }])).toEqual(unknownVerdict(bkk, 'unrecognised'))
+  })
+
+  it('leaves the part of a plot outside the snapshot zones unnamed', () => {
+    expect(classifyShares(bkk, [{ code: null, share: 1 }])).toEqual({ status: 'outside', zone: null, covered: 'brown zone 9 (very high-density residential)' })
+    expect(classifyShares(bkk, [{ code: brown, share: 0.6 }, { code: null, share: 0.4 }])).toEqual({
+      status: 'straddles',
+      parts: [
+        { zone: 'brown zone 9 (very high-density residential)', share: 0.6 },
+        { zone: null, share: 0.4 },
+      ],
+      covered: 'brown zone 9 (very high-density residential)',
+    })
   })
 
   it('calls a plot inside only when the covered zone holds at least 99% of it', () => {

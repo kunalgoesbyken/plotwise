@@ -3,7 +3,7 @@ import type { Assumption } from '@/site/assumptions'
 export const ZONE_TIMEOUT_MS: Assumption<number> = {
   value: 2_000,
   source:
-    'assumption: a spatial query on a small polygon layer answers well within two seconds, so a slower server is reported as an unchecked zone rather than keeping the user waiting',
+    'assumption: a spatial query on a small polygon layer answers well within two seconds, so a slower server leaves the dated snapshot verdict standing rather than keeping the user waiting',
 }
 
 export const ZONE_UNREACHABLE_MEMORY_MS: Assumption<number> = {

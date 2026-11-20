@@ -1,7 +1,7 @@
 import type { LngLat } from '@/geo/projection'
 import { ZONE_SLIVER_SHARE } from './assumptions'
 import type { ZoneShare } from './shares'
-import { ZONE_SOURCES, type ZoneNaming, type ZoneRegionId, type ZoneSource } from './sources'
+import { ZONE_SOURCES, type ZoneEntry, type ZoneNaming, type ZoneRegionId, type ZoneSource } from './sources'
 import type { UnknownReason, ZonePart, ZoneVerdict } from './verdict'
 
 const ZONE_REGION_IDS = Object.keys(ZONE_SOURCES) as ZoneRegionId[]
@@ -19,17 +19,17 @@ export function unknownVerdict(source: ZoneSource | undefined, reason: UnknownRe
   return { status: 'unknown', reason, plan: source?.plan ?? null }
 }
 
-function nameOf(naming: ZoneNaming, code: string): string | undefined {
-  return naming.zones.find((zone) => zone.sourceCode === code)?.name
+function nameOf(naming: ZoneNaming, code: string | null): string | null | undefined {
+  return code === null ? null : naming.zones.find((zone) => zone.sourceCode === code)?.name
 }
 
-function coveredName(naming: ZoneNaming): string {
+export function coveredEntry(naming: ZoneNaming): ZoneEntry {
   const covered = naming.zones.find((zone) => zone.packCode === naming.coveredCode)
   if (!covered) throw new Error(`Zone source lists no zone for the covered code ${naming.coveredCode}`)
-  return covered.name
+  return covered
 }
 
-function namedParts(naming: ZoneNaming, shares: readonly ZoneShare[]): (ZonePart & { readonly code: string })[] | null {
+function namedParts(naming: ZoneNaming, shares: readonly ZoneShare[]): (ZonePart & { readonly code: string | null })[] | null {
   const parts = shares.flatMap(({ code, share }) => {
     const zone = nameOf(naming, code)
     return zone === undefined ? [] : [{ code, zone, share }]
@@ -45,9 +45,8 @@ export function classifyShares(source: ZoneSource, shares: readonly ZoneShare[])
   const named = namedParts(naming, significant)
   if (!named) return unknownVerdict(source, 'unrecognised')
   const parts = named.map(({ zone, share }) => ({ zone, share }))
-  const covered = coveredName(naming)
-  if (parts.length > 1) return { status: 'straddles', parts, covered }
+  const covered = coveredEntry(naming)
+  if (parts.length > 1) return { status: 'straddles', parts, covered: covered.name }
   const [{ code, zone }] = named
-  const inside = naming.zones.some((entry) => entry.sourceCode === code && entry.packCode === naming.coveredCode)
-  return inside ? { status: 'inside', zone } : { status: 'outside', zone, covered }
+  return code === covered.sourceCode ? { status: 'inside', zone: covered.name } : { status: 'outside', zone, covered: covered.name }
 }

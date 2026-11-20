@@ -10,6 +10,7 @@ import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import { Disclosure } from '@/ui/disclosure'
 import { Placeholder } from '@/ui/section'
+import { ZoneStatus } from '@/zone'
 import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { useFeasibility } from './feasibility-provider'
 import { WhenReady } from './ready'
@@ -112,6 +113,9 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
       <ToCheck design={selected} id={toCheckId} />
       <VerificationNote solution={solution} detailed />
       <Disclosure label={t('design.checklist', { name: t(selected.nameKey) })}>
+        <div className="pt-2">
+          <ZoneStatus />
+        </div>
         <ul className="divide-y">
           {selected.checks.map((check) => (
             <CheckItem key={check.id} row={checkRow(check, region.areaUnit)} />

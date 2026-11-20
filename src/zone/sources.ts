@@ -11,6 +11,7 @@ export type ZoneEntry = {
 }
 
 export type ArcGisLayer = {
+  readonly name: string
   readonly url: string
   readonly zoneField: string
 }
@@ -23,6 +24,7 @@ export type ZoneSource = {
   readonly publisher: string
   readonly plan: Link
   readonly layer: ArcGisLayer
+  readonly snapshot: string
   readonly licence: { readonly summary: string; readonly url: string }
   readonly coverage: Bbox
   readonly naming: ZoneNaming
@@ -70,12 +72,15 @@ export const ZONE_SOURCES = {
     publisher: 'Bangkok Metropolitan Administration (BMA), City Planning and Urban Development Department',
     plan: REGIONS.bkk.cityPlan,
     layer: {
+      name: 'BMA city-plan layer',
       url: BMA_LAYER_URL,
       zoneField: 'LUP_ZONE',
     },
+    snapshot: '/zone/bma-2556-y9.json',
     licence: {
-      summary: 'The BMA publishes this ArcGIS REST layer without licence text, so Plotwise queries it live, stores no copy and shows only the zone name.',
-      url: BMA_LAYER_URL,
+      summary:
+        'Plotwise keeps a dated copy of the brown zone 9 polygons of this ArcGIS REST layer, which the BMA publishes without licence text, and checks the live layer against it. The polygons are the BMA rendering of the land-use map annexed to the Ministerial Regulation enforcing the Bangkok Comprehensive Plan B.E. 2556; section 7 of the Copyright Act B.E. 2537 does not treat the constitution and legislation, or regulations, bylaws, notifications and orders of government and local units, as copyright works.',
+      url: 'https://www.ipthailand.go.th/images/3534/2565/Copyright/Copyright_Act2_TH.pdf',
     },
     coverage: [100.326, 13.485, 100.94, 13.953],
     naming: { zones: BANGKOK_ZONES, coveredCode: zoneCode(REGIONS.bkk.packId) },

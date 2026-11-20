@@ -2,12 +2,14 @@
 
 import { createContext, use, useMemo, type ReactNode } from 'react'
 import type { LngLat } from '@/geo/projection'
+import type { ZoneCheck } from './cross-check'
 import type { ZoneVerdict } from './verdict'
 import { useZone } from './use-zone'
 
 export type ZoneGate = {
   readonly zone: string | null
-  readonly verdict: ZoneVerdict | null
+  readonly check: ZoneCheck | null
+  readonly confirmed: boolean
   readonly cleared: boolean
   readonly confirmable: boolean
   readonly confirm: () => void
@@ -26,17 +28,18 @@ type ZoneGateProps = {
 }
 
 export function ZoneGateProvider({ zone, ring, confirmed, onConfirm, children }: ZoneGateProps) {
-  const verdict = useZone(zone ? ring : null)
-  const gate = useMemo(
-    () => ({
+  const check = useZone(zone ? ring : null)
+  const gate = useMemo(() => {
+    const verdict = check?.verdict ?? null
+    return {
       zone,
-      verdict,
+      check,
+      confirmed,
       cleared: zone === null || verdict?.status === 'inside' || (confirmed && !isRefused(verdict)),
-      confirmable: zone !== null && !confirmed && !isRefused(verdict) && verdict?.status !== 'inside',
+      confirmable: zone !== null && !confirmed && verdict?.status === 'unknown',
       confirm: onConfirm,
-    }),
-    [zone, verdict, confirmed, onConfirm],
-  )
+    }
+  }, [zone, check, confirmed, onConfirm])
   return <ZoneGateContext value={gate}>{children}</ZoneGateContext>
 }
 
