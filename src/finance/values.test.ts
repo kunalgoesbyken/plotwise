@@ -91,7 +91,9 @@ describe('sources of the Bangkok money defaults', () => {
     for (const id of ['services.low', 'services.high', 'basement.low', 'basement.high'] as const) {
       expect(sourceOf(id, office)).toContain('https://www.boi.go.th/en/typical_costs_of_starting_and_operating_a_business')
       expect(sourceOf(id, office)).toContain('Last Update: March 27th, 2026')
+      expect(sourceOf(id, office)).toContain('the same baht figures as the 2020 edition')
     }
+    expect(sourceOf('services.low', office)).toContain('which are unsourced Plotwise estimates')
   })
 
   it('labels the split and the uses BOI gives no row for as unsourced, checked against the published totals', () => {

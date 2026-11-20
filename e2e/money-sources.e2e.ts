@@ -4,7 +4,7 @@ import { moneyRegion, openResults, showTab } from './support/app'
 import { hashOf, mockApp, RESULTS_PLOT } from './support/site'
 import { expect, test } from './support/test'
 
-const BOI = /Thailand Board of Investment, Cost of Doing Business in Thailand.*Last Update: March 27th, 2026/
+const BOI = /Thailand Board of Investment, Cost of Doing Business in Thailand.*Last Update: March 27th, 2026.*the same baht figures as the 2020 edition/
 const RHLB = /RHLB \(Siam\) Ltd\., Construction Commentary, issue July 2025/
 
 const CBD_PLOT: Plot = {
@@ -45,6 +45,7 @@ test('money: the office services rate and the basement rate are estimates from t
     await expect(row.getByText('Estimated')).toBeVisible()
     await expect(row.getByText(BOI)).toBeVisible()
   }
+  await expect(rateRow(page, /^Services/).getByText(/unsourced Plotwise estimates.*a high-rise office totals THB 33,000 to THB 47,000 per m², above both the BOI range/)).toBeVisible()
   await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue('8000')
   await expect(rateRow(page, /^Basement/).getByLabel('High')).toHaveValue('20000')
 })
@@ -66,7 +67,7 @@ test('money: a CBD condo is priced from CBRE Q3 2026 and the land check quotes t
   await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('293283')
   await land.getByRole('button', { name: 'Source' }).click()
   await expect(land.getByText(/CBRE Thailand, Bangkok Overall Figures Q3 2026, published 18 November 2026/)).toBeVisible()
-  await expect(land.getByText(/Official reference, not a market price: the Treasury Department's appraised value for the 2023 to 2026 cycle/)).toBeVisible()
+  await expect(land.getByText(/Official reference, not a market price, with the road names read from a partly garbled Thai text layer.*the Treasury Department's appraised value for the 2023 to 2026 cycle/)).toBeVisible()
 })
 
 test('money: the city fringe keeps Knight Frank and names CBRE for comparison', async ({ page }) => {
@@ -89,8 +90,8 @@ test('money: an edited BOI-based rate travels in the share link', async ({ page 
   await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue('9000')
 })
 
-test('the landing page says which money figures are published and which are Plotwise estimates', async ({ page }) => {
+test('money: the landing page says which money figures are published and which are Plotwise estimates', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('main').getByRole('button', { name: 'How far can I trust the money figures?', exact: true }).click()
-  await expect(page.getByText(/from CBRE in the CBD and Knight Frank elsewhere.*Office and basement build rates follow the Thailand Board of Investment’s cost table/)).toBeVisible()
+  await expect(page.getByText(/from CBRE in the CBD and Knight Frank elsewhere.*The low-rise office total and the basement build rate follow the Thailand Board of Investment’s cost table/)).toBeVisible()
 })

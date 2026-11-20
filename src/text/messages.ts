@@ -110,7 +110,7 @@ const en = {
     'From the published city plan and building regulations. Each value is compiled from a pointer to its page and line, and the app links you to that page.',
   'landing.faq.money.q': 'How far can I trust the money figures?',
   'landing.faq.money.a':
-    'Treat them as a first look. Condo sale prices are published asking prices for the plot’s area, from CBRE in the CBD and Knight Frank elsewhere, and the margin is a listed developer’s. Office and basement build rates follow the Thailand Board of Investment’s cost table; the other build rates, fees, holding and finance costs are Plotwise estimates, checked against a Bangkok quantity surveyor’s totals. Each figure shows where it comes from, and you can change every one.',
+    'Treat them as a first look. Condo sale prices are published asking prices for the plot’s area, from CBRE in the CBD and Knight Frank elsewhere, and the margin is a listed developer’s. The low-rise office total and the basement build rate follow the Thailand Board of Investment’s cost table; the other build rates, fees, holding and finance costs are Plotwise estimates, compared with a Bangkok quantity surveyor’s totals. Each figure shows where it comes from, and you can change every one.',
   'landing.faq.share.q': 'Can I share a result?',
   'landing.faq.share.a': 'Yes. The link holds the plot, the roads, the building type and any assumption you changed. You can also print a one-page summary.',
   'landing.faq.region.q': ({ city }: { city: string }) => `Does it work outside ${city}?`,
