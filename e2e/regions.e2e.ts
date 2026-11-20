@@ -103,6 +103,9 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(page.getByRole('alert').filter({ hasText: 'in the Roads step to continue' })).toBeAttached({ timeout: 30_000 })
 
     await goTo(page, 'Roads')
+    await enterLimit(page, 'Floor area ratio (FAR)', '2,5')
+    await expect(page.getByText('Use a point for decimals, as in 2.5.', { exact: false })).toBeVisible()
+    expect(decodeURIComponent(page.url())).not.toContain('maxFar')
     await enterLimit(page, 'Floor area ratio (FAR)', '3')
     await enterLimit(page, 'Maximum storeys', '8')
     await enterLimit(page, 'Maximum ground coverage', '60')
@@ -140,7 +143,7 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(plan.getByLabel('Gross floor area (GFA)')).toBeVisible()
     await expect(plan.getByText('sq ft').first()).toBeVisible()
     await enterLimit(page, 'Gross floor area (GFA)', '32,291')
-    await enterLimit(page, 'Floors (G+)', '4')
+    await enterLimit(page, 'Floors', '4')
     await enterLimit(page, 'Setback from neighbour', '3')
     await expect.poll(() => decodeURIComponent(page.url())).toContain('maxStoreys:5')
 

@@ -1,9 +1,12 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
+import { EXAMPLE_PLOT } from '@/plot/example-plot'
+import type { Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
 import type { RegionId } from '@/solve'
+import { AFFECTION_PLAN_TERMS } from '@/solve/assumptions'
 import type { AreaUnit } from '@/units/area'
 
 export type RulesSource = 'pack' | 'affectionPlan' | 'custom'
@@ -13,13 +16,25 @@ export type Transit = {
   readonly stationNodeTypes: Assumption<readonly string[]>
 }
 
+export type FloorCount = 'storeys' | 'gPlus'
+
+type Term = { readonly value: string; readonly source: string }
+
+export type LimitTerms = {
+  readonly document: Term
+  readonly use: Term
+  readonly fields: Readonly<Partial<Record<PlotLimitField, Term>>>
+}
+
 export type Region = {
   readonly id: RegionId
   readonly name: string
-  readonly city: string | null
   readonly country: string | null
   readonly packId: PackId
   readonly rules: RulesSource
+  readonly limitTerms: LimitTerms | null
+  readonly floors: FloorCount
+  readonly example: Plot | null
   readonly areaUnit: AreaUnit
   readonly zone: { readonly name: string; readonly scope: string } | null
   readonly authority: string
@@ -39,10 +54,12 @@ export const REGIONS = {
   bkk: {
     id: 'bkk',
     name: 'Bangkok',
-    city: 'Bangkok',
     country: 'Thailand',
     packId: 'bkk-y9',
     rules: 'pack',
+    limitTerms: null,
+    floors: 'storeys',
+    example: EXAMPLE_PLOT,
     areaUnit: 'sqm',
     zone: {
       name: 'Brown zone · very high-density residential',
@@ -76,10 +93,12 @@ export const REGIONS = {
   dxb: {
     id: 'dxb',
     name: 'Dubai',
-    city: 'Dubai',
     country: 'the Emirate of Dubai',
     packId: 'dxb-ap',
     rules: 'affectionPlan',
+    limitTerms: AFFECTION_PLAN_TERMS,
+    floors: 'gPlus',
+    example: null,
     areaUnit: 'sqft',
     zone: null,
     authority: 'the authority that issued the affection plan',
@@ -99,10 +118,12 @@ export const REGIONS = {
   custom: {
     id: 'custom',
     name: 'Custom rules',
-    city: null,
     country: null,
     packId: 'custom',
     rules: 'custom',
+    limitTerms: null,
+    floors: 'storeys',
+    example: null,
     areaUnit: 'sqm',
     zone: null,
     authority: 'your local planning authority',

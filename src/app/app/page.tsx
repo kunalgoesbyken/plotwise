@@ -6,7 +6,7 @@ import { t } from '@/text/messages'
 
 export const metadata: Metadata = pageMetadata({
   title: t('app.title'),
-  description: t('app.description', { city: DEFAULT_REGION.city }),
+  description: t('app.description', { city: DEFAULT_REGION.name }),
   path: '/app',
 })
 

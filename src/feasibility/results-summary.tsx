@@ -13,9 +13,10 @@ import { VerificationNote } from './verification-note'
 
 export function ResultsSummary({ children }: { children?: ReactNode }) {
   const { result, design } = useFeasibility()
-  const { areaUnit } = useRegion()
+  const region = useRegion()
+  const { areaUnit } = region
   if (!result) return <SummarySkeleton />
-  if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{failureText(result)}</p>
+  if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{failureText(result, region)}</p>
   if (!design) return <p className="text-sm leading-snug text-muted-foreground">{t('designs.none')}</p>
   const { solution } = result
   const best = t('summary.best', { name: t(design.nameKey), area: formatQuantity(design.metrics.gfaSqm, areaUnit) })

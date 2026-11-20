@@ -18,6 +18,7 @@ type Verb = { verb: string }
 type Num = { number: string }
 type Area = { area: string }
 type Authority = { authority: string }
+type Name = { name: string }
 
 type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
@@ -118,9 +119,9 @@ const en = {
   'flow.next.plot': 'Next: roads',
   'flow.next.roads': 'See results',
   'flow.back': 'Back',
-  'plot.framing.pack': ({ city }: { city: string }) => `Check what a ${city} plot can hold before you buy it.`,
-  'plot.framing.affectionPlan': ({ city }: { city: string }) => `Check what a ${city} plot can hold, from the limits on its affection plan.`,
-  'plot.framing.custom': 'Check what a plot anywhere can hold, from the limits you enter.',
+  'plot.framing.pack': ({ name }: Name) => `Check what a ${name} plot can hold before you buy it.`,
+  'plot.framing.affectionPlan': ({ name }: Name) => `Check what a ${name} plot can hold, from the limits on its affection plan.`,
+  'plot.framing.custom': ({ name }: Name) => `${name}: check what a plot anywhere can hold, from the limits you enter.`,
   'region.title': 'Rules',
   'region.pack': 'Rules read from the law, cited line by line.',
   'region.affectionPlan': 'You enter the limits from the plot’s affection plan. Results are unverified.',
@@ -132,12 +133,13 @@ const en = {
   'limits.intro.affectionPlan':
     'Enter the values printed on the plot’s affection plan. Floor area or ratio, and height or floors, are needed; leave the rest blank if the plan does not state them.',
   'limits.intro.custom': 'Enter the limits you know. Floor area or ratio, and height or storeys, are needed; leave the rest blank to skip them.',
-  'limits.use.affectionPlan': ({ term }: { term: string }) => `Pick the building type above that matches the ${term} on the plan.`,
+  'limits.use': ({ use, document }: { use: string; document: string }) => `Pick the building type above that matches the ${use} on the ${document}.`,
+  'input.comma': 'Use a point for decimals, as in 2.5. A comma may only group thousands, as in 5,000.',
   'limits.terms': 'Where these terms come from',
   'limits.unit.percent': '%',
   'limits.unit.m': 'm',
   'limits.unit.storeys': 'storeys',
-  'limits.unit.floors': 'G+',
+  'limits.unit.g-plus': 'G+',
   'limits.unit.ratio': ': 1',
   'limits.unit.per-space': ({ unit }: { unit: string }) => `${unit} per space`,
   'limits.custom.maxGfaSqm': 'Maximum floor area',
@@ -455,10 +457,12 @@ const en = {
   'money.range': ({ low, high }: { low: string; high: string }) => `${low} to ${high}`,
   'money.per-unit': ({ unit }: { unit: string }) => `per ${unit}`,
   'money.per-unit-in': ({ currency, unit }: { currency: string; unit: string }) => `${currency} per ${unit}`,
-  'money.needs-prices': ({ region }: { region: string }) =>
-    `Plotwise has no sourced prices or costs for ${region}, so it shows no money figures until you enter every value below: sale price, margin, land costs, asking prices and build rates.`,
+  'money.needs-prices': ({ region, values }: { region: string; values: string }) =>
+    `Plotwise has no sourced prices or costs for ${region}, so it shows no money figures until you enter every value: ${values}.`,
   'money.missing': ({ count }: Count) => `${count} ${count === 1 ? 'value' : 'values'} still to enter`,
   'assumptions.blank': 'No default: enter your own',
+  'assumptions.rate-range': ({ row }: { row: string }) => `${row} build rate, low and high`,
+  'assumptions.clear': 'Clear all values',
   'money.built-up': 'Built-up area',
   'money.gross': 'Gross floor area',
   'money.saleable': 'Saleable area, estimated',

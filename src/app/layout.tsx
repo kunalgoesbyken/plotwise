@@ -14,8 +14,8 @@ const sans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN.value),
   ...pageMetadata({
-    title: t('landing.title', { city: DEFAULT_REGION.city }),
-    description: t('landing.description', { city: DEFAULT_REGION.city }),
+    title: t('landing.title', { city: DEFAULT_REGION.name }),
+    description: t('landing.description', { city: DEFAULT_REGION.name }),
     path: '/',
   }),
 }

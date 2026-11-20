@@ -14,7 +14,6 @@ export type WidthRow = {
   readonly outcome: WidthOutcome | null
 }
 
-
 function widestRoad(roads: readonly Road[]): Road {
   return roads.reduce((widest, road) => (road.widthM > widest.widthM ? road : widest))
 }

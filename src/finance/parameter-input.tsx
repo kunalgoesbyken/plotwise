@@ -4,6 +4,7 @@ import { useId, useState } from 'react'
 import { useRegion } from '@/editor/plot-store'
 import type { MoneyRegion } from '@/solve'
 import { t } from '@/text/messages'
+import { readNumber } from '@/text/read-number'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { perAreaFromDisplay, perAreaToDisplay, type AreaUnit } from '@/units/area'
@@ -26,7 +27,8 @@ function fromShown({ unit }: Parameter, shown: number, area: AreaUnit): number {
 }
 
 function parse(text: string, parameter: Parameter, area: AreaUnit) {
-  return text.trim() === '' ? Number.NaN : roundOff(fromShown(parameter, Number(text.replaceAll(',', '')), area))
+  const read = readNumber(text)
+  return read.kind === 'number' ? roundOff(fromShown(parameter, read.value, area)) : Number.NaN
 }
 
 const perUnit = ({ currency }: MoneyRegion, unit: string) => (currency ? t('money.per-unit-in', { currency, unit }) : t('money.per-unit', { unit }))
@@ -53,11 +55,14 @@ type ParameterInputProps = {
 
 export function ParameterInput({ finance, parameter, label, hideLabel = false }: ParameterInputProps) {
   const id = useId()
+  const hintId = useId()
   const { areaUnit } = useRegion()
   const [draft, setDraft] = useState<string | null>(null)
   const value = finance.valueOf(parameter)
   const shown = draft ?? (value === null ? '' : String(roundOff(toShown(parameter, value, areaUnit))))
   const invalid = draft !== null && !isValidValue(parameter, parse(draft, parameter, areaUnit))
+  const read = draft === null ? null : readNumber(draft)
+  const comma = read?.kind === 'unreadable' && read.reason === 'comma'
 
   function change(text: string) {
     setDraft(text)
@@ -77,12 +82,18 @@ export function ParameterInput({ finance, parameter, label, hideLabel = false }:
           value={shown}
           required={value === null}
           aria-invalid={invalid}
+          aria-describedby={comma ? hintId : undefined}
           onChange={(event) => change(event.target.value)}
           onBlur={() => setDraft(null)}
           className="w-32"
         />
         <span className="text-xs text-muted-foreground">{suffixFor(parameter, finance.region, areaUnit)}</span>
       </div>
+      {comma && (
+        <p id={hintId} className="text-xs text-destructive">
+          {t('input.comma')}
+        </p>
+      )}
     </div>
   )
 }

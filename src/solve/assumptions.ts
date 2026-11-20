@@ -1,4 +1,4 @@
-import type { BuildingType } from '@/plot/plot'
+import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import { SQM_PER_SQFT } from '@/units/area'
 import type { Interpretations, QuestionId } from './interpretations'
 
@@ -255,7 +255,7 @@ const DUBAI_BUILDING_CODE =
 const dbc = (page: number, quote: string) => `${DUBAI_BUILDING_CODE}, PDF page ${page}: "${quote}"`
 
 export const AFFECTION_PLAN_TERMS = {
-  plan: {
+  document: {
     value: 'Affection plan',
     source: dbc(
       23,
@@ -269,39 +269,41 @@ export const AFFECTION_PLAN_TERMS = {
       'Authorized use: Plot use or building occupancy authorized according to the classification of lands in Dubai noted in the official affection plan or development regulation.',
     ),
   },
-  maxGfaSqm: {
-    value: 'Gross floor area (GFA)',
-    source: dbc(6, 'Gross floor area (GFA): Measurement used by Planning Authorities in Dubai to define the floor area ratio (FAR), where FAR is the ratio of GFA to plot area.'),
+  fields: {
+    maxGfaSqm: {
+      value: 'Gross floor area (GFA)',
+      source: dbc(6, 'Gross floor area (GFA): Measurement used by Planning Authorities in Dubai to define the floor area ratio (FAR), where FAR is the ratio of GFA to plot area.'),
+    },
+    maxFar: { value: 'Floor area ratio (FAR)', source: dbc(5, 'Floor area ratio (FAR): Ratio of gross floor area (GFA) to plot area.') },
+    maxHeightM: {
+      value: 'Building height',
+      source: dbc(
+        24,
+        'Building height: Vertical distance measured from the approved road edge level at the plot main access to the mean finished level of the building roof.',
+      ),
+    },
+    maxStoreys: {
+      value: 'Floors',
+      source: dbc(
+        40,
+        'the allowable number of floors, as defined by the affection plan or DCR ... Example: For a building with G+10 floors limit, the maximum allowable height shall be calculated as 11 (the number of floors)',
+      ),
+    },
+    maxCoverageShare: {
+      value: 'Plot coverage',
+      source: dbc(30, 'Plot coverage: Horizontal area occupied by all main and annex buildings on the same plot'),
+    },
+    roadSetbackM: {
+      value: 'Setback from road',
+      source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
+    },
+    boundarySetbackM: {
+      value: 'Setback from neighbour',
+      source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
+    },
+    parkingSqmPerSpace: {
+      value: 'Parking requirement',
+      source: dbc(89, 'Parking requirements set out in the affection plan or DCR shall take precedent over Table B.13.'),
+    },
   },
-  maxFar: { value: 'Floor area ratio (FAR)', source: dbc(5, 'Floor area ratio (FAR): Ratio of gross floor area (GFA) to plot area.') },
-  maxHeightM: {
-    value: 'Building height',
-    source: dbc(
-      24,
-      'Building height: Vertical distance measured from the approved road edge level at the plot main access to the mean finished level of the building roof.',
-    ),
-  },
-  maxStoreys: {
-    value: 'Floors (G+)',
-    source: dbc(
-      40,
-      'the allowable number of floors, as defined by the affection plan or DCR ... Example: For a building with G+10 floors limit, the maximum allowable height shall be calculated as 11 (the number of floors)',
-    ),
-  },
-  maxCoverageShare: {
-    value: 'Plot coverage',
-    source: dbc(30, 'Plot coverage: Horizontal area occupied by all main and annex buildings on the same plot'),
-  },
-  roadSetbackM: {
-    value: 'Setback from road',
-    source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
-  },
-  boundarySetbackM: {
-    value: 'Setback from neighbour',
-    source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
-  },
-  parkingSqmPerSpace: {
-    value: 'Parking requirement',
-    source: dbc(89, 'Parking requirements set out in the affection plan or DCR shall take precedent over Table B.13.'),
-  },
-} as const satisfies Record<string, Term>
+} as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }

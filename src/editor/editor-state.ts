@@ -5,7 +5,7 @@ import { loadPack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
 import { nearestStation, type NearestStation } from '@/site/nearest-station'
 import type { Road as SiteRoad, Station } from '@/site/schema'
-import { satisfies, stationDistance, type RegionId } from '@/solve'
+import { plotLimitFields, satisfies, stationDistance, type RegionId } from '@/solve'
 import type { Corner } from './outline'
 import { editDraft, emptyDraft, toPlot, type Draft, type DraftAction, type Rejection } from './plot-draft'
 import type { LinkProblem } from './plot-url'
@@ -192,9 +192,18 @@ function reduceAction(state: EditorState, action: EditorAction): EditorState {
   }
 }
 
+function withRegionLimits(state: EditorState): EditorState {
+  const taken = new Set<string>(plotLimitFields(loadPack(REGIONS[state.region].packId)))
+  const { limits } = state.draft
+  const kept = Object.entries(limits).filter(([field]) => taken.has(field))
+  if (kept.length === Object.keys(limits).length) return state
+  const draft = { ...state.draft, limits: Object.fromEntries(kept) }
+  return { ...state, draft, plot: toPlot(draft) }
+}
+
 export function reduceEditor(state: EditorState, action: EditorAction): EditorState {
   const next = reduceAction(state, action)
-  return next === state ? state : withStationEstimate(state, withFrontageEstimates(state, next))
+  return next === state ? state : withStationEstimate(state, withFrontageEstimates(state, withRegionLimits(next)))
 }
 
 export function nextStep({ draft }: EditorState): Step {

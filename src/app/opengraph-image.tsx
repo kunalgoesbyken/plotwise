@@ -7,7 +7,7 @@ import { SHARE_PALETTE } from '@/seo/identity'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 
-export const alt = t('share.image.alt', { city: DEFAULT_REGION.city })
+export const alt = t('share.image.alt', { city: DEFAULT_REGION.name })
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

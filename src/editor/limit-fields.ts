@@ -1,9 +1,12 @@
 import type { PlotLimitField } from '@/plot/plot'
+import type { FloorCount, Region } from '@/region/regions'
+import { t } from '@/text/messages'
+import { readNumber, type ReadNumber } from '@/text/read-number'
 import { areaFromDisplay, areaToDisplay, type AreaUnit } from '@/units/area'
 
 export type LimitUnit = 'area' | 'ratio' | 'm' | 'storeys' | 'percent' | 'perSpace'
 
-export type LimitDisplay = { readonly area: AreaUnit; readonly floors: 'storeys' | 'aboveGround' }
+export type LimitDisplay = { readonly area: AreaUnit; readonly floors: FloorCount }
 
 export const FIELD_UNITS: Readonly<Record<PlotLimitField, LimitUnit>> = {
   maxGfaSqm: 'area',
@@ -19,7 +22,6 @@ export const FIELD_UNITS: Readonly<Record<PlotLimitField, LimitUnit>> = {
 
 const PERCENT = 100
 const PRECISION = 12
-const DECIMAL = /^(\d+\.?\d*|\.\d+)$/
 
 function toShown(field: PlotLimitField, value: number, { area, floors }: LimitDisplay): number {
   switch (FIELD_UNITS[field]) {
@@ -29,7 +31,7 @@ function toShown(field: PlotLimitField, value: number, { area, floors }: LimitDi
     case 'percent':
       return value * PERCENT
     case 'storeys':
-      return floors === 'aboveGround' ? value - 1 : value
+      return floors === 'gPlus' ? value - 1 : value
     case 'ratio':
     case 'm':
       return value
@@ -44,19 +46,23 @@ function fromShown(field: PlotLimitField, shown: number, { area, floors }: Limit
     case 'percent':
       return shown / PERCENT
     case 'storeys':
-      return floors === 'aboveGround' ? shown + 1 : shown
+      return floors === 'gPlus' ? shown + 1 : shown
     case 'ratio':
     case 'm':
       return shown
   }
 }
 
-export const shownLimit = (field: PlotLimitField, value: number, display: LimitDisplay) =>
+export const limitDisplay = ({ areaUnit, floors }: Region): LimitDisplay => ({ area: areaUnit, floors })
+
+export const limitLabel = (field: PlotLimitField, { limitTerms }: Region) => limitTerms?.fields[field]?.value ?? t(`limits.custom.${field}`)
+
+export const limitName = (field: PlotLimitField, { limitTerms }: Region) => limitTerms?.fields[field]?.value ?? t(`plot-limit.${field}`)
+
+export const shownLimit =(field: PlotLimitField, value: number, display: LimitDisplay) =>
   String(Number(toShown(field, value, display).toPrecision(PRECISION)))
 
-export function parseLimit(field: PlotLimitField, text: string, display: LimitDisplay): number | undefined | null {
-  const trimmed = text.trim().replaceAll(',', '')
-  if (trimmed === '') return undefined
-  if (!DECIMAL.test(trimmed)) return null
-  return fromShown(field, Number(trimmed), display)
+export function parseLimit(field: PlotLimitField, text: string, display: LimitDisplay): ReadNumber {
+  const read = readNumber(text)
+  return read.kind === 'number' ? { kind: 'number', value: fromShown(field, read.value, display) } : read
 }

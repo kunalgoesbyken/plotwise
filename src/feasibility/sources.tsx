@@ -1,4 +1,6 @@
 import { ArrowSquareOutIcon } from '@phosphor-icons/react'
+import { limitName } from '@/editor/limit-fields'
+import { useRegion } from '@/editor/plot-store'
 import { isPlotLimitField } from '@/plot/plot'
 import { isSourceCite, type Cite } from '@/rules'
 import { t } from '@/text/messages'
@@ -9,10 +11,11 @@ import { citeKey } from './rule-layers'
 const unique = (cites: readonly Cite[]) => [...new Map(cites.map((cite) => [citeKey(cite), cite])).values()]
 
 function EnteredItem({ field }: { field: string }) {
+  const region = useRegion()
   return (
     <li className="flex flex-col gap-0.5 py-1.5 text-xs">
       <p className="font-medium text-foreground">{t('source.entered')}</p>
-      {isPlotLimitField(field) && <p className="text-muted-foreground">{t(`plot-limit.${field}`)}</p>}
+      {isPlotLimitField(field) && <p className="text-muted-foreground">{limitName(field, region)}</p>}
     </li>
   )
 }

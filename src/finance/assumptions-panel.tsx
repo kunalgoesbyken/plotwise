@@ -60,7 +60,7 @@ export function AssumptionsPanel() {
         <h2 className="text-base leading-6 font-semibold">{t('assumptions.title')}</h2>
         {finance.hasEdits && (
           <Button variant="link" size="xs" onClick={finance.resetAll}>
-            {t('assumptions.reset')}
+            {t(finance.region.prices ? 'assumptions.reset' : 'assumptions.clear')}
           </Button>
         )}
       </header>

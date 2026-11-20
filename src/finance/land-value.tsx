@@ -3,11 +3,11 @@
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
-import { formatNumber } from '@/text/format'
+import { formatList, formatNumber } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Disclosure } from '@/ui/disclosure'
-import { rangeText } from './figures'
+import { everyValueLabel, rangeText } from './figures'
 import { ParameterInput } from './parameter-input'
 import { SCALARS } from './parameters'
 import { useFinance, type Finance, type Priced } from './use-finance'
@@ -36,10 +36,10 @@ function Supported({ finance, priced, design }: { finance: Finance; priced: Pric
 }
 
 function NeedsPrices({ finance }: { finance: Finance }) {
-  const { name } = useRegion()
+  const { name, areaUnit } = useRegion()
   return (
     <div role="note" className="flex flex-col gap-1 text-xs leading-relaxed">
-      <p className="text-foreground">{t('money.needs-prices', { region: name })}</p>
+      <p className="text-foreground">{t('money.needs-prices', { region: name, values: formatList(everyValueLabel(areaUnit)) })}</p>
       <p className="font-medium text-destructive">{t('money.missing', { count: finance.missing.length })}</p>
     </div>
   )

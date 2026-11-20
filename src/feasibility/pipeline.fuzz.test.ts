@@ -7,10 +7,11 @@ import { intersection } from '@/geometry/clip'
 import { initialEditorState, reduceEditor } from '@/editor/editor-state'
 import { roundLngLat } from '@/editor/plot-draft'
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
-import type { Solution } from '@/solve'
+import type { RegionId, Solution } from '@/solve'
 import { layerSolids, solidsGeometry } from '@/scene/meshes'
 import { framingOf } from '@/scene/framing'
-import { loadPack, type PackId } from '@/rules'
+import { REGIONS } from '@/region/regions'
+import { loadPack } from '@/rules'
 import { feasibility } from './compute'
 import { carvingRules, envelopeLayers, RULE_STEPS } from './rule-layers'
 
@@ -155,8 +156,9 @@ function expectSound(solution: Solution, design: Design) {
   }
 }
 
-function openLikeTheApp(plot: Plot) {
-  return reduceEditor(initialEditorState(plot.buildingType), { type: 'load', plot })
+function openLikeTheApp(plot: Plot, region: RegionId = 'bkk') {
+  const start = reduceEditor(initialEditorState(plot.buildingType), { type: 'set-region', region })
+  return reduceEditor(start, { type: 'load', plot })
 }
 
 describe('plot to designs fuzz', () => {
@@ -194,10 +196,10 @@ const entered = fc.record(
 describe('plot to designs fuzz with limits the user enters', () => {
   it('keeps every design inside its envelope and limits, or names the limit still missing', () => {
     fc.assert(
-      fc.property(plots, entered, fc.constantFrom<PackId>('custom', 'dxb-ap'), (plot, limits, packId) => {
-        const loaded = openLikeTheApp({ ...plot, limits })
+      fc.property(plots, entered, fc.constantFrom<RegionId>('custom', 'dxb'), (plot, limits, region) => {
+        const loaded = openLikeTheApp({ ...plot, limits }, region)
         if (!loaded.plot) return expect(loaded.notice).not.toBeNull()
-        const result = feasibility(loaded.plot, loadPack(packId))
+        const result = feasibility(loaded.plot, loadPack(REGIONS[region].packId))
         if (result.status === 'failed') return expect(result.reason).not.toBe('unknown')
         expect(result.solution.verification).toBe('unverified')
         expectFinite(result.solution.limits, 'limits')

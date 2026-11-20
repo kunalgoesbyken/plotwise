@@ -159,6 +159,10 @@ describe('plot limits in the link', () => {
     const broken = ['castle:3', 'maxGfaSqm', 'maxGfaSqm:', 'maxGfaSqm:abc', 'maxGfaSqm:-5', 'maxStoreys:2.5', 'maxCoverageShare:1.5', 'maxGfaSqm:1;maxGfaSqm:2', '']
     for (const value of broken) expect(decodePlot(`${good}&limits=${value}`)).toEqual({ ok: false, problem: 'link-invalid' })
   })
+
+  it('refuses a link that gives the limits twice, as it refuses two rules sources', () => {
+    expect(decodePlot(`${encodePlot(plot)}&limits=maxFar:3&limits=maxFar:30`)).toEqual({ ok: false, problem: 'link-invalid' })
+  })
 })
 
 describe('rules source in the link', () => {

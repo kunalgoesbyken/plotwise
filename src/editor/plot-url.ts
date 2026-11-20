@@ -40,8 +40,10 @@ export type DecodedLink = { ok: true; plot: Plot } | { ok: false; problem: LinkP
 
 const rejected = (problem: LinkProblem) => ({ ok: false, problem }) as const
 
-function decodeLimits(text: string | null): Record<string, number> | null | undefined {
-  if (text === null) return undefined
+function decodeLimits(given: readonly string[]): Record<string, number> | null | undefined {
+  if (given.length === 0) return undefined
+  if (given.length > 1) return null
+  const [text] = given
   const pairs = text.split(LIST).map((pair) => pair.split(LIMIT))
   const fields = pairs.map(([field]) => field)
   if (pairs.some((pair) => pair.length !== 2 || !isPlotLimitField(pair[0])) || new Set(fields).size !== fields.length) return null
@@ -57,7 +59,7 @@ export function decodePlot(fragment: string): DecodedLink | null {
   if (ring === null && roads === null && buildingType === null) return null
   if (ring === null || roads === null || buildingType === null) return rejected('link-incomplete')
   if (station !== null && station !== STATION) return rejected('link-invalid')
-  const limits = decodeLimits(params.get('limits'))
+  const limits = decodeLimits(params.getAll('limits'))
   if (limits === null) return rejected('link-invalid')
   const parsed = PlotSchema.safeParse({
     ring: ring.split(LIST).map((p) => numbers(p, PAIR)),

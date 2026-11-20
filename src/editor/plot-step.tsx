@@ -1,8 +1,7 @@
 'use client'
 
 import { ArrowSquareOutIcon } from '@phosphor-icons/react'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
-import { DEFAULT_REGION, type Region } from '@/region/regions'
+import type { Region } from '@/region/regions'
 import { ZoneStatus } from '@/zone'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
@@ -11,18 +10,13 @@ import { PlaceSearch } from './place-search'
 import { useEditorState, useEditorStore, useRegion } from './plot-store'
 import { RegionPicker } from './region-picker'
 
-function framing({ rules, city }: Region): string {
-  if (rules === 'custom' || city === null) return t('plot.framing.custom')
-  return t(`plot.framing.${rules}`, { city })
-}
-
 function Start() {
   const store = useEditorStore()
-  const region = useRegion()
+  const { rules, name, example } = useRegion()
   return (
     <div className="flex flex-col items-start gap-3 px-(--pad) pt-5 pb-5">
-      <p className="text-base leading-snug font-medium text-pretty">{framing(region)}</p>
-      {region.id === DEFAULT_REGION.id && <Button onClick={() => store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })}>{t('plot.example')}</Button>}
+      <p className="text-base leading-snug font-medium text-pretty">{t(`plot.framing.${rules}`, { name })}</p>
+      {example && <Button onClick={() => store.dispatch({ type: 'load-example', plot: example })}>{t('plot.example')}</Button>}
     </div>
   )
 }
