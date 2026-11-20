@@ -39,7 +39,7 @@ function NeedsPrices({ finance }: { finance: Finance }) {
   const region = useRegion()
   return (
     <div role="note" className="flex flex-col gap-1 text-xs leading-relaxed">
-      <p className="text-foreground">{t('money.needs-prices', { region: region.name, values: formatList(everyValueLabel(region)) })}</p>
+      <p className="text-foreground">{t('money.needs-prices', { region: region.name, values: formatList(everyValueLabel(region, finance)) })}</p>
       <p className="font-medium text-destructive">{t('money.missing', { count: finance.missing.length })}</p>
     </div>
   )

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
+import type { RulePack } from '@/rules'
 import type { AreaTier, AssumedRange, MoneyPrices } from '@/solve'
 
 export type Unit = 'money' | 'landMoney' | 'share' | 'count'
@@ -103,6 +104,25 @@ export const RATES: readonly RateParameters[] = RATE_ROWS.map((row) => ({
 }))
 
 export const PARAMETERS: readonly Parameter[] = [...Object.values(SCALARS), ...RATES.flatMap(({ low, high }) => [low, high])]
+
+const ONE_CLASS_ROW: Readonly<Partial<Record<RateRow, RateRow>>> = {
+  'substructure.highRise': 'substructure.lowRise',
+  'superstructure.highRise': 'superstructure.lowRise',
+}
+
+const ONE_CLASS_RATES: ReadonlyMap<ParameterId, Parameter> = new Map(
+  RATES.flatMap(({ row, low, high }) => {
+    const rates = RATES.find((rate) => rate.row === ONE_CLASS_ROW[row])
+    return rates ? [[low.id, rates.low] as const, [high.id, rates.high] as const] : []
+  }),
+)
+
+export const enteredAs = (parameter: Parameter, { buildingClasses }: RulePack): Parameter =>
+  buildingClasses ? parameter : (ONE_CLASS_RATES.get(parameter.id) ?? parameter)
+
+export const parametersFor = (pack: RulePack): readonly Parameter[] => PARAMETERS.filter((parameter) => enteredAs(parameter, pack) === parameter)
+
+export const ratesFor = (pack: RulePack): readonly RateParameters[] => RATES.filter(({ low }) => enteredAs(low, pack) === low)
 
 export const storageKey = ({ id, perUse }: Input, use: BuildingType) => (perUse ? `${id}.${use}` : id)
 

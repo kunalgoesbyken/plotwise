@@ -645,6 +645,8 @@ const en = {
   'assumptions.rate.substructure.highRise': 'Substructure, high-rise',
   'assumptions.rate.superstructure.lowRise': 'Superstructure, low-rise',
   'assumptions.rate.superstructure.highRise': 'Superstructure, high-rise',
+  'assumptions.rate.one-class.substructure.lowRise': 'Substructure',
+  'assumptions.rate.one-class.superstructure.lowRise': 'Superstructure',
   'assumptions.rate.services': 'Services',
   'assumptions.rate.basement': ({ unit }: { unit: string }) => `Basement, per ${unit} of basement`,
 

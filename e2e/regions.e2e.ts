@@ -155,6 +155,8 @@ for (const viewport of [DESKTOP, PHONE]) {
     expect(await designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ }).count()).toBeGreaterThanOrEqual(2)
 
     await showTab(page, 'Money')
+    await expect(moneyPanel(page)).toContainText('Superstructure build rate, low and high')
+    await expect(moneyPanel(page)).not.toContainText('high-rise')
     const land = moneyPanel(page).getByRole('region', { name: 'Land value' })
     await expect(land.getByLabel('Sale price per sq ft of saleable area')).toHaveValue('')
     await expect(land.getByText('AED per sq ft')).toBeVisible()
