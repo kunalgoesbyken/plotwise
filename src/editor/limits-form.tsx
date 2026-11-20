@@ -36,7 +36,7 @@ function unitOf(field: PlotLimitField, { area, floors }: LimitDisplay): string {
   }
 }
 
-const isAccepted = (field: PlotLimitField, value: number | undefined | null) =>
+const isAccepted = (field: PlotLimitField, value: number | undefined | null): value is number | undefined =>
   value !== null && (value === undefined || PlotLimitsSchema.shape[field].safeParse(value).success)
 
 type LimitInputProps = { readonly field: PlotLimitField; readonly value: number | undefined; readonly region: Region }
@@ -52,7 +52,7 @@ function LimitInput({ field, value, region }: LimitInputProps) {
   function change(text: string) {
     setDraft(text)
     const parsed = parseLimit(field, text, display)
-    if (isAccepted(field, parsed)) store.dispatch({ type: 'set-limit', field, value: parsed ?? undefined })
+    if (isAccepted(field, parsed)) store.dispatch({ type: 'set-limit', field, value: parsed })
   }
 
   return (
