@@ -3,7 +3,8 @@ import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 import { formatMoney } from './format-money'
 import { totalOf, type Estimate, type Parking, type Range } from './estimate'
-import { RATES, SCALARS, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
+import { SCALARS, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
+import type { Finance } from './use-finance'
 
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
   t('money.range', { low: formatMoney(low, currency), high: formatMoney(high, currency) })
@@ -21,10 +22,18 @@ export function scalarLabel(id: ScalarId, { areaUnit, areaTerms }: Region): stri
 export const purchasePriceLabel = (id: PurchasePriceId, { areaUnit, areaTerms }: Region) =>
   id === 'landRate' ? t('land.landRate', { rate: areaTerms.landRate, unit: t(`area-unit.${areaUnit}`) }) : t('land.tdrPrice', { unit: t(`area-unit.${areaUnit}`) })
 
-export const everyValueLabel = (region: Region) => [
+type RateRows = Pick<Finance, 'rates' | 'buildClasses'>
+
+export const everyValueLabel = (region: Region, finance: RateRows) => [
   ...(Object.keys(SCALARS) as ScalarId[]).map((id) => scalarLabel(id, region)),
-  ...RATES.map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, region.areaUnit) })),
+  ...finance.rates.map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, region.areaUnit, finance) })),
 ]
 
-export const rateLabel = (row: RateRow, area: AreaUnit) =>
-  row === 'basement' ? t('assumptions.rate.basement', { unit: t(`area-unit.${area}`) }) : t(`assumptions.rate.${row}`)
+type OneClassRow = Extract<RateRow, 'substructure.lowRise' | 'superstructure.lowRise'>
+
+const isOneClassRow = (row: RateRow): row is OneClassRow => row === 'substructure.lowRise' || row === 'superstructure.lowRise'
+
+export function rateLabel(row: RateRow, area: AreaUnit, { buildClasses }: Pick<Finance, 'buildClasses'>): string {
+  if (row === 'basement') return t('assumptions.rate.basement', { unit: t(`area-unit.${area}`) })
+  return !buildClasses && isOneClassRow(row) ? t(`assumptions.rate.one-class.${row}`) : t(`assumptions.rate.${row}`)
+}

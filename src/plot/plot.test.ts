@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { MAX_PLOT_LIMIT, MAX_ROAD_WIDTH_M, MAX_STOREYS, PlotSchema } from './plot'
+import fc from 'fast-check'
+import { ASSUMPTIONS } from '@/solve/assumptions'
+import { MAX_ROAD_WIDTH_M, PlotLimitsSchema, PlotSchema, type PlotLimitField } from './plot'
 
 const ring = [
   [100.56, 13.74],
@@ -71,14 +73,35 @@ describe('limits entered for a plot', () => {
   })
 
   it('rejects limits that are not positive, not finite or beyond any real plot', () => {
-    for (const bad of [0, -1, Infinity, NaN, MAX_PLOT_LIMIT + 1]) {
+    for (const bad of [0, -1, Infinity, NaN]) {
       expect(withLimits({ maxGfaSqm: bad })).toBe(false)
       expect(withLimits({ maxHeightM: bad })).toBe(false)
     }
     expect(withLimits({ maxStoreys: 2.5 })).toBe(false)
-    expect(withLimits({ maxStoreys: MAX_STOREYS + 1 })).toBe(false)
     expect(withLimits({ maxCoverageShare: 1.01 })).toBe(false)
     expect(withLimits({ roadSetbackM: -0.5 })).toBe(false)
-    expect(withLimits({ boundarySetbackM: MAX_ROAD_WIDTH_M + 1 })).toBe(false)
+  })
+
+  const MAXIMA: Readonly<Partial<Record<PlotLimitField, number>>> = {
+    maxGfaSqm: ASSUMPTIONS.plotMaxGfaSqm.value,
+    maxFar: ASSUMPTIONS.plotMaxFar.value,
+    maxHeightM: ASSUMPTIONS.plotMaxHeightM.value,
+    maxStoreys: ASSUMPTIONS.plotMaxStoreys.value,
+    roadSetbackM: ASSUMPTIONS.plotMaxSetbackM.value,
+    boundarySetbackM: ASSUMPTIONS.plotMaxSetbackM.value,
+    parkingSqmPerSpace: ASSUMPTIONS.plotMaxParkingSqmPerSpace.value,
+  }
+
+  it.each(Object.entries(MAXIMA))('accepts %s up to its sourced maximum and refuses anything above it', (field, max) => {
+    expect(withLimits({ [field]: max })).toBe(true)
+    fc.assert(fc.property(fc.double({ min: max, max: Number.MAX_VALUE, minExcluded: true, noNaN: true }), (over) => !withLimits({ [field]: over })))
+  })
+
+  it('bounds every limit a plot can be given', () => {
+    expect(Object.keys(MAXIMA).sort()).toEqual(Object.keys(PlotLimitsSchema.shape).filter((f) => !f.endsWith('Share')).sort())
+  })
+
+  it('refuses the million-metre height that once built a 320,000-storey design', () => {
+    expect(withLimits({ maxFar: 100, maxHeightM: 1_000_000 })).toBe(false)
   })
 })

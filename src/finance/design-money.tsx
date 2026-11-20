@@ -64,7 +64,7 @@ export function DesignMoney() {
         <Figure label={t('money.saleable', areaTerms)} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
         <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, areaUnit)} />
         <Figure label={t('money.parking-levels')} value={parkingText(estimate.parking)} />
-        <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />
+        {finance.buildClasses && <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />}
         {COST_PARTS.map(({ part, label }) => (
           <Figure key={part} label={label} value={rangeText({ low: estimate.firstCost.low[part], high: estimate.firstCost.high[part] }, currency)} />
         ))}

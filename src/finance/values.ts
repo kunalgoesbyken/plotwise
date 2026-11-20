@@ -1,7 +1,7 @@
 import type { BuildingType } from '@/plot/plot'
 import { isSourceCite, type Cite, type RulePack } from '@/rules'
 import { CARPET_RATIO_NOTE, type MoneyPrices } from '@/solve'
-import { PARAMETERS, storageKey, type Assumed, type Basis, type Parameter, type ParameterId } from './parameters'
+import { enteredAs, PARAMETERS, parametersFor, storageKey, type Assumed, type Basis, type Parameter, type ParameterId } from './parameters'
 
 export type Overrides = Readonly<Partial<Record<string, number>>>
 export type Values = Readonly<Record<ParameterId, number>>
@@ -33,10 +33,13 @@ export function packDefaults({ carpetArea, sources }: RulePack): Defaults {
 const valueOf = (parameter: Parameter, overrides: Overrides, use: BuildingType, defaults: Defaults) =>
   overrides[storageKey(parameter, use)] ?? defaults[parameter.id]?.value
 
-export const missingParameters = (overrides: Overrides, use: BuildingType, defaults: Defaults = NO_DEFAULTS): readonly Parameter[] =>
-  PARAMETERS.filter((parameter) => valueOf(parameter, overrides, use, defaults) === undefined)
+export function missingParameters(overrides: Overrides, use: BuildingType, pack: RulePack): readonly Parameter[] {
+  const defaults = packDefaults(pack)
+  return parametersFor(pack).filter((parameter) => valueOf(parameter, overrides, use, defaults) === undefined)
+}
 
-export function enteredValues(overrides: Overrides, use: BuildingType, defaults: Defaults = NO_DEFAULTS): Values | null {
-  if (missingParameters(overrides, use, defaults).length > 0) return null
-  return Object.fromEntries(PARAMETERS.map((parameter) => [parameter.id, valueOf(parameter, overrides, use, defaults)])) as Values
+export function enteredValues(overrides: Overrides, use: BuildingType, pack: RulePack): Values | null {
+  if (missingParameters(overrides, use, pack).length > 0) return null
+  const defaults = packDefaults(pack)
+  return Object.fromEntries(PARAMETERS.map((parameter) => [parameter.id, valueOf(enteredAs(parameter, pack), overrides, use, defaults)])) as Values
 }

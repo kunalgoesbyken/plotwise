@@ -2,8 +2,9 @@ import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import fixture from './__fixtures__/nyc-lexington.arcgis.json'
 import { RECORDED_LAYER } from './__fixtures__/recorded-layer'
-import { ZONE_GENERALISATION_DEGREES } from './assumptions'
+import { ZONE_COORDINATE_DECIMALS } from './assumptions'
 import { fetchZoneFeatures, parseZoneFeatures, zoneQueryUrl, ZoneServiceUnavailableError } from './arcgis'
+import { generalisationDegrees } from './generalisation'
 import { ZONE_SOURCES } from './sources'
 
 const { bkk } = ZONE_SOURCES
@@ -28,7 +29,12 @@ describe('zoneQueryUrl', () => {
     expect(param('returnGeometry')).toBe('true')
     expect(param('outSR')).toBe('4326')
     expect(param('inSR')).toBe('4326')
-    expect(param('maxAllowableOffset')).toBe(String(ZONE_GENERALISATION_DEGREES.value))
+  })
+
+  it('asks for the generalisation and coordinate precision this plot can bear, written out in decimals', () => {
+    expect(param('geometryPrecision')).toBe(String(ZONE_COORDINATE_DECIMALS.value))
+    expect(param('maxAllowableOffset')).toMatch(/^0\.\d+$/)
+    expect(Number(param('maxAllowableOffset'))).toBe(generalisationDegrees(counterClockwise))
   })
 
   it('sends the plot as a closed clockwise ring, however it was drawn', () => {

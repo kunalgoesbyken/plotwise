@@ -22,6 +22,7 @@ type MetresInputProps = {
   placeholder: string
   valueM: number | null
   accepts: (valueM: number) => boolean
+  refusal?: string
   onValue: (valueM: number | null) => void
   describedBy?: string
   estimated?: boolean
@@ -29,7 +30,7 @@ type MetresInputProps = {
   required?: boolean
 }
 
-function MetresInput({ label, placeholder, valueM, accepts, onValue, describedBy, estimated = false, focus = false, required = false }: MetresInputProps) {
+function MetresInput({ label, placeholder, valueM, accepts, refusal, onValue, describedBy, estimated = false, focus = false, required = false }: MetresInputProps) {
   const id = useId()
   const hintId = useId()
   const input = useRef<HTMLInputElement>(null)
@@ -42,7 +43,7 @@ function MetresInput({ label, placeholder, valueM, accepts, onValue, describedBy
   const read = parseMetres(text)
   const blank = text.trim() === ''
   const invalid = blank ? required : read === null || !accepts(read)
-  const comma = hasDecimalComma(text)
+  const hint = hasDecimalComma(text) ? t('input.comma') : read !== null && !accepts(read) ? refusal : undefined
 
   useEffect(() => {
     if (focus) input.current?.focus()
@@ -63,7 +64,7 @@ function MetresInput({ label, placeholder, valueM, accepts, onValue, describedBy
           placeholder={placeholder}
           value={text}
           aria-invalid={invalid}
-          aria-describedby={[comma ? hintId : null, describedBy].filter(Boolean).join(' ') || undefined}
+          aria-describedby={[hint ? hintId : null, describedBy].filter(Boolean).join(' ') || undefined}
           data-estimated={estimated || undefined}
           onChange={(e) => {
             setText(e.target.value)
@@ -76,9 +77,9 @@ function MetresInput({ label, placeholder, valueM, accepts, onValue, describedBy
         <span className="text-sm text-muted-foreground">{t('frontage.metres')}</span>
         {estimated && <EstimateTag />}
       </div>
-      {comma && (
+      {hint && (
         <p id={hintId} className="max-w-48 text-xs text-destructive">
-          {t('input.comma')}
+          {hint}
         </p>
       )}
     </div>
@@ -107,6 +108,7 @@ function RoadInputs({ edge, name, road, noteId, prompt, widens, dispatch }: Road
           placeholder={t('frontage.prescribed-placeholder')}
           valueM={road.prescribedWidthM ?? null}
           accepts={(prescribedWidthM) => road.widthM === null || prescribedWidthM > road.widthM}
+          refusal={t('frontage.prescribed-invalid')}
           onValue={(prescribedWidthM) => dispatch({ type: 'set-prescribed-width', edge, prescribedWidthM: prescribedWidthM ?? undefined })}
         />
       )}

@@ -1,6 +1,5 @@
-import { MAX_FAR } from '@/plot/plot'
 import type { FarPurchase } from '@/rules'
-import type { PurchaseRatios } from '@/solve'
+import { ASSUMPTIONS, type PurchaseRatios } from '@/solve'
 
 const LIST = ';'
 const PAIR = ':'
@@ -9,7 +8,7 @@ const KEYS: Readonly<Record<FarPurchase['kind'], string>> = { premium: 'premium'
 
 const KINDS = new Map(Object.entries(KEYS).map(([kind, key]) => [key, kind as FarPurchase['kind']]))
 
-const isRatio = (value: number) => Number.isFinite(value) && value >= 0 && value <= MAX_FAR
+const isRatio = (value: number) => Number.isFinite(value) && value >= 0 && value <= ASSUMPTIONS.plotMaxFar.value
 
 export function encodePurchase(ratios: PurchaseRatios): string | null {
   const pairs = Object.entries(ratios).flatMap(([kind, ratio]) => (ratio ? [`${KEYS[kind as FarPurchase['kind']]}${PAIR}${ratio}`] : []))

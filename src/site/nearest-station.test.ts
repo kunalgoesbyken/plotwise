@@ -1,9 +1,12 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { localFrame, type LngLat, type Vec2 } from '@/geo/projection'
+import { LENGTH_TOLERANCE_M } from '@/geometry/tolerance'
 import { STATION_PLATFORM_RADIUS_M } from './assumptions'
 import { nearestStation } from './nearest-station'
 import type { Station } from './schema'
+
+const ROUND_TRIP_M = 1e-6
 
 const frame = localFrame([100.5603, 13.737])
 const at = ([x, y]: Vec2): LngLat => frame.toLngLat([x, y])
@@ -82,13 +85,24 @@ describe('nearestStation', () => {
     expect(nearestStation(plot, [platformArea('around', [-100, -100, 100, 100])])?.distanceM).toBe(0)
   })
 
+  const pointAt = (point: Vec2) => nearestStation(plot, [{ id: 'p', kind: 'platform', geometry: { type: 'point', at: at(point) } }])!.distanceM
+  const outsideBy = ([x, y]: Vec2) => Math.hypot(Math.max(0, -x, x - 40), Math.max(0, -y, y - 30))
+
+  it('counts a platform within the geometry length tolerance of the plot as touching it', () => {
+    expect(pointAt([0, -0.0005])).toBe(0)
+    expect(pointAt([40.0009, 10])).toBe(0)
+    expect(pointAt([40 + 2 * LENGTH_TOLERANCE_M, 10])).toBeCloseTo(2 * LENGTH_TOLERANCE_M, 6)
+  })
+
   it('measures a point platform to the nearest point of a rectangular plot', () => {
     fc.assert(
       fc.property(fc.double({ min: -600, max: 600, noNaN: true }), fc.double({ min: -600, max: 600, noNaN: true }), (x, y) => {
-        const point: Station = { id: 'p', kind: 'platform', geometry: { type: 'point', at: at([x, y]) } }
-        const expected = Math.hypot(Math.max(0, -x, x - 40), Math.max(0, -y, y - 30))
-        expect(nearestStation(plot, [point])!.distanceM).toBeCloseTo(expected, 3)
+        const expected = outsideBy([x, y])
+        const measured = pointAt([x, y])
+        if (expected > LENGTH_TOLERANCE_M + ROUND_TRIP_M) expect(measured).toBeCloseTo(expected, 6)
+        else expect(measured).toBeLessThanOrEqual(expected + ROUND_TRIP_M)
       }),
+      { examples: [[0, -0.0005]] },
     )
   })
 })

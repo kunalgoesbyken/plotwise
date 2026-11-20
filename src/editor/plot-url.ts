@@ -1,4 +1,4 @@
-import { isPlotLimitField, PlotSchema, type Plot, type PlotLimits } from '@/plot/plot'
+import { isPlotLimitField, PlotLimitsSchema, PlotSchema, type Plot, type PlotLimits } from '@/plot/plot'
 import { DEFAULT_REGION, RegionIdSchema } from '@/region/regions'
 import type { RegionId } from '@/solve'
 
@@ -35,7 +35,7 @@ export const EXAMPLE_FRAGMENT = 'example'
 
 export const isExampleLink = (fragment: string) => new URLSearchParams(fragment.replace(/^#/, '')).has(EXAMPLE_FRAGMENT)
 
-export type LinkProblem = 'link-incomplete' | 'link-invalid'
+export type LinkProblem = 'link-incomplete' | 'link-invalid' | 'link-limits'
 export type DecodedLink = { ok: true; plot: Plot } | { ok: false; problem: LinkProblem }
 
 const rejected = (problem: LinkProblem) => ({ ok: false, problem }) as const
@@ -47,7 +47,8 @@ function decodeLimits(given: readonly string[]): Record<string, number> | null |
   const pairs = text.split(LIST).map((pair) => pair.split(LIMIT))
   const fields = pairs.map(([field]) => field)
   if (pairs.some((pair) => pair.length !== 2 || !isPlotLimitField(pair[0])) || new Set(fields).size !== fields.length) return null
-  return Object.fromEntries(pairs.map(([field, value]) => [field, strictNumber(value)]))
+  const entries = pairs.map(([field, value]) => [field, strictNumber(value)] as const)
+  return entries.some(([, value]) => Number.isNaN(value)) ? null : Object.fromEntries(entries)
 }
 
 export function decodePlot(fragment: string): DecodedLink | null {
@@ -61,6 +62,7 @@ export function decodePlot(fragment: string): DecodedLink | null {
   if (station !== null && station !== STATION) return rejected('link-invalid')
   const limits = decodeLimits(params.getAll('limits'))
   if (limits === null) return rejected('link-invalid')
+  if (limits && !PlotLimitsSchema.safeParse(limits).success) return rejected('link-limits')
   const parsed = PlotSchema.safeParse({
     ring: ring.split(LIST).map((p) => numbers(p, PAIR)),
     roads: roads.split(LIST).map((r) => {

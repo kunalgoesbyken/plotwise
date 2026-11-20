@@ -64,7 +64,7 @@ export default function SceneView({ frame, plot, site, envelope, carved, strip, 
   )
   const standing = useSettled(onPlot, differentItems)
   const design = designs.find((d) => d.id === selectedDesignId) ?? designs[0]
-  const topM = Math.max(0, ...envelope.map((p) => p.topM), ...(design?.floors.map((f) => f.topM) ?? []))
+  const topM = [...envelope, ...(design?.floors ?? [])].reduce((top, part) => Math.max(top, part.topM), 0)
   const framing = useSettled(framingOf(plot.ring, topM), needsReframe)
 
   return (

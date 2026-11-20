@@ -1,4 +1,5 @@
 import type { Vec2 } from '@/geo/projection'
+import type { PlotLimitField } from '@/plot/plot'
 import { dot, edgeLengths, segmentDistance, subtract, type FloorPlates, type Loop, type Polygon } from '@/geometry'
 import type { Cite, Comparator, FrontOpenSpace } from '@/rules'
 import {
@@ -8,6 +9,7 @@ import {
   frontOpenSpaceDepth,
   inRange,
   isHighRiseOrExtraLarge,
+  isUnentered,
   lowRiseSetbacks,
   rearEdge,
   mainRoad,
@@ -49,6 +51,8 @@ export type CheckId =
 
 export type ManualCheckId = Extract<CheckId, 'far-bonus-measures' | 'far-purchase' | 'use-station' | 'road-access-network' | 'high-rise-road-network'>
 
+export type EnteredCheckId = Extract<CheckId, 'boundary-setback' | 'road-setback' | 'open-space-minimum'>
+
 export type Unit = 'sqm' | 'm' | 'ratio' | 'rooms'
 
 export type Check =
@@ -62,6 +66,7 @@ export type Check =
       readonly unit: Unit
     }
   | { readonly id: ManualCheckId; readonly cites: readonly Cite[]; readonly status: 'manual' }
+  | { readonly id: EnteredCheckId; readonly cites: readonly Cite[]; readonly status: 'manual'; readonly unentered: PlotLimitField }
 
 export type DesignFacts = {
   readonly solution: Solution
@@ -78,6 +83,18 @@ function measured(id: CheckId, actual: number, cmp: Comparator, limit: number, u
 }
 
 const manual = (id: ManualCheckId, cites: readonly Cite[]): Check => ({ id, status: 'manual', cites })
+
+const ENTERED_FIELD: Readonly<Record<EnteredCheckId, PlotLimitField>> = {
+  'boundary-setback': 'boundarySetbackM',
+  'road-setback': 'roadSetbackM',
+  'open-space-minimum': 'minOpenSpaceShare',
+}
+
+function unlessUnentered(id: EnteredCheckId, check: Check | null, { pack, plot }: Solution, notes: readonly Cite[]): Check[] {
+  const unentered = ENTERED_FIELD[id]
+  if (!isUnentered(pack, plot.limits, unentered) || check?.status === 'fail') return check ? [check] : []
+  return [{ id, status: 'manual', unentered, cites: [...(check?.cites ?? []), ...notes] }]
+}
 
 type Segment = readonly [Vec2, Vec2]
 
@@ -128,13 +145,13 @@ function openSpaceNeed({ solution, plates, programme, building }: DesignFacts): 
   return {
     landSqm: solution.site.areaSqm,
     farSqm: programme.farSqm,
-    largestFloorSqm: Math.max(0, ...plates.floors.map((f) => f.areaSqm)),
+    largestFloorSqm: plates.floors.reduce((largest, f) => Math.max(largest, f.areaSqm), 0),
     highRiseOrExtraLarge: isHighRiseOrExtraLarge(solution.pack, building),
   }
 }
 
 function openSpaceChecks(facts: DesignFacts): Check[] {
-  const { limits, site, farCap } = facts.solution
+  const { limits, site, farCap, pack } = facts.solution
   const need = openSpaceNeed(facts)
   const openSqm = site.areaSqm - facts.plates.footprintSqm
   const ratio = ratioOpenSpace(limits, need.farSqm)
@@ -144,7 +161,12 @@ function openSpaceChecks(facts: DesignFacts): Check[] {
     measured('far', need.farSqm, 'lte', farCap.maxGfaSqm, 'sqm', farCap.cites),
     ...(limits.openSpace.ratio ? [measured('open-space-ratio', openSqm, 'gte', ratio.value, 'sqm', ratio.cites)] : []),
     ...(limits.openSpace.permeable ? [measured('permeable', openSqm, 'gte', permeable.value, 'sqm', permeable.cites)] : []),
-    ...(limits.openSpace.minimums.length > 0 ? [measured('open-space-minimum', openSqm, 'gte', minimum.value, 'sqm', minimum.cites)] : []),
+    ...unlessUnentered(
+      'open-space-minimum',
+      limits.openSpace.minimums.length > 0 ? measured('open-space-minimum', openSqm, 'gte', minimum.value, 'sqm', minimum.cites) : null,
+      facts.solution,
+      pack.plotOpenSpace?.notes ?? [],
+    ),
   ]
 }
 
@@ -156,6 +178,7 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const roads = edges.flatMap((e) => (e.roadWidthM === null ? [] : [{ ...e, roadWidthM: e.roadWidthM }]))
   const checks: Check[] = []
   const lowRise = lowRiseSetbacks(pack, solution.landAreaSqm, building)
+  const plotSetback = (id: EnteredCheckId, check: Check) => (lowRise ? [check] : unlessUnentered(id, check, solution, pack.plotSetbacks?.notes ?? []))
   const rear = rearEdge(site)
   if (boundaries.length > 0) {
     const margins = boundaries.map((e) => {
@@ -164,7 +187,7 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
       return { actual, required, margin: actual - required.distanceM }
     })
     const worst = margins.reduce((least, m) => (m.margin < least.margin ? m : least))
-    checks.push(measured('boundary-setback', worst.actual, 'gte', worst.required.distanceM, 'm', worst.required.cites))
+    checks.push(...plotSetback('boundary-setback', measured('boundary-setback', worst.actual, 'gte', worst.required.distanceM, 'm', worst.required.cites)))
   }
   const roadMargins = roads.map((e) => {
     const required = lowRise ? lowRise.front : strictest([roadSetback(pack, building, e.roadWidthM), boundarySetback(pack, building, 'road')])
@@ -172,7 +195,7 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
     return { actual, required, margin: actual - required.distanceM }
   })
   const worstRoad = roadMargins.reduce((worst, r) => (r.margin < worst.margin ? r : worst))
-  checks.push(measured('road-setback', worstRoad.actual, 'gte', worstRoad.required.distanceM, 'm', worstRoad.required.cites))
+  checks.push(...plotSetback('road-setback', measured('road-setback', worstRoad.actual, 'gte', worstRoad.required.distanceM, 'm', worstRoad.required.cites)))
   const multiple = solution.limits.height.vsRoadMultiple
   if (!multiple) return checks
   if (multiple.distance === 'streetPlusFrontSpace') {

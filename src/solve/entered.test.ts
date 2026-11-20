@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { designs } from '@/designs'
+import { designs, type CheckId, type Design } from '@/designs'
 import type { PlotLimits } from '@/plot/plot'
 import { containsEntered, enteredCite, isSourceCite, loadPack, type Cite, type RulePack } from '@/rules'
 import { SolveError } from './errors'
@@ -95,10 +95,7 @@ describe('entered coverage, open space and parking are optional', () => {
     expect(limits.coverage).toBeNull()
     expect(limits.openSpace.minimums).toEqual([])
     expect(limits.parking.rules).toEqual([])
-    for (const design of designs(solveWith(CUSTOM, REQUIRED))) {
-      expect(design.checks.map((c) => c.id)).not.toContain('coverage')
-      expect(design.checks.map((c) => c.id)).not.toContain('open-space-minimum')
-    }
+    for (const design of designs(solveWith(CUSTOM, REQUIRED))) expect(design.checks.map((c) => c.id)).not.toContain('coverage')
   })
 
   it('caps coverage at the entered share when given', () => {
@@ -128,6 +125,72 @@ describe('entered coverage, open space and parking are optional', () => {
     const [rule] = solution.limits.parking.rules
     expect(rule).toMatchObject({ scope: 'entered', condo: { kind: 'perGrossArea', sqmPerSpace: { value: 50 } } })
     for (const design of designs(solution)) expect(design.metrics.parkingSpaces).toBeGreaterThan(0)
+  })
+})
+
+describe('a per-plot setback or open space left blank', () => {
+  const MUMBAI = loadPack('mum-suburbs-res')
+  const mumbaiLot = (limits: PlotLimits) => ({ ...plotFromMetres(rectangle(40, 50), [{ edge: 0, widthM: 18 }]), limits })
+  const checkOf = (design: Design, id: CheckId) => design.checks.find((c) => c.id === id)
+
+  it.each([
+    ['boundary-setback', 'boundarySetbackM'],
+    ['road-setback', 'roadSetbackM'],
+    ['open-space-minimum', 'minOpenSpaceShare'],
+  ] as const)('leaves %s to check, naming the limit not entered, for custom rules', (id, field) => {
+    const solution = solveWith(CUSTOM, REQUIRED)
+    expect(designs(solution).length).toBeGreaterThan(0)
+    for (const design of designs(solution)) expect(checkOf(design, id)).toEqual({ id, status: 'manual', unentered: field, cites: [] })
+  })
+
+  it('leaves the setbacks to check for a Dubai plot whose affection plan gives none', () => {
+    for (const design of designs(solveWith(DUBAI, REQUIRED))) {
+      expect(checkOf(design, 'boundary-setback')).toMatchObject({ status: 'manual', unentered: 'boundarySetbackM' })
+      expect(checkOf(design, 'road-setback')).toMatchObject({ status: 'manual', unentered: 'roadSetbackM' })
+      expect(checkOf(design, 'open-space-minimum')).toBeUndefined()
+    }
+  })
+
+  it('leaves Mumbai side and rear open space to check, citing the table it comes from', () => {
+    const solution = solve(mumbaiLot({}), MUMBAI, packInterpretations(MUMBAI))
+    expect(designs(solution).length).toBeGreaterThan(0)
+    for (const design of designs(solution)) {
+      expect(checkOf(design, 'boundary-setback')).toEqual({
+        id: 'boundary-setback',
+        status: 'manual',
+        unentered: 'boundarySetbackM',
+        cites: MUMBAI.plotSetbacks!.notes,
+      })
+      expect(checkOf(design, 'road-setback')).toMatchObject({ status: 'pass' })
+    }
+  })
+
+  it('checks the setbacks and open space once they are entered', () => {
+    const solution = solveWith(CUSTOM, { ...REQUIRED, roadSetbackM: 4, boundarySetbackM: 3, minOpenSpaceShare: 0.3 })
+    for (const design of designs(solution)) {
+      expect(checkOf(design, 'boundary-setback')).toMatchObject({ status: 'pass', limit: 3, cites: [enteredCite('boundarySetbackM')] })
+      expect(checkOf(design, 'road-setback')).toMatchObject({ status: 'pass', limit: 4, cites: [enteredCite('roadSetbackM')] })
+      expect(checkOf(design, 'open-space-minimum')).toMatchObject({ status: 'pass' })
+    }
+    for (const design of designs(solve(mumbaiLot({ boundarySetbackM: 6 }), MUMBAI, packInterpretations(MUMBAI)))) {
+      expect(checkOf(design, 'boundary-setback')).toMatchObject({ status: 'pass', limit: 6 })
+    }
+  })
+
+  it('never passes a setback or open space against a limit nobody entered', () => {
+    const blankOr = (max: number) => fc.option(fc.double({ min: 0.5, max, noNaN: true }), { nil: undefined })
+    const blankable = fc.record({ roadSetbackM: blankOr(6), boundarySetbackM: blankOr(4), minOpenSpaceShare: blankOr(0.6) })
+    fc.assert(
+      fc.property(blankable, fc.constantFrom(CUSTOM, DUBAI), (entered, pack) => {
+        for (const design of designs(solveWith(pack, { ...REQUIRED, ...entered }))) {
+          for (const check of design.checks) {
+            if (check.status === 'manual' || !['boundary-setback', 'road-setback', 'open-space-minimum'].includes(check.id)) continue
+            expect(check.cites.length).toBeGreaterThan(0)
+          }
+        }
+      }),
+      { numRuns: 25 },
+    )
   })
 })
 

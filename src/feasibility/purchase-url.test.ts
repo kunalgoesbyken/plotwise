@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { MAX_FAR } from '@/plot/plot'
+import { ASSUMPTIONS } from '@/solve'
 import { decodePurchase, encodePurchase } from './purchase-url'
 
 describe('purchase share links', () => {
@@ -11,7 +11,7 @@ describe('purchase share links', () => {
   })
 
   it('reads back every ratio it writes', () => {
-    const ratio = fc.double({ min: 0.001, max: MAX_FAR, noNaN: true })
+    const ratio = fc.double({ min: 0.001, max: ASSUMPTIONS.plotMaxFar.value, noNaN: true })
     fc.assert(
       fc.property(ratio, ratio, ratio, (premium, transferableRights, fungible) => {
         const chosen = { premium, transferableRights, fungible }

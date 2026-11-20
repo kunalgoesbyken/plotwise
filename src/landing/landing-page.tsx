@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { encodeRegion } from '@/editor/plot-url'
 import { DEFAULT_REGION } from '@/region/regions'
-import { formatQuantity } from '@/text/format'
+import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { EXAMPLE_LINK, exampleFigures } from './example'
 import { FaqItem } from './faq'
@@ -10,11 +10,20 @@ import { HeroMedia } from './hero-media'
 import { LegacyLinkForward } from './legacy-link-forward'
 import { APP_PATH } from './links'
 import { Nav } from './nav'
+import { OTHER_REGIONS, OTHER_RULES } from './other-regions'
 import { PillLink } from './pill-link'
 import { Proof } from './proof'
 
 const STEPS = ['plot', 'roads', 'results'] as const
-const QUESTIONS = ['sources', 'money', 'share', 'region'] as const
+const CITY = DEFAULT_REGION.name
+const ELSEWHERE = formatList(OTHER_RULES)
+
+const QUESTIONS = [
+  { id: 'sources', question: t('landing.faq.sources.q'), answer: t('landing.faq.sources.a') },
+  { id: 'money', question: t('landing.faq.money.q'), answer: t('landing.faq.money.a') },
+  { id: 'share', question: t('landing.faq.share.q'), answer: t('landing.faq.share.a') },
+  { id: 'region', question: t('landing.faq.region.q', { city: CITY }), answer: t('landing.faq.region.a', { city: CITY, elsewhere: ELSEWHERE }) },
+] as const
 
 function Section({ id, title, lede, children }: { id?: string; title: string; lede?: string; children: ReactNode }) {
   return (
@@ -33,7 +42,7 @@ function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) 
     <section className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
       <div className="mx-auto flex max-w-4xl animate-enter flex-col items-center text-center">
         <h1 className="text-display font-medium text-balance">{t('landing.hero.title')}</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">{t('landing.hero.lede', { city: DEFAULT_REGION.name })}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">{t('landing.hero.lede', { city: CITY, elsewhere: ELSEWHERE })}</p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <PillLink href={EXAMPLE_LINK}>{t('landing.hero.example')}</PillLink>
           <PillLink href={APP_PATH} quiet>
@@ -74,19 +83,19 @@ function Steps() {
   )
 }
 
-const ENTERED_RULES = ['dxb', 'custom'] as const
-
 function Scope() {
   return (
     <div className="reveal mt-8 flex flex-col gap-5">
       <p className="text-sm leading-relaxed text-pretty">
         <span className="font-medium">{t('landing.scope.title')}.</span>{' '}
-        <span className="text-muted-foreground">{t('landing.scope.body', { zone: DEFAULT_REGION.zone.name, city: DEFAULT_REGION.name, authority: DEFAULT_REGION.authority })}</span>
+        <span className="text-muted-foreground">
+          {t('landing.scope.body', { zone: DEFAULT_REGION.zone.name, city: CITY, authority: DEFAULT_REGION.authority, elsewhere: ELSEWHERE })}
+        </span>
       </p>
       <div className="flex flex-wrap gap-3">
-        {ENTERED_RULES.map((region) => (
-          <PillLink key={region} href={`${APP_PATH}#${encodeRegion(region)}`} quiet>
-            {t(`landing.regions.${region}`)}
+        {OTHER_REGIONS.map(({ region, link }) => (
+          <PillLink key={region.id} href={`${APP_PATH}#${encodeRegion(region.id)}`} quiet>
+            {link}
           </PillLink>
         ))}
       </div>
@@ -98,8 +107,8 @@ function Faq() {
   return (
     <Section id="faq" title={t('landing.faq.title')}>
       <div className="divide-y border-y">
-        {QUESTIONS.map((id) => (
-          <FaqItem key={id} question={t(`landing.faq.${id}.q`)} answer={t(`landing.faq.${id}.a`)} />
+        {QUESTIONS.map(({ id, question, answer }) => (
+          <FaqItem key={id} question={question} answer={answer} />
         ))}
       </div>
     </Section>

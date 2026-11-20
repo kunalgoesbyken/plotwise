@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { ZONE_GENERALISATION_DEGREES, ZONE_TIMEOUT_MS } from './assumptions'
+import { ZONE_COORDINATE_DECIMALS, ZONE_TIMEOUT_MS } from './assumptions'
+import { generalisationDegrees } from './generalisation'
 import type { ArcGisLayer } from './sources'
 
 const WGS84 = 4326
-const COORDINATE_DECIMALS = 6
 
 export class ZoneServiceUnavailableError extends Error {}
 
@@ -45,8 +45,8 @@ export function zoneQueryUrl({ url, zoneField }: ArcGisLayer, plot: readonly Lng
     spatialRel: 'esriSpatialRelIntersects',
     outFields: zoneField,
     returnGeometry: 'true',
-    maxAllowableOffset: String(ZONE_GENERALISATION_DEGREES.value),
-    geometryPrecision: String(COORDINATE_DECIMALS),
+    maxAllowableOffset: generalisationDegrees(plot).toFixed(ZONE_COORDINATE_DECIMALS.value),
+    geometryPrecision: String(ZONE_COORDINATE_DECIMALS.value),
   })
   return `${url}/query?${params}`
 }

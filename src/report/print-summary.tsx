@@ -11,7 +11,7 @@ import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { VerificationNote } from '@/feasibility/verification-note'
 import { firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
 import { formatMoney } from '@/finance/format-money'
-import { RATES, SCALARS, type Parameter, type ScalarId } from '@/finance/parameters'
+import { SCALARS, type Parameter, type ScalarId } from '@/finance/parameters'
 import { useFinance, type Finance, type Priced } from '@/finance/use-finance'
 import type { Loop, Polygon } from '@/geometry'
 import { formatQuantity } from '@/text/format'
@@ -62,8 +62,8 @@ function Assumptions({ finance, region }: { finance: Finance; region: Region }) 
           {valueText(finance, SCALARS[id], area)}
         </Fact>
       ))}
-      {RATES.map(({ row, low, high }) => (
-        <Fact key={row} label={rateLabel(row, area)}>
+      {finance.rates.map(({ row, low, high }) => (
+        <Fact key={row} label={rateLabel(row, area, finance)}>
           {t('money.range', { low: valueText(finance, low, area), high: valueText(finance, high, area) })}
         </Fact>
       ))}

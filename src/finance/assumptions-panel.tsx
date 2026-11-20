@@ -8,7 +8,7 @@ import { Button } from '@/ui/button'
 import { Disclosure } from '@/ui/disclosure'
 import { rateLabel, scalarLabel } from './figures'
 import { ParameterInput } from './parameter-input'
-import { RATES, SCALARS, type ScalarId } from './parameters'
+import { SCALARS, type ScalarId } from './parameters'
 import { useFinance, type Finance } from './use-finance'
 
 function Row({ label, source, children }: { readonly label: string; readonly source: string | null; readonly children: ReactNode }) {
@@ -82,8 +82,8 @@ export function AssumptionsPanel() {
         <ScalarRow finance={finance} id="parkingLevels" />
       </Group>
       <Group title={t('assumptions.rates', { unit: t(`area-unit.${areaUnit}`) })}>
-        {RATES.map(({ row, low, high }) => (
-          <Row key={row} label={rateLabel(row, areaUnit)} source={finance.sourceOf(low)}>
+        {finance.rates.map(({ row, low, high }) => (
+          <Row key={row} label={rateLabel(row, areaUnit, finance)} source={finance.sourceOf(low)}>
             <ParameterInput finance={finance} parameter={low} label={t('assumptions.low')} />
             <ParameterInput finance={finance} parameter={high} label={t('assumptions.high')} />
           </Row>
