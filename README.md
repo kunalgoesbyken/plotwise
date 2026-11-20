@@ -175,10 +175,11 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 | Land and prices | Holding cost, land finance and area distances are unsourced. Condo prices are Knight Frank asking prices by area, the margin a listed developer's; office and hotel prices are not split by area. The land check compares asking prices. All editable, all in the link |
 | OSM | Heights exist for about a third of central Bangkok buildings; roads have no width tags, so widths are carriageway estimates. Station distance: BTS 52 of 64, MRT 15 of 52, monorail 1 of 55 |
 | Road network | Continuity and planned widenings are in no open dataset used here; they appear in "to check" |
-| Bangkok bylaw 2026 | Body text could not be machine-read |
+| Bangkok bylaw 2026 | The gazette text is cipher in the PDF, so I read it by OCR and checked every line against the page images. It changes factory uses and exempts state medical and public-health land use from the land-use rules; it does not touch the floor area, open space, hotel or office limits |
 | Mumbai | Draft; later amendments not applied, and every result says so. Side and rear open spaces (Table A) could not be read and are entered per plot; the ASR land rate and TDR price are yours |
+| Dubai | No zone check by design: the affection plan is the plot's zoning, so its limits are entered from the plan and every result is marked unverified |
 | Rate limits | Per server instance, so the real ceiling is higher. They shield the free upstreams from a runaway script; they are not an abuse defence |
-| Security policy | Allows inline scripts |
+| Security policy | Allows inline scripts, because pages stay prebuilt and static and a per-request nonce would force every page to render per request |
 
 ## How I built this
 
@@ -255,7 +256,7 @@ Design tokens are defined once in `src/app/globals.css` (`@theme`); the map and 
 ## Sources
 
 - Bangkok Comprehensive Plan B.E. 2556 (Ministerial Regulation, Royal Gazette) and its 2013 correction
-- Bangkok bylaw of 13 March 2026 amending the plan (text layer unreadable; treated as factory-only, shown with a note)
+- Bangkok bylaw of 13 March 2026 amending the plan (text layer unreadable; read by OCR and checked against the page images)
 - Ministerial Regulations 55 (building setbacks, open space, height vs road), 33 (high-rise and extra-large buildings) and 7 (parking)
 - Bangkok Building Control Bylaw B.E. 2544
 - BMA City Planning GIS, comprehensive plan 2556 land-use layer: brown zone 9 polygons stored as a dated snapshot (`public/zone/bma-2556-y9.json`, built by `tools/zone-snapshot.ts`; not copyright works under section 7(2), (3) and (5) of the Copyright Act B.E. 2537) and checked against the live layer
