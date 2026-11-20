@@ -590,8 +590,6 @@ const en = {
     `${lead}${worse ? `, ${worse}` : ''}${better ? `; ${better}` : ''}.`,
   'standing.alternative': ({ name, better }: Name & { better: string }) => `Against the ${name}: ${better}.`,
   'standing.line': ({ name, standing }: Name & { standing: string }) => `${name}: ${standing}`,
-  'difference.worse.floor-area': ({ area }: Area) => `${area} less floor area`,
-  'difference.better.floor-area': ({ area }: Area) => `${area} more floor area`,
   'difference.worse.open-space': ({ area }: Area) => `${area} less open space`,
   'difference.better.open-space': ({ area }: Area) => `${area} more open space`,
   'difference.worse.height': ({ height }: { height: string }) => `${height} taller`,
