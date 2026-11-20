@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
+import { DUBAI_EXAMPLE_LIMITS_SOURCE, DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_LAND_RATE, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { BuildingType, Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
@@ -33,6 +33,8 @@ export type BuildingNames = Readonly<Record<BuildingType, string>>
 
 type Covers = { readonly use: string; readonly document: string }
 
+type RegionExample = { readonly plot: Plot; readonly limitsSource: string | null; readonly landRate: Assumption<number> | null }
+
 type Zone = { readonly name: string; readonly scope: string }
 
 type CityPlan = { readonly name: string; readonly version: string; readonly url: string }
@@ -45,7 +47,7 @@ export type Region = {
   readonly rules: RulesSource
   readonly limitTerms: LimitTerms | null
   readonly floors: FloorCount
-  readonly example: Plot | null
+  readonly example: RegionExample | null
   readonly areaUnit: AreaUnit
   readonly zone: Zone | null
   readonly authority: string
@@ -87,7 +89,7 @@ export const REGIONS = {
     rules: 'pack',
     limitTerms: null,
     floors: 'storeys',
-    example: EXAMPLE_PLOT,
+    example: { plot: EXAMPLE_PLOT, limitsSource: null, landRate: null },
     areaUnit: 'sqm',
     zone: BANGKOK_ZONE,
     authority: 'the BMA',
@@ -125,7 +127,7 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: DUBAI_EXAMPLE_PLOT,
+    example: { plot: DUBAI_EXAMPLE_PLOT, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, landRate: null },
     areaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
@@ -152,7 +154,7 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: DCPR_TERMS,
     floors: 'storeys',
-    example: MUMBAI_EXAMPLE_PLOT,
+    example: { plot: MUMBAI_EXAMPLE_PLOT, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
     areaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',
@@ -202,5 +204,10 @@ export const REGION_IDS = Object.keys(REGIONS) as [RegionId, ...RegionId[]]
 export const RegionIdSchema = z.enum(REGION_IDS, { error: `region must be one of ${REGION_IDS.join(', ')}` })
 
 export const DEFAULT_REGION = REGIONS.bkk
+
+const sameCorner = ([lng, lat]: LngLat, [exampleLng, exampleLat]: LngLat) => lng === exampleLng && lat === exampleLat
+
+export const isExampleSite = ({ example }: Region, ring: readonly LngLat[]) =>
+  example !== null && ring.length === example.plot.ring.length && ring.every((corner, i) => sameCorner(corner, example.plot.ring[i]))
 
 export const regionParam = (value: string | null) => RegionIdSchema.safeParse(value ?? DEFAULT_REGION.id)

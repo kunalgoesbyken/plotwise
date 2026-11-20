@@ -240,6 +240,7 @@ const en = {
   'plot.title': 'Plot',
   'plot.corners': ({ count }: Count) => plural(count, 'corner', 'corners'),
   'plot.example': 'Try an example plot',
+  'example.values': 'Example values.',
   'plot.clear': 'Clear and redraw',
 
   'import.toggle': 'Import coordinates or a file',

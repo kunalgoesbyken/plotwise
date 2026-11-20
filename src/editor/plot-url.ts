@@ -93,5 +93,5 @@ export function linkedExample(fragment: string): LinkedExample | null {
   if (!paramsOf(fragment).has(EXAMPLE_FRAGMENT)) return null
   const rules = decodeRegion(fragment)
   const { id, example } = rules.ok ? REGIONS[rules.region] : DEFAULT_REGION
-  return example ? { region: id, plot: example } : { region: DEFAULT_REGION.id, plot: DEFAULT_REGION.example }
+  return example ? { region: id, plot: example.plot } : { region: DEFAULT_REGION.id, plot: DEFAULT_REGION.example.plot }
 }

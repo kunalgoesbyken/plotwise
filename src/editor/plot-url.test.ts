@@ -126,8 +126,8 @@ describe('plot URL encoding', () => {
   it('opens the example of the region the link names, and Bangkok’s when that region has none or the name is broken', () => {
     expect(exampleFragment('bkk')).toBe('example')
     for (const region of ['mum', 'dxb'] as const) {
-      expect(linkedExample(`#${exampleFragment(region)}`)).toEqual({ region, plot: REGIONS[region].example })
-      expect(linkedExample(`#example&rules=${region}`)).toEqual({ region, plot: REGIONS[region].example })
+      expect(linkedExample(`#${exampleFragment(region)}`)).toEqual({ region, plot: REGIONS[region].example.plot })
+      expect(linkedExample(`#example&rules=${region}`)).toEqual({ region, plot: REGIONS[region].example.plot })
     }
     for (const hash of [exampleFragment('custom'), 'rules=nowhere&example', 'rules=mum&rules=dxb&example']) {
       expect(linkedExample(hash)).toEqual({ region: 'bkk', plot: EXAMPLE_PLOT })
@@ -137,9 +137,31 @@ describe('plot URL encoding', () => {
   it('gives every region’s example as a plot a link carries unchanged, so it opens the same after sharing', () => {
     for (const { id, example } of Object.values(REGIONS)) {
       if (!example) continue
-      expect(decodePlot(encodePlot(example))).toEqual({ ok: true, plot: example })
+      expect(decodePlot(encodePlot(example.plot))).toEqual({ ok: true, plot: example.plot })
       expect(decodeRegion(`#${exampleFragment(id)}`)).toEqual({ ok: true, region: id })
     }
+  })
+
+  it('still opens the link of the earlier Mumbai example, two 5 m lanes off Upashrey Lane', () => {
+    const earlier = '#rules=mum&plot=72.84163,19.116807;72.842039,19.116807;72.8420387,19.1171984;72.84163,19.1171982&roads=0:5;3:5&type=condo'
+    expect(decodeRegion(earlier)).toEqual({ ok: true, region: 'mum' })
+    expect(decodePlot(earlier)).toEqual({
+      ok: true,
+      plot: {
+        ring: [
+          [72.84163, 19.116807],
+          [72.842039, 19.116807],
+          [72.8420387, 19.1171984],
+          [72.84163, 19.1171982],
+        ],
+        roads: [
+          { edge: 0, widthM: 5 },
+          { edge: 3, widthM: 5 },
+        ],
+        buildingType: 'condo',
+        nearStation: false,
+      },
+    })
   })
 })
 

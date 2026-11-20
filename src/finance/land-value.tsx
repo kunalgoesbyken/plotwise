@@ -1,6 +1,7 @@
 'use client'
 
 import type { Design } from '@/designs'
+import { ExampleNote } from '@/editor/example-note'
 import { useRegion } from '@/editor/plot-store'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { formatList, formatNumber } from '@/text/format'
@@ -81,6 +82,10 @@ export function LandValue() {
           <ParameterInput key={input.id} finance={finance} parameter={input} label={purchasePriceLabel(input.id, region)} />
         ))}
       </div>
+      {finance.purchasePrices.map((input) => {
+        const source = finance.exampleSourceOf(input)
+        return source && <ExampleNote key={input.id} source={source} />
+      })}
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}
       <p className="text-xs leading-relaxed text-muted-foreground">{t('land.indicative')}</p>
       <PriceSources finance={finance} />
