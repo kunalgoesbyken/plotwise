@@ -27,6 +27,7 @@ const en = {
   'landing.title': ({ city }: { city: string }) => `Plotwise · What a ${city} plot can hold`,
   'landing.description': ({ city }: { city: string }) =>
     `Draw a plot in ${city}. See the floor area the rules allow, designs in 3D, what is left to check and a rough first cost.`,
+  'landing.nav.label': 'Main',
   'app.title': ({ city }: { city: string }) => `Plotwise · ${city} plot feasibility`,
   'app.description': ({ city }: { city: string }) =>
     `Trace a plot in ${city} and see the floor area the rules allow, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
@@ -42,8 +43,10 @@ const en = {
   'landing.hero.draw': 'Draw your own',
   'landing.frame.place': 'Example plot',
   'landing.frame.meta': ({ area, allowed }: { area: string; allowed: string }) => `${area} plot · up to ${allowed} of floor area`,
+  'landing.demo.pause': 'Pause the demo',
+  'landing.demo.play': 'Play the demo',
   'landing.frame.alt': 'Plotwise showing the example plot on the map, a podium-and-tower design in 3D and the results panel',
-  'landing.how.title': 'Three steps, a few minutes',
+  'landing.how.title': 'From a plot to a first answer',
   'landing.how.lede': 'No sign-up. The link holds the whole result, so you can send it to anyone.',
   'landing.how.plot.title': 'Draw the plot',
   'landing.how.plot.body': 'Search an address, then click each corner on the map. Or start from the example.',
@@ -56,6 +59,7 @@ const en = {
   'landing.sources.title': 'Every limit has a source',
   'landing.sources.body': 'Each limit links to the page and line of the regulation it comes from. No rule value is typed in by hand.',
   'landing.envelope.title': 'The buildable shape, in 3D',
+  'landing.envelope.evidence': ({ allowed, area }: { allowed: string; area: string }) => `Up to ${allowed} of floor area on this ${area} plot.`,
   'landing.envelope.body': 'Step through setbacks and the road-height rule and watch each one carve the shape, on the map and in 3D.',
   'landing.check.title': 'What is left to check',
   'landing.check.body': 'Anything the map can’t confirm is listed with the reason and who signs it off.',
@@ -64,6 +68,8 @@ const en = {
   'landing.money.body': 'Saleable area, first cost and the land value a design supports, on assumptions you can edit and share.',
   'landing.money.cost': 'First cost',
   'landing.money.land': 'Land value supported',
+  'landing.missing.title': 'This page is not on the map',
+  'landing.missing.body': 'The address may be mistyped, or the page may have moved. The app and the example plot are one click away.',
   'landing.scope.title': 'One zone, for now',
   'landing.scope.body': ({ zone, city, authority }: { zone: string; city: string; authority: string }) =>
     `Plotwise covers one zone of the ${city} plan: ${zone}. Money figures are estimates, not valuations. Confirm with ${authority} and an architect before you buy.`,
@@ -172,7 +178,7 @@ const en = {
   'frontage.remove': 'Remove',
   'frontage.remove-label': ({ edge }: { edge: string }) => `Remove road on edge ${edge}`,
   'frontage.mark': 'Mark as road',
-  'frontage.mark-label': ({ edge }: { edge: string }) => `Mark edge ${edge} as a road`,
+  'frontage.mark-label': ({ edge }: { edge: string }) => `Mark as road, edge ${edge}`,
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',
@@ -214,7 +220,7 @@ const en = {
   'search.submit': 'Search',
   'search.searching': 'Searching…',
   'search.failed': 'Place search is unavailable right now. Pan the map to the site instead.',
-  'search.none': 'No places found. Try the soi or building name, in Thai or English.',
+  'search.none': 'No places found. Try a soi, building or district',
   'search.results': 'Places found',
 
   'feasibility.working': 'Working out the rules for this plot…',

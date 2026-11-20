@@ -32,10 +32,13 @@ export function ShareActions() {
   const { state, copy } = useCopyLink()
   return (
     <div className="flex gap-1 print:hidden">
-      <Button variant="ghost" size="sm" onClick={copy} aria-live="polite">
+      <Button variant="ghost" size="sm" onClick={copy}>
         <LinkSimpleIcon aria-hidden="true" />
         {t(COPY_LABEL[state])}
       </Button>
+      <span role="status" className="sr-only">
+        {state === 'idle' ? '' : t(COPY_LABEL[state])}
+      </span>
       <Button variant="ghost" size="sm" onClick={() => print()}>
         <PrinterIcon aria-hidden="true" />
         {t('share.print')}

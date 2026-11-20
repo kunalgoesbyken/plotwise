@@ -136,7 +136,7 @@ function Results({ summary, panels, tab, onTab, sceneId }: ResultsProps) {
           </TabsTrigger>
         </TabsList>
         {panels.map((panel) => (
-          <TabsContent key={panel.id} forceMount value={panel.id} className="data-[state=active]:animate-enter data-[state=inactive]:hidden">
+          <TabsContent key={panel.id} forceMount value={panel.id} className="data-[state=active]:animate-fade data-[state=inactive]:hidden">
             {panel.content}
           </TabsContent>
         ))}
@@ -150,7 +150,7 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const state = useEditorState()
   const panel = useRef<HTMLElement>(null)
   const inset = useRef<HTMLElement>(null)
-  const content = useRef<HTMLDivElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
   const covers = useMemo(() => [panel, inset], [])
   const sceneId = useId()
   const [open, setOpen] = useState(true)
@@ -161,7 +161,7 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const tab = chosenTab === VIEW_3D && sceneInset ? firstPanel : (chosenTab ?? firstPanel)
   useShortcuts(store)
   useEffect(() => {
-    content.current?.scrollTo({ top: 0 })
+    scroller.current?.scrollTo({ top: 0 })
   }, [step])
 
   const ready = state.plot !== null
@@ -190,7 +190,7 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
           </Button>
         </div>
         <HintBar />
-        <div ref={content} className={cn('thin-scroll min-h-0 flex-1 scroll-pt-40 overflow-y-auto overscroll-contain', !open && 'max-lg:hidden')}>
+        <div ref={scroller} className={cn('thin-scroll min-h-0 flex-1 scroll-pt-40 overflow-y-auto overscroll-contain', !open && 'max-lg:hidden')}>
           {step === 'plot' && <PlotStep />}
           {step === 'roads' && (
             <>
