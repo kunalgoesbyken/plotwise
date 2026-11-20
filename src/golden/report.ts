@@ -56,17 +56,20 @@ function designReport({ id, envelope, limitedBy, metrics, checks, plates }: Desi
   }
 }
 
-function citeKeys(node: unknown): unknown {
-  if (Array.isArray(node)) return node.map(citeKeys)
+const PLATFORM_STABLE_DIGITS = 12
+
+function comparable(node: unknown): unknown {
+  if (typeof node === 'number') return Number(node.toPrecision(PLATFORM_STABLE_DIGITS))
+  if (Array.isArray(node)) return node.map(comparable)
   if (node === null || typeof node !== 'object') return node
   const record = node as Record<string, unknown>
   if ('quote' in record && 'page' in record) return `${record.source} p${record.page} l${record.line} ${record.clause}`
-  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, citeKeys(value)]))
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key, comparable(value)]))
 }
 
 export function scenarioReport(plot: Plot, farMode: Exclude<FarMode, 'purchased'>) {
   const solution = solve(plot, pack, readings, { mode: farMode })
-  return citeKeys({
+  return comparable({
     site: { areaSqm: solution.site.areaSqm, ring: solution.site.ring, edges: solution.site.edges.map(({ lengthM, roadWidthM }) => ({ lengthM, roadWidthM })) },
     farCap: solution.farCap,
     limits: limitsReport(solution),
