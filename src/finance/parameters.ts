@@ -1,20 +1,31 @@
 import { z } from 'zod'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
-import type { AssumedRange, MoneyRegion } from '@/solve'
+import type { AreaTier, AssumedRange, MoneyRegion } from '@/solve'
 
-export type Unit = 'money' | 'share' | 'count'
+export type Unit = 'money' | 'landMoney' | 'share' | 'count'
 export type RateRow = 'substructure.lowRise' | 'substructure.highRise' | 'superstructure.lowRise' | 'superstructure.highRise' | 'services' | 'basement'
 export type Bound = 'low' | 'high'
-export type ScalarId = 'salePrice' | 'saleableShare' | 'margin' | 'softCost' | 'parkingLevels'
+export type ScalarId =
+  | 'salePrice'
+  | 'saleableShare'
+  | 'margin'
+  | 'softCost'
+  | 'parkingLevels'
+  | 'transferCosts'
+  | 'holdingCost'
+  | 'landFinance'
+  | 'landReferenceLow'
+  | 'landReferenceHigh'
 export type ParameterId = ScalarId | `${RateRow}.${Bound}`
 
 export type Assumed = { readonly value: number; readonly source: string }
+export type Basis = { readonly use: BuildingType; readonly tier: AreaTier }
 
 export type Parameter = {
   readonly id: ParameterId
   readonly unit: Unit
   readonly perUse: boolean
-  readonly assumed: (region: MoneyRegion, use: BuildingType) => Assumed
+  readonly assumed: (region: MoneyRegion, basis: Basis) => Assumed
 }
 
 export const RATE_ROWS: readonly RateRow[] = [
@@ -31,6 +42,7 @@ const MAX_PARKING_LEVELS = 30
 
 const UNIT_SCHEMAS: Readonly<Record<Unit, z.ZodNumber>> = {
   money: z.number().min(0).max(MAX_MONEY),
+  landMoney: z.number().min(0).max(MAX_MONEY),
   share: z.number().min(0).max(1),
   count: z.number().int().min(0).max(MAX_PARKING_LEVELS),
 }
@@ -44,19 +56,34 @@ const RATE_RANGES: Readonly<Record<RateRow, (region: MoneyRegion, use: BuildingT
   basement: (region) => region.rates.basement,
 }
 
+const referenceParameter = (id: ScalarId, bound: Bound): Parameter => ({
+  id,
+  unit: 'landMoney',
+  perUse: false,
+  assumed: (region, { tier }) => {
+    const range = region.landReferencePerUnit[tier]
+    return { value: range[bound], source: range.source }
+  },
+})
+
 export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {
-  salePrice: { id: 'salePrice', unit: 'money', perUse: true, assumed: (region, use) => region.salePricePerSqm[use] },
-  saleableShare: { id: 'saleableShare', unit: 'share', perUse: true, assumed: (region, use) => region.saleableShare[use] },
+  salePrice: { id: 'salePrice', unit: 'money', perUse: true, assumed: (region, { use, tier }) => region.salePricePerSqm[use][tier] },
+  saleableShare: { id: 'saleableShare', unit: 'share', perUse: true, assumed: (region, { use }) => region.saleableShare[use] },
   margin: { id: 'margin', unit: 'share', perUse: false, assumed: (region) => region.developerMargin },
   softCost: { id: 'softCost', unit: 'share', perUse: false, assumed: (region) => region.softCostShare },
   parkingLevels: { id: 'parkingLevels', unit: 'count', perUse: false, assumed: (region) => region.maxAboveGroundParkingLevels },
+  transferCosts: { id: 'transferCosts', unit: 'share', perUse: false, assumed: (region) => region.transferCostShare },
+  holdingCost: { id: 'holdingCost', unit: 'share', perUse: false, assumed: (region) => region.holdingCostShare },
+  landFinance: { id: 'landFinance', unit: 'share', perUse: false, assumed: (region) => region.landFinanceShare },
+  landReferenceLow: referenceParameter('landReferenceLow', 'low'),
+  landReferenceHigh: referenceParameter('landReferenceHigh', 'high'),
 }
 
 const rateParameter = (row: RateRow, bound: Bound): Parameter => ({
   id: `${row}.${bound}`,
   unit: 'money',
   perUse: row === 'services',
-  assumed: (region, use) => {
+  assumed: (region, { use }) => {
     const range = RATE_RANGES[row](region, use)
     return { value: range[bound], source: range.source }
   },
