@@ -3,14 +3,16 @@ import type { LngLat } from '@/geo/projection'
 import { ZONE_DEBOUNCE_MS } from './assumptions'
 import { unknownVerdict, zoneRegionFor } from './classify'
 import { zoneCheck, type ZoneCheck } from './cross-check'
-import { lookupZone, snapshotZone } from './lookup'
-import { fetchZoneSnapshot, type ZoneSnapshot } from './snapshot'
+import { lookupZone } from './lookup'
+import { loadZoneSnapshot, snapshotZone, type ZoneSnapshot } from './snapshot'
 import { ZONE_SOURCES, type ZoneRegionId } from './sources'
 import { ringKey, type ZoneVerdict } from './verdict'
 
 type Outcome = { readonly key: string; readonly verdict: ZoneVerdict }
 
-type Loaded = { readonly region: ZoneRegionId; readonly snapshot: ZoneSnapshot | null }
+type Attempt = { readonly region: ZoneRegionId; readonly key: string | null; readonly snapshot: ZoneSnapshot | null }
+
+type SnapshotState = ZoneSnapshot | 'loading' | 'failed'
 
 const keyOf = (ring: readonly LngLat[] | null) => (ring ? ringKey(ring) : null)
 
@@ -19,22 +21,25 @@ function unreachable(ring: readonly LngLat[]): ZoneVerdict {
   return unknownVerdict(region && ZONE_SOURCES[region], 'unreachable')
 }
 
-function useSnapshot(region: ZoneRegionId | undefined): ZoneSnapshot | null {
-  const [loaded, setLoaded] = useState<Loaded | null>(null)
+function useSnapshot(region: ZoneRegionId | null, key: string | null): SnapshotState | null {
+  const [attempt, setAttempt] = useState<Attempt | null>(null)
+  const snapshot = attempt?.region === region ? attempt.snapshot : null
+  const failed = attempt?.region === region && attempt.snapshot === null && attempt.key === key
 
   useEffect(() => {
-    if (!region) return
+    if (!region || snapshot || failed) return
     let current = true
-    fetchZoneSnapshot(ZONE_SOURCES[region]).then(
-      (snapshot) => current && setLoaded({ region, snapshot }),
-      () => current && setLoaded({ region, snapshot: null }),
+    loadZoneSnapshot(region).then(
+      (loaded) => current && setAttempt({ region, key, snapshot: loaded }),
+      () => current && setAttempt({ region, key, snapshot: null }),
     )
     return () => {
       current = false
     }
-  }, [region])
+  }, [region, key, snapshot, failed])
 
-  return loaded && loaded.region === region ? loaded.snapshot : null
+  if (!region) return null
+  return snapshot ?? (failed ? 'failed' : 'loading')
 }
 
 function useLiveVerdict(ring: readonly LngLat[] | null): ZoneVerdict | null {
@@ -63,12 +68,14 @@ function useLiveVerdict(ring: readonly LngLat[] | null): ZoneVerdict | null {
   return outcome && outcome.key === keyOf(ring) ? outcome.verdict : null
 }
 
-export function useZone(plotRing: readonly LngLat[] | null): ZoneCheck | null {
+export function useZone(region: ZoneRegionId | null, plotRing: readonly LngLat[] | null): ZoneCheck | null {
   const [ring, setRing] = useState(plotRing)
   if (keyOf(ring) !== keyOf(plotRing)) setRing(plotRing)
-  const region = ring ? zoneRegionFor(ring) : undefined
-  const snapshot = useSnapshot(region)
+  const snapshot = useSnapshot(region, keyOf(ring))
   const live = useLiveVerdict(ring)
-  const fromSnapshot = useMemo(() => (ring && region && snapshot ? snapshotZone(ring, region, snapshot) : null), [ring, region, snapshot])
-  return useMemo(() => zoneCheck(fromSnapshot, live), [fromSnapshot, live])
+  const fromSnapshot = useMemo(
+    () => (ring && region && snapshot && typeof snapshot === 'object' ? snapshotZone(ring, region, snapshot) : null),
+    [ring, region, snapshot],
+  )
+  return useMemo(() => (snapshot === 'loading' ? null : zoneCheck(fromSnapshot, live)), [snapshot, fromSnapshot, live])
 }

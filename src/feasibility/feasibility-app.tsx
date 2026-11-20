@@ -16,13 +16,14 @@ import { FeasibilityProvider, useFeasibility } from './feasibility-provider'
 import { FeasibilityScene } from './feasibility-scene'
 import { mapOverlay } from './map-overlay'
 import { PurchaseSliders } from './purchase-sliders'
+import { ResultsSkeleton, SummarySkeleton } from './results-skeleton'
 import { ResultsSummary } from './results-summary'
 import { RulesPanel } from './rules-panel'
 import { WidthSensitivity } from './width-sensitivity-table'
 
 function usePanels(): readonly ResultPanel[] {
   const moneyRows = useMoneyRows()
-  const { cleared } = useZoneGate()
+  const { cleared, pending } = useZoneGate()
   const panels = [
     {
       id: 'designs',
@@ -55,7 +56,8 @@ function usePanels(): readonly ResultPanel[] {
     },
     { id: 'rules', label: t('tab.rules'), content: <RulesPanel /> },
   ]
-  return cleared ? panels : panels.map((panel) => ({ ...panel, content: <ZoneHeld /> }))
+  if (cleared) return panels
+  return panels.map((panel) => ({ ...panel, content: pending ? <ResultsSkeleton /> : <ZoneHeld /> }))
 }
 
 function PlotZone() {
@@ -66,6 +68,18 @@ function PlotZone() {
     <div className="mt-2">
       <ZoneStatus />
     </div>
+  )
+}
+
+function Summary() {
+  const { cleared, pending } = useZoneGate()
+  if (pending) return <SummarySkeleton />
+  if (!cleared) return <ZoneHold />
+  return (
+    <ResultsSummary>
+      <LandLine />
+      <PlotZone />
+    </ResultsSummary>
   )
 }
 
@@ -81,16 +95,7 @@ function Workspace() {
     <>
       <div className="contents print:hidden">
         <EditorShell
-          summary={
-            cleared ? (
-              <ResultsSummary>
-                <LandLine />
-                <PlotZone />
-              </ResultsSummary>
-            ) : (
-              <ZoneHold />
-            )
-          }
+          summary={<Summary />}
           panels={panels}
           view3d={<FeasibilityScene />}
           overlay={overlay}
@@ -117,7 +122,7 @@ function GatedWorkspace() {
     }
   }, [plot, setConfirmed])
   return (
-    <ZoneGateProvider zone={region.zone?.name ?? null} ring={plot?.ring ?? null} confirmed={confirmed} onConfirm={confirm}>
+    <ZoneGateProvider region={region} ring={plot?.ring ?? null} confirmed={confirmed} onConfirm={confirm}>
       <Workspace />
     </ZoneGateProvider>
   )
