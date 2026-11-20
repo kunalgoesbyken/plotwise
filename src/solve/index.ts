@@ -40,5 +40,5 @@ export { buildingControlOpenSpace, footprintCapSqm, permeableArea, ratioOpenSpac
 export { parkingSpaces, type ParkingNeed } from './parking'
 export { plotLimitFields } from './plot-limits'
 export { wideningStrip, type Widening } from './reservations'
-export { boundarySetback, frontOpenSpaceDepth, roadSetback, streetHeightLimitM, strictest, type HeightVsRoad, type Setback } from './setbacks'
+export { boundarySetback, frontOpenSpaceDepth, lowRiseSetbacks, rearEdge, roadSetback, streetHeightLimitM, strictest, type HeightVsRoad, type Setback } from './setbacks'
 export { coversBuildingType, solve, type Solution } from './solve'

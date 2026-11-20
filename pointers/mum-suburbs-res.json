@@ -1690,7 +1690,7 @@
     {
       "id": "low-rise-scope",
       "what": "Whether Table No 17 replaces Table A and Table 18 A or only relaxes them",
-      "why": "Reg 41(3)(a) says the open spaces may be relaxed to Table No 17; Plotwise applies it to the checks of a building of ground and one upper floor on a plot it covers, and keeps the envelope on the stricter open spaces."
+      "why": "Reg 41(3)(a) says the open spaces may be relaxed to Table No 17; Plotwise applies it to the checks of a building of ground and one upper floor on a plot it covers, and keeps the envelope on the stricter open spaces. The rear is taken as the boundary edge farthest from the main road."
     }
   ]
 }

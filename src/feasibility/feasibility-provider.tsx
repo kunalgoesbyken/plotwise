@@ -52,8 +52,7 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const region = useRegion()
   const pack = loadPack(region.packId)
   const [farBonus, setFarBonus] = useHashState('far', FAR_MODE_IN_URL)
-  const [stored, setPurchase] = useHashState('buy', PURCHASE_IN_URL)
-  if (!pack.farPurchases && Object.keys(stored).length > 0) setPurchase(NOTHING_BOUGHT)
+  const [stored, setPurchase] = useHashState(`buy-${region.id}`, PURCHASE_IN_URL)
   const purchase = pack.farPurchases ? stored : NOTHING_BOUGHT
   const far = useMemo(() => farChoice(pack, farBonus, purchase), [pack, farBonus, purchase])
   const buy = useCallback((kind: FarPurchase['kind'], ratio: number) => setPurchase((current) => ({ ...current, [kind]: ratio })), [setPurchase])

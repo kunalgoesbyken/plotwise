@@ -4,7 +4,7 @@ import { designs } from '@/designs'
 import { totalArea } from '@/geometry'
 import type { PlotLimits, Road } from '@/plot/plot'
 import { enteredBound, enteredCite, type FarPurchase, type RoadSetbackRule, type RulePack } from '@/rules'
-import { loadPack } from '@/rules'
+import { loadPack, RulePackSchema } from '@/rules'
 import { band, BANGKOK, PER_PLOT, unverified, value } from '@/rules/test-packs'
 import { ASSUMPTIONS } from './assumptions'
 import { SolveError } from './errors'
@@ -12,7 +12,7 @@ import { packInterpretations } from './interpretations'
 import { plotLimitFields } from './plot-limits'
 import type { FarChoice } from './far'
 import { wideningStrip } from './reservations'
-import { roadSetback } from './setbacks'
+import { lowRiseSetbacks, rearEdge, roadSetback } from './setbacks'
 import { solve } from './solve'
 import { plotFromMetres, rectangle } from './test-plots'
 
@@ -169,6 +169,35 @@ describe('height as a multiple of the street plus the required front open space'
       }),
       { numRuns: 15 },
     )
+  })
+})
+
+describe('open spaces relaxed for ground and one upper floor on a small plot (Table No 17)', () => {
+  const MUMBAI = loadPack('mum-suburbs-res')
+  const twoStoreys = RulePackSchema.parse({ ...MUMBAI, height: { ...MUMBAI.height, planLimit: { kind: 'maxStoreys', maxStoreys: value(2) } } })
+  const building = (storeys: number) => ({ heightM: storeys * 3, storeys, floorAreaSqm: 100 })
+
+  it('reads the row for the plot area and applies only up to ground and one upper floor', () => {
+    expect(lowRiseSetbacks(MUMBAI, 100, building(2))).toMatchObject({ front: { distanceM: 1.5 }, rear: { distanceM: 3 }, side: { distanceM: 1 } })
+    expect(lowRiseSetbacks(MUMBAI, 25, building(1))).toMatchObject({ front: { distanceM: 0.75 }, rear: { distanceM: 1.5 }, side: { distanceM: 0 } })
+    expect(lowRiseSetbacks(MUMBAI, 100, building(3))).toBeNull()
+    expect(lowRiseSetbacks(MUMBAI, 300, building(2))).toBeNull()
+    expect(lowRiseSetbacks(BANGKOK, 100, building(2))).toBeNull()
+  })
+
+  it('takes the boundary edge farthest from the main road as the rear', () => {
+    expect(rearEdge(solveWith(MUMBAI, lot(10, 12, onRoad(9))).site)).toBe(2)
+    expect(rearEdge(solveWith(MUMBAI, lot(10, 12, [{ edge: 1, widthM: 9 }])).site)).toBe(3)
+  })
+
+  it('checks a low design on a small plot against the relaxed open spaces', () => {
+    const solution = solveWith(twoStoreys, lot(10, 12, onRoad(9), { boundarySetbackM: 3 }))
+    expect(designs(solution).length).toBeGreaterThan(0)
+    for (const design of designs(solution)) {
+      expect(design.metrics.storeys).toBeLessThanOrEqual(2)
+      expect(design.checks.find((c) => c.id === 'road-setback')).toMatchObject({ status: 'pass', limit: 1.5 })
+      expect(design.checks.find((c) => c.id === 'boundary-setback')).toMatchObject({ status: 'pass', limit: 3 })
+    }
   })
 })
 

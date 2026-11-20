@@ -1,7 +1,9 @@
-import type { SiteEdge } from '@/plot/site'
+import { segmentDistance } from '@/geometry'
+import type { Site, SiteEdge } from '@/plot/site'
 import type { Cite, Cited, FrontOpenSpace, RoadMultiple, RoadSetbackDistance, RoadSetbackRule, RulePack } from '@/rules'
 import { inRange, satisfies } from './bound'
 import { isHighRiseOrExtraLarge, type Building } from './building'
+import { mainRoad } from './envelope'
 
 export type Setback = { readonly distanceM: number; readonly cites: readonly Cite[] }
 export type EdgeKind = 'road' | 'boundary'
@@ -49,6 +51,28 @@ export function roadSetback(pack: RulePack, building: Building, roadWidthM: numb
       rule.bands.filter((band) => inRange(roadWidthM, band.roadWidthM)).map((band) => roadDistance(band.setback, roadWidthM)),
     ),
   )
+}
+
+export type LowRiseSetbacks = { readonly front: Setback; readonly rear: Setback; readonly side: Setback }
+
+export function lowRiseSetbacks(pack: RulePack, plotAreaSqm: number, building: Building): LowRiseSetbacks | null {
+  const rule = pack.lowRiseOpenSpaces
+  if (!rule || building.storeys > rule.maxUpperFloors.value + 1) return null
+  const row = rule.rows.find((r) => inRange(plotAreaSqm, r.plotAreaSqm))
+  if (!row) return null
+  const scope = [rule.appliesTo]
+  const of = ({ value, cite }: Cited): Setback => ({ distanceM: value, cites: [cite, ...scope] })
+  return { front: of(row.frontM), rear: of(row.rearM), side: row.sideM ? of(row.sideM) : NO_SETBACK }
+}
+
+export function rearEdge(site: Site): number {
+  const front = mainRoad(site)
+  const [a, b] = [site.ring[front], site.ring[(front + 1) % site.ring.length]]
+  const reach = (i: number) => {
+    const [p, q] = [site.ring[i], site.ring[(i + 1) % site.ring.length]]
+    return segmentDistance([(p[0] + q[0]) / 2, (p[1] + q[1]) / 2], [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2], a, b)
+  }
+  return site.edges.reduce((rear, edge, i) => (edge.roadWidthM === null && (rear < 0 || reach(i) > reach(rear)) ? i : rear), -1)
 }
 
 export type HeightVsRoad = { readonly value: number; readonly distance: RoadMultiple['distance']; readonly cites: readonly Cite[] }
