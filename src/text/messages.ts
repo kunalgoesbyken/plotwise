@@ -519,6 +519,8 @@ const en = {
 
   'parking.scope.bangkokBylaw': 'Bangkok building bylaw',
   'parking.scope.entered': 'Entered by you',
+  'parking.not-set': 'Not set',
+  'parking.not-set.detail': 'Left blank, so the designs carry no parking spaces.',
   'parking.scope.ministerialInnerBangkok': 'Ministerial Regulation 7, inner Bangkok',
   'parking.scope.mumbaiTable21': 'DCPR 2034 Table No 21',
   'parking.units-per-space-by-size': ({ bands }: { bands: string }) => `One space for every ${bands}.`,

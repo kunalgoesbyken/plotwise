@@ -4,7 +4,7 @@ import { useId, type ReactNode } from 'react'
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import type { Region } from '@/region/regions'
-import type { Solution } from '@/solve'
+import { isParkingUnset, type Solution } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
@@ -28,14 +28,18 @@ const STATUS_TONE: Readonly<Record<CheckStatus, string>> = {
 
 export type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
-function rowsFor([first]: readonly Design[], { areaUnit: area, areaTerms }: Region, showChecks: (design: Design) => void): readonly Row[] {
+function parkingCell(solution: Solution): Row['cell'] {
+  return isParkingUnset(solution) ? () => t('parking.not-set') : (d) => formatQuantity(d.metrics.parkingSpaces, 'count')
+}
+
+function rowsFor([first]: readonly Design[], solution: Solution, { areaUnit: area, areaTerms }: Region, showChecks: (design: Design) => void): readonly Row[] {
   return [
     { label: t('metric.floor-area'), cell: (d) => formatQuantity(d.metrics.gfaSqm, area) },
     { label: t('metric.height'), cell: (d) => formatQuantity(d.metrics.heightM, 'm') },
     { label: t('metric.storeys'), cell: (d) => formatQuantity(d.metrics.storeys, 'count') },
     { label: yieldFigure(first.metrics.yield, area).label, cell: (d) => yieldFigure(d.metrics.yield, area).value },
     { label: t('metric.far', areaTerms), cell: (d) => formatQuantity(d.metrics.far, 'ratio') },
-    { label: t('metric.parking'), cell: (d) => formatQuantity(d.metrics.parkingSpaces, 'count') },
+    { label: t('metric.parking'), cell: parkingCell(solution) },
     { label: t('metric.open-space'), cell: (d) => formatQuantity(d.metrics.openSpaceSqm, area) },
     { label: t('metric.limited-by'), cell: (d) => t(`limiter.${d.limitedBy}`) },
     { label: t('metric.checks'), cell: (d) => <Tally checks={d.checks} onShowChecks={() => showChecks(d)} /> },
@@ -94,7 +98,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y">
-          {[...rowsFor(designs, region, showChecks), ...extraRows].map(({ label, cell }) => (
+          {[...rowsFor(designs, solution, region, showChecks), ...extraRows].map(({ label, cell }) => (
             <tr key={label}>
               <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
                 {label}

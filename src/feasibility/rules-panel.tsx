@@ -1,11 +1,12 @@
 'use client'
 
+import { limitLabel } from '@/editor/limit-fields'
 import { edgeName } from '@/editor/map-features'
 import { useEditorState, useRegion } from '@/editor/plot-store'
 import { WarningCircleIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 import type { Bound, Range } from '@/rules'
-import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
+import { isParkingUnset, negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
@@ -283,9 +284,13 @@ function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
 }
 
 function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
-  const { areaUnit } = useRegion()
+  const region = useRegion()
+  const { areaUnit } = region
   return (
     <LimitGroup title={t('rules.group.parking')}>
+      {isParkingUnset(solution) && (
+        <LimitRow label={limitLabel('parkingSqmPerSpace', region)} value={t('parking.not-set')} detail={t('parking.not-set.detail')} cites={[]} />
+      )}
       {solution.limits.parking.rules.map((rule) => {
         const demand = rule[plot.buildingType]
         if (!demand) return null
