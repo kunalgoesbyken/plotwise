@@ -48,6 +48,29 @@ describe('parsePasted degrees', () => {
     ])
   })
 
+  it('reads one line of space-separated longitude,latitude pairs as KML writes them', () => {
+    const { shape, question } = parsed('100.5301,13.7461 100.5310,13.7461 100.5310,13.7452')
+    expect(shape.points).toEqual([
+      [100.5301, 13.7461],
+      [100.531, 13.7461],
+      [100.531, 13.7452],
+    ])
+    expect(question).toEqual({ kind: 'degrees', orders: ['lng-lat'] })
+  })
+
+  it('reads one line of latitude,longitude pairs and an altitude in each pair', () => {
+    expect(parsed('13.7461,100.5301 13.7461,100.5310 13.7452,100.5310').question).toEqual({ kind: 'degrees', orders: ['lat-lng'] })
+    expect(parsed('  100.5301,13.7461,0 100.5310,13.7461,0\t100.5310,13.7452,0 100.5301,13.7461,0 ').shape.points).toHaveLength(3)
+  })
+
+  it('still reads a single pair per line however its numbers are spaced', () => {
+    expect(parsed('100.5 13.7\n100.51, 13.7\n100.51 ,13.71 2').shape.points).toEqual([
+      [100.5, 13.7],
+      [100.51, 13.7],
+      [100.51, 13.71],
+    ])
+  })
+
   it('ignores an altitude, blank lines and a repeated first corner', () => {
     const { shape } = parsed('\n100.5,13.7,0\n\n100.51,13.7,2.5\r\n100.51,13.71,0\n100.5,13.7,0\n')
     expect(shape.points).toHaveLength(3)
@@ -108,6 +131,15 @@ describe('parsePasted failures', () => {
     expect(problem('100.5 13.7; 100.6 13.7; Infinity 13.8')).toEqual({ reason: 'bad-entry', entry: 3 })
   })
 
+  it('names the pair on one line that is not a pair of numbers', () => {
+    expect(problem('100.5,13.7 100.6,abc 100.6,13.8')).toEqual({ reason: 'bad-entry', entry: 2 })
+    expect(problem('100.5,13.7 100.6,13.7,1,2 100.6,13.8')).toEqual({ reason: 'bad-entry', entry: 2 })
+  })
+
+  it('refuses one line of pairs that mixes degrees with metres', () => {
+    expect(problem('100.5,13.7 670304,1523806 100.6,13.8')).toEqual({ reason: 'unrecognised-coordinates' })
+  })
+
   it('refuses text with no corners', () => {
     expect(problem('')).toEqual({ reason: 'too-few-corners' })
     expect(problem(' \n ; \n')).toEqual({ reason: 'too-few-corners' })
@@ -127,6 +159,24 @@ describe('parsePasted failures', () => {
         expect(question).toEqual({ kind: 'degrees', orders: [swap ? 'lat-lng' : 'lng-lat'] })
       }),
     )
+  })
+
+  it('reads back any corners written on one line as space-separated pairs, in either order', () => {
+    const corner = fc.tuple(fc.double({ min: 98, max: 105, noNaN: true }), fc.double({ min: 6, max: 20, noNaN: true }))
+    const space = fc.constantFrom(' ', '  ', '\t')
+    fc.assert(
+      fc.property(fc.array(fc.tuple(corner, space), { minLength: 3, maxLength: 20 }), fc.boolean(), (corners, swap) => {
+        const text = corners.map(([[lng, lat], gap]) => `${swap ? `${lat},${lng}` : `${lng},${lat}`}${gap}`).join('')
+        const { shape, question } = parsed(text)
+        expect(shape.points).toEqual(corners.map(([[lng, lat]]) => (swap ? [lat, lng] : [lng, lat])))
+        expect(question).toEqual({ kind: 'degrees', orders: [swap ? 'lat-lng' : 'lng-lat'] })
+      }),
+    )
+  })
+
+  it('refuses more corners on one line than a plot can have', () => {
+    const line = Array.from({ length: MAX_CORNERS + 2 }, (_, i) => `${100.5 + i * 1e-4},13.7`).join(' ')
+    expect(problem(line)).toEqual({ reason: 'too-many-corners' })
   })
 
   it('refuses more text than a plot needs before reading any of it', () => {
