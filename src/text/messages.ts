@@ -1,8 +1,8 @@
 import type { CheckId, TypologyId } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
-import type { BuildingType } from '@/plot/plot'
+import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import { REGION } from '@/region/regions'
-import type { EnvelopeKind, SolveErrorReason } from '@/solve'
+import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
 
@@ -22,7 +22,8 @@ type Authority = { authority: string }
 type EngineMessages = Record<`check.${CheckId}`, string> &
   Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
   Record<`building.${BuildingType}`, string> &
-  Record<`feasibility.failed.${GeometryErrorReason | SolveErrorReason | 'unknown'}`, string> &
+  Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
+  Record<`plot-limit.${PlotLimitField}`, string> &
   Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
 
 const en = {
@@ -229,7 +230,14 @@ const en = {
   'feasibility.failed.invalid-floor-height': 'The floor heights for this building type are invalid. Pick another building type.',
   'feasibility.failed.invalid-cap': 'The floor-area limit could not be applied to this plot. Try reshaping it.',
   'feasibility.failed.invalid-reservation': 'The road-widening strip does not fit this plot. Check the road widths or reshape the plot.',
-  'feasibility.failed.plot-limit-missing': 'This area’s rules need limits given for each plot. Enter them to continue.',
+  'feasibility.failed.plot-limit-missing': ({ limits }: { limits: string }) =>
+    `This area’s rules set some limits plot by plot. Enter ${limits} for this plot to continue.`,
+  'plot-limit.maxGfaSqm': 'the maximum floor area',
+  'plot-limit.maxHeightM': 'the maximum height',
+  'plot-limit.maxStoreys': 'the maximum number of storeys',
+  'plot-limit.maxCoverageShare': 'the maximum ground coverage',
+  'plot-limit.roadSetbackM': 'the setback from the road',
+  'plot-limit.boundarySetbackM': 'the setback from neighbours',
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
   'source.entered': 'Entered by you',
@@ -487,8 +495,8 @@ const en = {
   'to-check.why.road-access-network': 'The road must stay wide enough all the way to a main road. The map only knows the stretch at your plot.',
   'to-check.why.high-rise-road-network': 'A high-rise needs a wide road all the way to a main road. The map only knows the stretch at your plot.',
   'to-check.why.far-bonus-measures': 'The extra floor area depends on measures in the design, such as public open space, that Plotwise can’t see.',
-  'to-check.why.far-purchase': 'The extra floor area has to be bought from the authority or the market, and its price is not known to Plotwise.',
-  'to-check.who.far-purchase': ({ authority }: Authority) => `Your architect applies; ${authority} sells and approves it with the permit.`,
+  'to-check.why.far-purchase': 'The extra floor area has to be bought from the authority or on the market before the permit is granted.',
+  'to-check.who.far-purchase': ({ authority }: Authority) => `Your architect applies; ${authority} approves it with the permit.`,
   'to-check.who.use-station': ({ authority }: Authority) => `A surveyor measures it; ${authority} confirms.`,
   'to-check.who.road-access-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,
   'to-check.who.high-rise-road-network': ({ authority }: Authority) => `An architect checks the route; ${authority} confirms.`,

@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
+import { failureText } from './failure-text'
 import { useFeasibility } from './feasibility-provider'
 import { limiterText } from './limiter-text'
 import { ShareActions } from './share-actions'
@@ -10,7 +11,7 @@ import { ShareActions } from './share-actions'
 export function ResultsSummary({ children }: { children?: ReactNode }) {
   const { result, design } = useFeasibility()
   if (!result) return null
-  if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{t(`feasibility.failed.${result.reason}`)}</p>
+  if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{failureText(result)}</p>
   if (!design) return <p className="text-sm leading-snug text-muted-foreground">{t('designs.none')}</p>
   const { limits, farCap } = result.solution
   const best = t('summary.best', { name: t(design.nameKey), area: formatQuantity(design.metrics.gfaSqm, 'sqm') })

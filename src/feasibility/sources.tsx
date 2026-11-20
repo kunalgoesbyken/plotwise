@@ -1,4 +1,5 @@
 import { ArrowSquareOutIcon } from '@phosphor-icons/react'
+import { isPlotLimitField } from '@/plot/plot'
 import { isSourceCite, type Cite } from '@/rules'
 import { t } from '@/text/messages'
 import { Disclosure } from '@/ui/disclosure'
@@ -11,7 +12,7 @@ function EnteredItem({ field }: { field: string }) {
   return (
     <li className="flex flex-col gap-0.5 py-1.5 text-xs">
       <p className="font-medium text-foreground">{t('source.entered')}</p>
-      <p className="text-muted-foreground">{field}</p>
+      {isPlotLimitField(field) && <p className="text-muted-foreground">{t(`plot-limit.${field}`)}</p>}
     </li>
   )
 }

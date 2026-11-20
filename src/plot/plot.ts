@@ -48,5 +48,7 @@ export const PlotSchema = z
 
 export type PlotLimits = z.infer<typeof PlotLimitsSchema>
 export type PlotLimitField = keyof PlotLimits
+
+export const isPlotLimitField = (field: string): field is PlotLimitField => field in PlotLimitsSchema.shape
 export type Plot = z.infer<typeof PlotSchema>
 export type Road = z.infer<typeof RoadSchema>
