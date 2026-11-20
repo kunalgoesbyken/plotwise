@@ -32,6 +32,7 @@ test('the not-found page has no serious or critical accessibility issues', async
 for (const { name, width, height, tabs } of viewports) {
   test(`the app has no serious or critical accessibility issues at ${name} size, on every tab`, async ({ page }) => {
     await page.setViewportSize({ width, height })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await openExample(page)
     for (const tab of tabs) {
       await page.getByRole('tab', { name: tab, exact: true }).click()

@@ -174,7 +174,7 @@ const en = {
   'frontage.remove': 'Remove',
   'frontage.remove-label': ({ edge }: { edge: string }) => `Remove road on edge ${edge}`,
   'frontage.mark': 'Mark as road',
-  'frontage.mark-label': ({ edge }: { edge: string }) => `Mark edge ${edge} as a road`,
+  'frontage.mark-label': ({ edge }: { edge: string }) => `Mark as road, edge ${edge}`,
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',

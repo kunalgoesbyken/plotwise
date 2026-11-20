@@ -136,7 +136,7 @@ function Results({ summary, panels, tab, onTab, sceneId }: ResultsProps) {
           </TabsTrigger>
         </TabsList>
         {panels.map((panel) => (
-          <TabsContent key={panel.id} forceMount value={panel.id} className="data-[state=active]:animate-enter data-[state=inactive]:hidden">
+          <TabsContent key={panel.id} forceMount value={panel.id} className="data-[state=active]:animate-fade data-[state=inactive]:hidden">
             {panel.content}
           </TabsContent>
         ))}

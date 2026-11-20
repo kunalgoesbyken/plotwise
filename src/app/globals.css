@@ -52,6 +52,7 @@
   --shadow-sheet: 0 -8px 24px -12px color-mix(in srgb, var(--color-foreground) 25%, transparent);
   --animate-flash: flash 0.5s var(--ease-out-quart);
   --animate-enter: enter 0.2s var(--ease-out-quart);
+  --animate-fade: fade 0.2s var(--ease-out-quart);
   --animate-collapsible-down: collapsible-down 0.2s var(--ease-out-quart);
   --animate-collapsible-up: collapsible-up 0.15s var(--ease-out-quart);
 
@@ -59,6 +60,12 @@
     from {
       opacity: 0.35;
       filter: blur(1px);
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
     }
   }
 
