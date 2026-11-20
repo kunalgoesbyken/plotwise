@@ -1,0 +1,27 @@
+{
+  "id": "dxb-ap",
+  "verification": "unverified",
+  "sources": {},
+  "far": { "kind": "plotSpecific", "notes": [] },
+  "height": { "planLimit": { "kind": "plotSpecific" } },
+  "coverage": { "kind": "plotSpecific", "required": false },
+  "plotSetbacks": { "kind": "plotSpecific", "notes": [] },
+  "plotParking": { "kind": "plotSpecific", "notes": [] },
+  "openSpaceMinimums": [],
+  "roadSetbacks": [],
+  "boundarySetbacks": [],
+  "parking": [],
+  "questions": [],
+  "gaps": [
+    {
+      "id": "dbc-default-setbacks",
+      "what": "The Dubai Building Code's default setbacks by number of floors (Table B.1), which apply only where the affection plan or DCR sets none",
+      "why": "Plotwise takes every setback from the affection plan as you enter it; it applies no default of its own"
+    },
+    {
+      "id": "dcr-and-master-developer",
+      "what": "Development control regulations (DCR) and master-developer guidelines beyond the affection plan",
+      "why": "They vary by community and are not published in one place; check them with the master developer and the permitting authority"
+    }
+  ]
+}

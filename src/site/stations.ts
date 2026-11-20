@@ -1,4 +1,4 @@
-import { REGION } from '@/region/regions'
+import type { Transit } from '@/region/regions'
 import { namesOf, toLine } from './geometry'
 import type { OverpassNode, OverpassResponse, OverpassTags, OverpassWay } from './overpass-response'
 import { isClosed, toOpenRing } from './ring'
@@ -11,13 +11,13 @@ const englishName = (tags: OverpassTags) => {
 
 type Element = OverpassResponse['elements'][number]
 
-function isPlatform(tags: OverpassTags): boolean {
+function isPlatform(tags: OverpassTags, transit: Transit): boolean {
   if (tags.railway === 'platform') return true
-  return tags.public_transport === 'platform' && REGION.transit.platformModes.value.some((mode) => tags[mode] === 'yes')
+  return tags.public_transport === 'platform' && transit.platformModes.value.some((mode) => tags[mode] === 'yes')
 }
 
-function isStation(tags: OverpassTags): boolean {
-  return tags.railway === 'station' && REGION.transit.stationNodeTypes.value.includes(tags.station ?? '')
+function isStation(tags: OverpassTags, transit: Transit): boolean {
+  return tags.railway === 'station' && transit.stationNodeTypes.value.includes(tags.station ?? '')
 }
 
 function wayGeometry(way: OverpassWay): StationGeometry | undefined {
@@ -28,30 +28,30 @@ function wayGeometry(way: OverpassWay): StationGeometry | undefined {
   return ring && { type: 'area', ring }
 }
 
-function nodeKind(tags: OverpassTags): Station['kind'] | undefined {
-  if (isPlatform(tags)) return 'platform'
-  return isStation(tags) ? 'station' : undefined
+function nodeKind(tags: OverpassTags, transit: Transit): Station['kind'] | undefined {
+  if (isPlatform(tags, transit)) return 'platform'
+  return isStation(tags, transit) ? 'station' : undefined
 }
 
-function fromNode(node: OverpassNode): Station | undefined {
-  const kind = nodeKind(node.tags)
+function fromNode(node: OverpassNode, transit: Transit): Station | undefined {
+  const kind = nodeKind(node.tags, transit)
   if (!kind) return undefined
   return { id: `node/${node.id}`, ...englishName(node.tags), kind, geometry: { type: 'point', at: [node.lon, node.lat] } }
 }
 
-function fromWay(way: OverpassWay): Station | undefined {
-  const geometry = isPlatform(way.tags) ? wayGeometry(way) : undefined
+function fromWay(way: OverpassWay, transit: Transit): Station | undefined {
+  const geometry = isPlatform(way.tags, transit) ? wayGeometry(way) : undefined
   return geometry && { id: `way/${way.id}`, ...englishName(way.tags), kind: 'platform', geometry }
 }
 
-function toStation(element: Element): Station | undefined {
-  if (element.type === 'node') return fromNode(element)
-  return element.type === 'way' ? fromWay(element) : undefined
+function toStation(element: Element, transit: Transit): Station | undefined {
+  if (element.type === 'node') return fromNode(element, transit)
+  return element.type === 'way' ? fromWay(element, transit) : undefined
 }
 
-export function parseStationElements(elements: Element[]): Station[] {
+export function parseStationElements(elements: Element[], transit: Transit): Station[] {
   return elements.flatMap((element) => {
-    const station = toStation(element)
+    const station = toStation(element, transit)
     return station ? [station] : []
   })
 }

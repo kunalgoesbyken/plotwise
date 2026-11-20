@@ -7,6 +7,8 @@ import { fail, succeed, type Georef, type ProblemReason, type Result, type Shape
 
 export type Bounds = readonly [minLng: number, minLat: number, maxLng: number, maxLat: number]
 
+export const EARTH: Bounds = [-180, -90, 180, 90]
+
 export type Checked = { ring: LngLat[]; areaSqm: number }
 
 const REASON_FOR: Partial<Record<GeometryErrorReason, ProblemReason>> = {

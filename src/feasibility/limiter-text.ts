@@ -1,8 +1,8 @@
 import type { Limiter } from '@/designs'
-import { stationDistance, type Limits } from '@/solve'
+import type { RulePack } from '@/rules'
+import { stationDistance, type Limits, type Solution } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { PACK } from './compute'
 
 const metres = (value: number) => formatQuantity(value, 'm')
 
@@ -11,20 +11,20 @@ function buildingClassText({ highRise }: Limits): string {
   return t('limited-by.building-class', { height: metres(highRise.fromHeightM.value) })
 }
 
-function sizeConditionText({ use }: Limits): string {
-  const station = stationDistance(PACK)
+function sizeConditionText({ use }: Limits, pack: RulePack): string {
+  const station = stationDistance(pack)
   if (use.kind === 'permitted' || !station) return t('limited-by.use')
   return t('limited-by.use-unless', { road: metres(use.roadWidthM.value), station: metres(station.value) })
 }
 
-export function limiterText(limiter: Limiter, limits: Limits): string {
+export function limiterText(limiter: Limiter, { limits, pack }: Solution): string {
   switch (limiter) {
     case 'far':
       return t('limited-by.far')
     case 'building-class':
       return buildingClassText(limits)
     case 'use':
-      return sizeConditionText(limits)
+      return sizeConditionText(limits, pack)
     case 'envelope':
       return t('limited-by.envelope')
   }

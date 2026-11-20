@@ -1,10 +1,13 @@
 'use client'
 
 import { useId, useState } from 'react'
+import { useRegion } from '@/editor/plot-store'
 import type { MoneyRegion } from '@/solve'
 import { t } from '@/text/messages'
+import { readNumber } from '@/text/read-number'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
+import { perAreaFromDisplay, perAreaToDisplay, type AreaUnit } from '@/units/area'
 import { isValidValue, type Parameter } from './parameters'
 import type { Finance } from './use-finance'
 
@@ -13,16 +16,29 @@ const PRECISION = 12
 
 const roundOff = (value: number) => Number(value.toPrecision(PRECISION))
 
-function parse(text: string, scale: number) {
-  return text.trim() === '' ? Number.NaN : roundOff(Number(text.replaceAll(',', '')) / scale)
+function toShown({ unit }: Parameter, value: number, area: AreaUnit): number {
+  if (unit === 'share') return value * SHARE_SCALE
+  return unit === 'money' ? perAreaToDisplay(value, area) : value
 }
 
-function suffixFor({ unit }: Parameter, { currency, landUnit }: MoneyRegion) {
+function fromShown({ unit }: Parameter, shown: number, area: AreaUnit): number {
+  if (unit === 'share') return shown / SHARE_SCALE
+  return unit === 'money' ? perAreaFromDisplay(shown, area) : shown
+}
+
+function parse(text: string, parameter: Parameter, area: AreaUnit) {
+  const read = readNumber(text)
+  return read.kind === 'number' ? roundOff(fromShown(parameter, read.value, area)) : Number.NaN
+}
+
+const perUnit = ({ currency }: MoneyRegion, unit: string) => (currency ? t('money.per-unit-in', { currency, unit }) : t('money.per-unit', { unit }))
+
+function suffixFor({ unit }: Parameter, region: MoneyRegion, area: AreaUnit) {
   switch (unit) {
     case 'money':
-      return t('money.per-sqm', { currency })
+      return perUnit(region, t(`area-unit.${area}`))
     case 'landMoney':
-      return t('money.per-land-unit', { currency, unit: landUnit.name })
+      return perUnit(region, region.landUnit.name)
     case 'share':
       return '%'
     case 'count':
@@ -39,15 +55,19 @@ type ParameterInputProps = {
 
 export function ParameterInput({ finance, parameter, label, hideLabel = false }: ParameterInputProps) {
   const id = useId()
+  const hintId = useId()
+  const { areaUnit } = useRegion()
   const [draft, setDraft] = useState<string | null>(null)
-  const scale = parameter.unit === 'share' ? SHARE_SCALE : 1
-  const shown = draft ?? String(roundOff(finance.valueOf(parameter) * scale))
-  const invalid = draft !== null && !isValidValue(parameter, parse(draft, scale))
+  const value = finance.valueOf(parameter)
+  const shown = draft ?? (value === null ? '' : String(roundOff(toShown(parameter, value, areaUnit))))
+  const invalid = draft !== null && !isValidValue(parameter, parse(draft, parameter, areaUnit))
+  const read = draft === null ? null : readNumber(draft)
+  const comma = read?.kind === 'unreadable' && read.reason === 'comma'
 
   function change(text: string) {
     setDraft(text)
-    const value = parse(text, scale)
-    if (isValidValue(parameter, value)) finance.edit(parameter, value)
+    const parsed = parse(text, parameter, areaUnit)
+    if (isValidValue(parameter, parsed)) finance.edit(parameter, parsed)
   }
 
   return (
@@ -60,13 +80,20 @@ export function ParameterInput({ finance, parameter, label, hideLabel = false }:
           id={id}
           inputMode="decimal"
           value={shown}
+          required={value === null}
           aria-invalid={invalid}
+          aria-describedby={comma ? hintId : undefined}
           onChange={(event) => change(event.target.value)}
           onBlur={() => setDraft(null)}
           className="w-32"
         />
-        <span className="text-xs text-muted-foreground">{suffixFor(parameter, finance.region)}</span>
+        <span className="text-xs text-muted-foreground">{suffixFor(parameter, finance.region, areaUnit)}</span>
       </div>
+      {comma && (
+        <p id={hintId} className="text-xs text-destructive">
+          {t('input.comma')}
+        </p>
+      )}
     </div>
   )
 }

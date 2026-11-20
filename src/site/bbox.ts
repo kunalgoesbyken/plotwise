@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { localFrame, type LngLat } from '@/geo/projection'
-import { REGION } from '@/region/regions'
+import type { Region } from '@/region/regions'
 import { MAX_BBOX_SIDE_M, SITE_MARGIN_M, SNAP_CELLS_PER_DEGREE } from './assumptions'
 
 export type Bbox = readonly [minLng: number, minLat: number, maxLng: number, maxLat: number]
@@ -32,22 +32,18 @@ export function bboxSideLengthsM([minLng, minLat, maxLng, maxLat]: Bbox): { widt
   return { widthM: x, heightM: y }
 }
 
-function isInsideRegion([minLng, minLat, maxLng, maxLat]: Bbox): boolean {
-  const [westLimit, southLimit, eastLimit, northLimit] = REGION.bounds.value
-  return minLng >= westLimit && minLat >= southLimit && maxLng <= eastLimit && maxLat <= northLimit
-}
+export const bboxContains = ([west, south, east, north]: Bbox, [lng, lat]: LngLat) => lng >= west && lng <= east && lat >= south && lat <= north
+
+const isWithin = ([minLng, minLat, maxLng, maxLat]: Bbox, bounds: Bbox) => bboxContains(bounds, [minLng, minLat]) && bboxContains(bounds, [maxLng, maxLat])
 
 function isSmallEnough(bbox: Bbox): boolean {
   const { widthM, heightM } = bboxSideLengthsM(bbox)
   return Math.max(widthM, heightM) <= MAX_BBOX_SIDE_M.value
 }
 
-const LimitedBboxSchema = z
-  .custom<Bbox>()
-  .refine(isInsideRegion, { error: `bbox must lie inside ${REGION.country}`, abort: true })
-  .refine(isSmallEnough, {
-    error: `bbox is too large: after snapping, each side must be at most ${MAX_BBOX_SIDE_M.value} m`,
-  })
+const LimitedBboxSchema = z.custom<Bbox>().refine(isSmallEnough, {
+  error: `bbox is too large: after snapping, each side must be at most ${MAX_BBOX_SIDE_M.value} m`,
+})
 
 function splitCoordinates(param: string): readonly number[] {
   return param.split(',').map((part) => (part.trim() === '' ? NaN : Number(part)))
@@ -55,12 +51,17 @@ function splitCoordinates(param: string): readonly number[] {
 
 export const BboxSchema = OrderedBboxSchema.pipe(LimitedBboxSchema)
 
-export const BboxParamSchema = z
-  .string({ error: 'bbox is required: minLng,minLat,maxLng,maxLat' })
-  .transform(splitCoordinates)
-  .pipe(OrderedBboxSchema)
-  .transform(snapBbox)
-  .pipe(LimitedBboxSchema)
+const insideRegion = ({ bounds, country }: Region) =>
+  z.custom<Bbox>().refine((bbox) => bounds === null || isWithin(bbox, bounds.value), { error: `bbox must lie inside ${country}`, abort: true })
+
+export const bboxParamSchema = (region: Region) =>
+  z
+    .string({ error: 'bbox is required: minLng,minLat,maxLng,maxLat' })
+    .transform(splitCoordinates)
+    .pipe(OrderedBboxSchema)
+    .transform(snapBbox)
+    .pipe(insideRegion(region))
+    .pipe(LimitedBboxSchema)
 
 export function bboxQuery(bbox: Bbox): string {
   return bbox.join(',')

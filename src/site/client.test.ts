@@ -47,20 +47,20 @@ function fetchReturning(response: Response): { fetchImpl: typeof fetch; urls: st
 }
 
 describe('fetchSite', () => {
-  it('requests the snapped bbox so nearby calls share a cache entry', async () => {
+  it('requests the snapped bbox and the region so nearby calls share a cache entry', async () => {
     const { fetchImpl, urls } = fetchReturning(Response.json(site))
-    await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl })
-    expect(urls).toEqual(['/api/site?bbox=100.566,13.762,100.572,13.768'])
+    await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl })
+    expect(urls).toEqual(['/api/site?bbox=100.566,13.762,100.572,13.768&region=bkk'])
   })
 
   it('returns the validated site', async () => {
     const { fetchImpl } = fetchReturning(Response.json(site))
-    expect(await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl })).toEqual(site)
+    expect(await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl })).toEqual(site)
   })
 
   it('throws the server message and status on an error response', async () => {
     const { fetchImpl } = fetchReturning(Response.json({ error: 'bbox must lie inside Thailand' }, { status: 400 }))
-    const failure = await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl }).catch((e: unknown) => e)
+    const failure = await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl }).catch((e: unknown) => e)
     expect(failure).toBeInstanceOf(SiteRequestError)
     expect((failure as SiteRequestError).message).toBe('bbox must lie inside Thailand')
     expect((failure as SiteRequestError).status).toBe(400)
@@ -68,14 +68,14 @@ describe('fetchSite', () => {
 
   it('falls back to the status when the error body is not ours', async () => {
     const { fetchImpl } = fetchReturning(new Response('<html>bad gateway</html>', { status: 502 }))
-    const failure = await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl }).catch((e: unknown) => e)
+    const failure = await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl }).catch((e: unknown) => e)
     expect((failure as SiteRequestError).message).toBe('Site request failed with HTTP 502')
   })
 
   it('rejects a response that breaks the contract', async () => {
     const broken = { ...site, buildings: [{ ...site.buildings[0], heightM: -1 }] }
     const { fetchImpl } = fetchReturning(Response.json(broken))
-    await expect(fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl })).rejects.toThrow()
+    await expect(fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl })).rejects.toThrow()
   })
 
   it('passes the abort signal to fetch', async () => {
@@ -85,7 +85,7 @@ describe('fetchSite', () => {
       return Response.json(site)
     }) as typeof fetch
     const controller = new AbortController()
-    await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], { fetchImpl, signal: controller.signal })
+    await fetchSite([100.5671, 13.7632, 100.5709, 13.7668], 'bkk', { fetchImpl, signal: controller.signal })
     expect(seen?.signal).toBe(controller.signal)
   })
 })

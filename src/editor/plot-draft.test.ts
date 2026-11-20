@@ -71,7 +71,7 @@ describe('drawing', () => {
 
   it('undoes the last point', () => {
     const draft = apply(emptyDraft('condo'), { type: 'add', at: [0, 0] }, { type: 'add', at: [1, 0] }, { type: 'undo' })
-    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo', nearStation: false, nearStationSource: 'default' })
+    expect(draft).toEqual({ status: 'drawing', points: [[0, 0]], buildingType: 'condo', nearStation: false, nearStationSource: 'default', limits: {} })
   })
 })
 

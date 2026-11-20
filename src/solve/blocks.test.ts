@@ -66,7 +66,7 @@ describe('limits given for each plot', () => {
 
   it('lists the fields a pack needs the user to enter', () => {
     expect(plotLimitFields(BANGKOK)).toEqual([])
-    expect(plotLimitFields(PER_PLOT)).toEqual(['maxGfaSqm', 'maxHeightM', 'maxStoreys', 'maxCoverageShare', 'roadSetbackM', 'boundarySetbackM'])
+    expect(plotLimitFields(PER_PLOT)).toEqual(['maxGfaSqm', 'maxFar', 'maxHeightM', 'maxStoreys', 'maxCoverageShare', 'roadSetbackM', 'boundarySetbackM'])
   })
 
   it('uses the entered floor area, cited as entered, and marks the result unverified', () => {
@@ -96,7 +96,7 @@ describe('limits given for each plot', () => {
   })
 
   it.each([
-    ['maxGfaSqm', ['maxGfaSqm']],
+    ['maxGfaSqm', ['maxGfaSqm', 'maxFar']],
     ['maxHeightM', ['maxHeightM', 'maxStoreys']],
     ['maxCoverageShare', ['maxCoverageShare']],
   ] as const)('refuses to solve without %s', (field, fields) => {

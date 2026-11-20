@@ -1,3 +1,4 @@
+import type { RegionId } from '@/solve'
 import { bboxQuery, snapBbox, type Bbox } from './bbox'
 import { SiteErrorSchema, SiteSchema, type Site } from './schema'
 
@@ -20,8 +21,8 @@ async function failureOf(response: Response): Promise<SiteRequestError> {
   return new SiteRequestError(message, response.status)
 }
 
-export async function fetchSite(bbox: Bbox, { signal, fetchImpl = fetch }: FetchSiteOptions = {}): Promise<Site> {
-  const response = await fetchImpl(`${SITE_ENDPOINT}?bbox=${bboxQuery(snapBbox(bbox))}`, { signal })
+export async function fetchSite(bbox: Bbox, region: RegionId, { signal, fetchImpl = fetch }: FetchSiteOptions = {}): Promise<Site> {
+  const response = await fetchImpl(`${SITE_ENDPOINT}?bbox=${bboxQuery(snapBbox(bbox))}&region=${region}`, { signal })
   if (!response.ok) throw await failureOf(response)
   return SiteSchema.parse(await response.json())
 }

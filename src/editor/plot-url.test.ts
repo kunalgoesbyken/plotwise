@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { BUILDING_TYPES, MAX_CORNERS, type Plot } from '@/plot/plot'
 import { roundLngLat } from './plot-draft'
-import { decodePlot, encodePlot, isExampleLink } from './plot-url'
+import { decodePlot, decodeRegion, encodePlot, encodeRegion, isExampleLink } from './plot-url'
 
 const plot: Plot = {
   ring: [
@@ -109,6 +109,8 @@ describe('plot URL encoding', () => {
       fc.property(fc.string(), (s) => {
         decodePlot(s)
         decodePlot(`plot=${s}&roads=${s}&type=condo`)
+        decodePlot(`${encodePlot(plot)}&limits=${s}`)
+        decodeRegion(`rules=${s}`)
       }),
     )
   })
@@ -116,5 +118,69 @@ describe('plot URL encoding', () => {
   it('recognises the example link, with or without the leading # and beside the zone confirmation', () => {
     for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(isExampleLink(hash)).toBe(true)
     for (const hash of ['', '#', encodePlot(plot), '#examples']) expect(isExampleLink(hash)).toBe(false)
+  })
+})
+
+const limits = fc.record(
+  {
+    maxGfaSqm: fc.double({ min: 1, max: 1e6, noNaN: true }),
+    maxFar: fc.double({ min: 0.1, max: 100, noNaN: true }),
+    maxHeightM: fc.double({ min: 1, max: 1000, noNaN: true }),
+    maxStoreys: fc.integer({ min: 1, max: 200 }),
+    maxCoverageShare: fc.double({ min: 0.01, max: 1, noNaN: true }),
+    roadSetbackM: fc.double({ min: 0, max: 200, noNaN: true }),
+    boundarySetbackM: fc.double({ min: 0, max: 200, noNaN: true }),
+    minOpenSpaceShare: fc.double({ min: 0, max: 0.99, noNaN: true }),
+    parkingSqmPerSpace: fc.double({ min: 1, max: 1e6, noNaN: true }),
+  },
+  { requiredKeys: [] },
+)
+
+describe('plot limits in the link', () => {
+  const entered: Plot = { ...plot, limits: { maxGfaSqm: 5000, maxStoreys: 10, maxCoverageShare: 0.6 } }
+
+  it('adds the entered limits only when there are some, so links made before them still open', () => {
+    expect(encodePlot(entered)).toBe(`${encodePlot(plot)}&limits=maxGfaSqm:5000;maxStoreys:10;maxCoverageShare:0.6`)
+    expect(encodePlot({ ...plot, limits: {} })).toBe(encodePlot(plot))
+    expect(decodePlot(encodePlot(plot))).toEqual({ ok: true, plot })
+  })
+
+  it('round-trips any entered limits exactly', () => {
+    fc.assert(
+      fc.property(plots, limits, (p, entered) => {
+        const withLimits = Object.keys(entered).length === 0 ? p : { ...p, limits: entered }
+        expect(decodePlot(encodePlot(withLimits))).toEqual({ ok: true, plot: withLimits })
+      }),
+    )
+  })
+
+  it('says a link is invalid when a limit is unknown, malformed or out of range', () => {
+    const good = encodePlot(plot)
+    const broken = ['castle:3', 'maxGfaSqm', 'maxGfaSqm:', 'maxGfaSqm:abc', 'maxGfaSqm:-5', 'maxStoreys:2.5', 'maxCoverageShare:1.5', 'maxGfaSqm:1;maxGfaSqm:2', '']
+    for (const value of broken) expect(decodePlot(`${good}&limits=${value}`)).toEqual({ ok: false, problem: 'link-invalid' })
+  })
+
+  it('refuses a link that gives the limits twice, as it refuses two rules sources', () => {
+    expect(decodePlot(`${encodePlot(plot)}&limits=maxFar:3&limits=maxFar:30`)).toEqual({ ok: false, problem: 'link-invalid' })
+  })
+})
+
+describe('rules source in the link', () => {
+  it('leaves Bangkok out, so every link made before regions existed opens as Bangkok', () => {
+    expect(encodeRegion('bkk')).toBe('')
+    expect(decodeRegion(encodePlot(plot))).toEqual({ ok: true, region: 'bkk' })
+    expect(decodeRegion('')).toEqual({ ok: true, region: 'bkk' })
+  })
+
+  it('names Dubai and custom rules', () => {
+    expect(encodeRegion('dxb')).toBe('rules=dxb')
+    expect(encodeRegion('custom')).toBe('rules=custom')
+    for (const id of ['dxb', 'custom'] as const) expect(decodeRegion(`#${encodePlot(plot)}&${encodeRegion(id)}`)).toEqual({ ok: true, region: id })
+  })
+
+  it('refuses a rules source it does not know', () => {
+    for (const hash of ['rules=', 'rules=mumbai', 'rules=BKK', 'rules=dxb&rules=custom']) {
+      expect(decodeRegion(hash)).toEqual({ ok: false, problem: 'link-invalid' })
+    }
   })
 })

@@ -21,15 +21,22 @@ export const MAX_PLOT_LIMIT = 1_000_000
 
 export const MAX_STOREYS = 200
 
+export const MAX_FAR = 100
+
 const LimitSchema = z.number().positive().max(MAX_PLOT_LIMIT)
+
+const ShareSchema = z.number().positive().max(1)
 
 export const PlotLimitsSchema = z.object({
   maxGfaSqm: LimitSchema.optional(),
+  maxFar: z.number().positive().max(MAX_FAR).optional(),
   maxHeightM: LimitSchema.optional(),
   maxStoreys: z.int().positive().max(MAX_STOREYS).optional(),
-  maxCoverageShare: z.number().positive().max(1).optional(),
+  maxCoverageShare: ShareSchema.optional(),
   roadSetbackM: z.number().min(0).max(MAX_ROAD_WIDTH_M).optional(),
   boundarySetbackM: z.number().min(0).max(MAX_ROAD_WIDTH_M).optional(),
+  minOpenSpaceShare: z.number().min(0).lt(1).optional(),
+  parkingSqmPerSpace: LimitSchema.optional(),
 })
 
 export const PlotSchema = z

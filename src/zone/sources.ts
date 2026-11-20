@@ -80,6 +80,6 @@ export const ZONE_SOURCES = {
     coverage: [100.326, 13.485, 100.94, 13.953],
     naming: { zones: BANGKOK_ZONES, coveredCode: zoneCode(REGIONS.bkk.packId) },
   },
-} satisfies Record<RegionId, ZoneSource>
+} satisfies Partial<Record<RegionId, ZoneSource>>
 
 export type ZoneRegionId = keyof typeof ZONE_SOURCES

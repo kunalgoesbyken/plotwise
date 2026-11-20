@@ -1,4 +1,5 @@
-import type { BuildingType } from '@/plot/plot'
+import type { BuildingType, PlotLimitField } from '@/plot/plot'
+import { SQM_PER_SQFT } from '@/units/area'
 import type { Interpretations, QuestionId } from './interpretations'
 
 export type Assumption = { readonly value: number; readonly source: string }
@@ -106,13 +107,10 @@ export type AreaMap = {
   readonly source: string
 }
 
-export type MoneyRegion = {
-  readonly currency: string
-  readonly landUnit: { readonly name: string; readonly sqm: Assumption }
+export type MoneyPrices = {
   readonly areas: AreaMap
   readonly salePricePerSqm: Readonly<Record<BuildingType, PerTier<Assumption>>>
   readonly landReferencePerUnit: PerTier<AssumedRange>
-  readonly landWarningFactor: Assumption
   readonly saleableShare: PerUse
   readonly developerMargin: Assumption
   readonly softCostShare: Assumption
@@ -128,7 +126,19 @@ export type MoneyRegion = {
   }
 }
 
+export type MoneyRegion = {
+  readonly currency: string | null
+  readonly landUnit: { readonly name: string; readonly sqm: Assumption }
+  readonly landWarningFactor: Assumption
+  readonly prices: MoneyPrices | null
+}
+
 const UNSOURCED = 'Plotwise estimate, unsourced'
+
+const LAND_WARNING_FACTOR: Assumption = {
+  value: 2,
+  source: `${UNSOURCED}; the land value a design supports is flagged when it is more than this many times the high end of the typical asking range`,
+}
 const RHLB_COST_GUIDE =
   'RHLB (Siam) Ltd., Construction cost commentary July 2025, residential condominium THB 25,500 to 49,500 per m² of construction floor area from low to high quality, http://www.rhlb.co.th/wp-content/uploads/research/Construction-cost-commentary-July%202025.pdf'
 const NO_BKK_COST = `${UNSOURCED}; no published Bangkok split into substructure, superstructure and services was found, so each rate is editable. Cross-check on the total: ${RHLB_COST_GUIDE}`
@@ -146,6 +156,92 @@ const knightFrankCondo = (area: string, value: number): Assumption => ({
   source: `${EDITABLE}; Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, ${area} average asking price of approximately THB ${value.toLocaleString('en-US')} per m², an average over all listed condominiums, not new launches, ${KNIGHT_FRANK_Q1_2026}`,
 })
 
+const BANGKOK_PRICES = {
+  areas: {
+    centre: { name: 'Ratchaprasong', lng: 100.5409, lat: 13.7446 },
+    radiusKm: { cbd: 3, cityFringe: 9, coverage: 40 },
+    fallbackTier: 'cityFringe',
+    source: `${UNSOURCED}; straight-line distance from Ratchaprasong, a Central Lumpinee sub-area of Knight Frank's CBD (${KNIGHT_FRANK_AREAS}). Knight Frank defines its areas by road and soi, not by distance, so the 3 km and 9 km radii are chosen to keep its named city-fringe corridors (Ratchadaphisek Soi 1 to 17, Rama 9, Phahonyothin Soi 1 to 15) in the fringe. That makes the CBD smaller than Knight Frank's, which errs conservative. The 40 km limit marks where the Bangkok tiers stop applying, and there the city fringe value is used`,
+  },
+  salePricePerSqm: {
+    condo: {
+      cbd: knightFrankCondo('CBD', 236_800),
+      cityFringe: knightFrankCondo('City Fringe', 123_500),
+      suburban: knightFrankCondo('Bangkok Suburbs', 71_200),
+    },
+    office: everyTier({
+      value: 164_900,
+      source: `${EDITABLE}; Real Estate Asia, Bangkok office capital value THB 164,900 per m² at a 5.55% market yield, period not confirmed, not split by area, https://realestateasia.com/commercial-office/news/bangkok-office-vacancy-rate-spike-30-2030`,
+    }),
+    hotel: everyTier({
+      value: HOTEL_VALUE_PER_KEY_THB / ASSUMPTIONS.hotelGrossSqmPerRoom.value,
+      source: `${EDITABLE}; HVS Asia Pacific Hotel Transactions Bulletin, Royal Orchid Sheraton sold for about THB 7.3 million per key, divided by the hotel gross area per key, not split by area, https://www.hotelnewsresource.com/article143610.html`,
+    }),
+  },
+  landReferencePerUnit: {
+    cbd: {
+      low: 1_000_000,
+      high: 4_000_000,
+      source: `${EDITABLE}; asking and marketed prices per square wah reported by Colliers on 4 June 2026: "Land prices along sections of Ratchadaphisek Road have already exceeded 1 million baht per square wah" and Chidlom, Ploenchit and Wireless Road "currently range between 3 million and 4 million baht per square wah", ${COLLIERS_JUNE_2026}`,
+    },
+    cityFringe: {
+      low: 170_000,
+      high: 345_000,
+      source: `${EDITABLE}; Huai Khwang land listings per square wah, low end a Yor.9 plot near MRT Sutthisan listed at THB 170,000 on Hipflat, the median list price THB 234,468 on ${THAILAND_PROPERTY}/huai-khwang/huai-khwang (undated listing site), high end THB 345,000 as supplied by the project reviewer and not re-checked`,
+    },
+    suburban: {
+      low: 25_632,
+      high: 82_344,
+      source: `${EDITABLE}; median list price per square wah on thailand-property.com, low end Lat Krabang THB 25,632 (${THAILAND_PROPERTY}/lat-krabang), high end all of Bangkok THB 82,344 (${THAILAND_PROPERTY}), undated listing site`,
+    },
+  },
+  saleableShare: {
+    condo: { value: ASSUMPTIONS.netToGross.condo.value, source: ASSUMPTIONS.netToGross.condo.source },
+    office: { value: ASSUMPTIONS.netToGross.office.value, source: ASSUMPTIONS.netToGross.office.source },
+    hotel: { value: 1, source: `${EDITABLE}; hotel value is priced per key and divided by the gross area per key, so all gross area above parking is priced` },
+  },
+  developerMargin: {
+    value: 0.186,
+    source: `${EDITABLE}; Sansiri Annual Report 2023 net profit margin of 18.6% of revenue, a listed developer's company-wide figure, https://assets.sansiri.com/o77site/pdf/investor/siri-ar-2023-en.pdf`,
+  },
+  softCostShare: {
+    value: 0.15,
+    source: `${UNSOURCED}; design fees, marketing and overheads on the build cost, no Bangkok share was found in research. Finance on the land is a separate line`,
+  },
+  transferCostShare: {
+    value: 0.01,
+    source: `${EDITABLE}; the land transfer fee is 2% of the Treasury appraised value (https://www.peakaccount.com/blog/tax/specific-business-tax/know-about-land-tax) and is usually split half each (https://aplusme.org/blog/tax-company-property-transfer-fees.html), so the buyer's half is taken on the land price as a stand-in for the appraised value. Specific business tax of 3.3%, stamp duty and withholding tax normally fall on the seller and are not deducted`,
+  },
+  holdingCostShare: {
+    value: 0.02,
+    source: `${UNSOURCED}; land and building tax, security and site upkeep between buying the land and starting construction, as a share of the land price`,
+  },
+  landFinanceShare: {
+    value: 0.1,
+    source: `${UNSOURCED}; interest on the land price carried through approvals and construction, about 4% a year for about 2.5 years, as a share of the land price`,
+  },
+  maxAboveGroundParkingLevels: {
+    value: 5,
+    source: `${EDITABLE}; parking levels beyond this go into basements, no Bangkok practice figure was found in research`,
+  },
+  rates: {
+    substructure: {
+      lowRise: { low: 4_000, high: 6_000, source: NO_BKK_COST },
+      highRise: { low: 8_000, high: 12_000, source: NO_BKK_COST },
+    },
+    superstructure: {
+      lowRise: { low: 13_000, high: 18_000, source: NO_BKK_COST },
+      highRise: { low: 17_000, high: 24_000, source: NO_BKK_COST },
+    },
+    services: {
+      condo: { low: 7_000, high: 10_000, source: NO_BKK_COST },
+      office: { low: 10_000, high: 14_000, source: NO_BKK_COST },
+      hotel: { low: 13_000, high: 19_000, source: NO_BKK_COST },
+    },
+    basement: { low: 30_000, high: 45_000, source: NO_BKK_COST },
+  },
+} as const satisfies MoneyPrices
+
 export const MONEY_REGIONS = {
   bkk: {
     currency: 'THB',
@@ -153,94 +249,85 @@ export const MONEY_REGIONS = {
       name: 'square wah',
       sqm: { value: 4, source: 'Thai land measure: 1 rai = 400 square wah = 1,600 m², so 1 square wah = 4 m²; stated conversion, not fetched in research' },
     },
-    areas: {
-      centre: { name: 'Ratchaprasong', lng: 100.5409, lat: 13.7446 },
-      radiusKm: { cbd: 3, cityFringe: 9, coverage: 40 },
-      fallbackTier: 'cityFringe',
-      source: `${UNSOURCED}; straight-line distance from Ratchaprasong, a Central Lumpinee sub-area of Knight Frank's CBD (${KNIGHT_FRANK_AREAS}). Knight Frank defines its areas by road and soi, not by distance, so the 3 km and 9 km radii are chosen to keep its named city-fringe corridors (Ratchadaphisek Soi 1 to 17, Rama 9, Phahonyothin Soi 1 to 15) in the fringe. That makes the CBD smaller than Knight Frank's, which errs conservative. The 40 km limit marks where the Bangkok tiers stop applying, and there the city fringe value is used`,
+    landWarningFactor: LAND_WARNING_FACTOR,
+    prices: BANGKOK_PRICES,
+  },
+  dxb: {
+    currency: 'AED',
+    landUnit: {
+      name: 'sq ft',
+      sqm: { value: SQM_PER_SQFT, source: 'one square foot, from the international foot of exactly 0.3048 m; Dubai areas are shown in square feet' },
     },
-    salePricePerSqm: {
-      condo: {
-        cbd: knightFrankCondo('CBD', 236_800),
-        cityFringe: knightFrankCondo('City Fringe', 123_500),
-        suburban: knightFrankCondo('Bangkok Suburbs', 71_200),
-      },
-      office: everyTier({
-        value: 164_900,
-        source: `${EDITABLE}; Real Estate Asia, Bangkok office capital value THB 164,900 per m² at a 5.55% market yield, period not confirmed, not split by area, https://realestateasia.com/commercial-office/news/bangkok-office-vacancy-rate-spike-30-2030`,
-      }),
-      hotel: everyTier({
-        value: HOTEL_VALUE_PER_KEY_THB / ASSUMPTIONS.hotelGrossSqmPerRoom.value,
-        source: `${EDITABLE}; HVS Asia Pacific Hotel Transactions Bulletin, Royal Orchid Sheraton sold for about THB 7.3 million per key, divided by the hotel gross area per key, not split by area, https://www.hotelnewsresource.com/article143610.html`,
-      }),
-    },
-    landReferencePerUnit: {
-      cbd: {
-        low: 1_000_000,
-        high: 4_000_000,
-        source: `${EDITABLE}; asking and marketed prices per square wah reported by Colliers on 4 June 2026: "Land prices along sections of Ratchadaphisek Road have already exceeded 1 million baht per square wah" and Chidlom, Ploenchit and Wireless Road "currently range between 3 million and 4 million baht per square wah", ${COLLIERS_JUNE_2026}`,
-      },
-      cityFringe: {
-        low: 170_000,
-        high: 345_000,
-        source: `${EDITABLE}; Huai Khwang land listings per square wah, low end a Yor.9 plot near MRT Sutthisan listed at THB 170,000 on Hipflat, the median list price THB 234,468 on ${THAILAND_PROPERTY}/huai-khwang/huai-khwang (undated listing site), high end THB 345,000 as supplied by the project reviewer and not re-checked`,
-      },
-      suburban: {
-        low: 25_632,
-        high: 82_344,
-        source: `${EDITABLE}; median list price per square wah on thailand-property.com, low end Lat Krabang THB 25,632 (${THAILAND_PROPERTY}/lat-krabang), high end all of Bangkok THB 82,344 (${THAILAND_PROPERTY}), undated listing site`,
-      },
-    },
-    landWarningFactor: {
-      value: 2,
-      source: `${UNSOURCED}; the land value a design supports is flagged when it is more than this many times the high end of the typical asking range`,
-    },
-    saleableShare: {
-      condo: { value: ASSUMPTIONS.netToGross.condo.value, source: ASSUMPTIONS.netToGross.condo.source },
-      office: { value: ASSUMPTIONS.netToGross.office.value, source: ASSUMPTIONS.netToGross.office.source },
-      hotel: { value: 1, source: `${EDITABLE}; hotel value is priced per key and divided by the gross area per key, so all gross area above parking is priced` },
-    },
-    developerMargin: {
-      value: 0.186,
-      source: `${EDITABLE}; Sansiri Annual Report 2023 net profit margin of 18.6% of revenue, a listed developer's company-wide figure, https://assets.sansiri.com/o77site/pdf/investor/siri-ar-2023-en.pdf`,
-    },
-    softCostShare: {
-      value: 0.15,
-      source: `${UNSOURCED}; design fees, marketing and overheads on the build cost, no Bangkok share was found in research. Finance on the land is a separate line`,
-    },
-    transferCostShare: {
-      value: 0.01,
-      source: `${EDITABLE}; the land transfer fee is 2% of the Treasury appraised value (https://www.peakaccount.com/blog/tax/specific-business-tax/know-about-land-tax) and is usually split half each (https://aplusme.org/blog/tax-company-property-transfer-fees.html), so the buyer's half is taken on the land price as a stand-in for the appraised value. Specific business tax of 3.3%, stamp duty and withholding tax normally fall on the seller and are not deducted`,
-    },
-    holdingCostShare: {
-      value: 0.02,
-      source: `${UNSOURCED}; land and building tax, security and site upkeep between buying the land and starting construction, as a share of the land price`,
-    },
-    landFinanceShare: {
-      value: 0.1,
-      source: `${UNSOURCED}; interest on the land price carried through approvals and construction, about 4% a year for about 2.5 years, as a share of the land price`,
-    },
-    maxAboveGroundParkingLevels: {
-      value: 5,
-      source: `${EDITABLE}; parking levels beyond this go into basements, no Bangkok practice figure was found in research`,
-    },
-    rates: {
-      substructure: {
-        lowRise: { low: 4_000, high: 6_000, source: NO_BKK_COST },
-        highRise: { low: 8_000, high: 12_000, source: NO_BKK_COST },
-      },
-      superstructure: {
-        lowRise: { low: 13_000, high: 18_000, source: NO_BKK_COST },
-        highRise: { low: 17_000, high: 24_000, source: NO_BKK_COST },
-      },
-      services: {
-        condo: { low: 7_000, high: 10_000, source: NO_BKK_COST },
-        office: { low: 10_000, high: 14_000, source: NO_BKK_COST },
-        hotel: { low: 13_000, high: 19_000, source: NO_BKK_COST },
-      },
-      basement: { low: 30_000, high: 45_000, source: NO_BKK_COST },
-    },
+    landWarningFactor: LAND_WARNING_FACTOR,
+    prices: null,
+  },
+  custom: {
+    currency: null,
+    landUnit: { name: 'm²', sqm: { value: 1, source: 'one square metre, the unit areas are shown in for custom rules' } },
+    landWarningFactor: LAND_WARNING_FACTOR,
+    prices: null,
   },
 } as const satisfies Record<string, MoneyRegion>
 
 export type RegionId = keyof typeof MONEY_REGIONS
+
+type Term = { readonly value: string; readonly source: string }
+
+const DUBAI_BUILDING_CODE =
+  'Dubai Municipality, Dubai Building Code, 2021 Edition, https://dmpmedia.dm.gov.ae/uploads/2021/12/Dubai%20Building%20Code_English_2021%20Edition_compressed.pdf'
+
+const dbc = (page: number, quote: string) => `${DUBAI_BUILDING_CODE}, PDF page ${page}: "${quote}"`
+
+export const AFFECTION_PLAN_TERMS = {
+  document: {
+    value: 'Affection plan',
+    source: dbc(
+      23,
+      'Affection plan: Plan of the plot or site issued by the Authority, showing information that includes (but is not limited to) the plot boundaries, plot dimensions, plot areas, setbacks and surroundings as well as the land uses. Also called site plan.',
+    ),
+  },
+  use: {
+    value: 'Authorized use',
+    source: dbc(
+      23,
+      'Authorized use: Plot use or building occupancy authorized according to the classification of lands in Dubai noted in the official affection plan or development regulation.',
+    ),
+  },
+  fields: {
+    maxGfaSqm: {
+      value: 'Gross floor area (GFA)',
+      source: dbc(6, 'Gross floor area (GFA): Measurement used by Planning Authorities in Dubai to define the floor area ratio (FAR), where FAR is the ratio of GFA to plot area.'),
+    },
+    maxFar: { value: 'Floor area ratio (FAR)', source: dbc(5, 'Floor area ratio (FAR): Ratio of gross floor area (GFA) to plot area.') },
+    maxHeightM: {
+      value: 'Building height',
+      source: dbc(
+        24,
+        'Building height: Vertical distance measured from the approved road edge level at the plot main access to the mean finished level of the building roof.',
+      ),
+    },
+    maxStoreys: {
+      value: 'Floors',
+      source: dbc(
+        40,
+        'the allowable number of floors, as defined by the affection plan or DCR ... Example: For a building with G+10 floors limit, the maximum allowable height shall be calculated as 11 (the number of floors)',
+      ),
+    },
+    maxCoverageShare: {
+      value: 'Plot coverage',
+      source: dbc(30, 'Plot coverage: Horizontal area occupied by all main and annex buildings on the same plot'),
+    },
+    roadSetbackM: {
+      value: 'Setback from road',
+      source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
+    },
+    boundarySetbackM: {
+      value: 'Setback from neighbour',
+      source: dbc(41, 'Table B.1 Setback calculation table: Setback from neighbour (X) ... Setback from road; The building setback requirements in the affection plan or DCR shall take precedence'),
+    },
+    parkingSqmPerSpace: {
+      value: 'Parking requirement',
+      source: dbc(89, 'Parking requirements set out in the affection plan or DCR shall take precedent over Table B.13.'),
+    },
+  },
+} as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }

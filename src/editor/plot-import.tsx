@@ -5,8 +5,7 @@ import { FILE_ACCEPT, readImportFile } from '@/import/file'
 import { georefFor, initialForm, type FrameForm } from '@/import/frame'
 import { parsePasted } from '@/import/paste'
 import { fail, type Georef, type Problem, type Result, type Shape, type Source } from '@/import/types'
-import { checkShape, shapeAreaSqm, shapeProblem, type Checked } from '@/import/validate'
-import { REGION } from '@/region/regions'
+import { checkShape, EARTH, shapeAreaSqm, shapeProblem, type Checked } from '@/import/validate'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
@@ -16,7 +15,7 @@ import { Select } from '@/ui/select'
 import { Textarea } from '@/ui/textarea'
 import { ImportQuestions } from './import-questions'
 import { problemText } from './import-problem'
-import { useEditorStore } from './plot-store'
+import { useEditorStore, useRegion } from './plot-store'
 
 type Imported =
   | { status: 'idle' }
@@ -63,11 +62,12 @@ function ShapePicker({ source, georef, value, onChange }: { source: Source; geor
 
 function Verdict({ checked }: { checked: Result<Checked> | null }) {
   const store = useEditorStore()
+  const region = useRegion()
   if (checked?.ok) {
     return (
       <div className="flex flex-col items-start gap-3">
         <p aria-live="polite" className="text-sm font-medium">
-          {t('import.result', { corners: t('plot.corners', { count: checked.value.ring.length }), area: formatQuantity(checked.value.areaSqm, 'sqm') })}
+          {t('import.result', { corners: t('plot.corners', { count: checked.value.ring.length }), area: formatQuantity(checked.value.areaSqm, region.areaUnit) })}
         </p>
         <Button onClick={() => store.dispatch({ type: 'import', ring: checked.value.ring })}>{t('import.use')}</Button>
       </div>
@@ -75,13 +75,16 @@ function Verdict({ checked }: { checked: Result<Checked> | null }) {
   }
   return (
     <p aria-live="polite" className={checked ? 'text-sm leading-relaxed text-destructive' : 'text-xs leading-relaxed text-muted-foreground'}>
-      {checked ? problemText(checked.problem) : t('import.incomplete')}
+      {checked ? problemText(checked.problem, region) : t('import.incomplete')}
     </p>
   )
 }
 
+const useImportBounds = () => useRegion().bounds?.value ?? EARTH
+
 function Review({ ready, onChange }: { ready: Extract<Imported, { status: 'ready' }>; onChange: (next: Imported) => void }) {
   const { source, shape, form } = ready
+  const bounds = useImportBounds()
   const chosen = source.shapes[shape]
   const unusable = shapeProblem(chosen)
   const georef = georefFor(source.question, form)
@@ -95,7 +98,7 @@ function Review({ ready, onChange }: { ready: Extract<Imported, { status: 'ready
       ) : (
         <>
           <ImportQuestions question={source.question} form={form} onChange={patchForm} />
-          <Verdict checked={georef && checkShape(chosen, georef, REGION.bounds.value)} />
+          <Verdict checked={georef && checkShape(chosen, georef, bounds)} />
         </>
       )}
     </div>
@@ -103,6 +106,7 @@ function Review({ ready, onChange }: { ready: Extract<Imported, { status: 'ready
 }
 
 function Outcome({ imported, onChange }: { imported: Imported; onChange: (next: Imported) => void }) {
+  const region = useRegion()
   switch (imported.status) {
     case 'idle':
       return null
@@ -111,7 +115,7 @@ function Outcome({ imported, onChange }: { imported: Imported; onChange: (next: 
     case 'failed':
       return (
         <p role="alert" className="text-sm leading-relaxed text-destructive">
-          {problemText(imported.problem)}
+          {problemText(imported.problem, region)}
         </p>
       )
     case 'ready':
@@ -125,11 +129,12 @@ export function PlotImport() {
   const [text, setText] = useState('')
   const [imported, setImported] = useState<Imported>(IDLE)
   const latest = useRef(0)
+  const bounds = useImportBounds()
 
   const paste = (value: string) => {
     latest.current += 1
     setText(value)
-    setImported(value.trim() === '' ? IDLE : importedFrom(parsePasted(value, REGION.bounds.value)))
+    setImported(value.trim() === '' ? IDLE : importedFrom(parsePasted(value, bounds)))
   }
 
   const choose = async (event: ChangeEvent<HTMLInputElement>) => {

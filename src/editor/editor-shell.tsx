@@ -2,7 +2,6 @@
 
 import { CaretDownIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
-import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
 import { cn } from '@/ui/cn'
@@ -12,10 +11,11 @@ import { BuildingTypePicker } from './building-type'
 import type { EditorAction, EditorState } from './editor-state'
 import { Frontage } from './frontage'
 import { HintBar } from './hint-bar'
+import { LimitsForm } from './limits-form'
 import type { MapOverlay } from './map-layers'
 import { PlotMap } from './plot-map'
 import { PlotStep } from './plot-step'
-import { useEditorState, useEditorStore, type EditorStore } from './plot-store'
+import { useEditorState, useEditorStore, useRegion, type EditorStore } from './plot-store'
 import { StationToggle } from './station-toggle'
 import { Stepper } from './stepper'
 import { followEdits, furthestStep, isOpen, shownStep, STEPS, type Step } from './steps'
@@ -86,11 +86,12 @@ function useStep(state: EditorState, onMove: () => void) {
 }
 
 function Wordmark() {
+  const region = useRegion()
   return (
     <div className="flex items-center gap-2.5">
       <Logo className="size-6" />
       <span className="text-lg leading-none font-semibold tracking-tight">{t('app.name')}</span>
-      <span className="text-sm leading-none text-muted-foreground">{REGION.city}</span>
+      <span className="text-sm leading-none text-muted-foreground">{region.name}</span>
     </div>
   )
 }
@@ -197,6 +198,7 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
               {ready && summary && <div className="sticky top-0 z-10 border-b bg-background px-(--pad) py-3">{summary}</div>}
               <Frontage />
               <StationToggle />
+              <LimitsForm />
             </>
           )}
           {step === 'results' && <Results summary={summary} panels={panels} tab={tab} onTab={setTab} sceneId={sceneId} />}

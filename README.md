@@ -33,7 +33,7 @@ flowchart LR
   designs --> finance[finance: editable estimates]
   designs --> ui[Results panel and 3D scene]
   finance --> ui
-  ui <--> url[(URL hash: plot, roads, assumptions)]
+  ui <--> url[(URL hash: rules, plot, roads, limits, assumptions)]
   map -.-> site[/api/site/] -.-> osm[OpenStreetMap via Overpass]
   map -.-> geocode[/api/geocode/] -.-> photon[Photon place search]
   map -.-> bma[BMA city-plan layer, queried by the browser]
@@ -91,9 +91,13 @@ The app takes three steps:
    - the rules that apply, with their legal sources;
    - the allowed envelope in 3D among the real surrounding buildings.
 
-Every edit updates the results live. The share link holds the plot, the roads, the building type, the FAR bonus switch and any edited assumption. **Print** gives a one-page summary.
+Every edit updates the results live. The share link holds the rules source, the plot, the roads, the building type, any limits you entered, the FAR bonus switch and any edited assumption. **Print** gives a one-page summary.
 
-Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. The landing page is at `/` and the app is at `/app`. Old share links on the root still open in the app.
+Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Two more rules sources sit beside it, picked on the first step:
+- **Dubai.** You enter the limits from the plot's affection plan (GFA or FAR, height or G+ floors, setbacks, plot coverage, parking), labelled with the Dubai Building Code's terms. Areas show in sq ft and prices in AED.
+- **Custom rules.** You enter the limits you know for a plot anywhere in the world.
+
+Both are always labelled unverified, in the results, the checklist and the print. They have no zone check and no sourced prices: every money input starts blank. The landing page is at `/` and the app is at `/app`. Old share links on the root still open in the app, and links without a rules source open as Bangkok.
 
 ## How it works
 
@@ -121,13 +125,13 @@ Scope: the brown zone (very high-density residential, coded ย.9) of the Bangko
 
 ## Region and design system
 
-- **Region.** Everything specific to a jurisdiction lives in one record, `src/region/regions.ts`:
-  - the rule pack, city and country names, zone label and authority;
-  - city-plan link and version, and the local name for the floor area ratio;
-  - map start, search bounds and bias;
-  - OSM transit tags.
+- **Region.** Everything specific to a jurisdiction lives in one record per region in `src/region/regions.ts` (Bangkok, Dubai and Custom rules):
+  - the rule pack, how its limits are given (from the law, an affection plan or the user), city and country names, zone label and authority;
+  - the display area unit (m² or sq ft), city-plan link and version, and the local name for the floor area ratio;
+  - map start, search bounds and bias (none for custom rules, which search the whole world);
+  - OSM transit tags, where a pack has station rules.
 
-  Money defaults, with the currency and the land unit, are in `MONEY_REGIONS` in `src/solve/assumptions.ts`, and the zone layer is in `src/zone/sources.ts`, both keyed by region. `NEXT_PUBLIC_REGION` picks the active region.
+  Money, with the currency and the land unit, is in `MONEY_REGIONS` in `src/solve/assumptions.ts`; only Bangkok has sourced prices. The zone layer is in `src/zone/sources.ts`, Bangkok only. All are keyed by region. The rules source is picked in the app and kept in the link as `rules=`; a link without it is Bangkok. Internal units stay metres, m² and the region's currency; sq ft is a display unit, converted in `src/units/area.ts`.
 
   A rule pack is built from blocks in `src/rules`: FAR from the zone, from a road width × plot size table or given per plot, a capped bonus, purchasable FAR (premium, transferable rights), height caps in metres or storeys, road and boundary setbacks by height and road width, coverage, open space, parking, road widening and use conditions. Most blocks are optional. A value the user enters carries its own cite and makes the result unverified, and a verified pack cannot hold one. Adding a city is a data change when its rules fit these blocks: a rule pack, a region record, money defaults and a zone source.
 - **Design tokens.** Colours, fonts, radii, type scale, shadows and motion are defined once in `src/app/globals.css` (`@theme`). The map and the 3D scene read the same tokens at runtime. Components use token names only. The UI uses Geist, Phosphor icons and shadcn/ui on Radix.
@@ -167,7 +171,8 @@ Feature-first folders under `src/`:
 | `designs` | Concept designs, metrics and checklists |
 | `finance` | Saleable area, parking levels, first cost, land value, the assumptions panel and their share-link encoding |
 | `feasibility` | Runs solve + designs once for every panel; Designs, Rules, to-check, road-width sensitivity, FAR bonus, share |
-| `region` | The active jurisdiction as data |
+| `region` | Each rules source (Bangkok, Dubai, custom) as data |
+| `units` | Display area units (m², sq ft) and their conversions |
 | `zone` | City-plan zone lookup through the BMA ArcGIS layer |
 | `site` | Overpass proxy, OSM parsing, height and width estimates, nearest-road and nearest-station suggestions |
 | `geocode` | Place search through Photon |

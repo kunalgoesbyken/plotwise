@@ -1,7 +1,8 @@
 import type { Metrics } from '@/designs'
+import type { LngLat } from '@/geo/projection'
 import type { BuildingType } from '@/plot/plot'
 import type { RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge, type MoneyRegion, type Solution } from '@/solve'
+import { isHighRiseOrExtraLarge, type MoneyPrices, type MoneyRegion, type Solution } from '@/solve'
 import { placementOf, type Placement } from './area'
 import type { Basis, Bound, RateRow } from './parameters'
 import type { Values } from './values'
@@ -11,7 +12,7 @@ export type BuildClass = 'lowRise' | 'highRise'
 export type FinanceSite = {
   readonly pack: RulePack
   readonly use: BuildingType
-  readonly area: Placement
+  readonly origin: LngLat
   readonly plotAreaSqm: number
   readonly landUnitSqm: number
 }
@@ -19,12 +20,14 @@ export type FinanceSite = {
 export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSite => ({
   pack: solution.pack,
   use: solution.plot.buildingType,
-  area: placementOf(solution.site.frame.origin, region.areas),
+  origin: solution.site.frame.origin,
   plotAreaSqm: solution.landAreaSqm,
   landUnitSqm: region.landUnit.sqm.value,
 })
 
-export const basisOf = ({ use, area }: FinanceSite): Basis => ({ use, tier: area.tier })
+export const placementIn = ({ origin }: FinanceSite, prices: MoneyPrices): Placement => placementOf(origin, prices.areas)
+
+export const basisOf = (site: FinanceSite, prices: MoneyPrices): Basis => ({ use: site.use, tier: placementIn(site, prices).tier })
 
 export type CostSplit = { readonly substructure: number; readonly superstructure: number; readonly services: number }
 export type Range = { readonly low: number; readonly high: number }

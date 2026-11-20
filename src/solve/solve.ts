@@ -6,7 +6,7 @@ import { highRiseEnvelope, ordinaryEnvelope, type Envelope } from './envelope'
 import { farCapFor, type FarCap, type FarMode } from './far'
 import type { Interpretations } from './interpretations'
 import { limitsFor, type Limits } from './limits'
-import { plotLimitFields, withPlotSetbacks } from './plot-limits'
+import { plotLimitFields, withPlotLimits } from './plot-limits'
 import { reserveRoadWidening, type Widening } from './reservations'
 
 export type Solution = {
@@ -25,7 +25,7 @@ export type Solution = {
 }
 
 export function solve(plot: Plot, authored: RulePack, readings: Interpretations, farMode: FarMode = 'standard'): Solution {
-  const pack = withPlotSetbacks(authored, plot.limits)
+  const pack = withPlotLimits(authored, plot.limits)
   const { site, widening } = reserveRoadWidening(siteOf(plot), pack.reservations ?? [])
   const floorToFloorM = ASSUMPTIONS.floorToFloorM[plot.buildingType].value
   const { buildingType, nearStation } = plot

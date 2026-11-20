@@ -1,15 +1,14 @@
 'use client'
 
 import { edgeName } from '@/editor/map-features'
-import { useEditorState } from '@/editor/plot-store'
+import { useEditorState, useRegion } from '@/editor/plot-store'
 import { WarningCircleIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
-import { REGION } from '@/region/regions'
 import type { Bound, Range } from '@/rules'
 import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { PACK } from './compute'
+import type { AreaUnit } from '@/units/area'
 import { useFeasibility } from './feasibility-provider'
 import { Interpretations } from './interpretations'
 import { LimitGroup, LimitRow } from './limit-row'
@@ -18,16 +17,17 @@ import { WhenReady, type Ready } from './ready'
 import { SetbackTable } from './setback-table'
 import { siteEdgeNames } from './site-edges'
 import { Sources } from './sources'
+import { VerificationNote } from './verification-note'
 
 const bound = ({ cmp, value }: Pick<Bound, 'cmp' | 'value'>, quantity: Quantity) =>
   `${formatComparator(cmp)} ${formatQuantity(value, quantity)}`
 
 const percent = (share: number) => formatQuantity(share, 'percent')
 
-function rangeText({ min, max }: Range): string {
-  if (min && max) return t('range.between', { min: bound(min, 'sqm'), max: bound(max, 'sqm') })
+function rangeText({ min, max }: Range, area: AreaUnit): string {
+  if (min && max) return t('range.between', { min: bound(min, area), max: bound(max, area) })
   const only = min ?? max
-  return only ? bound(only, 'sqm') : t('range.any')
+  return only ? bound(only, area) : t('range.any')
 }
 
 function Caution({ title, children }: { title?: string; children: ReactNode }) {
@@ -44,7 +44,7 @@ function Caution({ title, children }: { title?: string; children: ReactNode }) {
 
 function BylawBanner({ solution }: Pick<Ready, 'solution'>) {
   const reading = solution.readings['bylaw-2569-scope']
-  const question = PACK.questions.find((q) => q.id === 'bylaw-2569-scope')
+  const question = solution.pack.questions.find((q) => q.id === 'bylaw-2569-scope')
   if (!question) return null
   const cites = question.readings.find((r) => r.id === reading)?.cites ?? []
   return (
@@ -68,6 +68,7 @@ function EstimatedRoads() {
 }
 
 function FloorArea({ limits }: { limits: Limits }) {
+  const { areaUnit } = useRegion()
   const { farBonus } = useFeasibility()
   const eligible = limits.farBonus.measures.filter((m) => m.eligible)
   return (
@@ -75,7 +76,7 @@ function FloorArea({ limits }: { limits: Limits }) {
       <LimitRow
         label={t('limit.far')}
         value={t('value.far', { ratio: formatQuantity(limits.far.ratio, 'ratio') })}
-        detail={t('limit.far.detail', { area: formatQuantity(limits.far.maxGfaSqm, 'sqm') })}
+        detail={t('limit.far.detail', { area: formatQuantity(limits.far.maxGfaSqm, areaUnit) })}
         cites={limits.far.cites}
       />
       {limits.farBonus.measures.length > 0 && (
@@ -85,7 +86,7 @@ function FloorArea({ limits }: { limits: Limits }) {
           detail={
             <>
               {t('limit.far-bonus.detail', {
-                area: formatQuantity(limits.farBonus.maxGfaSqm, 'sqm'),
+                area: formatQuantity(limits.farBonus.maxGfaSqm, areaUnit),
                 measures: formatList(eligible.map((m) => t(`bonus.${m.kind}`))),
               })}
               {limits.farBonus.extraGfaSqm > 0 && (
@@ -99,11 +100,20 @@ function FloorArea({ limits }: { limits: Limits }) {
           cites={[...limits.farBonus.cites, ...eligible.flatMap((m) => m.cites)]}
         />
       )}
+      {limits.coverage && (
+        <LimitRow
+          label={t('limit.coverage')}
+          value={bound({ cmp: 'lte', value: limits.coverage.share }, 'percent')}
+          detail={t('limit.coverage.detail', { area: formatQuantity(limits.coverage.maxFootprintSqm, areaUnit) })}
+          cites={limits.coverage.cites}
+        />
+      )}
     </LimitGroup>
   )
 }
 
 function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number }) {
+  const { areaUnit } = useRegion()
   const { ratio, permeable, minimums } = limits.openSpace
   return (
     <LimitGroup title={t('rules.group.open-space')}>
@@ -111,7 +121,7 @@ function OpenSpace({ limits, maxGfaSqm }: { limits: Limits; maxGfaSqm: number })
         <LimitRow
           label={t('limit.open-space-ratio')}
           value={bound({ cmp: 'gte', value: ratio.value }, 'percent')}
-          detail={t('limit.open-space-ratio.detail', { area: formatQuantity(ratioOpenSpace(limits, maxGfaSqm).value, 'sqm') })}
+          detail={t('limit.open-space-ratio.detail', { area: formatQuantity(ratioOpenSpace(limits, maxGfaSqm).value, areaUnit) })}
           cites={ratio.cites}
         />
       )}
@@ -176,6 +186,7 @@ function Height({ solution }: Pick<Ready, 'solution'>) {
 }
 
 function HighRise({ limits }: { limits: Limits }) {
+  const { areaUnit } = useRegion()
   if (!limits.highRise) return null
   const { access, farMax, fireLaneWidthM } = limits.highRise
   return (
@@ -183,7 +194,7 @@ function HighRise({ limits }: { limits: Limits }) {
       {access.map((band, i) => (
         <LimitRow
           key={i}
-          label={t('limit.high-rise-access', { area: rangeText(band.floorAreaSqm) })}
+          label={t('limit.high-rise-access', { area: rangeText(band.floorAreaSqm, areaUnit) })}
           value={t(band.qualifies ? 'value.met' : 'value.not-met')}
           detail={t('limit.high-rise-access.detail', { road: bound(band.roadWidthM, 'm'), frontage: bound(band.frontageM, 'm') })}
           cites={[band.roadWidthM.cite, band.frontageM.cite]}
@@ -213,7 +224,8 @@ function exemptionText(use: Extract<UseLimit, { kind: 'restricted' }>, names: re
 
 function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
   const { use } = solution.limits
-  const station = stationDistance(PACK)
+  const station = stationDistance(solution.pack)
+  const { areaUnit } = useRegion()
   const title = t('rules.group.use', { building: t(`building.${plot.buildingType}`) })
   if (use.kind === 'permitted' || !station) {
     return (
@@ -222,7 +234,7 @@ function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
       </LimitGroup>
     )
   }
-  const quantity = use.measure === 'rooms' ? 'count' : 'sqm'
+  const quantity = use.measure === 'rooms' ? 'count' : areaUnit
   const exemptionCites = use.exemption.kind === 'none' ? [use.roadWidthM.cite] : use.exemption.cites
   return (
     <LimitGroup title={title}>
@@ -241,6 +253,7 @@ function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
 }
 
 function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
+  const { areaUnit } = useRegion()
   return (
     <LimitGroup title={t('rules.group.parking')}>
       {solution.limits.parking.rules.map((rule) => {
@@ -251,11 +264,11 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
             label={t(`parking.scope.${rule.scope}`)}
             detail={
               <>
-                {demandText(demand)}
+                {demandText(demand, areaUnit)}
                 {rule.largeBuildingSqmPerSpace && (
                   <>
                     <br />
-                    {t('parking.large', { area: formatQuantity(rule.largeBuildingSqmPerSpace.value, 'sqm') })}
+                    {t('parking.large', { area: formatQuantity(rule.largeBuildingSqmPerSpace.value, areaUnit) })}
                   </>
                 )}
               </>
@@ -270,18 +283,20 @@ function Parking({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
 
 function Rules({ plot, solution }: Ready) {
   const { site, limits } = solution
+  const region = useRegion()
   return (
     <div>
       <div className="mb-5 flex flex-col gap-2">
+        <VerificationNote solution={solution} detailed />
         <BylawBanner solution={solution} />
         <EstimatedRoads />
       </div>
       <div className="mb-5">
         <p className="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
-          <span className="font-medium">{REGION.zone.name}</span>
-          <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, 'sqm') })}</span>
+          <span className="font-medium">{region.zone?.name ?? region.name}</span>
+          <span className="text-muted-foreground tabular-nums">{t('rules.plot-area', { area: formatQuantity(site.areaSqm, region.areaUnit) })}</span>
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">{t('rules.plan', { plan: REGION.cityPlan.version })}</p>
+        {region.cityPlan && <p className="mt-1 text-xs text-muted-foreground">{t('rules.plan', { plan: region.cityPlan.version })}</p>}
       </div>
       <FloorArea limits={limits} />
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
@@ -290,7 +305,7 @@ function Rules({ plot, solution }: Ready) {
       <HighRise limits={limits} />
       <Use plot={plot} solution={solution} />
       <Parking plot={plot} solution={solution} />
-      <Interpretations readings={solution.readings} />
+      <Interpretations questions={solution.pack.questions} readings={solution.readings} />
     </div>
   )
 }

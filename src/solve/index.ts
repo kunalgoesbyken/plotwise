@@ -1,5 +1,6 @@
 export {
   AREA_TIERS,
+  AFFECTION_PLAN_TERMS,
   ASSUMPTIONS,
   DEFAULT_READINGS,
   MONEY_REGIONS,
@@ -7,6 +8,7 @@ export {
   type AreaTier,
   type AssumedRange,
   type Assumption,
+  type MoneyPrices,
   type MoneyRegion,
   type RegionId,
 } from './assumptions'

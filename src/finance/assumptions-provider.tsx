@@ -1,9 +1,10 @@
 'use client'
 
 import { createContext, use, useMemo, type ReactNode } from 'react'
+import { useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
-import { REGION } from '@/region/regions'
-import { MONEY_REGIONS, type MoneyRegion } from '@/solve'
+import { DEFAULT_REGION } from '@/region/regions'
+import { MONEY_REGIONS, type MoneyRegion, type RegionId } from '@/solve'
 import { decodeAssumptions, encodeAssumptions } from './url'
 import type { Overrides } from './values'
 
@@ -18,16 +19,19 @@ const AssumptionsContext = createContext<AssumptionsView | null>(null)
 
 const OVERRIDES_IN_URL = { decode: decodeAssumptions, encode: encodeAssumptions }
 
+const overridesParam = (region: RegionId) => (region === DEFAULT_REGION.id ? 'assume' : `assume-${region}`)
+
 export function AssumptionsProvider({ children }: { readonly children: ReactNode }) {
-  const [overrides, setOverrides] = useHashState('assume', OVERRIDES_IN_URL)
+  const { id } = useRegion()
+  const [overrides, setOverrides] = useHashState(overridesParam(id), OVERRIDES_IN_URL)
   const view = useMemo<AssumptionsView>(
     () => ({
-      region: MONEY_REGIONS[REGION.id],
+      region: MONEY_REGIONS[id],
       overrides,
       setOverride: (key, value) => setOverrides((current) => ({ ...current, [key]: value })),
       clearAll: () => setOverrides({}),
     }),
-    [overrides, setOverrides],
+    [id, overrides, setOverrides],
   )
   return <AssumptionsContext value={view}>{children}</AssumptionsContext>
 }

@@ -1,24 +1,24 @@
 import type { Problem } from '@/import/types'
 import { MAX_CORNERS } from '@/plot/plot'
-import { REGION } from '@/region/regions'
+import type { Region } from '@/region/regions'
 import { ASSUMPTIONS } from '@/solve'
 import { formatNumber, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 
 const BYTES_PER_MEGABYTE = 1_000_000
 
-export function problemText(problem: Problem): string {
+export function problemText(problem: Problem, { country, name, areaUnit }: Region): string {
   switch (problem.reason) {
     case 'bad-entry':
       return t('import.problem.bad-entry', { entry: problem.entry })
     case 'outside-region':
-      return t('import.problem.outside-region', { country: REGION.country })
+      return t('import.problem.outside-region', { country: country ?? name })
     case 'too-many-corners':
       return t('import.problem.too-many-corners', { count: MAX_CORNERS })
     case 'too-small':
-      return t('import.problem.too-small', { area: formatQuantity(ASSUMPTIONS.importMinPlotSqm.value, 'sqm') })
+      return t('import.problem.too-small', { area: formatQuantity(ASSUMPTIONS.importMinPlotSqm.value, areaUnit) })
     case 'too-large':
-      return t('import.problem.too-large', { area: formatQuantity(ASSUMPTIONS.importMaxPlotSqm.value, 'sqm') })
+      return t('import.problem.too-large', { area: formatQuantity(ASSUMPTIONS.importMaxPlotSqm.value, areaUnit) })
     case 'too-many-shapes':
       return t('import.problem.too-many-shapes', { count: ASSUMPTIONS.importMaxShapes.value })
     case 'file-too-large':

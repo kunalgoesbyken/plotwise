@@ -1,7 +1,9 @@
 import bkkY9 from './packs/bkk-y9.json'
+import custom from './packs/custom.json'
+import dxbAp from './packs/dxb-ap.json'
 import { RulePackSchema, type RulePack } from './pack'
 
-const PACKS = { 'bkk-y9': bkkY9 } as const
+const PACKS = { 'bkk-y9': bkkY9, 'dxb-ap': dxbAp, custom } as const
 
 export type PackId = keyof typeof PACKS
 export const PACK_IDS = Object.keys(PACKS) as PackId[]

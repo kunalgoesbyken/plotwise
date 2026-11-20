@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { REGIONS } from '@/region/regions'
 import fixture from './__fixtures__/ratchadaphisek.overpass.json'
 import { DEFAULT_BUILDING_HEIGHT_M, ROAD_WIDTH_BY_CLASS_M } from './assumptions'
 import { OverpassResponseSchema, type OverpassResponse } from './overpass-response'
@@ -12,7 +13,7 @@ function countBy<T>(items: T[], key: (item: T) => string): Record<string, number
 
 describe('parseOverpass on a recorded central-Bangkok response', () => {
   const response = OverpassResponseSchema.parse(fixture)
-  const site = parseOverpass(response)
+  const site = parseOverpass(response, REGIONS.bkk.transit)
 
   it('produces output that satisfies the public schema', () => {
     expect(SiteDataSchema.safeParse(site).success).toBe(true)
@@ -91,6 +92,6 @@ describe('parseOverpass', () => {
         { type: 'way', id: 2, tags: { 'building:part': 'yes', height: '50' }, geometry: square(0.001) },
       ],
     }
-    expect(parseOverpass(response).buildings.map((b) => b.id)).toEqual(['way/2'])
+    expect(parseOverpass(response, REGIONS.bkk.transit).buildings.map((b) => b.id)).toEqual(['way/2'])
   })
 })

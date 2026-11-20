@@ -3,8 +3,9 @@
 import { createContext, use, useDeferredValue, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
+import { DEFAULT_REGION, REGIONS, type Region } from '@/region/regions'
 import { initialEditorState, reduceEditor, type EditorAction, type EditorState } from './editor-state'
-import { decodePlot, encodePlot, EXAMPLE_FRAGMENT, isExampleLink } from './plot-url'
+import { decodePlot, decodeRegion, encodePlot, encodeRegion, EXAMPLE_FRAGMENT, isExampleLink } from './plot-url'
 import { syncSite } from './site-sync'
 import { writeHash } from './url-hash'
 
@@ -34,36 +35,44 @@ function createEditorStore(): EditorStore {
   }
 }
 
-const PLOT_PARAMS = ['plot', 'roads', 'type', 'station', EXAMPLE_FRAGMENT] as const
+const LINK_PARAMS = ['rules', 'plot', 'roads', 'type', 'station', 'limits', EXAMPLE_FRAGMENT] as const
 
-const fragmentFor = (plot: Plot | null) => (plot ? encodePlot(plot) : '')
+type Linked = Pick<EditorState, 'region' | 'plot'>
 
-const writeUrl = (plot: Plot | null) => writeHash(PLOT_PARAMS, fragmentFor(plot))
+const fragmentFor = ({ region, plot }: Linked) => [encodeRegion(region), plot ? encodePlot(plot) : ''].filter(Boolean).join('&')
+
+const writeUrl = (linked: Linked) => writeHash(LINK_PARAMS, fragmentFor(linked))
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
     if (isExampleLink(location.hash)) {
+      store.dispatch({ type: 'set-region', region: DEFAULT_REGION.id })
       store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })
-      writeUrl(store.getState().plot)
+      writeUrl(store.getState())
       return
     }
+    const rules = decodeRegion(location.hash)
     const link = decodePlot(location.hash)
-    if (!link) return
-    if (!link.ok) {
+    if (!rules.ok) {
+      store.dispatch({ type: 'reject-link', problem: rules.problem })
+      return
+    }
+    if (link?.ok === false) {
       store.dispatch({ type: 'reject-link', problem: link.problem })
       return
     }
-    if (fragmentFor(store.getState().plot) !== encodePlot(link.plot)) store.dispatch({ type: 'load', plot: link.plot })
+    store.dispatch({ type: 'set-region', region: rules.region })
+    if (link && fragmentFor(store.getState()) !== fragmentFor({ region: rules.region, plot: link.plot })) store.dispatch({ type: 'load', plot: link.plot })
   }
   loadFromUrl()
-  let written = store.getState().plot
+  let written: Linked = store.getState()
   let timer: ReturnType<typeof setTimeout> | undefined
   const unsubscribe = store.subscribe(() => {
-    const { plot } = store.getState()
-    if (plot === written) return
-    written = plot
+    const state = store.getState()
+    if (state.plot === written.plot && state.region === written.region) return
+    written = state
     clearTimeout(timer)
-    timer = setTimeout(() => writeUrl(plot), URL_WRITE_DELAY_MS)
+    timer = setTimeout(() => writeUrl(state), URL_WRITE_DELAY_MS)
   })
   addEventListener('hashchange', loadFromUrl)
   return () => {
@@ -91,6 +100,12 @@ export function useEditorStore() {
 export function useEditorState() {
   const store = useEditorStore()
   return useSyncExternalStore(store.subscribe, store.getState, store.getState)
+}
+
+export function useRegion(): Region {
+  const store = useEditorStore()
+  const region = () => store.getState().region
+  return REGIONS[useSyncExternalStore(store.subscribe, region, region)]
 }
 
 export function usePlot(): Plot | null {

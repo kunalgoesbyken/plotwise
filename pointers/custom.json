@@ -1,0 +1,17 @@
+{
+  "id": "custom",
+  "verification": "unverified",
+  "sources": {},
+  "far": { "kind": "plotSpecific", "notes": [] },
+  "height": { "planLimit": { "kind": "plotSpecific" } },
+  "coverage": { "kind": "plotSpecific", "required": false },
+  "plotSetbacks": { "kind": "plotSpecific", "notes": [] },
+  "plotOpenSpace": { "kind": "plotSpecific", "notes": [] },
+  "plotParking": { "kind": "plotSpecific", "notes": [] },
+  "openSpaceMinimums": [],
+  "roadSetbacks": [],
+  "boundarySetbacks": [],
+  "parking": [],
+  "questions": [],
+  "gaps": []
+}

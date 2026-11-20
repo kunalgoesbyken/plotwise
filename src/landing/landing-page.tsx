@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { REGION } from '@/region/regions'
+import { encodeRegion } from '@/editor/plot-url'
+import { DEFAULT_REGION } from '@/region/regions'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { EXAMPLE_LINK, exampleFigures } from './example'
@@ -32,7 +33,7 @@ function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) 
     <section className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
       <div className="mx-auto flex max-w-4xl animate-enter flex-col items-center text-center">
         <h1 className="text-display font-medium text-balance">{t('landing.hero.title')}</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">{t('landing.hero.lede', { city: REGION.city })}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">{t('landing.hero.lede', { city: DEFAULT_REGION.name })}</p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <PillLink href={EXAMPLE_LINK}>{t('landing.hero.example')}</PillLink>
           <PillLink href={APP_PATH} quiet>
@@ -44,7 +45,7 @@ function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) 
         <div className="overflow-hidden rounded-frame-inner bg-background shadow-sm">
           <figcaption className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b px-5 py-3.5 text-sm">
             <span className="text-muted-foreground">
-              {REGION.city} <span className="px-1 text-border">/</span> <span className="text-foreground">{t('landing.frame.place')}</span>
+              {DEFAULT_REGION.name} <span className="px-1 text-border">/</span> <span className="text-foreground">{t('landing.frame.place')}</span>
             </span>
             <span className="text-muted-foreground">
               {t('landing.frame.meta', { area: formatQuantity(plotSqm, 'sqm'), allowed: formatQuantity(allowedSqm, 'sqm') })}
@@ -73,12 +74,23 @@ function Steps() {
   )
 }
 
+const ENTERED_RULES = ['dxb', 'custom'] as const
+
 function Scope() {
   return (
-    <p className="reveal mt-8 text-sm leading-relaxed text-pretty">
-      <span className="font-medium">{t('landing.scope.title')}.</span>{' '}
-      <span className="text-muted-foreground">{t('landing.scope.body', { zone: REGION.zone.name, city: REGION.city, authority: REGION.authority })}</span>
-    </p>
+    <div className="reveal mt-8 flex flex-col gap-5">
+      <p className="text-sm leading-relaxed text-pretty">
+        <span className="font-medium">{t('landing.scope.title')}.</span>{' '}
+        <span className="text-muted-foreground">{t('landing.scope.body', { zone: DEFAULT_REGION.zone.name, city: DEFAULT_REGION.name, authority: DEFAULT_REGION.authority })}</span>
+      </p>
+      <div className="flex flex-wrap gap-3">
+        {ENTERED_RULES.map((region) => (
+          <PillLink key={region} href={`${APP_PATH}#${encodeRegion(region)}`} quiet>
+            {t(`landing.regions.${region}`)}
+          </PillLink>
+        ))}
+      </div>
+    </div>
   )
 }
 

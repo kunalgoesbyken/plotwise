@@ -3,7 +3,7 @@ import { CiteSchema, CitedSchema } from './cite'
 
 export const CoverageSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('maxShare'), share: CitedSchema, notes: z.array(CiteSchema) }),
-  z.object({ kind: z.literal('plotSpecific') }),
+  z.object({ kind: z.literal('plotSpecific'), required: z.boolean() }),
 ])
 
 export const ReservationSchema = z.object({

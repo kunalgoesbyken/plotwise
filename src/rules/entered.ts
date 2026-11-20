@@ -1,5 +1,10 @@
-import { entered, enteredBound } from './cite'
+import { z } from 'zod'
+import { CiteSchema, entered, enteredBound, enteredCite } from './cite'
+import type { OpenSpaceMinimumRule } from './open-space'
+import type { ParkingDemand, ParkingRule } from './parking'
 import type { BoundarySetbackRule, RoadSetbackRule } from './setbacks'
+
+export const PlotSpecificSchema = z.object({ kind: z.literal('plotSpecific'), notes: z.array(CiteSchema) })
 
 export function enteredRoadSetback(distanceM: number, field: string): RoadSetbackRule {
   return {
@@ -15,4 +20,13 @@ export function enteredBoundarySetback(distanceM: number, field: string): Bounda
     from: 'plotBoundary',
     bands: [{ heightM: {}, distanceM: entered(distanceM, field) }],
   }
+}
+
+export function enteredOpenSpace(share: number, field: string): OpenSpaceMinimumRule[] {
+  return (['residential', 'nonResidential'] as const).map((use) => ({ use, scope: 'anyBuilding', base: 'landArea', minShare: entered(share, field) }))
+}
+
+export function enteredParking(sqmPerSpace: number, field: string): ParkingRule {
+  const demand: ParkingDemand = { kind: 'perGrossArea', sqmPerSpace: entered(sqmPerSpace, field) }
+  return { scope: 'entered', appliesWhere: enteredCite(field), condo: demand, office: demand, hotel: demand }
 }

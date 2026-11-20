@@ -2,6 +2,7 @@ import type { Check, CheckId, Unit } from '@/designs'
 import type { Cite } from '@/rules'
 import { formatComparator, formatQuantity, type Quantity } from '@/text/format'
 import { t } from '@/text/messages'
+import type { AreaUnit } from '@/units/area'
 
 export type CheckStatus = Check['status']
 
@@ -14,22 +15,23 @@ export type CheckRow = {
 
 export type CheckTally = Readonly<Record<CheckStatus, number>>
 
-const QUANTITY: Readonly<Record<Unit, Quantity>> = { sqm: 'sqm', m: 'm', ratio: 'ratio', rooms: 'count' }
+const QUANTITY: Readonly<Record<Exclude<Unit, 'sqm'>, Quantity>> = { m: 'm', ratio: 'ratio', rooms: 'count' }
 const SHARES: ReadonlySet<CheckId> = new Set(['front-open-space'])
 
-function quantityOf(check: Extract<Check, { unit: Unit }>): Quantity {
-  return SHARES.has(check.id) ? 'percent' : QUANTITY[check.unit]
+function quantityOf(check: Extract<Check, { unit: Unit }>, area: AreaUnit): Quantity {
+  if (SHARES.has(check.id)) return 'percent'
+  return check.unit === 'sqm' ? area : QUANTITY[check.unit]
 }
 
-function formatted(value: number, check: Extract<Check, { unit: Unit }>): string {
-  const text = formatQuantity(value, quantityOf(check))
+function formatted(value: number, check: Extract<Check, { unit: Unit }>, area: AreaUnit): string {
+  const text = formatQuantity(value, quantityOf(check, area))
   return check.unit === 'rooms' ? t('unit.rooms', { number: text }) : text
 }
 
-export function checkRow(check: Check): CheckRow {
+export function checkRow(check: Check, area: AreaUnit): CheckRow {
   const row = { id: check.id, status: check.status, cites: check.cites }
   if (check.status === 'manual') return { ...row, reading: null }
-  return { ...row, reading: `${formatted(check.actual, check)} ${formatComparator(check.cmp)} ${formatted(check.limit, check)}` }
+  return { ...row, reading: `${formatted(check.actual, check, area)} ${formatComparator(check.cmp)} ${formatted(check.limit, check, area)}` }
 }
 
 export function tally(checks: readonly Check[]): CheckTally {

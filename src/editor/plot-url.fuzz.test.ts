@@ -2,8 +2,10 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { feasibility } from '@/feasibility/compute'
 import { PlotSchema } from '@/plot/plot'
+import { REGIONS } from '@/region/regions'
+import { loadPack } from '@/rules'
 import { initialEditorState, reduceEditor } from './editor-state'
-import { decodePlot, encodePlot } from './plot-url'
+import { decodePlot, decodeRegion, encodePlot } from './plot-url'
 
 const valid = encodePlot({
   ring: [
@@ -23,6 +25,7 @@ const valid = encodePlot({
 const fragments = [
   'plot=', 'roads=', 'type=', 'station=', '&', '&&', ';', ';;', ',', ',,', ':', '=', '#', '%', '%zz', '%20', '+', '-', '.', 'e',
   '0', '1', '2', '3', '-0', '1.5', 'NaN', 'Infinity', '-Infinity', '1e999', '0x10', '1_0', ' ', '๑', '\u0000', '__proto__',
+  'limits=', 'rules=', 'dxb', 'custom', 'maxGfaSqm:', 'maxFar:', 'maxStoreys:', 'maxCoverageShare:',
   'condo', 'office', 'hotel', 'castle', '100.5636', '13.7466', '180', '-180', '90', '-90', '9999999999', '1e-9', '1e308',
 ]
 
@@ -54,11 +57,12 @@ describe('plot URL fuzz', () => {
     fc.assert(
       fc.property(hashes, (fragment) => {
         const link = decodePlot(fragment)
-        if (!link?.ok) return
+        const rules = decodeRegion(fragment)
+        if (!link?.ok || !rules.ok) return
         const { plot } = link
         const state = reduceEditor(initialEditorState(plot.buildingType), { type: 'load', plot })
         if (!state.plot) return expect(state.notice).not.toBeNull()
-        const result = feasibility(state.plot)
+        const result = feasibility(state.plot, loadPack(REGIONS[rules.region].packId))
         if (result.status === 'failed') expect(result.reason).not.toBe('unknown')
       }),
       { numRuns: 1500 },

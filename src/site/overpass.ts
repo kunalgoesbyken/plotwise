@@ -1,4 +1,4 @@
-import { REGION } from '@/region/regions'
+import type { Transit } from '@/region/regions'
 import { HIGHWAY_CLASSES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassResponseSchema, type OverpassResponse } from './overpass-response'
@@ -23,9 +23,19 @@ function overpassArea([minLng, minLat, maxLng, maxLat]: Bbox): string {
   return `(${minLat},${minLng},${maxLat},${maxLng})`
 }
 
-export function overpassQuery(siteBbox: Bbox, stationBbox: Bbox, timeoutS = SERVER_TIMEOUT_S): string {
+export type StationSearch = { readonly bbox: Bbox; readonly transit: Transit }
+
+function stationQuery({ bbox, transit }: StationSearch): string[] {
+  const area = overpassArea(bbox)
+  return [
+    `nw["railway"="platform"]${area};`,
+    `nw["public_transport"="platform"][~"^(${transit.platformModes.value.join('|')})$"~"^yes$"]${area};`,
+    `node["railway"="station"]["station"~"^(${transit.stationNodeTypes.value.join('|')})$"]${area};`,
+  ]
+}
+
+export function overpassQuery(siteBbox: Bbox, stations: StationSearch | null, timeoutS = SERVER_TIMEOUT_S): string {
   const area = overpassArea(siteBbox)
-  const stationArea = overpassArea(stationBbox)
   return [
     `[out:json][timeout:${timeoutS}];(`,
     `way["building"]["building"!="no"]${area};`,
@@ -33,9 +43,7 @@ export function overpassQuery(siteBbox: Bbox, stationBbox: Bbox, timeoutS = SERV
     `way["building:part"]${area};`,
     `relation["building:part"]["type"="multipolygon"]${area};`,
     `way["highway"~"^(${HIGHWAY_CLASSES.join('|')})$"]${area};`,
-    `nw["railway"="platform"]${stationArea};`,
-    `nw["public_transport"="platform"][~"^(${REGION.transit.platformModes.value.join('|')})$"~"^yes$"]${stationArea};`,
-    `node["railway"="station"]["station"~"^(${REGION.transit.stationNodeTypes.value.join('|')})$"]${stationArea};`,
+    ...(stations ? stationQuery(stations) : []),
     `);out geom;`,
   ].join('')
 }

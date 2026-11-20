@@ -5,11 +5,11 @@ import { LOCATE_METHODS, type FrameForm } from '@/import/frame'
 import type { DegreeOrder, Question, UtmOrder } from '@/import/types'
 import { LENGTH_UNITS } from '@/import/units'
 import { HEMISPHERES, utmZoneAt } from '@/import/utm'
-import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { Select } from '@/ui/select'
+import { useRegion } from './plot-store'
 
 type Change = (patch: Partial<FrameForm>) => void
 type Choice = { value: string; label: string }
@@ -61,7 +61,8 @@ function OrderChoice({ orders, form, onChange }: { orders: readonly (DegreeOrder
 }
 
 function UtmFields({ form, onChange }: { form: FrameForm; onChange: Change }) {
-  const { zone, hemisphere } = utmZoneAt(REGION.mapStart.value)
+  const region = useRegion()
+  const { zone, hemisphere } = utmZoneAt(region.mapStart.value.centre)
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex gap-3">
@@ -81,7 +82,7 @@ function UtmFields({ form, onChange }: { form: FrameForm; onChange: Change }) {
           )}
         </Field>
       </div>
-      <p className={HINT}>{t('import.utm.hint', { city: REGION.city, zone: `${zone} ${hemisphere}` })}</p>
+      {region.bounds && <p className={HINT}>{t('import.utm.hint', { city: region.name, zone: `${zone} ${hemisphere}` })}</p>}
     </div>
   )
 }

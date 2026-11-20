@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { REGION } from '@/region/regions'
+import { REGIONS } from '@/region/regions'
 import { HIGHWAY_CLASSES } from './assumptions'
 import type { Bbox } from './bbox'
 import { OverpassUnavailableError, fetchOverpass, overpassQuery } from './overpass'
@@ -7,7 +7,8 @@ import { USER_AGENT } from './user-agent'
 
 const bbox: Bbox = [100.566, 13.762, 100.572, 13.768]
 const stationBbox: Bbox = [100.56, 13.756, 100.578, 13.774]
-const query = overpassQuery(bbox, stationBbox, 20)
+const transit = REGIONS.bkk.transit
+const query = overpassQuery(bbox, { bbox: stationBbox, transit }, 20)
 const instances = ['https://a.test/api', 'https://b.test/api', 'https://c.test/api']
 const okBody = { elements: [{ type: 'way', id: 1, tags: { building: 'yes' }, geometry: [] }] }
 
@@ -43,10 +44,10 @@ describe('overpassQuery', () => {
 
   it('asks for mass-transit platforms and station nodes in the wider station box', () => {
     const stationArea = '(13.756,100.56,13.774,100.578)'
-    const modes = REGION.transit.platformModes.value.join('|')
+    const modes = transit.platformModes.value.join('|')
     expect(query).toContain(`nw["railway"="platform"]${stationArea};`)
     expect(query).toContain(`nw["public_transport"="platform"][~"^(${modes})$"~"^yes$"]${stationArea};`)
-    expect(query).toContain(`node["railway"="station"]["station"~"^(${REGION.transit.stationNodeTypes.value.join('|')})$"]${stationArea};`)
+    expect(query).toContain(`node["railway"="station"]["station"~"^(${transit.stationNodeTypes.value.join('|')})$"]${stationArea};`)
   })
 
   it('returns tags and geometry as JSON with a server timeout', () => {
