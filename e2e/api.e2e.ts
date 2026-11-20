@@ -1,8 +1,10 @@
 import type { APIResponse } from '@playwright/test'
 import { expect, test } from '@playwright/test'
+import { encodeRing } from '../src/zone/schema'
+import { RESULTS_PLOT } from './support/site'
 
 const BANGKOK_BBOX = '100.5671,13.7632,100.5709,13.7668'
-const BANGKOK_RING = '100.5686,13.7648;100.56915,13.7648;100.5692,13.76525'
+const BANGKOK_RING = encodeRing(RESULTS_PLOT.ring)
 const BURST_REQUESTS = 120
 
 const MUST_NOT_BE_CACHED = 'no-store'

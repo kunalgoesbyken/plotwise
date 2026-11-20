@@ -1,4 +1,4 @@
-import { designTable, dragBy, openApp, openResults, settledCorner, summary, zoneCheck } from './support/app'
+import { designTable, designsRegion, dragBy, openApp, openResults, settledCorner, summary, zoneCheck } from './support/app'
 import { CHATUCHAK_PARK_PLOT, INSIDE, MIXED, OUTSIDE, RESULTS_PLOT, hashOf, mockApp, unchecked } from './support/site'
 import { expect, test } from './support/test'
 
@@ -30,7 +30,7 @@ test('a plot in Chatuchak Park is blocked with the outside message and no figure
   await expect(held.getByRole('button')).toHaveCount(0)
   await expect(designTable(page)).toHaveCount(0)
   await expect(page.getByText('You can build up to')).toHaveCount(0)
-  await expect(page.getByText(NOTHING_TO_SHOW)).toBeVisible()
+  await expect(designsRegion(page).getByText(NOTHING_TO_SHOW)).toBeVisible()
 
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByRole('heading', { name: 'Plotwise · Bangkok plot summary' })).toHaveCount(0)
@@ -53,7 +53,7 @@ for (const reason of ['no-region', 'no-zone', 'unrecognised'] as const)
     await openApp(page, hashOf(RESULTS_PLOT))
     await expect(zoneCheck(page).getByRole('button', { name: CONFIRM })).toBeVisible()
     await expect(designTable(page)).toHaveCount(0)
-    await expect(page.getByText(NOTHING_TO_SHOW)).toBeVisible()
+    await expect(designsRegion(page).getByText(NOTHING_TO_SHOW)).toBeVisible()
 
     await zoneCheck(page).getByRole('button', { name: CONFIRM }).click()
     await expect(designTable(page)).toBeAttached({ timeout: 30_000 })
