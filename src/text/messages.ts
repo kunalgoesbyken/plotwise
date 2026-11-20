@@ -244,8 +244,8 @@ const en = {
   'import.toggle': 'Import coordinates or a file',
   'import.privacy': 'Read in your browser. Nothing is uploaded.',
   'import.paste.label': 'Paste corner coordinates',
-  'import.paste.placeholder': '100.5754, 13.7787\n100.5757, 13.7787\n100.5757, 13.7791',
-  'import.paste.hint': 'One corner per line, or separated by semicolons. Degrees, or UTM metres.',
+  'import.paste.any-corner': 'longitude, latitude',
+  'import.paste.hint': 'One corner per line, or separated by semicolons. KML’s longitude,latitude pairs separated by spaces work too. Degrees, or UTM metres.',
   'import.file.label': 'Or choose a KML, GeoJSON or DXF file',
   'import.file.reading': ({ name }: { name: string }) => `Reading ${name}…`,
   'import.shape.label': 'Which shape is the plot?',
@@ -283,7 +283,8 @@ const en = {
   'import.result': ({ corners, area }: { corners: string; area: string }) => `${corners}, ${area}`,
   'import.use': 'Use this outline',
 
-  'import.problem.bad-entry': ({ entry }: { entry: number }) => `Entry ${entry} is not a pair of numbers. Write one corner per line, like 100.5754, 13.7787.`,
+  'import.problem.bad-entry': ({ entry, corner }: { entry: number; corner: string }) =>
+    `Entry ${entry} is not a pair of numbers. Write one corner per line, like ${corner}.`,
   'import.problem.unrecognised-coordinates': 'These numbers are not all degrees or all UTM metres. Use one system for every corner.',
   'import.problem.out-of-range': 'Some coordinates are not positions on Earth. Check the order and the units.',
   'import.problem.outside-region': ({ country }: { country: string }) =>

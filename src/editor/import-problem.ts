@@ -4,13 +4,15 @@ import type { Region } from '@/region/regions'
 import { ASSUMPTIONS } from '@/solve'
 import { formatNumber, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
+import { exampleCorners } from './corner-example'
 
 const BYTES_PER_MEGABYTE = 1_000_000
 
-export function problemText(problem: Problem, { country, name, areaUnit }: Region): string {
+export function problemText(problem: Problem, region: Region): string {
+  const { country, name, areaUnit } = region
   switch (problem.reason) {
     case 'bad-entry':
-      return t('import.problem.bad-entry', { entry: problem.entry })
+      return t('import.problem.bad-entry', { entry: problem.entry, corner: exampleCorners(region)[0] })
     case 'outside-region':
       return t('import.problem.outside-region', { country: country ?? name })
     case 'too-many-corners':
