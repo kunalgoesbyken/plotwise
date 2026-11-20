@@ -12,7 +12,8 @@ import {
   type Polygon,
   type Prism,
 } from '@/geometry'
-import { ASSUMPTIONS, footprintCapSqm, mainRoad, type Envelope, type Solution } from '@/solve'
+import { mainRoad } from '@/plot/site'
+import { ASSUMPTIONS, footprintCapSqm, type Envelope, type Solution } from '@/solve'
 import { programme } from './programme'
 
 export type TypologyId = 'podium-tower' | 'slab' | 'low-rise'

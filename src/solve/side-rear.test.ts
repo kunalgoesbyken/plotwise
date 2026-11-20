@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { siteOf } from '@/plot/site'
 import { loadPack } from '@/rules'
-import { sideRearCeilingM, sideRearLimit, sideRearOpenSpace, type SideRearLimit } from './side-rear'
+import { sideRearCeilingM, sideRearLimit, sideRearOpenSpace, storeysToHold, type SideRearLimit } from './side-rear'
 import { plotFromMetres, rectangle } from './test-plots'
 
 const MUMBAI = loadPack('mum-suburbs-res')
@@ -55,6 +55,16 @@ describe('Table A open space by building height', () => {
   it('stops the smaller plot class at 70 m, where Table A leaves its cells blank, and leaves the larger class open', () => {
     expect(sideRearCeilingM(SMALL)).toBe(70)
     expect(sideRearCeilingM(LARGE)).toBe(Infinity)
+  })
+
+  it('fails loudly for a height Table A leaves blank', () => {
+    expect(() => sideRearOpenSpace(SMALL, 71)).toThrow()
+  })
+
+  it('tries the tallest height at the smallest open space, then every storey where the open space grows', () => {
+    expect(storeysToHold(SMALL, 3.1, 8)).toEqual([5, 6, 7, 8])
+    expect(storeysToHold(LARGE, 3.1, 8)).toEqual([4, 5, 6, 7, 8])
+    expect(storeysToHold(LARGE, 3.1, 3)).toEqual([3])
   })
 
   it('never shrinks as the building gets taller and never falls below the 3.6 m minimum', () => {

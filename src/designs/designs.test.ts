@@ -352,16 +352,18 @@ describe('Mumbai side and rear open spaces (Table A) carved out of the envelope'
     return Math.min(...polygons.flatMap((polygon) => polygon.outer.map((p, i) => segmentDistance(p, polygon.outer[(i + 1) % polygon.outer.length], a, b))))
   }
 
-  it('keeps every floor plate of every design outside the side and rear open space Table A asks at that floor’s height', () => {
+  const lowestClearanceM = (solution: Solution, d: Design) => {
+    const boundaries = solution.site.edges.flatMap((edge, i) => (edge.roadWidthM === null ? [i] : []))
+    return Math.min(...d.plates.floors.flatMap((floor) => boundaries.map((edge) => clearanceM(solution, floor.polygons, edge))))
+  }
+
+  it('keeps every floor of every design outside the side and rear open space Table A asks for the design’s full height', () => {
     fc.assert(
       fc.property(fc.oneof(convexPolygon(10), starPolygon(16)), fc.double({ min: 4, max: 40, noNaN: true }), (points: Vec2[], roadWidthM) => {
         const { solution, options } = designedWith(MUMBAI, plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]))
-        const boundaries = solution.site.edges.flatMap((edge, i) => (edge.roadWidthM === null ? [i] : []))
         for (const d of options) {
-          for (const floor of d.plates.floors) {
-            const requiredM = sideRearOpenSpace(solution.limits.sideRear!, floor.topM).distanceM
-            for (const edge of boundaries) expect(clearanceM(solution, floor.polygons, edge)).toBeGreaterThanOrEqual(requiredM - 1e-3)
-          }
+          const requiredM = sideRearOpenSpace(solution.limits.sideRear, d.metrics.heightM).distanceM
+          expect(lowestClearanceM(solution, d)).toBeGreaterThanOrEqual(requiredM - 1e-3)
         }
       }),
       { numRuns: 40 },
@@ -379,15 +381,23 @@ describe('Mumbai side and rear open spaces (Table A) carved out of the envelope'
     expect(after.checks.find((c) => c.id === 'boundary-setback')).toMatchObject({ status: 'pass', limit: 3.6 })
   })
 
-  it('stops a 10 m × 12 m plot short of its floor area cap, where the slab used to touch the rear boundary', () => {
+  it('holds a tall design on a 10 m × 12 m plot H/5 off its neighbours on every floor, not 3.6 m on the lower ones', () => {
     const before = designedWith(withoutTableA, SMALL_PLOT).options
     const { solution, options } = designedWith(MUMBAI, SMALL_PLOT)
     expect(solution.limits.sideRear?.plotClass).toBe('small')
     expect(before.map((d) => d.limitedBy)).toEqual(['far', 'far'])
     expect(byId(before, 'slab')!.checks.find((c) => c.id === 'boundary-setback')?.status).toBe('fail')
-    expect(options.map((d) => d.limitedBy)).toEqual(['envelope', 'envelope'])
+    expect(options.map((d) => [d.metrics.storeys, d.limitedBy])).toEqual([
+      [6, 'envelope'],
+      [6, 'envelope'],
+    ])
     for (const d of options) {
+      expect(lowestClearanceM(solution, d)).toBeGreaterThanOrEqual(d.metrics.heightM / 5 - 1e-3)
+      expect(lowestClearanceM(solution, d)).toBeGreaterThan(3.6)
       expect(d.metrics.gfaSqm).toBeLessThan(solution.farCap.maxGfaSqm)
+      const check = d.checks.find((c) => c.id === 'boundary-setback')
+      expect(check?.status).toBe('pass')
+      expect(check && 'limit' in check ? check.limit : 0).toBeCloseTo(d.metrics.heightM / 5, 9)
       expect(computed(d).filter((c) => c.status === 'fail')).toEqual([])
     }
   })

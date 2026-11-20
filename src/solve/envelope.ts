@@ -1,5 +1,5 @@
 import { segmentDistance, tieredEnvelope, type Prism, type Tier } from '@/geometry'
-import type { Site } from '@/plot/site'
+import { mainRoad, type Site } from '@/plot/site'
 import type { Bound, RulePack } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
 import { satisfies } from './bound'
@@ -37,21 +37,16 @@ export type EnvelopeInput = {
   readonly floorToFloorM: number
   readonly planLimitM: number | null
   readonly sideRear: SideRearLimit | null
+  readonly heldStoreys: number | null
 }
 
-export function mainRoad({ edges }: Site): number {
-  return edges.reduce((best, edge, i) => {
-    const current = edges[best]
-    if (edge.roadWidthM === null) return best
-    if (current.roadWidthM === null || edge.roadWidthM > current.roadWidthM) return i
-    return edge.roadWidthM === current.roadWidthM && edge.lengthM > current.lengthM ? i : best
-  }, 0)
-}
+const heldTo = ({ heldStoreys }: EnvelopeInput, storeys: number) => Math.min(storeys, heldStoreys ?? storeys)
 
-function baseSetbacks({ pack, readings, site, sideRear, floorToFloorM }: EnvelopeInput, building: Building): Setback[] {
+function baseSetbacks(input: EnvelopeInput, building: Building): Setback[] {
+  const { pack, readings, site, sideRear, floorToFloorM, heldStoreys } = input
   const { frontOpenSpace } = pack
   const front = frontOpenSpace && readings['front-open-space'] === 'always' ? mainRoad(site) : -1
-  const sideRearSpace = sideRearOpenSpace(sideRear, floorToFloorM)
+  const sideRearSpace = sideRearOpenSpace(sideRear, (heldStoreys ?? 1) * floorToFloorM)
   return site.edges.map((edge, i) => {
     if (edge.roadWidthM === null) return strictest([boundarySetback(pack, building, 'boundary'), sideRearSpace])
     const frontSpace = frontOpenSpace && i === front ? [frontOpenSpaceDepth(frontOpenSpace, building.storeys)] : []
@@ -59,15 +54,10 @@ function baseSetbacks({ pack, readings, site, sideRear, floorToFloorM }: Envelop
   })
 }
 
-function boundaryAt({ sideRear }: EnvelopeInput, setback: Setback, heightM: number): Setback {
-  const open = sideRearOpenSpace(sideRear, heightM)
-  return open.distanceM > setback.distanceM ? open : setback
-}
-
-function setbacksAt(input: EnvelopeInput, base: readonly Setback[], heightM: number): Setback[] {
+function setbacksAt({ pack, site }: EnvelopeInput, base: readonly Setback[], heightM: number): Setback[] {
   return base.map((setback, i) => {
-    const widthM = input.site.edges[i].roadWidthM
-    return widthM === null ? boundaryAt(input, setback, heightM) : strictest([setback, heightVsRoadSetback(input.pack, widthM, heightM)])
+    const widthM = site.edges[i].roadWidthM
+    return widthM === null ? setback : strictest([setback, heightVsRoadSetback(pack, widthM, heightM)])
   })
 }
 
@@ -130,11 +120,11 @@ function belowHighRiseStoreys(input: EnvelopeInput, highRise: Bound): number {
 export function ordinaryEnvelope(input: EnvelopeInput): Envelope {
   const f = input.floorToFloorM
   const { buildingClasses } = input.pack
-  const storeys = buildingClasses ? belowHighRiseStoreys(input, buildingClasses.highRiseFromHeightM) : storeysWithin(ceilingM(input), f)
+  const storeys = heldTo(input, buildingClasses ? belowHighRiseStoreys(input, buildingClasses.highRiseFromHeightM) : storeysWithin(ceilingM(input), f))
   return envelope(input, 'ordinary', { heightM: storeys * f, storeys, floorAreaSqm: 0 })
 }
 
 export function highRiseEnvelope(input: EnvelopeInput): Envelope {
-  const storeys = storeysWithin(ceilingM(input), input.floorToFloorM)
+  const storeys = heldTo(input, storeysWithin(ceilingM(input), input.floorToFloorM))
   return envelope(input, 'highRise', { heightM: storeys * input.floorToFloorM, storeys, floorAreaSqm: Infinity })
 }

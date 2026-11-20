@@ -5,7 +5,9 @@ import {
   negate,
   compare,
   farCapFor,
+  heldAt,
   satisfies,
+  storeysToHold,
   type Building,
   type EnvelopeKind,
   type Solution,
@@ -167,8 +169,24 @@ function bestPlacement(solution: Solution, id: TypologyId): Placed | null {
   return placements.reduce<Placed | null>((best, next) => (!best || next.fit.programme.farSqm > best.fit.programme.farSqm ? next : best), null)
 }
 
+const topStoreys = ({ envelopes, floorToFloorM }: Solution) => Math.max(0, ...envelopes.map((e) => Math.round((e.prisms.at(-1)?.topM ?? 0) / floorToFloorM)))
+
+function heldPlacement(solution: Solution, id: TypologyId): Placed | null {
+  const { sideRear } = solution.limits
+  if (!sideRear) return bestPlacement(solution, id)
+  let best: Placed | null = null
+  for (const storeys of storeysToHold(sideRear, solution.floorToFloorM, topStoreys(solution))) {
+    const held = heldAt(solution, storeys)
+    if (held.envelopes.every((e) => e.prisms.length === 0)) break
+    const placed = bestPlacement(held, id)
+    if (placed && (!best || placed.fit.programme.farSqm > best.fit.programme.farSqm + AREA_TOLERANCE_SQM)) best = placed
+    if (best && reachesCap(solution, best.fit)) break
+  }
+  return best
+}
+
 function design(solution: Solution, id: TypologyId): Design | null {
-  const placed = bestPlacement(solution, id)
+  const placed = heldPlacement(solution, id)
   if (!placed) return null
   const { massing, fit } = placed
   const plates = stack(fit.floors)

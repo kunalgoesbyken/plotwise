@@ -1,5 +1,6 @@
 import type { Vec2 } from '@/geo/projection'
 import type { PlotLimitField } from '@/plot/plot'
+import { mainRoad } from '@/plot/site'
 import { dot, edgeLengths, segmentDistance, subtract, type FloorPlates, type Loop, type Polygon } from '@/geometry'
 import type { Cite, Comparator, FrontOpenSpace } from '@/rules'
 import {
@@ -12,7 +13,6 @@ import {
   isUnentered,
   lowRiseSetbacks,
   rearEdge,
-  mainRoad,
   negate,
   permeableArea,
   ratioOpenSpace,
@@ -182,14 +182,12 @@ function setbackChecks({ solution, building, levels }: Context): Check[] {
   const plotSetback = (id: EnteredCheckId, check: Check) => (lowRise ? [check] : unlessUnentered(id, check, solution, pack.plotSetbacks?.notes ?? []))
   const rear = rearEdge(site)
   if (boundaries.length > 0) {
-    const margins = boundaries.flatMap((e) =>
-      levels.map((level) => {
-        const ordinary = strictest([boundarySetback(pack, building, 'boundary'), sideRearOpenSpace(solution.limits.sideRear, level.topM)])
-        const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : ordinary
-        const actual = level.clearanceM[e.i]
-        return { actual, required, margin: actual - required.distanceM }
-      }),
-    )
+    const ordinary = () => strictest([boundarySetback(pack, building, 'boundary'), sideRearOpenSpace(solution.limits.sideRear, building.heightM)])
+    const margins = boundaries.map((e) => {
+      const required = lowRise ? (e.i === rear ? lowRise.rear : lowRise.side) : ordinary()
+      const actual = nearest(e.i)
+      return { actual, required, margin: actual - required.distanceM }
+    })
     const worst = margins.reduce((least, m) => (m.margin < least.margin ? m : least))
     checks.push(...plotSetback('boundary-setback', measured('boundary-setback', worst.actual, 'gte', worst.required.distanceM, 'm', worst.required.cites)))
   }

@@ -1,9 +1,8 @@
 import type { Vec2 } from '@/geo/projection'
 import { dot, length, subtract } from '@/geometry'
-import type { Site } from '@/plot/site'
+import { mainRoad, type Site } from '@/plot/site'
 import type { Cite, RulePack, SideRearOpenSpaces, SideRearRow } from '@/rules'
 import { inRange, satisfies } from './bound'
-import { mainRoad } from './envelope'
 import { NO_SETBACK, type Setback } from './setbacks'
 
 export type PlotClass = 'small' | 'large'
@@ -52,8 +51,14 @@ export function rowCites({ distance }: SideRearRow): Cite[] {
 
 export function sideRearOpenSpace(limit: SideRearLimit | null, heightM: number): Setback {
   if (!limit) return NO_SETBACK
-  const row = limit.rows.find((r) => inRange(heightM, r.heightM)) ?? limit.rows[limit.rows.length - 1]
+  const row = limit.rows.find((r) => inRange(heightM, r.heightM))
+  if (!row) throw new Error(`Table A has no row for a ${heightM} m building on a ${limit.plotClass} plot`)
   return { distanceM: rowDistanceM(row, heightM), cites: [limit.appliesTo, ...rowCites(row)] }
 }
 
 export const sideRearCeilingM = (limit: SideRearLimit | null) => (limit ? (limit.rows[limit.rows.length - 1].heightM.max?.value ?? Infinity) : Infinity)
+
+export function storeysToHold(limit: SideRearLimit, floorToFloorM: number, maxStoreys: number): number[] {
+  const openAt = (storeys: number) => sideRearOpenSpace(limit, storeys * floorToFloorM).distanceM
+  return Array.from({ length: maxStoreys }, (_, i) => i + 1).filter((storeys) => storeys === maxStoreys || openAt(storeys) < openAt(storeys + 1))
+}

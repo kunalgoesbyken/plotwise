@@ -45,3 +45,12 @@ export function siteOf(plot: Plot): Site {
     })),
   }
 }
+
+export function mainRoad({ edges }: Site): number {
+  return edges.reduce((best, edge, i) => {
+    const current = edges[best]
+    if (edge.roadWidthM === null) return best
+    if (current.roadWidthM === null || edge.roadWidthM > current.roadWidthM) return i
+    return edge.roadWidthM === current.roadWidthM && edge.lengthM > current.lengthM ? i : best
+  }, 0)
+}
