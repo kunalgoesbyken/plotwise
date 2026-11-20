@@ -3,7 +3,7 @@ import { BUILDING_TYPES } from '@/plot/plot'
 import { MONEY_REGIONS } from '@/solve'
 import { loadPack } from '@/rules'
 import { BANGKOK } from '@/rules/test-packs'
-import { PARAMETERS, parametersFor, ratesFor, storageKey } from './parameters'
+import { PARAMETERS, parametersFor, ratesFor, storageKey, type Basis, type ParameterId } from './parameters'
 import { enteredValues, missingParameters, packDefaults } from './values'
 
 const CUSTOM = loadPack('custom')
@@ -78,5 +78,42 @@ describe('defaults a rule pack gives for values otherwise entered', () => {
     const rest = { ...everyValue('condo'), 'saleableShare.condo': undefined }
     expect(enteredValues(rest, 'condo', MUMBAI)?.saleableShare).toBeCloseTo(1 / 1.2, 12)
     expect(enteredValues({ ...rest, 'saleableShare.condo': 0.7 }, 'condo', MUMBAI)?.saleableShare).toBe(0.7)
+  })
+})
+
+describe('sources of the Bangkok money defaults', () => {
+  const prices = MONEY_REGIONS.bkk.prices
+  const sourceOf = (id: ParameterId, basis: Basis) => PARAMETERS.find((parameter) => parameter.id === id)?.assumed(prices, basis).source
+  const office: Basis = { use: 'office', tier: 'cityFringe' }
+  const condo: Basis = { use: 'condo', tier: 'cityFringe' }
+
+  it('takes the office services rate and the basement rate from the dated BOI construction cost table', () => {
+    for (const id of ['services.low', 'services.high', 'basement.low', 'basement.high'] as const) {
+      expect(sourceOf(id, office)).toContain('https://www.boi.go.th/en/typical_costs_of_starting_and_operating_a_business')
+      expect(sourceOf(id, office)).toContain('Last Update: March 27th, 2026')
+    }
+  })
+
+  it('labels the split and the uses BOI gives no row for as unsourced, checked against the published totals', () => {
+    for (const id of ['substructure.lowRise.low', 'superstructure.highRise.high', 'services.low'] as const) {
+      expect(sourceOf(id, condo)).toContain('unsourced')
+      expect(sourceOf(id, condo)).toContain('RHLB (Siam) Ltd., Construction Commentary, issue July 2025')
+    }
+    expect(sourceOf('services.low', condo)).toContain('no condominium row')
+    expect(sourceOf('services.low', { use: 'hotel', tier: 'cbd' })).toContain('no hotel row')
+  })
+
+  it('prices a CBD condo from CBRE Q3 2026 and the other areas from Knight Frank, with CBRE named for comparison', () => {
+    expect(sourceOf('salePrice', { use: 'condo', tier: 'cbd' })).toContain('CBRE Thailand, Bangkok Overall Figures Q3 2026')
+    for (const tier of ['cityFringe', 'suburban'] as const) {
+      expect(sourceOf('salePrice', { use: 'condo', tier })).toContain('Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026')
+      expect(sourceOf('salePrice', { use: 'condo', tier })).toContain('CBRE Thailand, Bangkok Overall Figures Q3 2026')
+    }
+  })
+
+  it('gives the Treasury appraised value as an official reference, not a market price, for CBD land', () => {
+    const source = sourceOf('landReferenceHigh', { use: 'condo', tier: 'cbd' })
+    expect(source).toContain('Official reference, not a market price')
+    expect(source).toContain('https://assessprice.treasury.go.th')
   })
 })

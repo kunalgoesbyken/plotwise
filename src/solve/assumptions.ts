@@ -168,21 +168,52 @@ const LAND_WARNING_FACTOR: Assumption = {
   value: 2,
   source: `${UNSOURCED}; the land value a design supports is flagged when it is more than this many times the high end of the typical asking range`,
 }
-const RHLB_COST_GUIDE =
-  'RHLB (Siam) Ltd., Construction cost commentary July 2025, residential condominium THB 25,500 to 49,500 per m² of construction floor area from low to high quality, http://www.rhlb.co.th/wp-content/uploads/research/Construction-cost-commentary-July%202025.pdf'
-const NO_BKK_COST = `${UNSOURCED}; no published Bangkok split into substructure, superstructure and services was found, so each rate is editable. Cross-check on the total: ${RHLB_COST_GUIDE}`
+const BOI_COSTS =
+  'Thailand Board of Investment, Cost of Doing Business in Thailand, Typical Costs of Starting and Operating a Business, section 5 Construction Cost (from Tractus Asia Ltd, "updated as of September 2025"; page "Last Update: March 27th, 2026"), https://www.boi.go.th/en/typical_costs_of_starting_and_operating_a_business'
+const RHLB_COSTS =
+  'RHLB (Siam) Ltd., Construction Commentary, issue July 2025, Approximate Order of Construction Costs per m² of construction floor area, http://www.rhlb.co.th/wp-content/uploads/research/Construction-cost-commentary-July%202025.pdf'
+const BOI_OFFICE = { low: 25_000, high: 35_000 }
+const BOI_BASEMENT_CAR_PARK = { low: 16_000, high: 20_000 }
 const HOTEL_VALUE_PER_KEY_THB = 7_300_000
+const CBRE_Q3_2026 =
+  'CBRE Thailand, Bangkok Overall Figures Q3 2026, published 18 November 2026, page 2, https://mktgdocs.cbre.com/2299/8a1f5389-9d73-4ae3-b3e0-d41d19e72f4f-1453980461/Bangkok-Overall-Figures-Q3_202.pdf'
 const KNIGHT_FRANK_Q1_2026 = 'https://content.knightfrank.com/research/2265/documents/en/bangkok-condominium-market-q1-2026-12909.pdf'
 const KNIGHT_FRANK_AREAS = 'https://content.knightfrank.com/research/2265/documents/en/bangkok-condominium-market-q2-2021-8431.pdf'
 const COLLIERS_JUNE_2026 =
   'https://www.thaiexaminer.com/thai-news-foreigners/2026/06/04/colliers-boss-in-thailand-says-now-is-the-time-to-buy-into-the-countrys-resilient-property-market/'
 const THAILAND_PROPERTY = 'https://www.thailand-property.com/land-for-sale/bangkok'
+const TREASURY_BANGKOK_2566_2569 =
+  'Treasury Department, summary of appraised land prices per land unit, Bangkok, accounting cycle B.E. 2566 to 2569 (2023 to 2026), file "สรุปราคาประเมินทุนทรัพย์ที่ดิน_รอบบัญชี_พ.ศ.2566 - 2569_กรุงเทพมหานคร.pdf", page 1, land office area of Dusit, Bang Kho Laem, Bang Rak, Pathum Wan, Pom Prap Sattru Phai, Phra Nakhon, Yan Nawa, Samphanthawong and Sathon, from https://assessprice.treasury.go.th'
+
+const thb = (value: number) => `THB ${value.toLocaleString('en-US')}`
+
+const band = ({ low, high }: { readonly low: number; readonly high: number }) => `${thb(low)} to ${thb(high)}`
+
+const WHOLE_BUILDING_CHECK = `Whole-building check: BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality, ${BOI_COSTS}; RHLB residential condominium THB 25,500 to 49,500, office THB 26,000 to 39,000 and hotel, including furniture and equipment, THB 49,000 to 64,500 per m², ${RHLB_COSTS}`
+
+const PLOTWISE_SPLIT = `${UNSOURCED}; BOI and RHLB publish whole-building rates only, not a split into substructure, superstructure and services, so this split is Plotwise's own. ${WHOLE_BUILDING_CHECK}`
+
+const noBoiRow = (use: string) => `${UNSOURCED}; the BOI table has no ${use} row and no published Bangkok split into substructure, superstructure and services was found. ${WHOLE_BUILDING_CHECK}`
+
+const LOW_RISE_STRUCTURE = {
+  substructure: { low: 4_000, high: 6_000, source: PLOTWISE_SPLIT },
+  superstructure: { low: 13_000, high: 18_000, source: PLOTWISE_SPLIT },
+} as const satisfies Record<string, AssumedRange>
+
+const officeServices = (bound: 'low' | 'high') =>
+  BOI_OFFICE[bound] - LOW_RISE_STRUCTURE.substructure[bound] - LOW_RISE_STRUCTURE.superstructure[bound]
+
+const BOI_OFFICE_SERVICES: AssumedRange = {
+  low: officeServices('low'),
+  high: officeServices('high'),
+  source: `${EDITABLE}; BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality ("The cost includes communal air conditioning, general electrics, and sanitary"), less the low-rise substructure and superstructure rates, so a low-rise office costs the BOI range in total. BOI gives one range for every height, so the extra for a high-rise office is Plotwise's estimate. ${BOI_COSTS}`,
+}
 
 const everyTier = (assumption: Assumption): PerTier<Assumption> => ({ cbd: assumption, cityFringe: assumption, suburban: assumption })
 
 const knightFrankCondo = (area: string, value: number): Assumption => ({
   value,
-  source: `${EDITABLE}; Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, ${area} average asking price of approximately THB ${value.toLocaleString('en-US')} per m², an average over all listed condominiums, not new launches, ${KNIGHT_FRANK_Q1_2026}`,
+  source: `${EDITABLE}; Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, ${area} average asking price of approximately ${thb(value)} per m², an average over all listed condominiums, not new launches, ${KNIGHT_FRANK_Q1_2026}. Knight Frank splits the city fringe from the suburbs, so it is used here. For comparison, the asking price of off-plan and under-construction condominium units in CBRE's combined Midtown/Suburban Bangkok was THB 110,696 per m² in Q3 2026, ${CBRE_Q3_2026}`,
 })
 
 const BANGKOK_PRICES = {
@@ -194,7 +225,10 @@ const BANGKOK_PRICES = {
   },
   salePricePerSqm: {
     condo: {
-      cbd: knightFrankCondo('CBD', 236_800),
+      cbd: {
+        value: 293_283,
+        source: `${EDITABLE}; CBRE Thailand: "The average asking price of under-construction units in freehold condominium projects (High-end and above) in downtown Bangkok increased 2.5% Y-o-Y to THB 293,283 per square meter", ${CBRE_Q3_2026}. An asking price for new high-end projects, which most new CBD launches are; for a mid-market project compare Knight Frank's CBD average asking price over all listed condominiums of approximately THB 236,800 per m² in Q1 2026, ${KNIGHT_FRANK_Q1_2026}`,
+      },
       cityFringe: knightFrankCondo('City Fringe', 123_500),
       suburban: knightFrankCondo('Bangkok Suburbs', 71_200),
     },
@@ -211,7 +245,7 @@ const BANGKOK_PRICES = {
     cbd: {
       low: 1_000_000,
       high: 4_000_000,
-      source: `${EDITABLE}; asking and marketed prices per square wah reported by Colliers on 4 June 2026: "Land prices along sections of Ratchadaphisek Road have already exceeded 1 million baht per square wah" and Chidlom, Ploenchit and Wireless Road "currently range between 3 million and 4 million baht per square wah", ${COLLIERS_JUNE_2026}`,
+      source: `${EDITABLE}; asking and marketed prices per square wah reported by Colliers on 4 June 2026: "Land prices along sections of Ratchadaphisek Road have already exceeded 1 million baht per square wah" and Chidlom, Ploenchit and Wireless Road "currently range between 3 million and 4 million baht per square wah", ${COLLIERS_JUNE_2026}. Official reference, not a market price: the Treasury Department's appraised value for the 2023 to 2026 cycle (B.E. 2566 to 2569), the value transfer fees and taxes are charged on, is THB 1,000,000 per square wah on Phloen Chit Road and Witthayu (Wireless) Road, THB 750,000 to 900,000 on Ratchadamri Road and THB 400,000 to 1,000,000 on Rama I Road, ${TREASURY_BANGKOK_2566_2569}`,
     },
     cityFringe: {
       low: 170_000,
@@ -255,19 +289,22 @@ const BANGKOK_PRICES = {
   },
   rates: {
     substructure: {
-      lowRise: { low: 4_000, high: 6_000, source: NO_BKK_COST },
-      highRise: { low: 8_000, high: 12_000, source: NO_BKK_COST },
+      lowRise: LOW_RISE_STRUCTURE.substructure,
+      highRise: { low: 8_000, high: 12_000, source: PLOTWISE_SPLIT },
     },
     superstructure: {
-      lowRise: { low: 13_000, high: 18_000, source: NO_BKK_COST },
-      highRise: { low: 17_000, high: 24_000, source: NO_BKK_COST },
+      lowRise: LOW_RISE_STRUCTURE.superstructure,
+      highRise: { low: 17_000, high: 24_000, source: PLOTWISE_SPLIT },
     },
     services: {
-      condo: { low: 7_000, high: 10_000, source: NO_BKK_COST },
-      office: { low: 10_000, high: 14_000, source: NO_BKK_COST },
-      hotel: { low: 13_000, high: 19_000, source: NO_BKK_COST },
+      condo: { low: 7_000, high: 10_000, source: noBoiRow('condominium') },
+      office: BOI_OFFICE_SERVICES,
+      hotel: { low: 13_000, high: 19_000, source: noBoiRow('hotel') },
     },
-    basement: { low: 30_000, high: 45_000, source: NO_BKK_COST },
+    basement: {
+      ...BOI_BASEMENT_CAR_PARK,
+      source: `${EDITABLE}; BOI car park, basement, ${band(BOI_BASEMENT_CAR_PARK)} per m², ${BOI_COSTS}. RHLB basement car park THB 19,500 to 23,500 per m², ${RHLB_COSTS}`,
+    },
   },
 } as const satisfies MoneyPrices
 

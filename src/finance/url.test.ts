@@ -45,6 +45,11 @@ describe('assumption share links', () => {
     expect(decodeAssumptions(encodeAssumptions(overrides))).toEqual(overrides)
   })
 
+  it('round-trips a build rate edited for one building type and the basement rate', () => {
+    const overrides = { 'services.low.office': 9000, 'services.high.office': 12000, 'basement.high': 21000 }
+    expect(decodeAssumptions(encodeAssumptions(overrides))).toEqual(overrides)
+  })
+
   it('writes nothing when there are no overrides', () => {
     expect(encodeAssumptions({})).toBeNull()
     expect(decodeAssumptions(null)).toEqual({})
