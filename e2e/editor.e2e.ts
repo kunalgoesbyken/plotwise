@@ -218,8 +218,9 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('Space')
   await expect(page.getByRole('radio', { name: 'Office' })).toBeChecked()
   await expect.poll(async () => (await plotInUrl(page))?.roads).toEqual([
-    { edge: 0, widthM: 12 },
+    ...EXAMPLE_PLOT.roads.slice(0, 2),
     { edge: 2, widthM: 8 },
+    EXAMPLE_PLOT.roads[2],
   ])
 })
 
