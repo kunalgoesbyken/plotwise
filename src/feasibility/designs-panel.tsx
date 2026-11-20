@@ -72,10 +72,12 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
   const { design: selected, selectDesign } = useFeasibility()
   const region = useRegion()
   const toCheckId = useId()
+  const reasonId = useId()
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
   const ranked = rank(designs)
   const columns = ranked.filter(({ standing }) => standing.kind !== 'same-as')
   const shown = (design: Design) => design.id === selected.id
+  const reasonOf = (design: Design) => `${reasonId}-${design.id}`
   const showChecks = (design: Design) => {
     selectDesign(design.id)
     requestAnimationFrame(() => document.getElementById(toCheckId)?.focus())
@@ -84,7 +86,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
     <div className="flex flex-col gap-4">
       <ul aria-label={t('standing.label')} className="flex flex-col gap-1 text-xs leading-snug">
         {ranked.map((option) => (
-          <li key={option.design.id} className={option.standing.kind === 'best' ? 'font-medium text-foreground' : 'text-muted-foreground'}>
+          <li key={option.design.id} id={reasonOf(option.design)} className={option.standing.kind === 'best' ? 'font-medium text-foreground' : 'text-muted-foreground'}>
             {standingLine(option, region.areaUnit)}
           </li>
         ))}
@@ -101,6 +103,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
                     type="button"
                     aria-pressed={shown(design)}
                     aria-label={t('design.show', { name })}
+                    aria-describedby={reasonOf(design)}
                     onClick={() => selectDesign(design.id)}
                     className="relative flex min-h-11 w-full items-end px-2 py-2 text-left text-xs leading-snug font-medium text-muted-foreground transition-colors hover:text-foreground aria-pressed:text-foreground after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-foreground after:opacity-0 after:transition-opacity aria-pressed:after:opacity-100"
                   >

@@ -39,7 +39,10 @@ async function expectStandings(page: Page, region: Example) {
   const options = ranked(region)
   const shown = options.filter(({ standing }) => standing.kind !== 'same-as')
   await expect(columnButtons(page)).toHaveCount(shown.length)
-  for (const [index, option] of shown.entries()) await expect(columnButtons(page).nth(index)).toHaveAccessibleName(t('design.show', { name: nameOf(option) }))
+  for (const [index, option] of shown.entries()) {
+    await expect(columnButtons(page).nth(index)).toHaveAccessibleName(t('design.show', { name: nameOf(option) }))
+    await expect(columnButtons(page).nth(index)).toHaveAccessibleDescription(lineOf(region, option))
+  }
   await expect(standings(page)).toHaveText(options.map((option) => lineOf(region, option)))
   return shown
 }
