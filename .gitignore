@@ -46,6 +46,7 @@ next-env.d.ts
 
 public/maplibre-gl-worker.mjs
 e2e/.results
+playwright-report/
 .playwright-mcp
 
 # planning files (kept local, not committed)

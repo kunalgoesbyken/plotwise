@@ -1,13 +1,15 @@
 import { defineConfig } from '@playwright/test'
 
-const port = 3123
+const port = Number(process.env.E2E_PORT ?? 3123)
 
 export default defineConfig({
   testDir: 'e2e',
   testMatch: '**/*.e2e.ts',
   timeout: 90_000,
   workers: 1,
-  reporter: [['list']],
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   outputDir: 'e2e/.results',
   use: {
     baseURL: process.env.E2E_URL ?? `http://localhost:${port}`,
@@ -22,6 +24,6 @@ export default defineConfig({
     : {
         command: `bunx next start -p ${port}`,
         url: `http://localhost:${port}`,
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
       },
 })
