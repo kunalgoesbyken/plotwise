@@ -7,7 +7,6 @@ import {
   length,
   polygonArea,
   subtract,
-  totalArea,
   type Floor,
   type FloorPlates,
   type Polygon,
@@ -15,6 +14,7 @@ import {
 } from '@/geometry'
 import { ASSUMPTIONS, footprintCapSqm, mainRoad, type Envelope, type Solution } from '@/solve'
 import { programme } from './programme'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 export type TypologyId = 'podium-tower' | 'slab' | 'low-rise'
 
@@ -65,6 +65,7 @@ function envelopeOf(solution: Solution, kind: Envelope['kind']): Envelope | null
 }
 
 const CAP_SEARCH_STEPS = 30
+const SIZE_SEARCH_STEPS = 10
 
 function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number {
   const maxGfaSqm = farCap.maxGfaSqm
@@ -72,9 +73,6 @@ function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number 
 }
 
 const storeysOf = (envelope: Envelope) => Math.round(envelope.prisms[envelope.prisms.length - 1].topM / envelope.floorToFloorM)
-
-const capacitySqm = ({ prisms, floorToFloorM }: Envelope) =>
-  prisms.reduce((sum, prism) => sum + totalArea(prism.polygons) * Math.round((prism.topM - prism.baseM) / floorToFloorM), 0)
 
 function openSpaceFootprintCap(solution: Solution, envelope: Envelope): number {
   const { limits, site } = solution
@@ -106,6 +104,25 @@ export function stack(floors: readonly Floor[]): FloorPlates {
   return { footprint: levelled[0]?.polygons ?? [], footprintSqm: levelled[0]?.areaSqm ?? 0, floors: levelled, gfaSqm: builtCents / 100 }
 }
 
+type BlockTarget = { readonly sqm: number; readonly mayExceed: boolean }
+
+const larger = (a: FloorPlates, b: FloorPlates) => (b.gfaSqm > a.gfaSqm ? b : a)
+
+function blockPlates(platesAt: (share: number) => FloorPlates, target: BlockTarget, guess: number): FloorPlates {
+  const guessed = platesAt(guess)
+  if (guessed.gfaSqm >= target.sqm - AREA_TOLERANCE_SQM || guess >= 1) return guessed
+  const full = platesAt(1)
+  if (target.mayExceed || full.gfaSqm < target.sqm) return larger(guessed, full)
+  let [low, high, below] = [guess, 1, guessed]
+  for (let step = 0; step < SIZE_SEARCH_STEPS; step++) {
+    const share = (low + high) / 2
+    const plates = platesAt(share)
+    if (plates.gfaSqm >= target.sqm) high = share
+    else [low, below] = [share, larger(below, plates)]
+  }
+  return below
+}
+
 function lowRise(solution: Solution): Massing | null {
   const envelope = envelopeOf(solution, 'ordinary')
   if (!envelope) return null
@@ -113,12 +130,13 @@ function lowRise(solution: Solution): Massing | null {
   const ground = extentOf(frame, envelope.prisms[0].polygons)
   const [lengthM, depthM] = [ground.maxAlong - ground.minAlong, ground.maxIn - ground.minIn]
   const targetSqm = reachableSqm(solution, envelope)
-  const share = capacitySqm(envelope) <= targetSqm ? 1 : Math.min(1, Math.sqrt(targetSqm / storeysOf(envelope) / (lengthM * depthM)))
-  const half = share / 2
+  const target = { sqm: targetSqm, mayExceed: targetSqm >= solution.farCap.maxGfaSqm }
   const middle: Vec2 = [(ground.minAlong + ground.maxAlong) / 2, (ground.minIn + ground.maxIn) / 2]
-  const block = centred(frame, middle, half * lengthM, half * depthM)
-  const limits = { footprint: [block], maxFootprintSqm: footprintCap(solution, envelope) }
-  return { envelope, plates: floorPlates(envelope.prisms, envelope.floorToFloorM, limits), shape: { form: 'block' } }
+  const maxFootprintSqm = footprintCap(solution, envelope)
+  const platesAt = (share: number) =>
+    floorPlates(envelope.prisms, envelope.floorToFloorM, { footprint: [centred(frame, middle, (share * lengthM) / 2, (share * depthM) / 2)], maxFootprintSqm })
+  const guess = Math.min(1, Math.sqrt(targetSqm / storeysOf(envelope) / (lengthM * depthM)))
+  return { envelope, plates: blockPlates(platesAt, target, guess), shape: { form: 'block' } }
 }
 
 function slab(solution: Solution): Massing | null {
@@ -143,7 +161,6 @@ function podiumStoreys(solution: Solution, podium: FloorPlates): number {
   return Math.min(podium.floors.length, Math.max(1, Math.ceil(parkingSqm / podium.footprintSqm)))
 }
 
-const TOWER_SEARCH_STEPS = 10
 const MIN_TOWER_SIDE_SHARE = 0.3
 
 const covers = (region: readonly Polygon[], point: Vec2) =>
@@ -179,7 +196,7 @@ function largestHalf(region: readonly Polygon[], centre: Vec2, maxHalf: number):
   if (!covers(region, centre)) return 0
   if (clearOfBoundary(region, centre, maxHalf)) return maxHalf
   let [fits, fails] = [0, maxHalf]
-  for (let step = 0; step < TOWER_SEARCH_STEPS; step++) {
+  for (let step = 0; step < SIZE_SEARCH_STEPS; step++) {
     const half = (fits + fails) / 2
     if (clearOfBoundary(region, centre, half)) fits = half
     else fails = half

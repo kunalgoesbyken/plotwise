@@ -1,6 +1,7 @@
 import { withoutHighRiseRules, type Solution } from '@/solve'
-import { AREA_TOLERANCE_SQM, designs, type Design } from './designs'
+import { designs, type Design } from './designs'
 import { headline } from './headline'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 export function highRiseCost(solution: Solution, options: readonly Design[]): number | null {
   const best = headline(options)

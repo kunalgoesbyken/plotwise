@@ -20,8 +20,9 @@ import {
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { SQM_PER_SQFT } from '@/units/area'
-import { AREA_TOLERANCE_SQM, designs, type Design } from './designs'
+import { designs, type Design } from './designs'
 import { headline } from './headline'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const pack = loadPack('bkk-y9')
 const readings = packInterpretations(pack)
@@ -312,6 +313,28 @@ describe('designs reach the floor area cap when the envelope has room', () => {
             assertHonestLimit(solution, d)
             assertNamedFromResult(solution, d)
           }
+        },
+      ),
+      { numRuns: 40 },
+    )
+  })
+})
+
+describe('the low-rise block', () => {
+  it('never loses floor area when more storeys are allowed, however the envelope compares with the cap', () => {
+    fc.assert(
+      fc.property(
+        fc.oneof(convexPolygon(10), starPolygon(16)),
+        fc.double({ min: 4, max: 40, noNaN: true }),
+        fc.double({ min: 0.5, max: 6, noNaN: true }),
+        fc.integer({ min: 1, max: 15 }),
+        fc.integer({ min: 1, max: 10 }),
+        (points: Vec2[], roadWidthM, maxFar, storeys, more) => {
+          const plot = (maxStoreys: number) => ({ ...plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]), limits: { maxFar, maxStoreys } })
+          const lower = byId(designedUnder('dxb-ap', plot(storeys)).options, 'low-rise')
+          const taller = byId(designedUnder('dxb-ap', plot(storeys + more)).options, 'low-rise')
+          if (!lower || !taller) return
+          expect(taller.metrics.gfaSqm).toBeGreaterThanOrEqual(lower.metrics.gfaSqm - AREA_TOLERANCE_SQM)
         },
       ),
       { numRuns: 40 },

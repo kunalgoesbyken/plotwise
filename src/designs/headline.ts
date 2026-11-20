@@ -1,4 +1,5 @@
-import { AREA_TOLERANCE_SQM, type Design } from './designs'
+import type { Design } from './designs'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 export function headline(designs: readonly Design[]): Design | null {
   const mostSqm = Math.max(...designs.map((d) => d.metrics.gfaSqm))

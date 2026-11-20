@@ -7,9 +7,10 @@ import type { BuildingType, Plot } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { packInterpretations, satisfies, solve, withoutHighRiseRules, type Solution } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
-import { AREA_TOLERANCE_SQM, designs } from './designs'
+import { designs } from './designs'
 import { headline } from './headline'
 import { highRiseCost } from './high-rise-cost'
+import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const pack = loadPack('bkk-y9')
 const readings = packInterpretations(pack)
@@ -38,6 +39,12 @@ describe('waiving the high-rise rules', () => {
     const { solution } = designed(EXAMPLE_PLOT)
     const [ordinary] = withoutHighRiseRules(solution).envelopes
     expect(satisfies(ordinary.prisms.at(-1)!.topM, pack.buildingClasses!.highRiseFromHeightM)).toBe(true)
+  })
+
+  it('builds no less on the Bangkok example when every road widens from 7 m to 8 m', () => {
+    const withRoads = (widthM: number): Plot => ({ ...EXAMPLE_PLOT, roads: EXAMPLE_PLOT.roads.map((road) => ({ ...road, widthM })) })
+    const [narrow, wider] = [7, 8].map((widthM) => waivedBest(designed(withRoads(widthM)).solution))
+    expect(wider).toBeGreaterThanOrEqual(narrow - AREA_TOLERANCE_SQM)
   })
 
   it('never stops a design at the building class', () => {
