@@ -43,9 +43,9 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
 
 function valueText(finance: Finance, parameter: Parameter) {
   const value = finance.valueOf(parameter)
-  if (parameter.unit === 'money') return formatMoney(value, finance.region.currency)
   if (parameter.unit === 'share') return formatQuantity(value, 'percent')
-  return formatQuantity(value, 'count')
+  if (parameter.unit === 'count') return formatQuantity(value, 'count')
+  return formatMoney(value, finance.region.currency)
 }
 
 function Assumptions({ finance }: { finance: Finance }) {

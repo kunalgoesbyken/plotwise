@@ -293,6 +293,79 @@ test('an old share link without the new parameters still opens with the defaults
   expect(errors).toEqual([])
 })
 
+const OLD_KEYS_LINK = `&assume=${encodeURIComponent('salePrice.condo:300000;margin:0.2')}`
+
+async function openAssumptions(page: Page) {
+  await showTab(page, 'Money')
+  await moneyRegion(page).getByRole('button', { name: 'All money assumptions' }).click()
+}
+
+test('money: the plot area sets the default sale price and is shown with its source', async ({ page }) => {
+  const errors = await open(page)
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  await expect(land.getByText(/Priced as city fringe, about [\d.]+ km from Ratchaprasong/)).toBeVisible()
+  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('123500')
+  await land.getByRole('button', { name: 'Source' }).click()
+  await expect(land.getByText(/Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, City Fringe/)).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('money: the land value is after land costs and is checked against asking prices', async ({ page }) => {
+  const errors = await open(page)
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  await expect(land.getByText(/Typical asking prices nearby: ฿[\d.]+K to ฿[\d.]+K per square wah/)).toBeVisible()
+  await openAssumptions(page)
+  for (const label of [
+    'Transfer fee paid by the buyer, share of land price',
+    'Holding cost before construction, share of land price',
+    'Finance on the land, share of land price',
+  ]) {
+    await expect(moneyRegion(page).getByLabel(label)).toBeVisible()
+  }
+  expect(errors).toEqual([])
+})
+
+test('money: a land value far above asking prices is warned about in the summary and the Money tab', async ({ page }) => {
+  const errors = await open(page, PLOT, `&assume=${encodeURIComponent('salePrice.condo:900000')}`)
+  await expect(summary(page)).toContainText('more than 2 times typical asking prices nearby')
+  await showTab(page, 'Money')
+  await expect(moneyRegion(page).getByRole('region', { name: 'Land value' })).toContainText('more than 2 times the typical asking price nearby')
+  expect(errors).toEqual([])
+})
+
+test('money: no warning at the default prices', async ({ page }) => {
+  const errors = await open(page)
+  await expect(summary(page)).not.toContainText('typical asking prices nearby')
+  expect(errors).toEqual([])
+})
+
+test('an old share link keeps its edited values and takes the defaults for the new parameters', async ({ page }) => {
+  const errors = await open(page, PLOT, OLD_KEYS_LINK)
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('300000')
+  await expect(land.getByLabel('Target margin')).toHaveValue('20')
+  await openAssumptions(page)
+  await expect(moneyRegion(page).getByLabel('Finance on the land, share of land price')).toHaveValue('10')
+  await expect(moneyRegion(page).getByLabel('Transfer fee paid by the buyer, share of land price')).toHaveValue('1')
+  expect(errors).toEqual([])
+})
+
+test('the new land assumptions are editable and travel in the share link', async ({ page }) => {
+  const errors = await open(page)
+  await openAssumptions(page)
+  await moneyRegion(page).getByLabel('Finance on the land, share of land price').fill('20')
+  await expect.poll(() => decodeURIComponent(page.url())).toContain('landFinance:0.2')
+
+  await page.reload()
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+  await openAssumptions(page)
+  await expect(moneyRegion(page).getByLabel('Finance on the land, share of land price')).toHaveValue('20')
+  expect(errors).toEqual([])
+})
+
 test('the FAR bonus switch raises the allowed area and is kept in the link', async ({ page }) => {
   const errors = await open(page)
   const allowed = async () => Number((await summary(page).locator('.text-2xl').textContent())!.replace(/\D/g, ''))
