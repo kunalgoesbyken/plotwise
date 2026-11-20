@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
+import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
@@ -100,7 +100,7 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: null,
+    example: DUBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
     zone: null,
     authority: 'the authority that issued the affection plan',
@@ -125,7 +125,7 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: DCPR_TERMS,
     floors: 'storeys',
-    example: null,
+    example: MUMBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',

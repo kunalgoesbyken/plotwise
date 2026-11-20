@@ -15,3 +15,34 @@ export const EXAMPLE_PLOT: Plot = {
   buildingType: 'condo',
   nearStation: false,
 }
+
+export const MUMBAI_EXAMPLE_PLOT: Plot = {
+  ring: [
+    [72.84163, 19.116807],
+    [72.842039, 19.116807],
+    [72.8420387, 19.1171984],
+    [72.84163, 19.1171982],
+  ],
+  roads: [
+    { edge: 0, widthM: 5 },
+    { edge: 3, widthM: 5 },
+  ],
+  buildingType: 'condo',
+  nearStation: false,
+}
+
+export const DUBAI_EXAMPLE_PLOT: Plot = {
+  ring: [
+    [55.2095575, 25.0605486],
+    [55.2094672, 25.0600975],
+    [55.209891, 25.0600157],
+    [55.2099585, 25.0604223],
+  ],
+  roads: [
+    { edge: 2, widthM: 5 },
+    { edge: 3, widthM: 8 },
+  ],
+  buildingType: 'condo',
+  nearStation: false,
+  limits: { maxFar: 3.5, maxStoreys: 9 },
+}

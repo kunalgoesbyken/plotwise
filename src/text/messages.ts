@@ -65,6 +65,7 @@ const en = {
   'landing.from.affectionPlan': ({ name }: Name) => `the limits on a ${name} plot’s affection plan`,
   'landing.from.custom': 'your own rules for a plot anywhere',
   'landing.hero.example': 'Try the example plot',
+  'landing.hero.example-in': ({ name }: Name) => `${name} example`,
   'landing.hero.draw': 'Draw your own',
   'landing.frame.place': 'Example plot',
   'landing.frame.meta': ({ area, allowed }: { area: string; allowed: string }) => `${area} plot · up to ${allowed} of floor area`,
