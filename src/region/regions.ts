@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
+import { DUBAI_EXAMPLE_LIMITS_SOURCE, DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_LAND_RATE, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { BuildingType, Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
@@ -31,6 +31,19 @@ export type AreaTerms = { readonly ratio: string; readonly ratioName: string; re
 
 export type BuildingNames = Readonly<Record<BuildingType, string>>
 
+type Covers = { readonly use: string; readonly document: string }
+
+export type RegionExample = {
+  readonly plot: Plot
+  readonly roadsEstimated: boolean
+  readonly limitsSource: string | null
+  readonly landRate: Assumption<number> | null
+}
+
+type Zone = { readonly name: string; readonly scope: string }
+
+type CityPlan = { readonly name: string; readonly version: string; readonly url: string }
+
 export type Region = {
   readonly id: RegionId
   readonly name: string
@@ -39,12 +52,12 @@ export type Region = {
   readonly rules: RulesSource
   readonly limitTerms: LimitTerms | null
   readonly floors: FloorCount
-  readonly example: Plot | null
+  readonly example: RegionExample | null
   readonly areaUnit: AreaUnit
-  readonly limitAreaUnit: AreaUnit
-  readonly zone: { readonly name: string; readonly scope: string } | null
+  readonly zone: Zone | null
   readonly authority: string
-  readonly cityPlan: { readonly name: string; readonly version: string; readonly url: string } | null
+  readonly cityPlan: CityPlan | null
+  readonly covers: Covers | null
   readonly areaTerms: AreaTerms
   readonly buildingNames: BuildingNames
   readonly mapStart: Assumption<{ readonly centre: LngLat; readonly zoom: number }>
@@ -59,6 +72,19 @@ const BUILDING_NAMES: BuildingNames = { condo: t('building.condo'), office: t('b
 
 const STREET_ZOOM = 17
 
+const BANGKOK_ZONE: Zone = {
+  name: 'Brown zone · very high-density residential',
+  scope: 'Plotwise covers only this zone of the Bangkok city plan.',
+}
+
+const BANGKOK_PLAN: CityPlan = { name: 'BMA city plan', version: 'Bangkok Comprehensive Plan B.E. 2556 (2013)', url: 'https://webportal.bangkok.go.th/cpud' }
+
+const MUMBAI_PLAN: CityPlan = {
+  name: 'DCPR 2034',
+  version: 'DCPR 2034 as sanctioned in 2018',
+  url: 'https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf',
+}
+
 export const REGIONS = {
   bkk: {
     id: 'bkk',
@@ -68,15 +94,12 @@ export const REGIONS = {
     rules: 'pack',
     limitTerms: null,
     floors: 'storeys',
-    example: EXAMPLE_PLOT,
+    example: { plot: EXAMPLE_PLOT, roadsEstimated: false, limitsSource: null, landRate: null },
     areaUnit: 'sqm',
-    limitAreaUnit: 'sqm',
-    zone: {
-      name: 'Brown zone · very high-density residential',
-      scope: 'Plotwise covers only this zone of the Bangkok city plan.',
-    },
+    zone: BANGKOK_ZONE,
     authority: 'the BMA',
-    cityPlan: { name: 'BMA city plan', version: 'Bangkok Comprehensive Plan B.E. 2556 (2013)', url: 'https://webportal.bangkok.go.th/cpud' },
+    cityPlan: BANGKOK_PLAN,
+    covers: { use: BANGKOK_ZONE.name, document: BANGKOK_PLAN.name },
     areaTerms: FAR_TERMS,
     buildingNames: BUILDING_NAMES,
     mapStart: { value: { centre: [100.5268, 13.7236], zoom: STREET_ZOOM }, source: 'assumption: opening map view over central Bangkok' },
@@ -109,12 +132,12 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: DUBAI_EXAMPLE_PLOT,
-    areaUnit: 'sqft',
-    limitAreaUnit: 'sqm',
+    example: { plot: DUBAI_EXAMPLE_PLOT, roadsEstimated: false, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, landRate: null },
+    areaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
     cityPlan: null,
+    covers: { use: AFFECTION_PLAN_TERMS.use.value, document: AFFECTION_PLAN_TERMS.document.value },
     areaTerms: FAR_TERMS,
     buildingNames: BUILDING_NAMES,
     mapStart: { value: { centre: [55.2744, 25.1972], zoom: STREET_ZOOM }, source: 'assumption: opening map view over Downtown Dubai' },
@@ -136,16 +159,12 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: DCPR_TERMS,
     floors: 'storeys',
-    example: MUMBAI_EXAMPLE_PLOT,
+    example: { plot: MUMBAI_EXAMPLE_PLOT, roadsEstimated: true, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
     areaUnit: 'sqft',
-    limitAreaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',
-    cityPlan: {
-      name: 'DCPR 2034',
-      version: 'DCPR 2034 as sanctioned in 2018',
-      url: 'https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf',
-    },
+    cityPlan: MUMBAI_PLAN,
+    covers: { use: 'Residential (R zone), Suburbs and Extended Suburbs', document: MUMBAI_PLAN.name },
     areaTerms: { ratio: 'FSI', ratioName: 'Floor space index', saleable: 'carpet area', landRate: 'ASR land rate' },
     buildingNames: { ...BUILDING_NAMES, condo: t('building.apartments') },
     mapStart: {
@@ -169,10 +188,10 @@ export const REGIONS = {
     floors: 'storeys',
     example: null,
     areaUnit: 'sqm',
-    limitAreaUnit: 'sqm',
     zone: null,
     authority: 'your local planning authority',
     cityPlan: null,
+    covers: null,
     areaTerms: FAR_TERMS,
     buildingNames: BUILDING_NAMES,
     mapStart: {
@@ -190,5 +209,10 @@ export const REGION_IDS = Object.keys(REGIONS) as [RegionId, ...RegionId[]]
 export const RegionIdSchema = z.enum(REGION_IDS, { error: `region must be one of ${REGION_IDS.join(', ')}` })
 
 export const DEFAULT_REGION = REGIONS.bkk
+
+const sameCorner = ([lng, lat]: LngLat, [exampleLng, exampleLat]: LngLat) => lng === exampleLng && lat === exampleLat
+
+export const isExampleSite = ({ example }: Region, ring: readonly LngLat[]) =>
+  example !== null && ring.length === example.plot.ring.length && ring.every((corner, i) => sameCorner(corner, example.plot.ring[i]))
 
 export const regionParam = (value: string | null) => RegionIdSchema.safeParse(value ?? DEFAULT_REGION.id)

@@ -1,5 +1,6 @@
 import type { LngLat } from '@/geo/projection'
 import { MAX_CORNERS, PlotLimitsSchema, PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type PlotLimitField, type PlotLimits, type Road } from '@/plot/plot'
+import type { RegionExample } from '@/region/regions'
 import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection, type RoadEdge } from './outline'
 import { isSimplePath } from './path'
 
@@ -33,7 +34,7 @@ export type DraftAction =
   | { type: 'set-limit'; field: PlotLimitField; value: number | undefined }
   | { type: 'clear' }
   | { type: 'load'; plot: Plot }
-  | { type: 'load-example'; plot: Plot }
+  | { type: 'load-example'; example: Pick<RegionExample, 'plot' | 'roadsEstimated'> }
   | { type: 'import'; ring: readonly LngLat[] }
 
 export type Rejection = OutlineRejection | 'too-few-corners' | 'too-many-corners'
@@ -163,11 +164,11 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
   }
 }
 
-function fromPlot(plot: Plot, nearStationSource: NearStationSource): EditResult {
+function fromPlot(plot: Plot, nearStationSource: NearStationSource, roadsEstimated: boolean): EditResult {
   const roads = new Map(plot.roads.map((r) => [r.edge, r]))
   const corners = plot.ring.map((at, i): Corner => {
     const road = roads.get(i)
-    return { at, edge: road ? roadOf(road.widthM, false, road.prescribedWidthM) : NEIGHBOUR }
+    return { at, edge: road ? roadOf(road.widthM, roadsEstimated, road.prescribedWidthM) : NEIGHBOUR }
   })
   return closed({ ...plot, limits: plot.limits ?? {}, nearStationSource }, corners)
 }
@@ -196,9 +197,9 @@ export function editDraft(draft: Draft, action: DraftAction): EditResult {
     case 'clear':
       return accept({ ...emptyDraft(draft.buildingType), limits: draft.limits })
     case 'load':
-      return fromPlot(action.plot, 'user')
+      return fromPlot(action.plot, 'user', false)
     case 'load-example':
-      return fromPlot(action.plot, 'default')
+      return fromPlot(action.example.plot, 'default', action.example.roadsEstimated)
     case 'import':
       return closed(draft, action.ring.map((at) => ({ at: roundLngLat(at), edge: SIDE })))
     default:

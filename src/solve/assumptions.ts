@@ -341,8 +341,8 @@ export const MONEY_REGIONS = {
   dxb: {
     currency: 'AED',
     landUnit: {
-      name: 'sq ft',
-      sqm: { value: SQM_PER_SQFT, source: 'one square foot, from the international foot of exactly 0.3048 m; Dubai areas are shown in square feet' },
+      name: 'm²',
+      sqm: { value: 1, source: 'one square metre, the unit Dubai affection plans state areas in, as in the Trakhees site plan for International City plot IC1-CTYL-16_013 (12 May 2026): "GFA=4804.84 Sq. m"' },
     },
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,

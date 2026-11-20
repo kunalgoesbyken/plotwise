@@ -51,7 +51,7 @@ describe('entered limits shown in the region’s units', () => {
   })
 
   it('reads Dubai areas in square metres unless square feet are chosen, as the affection plan states them', () => {
-    const dubai = limitDisplay(REGIONS.dxb, REGIONS.dxb.limitAreaUnit)
+    const dubai = limitDisplay(REGIONS.dxb, REGIONS.dxb.areaUnit)
     expect(dubai).toEqual({ area: 'sqm', floors: 'gPlus' })
     expect(read('maxGfaSqm', '3000', dubai)).toBe(3000)
     expect(read('parkingSqmPerSpace', '50', dubai)).toBe(50)

@@ -2,7 +2,7 @@ import type { Metrics } from '@/designs'
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType } from '@/plot/plot'
 import type { FarPurchase, RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge, purchaseUse, type Limits, type MoneyPrices, type MoneyRegion, type Solution } from '@/solve'
+import { isHighRiseOrExtraLarge, purchaseUse, type Limits, type MoneyPrices, type MoneyRegion, type PurchaseOption, type Solution } from '@/solve'
 import { placementOf, type Placement } from './area'
 import type { Basis, Bound, PurchasePriceId, RateRow } from './parameters'
 import type { Values } from './values'
@@ -40,9 +40,11 @@ function priceInputOf(price: FarPurchase['price']): PurchasePriceId | null {
   }
 }
 
-export const neededPrices = ({ farLimits }: FinanceSite): PurchasePriceId[] => [
-  ...new Set(farLimits.farPurchase.options.flatMap((option) => (option.chosenGfaSqm > 0 ? (priceInputOf(option.price) ?? []) : []))),
-]
+const pricesOf = (options: readonly PurchaseOption[]): PurchasePriceId[] => [...new Set(options.flatMap((option) => priceInputOf(option.price) ?? []))]
+
+export const neededPrices = ({ farLimits }: FinanceSite) => pricesOf(farLimits.farPurchase.options.filter((option) => option.chosenGfaSqm > 0))
+
+export const offeredPrices = ({ farLimits }: FinanceSite) => pricesOf(farLimits.farPurchase.options.filter((option) => option.maxExtraGfaSqm > 0))
 
 function pricePerSqm(price: FarPurchase['price'], prices: PurchasePrices): number {
   switch (price.kind) {

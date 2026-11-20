@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react'
 import { PlotLimitsSchema, type PlotLimitField } from '@/plot/plot'
-import type { LimitTerms, Region } from '@/region/regions'
+import { isExampleSite, type LimitTerms, type Region } from '@/region/regions'
 import { loadPack } from '@/rules'
 import { plotLimitFields } from '@/solve'
 import { t } from '@/text/messages'
@@ -13,6 +13,7 @@ import { Label } from '@/ui/label'
 import { PanelSection } from '@/ui/section'
 import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
 import { AREA_UNITS, type AreaUnit } from '@/units/area'
+import { ExampleNote } from './example-note'
 import { FIELD_UNITS, isAreaField, limitDisplay, limitLabel, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
 import { useEditorState, useEditorStore, useRegion } from './plot-store'
 
@@ -129,9 +130,10 @@ function AreaUnitToggle({ value, onChange }: { value: AreaUnit; onChange: (unit:
 }
 
 function Limits({ region, fields }: { region: Region; fields: readonly PlotLimitField[] }) {
-  const { draft } = useEditorState()
-  const [areaUnit, setAreaUnit] = useState(region.limitAreaUnit)
+  const { draft, plot } = useEditorState()
+  const [areaUnit, setAreaUnit] = useState(region.areaUnit)
   const terms = region.limitTerms
+  const exampleSource = plot && isExampleSite(region, plot.ring) ? region.example?.limitsSource : null
   return (
     <PanelSection title={t(`limits.title.${region.rules}`)} description={t(`limits.intro.${region.rules}`)}>
       {fields.some(isAreaField) && <AreaUnitToggle value={areaUnit} onChange={setAreaUnit} />}
@@ -140,12 +142,8 @@ function Limits({ region, fields }: { region: Region; fields: readonly PlotLimit
           <LimitInput key={field} field={field} value={draft.limits[field]} region={region} areaUnit={areaUnit} />
         ))}
       </ul>
-      {terms && (
-        <>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('limits.use', { use: terms.use.value, document: terms.document.value })}</p>
-          <TermSources terms={terms} />
-        </>
-      )}
+      {exampleSource && <ExampleNote source={exampleSource} className="mt-3" />}
+      {terms && <TermSources terms={terms} />}
     </PanelSection>
   )
 }
