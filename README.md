@@ -8,7 +8,7 @@
 
 <p align="center"><a href="https://github.com/kunalgoesbyken/plotwise/actions/workflows/ci.yml"><img src="https://github.com/kunalgoesbyken/plotwise/actions/workflows/ci.yml/badge.svg" alt="CI status"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue.svg" alt="MIT licence"></a></p>
 
-<p align="center"><img src="src/landing/app.png" width="900" alt="Plotwise with the example plot: the plot and its buildable area on the map, a podium-and-tower design in 3D among the real buildings, and the results panel"></p>
+<p align="center"><img src="src/landing/app.png" width="900" alt="Plotwise with the example plot: the plot and its buildable area on the map, its largest design in 3D among the real buildings, and the results panel"></p>
 
 Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels. Dubai, Mumbai (draft) and custom rules sit beside it. The landing page is at `/` and the app at `/app`; old share links on the root still open in the app.
 

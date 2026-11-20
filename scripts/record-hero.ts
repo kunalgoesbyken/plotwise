@@ -48,7 +48,20 @@ async function orbit(page: Page, area: Locator, durationMs: number) {
   await page.mouse.up()
 }
 
-const showDesign = (page: Page, index: number) => page.getByRole('button', { name: /^Show .+ in 3D$/ }).nth(index).click()
+const DESIGN_BUTTON = /^Show .+ in 3D$/
+
+const showDesign = (page: Page, name: string) => page.getByRole('button', { name: `Show ${name} in 3D`, exact: true }).click()
+
+async function tourDesigns(page: Page) {
+  const names = await page.getByRole('button', { name: DESIGN_BUTTON }).allTextContents()
+  const headline = (await page.getByRole('button', { name: DESIGN_BUTTON, pressed: true }).textContent())!
+  await orbit(page, scene(page), 2000)
+  for (const name of names.filter((name) => name !== headline)) {
+    await showDesign(page, name)
+    await orbit(page, scene(page), 1700)
+  }
+  await showDesign(page, headline)
+}
 
 async function desktopScenario(page: Page) {
   await pause(900)
@@ -59,12 +72,7 @@ async function desktopScenario(page: Page) {
   await stepper(page, 'Results').click()
   await scene(page).waitFor()
   await pause(500)
-  await orbit(page, scene(page), 2000)
-  await showDesign(page, 1)
-  await orbit(page, scene(page), 1700)
-  await showDesign(page, 2)
-  await orbit(page, scene(page), 1700)
-  await showDesign(page, 0)
+  await tourDesigns(page)
   await pause(900)
 }
 
@@ -163,7 +171,6 @@ async function record(variant: Variant, dir: string) {
     reducedMotion: 'no-preference',
   })
   const page = await context.newPage()
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
   await warmUp(page)
   await writePoster(page, variant, dir)
   await stepper(page, 'Plot').click()
