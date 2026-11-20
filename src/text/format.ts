@@ -1,10 +1,11 @@
 import type { Comparator } from '@/rules'
 import { LOCALE, t } from './messages'
 
-export type Quantity = 'm' | 'sqm' | 'percent' | 'ratio' | 'count'
+export type Quantity = 'm' | 'km' | 'sqm' | 'percent' | 'ratio' | 'count'
 
 const NUMBER_FORMATS: Readonly<Record<Quantity, Intl.NumberFormat>> = {
   m: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }),
+  km: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }),
   sqm: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 }),
   percent: new Intl.NumberFormat(LOCALE, { style: 'percent', maximumFractionDigits: 1 }),
   ratio: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2 }),
