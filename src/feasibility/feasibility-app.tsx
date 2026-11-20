@@ -1,14 +1,15 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { EditorShell, type ResultPanel } from '@/editor/editor-shell'
 import { EditorStoreProvider } from '@/editor/plot-store'
+import { useHashState } from '@/editor/url-hash'
 import { AssumptionsPanel, AssumptionsProvider, DesignMoney, LandValue, useMoneyRows } from '@/finance'
 import { LandLine } from '@/finance/land-line'
 import { PrintSummary } from '@/report/print-summary'
 import { t } from '@/text/messages'
 import { Disclosure } from '@/ui/disclosure'
-import { ZoneStatus } from '@/zone'
+import { ZoneGateProvider, ZoneHeld, ZoneHold, ZoneStatus, useZoneGate } from '@/zone'
 import { DesignsPanel } from './designs-panel'
 import { FarBonusToggle } from './far-bonus-toggle'
 import { FeasibilityProvider, useFeasibility } from './feasibility-provider'
@@ -20,7 +21,8 @@ import { WidthSensitivity } from './width-sensitivity-table'
 
 function usePanels(): readonly ResultPanel[] {
   const moneyRows = useMoneyRows()
-  return [
+  const { cleared } = useZoneGate()
+  const panels = [
     {
       id: 'designs',
       label: t('tab.designs'),
@@ -51,6 +53,7 @@ function usePanels(): readonly ResultPanel[] {
     },
     { id: 'rules', label: t('tab.rules'), content: <RulesPanel /> },
   ]
+  return cleared ? panels : panels.map((panel) => ({ ...panel, content: <ZoneHeld /> }))
 }
 
 function PlotZone() {
@@ -58,13 +61,14 @@ function PlotZone() {
   if (!plot) return null
   return (
     <div className="mt-2">
-      <ZoneStatus ring={plot.ring} />
+      <ZoneStatus />
     </div>
   )
 }
 
 function Workspace() {
   const { result, design, layers } = useFeasibility()
+  const { cleared } = useZoneGate()
   const panels = usePanels()
   const overlay = useMemo(() => {
     if (result?.status !== 'ready' || !layers) return undefined
@@ -75,18 +79,43 @@ function Workspace() {
       <div className="contents print:hidden">
         <EditorShell
           summary={
-            <ResultsSummary>
-              <LandLine />
-              <PlotZone />
-            </ResultsSummary>
+            cleared ? (
+              <ResultsSummary>
+                <LandLine />
+                <PlotZone />
+              </ResultsSummary>
+            ) : (
+              <ZoneHold />
+            )
           }
           panels={panels}
           view3d={<FeasibilityScene />}
           overlay={overlay}
         />
       </div>
-      <PrintSummary />
+      {cleared && <PrintSummary />}
     </>
+  )
+}
+
+const ZONE_CONFIRMED_IN_URL = { decode: (value: string | null) => value === 'confirmed', encode: (confirmed: boolean) => (confirmed ? 'confirmed' : null) }
+
+function GatedWorkspace() {
+  const { plot } = useFeasibility()
+  const [confirmed, setConfirmed] = useHashState('zone', ZONE_CONFIRMED_IN_URL)
+  const confirm = useCallback(() => setConfirmed(true), [setConfirmed])
+  const hadPlot = useRef(false)
+  useEffect(() => {
+    if (plot) hadPlot.current = true
+    else if (hadPlot.current) {
+      hadPlot.current = false
+      setConfirmed(false)
+    }
+  }, [plot, setConfirmed])
+  return (
+    <ZoneGateProvider ring={plot?.ring ?? null} confirmed={confirmed} onConfirm={confirm}>
+      <Workspace />
+    </ZoneGateProvider>
   )
 }
 
@@ -95,7 +124,7 @@ export function FeasibilityApp() {
     <EditorStoreProvider>
       <FeasibilityProvider>
         <AssumptionsProvider>
-          <Workspace />
+          <GatedWorkspace />
         </AssumptionsProvider>
       </FeasibilityProvider>
     </EditorStoreProvider>

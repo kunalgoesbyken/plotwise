@@ -1,10 +1,11 @@
 'use client'
 
-import type { LngLat } from '@/geo/projection'
+import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
+import { Button } from '@/ui/button'
 import type { ZoneVerdict } from './schema'
-import { useZone } from './use-zone'
+import { useZoneGate } from './zone-gate'
 
 type Presentation = { readonly badge: string; readonly variant: 'default' | 'destructive' | 'secondary'; readonly text: string }
 
@@ -50,11 +51,30 @@ function ZoneText({ verdict }: { verdict: ZoneVerdict }) {
   )
 }
 
-export function ZoneStatus({ ring }: { readonly ring: readonly LngLat[] }) {
-  const verdict = useZone(ring)
+export function ZoneStatus() {
+  const { verdict } = useZoneGate()
   return (
     <p aria-live="polite" className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs leading-relaxed">
       {verdict ? <ZoneText verdict={verdict} /> : <span className="text-muted-foreground">{t('zone.checking')}</span>}
     </p>
   )
+}
+
+export function ZoneHold() {
+  const { confirmable, confirm } = useZoneGate()
+  return (
+    <section aria-label={t('zone.hold.label')} className="flex flex-col gap-3">
+      <ZoneStatus />
+      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : t('zone.hold.refused')}</p>
+      {confirmable && (
+        <Button size="sm" variant="outline" className="self-start" onClick={confirm}>
+          {t('zone.hold.confirm')}
+        </Button>
+      )}
+    </section>
+  )
+}
+
+export function ZoneHeld() {
+  return <p className="text-sm text-muted-foreground">{t('zone.hold.panel')}</p>
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useId, useState } from 'react'
+import type { MoneyRegion } from '@/solve'
 import { t } from '@/text/messages'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
@@ -16,10 +17,12 @@ function parse(text: string, scale: number) {
   return text.trim() === '' ? Number.NaN : roundOff(Number(text.replaceAll(',', '')) / scale)
 }
 
-function suffixFor({ unit }: Parameter, currency: string) {
+function suffixFor({ unit }: Parameter, { currency, landUnit }: MoneyRegion) {
   switch (unit) {
     case 'money':
       return t('money.per-sqm', { currency })
+    case 'landMoney':
+      return t('money.per-land-unit', { currency, unit: landUnit.name })
     case 'share':
       return '%'
     case 'count':
@@ -62,7 +65,7 @@ export function ParameterInput({ finance, parameter, label, hideLabel = false }:
           onBlur={() => setDraft(null)}
           className="w-32"
         />
-        <span className="text-xs text-muted-foreground">{suffixFor(parameter, finance.region.currency)}</span>
+        <span className="text-xs text-muted-foreground">{suffixFor(parameter, finance.region)}</span>
       </div>
     </div>
   )
