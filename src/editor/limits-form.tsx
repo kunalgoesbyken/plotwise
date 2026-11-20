@@ -142,7 +142,7 @@ function Limits({ region, fields }: { region: Region; fields: readonly PlotLimit
       </ul>
       {terms && (
         <>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('limits.use', { use: terms.use.value, document: terms.document.value.toLowerCase() })}</p>
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('limits.use', { use: terms.use.value, document: terms.document.value })}</p>
           <TermSources terms={terms} />
         </>
       )}
