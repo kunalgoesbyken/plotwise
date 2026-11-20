@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test'
 
-const port = 3123
+const port = Number(process.env.E2E_PORT ?? 3123)
 
 export default defineConfig({
   testDir: 'e2e',

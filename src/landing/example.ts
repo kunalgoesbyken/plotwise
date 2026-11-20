@@ -1,7 +1,7 @@
 import { encodePlot } from '@/editor/plot-url'
 import { feasibility, PACK } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
-import { estimate, financeSite } from '@/finance/estimate'
+import { basisOf, estimate, financeSite } from '@/finance/estimate'
 import { resolveValues } from '@/finance/values'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { REGION } from '@/region/regions'
@@ -18,7 +18,8 @@ export function exampleFigures() {
   const { solution, designs } = result
   const [design] = designs
   const region = MONEY_REGIONS[REGION.id]
-  const money = estimate(design.metrics, financeSite(solution, region), resolveValues(region, EXAMPLE_PLOT.buildingType, {}))
+  const site = financeSite(solution, region)
+  const money = estimate(design.metrics, site, resolveValues(region, basisOf(site), {}))
   const cited = design.checks
     .filter((check) => check.status === 'pass')
     .flatMap((check) => {

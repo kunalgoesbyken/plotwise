@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { designs } from '@/designs'
-import { estimate, financeSite } from '@/finance/estimate'
+import { basisOf, estimate, financeSite } from '@/finance/estimate'
 import { resolveValues } from '@/finance/values'
 import { loadPack } from '@/rules'
 import { MONEY_REGIONS, packInterpretations, solve } from '@/solve'
@@ -15,7 +15,7 @@ describe('Bangkok money estimates stay byte-identical across engine refactors', 
     it(name, () => {
       const solution = solve(plot, pack, readings, farMode)
       const site = financeSite(solution, region)
-      const values = resolveValues(region, plot.buildingType, {})
+      const values = resolveValues(region, basisOf(site), {})
       expect(designs(solution).map((design) => ({ id: design.id, ...estimate(design.metrics, site, values) }))).toMatchSnapshot()
     })
   }

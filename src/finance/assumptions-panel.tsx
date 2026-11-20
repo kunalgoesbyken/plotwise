@@ -61,6 +61,13 @@ export function AssumptionsPanel() {
         <ScalarRow finance={finance} parameter={SCALARS.margin} label={t('assumptions.margin')} />
         <ScalarRow finance={finance} parameter={SCALARS.softCost} label={t('assumptions.softCost')} />
       </Group>
+      <Group title={t('assumptions.land')}>
+        <ScalarRow finance={finance} parameter={SCALARS.transferCosts} label={t('assumptions.transferCosts')} />
+        <ScalarRow finance={finance} parameter={SCALARS.holdingCost} label={t('assumptions.holdingCost')} />
+        <ScalarRow finance={finance} parameter={SCALARS.landFinance} label={t('assumptions.landFinance')} />
+        <ScalarRow finance={finance} parameter={SCALARS.landReferenceLow} label={t('assumptions.landReferenceLow')} />
+        <ScalarRow finance={finance} parameter={SCALARS.landReferenceHigh} label={t('assumptions.landReferenceHigh')} />
+      </Group>
       <Group title={t('assumptions.parking')}>
         <ScalarRow finance={finance} parameter={SCALARS.parkingLevels} label={t('assumptions.parkingLevels')} />
       </Group>

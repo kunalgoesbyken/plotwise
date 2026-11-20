@@ -1,4 +1,15 @@
-export { ASSUMPTIONS, DEFAULT_READINGS, MONEY_REGIONS, type AssumedRange, type Assumption, type MoneyRegion, type RegionId } from './assumptions'
+export {
+  AREA_TIERS,
+  ASSUMPTIONS,
+  DEFAULT_READINGS,
+  MONEY_REGIONS,
+  type AreaMap,
+  type AreaTier,
+  type AssumedRange,
+  type Assumption,
+  type MoneyRegion,
+  type RegionId,
+} from './assumptions'
 export { compare, inRange, negate, satisfies } from './bound'
 export { isHighRiseOrExtraLarge, isLarge, type Building } from './building'
 export { type ClassMembership, type Classes } from './classes'
