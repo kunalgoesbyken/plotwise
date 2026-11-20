@@ -325,7 +325,7 @@ test('phone layout at 375 px: bottom sheet, no overflow, 44 px targets, drawing 
   ])
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeHidden()
   const [[ax, ay], [bx, by]] = [await settledCorner(page, 'A'), await settledCorner(page, 'B')]
-  await page.mouse.click((ax + bx) / 2, (ay + by) / 2)
+  await page.mouse.click(ax + (bx - ax) / 4, ay + (by - ay) / 4)
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeVisible()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
   await page.getByRole('button', { name: 'See what you can build' }).click()
