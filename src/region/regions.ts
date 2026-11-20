@@ -33,7 +33,12 @@ export type BuildingNames = Readonly<Record<BuildingType, string>>
 
 type Covers = { readonly use: string; readonly document: string }
 
-type RegionExample = { readonly plot: Plot; readonly limitsSource: string | null; readonly landRate: Assumption<number> | null }
+export type RegionExample = {
+  readonly plot: Plot
+  readonly roadsEstimated: boolean
+  readonly limitsSource: string | null
+  readonly landRate: Assumption<number> | null
+}
 
 type Zone = { readonly name: string; readonly scope: string }
 
@@ -89,7 +94,7 @@ export const REGIONS = {
     rules: 'pack',
     limitTerms: null,
     floors: 'storeys',
-    example: { plot: EXAMPLE_PLOT, limitsSource: null, landRate: null },
+    example: { plot: EXAMPLE_PLOT, roadsEstimated: false, limitsSource: null, landRate: null },
     areaUnit: 'sqm',
     zone: BANGKOK_ZONE,
     authority: 'the BMA',
@@ -127,7 +132,7 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: { plot: DUBAI_EXAMPLE_PLOT, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, landRate: null },
+    example: { plot: DUBAI_EXAMPLE_PLOT, roadsEstimated: false, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, landRate: null },
     areaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
@@ -154,7 +159,7 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: DCPR_TERMS,
     floors: 'storeys',
-    example: { plot: MUMBAI_EXAMPLE_PLOT, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
+    example: { plot: MUMBAI_EXAMPLE_PLOT, roadsEstimated: true, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
     areaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',

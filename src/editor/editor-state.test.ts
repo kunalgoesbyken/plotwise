@@ -169,7 +169,7 @@ describe('road width estimates', () => {
   })
 
   it('selects the example’s road and tells a link load from an example load', () => {
-    const example = run({ type: 'load-example', plot: lot })
+    const example = run({ type: 'load-example', example: { plot: lot, roadsEstimated: false } })
     expect(example.selection).toEqual({ kind: 'edge', index: 0 })
     expect(example.load?.source).toBe('example')
     expect(run({ type: 'load', plot: lot }).load?.source).toBe('link')
@@ -245,7 +245,7 @@ describe('station distance estimates', () => {
 
   it('estimates the flag for the example plot, which is nobody’s choice, and frames it like any load', () => {
     const ring = corners.map(([x, y]) => [...frame.toLngLat([x, y])] as [number, number])
-    const state = run({ type: 'load-example', plot: { ...plot, ring } }, site([asok]))
+    const state = run({ type: 'load-example', example: { plot: { ...plot, ring }, roadsEstimated: false } }, site([asok]))
     expect(state.draft).toMatchObject({ nearStation: true, nearStationSource: 'estimate' })
     expect(state.load).toEqual({ source: 'example', count: 1 })
   })

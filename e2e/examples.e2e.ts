@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import { mockApp } from './support/site'
-import { designsRegion, designTable, goTo, moneyRegion, READY_TIMEOUT, rulesRegion, showTab, summary } from './support/app'
+import { designsRegion, designTable, frontageWidth, goTo, moneyRegion, READY_TIMEOUT, rulesRegion, showTab, summary } from './support/app'
 import { expect, test } from './support/test'
 
 const EXAMPLES = [
@@ -49,7 +49,7 @@ async function openExample(page: Page, region: 'mum' | 'dxb') {
   await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
 }
 
-test('the Mumbai example sits on a 12 m road, so Premium FSI and TDR are on offer, with its ASR land rate filled in from the Ready Reckoner', async ({ page }) => {
+test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate, so Premium FSI and TDR are on offer, with its ASR land rate filled in from the Ready Reckoner', async ({ page }) => {
   await openExample(page, 'mum')
   const buying = designsRegion(page).getByRole('region', { name: 'Extra floor area to buy' })
   await expect(buying.getByRole('slider', { name: 'Premium FSI' })).toBeVisible()
@@ -57,6 +57,7 @@ test('the Mumbai example sits on a 12 m road, so Premium FSI and TDR are on offe
   await expect(designsRegion(page)).not.toContainText('None on this road width')
   await showTab(page, 'Rules')
   await expect(rulesRegion(page)).not.toContainText('None on this road width')
+  await expect(rulesRegion(page)).toContainText('The road width on A–B and B–C is estimated from OpenStreetMap.')
 
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
@@ -65,6 +66,13 @@ test('the Mumbai example sits on a 12 m road, so Premium FSI and TDR are on offe
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
   await expect(land).toContainText('zone 123/567')
   await expect(land).toContainText('easr.igrmaharashtra.gov.in')
+  await expect(land).toContainText('matched by position and not confirmed for this plot')
+
+  await goTo(page, 'Roads')
+  await expect(frontageWidth(page, 'A–B')).toHaveValue('12')
+  await expect(frontageWidth(page, 'A–B')).toHaveAttribute('data-estimated', 'true')
+  await expect(frontageWidth(page, 'B–C')).toHaveValue('5')
+  await expect(page.getByText('Estimated from OpenStreetMap, check on site.')).toBeVisible()
 })
 
 test('the Mumbai example’s ASR stays the user’s once typed, and is not offered for another plot', async ({ page }) => {

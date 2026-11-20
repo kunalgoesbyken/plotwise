@@ -44,10 +44,10 @@ const writeUrl = (linked: Linked) => writeHash(LINK_PARAMS, fragmentFor(linked))
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
-    const example = linkedExample(location.hash)
-    if (example) {
-      store.dispatch({ type: 'set-region', region: example.region })
-      store.dispatch({ type: 'load-example', plot: example.plot })
+    const linked = linkedExample(location.hash)
+    if (linked) {
+      store.dispatch({ type: 'set-region', region: linked.region })
+      store.dispatch({ type: 'load-example', example: linked.example })
       writeUrl(store.getState())
       return
     }

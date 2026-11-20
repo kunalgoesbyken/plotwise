@@ -18,7 +18,7 @@ function Start() {
   return (
     <div className="flex flex-col items-start gap-3 px-(--pad) pt-5 pb-5">
       <p className="text-base leading-snug font-medium text-pretty">{t(`plot.framing.${rules}`, { name })}</p>
-      {example && <Button onClick={() => store.dispatch({ type: 'load-example', plot: example.plot })}>{t('plot.example')}</Button>}
+      {example && <Button onClick={() => store.dispatch({ type: 'load-example', example })}>{t('plot.example')}</Button>}
       <Disclosure label={t('import.toggle')} tone="muted" className="w-full">
         <PlotImport />
       </Disclosure>

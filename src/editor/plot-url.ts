@@ -1,5 +1,5 @@
 import { isPlotLimitField, PlotLimitsSchema, PlotSchema, type Plot, type PlotLimits } from '@/plot/plot'
-import { DEFAULT_REGION, RegionIdSchema, REGIONS } from '@/region/regions'
+import { DEFAULT_REGION, RegionIdSchema, REGIONS, type RegionExample } from '@/region/regions'
 import type { RegionId } from '@/solve'
 
 const LIST = ';'
@@ -87,11 +87,11 @@ export function decodeRegion(fragment: string): DecodedRegion {
 
 export const exampleFragment = (region: RegionId) => [encodeRegion(region), EXAMPLE_FRAGMENT].filter(Boolean).join('&')
 
-export type LinkedExample = { readonly region: RegionId; readonly plot: Plot }
+export type LinkedExample = { readonly region: RegionId; readonly example: RegionExample }
 
 export function linkedExample(fragment: string): LinkedExample | null {
   if (!paramsOf(fragment).has(EXAMPLE_FRAGMENT)) return null
   const rules = decodeRegion(fragment)
   const { id, example } = rules.ok ? REGIONS[rules.region] : DEFAULT_REGION
-  return example ? { region: id, plot: example.plot } : { region: DEFAULT_REGION.id, plot: DEFAULT_REGION.example.plot }
+  return example ? { region: id, example } : { region: DEFAULT_REGION.id, example: DEFAULT_REGION.example }
 }

@@ -4,6 +4,10 @@ import { feasibility } from '@/feasibility/compute'
 import { isInside } from '@/import/validate'
 import { isExampleSite, REGIONS } from '@/region/regions'
 import { loadPack } from '@/rules'
+import fixture from '@/site/__fixtures__/mulund-west.overpass.json'
+import { nearestRoad } from '@/site/nearest-road'
+import { OverpassResponseSchema } from '@/site/overpass-response'
+import { parseOverpass } from '@/site/parse'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_LAND_RATE, MUMBAI_EXAMPLE_PLOT } from './example-plot'
 
 function solved(region: 'mum' | 'dxb') {
@@ -27,9 +31,25 @@ describe('example plots', () => {
   it('opens in the editor exactly as written, so its link is the plot itself', () => {
     for (const { example } of Object.values(REGIONS)) {
       if (!example) continue
-      const opened = editDraft(emptyDraft(example.plot.buildingType), { type: 'load-example', plot: example.plot })
+      const opened = editDraft(emptyDraft(example.plot.buildingType), { type: 'load-example', example })
       expect(opened.ok && toPlot(opened.draft)).toEqual(example.plot)
     }
+  })
+
+  it('gives the Mumbai example the road widths Plotwise itself estimates from OpenStreetMap, and loads them marked as estimates', () => {
+    const { roads } = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.mum.transit)
+    const { ring } = MUMBAI_EXAMPLE_PLOT
+    for (const road of MUMBAI_EXAMPLE_PLOT.roads) {
+      expect(nearestRoad([ring[road.edge], ring[(road.edge + 1) % ring.length]], roads)?.widthM).toBe(road.widthM)
+    }
+    for (const { example } of Object.values(REGIONS)) {
+      if (!example) continue
+      const opened = editDraft(emptyDraft(example.plot.buildingType), { type: 'load-example', example })
+      const roadEdges = opened.ok && opened.draft.status === 'closed' ? opened.draft.corners.flatMap(({ edge }) => (edge.road ? [edge] : [])) : []
+      expect(roadEdges.length).toBe(example.plot.roads.length)
+      for (const edge of roadEdges) expect(edge.estimated).toBe(example.roadsEstimated)
+    }
+    expect(REGIONS.mum.example.roadsEstimated).toBe(true)
   })
 
   it('gives Mumbai a residential plot of a few thousand m² whose main road is 12 to 18 m wide, so Premium FSI and TDR are offered', () => {

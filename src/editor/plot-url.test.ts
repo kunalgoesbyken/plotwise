@@ -1,6 +1,5 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { BUILDING_TYPES, MAX_CORNERS, type Plot } from '@/plot/plot'
 import { REGIONS } from '@/region/regions'
 import { ASSUMPTIONS } from '@/solve/assumptions'
@@ -119,18 +118,18 @@ describe('plot URL encoding', () => {
   })
 
   it('recognises the example link, with or without the leading # and beside the zone confirmation', () => {
-    for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(linkedExample(hash)).toEqual({ region: 'bkk', plot: EXAMPLE_PLOT })
+    for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(linkedExample(hash)).toEqual({ region: 'bkk', example: REGIONS.bkk.example })
     for (const hash of ['', '#', encodePlot(plot), '#examples']) expect(linkedExample(hash)).toBeNull()
   })
 
   it('opens the example of the region the link names, and Bangkok’s when that region has none or the name is broken', () => {
     expect(exampleFragment('bkk')).toBe('example')
     for (const region of ['mum', 'dxb'] as const) {
-      expect(linkedExample(`#${exampleFragment(region)}`)).toEqual({ region, plot: REGIONS[region].example.plot })
-      expect(linkedExample(`#example&rules=${region}`)).toEqual({ region, plot: REGIONS[region].example.plot })
+      expect(linkedExample(`#${exampleFragment(region)}`)).toEqual({ region, example: REGIONS[region].example })
+      expect(linkedExample(`#example&rules=${region}`)).toEqual({ region, example: REGIONS[region].example })
     }
     for (const hash of [exampleFragment('custom'), 'rules=nowhere&example', 'rules=mum&rules=dxb&example']) {
-      expect(linkedExample(hash)).toEqual({ region: 'bkk', plot: EXAMPLE_PLOT })
+      expect(linkedExample(hash)).toEqual({ region: 'bkk', example: REGIONS.bkk.example })
     }
   })
 
