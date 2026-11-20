@@ -83,5 +83,6 @@ export async function fetchPlaces(
   const features = await queryPhoton(query, timeoutMs, fetchImpl).catch((error: unknown) => {
     throw new PlaceSearchUnavailableError(`Place search is unavailable: ${error instanceof Error ? error.message : String(error)}`)
   })
-  return features.flatMap((feature) => toPlace(feature) ?? [])
+  const places = features.flatMap((feature) => toPlace(feature) ?? [])
+  return places.filter((place, index) => places.findIndex((other) => other.label === place.label) === index)
 }

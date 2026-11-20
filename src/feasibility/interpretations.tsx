@@ -13,7 +13,7 @@ function QuestionItem({ question, readingId }: { question: Question; readingId: 
     <li className="py-3">
       <p className="text-sm leading-snug">{question.question}</p>
       <p className="mt-2 flex items-baseline gap-2 text-xs leading-relaxed">
-        <Badge variant="secondary" className="shrink-0 text-primary">{t('interpretation.decided')}</Badge>
+        <Badge variant="secondary" className="shrink-0">{t('interpretation.decided')}</Badge>
         {reading && <span>{reading.reading}</span>}
       </p>
       <Disclosure label={t('interpretation.why')} tone="muted">

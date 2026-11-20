@@ -15,7 +15,7 @@ const metres = (value: number) => formatQuantity(value, 'm')
 const isRuleStep = (value: string): value is RuleStep => (RULE_STEPS as readonly string[]).includes(value)
 
 const KEY = [
-  { key: 'legend.envelope', swatch: 'border-primary bg-primary/20' },
+  { key: 'legend.envelope', swatch: 'border-plot bg-plot/20' },
   { key: 'legend.carved', swatch: 'border-dashed border-destructive' },
   { key: 'legend.design', swatch: 'border-foreground/50 bg-background' },
 ] as const
@@ -79,7 +79,7 @@ export function RuleStepper() {
               value={step}
               disabled={!available}
               title={available ? undefined : t('step.not-binding')}
-              className="w-full text-xs data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
+              className="w-full text-xs data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background"
             >
               {t(`step.${step}`)}
             </ToggleGroupItem>

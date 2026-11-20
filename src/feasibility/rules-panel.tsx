@@ -2,6 +2,7 @@
 
 import { edgeName } from '@/editor/map-features'
 import { useEditorState } from '@/editor/plot-store'
+import { WarningCircleIcon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 import { REGION } from '@/region/regions'
 import type { Bound, Range } from '@/rules'
@@ -31,9 +32,12 @@ function rangeText({ min, max }: Range): string {
 
 function Caution({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <div role="note" className="border-l-2 border-road pl-3 text-xs leading-relaxed">
-      {title && <p className="font-semibold text-road-foreground">{title}</p>}
-      {children}
+    <div role="note" className="flex gap-2 text-xs leading-relaxed">
+      <WarningCircleIcon aria-hidden="true" weight="fill" className="mt-0.5 size-3.5 shrink-0 text-road" />
+      <div className="min-w-0">
+        {title && <p className="font-medium text-foreground">{title}</p>}
+        <div className="text-muted-foreground">{children}</div>
+      </div>
     </div>
   )
 }

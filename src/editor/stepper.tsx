@@ -23,15 +23,15 @@ export function Stepper({ step, state, onChoose }: StepperProps) {
                 className={cn(
                   'flex h-11 w-full items-center justify-center gap-2 rounded-md px-2 text-sm font-medium transition-colors lg:h-9',
                   'text-muted-foreground hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40',
-                  'aria-[current=step]:bg-accent aria-[current=step]:text-accent-foreground',
+                  'aria-[current=step]:text-foreground',
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'grid size-5 shrink-0 place-items-center rounded-full border text-2xs',
-                    current && 'border-primary bg-primary text-primary-foreground',
-                    done && 'border-primary text-primary',
+                    'grid size-5 shrink-0 place-items-center rounded-full border text-2xs transition-colors',
+                    current && 'border-foreground bg-foreground text-background',
+                    done && 'border-foreground/40 text-foreground',
                   )}
                 >
                   {index + 1}

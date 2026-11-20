@@ -16,12 +16,12 @@ import { ToCheck } from './to-check'
 import { yieldFigure } from './yield-figure'
 
 const STATUS_TONE: Readonly<Record<CheckStatus, string>> = {
-  pass: 'text-primary',
+  pass: 'text-muted-foreground',
   fail: 'text-destructive',
   manual: 'text-road-foreground',
 }
 
-type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
+export type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
 function rowsFor([first]: readonly Design[], showChecks: (design: Design) => void): readonly Row[] {
   return [
@@ -51,7 +51,7 @@ function CheckItem({ row }: { row: CheckRow }) {
   )
 }
 
-function DesignTable({ designs }: { designs: readonly Design[] }) {
+function DesignTable({ designs, extraRows }: { designs: readonly Design[]; extraRows: readonly Row[] }) {
   const { design: selected, selectDesign } = useFeasibility()
   const toCheckId = useId()
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
@@ -69,13 +69,13 @@ function DesignTable({ designs }: { designs: readonly Design[] }) {
             {designs.map((design) => {
               const name = t(design.nameKey)
               return (
-                <th key={design.id} scope="col" className={cn('p-0 align-bottom', shown(design) && 'bg-accent')}>
+                <th key={design.id} scope="col" className="p-0 align-bottom">
                   <button
                     type="button"
                     aria-pressed={shown(design)}
                     aria-label={t('design.show', { name })}
                     onClick={() => selectDesign(design.id)}
-                    className="flex min-h-11 w-full items-end px-2 py-2 text-left text-xs leading-snug font-semibold text-muted-foreground transition-colors hover:text-foreground aria-pressed:text-primary"
+                    className="relative flex min-h-11 w-full items-end px-2 py-2 text-left text-xs leading-snug font-medium text-muted-foreground transition-colors hover:text-foreground aria-pressed:text-foreground after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-foreground after:opacity-0 after:transition-opacity aria-pressed:after:opacity-100"
                   >
                     {name}
                   </button>
@@ -85,13 +85,13 @@ function DesignTable({ designs }: { designs: readonly Design[] }) {
           </tr>
         </thead>
         <tbody className="divide-y">
-          {rowsFor(designs, showChecks).map(({ label, cell }) => (
+          {[...rowsFor(designs, showChecks), ...extraRows].map(({ label, cell }) => (
             <tr key={label}>
               <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
                 {label}
               </th>
               {designs.map((design) => (
-                <td key={design.id} className={cn('px-2 py-2 align-top', shown(design) && 'bg-accent font-medium')}>
+                <td key={design.id} className={cn('px-2 py-2 align-top transition-colors', shown(design) ? 'text-foreground' : 'text-muted-foreground')}>
                   {cell(design)}
                 </td>
               ))}
@@ -112,6 +112,6 @@ function DesignTable({ designs }: { designs: readonly Design[] }) {
   )
 }
 
-export function DesignsPanel() {
-  return <WhenReady render={({ designs }) => <DesignTable designs={designs} />} />
+export function DesignsPanel({ extraRows = [] }: { extraRows?: readonly Row[] }) {
+  return <WhenReady render={({ designs }) => <DesignTable designs={designs} extraRows={extraRows} />} />
 }

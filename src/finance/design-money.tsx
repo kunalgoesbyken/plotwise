@@ -19,7 +19,6 @@ export function useMoneyRows(): readonly MoneyRow[] {
   return [
     { label: t('money.built-up'), cell: (design) => formatQuantity(finance.estimateFor(design).builtSqm, 'sqm') },
     { label: t('money.saleable'), cell: (design) => formatQuantity(finance.estimateFor(design).saleableSqm, 'sqm') },
-    { label: t('money.parking-area'), cell: (design) => formatQuantity(finance.estimateFor(design).parkingSqm, 'sqm') },
     { label: t('money.parking-levels'), cell: (design) => parkingText(finance.estimateFor(design).parking) },
     { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(finance.estimateFor(design)), currency) },
     { label: t('money.land-value'), cell: (design) => rangeText(finance.estimateFor(design).landValue, currency) },

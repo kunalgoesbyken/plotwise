@@ -1,11 +1,12 @@
 'use client'
 
-import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
-import Image from 'next/image'
+import { CaretDownIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
 import { cn } from '@/ui/cn'
+import { Logo } from '@/ui/logo'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs'
 import { BuildingTypePicker } from './building-type'
 import type { EditorAction, EditorState } from './editor-state'
@@ -19,19 +20,16 @@ import { StationToggle } from './station-toggle'
 import { Stepper } from './stepper'
 import { followEdits, furthestStep, isOpen, shownStep, STEPS, type Step } from './steps'
 
+export type ResultPanel = { readonly id: string; readonly label: string; readonly content: ReactNode }
+
 export type EditorSlots = {
   summary?: ReactNode
-  rules?: ReactNode
-  designs?: ReactNode
+  panels?: readonly ResultPanel[]
   view3d?: ReactNode
   overlay?: MapOverlay
 }
 
-const RESULT_TABS = ['designs', 'rules', 'view3d'] as const
-
-type ResultTab = (typeof RESULT_TABS)[number]
-
-const isResultTab = (value: string): value is ResultTab => (RESULT_TABS as readonly string[]).includes(value)
+const VIEW_3D = 'view3d'
 
 const INTERACTIVE = 'input, select, textarea, button, a[href], [contenteditable]'
 
@@ -80,9 +78,9 @@ function useStep(state: EditorState, onMove: () => void) {
 function Wordmark() {
   return (
     <div className="flex items-center gap-2.5">
-      <Image src="/icon.svg" width={24} height={24} alt="" unoptimized priority />
+      <Logo className="size-6" />
       <span className="text-lg leading-none font-semibold tracking-tight">{t('app.name')}</span>
-      <span className="text-sm leading-none text-muted-foreground">{t('app.city')}</span>
+      <span className="text-sm leading-none text-muted-foreground">{REGION.city}</span>
     </div>
   )
 }
@@ -95,47 +93,49 @@ function StepFooter({ step, state, onChoose }: { step: Step; state: EditorState;
     <footer className="flex shrink-0 items-center gap-2 border-t px-(--pad) py-2">
       {previous && (
         <Button variant="ghost" onClick={() => onChoose(previous)}>
-          <ChevronLeft aria-hidden="true" />
+          <CaretLeftIcon aria-hidden="true" weight="bold" />
           {t('flow.back')}
         </Button>
       )}
       {next && step !== 'results' && (
         <Button className="ml-auto" disabled={!isOpen(next, state)} onClick={() => onChoose(next)}>
           {t(`flow.next.${step}`)}
-          <ChevronRight aria-hidden="true" />
+          <CaretRightIcon aria-hidden="true" weight="bold" />
         </Button>
       )}
     </footer>
   )
 }
 
-type ResultsProps = Pick<EditorSlots, 'summary' | 'rules' | 'designs'> & { tab: ResultTab; onTab: (tab: ResultTab) => void; sceneId: string }
+type ResultsProps = { summary: ReactNode; panels: readonly ResultPanel[]; tab: string; onTab: (tab: string) => void; sceneId: string }
 
-function Results({ summary, rules, designs, tab, onTab, sceneId }: ResultsProps) {
+function Results({ summary, panels, tab, onTab, sceneId }: ResultsProps) {
   return (
     <>
       <BuildingTypePicker />
-      {summary && <div className={cn('sticky top-0 z-10 border-y bg-background px-(--pad) py-4', tab === 'view3d' && 'max-xl:hidden')}>{summary}</div>}
-      <Tabs value={tab} onValueChange={(value) => isResultTab(value) && onTab(value)} className="gap-4 px-(--pad) pt-4 pb-5">
+      {summary && <div className={cn('sticky top-0 z-10 border-y bg-background px-(--pad) py-4', tab === VIEW_3D && 'max-xl:hidden')}>{summary}</div>}
+      <Tabs value={tab} onValueChange={onTab} className="gap-4 px-(--pad) pt-4 pb-5">
         <TabsList variant="line" aria-label={t('tab.label')} className="w-full justify-start border-b">
-          <TabsTrigger value="designs">{t('tab.designs')}</TabsTrigger>
-          <TabsTrigger value="rules">{t('tab.rules')}</TabsTrigger>
-          <TabsTrigger value="view3d" aria-controls={sceneId} className="xl:hidden">
+          {panels.map((panel) => (
+            <TabsTrigger key={panel.id} value={panel.id}>
+              {panel.label}
+            </TabsTrigger>
+          ))}
+          <TabsTrigger value={VIEW_3D} aria-controls={sceneId} className="xl:hidden">
             {t('tab.view3d')}
           </TabsTrigger>
         </TabsList>
-        <TabsContent forceMount value="designs" className="data-[state=inactive]:hidden">
-          {designs}
-        </TabsContent>
-        <TabsContent forceMount value="rules" className="data-[state=inactive]:hidden">
-          {rules}
-        </TabsContent>
+        {panels.map((panel) => (
+          <TabsContent key={panel.id} forceMount value={panel.id} className="data-[state=active]:animate-enter data-[state=inactive]:hidden">
+            {panel.content}
+          </TabsContent>
+        ))}
       </Tabs>
     </>
   )
 }
 
-export function EditorShell({ summary, rules, designs, view3d, overlay }: EditorSlots) {
+export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlots) {
   const store = useEditorStore()
   const state = useEditorState()
   const panel = useRef<HTMLElement>(null)
@@ -144,7 +144,8 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
   const sceneId = useId()
   const [open, setOpen] = useState(true)
   const [step, setStep] = useStep(state, () => setOpen(true))
-  const [tab, setTab] = useState<ResultTab>('designs')
+  const [chosenTab, setTab] = useState<string | null>(null)
+  const tab = chosenTab ?? panels[0]?.id ?? VIEW_3D
   useShortcuts(store)
 
   const ready = state.plot !== null
@@ -152,16 +153,16 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
     setStep(next)
     setOpen(true)
   }
-  const sceneInPanel = step === 'results' && tab === 'view3d'
+  const sceneInPanel = step === 'results' && tab === VIEW_3D
 
   return (
-    <main className="relative h-dvh w-full overflow-clip [--panel-w:24rem] 2xl:[--panel-w:27rem]">
+    <main className="relative h-dvh w-full overflow-clip">
       <PlotMap covers={covers} overlay={overlay} />
       <aside
         ref={panel}
         aria-label={t('shell.panel')}
         data-scene={sceneInPanel}
-        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col max-lg:data-[scene=true]:max-h-[85dvh] rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px] shadow-foreground/25 [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-[26rem] md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
+        className="absolute inset-x-0 bottom-0 z-10 flex max-h-[min(36rem,64dvh)] flex-col max-lg:data-[scene=true]:max-h-[85dvh] rounded-t-2xl border-t bg-background pb-[env(safe-area-inset-bottom)] shadow-sheet [--pad:1rem] md:inset-x-auto md:bottom-3 md:left-3 md:w-sheet md:rounded-2xl md:border md:pb-0 md:shadow-xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-(--panel-w) lg:rounded-xl lg:[--pad:1.25rem]"
       >
         <header className="hidden h-14 shrink-0 items-center border-b px-(--pad) lg:flex">
           <Wordmark />
@@ -169,7 +170,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
         <div className="flex shrink-0 items-center gap-1 px-2 pt-2 lg:px-(--pad) lg:pt-3">
           <Stepper step={step} state={state} onChoose={choose} />
           <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t(open ? 'shell.hide' : 'shell.show')} aria-expanded={open} onClick={() => setOpen(!open)}>
-            <ChevronDown aria-hidden="true" className={cn('transition-transform', !open && 'rotate-180')} />
+            <CaretDownIcon aria-hidden="true" weight="bold" className={cn('transition-transform', !open && 'rotate-180')} />
           </Button>
         </div>
         <HintBar />
@@ -182,7 +183,7 @@ export function EditorShell({ summary, rules, designs, view3d, overlay }: Editor
               <StationToggle />
             </>
           )}
-          {step === 'results' && <Results summary={summary} rules={rules} designs={designs} tab={tab} onTab={setTab} sceneId={sceneId} />}
+          {step === 'results' && <Results summary={summary} panels={panels} tab={tab} onTab={setTab} sceneId={sceneId} />}
           <section
             ref={inset}
             id={sceneId}

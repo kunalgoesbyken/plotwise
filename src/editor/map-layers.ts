@@ -41,7 +41,7 @@ export function labelInEnglish(map: MapLibreMap) {
 export function readPalette(element: Element): Palette {
   const style = getComputedStyle(element)
   const read = (name: string) => style.getPropertyValue(`--color-${name}`).trim()
-  return { plot: read('primary'), road: read('road'), ink: read('foreground'), paper: read('background') }
+  return { plot: read('plot'), road: read('road'), ink: read('foreground'), paper: read('background') }
 }
 
 export function addEditorLayers(map: MapLibreMap, palette: Palette) {

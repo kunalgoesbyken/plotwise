@@ -24,7 +24,6 @@ type EngineMessages = Record<`check.${CheckId}`, string> &
 
 const en = {
   'app.name': 'Plotwise',
-  'app.city': 'Bangkok',
 
   'verb.click': 'Click',
   'verb.tap': 'Tap',
@@ -47,7 +46,7 @@ const en = {
   'flow.next.plot': 'Next: roads',
   'flow.next.roads': 'See what you can build',
   'flow.back': 'Back',
-  'plot.framing': 'Check what a Bangkok plot can hold before you buy it.',
+  'plot.framing': ({ city }: { city: string }) => `Check what a ${city} plot can hold before you buy it.`,
   'rejection.link-incomplete': 'This link is missing part of the plot, so it could not be opened.',
   'rejection.link-invalid': 'This link’s plot is not valid, so it could not be opened.',
   'frontage.right-of-way': 'Right-of-way: the full width between property lines across the road, not just the paved lanes.',
@@ -55,6 +54,16 @@ const en = {
   'tab.rules': 'Rules',
   'tab.designs': 'Designs',
   'tab.view3d': '3D',
+  'tab.money': 'Money',
+  'share.copy': 'Copy link',
+  'share.copied': 'Link copied',
+  'share.print': 'Print',
+  'assumptions.all': 'All money assumptions',
+  'report.title': ({ city }: { city: string }) => `Plotwise · ${city} plot summary`,
+  'report.plot': ({ area, allowed }: { area: string; allowed: string }) => `Plot ${area}. Up to ${allowed} of floor area allowed.`,
+  'report.open': 'Not passed yet',
+  'report.assumptions': 'Assumptions used (estimated, editable)',
+  'report.disclaimer': 'Money figures are estimates on editable assumptions, not a valuation. Rule figures come from the cited sources. Link:',
   'section.view3d': '3D view',
 
   'rejection.crossing': 'Edges can’t cross or overlap. Try another point.',
@@ -110,8 +119,6 @@ const en = {
   'map.road-width-unknown': '? m',
 
   'building-type.title': 'Building type',
-  'zone.name': 'Brown zone · very high-density residential',
-  'zone.scope': 'Plotwise covers only this zone of the Bangkok city plan.',
   'zone.check': 'Check your plot is in it',
   'transit.title': 'Mass transit',
   'transit.near': ({ distance }: { distance: string }) => `Within ${distance} of a BTS/MRT station`,
@@ -123,7 +130,7 @@ const en = {
   'transit.unnamed': 'an unnamed station',
 
   'search.title': 'Find the site',
-  'search.label': 'Search for an address or place in Thailand',
+  'search.label': ({ country }: { country: string }) => `Search for an address or place in ${country}`,
   'search.placeholder': 'Address, building or soi',
   'search.submit': 'Search',
   'search.searching': 'Searching…',
@@ -288,6 +295,7 @@ const en = {
   'summary.label': 'Results for the design shown in 3D',
   'summary.allowed': 'You can build up to',
   'summary.allowed-unit': 'of floor area',
+  'summary.land': ({ range }: { range: string }) => `Supports land worth about ${range}, estimated.`,
   'summary.best': ({ name, area }: { name: string; area: string }) => `${name} fits ${area}.`,
 
   'money.title': 'Areas and first cost',

@@ -18,7 +18,6 @@
     "class-variance-authority": "^0.7.1",
     "clipper2-ts": "^2.0.1-19",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.76.0",
     "maplibre-gl": "^6.19.0",
     "next": "16.4.6",
     "radix-ui": "^1.8.1",

@@ -22,7 +22,7 @@ export function BuildingTypePicker() {
         className="grid w-full grid-cols-3"
       >
         {BUILDING_TYPES.map((type) => (
-          <ToggleGroupItem key={type} value={type} className="w-full data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+          <ToggleGroupItem key={type} value={type} className="w-full data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
             {t(`building.${type}`)}
           </ToggleGroupItem>
         ))}

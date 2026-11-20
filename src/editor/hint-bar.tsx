@@ -82,7 +82,7 @@ export function HintBar() {
 
 const LEGEND = [
   { key: 'legend.road', swatch: 'h-1 w-4 rounded-full bg-road' },
-  { key: 'legend.buildable', swatch: 'size-3.5 rounded-xs border border-dashed border-primary bg-primary/15' },
+  { key: 'legend.buildable', swatch: 'size-3.5 rounded-xs border border-dashed border-plot bg-plot/15' },
   { key: 'legend.footprint', swatch: 'size-3.5 rounded-xs bg-foreground/25 ring-1 ring-foreground/60' },
 ] as const
 

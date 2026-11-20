@@ -5,6 +5,7 @@ import { BUILDING_TYPES, type Plot } from '@/plot/plot'
 import { initialEditorState, reduceEditor, type EditorAction, type EditorState } from './editor-state'
 import { decodePlot, encodePlot } from './plot-url'
 import { syncSite } from './site-sync'
+import { writeHash } from './url-hash'
 
 const URL_WRITE_DELAY_MS = 300
 
@@ -32,15 +33,11 @@ function createEditorStore(): EditorStore {
   }
 }
 
-function fragmentFor(plot: Plot | null) {
-  return plot ? `#${encodePlot(plot)}` : ''
-}
+const PLOT_PARAMS = ['plot', 'roads', 'type', 'station'] as const
 
-function writeUrl(plot: Plot | null) {
-  const fragment = fragmentFor(plot)
-  if (location.hash === fragment) return
-  history.replaceState(null, '', `${location.pathname}${location.search}${fragment}`)
-}
+const fragmentFor = (plot: Plot | null) => (plot ? encodePlot(plot) : '')
+
+const writeUrl = (plot: Plot | null) => writeHash(PLOT_PARAMS, fragmentFor(plot))
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
@@ -50,7 +47,7 @@ function syncWithUrl(store: EditorStore) {
       store.dispatch({ type: 'reject-link', problem: link.problem })
       return
     }
-    if (fragmentFor(store.getState().plot) !== location.hash) store.dispatch({ type: 'load', plot: link.plot })
+    if (fragmentFor(store.getState().plot) !== encodePlot(link.plot)) store.dispatch({ type: 'load', plot: link.plot })
   }
   loadFromUrl()
   let written = store.getState().plot

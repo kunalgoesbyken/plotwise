@@ -1,8 +1,9 @@
 import { MAX_ROAD_WIDTH_M, type Plot, type Road } from '@/plot/plot'
+import { ASSUMPTIONS } from '@/solve'
 import { feasibility, PACK, type Feasibility } from './compute'
 import { roadWidthThresholds } from './road-width-thresholds'
 
-export const WIDTH_STEP_M = 2
+const WIDTH_STEP_M = ASSUMPTIONS.roadWidthStepM.value
 
 export type WidthOutcome = { readonly gfaSqm: number; readonly heightM: number }
 

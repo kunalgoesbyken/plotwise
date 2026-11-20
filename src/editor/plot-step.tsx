@@ -1,20 +1,20 @@
 'use client'
 
-import { ExternalLink } from 'lucide-react'
+import { ArrowSquareOutIcon } from '@phosphor-icons/react'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
+import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
 import { PanelSection } from '@/ui/section'
 import { PlaceSearch } from './place-search'
 import { useEditorState, useEditorStore } from './plot-store'
 
-const BMA_CITY_PLAN_URL = 'https://webportal.bangkok.go.th/cpud'
 
 function Start() {
   const store = useEditorStore()
   return (
     <div className="flex flex-col items-start gap-3 px-(--pad) pt-5 pb-5">
-      <p className="text-base leading-snug font-medium text-pretty">{t('plot.framing')}</p>
+      <p className="text-base leading-snug font-medium text-pretty">{t('plot.framing', { city: REGION.city })}</p>
       <Button onClick={() => store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })}>{t('plot.example')}</Button>
     </div>
   )
@@ -34,15 +34,15 @@ function Outline({ count }: { count: number }) {
 function Zone() {
   return (
     <p className="border-t px-(--pad) py-4 text-xs leading-relaxed text-muted-foreground">
-      <span className="font-medium text-foreground">{t('zone.name')}.</span> {t('zone.scope')}
+      <span className="font-medium text-foreground">{REGION.zone.name}.</span> {REGION.zone.scope}
       <a
-        href={BMA_CITY_PLAN_URL}
+        href={REGION.cityPlanUrl}
         target="_blank"
         rel="noreferrer"
-        className="mt-1 flex min-h-11 w-fit items-center gap-1 font-medium text-primary underline-offset-2 hover:underline lg:min-h-0"
+        className="mt-1 flex min-h-11 w-fit items-center gap-1 font-medium text-foreground underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground lg:min-h-0"
       >
         {t('zone.check')}
-        <ExternalLink aria-hidden="true" className="size-3" />
+        <ArrowSquareOutIcon aria-hidden="true" className="size-3.5" />
       </a>
     </p>
   )

@@ -23,7 +23,7 @@ export function readPalette(): Palette {
     ink: read('foreground'),
     slate: read('muted-foreground'),
     rule: read('border'),
-    plot: read('primary'),
+    plot: read('plot'),
     road: read('road'),
     signal: read('destructive'),
   }

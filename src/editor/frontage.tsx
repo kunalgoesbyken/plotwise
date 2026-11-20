@@ -78,7 +78,7 @@ function EdgeRow({ index, edge, count, selected, noteId, dispatch }: EdgeRowProp
       className="col-span-full grid min-h-14 grid-cols-subgrid items-center px-(--pad) py-1.5 transition-colors aria-current:bg-accent lg:min-h-12"
     >
       <span className="flex items-center gap-2.5 text-sm font-medium tabular-nums">
-        <span aria-hidden="true" className={`w-4 rounded-full ${edge.road ? 'h-1 bg-road' : 'h-0.5 bg-primary/60'}`} />
+        <span aria-hidden="true" className={`w-4 rounded-full ${edge.road ? 'h-1 bg-road' : 'h-0.5 bg-plot/60'}`} />
         {name}
       </span>
       {edge.road ? (

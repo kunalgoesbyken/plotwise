@@ -18,7 +18,7 @@ function CiteItem({ cite }: { cite: Cite }) {
           href={`${source.url}#page=${cite.page}`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 w-fit items-center gap-1 font-medium text-primary underline-offset-2 hover:underline lg:min-h-0"
+          className="inline-flex min-h-11 w-fit items-center gap-1 text-foreground underline decoration-foreground/25 underline-offset-3 transition-colors hover:decoration-foreground lg:min-h-0"
         >
           {t('source.open')}
           <ArrowSquareOutIcon aria-hidden="true" className="size-3.5" />

@@ -1,26 +1,29 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme static {
-  --color-background: #fbfcfb;
-  --color-foreground: #1a2228;
-  --color-card: #fbfcfb;
-  --color-card-foreground: #1a2228;
-  --color-popover: #fbfcfb;
-  --color-popover-foreground: #1a2228;
-  --color-primary: #2c48c8;
-  --color-primary-foreground: #fbfcfb;
-  --color-secondary: #eef2f1;
-  --color-secondary-foreground: #1a2228;
-  --color-muted: #eef2f1;
-  --color-muted-foreground: #56646c;
-  --color-accent: #e6eafa;
-  --color-accent-foreground: #2c48c8;
-  --color-destructive: #b8322a;
-  --color-border: #d3dbd9;
-  --color-input: #d3dbd9;
-  --color-ring: #2c48c8;
-  --color-road: #e2a01b;
-  --color-road-foreground: #6e4a00;
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-card: #ffffff;
+  --color-card-foreground: #171717;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171717;
+  --color-primary: #171717;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f4f4f4;
+  --color-secondary-foreground: #171717;
+  --color-muted: #f4f4f4;
+  --color-muted-foreground: #666666;
+  --color-accent: #f0f0f0;
+  --color-accent-foreground: #171717;
+  --color-destructive: #d0242b;
+  --color-border: #ebebeb;
+  --color-input: #e0e0e0;
+  --color-ring: #a1a1a1;
+  --color-plot: #2f5bea;
+  --color-road: #f0a92a;
+  --color-road-foreground: #8a5a00;
 }
 
 @theme {
@@ -32,12 +35,46 @@
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --animate-flash: flash 1.4s var(--ease-out-quart);
+  --default-transition-duration: 180ms;
+  --default-transition-timing-function: var(--ease-out-quart);
+  --container-sheet: 26rem;
+  --shadow-sheet: 0 -8px 24px -12px color-mix(in srgb, var(--color-foreground) 25%, transparent);
+  --animate-flash: flash 0.5s var(--ease-out-quart);
+  --animate-enter: enter 0.2s var(--ease-out-quart);
+  --animate-collapsible-down: collapsible-down 0.2s var(--ease-out-quart);
+  --animate-collapsible-up: collapsible-up 0.15s var(--ease-out-quart);
 
   @keyframes flash {
     from {
-      background-color: var(--color-accent);
-      color: var(--color-primary);
+      opacity: 0.35;
+      filter: blur(1px);
+    }
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      translate: 0 4px;
+    }
+  }
+
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+      opacity: 0;
     }
   }
 }
@@ -49,6 +86,16 @@
 @layer base {
   * {
     border-color: var(--color-border);
+  }
+}
+
+:root {
+  --panel-w: 24rem;
+}
+
+@media (width >= 96rem) {
+  :root {
+    --panel-w: 27rem;
   }
 }
 
@@ -99,9 +146,9 @@ body {
   translate: 14px -14px;
   padding: 3px 4px;
   font-size: 11px;
-  color: var(--color-primary);
+  color: var(--color-plot);
   background: var(--color-background);
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--color-plot);
   border-radius: 3px;
 }
 

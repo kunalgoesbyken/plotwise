@@ -1,106 +1,155 @@
 'use client'
 
-import { Search } from 'lucide-react'
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { MagnifyingGlassIcon } from '@phosphor-icons/react'
+import { useEffect, useId, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { searchPlaces } from '@/geocode/client'
 import { MIN_QUERY_LENGTH, normaliseQuery, type Place } from '@/geocode/schema'
+import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
-import { Button } from '@/ui/button'
+import { cn } from '@/ui/cn'
 import { Input } from '@/ui/input'
 import { PanelSection } from '@/ui/section'
 import { useEditorStore } from './plot-store'
 
-type SearchState = { status: 'idle' } | { status: 'searching' } | { status: 'found'; places: readonly Place[] } | { status: 'failed' }
+const TYPING_PAUSE_MS = 250
 
-function useSearch() {
+type SearchState =
+  | { status: 'idle' }
+  | { status: 'searching'; places: readonly Place[] }
+  | { status: 'found'; places: readonly Place[] }
+  | { status: 'failed' }
+
+const placesOf = (search: SearchState) => (search.status === 'found' || search.status === 'searching' ? search.places : [])
+
+function useLiveSearch(query: string) {
   const [search, setSearch] = useState<SearchState>({ status: 'idle' })
-  const pending = useRef<AbortController | null>(null)
-  useEffect(() => () => pending.current?.abort(), [])
+  const normalised = normaliseQuery(query)
+  const [settled, setSettled] = useState(normalised)
+  const ready = normalised.length >= MIN_QUERY_LENGTH
 
-  const run = (query: string) => {
-    pending.current?.abort()
-    const controller = new AbortController()
-    pending.current = controller
-    setSearch({ status: 'searching' })
-    searchPlaces(query, { signal: controller.signal })
-      .then((places) => setSearch({ status: 'found', places }))
-      .catch(() => {
-        if (!controller.signal.aborted) setSearch({ status: 'failed' })
-      })
+  if (settled !== normalised) {
+    setSettled(normalised)
+    setSearch((current) => (ready ? { status: 'searching', places: placesOf(current) } : { status: 'idle' }))
   }
-  const reset = () => setSearch({ status: 'idle' })
-  return { search, run, reset }
+
+  useEffect(() => {
+    if (!ready) return
+    const controller = new AbortController()
+    const timer = setTimeout(() => {
+      searchPlaces(normalised, { signal: controller.signal })
+        .then((places) => setSearch({ status: 'found', places }))
+        .catch(() => {
+          if (!controller.signal.aborted) setSearch({ status: 'failed' })
+        })
+    }, TYPING_PAUSE_MS)
+    return () => {
+      clearTimeout(timer)
+      controller.abort()
+    }
+  }, [normalised, ready])
+
+  return { search, close: () => setSearch({ status: 'idle' }) }
 }
 
 function StatusLine({ search }: { search: SearchState }) {
-  if (search.status === 'searching') return t('search.searching')
   if (search.status === 'failed') return t('search.failed')
   if (search.status === 'found' && search.places.length === 0) return t('search.none')
   return null
 }
 
-function PlaceList({ places, onPick }: { places: readonly Place[]; onPick: (place: Place) => void }) {
-  return (
-    <ul aria-label={t('search.results')} className="mt-2 divide-y border-y">
-      {places.map((place) => (
-        <li key={place.id}>
-          <button
-            type="button"
-            onClick={() => onPick(place)}
-            className="flex min-h-11 w-full items-center px-3 py-2 text-left text-sm leading-snug transition-colors hover:bg-muted"
-          >
-            {place.label}
-          </button>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 export function PlaceSearch() {
   const store = useEditorStore()
   const id = useId()
+  const listId = `${id}-list`
   const [query, setQuery] = useState('')
-  const { search, run, reset } = useSearch()
-  const tooShort = normaliseQuery(query).length < MIN_QUERY_LENGTH
+  const [active, setActive] = useState(0)
+  const { search, close } = useLiveSearch(query)
+  const places = placesOf(search)
+  const open = places.length > 0
+  const highlighted = Math.min(active, places.length - 1)
 
-  const submit = (event: FormEvent) => {
-    event.preventDefault()
-    if (!tooShort) run(query)
-  }
   const pick = (place: Place) => {
     store.dispatch({ type: 'focus', at: place.lngLat })
     setQuery(place.label)
-    reset()
+    close()
+  }
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
+    if (open) pick(places[highlighted])
+  }
+  const move = (event: KeyboardEvent) => {
+    if (!open) return
+    if (event.key === 'Escape') close()
+    const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
+    if (step === 0) return
+    event.preventDefault()
+    setActive((highlighted + step + places.length) % places.length)
+  }
+  const type = (text: string) => {
+    setQuery(text)
+    setActive(0)
   }
 
   return (
     <PanelSection title={t('search.title')}>
-      <form role="search" onSubmit={submit} className="flex gap-2">
+      <form role="search" onSubmit={submit}>
         <label htmlFor={id} className="sr-only">
-          {t('search.label')}
+          {t('search.label', { country: REGION.country })}
         </label>
-        <div className="relative min-w-0 flex-1">
-          <Search aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <div className="relative">
+          <MagnifyingGlassIcon aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id={id}
             type="search"
+            role="combobox"
+            aria-expanded={open}
+            aria-controls={listId}
+            aria-autocomplete="list"
+            aria-activedescendant={open ? `${listId}-${highlighted}` : undefined}
             autoComplete="off"
             enterKeyHint="search"
             placeholder={t('search.placeholder')}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pl-9"
+            onChange={(e) => type(e.target.value)}
+            onKeyDown={move}
+            className="pl-9 [&::-webkit-search-cancel-button]:appearance-none"
           />
+          {search.status === 'searching' && (
+            <span
+              aria-hidden="true"
+              className="absolute top-1/2 right-9 size-3.5 -translate-y-1/2 animate-spin rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground"
+            />
+          )}
         </div>
-        <Button type="submit" variant="outline" disabled={tooShort || search.status === 'searching'}>
-          {t('search.submit')}
-        </Button>
       </form>
       <p aria-live="polite" className="mt-2 text-xs leading-relaxed text-muted-foreground empty:hidden">
         <StatusLine search={search} />
       </p>
-      {search.status === 'found' && search.places.length > 0 && <PlaceList places={search.places} onPick={pick} />}
+      <ul
+        id={listId}
+        role="listbox"
+        aria-label={t('search.results')}
+        className={cn(
+          'mt-1 overflow-hidden rounded-md border bg-background shadow-sm transition-opacity',
+          open ? 'animate-enter' : 'hidden',
+          search.status === 'searching' && 'opacity-60',
+        )}
+      >
+        {places.map((place, index) => (
+          <li
+            key={place.id}
+            id={`${listId}-${index}`}
+            role="option"
+            aria-selected={index === highlighted}
+            onPointerDown={(event) => event.preventDefault()}
+            onPointerMove={() => setActive(index)}
+            onClick={() => pick(place)}
+            className="flex min-h-11 cursor-pointer items-center px-3 py-2 text-sm leading-snug aria-selected:bg-muted lg:min-h-9"
+          >
+            {place.label}
+          </li>
+        ))}
+      </ul>
     </PanelSection>
   )
 }

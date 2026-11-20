@@ -57,6 +57,17 @@ describe('fetchPlaces', () => {
     expect(places).toEqual([{ id: 'W1', label: 'Terminal 21', lngLat: [100.5, 13.7], kind: 'other' }])
   })
 
+  it('shows each label once, keeping the best-ranked place', async () => {
+    const feature = (osm_id: number, street: string) => ({
+      type: 'Feature',
+      properties: { osm_type: 'N', osm_id, name: 'Siam', street },
+      geometry: { type: 'Point', coordinates: [100.53 + osm_id / 1000, 13.74] },
+    })
+    const body = { type: 'FeatureCollection', features: [feature(1, 'Rama I Road'), feature(2, 'Rama I Road'), feature(3, 'Phaya Thai Road')] }
+    const places = await fetchPlaces('siam', { fetchImpl: fakePhoton(() => Response.json(body)).fetchImpl })
+    expect(places.map((place) => place.id)).toEqual(['N1', 'N3'])
+  })
+
   it('reports Photon as unavailable on an HTTP error, a timeout or an unexpected answer', async () => {
     const failures: Handler[] = [
       () => new Response('slow down', { status: 429 }),

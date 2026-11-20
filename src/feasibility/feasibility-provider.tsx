@@ -3,6 +3,7 @@
 import { createContext, use, useMemo, useState, type ReactNode } from 'react'
 import type { Design, TypologyId } from '@/designs'
 import { usePlot } from '@/editor/plot-store'
+import { useHashState } from '@/editor/url-hash'
 import type { Plot } from '@/plot/plot'
 import type { Envelope } from '@/solve'
 import { CARVING, feasibility, type Feasibility } from './compute'
@@ -24,9 +25,11 @@ const FeasibilityContext = createContext<FeasibilityView | null>(null)
 
 const ALL_RULES = RULE_STEPS[RULE_STEPS.length - 1]
 
+const FAR_MODE_IN_URL = { decode: (value: string | null) => value === 'bonus', encode: (bonus: boolean) => (bonus ? 'bonus' : null) }
+
 export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const plot = usePlot()
-  const [farBonus, setFarBonus] = useState(false)
+  const [farBonus, setFarBonus] = useHashState('far', FAR_MODE_IN_URL)
   const result = useMemo(() => plot && feasibility(plot, farBonus ? 'bonus' : 'standard'), [plot, farBonus])
   const [designId, setDesignId] = useState<TypologyId | null>(null)
   const [step, setStep] = useState<RuleStep>(ALL_RULES)
@@ -37,7 +40,7 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const layers = useMemo(() => (envelope && site ? envelopeLayers(envelope, site, step, CARVING) : null), [envelope, site, step])
   const view = useMemo(
     () => ({ plot, result, design, envelope, layers, farBonus, setFarBonus, selectDesign: setDesignId, chooseStep: setStep }),
-    [plot, result, design, envelope, layers, farBonus],
+    [plot, result, design, envelope, layers, farBonus, setFarBonus],
   )
   return <FeasibilityContext value={view}>{children}</FeasibilityContext>
 }

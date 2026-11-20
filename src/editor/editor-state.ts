@@ -1,5 +1,6 @@
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType, Plot } from '@/plot/plot'
+import { REGION } from '@/region/regions'
 import { loadPack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
 import { nearestStation, type NearestStation } from '@/site/nearest-station'
@@ -43,7 +44,7 @@ export type Step =
   | { step: 'done' }
 
 const NONE: Selection = { kind: 'none' }
-const STATION_DISTANCE = stationDistance(loadPack('bkk-y9'))
+const STATION_DISTANCE = stationDistance(loadPack(REGION.packId))
 
 export function initialEditorState(buildingType: BuildingType): EditorState {
   return {

@@ -44,6 +44,7 @@ export const ASSUMPTIONS = {
     value: 8,
     source: 'engine resolution: the height-to-road step-back is drawn in at most this many tiers so a solve stays under 30 ms',
   },
+  roadWidthStepM: { value: 2, source: 'display choice: the road-width table shows the result this much narrower and wider than the width entered' },
 } as const
 
 export type AssumedRange = { readonly low: number; readonly high: number; readonly source: string }
