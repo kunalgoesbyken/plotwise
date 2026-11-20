@@ -1,4 +1,5 @@
 import type { BuildingType } from '@/plot/plot'
+import type { Interpretations, QuestionId } from './interpretations'
 
 export type Assumption = { readonly value: number; readonly source: string }
 type PerUse = Readonly<Record<BuildingType, Assumption>>
@@ -48,8 +49,28 @@ export const ASSUMPTIONS = {
     value: 8,
     source: 'engine resolution: the height-to-road step-back is drawn in at most this many tiers so a solve stays under 30 ms',
   },
+  unboundedHeightStoreys: {
+    value: 50,
+    source: 'engine resolution: where a pack sets no height limit of any kind the envelope is drawn this many storeys tall, and floor area, setbacks and the road-height rule carve it down',
+  },
   roadWidthStepM: { value: 2, source: 'display choice: the road-width table shows the result this much narrower and wider than the width entered' },
 } as const
+
+const UNPOSED = 'engine default for a pack that poses no such question, the strictest reading'
+
+export const DEFAULT_READINGS = {
+  'hotel-residential': { value: 'public-building', source: UNPOSED },
+  'condo-public-building': { value: 'public', source: UNPOSED },
+  'office-public-building': { value: 'public', source: UNPOSED },
+  'open-space-base': { value: 'all-stricter', source: UNPOSED },
+  'parking-source': { value: 'higher-of-both', source: UNPOSED },
+  'permeable-base': { value: 'required', source: UNPOSED },
+  'gfa-includes-parking': { value: 'counts', source: UNPOSED },
+  'office-operating-area': { value: 'gfa', source: UNPOSED },
+  'road-access-tiers': { value: 'frontage-and-row', source: UNPOSED },
+  'bylaw-2569-scope': { value: 'unverified', source: UNPOSED },
+  'front-open-space': { value: 'always', source: UNPOSED },
+} as const satisfies { readonly [Id in QuestionId]: { readonly value: Interpretations[Id]; readonly source: string } }
 
 export type AssumedRange = { readonly low: number; readonly high: number; readonly source: string }
 type ClassRates = { readonly lowRise: AssumedRange; readonly highRise: AssumedRange }

@@ -174,7 +174,7 @@ describe('road width estimates', () => {
 
 describe('station distance estimates', () => {
   const frame = localFrame([100.5603, 13.737])
-  const limitM = stationDistance(loadPack('bkk-y9')).value
+  const limitM = stationDistance(loadPack('bkk-y9'))!.value
   const corners: [number, number][] = [
     [0, 0],
     [40, 0],

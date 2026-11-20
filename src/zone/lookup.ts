@@ -1,18 +1,48 @@
-import { localFrame, type LngLat } from '@/geo/projection'
-import { shrink } from '@/geometry'
-import { fetchZoneCodes, type FetchZoneCodesOptions } from './arcgis'
-import { ZONE_EDGE_TOLERANCE_M } from './assumptions'
-import { classifyZones, sourceFor, unknownVerdict } from './classify'
-import type { ZoneVerdict } from './schema'
+import type { LngLat } from '@/geo/projection'
+import { MAX_BBOX_SIDE_M } from '@/site/assumptions'
+import { bboxSideLengthsM } from '@/site/bbox'
+import { fetchZoneFeatures, ZoneServiceUnavailableError, type FetchZoneFeaturesOptions } from './arcgis'
+import { ZONE_ANSWER_MEMORY_MS, ZONE_UNREACHABLE_MEMORY_MS } from './assumptions'
+import { classifyShares, unknownVerdict, zoneRegionFor } from './classify'
+import { zoneShares } from './shares'
+import { ZONE_SOURCES, type ZoneRegionId } from './sources'
+import { ringKey, type ZoneVerdict } from './verdict'
 
-function innerRings(ring: readonly LngLat[]): LngLat[][] {
-  const frame = localFrame(ring[0])
-  const inner = shrink([{ outer: ring.map(frame.toLocal), holes: [] }], ZONE_EDGE_TOLERANCE_M.value)
-  return inner.length === 0 ? [[...ring]] : inner.map((polygon) => polygon.outer.map(frame.toLngLat))
+function isPlotSized(ring: readonly LngLat[]): boolean {
+  const lngs = ring.map(([lng]) => lng)
+  const lats = ring.map(([, lat]) => lat)
+  const { widthM, heightM } = bboxSideLengthsM([Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)])
+  return Math.max(widthM, heightM) <= MAX_BBOX_SIDE_M.value
 }
 
-export async function lookupZone(ring: readonly LngLat[], options?: FetchZoneCodesOptions): Promise<ZoneVerdict> {
-  const source = sourceFor(ring)
-  if (!source) return unknownVerdict(undefined, 'no-region')
-  return classifyZones(source, await fetchZoneCodes(source, innerRings(ring), options))
+export type ZoneLookup = (ring: readonly LngLat[], signal?: AbortSignal) => Promise<ZoneVerdict>
+
+type Remembered = { readonly verdict: ZoneVerdict; readonly until: number }
+
+export function createZoneLookup({ now = Date.now, ...fetchOptions }: Omit<FetchZoneFeaturesOptions, 'signal'> & { now?: () => number } = {}): ZoneLookup {
+  const answers = new Map<string, Remembered>()
+  const unreachableUntil = new Map<ZoneRegionId, number>()
+
+  return async (ring, signal) => {
+    const region = zoneRegionFor(ring)
+    if (!region) return unknownVerdict(undefined, 'no-region')
+    const source = ZONE_SOURCES[region]
+    if (!isPlotSized(ring)) return unknownVerdict(source, 'too-large')
+    const key = `${region}:${ringKey(ring)}`
+    const answer = answers.get(key)
+    if (answer && answer.until > now()) return answer.verdict
+    if ((unreachableUntil.get(region) ?? 0) > now()) return unknownVerdict(source, 'unreachable')
+    try {
+      const features = await fetchZoneFeatures(source.layer, ring, { ...fetchOptions, signal })
+      const verdict = classifyShares(source, zoneShares(ring, features))
+      answers.set(key, { verdict, until: now() + ZONE_ANSWER_MEMORY_MS.value })
+      return verdict
+    } catch (error) {
+      if (!(error instanceof ZoneServiceUnavailableError) || signal?.aborted) throw error
+      unreachableUntil.set(region, now() + ZONE_UNREACHABLE_MEMORY_MS.value)
+      return unknownVerdict(source, 'unreachable')
+    }
+  }
 }
+
+export const lookupZone = createZoneLookup()

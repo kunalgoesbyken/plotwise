@@ -97,7 +97,7 @@ test('draws a concave plot, marks a road, picks a type and restores it all from 
   const width = page.getByLabel('Road width on edge A–B, in metres')
   await expect(width).toBeFocused()
   await width.fill('16')
-  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await page.getByRole('button', { name: 'See results' }).click()
   await page.getByRole('radio', { name: 'Hotel' }).click()
 
   const plot = await plotInUrl(page)
@@ -134,7 +134,7 @@ test('refuses a corner that would make the outline cross itself', async ({ page 
 test('drags a corner, inserts one on an edge and deletes it again', async ({ page }) => {
   await open(page)
   await draw(page, L_SHAPE)
-  await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
+  await page.getByRole('button', { name: 'Mark as road, edge A–B' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
   const before = await plotInUrl(page)
 
@@ -176,6 +176,11 @@ test('the example plot opens on the roads step with its road selected and its wi
   await expect(page.getByRole('region', { name: 'Road frontage' })).toBeVisible()
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toHaveValue('12')
   await expect(page.getByRole('listitem').filter({ hasText: 'A–B' })).toHaveAttribute('aria-current', 'true')
+  await expect(page).toHaveURL(/#plot=/)
+  await page.getByRole('button', { name: 'See results' }).click()
+  await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
+  await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).click()
+  await expect(page.getByRole('region', { name: 'Road frontage' })).toBeVisible()
 })
 
 test('a plot opened from a link goes straight to the results', async ({ page }) => {
@@ -196,7 +201,7 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('Enter')
   await page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: 'Roads' }).focus()
   await page.keyboard.press('Enter')
-  await page.getByRole('button', { name: 'Mark edge C–D as a road' }).focus()
+  await page.getByRole('button', { name: 'Mark as road, edge C–D' }).focus()
   await page.keyboard.press('Enter')
   const width = page.getByLabel('Road width on edge C–D, in metres')
   await expect(width).toBeFocused()
@@ -205,7 +210,7 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.type('8')
   await expect(site(page).getByText('Estimated from OpenStreetMap')).toBeHidden()
-  await page.getByRole('button', { name: 'See what you can build' }).focus()
+  await page.getByRole('button', { name: 'See results' }).focus()
   await page.keyboard.press('Enter')
   await page.getByRole('radio', { name: 'Condominium' }).focus()
   await page.keyboard.press('ArrowRight')
@@ -213,8 +218,9 @@ test('works from the keyboard, and suggests a mapped road width that stays edita
   await page.keyboard.press('Space')
   await expect(page.getByRole('radio', { name: 'Office' })).toBeChecked()
   await expect.poll(async () => (await plotInUrl(page))?.roads).toEqual([
-    { edge: 0, widthM: 12 },
+    ...EXAMPLE_PLOT.roads.slice(0, 2),
     { edge: 2, widthM: 8 },
+    EXAMPLE_PLOT.roads[2],
   ])
 })
 
@@ -233,7 +239,7 @@ for (const width of [536, 1280])
     await open(page, '/app', [SOI_NORTH_OF_EXAMPLE])
     await page.getByRole('button', { name: 'Try an example plot' }).click()
     await goTo(page, 'Roads')
-    await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
+    await page.getByRole('button', { name: 'Mark as road, edge C–D' }).click()
     await expect(site(page).getByText('Estimated from OpenStreetMap, check on site.')).toBeVisible()
     const rows = await frontageColumns(page)
     expect(rows).toHaveLength(EXAMPLE_PLOT.ring.length)
@@ -259,7 +265,7 @@ test('suggests places while typing and draws the plot at the one picked', async 
     [700, 380],
     [650, 460],
   ])
-  await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
+  await page.getByRole('button', { name: 'Mark as road, edge A–B' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
   const [lng, lat] = (await plotInUrl(page))!.ring[0]
   expect(Math.abs(lng - ASOK.lngLat[0])).toBeLessThan(0.01)
@@ -277,7 +283,7 @@ test('says when place search is down instead of failing silently', async ({ page
 test('turns on the station switch from the nearest mapped platform as an estimate the user can override', async ({ page }) => {
   await open(page, '/app', [], [PLATFORM_THROUGH_START_VIEW])
   await draw(page, L_SHAPE)
-  await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
+  await page.getByRole('button', { name: 'Mark as road, edge A–B' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
   const near = page.getByRole('switch', { name: /Within 500\sm of a BTS\/MRT station/ })
   await expect(site(page).getByText(/Nearest mapped platform: Test Platform, [\d.,]+\sm from the plot/)).toBeVisible()
@@ -324,10 +330,11 @@ test('phone layout at 375 px: bottom sheet, no overflow, 44 px targets, drawing 
     [300, 200],
   ])
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeHidden()
-  await page.mouse.click(60, 260)
+  const [[ax, ay], [bx, by]] = [await settledCorner(page, 'A'), await settledCorner(page, 'B')]
+  await page.mouse.click(ax + (bx - ax) / 4, ay + (by - ay) / 4)
   await expect(page.getByLabel('Road width on edge A–B, in metres')).toBeVisible()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
-  await page.getByRole('button', { name: 'See what you can build' }).click()
+  await page.getByRole('button', { name: 'See results' }).click()
   await expect(page.getByRole('region', { name: 'Building type' })).toBeVisible()
   await page.getByRole('tab', { name: 'Rules' }).click()
   await expect(page.getByRole('tabpanel', { name: 'Rules' })).toBeVisible()

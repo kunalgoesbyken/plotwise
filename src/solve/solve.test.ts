@@ -4,7 +4,8 @@ import type { Vec2 } from '@/geo/projection'
 import { convexPolygon } from '@/geometry/arbitraries'
 import { totalArea, type Prism } from '@/geometry'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
-import { loadPack } from '@/rules'
+import { isSourceCite, loadPack, type Cite } from '@/rules'
+import { zoneFar } from '@/rules/zone-far'
 import { packInterpretations, type Interpretations } from './interpretations'
 import { stationDistance } from './limits'
 import { solve } from './solve'
@@ -19,14 +20,15 @@ function lot(widthM: number, depthM: number, roadWidthM: number, buildingType: B
   return plotFromMetres(rectangle(widthM, depthM), [{ edge: 0, widthM: roadWidthM }], buildingType, nearStation)
 }
 
+const sourceOf = (cite: Cite) => (isSourceCite(cite) ? cite.source : '')
 const nearestToRoad = (prism: Prism) => Math.min(...prism.polygons.flatMap((p) => p.outer.map(([, y]) => y)))
 
 describe('FAR and its bonus', () => {
   it('caps floor area at the zone FAR times the land area, cited to the plan', () => {
     const { limits, site } = solve(lot(40, 50, 16), pack, readings)
     expect(site.areaSqm).toBeCloseTo(2000, 0)
-    expect(limits.far.maxGfaSqm).toBeCloseTo(pack.far.max.value * 2000, -1)
-    expect(limits.far.cites).toContain(pack.far.max.cite)
+    expect(limits.far.maxGfaSqm).toBeCloseTo(zoneFar(pack).max.value * 2000, -1)
+    expect(limits.far.cites).toContain(zoneFar(pack).max.cite)
   })
 
   it('lists the bonus measures a condo can use under each reading of the public-building question', () => {
@@ -42,7 +44,7 @@ describe('FAR and its bonus', () => {
 
   it('never lets the combined bonus pass the plan cap', () => {
     const { farBonus, far } = solve(lot(40, 50, 16, 'hotel', true), pack, readings).limits
-    expect(farBonus.maxShare).toBeLessThanOrEqual(pack.farBonus.combinedMaxShare.value)
+    expect(farBonus.maxShare).toBeLessThanOrEqual(pack.farBonus!.combinedMaxShare.value)
     expect(farBonus.maxGfaSqm).toBeCloseTo(far.maxGfaSqm * (1 + farBonus.maxShare), 6)
   })
 })
@@ -50,7 +52,7 @@ describe('FAR and its bonus', () => {
 describe('open space limits under each reading', () => {
   it('applies the bylaw share of land only when the stricter reading is chosen', () => {
     const sources = (r: Interpretations) =>
-      new Set(solve(lot(40, 50, 16), pack, r).limits.openSpace.minimums.map((m) => m.cites[0].source))
+      new Set(solve(lot(40, 50, 16), pack, r).limits.openSpace.minimums.map((m) => sourceOf(m.cites[0])))
     expect(sources({ ...readings, 'open-space-base': 'all-stricter' })).toContain('bb44-03')
     expect(sources({ ...readings, 'open-space-base': 'ministerial-only' })).not.toContain('bb44-03')
   })
@@ -62,8 +64,8 @@ describe('open space limits under each reading', () => {
   })
 
   it('records which open space the permeable half is measured against', () => {
-    expect(solve(lot(40, 50, 16), pack, { ...readings, 'permeable-base': 'provided' }).limits.openSpace.permeable.base).toBe('provided')
-    expect(solve(lot(40, 50, 16), pack, { ...readings, 'permeable-base': 'required' }).limits.openSpace.permeable.base).toBe('required')
+    expect(solve(lot(40, 50, 16), pack, { ...readings, 'permeable-base': 'provided' }).limits.openSpace.permeable!.base).toBe('provided')
+    expect(solve(lot(40, 50, 16), pack, { ...readings, 'permeable-base': 'required' }).limits.openSpace.permeable!.base).toBe('required')
   })
 })
 
@@ -92,8 +94,8 @@ describe('use conditions', () => {
   })
 
   it('shares one station distance across every use that names one', () => {
-    const named = BUILDING_TYPES.map((t) => pack.useConditions[t]).flatMap((c) => (c.kind === 'restrictedAbove' ? [c.unlessStationDistanceM.value] : []))
-    expect(new Set(named)).toEqual(new Set([stationDistance(pack).value]))
+    const named = BUILDING_TYPES.map((t) => pack.useConditions![t]).flatMap((c) => (c.kind === 'restrictedAbove' ? [c.unlessStationDistanceM.value] : []))
+    expect(new Set(named)).toEqual(new Set([stationDistance(pack)!.value]))
   })
 })
 
@@ -116,7 +118,7 @@ describe('the allowed envelope', () => {
 
   it('keeps an ordinary building below the high-rise height', () => {
     const ordinary = envelopeOf(solve(lot(40, 50, 16), pack, readings), 'ordinary')
-    expect(ordinary?.prisms.at(-1)?.topM).toBeLessThan(pack.buildingClasses.highRiseFromHeightM.value)
+    expect(ordinary?.prisms.at(-1)?.topM).toBeLessThan(pack.buildingClasses!.highRiseFromHeightM.value)
   })
 
   it('steps back from the road as it rises, never closer than twice the height rule allows', () => {

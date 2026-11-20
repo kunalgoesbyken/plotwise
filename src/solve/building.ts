@@ -3,13 +3,15 @@ import { satisfies } from './bound'
 
 export type Building = { readonly heightM: number; readonly storeys: number; readonly floorAreaSqm: number }
 
-export function isHighRiseOrExtraLarge(pack: RulePack, { heightM, floorAreaSqm }: Building): boolean {
-  const { highRiseFromHeightM, extraLargeFromFloorAreaSqm } = pack.buildingClasses
-  return satisfies(heightM, highRiseFromHeightM) || satisfies(floorAreaSqm, extraLargeFromFloorAreaSqm)
+type Classed = Pick<RulePack, 'buildingClasses'>
+
+export function isHighRiseOrExtraLarge({ buildingClasses }: Classed, { heightM, floorAreaSqm }: Building): boolean {
+  if (!buildingClasses) return false
+  return satisfies(heightM, buildingClasses.highRiseFromHeightM) || satisfies(floorAreaSqm, buildingClasses.extraLargeFromFloorAreaSqm)
 }
 
-export function isLarge(pack: RulePack, { heightM, floorAreaSqm }: Building): boolean {
-  const classes = pack.buildingClasses
-  if (satisfies(floorAreaSqm, classes.largeAboveFloorAreaSqm)) return true
-  return satisfies(heightM, classes.largeIfTallFromHeightM) && satisfies(floorAreaSqm, classes.largeIfTallAboveFloorAreaSqm)
+export function isLarge({ buildingClasses }: Classed, { heightM, floorAreaSqm }: Building): boolean {
+  if (!buildingClasses) return false
+  if (satisfies(floorAreaSqm, buildingClasses.largeAboveFloorAreaSqm)) return true
+  return satisfies(heightM, buildingClasses.largeIfTallFromHeightM) && satisfies(floorAreaSqm, buildingClasses.largeIfTallAboveFloorAreaSqm)
 }

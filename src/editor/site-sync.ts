@@ -1,5 +1,5 @@
 import { bboxQuery, plotSiteBbox, snapBbox } from '@/site/bbox'
-import { fetchSite } from '@/site/client'
+import { loadSharedSite } from '@/site/shared-site'
 import type { EditorStore } from './plot-store'
 
 export function syncSite(store: EditorStore) {
@@ -16,7 +16,7 @@ export function syncSite(store: EditorStore) {
     pending?.abort()
     const controller = new AbortController()
     pending = controller
-    fetchSite(bbox, { signal: controller.signal })
+    loadSharedSite(bbox, { signal: controller.signal })
       .then((site) => store.dispatch({ type: 'site', roads: site.roads, stations: site.stations }))
       .catch(() => store.dispatch({ type: 'site', roads: [], stations: null }))
   }

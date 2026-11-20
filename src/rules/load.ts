@@ -1,5 +1,5 @@
 import bkkY9 from './packs/bkk-y9.json'
-import { RulePackSchema, type RulePack } from './types'
+import { RulePackSchema, type RulePack } from './pack'
 
 const PACKS = { 'bkk-y9': bkkY9 } as const
 

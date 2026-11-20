@@ -1,4 +1,7 @@
-import { RulePackSchema, type Bound, type Cite, type Cited, type Range, type RulePack } from '../src/rules/types'
+import { bandGaps, endsOpen, meets } from '../src/rules/bands'
+import { isSourceCite, type Cited, type Range, type SourceCite } from '../src/rules/cite'
+import type { FarPurchase, FarRule } from '../src/rules/far'
+import { RulePackSchema, type RulePack } from '../src/rules/pack'
 
 export type CheckResult = { errors: string[]; info: string[] }
 
@@ -7,29 +10,25 @@ type Check = (pack: RulePack) => string[]
 const SHARE = { min: 0, max: 1 }
 const DISTANCE_M = { min: 0, max: 50 }
 const ROAD_WIDTH_M = { min: 0, max: 100 }
+const FAR_RATIO = { min: 0, max: 20 }
+const HEIGHT_M = { min: 0, max: 1000 }
+const STOREYS = { min: 0, max: 200 }
+const PRICE_PER_SQM = { min: 0, max: 10_000_000 }
 
 function outOfRange(path: string, value: number, range: { min: number; max: number }): string[] {
   return value > range.min && value <= range.max ? [] : [`${path} = ${value} is outside (${range.min}, ${range.max}]`]
 }
 
-const meets = (upper: Bound, lower: Bound) =>
-  upper.value === lower.value && ((upper.cmp === 'lt' && lower.cmp === 'gte') || (upper.cmp === 'lte' && lower.cmp === 'gt'))
-
-function contiguous(path: string, ranges: Range[]): string[] {
-  const errors = ranges[0].min ? [`${path} does not start at 0`] : []
-  ranges.slice(1).forEach((range, i) => {
-    const prev = ranges[i]
-    if (!prev.max || !range.min || !meets(prev.max, range.min)) errors.push(`${path} has a gap or overlap between bands ${i} and ${i + 1}`)
-  })
-  return errors
-}
+const contiguous = (path: string, ranges: Range[]) => bandGaps(ranges).map((problem) => `${path} ${problem}`)
 
 function nonDecreasing(path: string, values: number[]): string[] {
   return values.some((v, i) => i > 0 && v < values[i - 1]) ? [`${path} decreases: ${values.join(', ')}`] : []
 }
 
 function allEqual(path: string, values: Cited[]): string[] {
-  return new Set(values.map((v) => v.value)).size > 1 ? [`${path}: sources disagree (${values.map((v) => `${v.cite.source} ${v.value}`).join(' vs ')})`] : []
+  return new Set(values.map((v) => v.value)).size > 1
+    ? [`${path}: sources disagree (${values.map((v) => `${isSourceCite(v.cite) ? v.cite.source : 'entered'} ${v.value}`).join(' vs ')})`]
+    : []
 }
 
 function citedValues(node: unknown, path: string[] = []): { path: string; value: Cited }[] {
@@ -39,48 +38,119 @@ function citedValues(node: unknown, path: string[] = []): { path: string; value:
   return Object.entries(node).flatMap(([k, v]) => citedValues(v, [...path, k]))
 }
 
-function cites(node: unknown): Cite[] {
+function cites(node: unknown): SourceCite[] {
   if (Array.isArray(node)) return node.flatMap(cites)
   if (node === null || typeof node !== 'object') return []
-  if ('quote' in node && 'source' in node) return [node as Cite]
+  if ('quote' in node && 'source' in node) return [node as SourceCite]
   return Object.values(node).flatMap(cites)
 }
 
+function farRanges(far: FarRule): string[] {
+  switch (far.kind) {
+    case 'zone':
+      return outOfRange('far.max', far.max.value, FAR_RATIO)
+    case 'byRoadWidthAndPlotSize':
+      return far.roadWidthBands.flatMap((band, i) =>
+        band.byPlotSize.flatMap((row, j) => outOfRange(`far.roadWidthBands.${i}.byPlotSize.${j}`, row.ratio.value, FAR_RATIO)),
+      )
+    case 'plotSpecific':
+      return []
+  }
+}
+
+function capRanges(path: string, cap: FarPurchase['cap']): string[] {
+  switch (cap.kind) {
+    case 'extraRatio':
+      return outOfRange(path, cap.ratio.value, FAR_RATIO)
+    case 'extraRatioByRoadWidth':
+      return [
+        ...contiguous(`${path}.bands`, cap.bands.map((band) => band.roadWidthM)),
+        ...cap.bands.flatMap((band, j) => (band.kind === 'ratio' ? outOfRange(`${path}.bands.${j}`, band.ratio.value, FAR_RATIO) : [])),
+      ]
+    case 'shareOf':
+      return outOfRange(path, cap.share.value, SHARE)
+  }
+}
+
+function priceRanges(path: string, price: FarPurchase['price']): string[] {
+  switch (price.kind) {
+    case 'perSqm':
+      return outOfRange(path, price.value.value, PRICE_PER_SQM)
+    case 'shareOfLandRate':
+      return outOfRange(path, price.share.value, SHARE)
+    case 'userSupplied':
+      return []
+  }
+}
+
 const checkRanges: Check = (pack) => [
-  ...outOfRange('far.max', pack.far.max.value, { min: 0, max: 20 }),
-  ...outOfRange('openSpaceRatio.minShareOfFloorArea', pack.openSpaceRatio.minShareOfFloorArea.value, SHARE),
-  ...outOfRange('openSpaceRatio.permeableShareOfOpenSpace', pack.openSpaceRatio.permeableShareOfOpenSpace.value, SHARE),
+  ...farRanges(pack.far),
+  ...(pack.farPurchases ?? []).flatMap((purchase, i) => [
+    ...capRanges(`farPurchases.${i}.cap`, purchase.cap),
+    ...priceRanges(`farPurchases.${i}.price`, purchase.price),
+  ]),
+  ...(pack.coverage?.kind === 'maxShare' ? outOfRange('coverage.share', pack.coverage.share.value, SHARE) : []),
+  ...(pack.height.planLimit.kind === 'maxMetres' ? outOfRange('height.planLimit.maxM', pack.height.planLimit.maxM.value, HEIGHT_M) : []),
+  ...(pack.height.planLimit.kind === 'maxStoreys' ? outOfRange('height.planLimit.maxStoreys', pack.height.planLimit.maxStoreys.value, STOREYS) : []),
+  ...(pack.reservations ?? []).flatMap((reservation, i) => outOfRange(`reservations.${i}.targetWidthM`, reservation.targetWidthM.value, ROAD_WIDTH_M)),
+  ...(pack.openSpaceRatio
+    ? [
+        ...outOfRange('openSpaceRatio.minShareOfFloorArea', pack.openSpaceRatio.minShareOfFloorArea.value, SHARE),
+        ...outOfRange('openSpaceRatio.permeableShareOfOpenSpace', pack.openSpaceRatio.permeableShareOfOpenSpace.value, SHARE),
+      ]
+    : []),
   ...pack.openSpaceMinimums.flatMap((rule, i) => outOfRange(`openSpaceMinimums.${i}`, rule.minShare.value, SHARE)),
   ...pack.boundarySetbacks.flatMap((rule, i) => rule.bands.flatMap((band, j) => outOfRange(`boundarySetbacks.${i}.bands.${j}`, band.distanceM.value, DISTANCE_M))),
-  ...pack.useConditions.roadAccessTiers.flatMap((tier, i) => [
+  ...(pack.useConditions?.roadAccessTiers ?? []).flatMap((tier, i) => [
     ...outOfRange(`useConditions.roadAccessTiers.${i}.roadWidthM`, tier.roadWidthM.value, ROAD_WIDTH_M),
     ...outOfRange(`useConditions.roadAccessTiers.${i}.frontageM`, tier.frontageM.value, ROAD_WIDTH_M),
   ]),
-  ...pack.heightVsRoad.maxMultipleOfDistance.flatMap((m, i) => outOfRange(`heightVsRoad.maxMultipleOfDistance.${i}`, m.value, { min: 0, max: 10 })),
+  ...(pack.height.roadMultiple?.maxMultipleOfDistance ?? []).flatMap((m, i) =>
+    outOfRange(`height.roadMultiple.maxMultipleOfDistance.${i}`, m.value, { min: 0, max: 10 }),
+  ),
 ]
 
 const checkBands: Check = (pack) => {
-  const highRise = pack.buildingClasses.highRiseFromHeightM
+  const highRise = pack.buildingClasses?.highRiseFromHeightM
   return [
     ...pack.roadSetbacks.flatMap((rule, i) => {
       const ranges = rule.bands.map((b) => b.roadWidthM)
-      const open = ranges.at(-1)?.max ? [`roadSetbacks.${i} does not cover the widest roads`] : []
+      const open = endsOpen(ranges) ? [] : [`roadSetbacks.${i} does not cover the widest roads`]
       return [...contiguous(`roadSetbacks.${i}`, ranges), ...open]
     }),
     ...pack.boundarySetbacks.flatMap((rule, i) => {
       const path = `boundarySetbacks.${i}`
       const last = rule.bands.at(-1)?.heightM.max
-      const end = last && !meets(last, highRise) ? [`${path} stops at ${last.value} m, not at the high-rise threshold`] : []
+      const end = last && highRise && !meets(last, highRise) ? [`${path} stops at ${last.value} m, not at the high-rise threshold`] : []
       return [...contiguous(path, rule.bands.map((b) => b.heightM)), ...end, ...nonDecreasing(path, rule.bands.map((b) => b.distanceM.value))]
     }),
-    ...contiguous('highRise.access', pack.highRise.access.map((band) => band.floorAreaSqm)),
-    ...nonDecreasing('highRise.access roadWidthM', pack.highRise.access.map((band) => band.roadWidthM.value)),
-    ...nonDecreasing('useConditions.roadAccessTiers roadWidthM', pack.useConditions.roadAccessTiers.map((t) => t.roadWidthM.value)),
-    ...nonDecreasing('useConditions.roadAccessTiers frontageM', pack.useConditions.roadAccessTiers.map((t) => t.frontageM.value)),
+    ...(pack.highRise
+      ? [
+          ...contiguous('highRise.access', pack.highRise.access.map((band) => band.floorAreaSqm)),
+          ...nonDecreasing('highRise.access roadWidthM', pack.highRise.access.map((band) => band.roadWidthM.value)),
+        ]
+      : []),
+    ...(pack.useConditions
+      ? [
+          ...nonDecreasing('useConditions.roadAccessTiers roadWidthM', pack.useConditions.roadAccessTiers.map((t) => t.roadWidthM.value)),
+          ...nonDecreasing('useConditions.roadAccessTiers frontageM', pack.useConditions.roadAccessTiers.map((t) => t.frontageM.value)),
+        ]
+      : []),
+    ...parkingBands(pack),
   ]
 }
 
+function parkingBands({ parking }: RulePack): string[] {
+  return parking.flatMap((rule, i) =>
+    (['condo', 'office', 'hotel'] as const).flatMap((use) => {
+      const demand = rule[use]
+      return demand.kind === 'perUnitBySize' ? contiguous(`parking.${i}.${use}`, demand.bands.map((band) => band.unitSqm)) : []
+    }),
+  )
+}
+
 const checkBonus: Check = (pack) => {
+  if (!pack.farBonus) return []
   const cap = pack.farBonus.combinedMaxShare.value
   return pack.farBonus.measures.flatMap((measure, i) => {
     const shares = measure.kind === 'energyRating' ? measure.levels.map((l) => l.share.value) : [measure.maxShare.value]
@@ -93,12 +163,13 @@ const checkBonus: Check = (pack) => {
   })
 }
 
-const checkAgreement: Check = (pack) => allEqual('heightVsRoad.maxMultipleOfDistance', pack.heightVsRoad.maxMultipleOfDistance)
+const checkAgreement: Check = (pack) => allEqual('height.roadMultiple.maxMultipleOfDistance', pack.height.roadMultiple?.maxMultipleOfDistance ?? [])
 
-const checkUseConditions: Check = (pack) => {
-  const tiers = new Set(pack.useConditions.roadAccessTiers.map((tier) => tier.roadWidthM.value))
+const checkUseConditions: Check = ({ useConditions }) => {
+  if (!useConditions) return []
+  const tiers = new Set(useConditions.roadAccessTiers.map((tier) => tier.roadWidthM.value))
   return (['condo', 'office', 'hotel'] as const).flatMap((type) => {
-    const condition = pack.useConditions[type]
+    const condition = useConditions[type]
     if (condition.kind !== 'restrictedAbove' || tiers.has(condition.unlessRoadWidthM.value)) return []
     return [`useConditions.${type} needs a ${condition.unlessRoadWidthM.value} m road but ข้อ 36 has no such tier`]
   })
@@ -109,15 +180,16 @@ const checkSources: Check = (pack) => [
     .filter((cite) => !pack.sources[cite.source])
     .map((cite) => `cite to unlisted source ${cite.source} p${cite.page} l${cite.line}`),
   ...citedValues({ ...pack, questions: [] })
-    .filter(({ value }) => pack.sources[value.cite.source]?.textLayer === 'garbled')
-    .map(({ path, value }) => `${path} is read from ${value.cite.source}, whose text layer is garbled`),
+    .filter(({ value }) => isSourceCite(value.cite) && pack.sources[value.cite.source]?.textLayer === 'garbled')
+    .map(({ path, value }) => `${path} is read from ${isSourceCite(value.cite) ? value.cite.source : ''}, whose text layer is garbled`),
 ]
 
 const checkQuestions: Check = (pack) => {
   const ids = pack.questions.map((q) => q.id)
   const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i).map((id) => `question ${id} is listed twice`)
-  const missing = Object.entries(pack.classification).flatMap(([type, classes]) =>
-    Object.entries(classes)
+  const classes = Object.entries(pack.classification ?? {})
+  const missing = classes.flatMap(([type, memberships]) =>
+    Object.entries(memberships)
       .filter(([, membership]) => membership.kind === 'question' && !ids.includes(membership.questionId))
       .map(([cls, membership]) => `classification.${type}.${cls} points to missing question ${membership.kind === 'question' ? membership.questionId : ''}`),
   )
@@ -130,7 +202,11 @@ const checkDecided: Check = (pack) =>
 const CHECKS: Check[] = [checkRanges, checkBands, checkBonus, checkAgreement, checkUseConditions, checkSources, checkQuestions, checkDecided]
 
 export function checkPack(pack: RulePack): CheckResult {
-  const capped = pack.far.max.value > pack.highRise.farMax.value ? [`plan FAR ${pack.far.max.value} is above the Reg 33 cap ${pack.highRise.farMax.value}`] : []
+  const planFar = pack.far.kind === 'zone' ? pack.far.max.value : null
+  const capped =
+    planFar !== null && pack.highRise && planFar > pack.highRise.farMax.value
+      ? [`plan FAR ${planFar} is above the Reg 33 cap ${pack.highRise.farMax.value}`]
+      : []
   return { errors: CHECKS.flatMap((check) => check(pack)), info: capped }
 }
 

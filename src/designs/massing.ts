@@ -63,12 +63,12 @@ const CAP_SEARCH_STEPS = 30
 
 function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number {
   const maxGfaSqm = farCap.maxGfaSqm
-  return envelope.kind === 'highRise' ? maxGfaSqm : Math.min(maxGfaSqm, limits.highRise.extraLargeFromFloorAreaSqm.value)
+  return envelope.kind === 'highRise' || !limits.highRise ? maxGfaSqm : Math.min(maxGfaSqm, limits.highRise.extraLargeFromFloorAreaSqm.value)
 }
 
 const storeysOf = (envelope: Envelope) => Math.round(envelope.prisms[envelope.prisms.length - 1].topM / envelope.floorToFloorM)
 
-function footprintCap(solution: Solution, envelope: Envelope): number {
+function openSpaceFootprintCap(solution: Solution, envelope: Envelope): number {
   const { limits, site } = solution
   const targetSqm = reachableSqm(solution, envelope)
   const storeys = storeysOf(envelope)
@@ -84,6 +84,9 @@ function footprintCap(solution: Solution, envelope: Envelope): number {
   }
   return low
 }
+
+const footprintCap = (solution: Solution, envelope: Envelope) =>
+  Math.min(openSpaceFootprintCap(solution, envelope), solution.limits.coverage?.maxFootprintSqm ?? Infinity)
 
 function above(prisms: readonly Prism[], heightM: number): Prism[] {
   return prisms.filter((p) => p.topM > heightM).map((p) => ({ ...p, baseM: Math.max(p.baseM, heightM) }))

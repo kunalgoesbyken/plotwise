@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { LngLat } from '@/geo/projection'
 import { bboxQuery, plotSiteBbox, snapBbox, type Bbox } from '@/site/bbox'
-import { fetchSite } from '@/site/client'
+import { loadSharedSite } from '@/site/shared-site'
 import type { Site } from '@/site/schema'
 import { useSettled } from './use-settled'
 
@@ -19,7 +19,7 @@ export function useSite(ring: readonly LngLat[]) {
 
   useEffect(() => {
     const controller = new AbortController()
-    fetchSite(bbox, { signal: controller.signal }).then(
+    loadSharedSite(bbox, { signal: controller.signal }).then(
       (loaded) => {
         if (controller.signal.aborted) return
         setSite(loaded)

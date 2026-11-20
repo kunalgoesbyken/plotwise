@@ -128,7 +128,7 @@ function applyDraft(state: EditorState, action: DraftAction): EditorState {
 }
 
 function isNearStation(nearest: NearestStation | null): boolean {
-  return nearest !== null && satisfies(nearest.distanceM, STATION_DISTANCE)
+  return STATION_DISTANCE !== null && nearest !== null && satisfies(nearest.distanceM, STATION_DISTANCE)
 }
 
 function sameStationInputs(before: EditorState, after: EditorState): boolean {
