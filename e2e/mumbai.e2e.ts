@@ -66,7 +66,11 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(page.getByRole('radiogroup', { name: 'Building type' }).getByRole('radio')).toHaveCount(1)
 
     await goTo(page, 'Roads')
-    await page.getByLabel('Prescribed width of the road on edge A–B, in metres').fill('18')
+    const prescribed = page.getByLabel('Prescribed width of the road on edge A–B, in metres')
+    await prescribed.fill('6')
+    await expect(prescribed).toHaveAttribute('aria-invalid', 'true')
+    await expect(prescribed).toHaveAccessibleDescription('A prescribed width must be wider than the road.')
+    await prescribed.fill('18')
     await expect.poll(() => page.url()).toContain('roads=0:9:18')
     await goTo(page, 'Results')
     await expect(summary(page)).toContainText('14,853')
