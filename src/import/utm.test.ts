@@ -33,7 +33,25 @@ const closeTo = (actual: LngLat, expected: LngLat, degrees: number) => {
   expect(Math.abs(actual[1] - expected[1])).toBeLessThan(degrees)
 }
 
+const WILLIAMS_GROUND_TRUTH = 'Williams College Urban Growth project, https://web.williams.edu/Economics/UrbanGrowth/Images/GroundTruth'
+
+const PUBLISHED: readonly { place: string; point: UtmPoint; lngLat: LngLat }[] = [
+  { place: 'Bangkok city center', point: { zone: 47, hemisphere: 'N', easting: 666_535.84, northing: 1_520_010.53 }, lngLat: [100.54028, 13.74458] },
+  { place: 'Bangkok bridge', point: { zone: 47, hemisphere: 'N', easting: 659_495.44, northing: 1_522_287.8 }, lngLat: [100.47531, 13.76556] },
+  { place: 'Bangkok city intersection', point: { zone: 47, hemisphere: 'N', easting: 661_042.59, northing: 1_513_387.35 }, lngLat: [100.48911, 13.68502] },
+  { place: 'Bangkok fringe intersection', point: { zone: 47, hemisphere: 'N', easting: 672_446.29, northing: 1_508_763.28 }, lngLat: [100.59424, 13.64257] },
+  { place: 'Johannesburg city center', point: { zone: 35, hemisphere: 'S', easting: 604_189.87, northing: 7_101_333.82 }, lngLat: [28.04286, -26.20374] },
+  { place: 'Johannesburg city intersection', point: { zone: 35, hemisphere: 'S', easting: 594_359.58, northing: 7_104_762.7 }, lngLat: [27.94423, -26.17347] },
+  { place: 'Johannesburg fringe intersection', point: { zone: 35, hemisphere: 'S', easting: 615_130.23, northing: 7_105_724.76 }, lngLat: [28.15196, -26.16327] },
+]
+
 describe('utmToLngLat', () => {
+  for (const { place, point, lngLat } of PUBLISHED) {
+    it(`matches the published pair for ${place} (${WILLIAMS_GROUND_TRUTH}, five-decimal degrees)`, () => {
+      closeTo(utmToLngLat(point), lngLat, 1e-5)
+    })
+  }
+
   it('puts the central meridian on the equator at the false easting and zero northing', () => {
     closeTo(utmToLngLat({ zone: 47, hemisphere: 'N', easting: 500_000, northing: 0 }), [99, 0], 1e-9)
   })
@@ -49,12 +67,6 @@ describe('utmToLngLat', () => {
     expect(point.northing).toBeGreaterThan(1_520_000)
     expect(point.northing).toBeLessThan(1_530_000)
     closeTo(utmToLngLat(point), [100.5018, 13.7563], 1e-9)
-  })
-
-  it('counts northings from the false northing in the southern hemisphere', () => {
-    const [, lat] = utmToLngLat({ zone: 56, hemisphere: 'S', easting: 500_000, northing: 6_000_000 })
-    expect(lat).toBeLessThan(-33)
-    expect(lat).toBeGreaterThan(-40)
   })
 
   it('inverts the forward projection anywhere in a zone', () => {

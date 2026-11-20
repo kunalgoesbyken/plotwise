@@ -1,6 +1,7 @@
-import { expect, test, type Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 import { decodePlot } from '../src/editor/plot-url'
 import {
+  DXF_CURVED_AND_STRAIGHT,
   DXF_MM,
   DXF_UTM,
   GEOJSON_MULTI_POLYGON,
@@ -12,6 +13,7 @@ import {
 } from '../src/import/fixtures'
 import type { LngLat } from '../src/geo/projection'
 import { mockSite, mockZoneInside } from './app-fixtures'
+import { expect, test } from './support/test'
 
 const DESKTOP = { width: 1280, height: 800 }
 const PHONE = { width: 375, height: 812 }
@@ -28,15 +30,11 @@ const asLines = (points: readonly (readonly [number, number])[]) => points.map((
 
 async function openImport(page: Page, viewport = DESKTOP) {
   await page.setViewportSize(viewport)
-  const errors: string[] = []
-  page.on('pageerror', (e) => errors.push(e.message))
-  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   await mockSite(page)
   await mockZoneInside(page)
   await page.goto('/app')
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await page.getByRole('button', { name: 'Import coordinates or a file' }).click()
-  return errors
 }
 
 const pasteBox = (page: Page) => page.getByLabel('Paste corner coordinates')
@@ -72,14 +70,13 @@ for (const [name, viewport] of [
   ['phone', PHONE],
 ] as const) {
   test(`pasted coordinates become the plot and its results on a ${name}`, async ({ page }) => {
-    const errors = await openImport(page, viewport)
+    await openImport(page, viewport)
     await pasteBox(page).fill(asLines(PLOT_LNG_LAT))
     await expect(page.getByText(/^4 corners, [\d,]+\sm²$/)).toBeVisible()
     const plot = await finishWithRoad(page)
     expectRing(plot.ring, PLOT_LNG_LAT)
     expect(plot.roads).toEqual([{ edge: 0, widthM: 12 }])
-    expect(errors).toEqual([])
-  })
+    })
 }
 
 test('semicolon-separated coordinates in latitude then longitude order are detected', async ({ page }) => {
@@ -112,13 +109,12 @@ test('the wrong UTM zone is caught instead of drawing a plot in another country'
 })
 
 test('a KML file with two polygons asks which one is the plot', async ({ page }) => {
-  const errors = await openImport(page)
+  await openImport(page)
   await upload(page, 'survey.kml', KML_TWO_POLYGONS)
   const picker = page.getByLabel('Which shape is the plot?')
   await expect(picker.getByRole('option')).toHaveText([/แปลงที่ 1 · 4 corners · [\d,]+\sm²/, /Plot B · 4 corners · [\d,]+\sm²/])
   await picker.selectOption({ index: 1 })
   expectRing((await finishWithRoad(page)).ring, SECOND_PARCEL)
-  expect(errors).toEqual([])
 })
 
 test('a KML file with one polygon needs no questions', async ({ page }) => {
@@ -165,6 +161,19 @@ test('a DXF in millimetres is placed from a reference point and never guessed', 
   expect(first).toBeDefined()
 })
 
+test('a curved polyline stays in the picker, marked, and says why it cannot be used', async ({ page }) => {
+  await openImport(page)
+  await upload(page, 'corner-lot.dxf', DXF_CURVED_AND_STRAIGHT)
+  const picker = page.getByLabel('Which shape is the plot?')
+  await expect(picker.getByRole('option')).toHaveText([/^CURVED · 4 corners · curved, cannot be used$/, /^STRAIGHT · 4 corners$/])
+  const curvedMessage = page.getByText('This polyline has curved segments', { exact: false })
+  await expect(picker.locator('option:checked')).toHaveText('STRAIGHT · 4 corners')
+  await expect(curvedMessage).toHaveCount(0)
+  await picker.selectOption({ index: 0 })
+  await expect(curvedMessage).toBeVisible()
+  await expect(confirmButton(page)).toHaveCount(0)
+})
+
 test('wrong units are caught by the plot size range', async ({ page }) => {
   await openImport(page)
   await upload(page, 'lot.dxf', DXF_MM)
@@ -177,7 +186,7 @@ test('wrong units are caught by the plot size range', async ({ page }) => {
 })
 
 test('says what is wrong with a file or a paste it cannot use', async ({ page }) => {
-  const errors = await openImport(page)
+  await openImport(page)
   await upload(page, 'broken.kml', '<kml><Document>')
   await expect(alert(page, 'That KML file is damaged')).toBeVisible()
   await upload(page, 'drawing.dwg', 'AC1015')
@@ -191,7 +200,6 @@ test('says what is wrong with a file or a paste it cannot use', async ({ page })
   await pasteBox(page).fill('100.5, 13.7\n100.501, 13.701\n100.501, 13.7\n100.5, 13.701')
   await expect(page.getByText('The outline crosses itself.')).toBeVisible()
   await expect(confirmButton(page)).toHaveCount(0)
-  expect(errors).toEqual([])
 })
 
 test('the import controls fit a phone with 44 px targets and no sideways scroll', async ({ page }) => {

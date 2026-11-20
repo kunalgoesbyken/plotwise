@@ -5,7 +5,7 @@ import { starPolygon } from '@/geometry/arbitraries'
 import { MAX_CORNERS } from '@/plot/plot'
 import { ASSUMPTIONS } from '@/solve'
 import type { Georef, Pair, Shape } from './types'
-import { checkShape, shapeAreaSqm, type Bounds } from './validate'
+import { checkShape, shapeAreaSqm, shapeProblem, type Bounds } from './validate'
 
 const BOUNDS: Bounds = [97.3, 5.6, 105.7, 20.5]
 const DEGREES: Georef = { kind: 'degrees', order: 'lng-lat' }
@@ -16,7 +16,7 @@ const PLOT: readonly Pair[] = [
   [100.575382, 13.779044],
 ]
 
-const shape = (points: readonly Pair[], closed = true): Shape => ({ name: null, points, closed })
+const shape = (points: readonly Pair[], closed = true, curved = false): Shape => ({ name: null, points, closed, curved })
 
 function reason(result: ReturnType<typeof checkShape>) {
   return result.ok ? null : result.problem.reason
@@ -35,6 +35,10 @@ describe('checkShape', () => {
 
   it('refuses an open ring', () => {
     expect(reason(checkShape(shape(PLOT, false), DEGREES, BOUNDS))).toBe('open-ring')
+  })
+
+  it('refuses a curved outline, which a straight-edged plot cannot represent', () => {
+    expect(reason(checkShape(shape(PLOT, true, true), DEGREES, BOUNDS))).toBe('dxf-curved')
   })
 
   it('refuses fewer than three corners', () => {
@@ -107,5 +111,14 @@ describe('shapeAreaSqm', () => {
   it('measures an outline whether or not it passes the checks', () => {
     expect(shapeAreaSqm(shape(PLOT), DEGREES)).toBeGreaterThan(1500)
     expect(shapeAreaSqm(shape([]), DEGREES)).toBe(0)
+  })
+})
+
+describe('shapeProblem', () => {
+  it('names what is wrong with a shape before any placement is known', () => {
+    expect(shapeProblem(shape(PLOT))).toBeNull()
+    expect(shapeProblem(shape(PLOT, false))).toBe('open-ring')
+    expect(shapeProblem(shape(PLOT, true, true))).toBe('dxf-curved')
+    expect(shapeProblem(shape(PLOT, false, true))).toBe('dxf-curved')
   })
 })

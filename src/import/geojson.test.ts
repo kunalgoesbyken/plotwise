@@ -23,7 +23,7 @@ function reasonOf(text: string) {
 
 describe('parseGeoJson', () => {
   it('reads the polygon of a feature collection and skips other geometry', () => {
-    expect(shapesOf(GEOJSON_ONE_POLYGON)).toEqual([{ name: 'Sukhumvit plot', points: PLOT_LNG_LAT, closed: true }])
+    expect(shapesOf(GEOJSON_ONE_POLYGON)).toEqual([{ name: 'Sukhumvit plot', points: PLOT_LNG_LAT, closed: true, curved: false }])
   })
 
   it('lists each polygon of a multipolygon under the feature name', () => {
@@ -33,7 +33,7 @@ describe('parseGeoJson', () => {
   })
 
   it('reads a bare geometry and ignores altitude', () => {
-    expect(shapesOf(GEOJSON_BARE_POLYGON)).toEqual([{ name: null, points: PLOT_LNG_LAT, closed: true }])
+    expect(shapesOf(GEOJSON_BARE_POLYGON)).toEqual([{ name: null, points: PLOT_LNG_LAT, closed: true, curved: false }])
   })
 
   it('reads the polygons inside a geometry collection', () => {

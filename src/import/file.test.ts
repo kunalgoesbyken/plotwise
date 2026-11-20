@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { ASSUMPTIONS } from '@/solve'
 import { readImportFile } from './file'
-import { DXF_MM, GEOJSON_ONE_POLYGON, KML_ONE_POLYGON } from './fixtures'
+import { DXF_MM, dxfFile, GEOJSON_ONE_POLYGON, KML_ONE_POLYGON, lwpolyline, PLOT_UTM_47N } from './fixtures'
 
 const file = (name: string, text: string) => new File([text], name)
 
@@ -36,6 +36,13 @@ describe('readImportFile', () => {
   it('refuses a file over the size bound without reading it', async () => {
     const big = new File([new Uint8Array(ASSUMPTIONS.importMaxFileBytes.value + 1)], 'big.dxf')
     expect(await reasonOf(big)).toBe('file-too-large')
+  })
+
+  it('refuses a file with more shapes than the picker offers, and accepts exactly that many', async () => {
+    const { value: cap } = ASSUMPTIONS.importMaxShapes
+    const parcels = (count: number) => dxfFile(6, Array.from({ length: count }, (_, i) => lwpolyline(`L${i}`, PLOT_UTM_47N, 1)).flat())
+    expect(await reasonOf(file('site.dxf', parcels(cap + 1)))).toBe('too-many-shapes')
+    expect((await readImportFile(file('site.dxf', parcels(cap)))).ok).toBe(true)
   })
 
   it('reports a malformed file in the format it claims to be', async () => {

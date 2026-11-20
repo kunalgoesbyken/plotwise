@@ -44,8 +44,14 @@ function sizeProblem(areaSqm: number): ProblemReason | null {
   return areaSqm > ASSUMPTIONS.importMaxPlotSqm.value ? 'too-large' : null
 }
 
+export function shapeProblem(shape: Shape): ProblemReason | null {
+  if (shape.curved) return 'dxf-curved'
+  return shape.closed ? null : 'open-ring'
+}
+
 export function checkShape(shape: Shape, georef: Georef, bounds: Bounds): Result<Checked> {
-  if (!shape.closed) return fail('open-ring')
+  const unusable = shapeProblem(shape)
+  if (unusable) return fail(unusable)
   if (shape.points.length < 3) return fail('too-few-corners')
   if (shape.points.length > MAX_CORNERS) return fail('too-many-corners')
   const ring = locate(shape.points, georef)

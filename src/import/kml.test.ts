@@ -16,7 +16,7 @@ function reasonOf(text: string) {
 
 describe('parseKml', () => {
   it('reads the outer ring of a Google Earth polygon and drops the closing corner and any hole', () => {
-    expect(shapesOf(KML_ONE_POLYGON)).toEqual([{ name: 'Sukhumvit plot', points: PLOT_LNG_LAT, closed: true }])
+    expect(shapesOf(KML_ONE_POLYGON)).toEqual([{ name: 'Sukhumvit plot', points: PLOT_LNG_LAT, closed: true, curved: false }])
   })
 
   it('lists every polygon with its placemark name, skipping other geometry', () => {
@@ -39,6 +39,15 @@ describe('parseKml', () => {
 
   it('says when there is no polygon', () => {
     expect(reasonOf(KML_NO_POLYGON)).toBe('no-polygon')
+  })
+
+  it('refuses a coordinate with an empty or non-numeric component instead of reading it as zero', () => {
+    const polygon = (coordinates: string) =>
+      `<kml><Polygon><outerBoundaryIs><LinearRing><coordinates>${coordinates}</coordinates></LinearRing></outerBoundaryIs></Polygon></kml>`
+    for (const bad of ['100.5,,13.7 100.6,13.7 100.6,13.8', '100.5,13.7,0 100.6,13.7,x 100.6,13.8,0', '100.5, 13.7, 0 100.6, 13.7, 0 100.6, 13.8, 0', ',13.7 100.6,13.7 100.6,13.8', '100.5,13.7,0,1 100.6,13.7 100.6,13.8']) {
+      expect(reasonOf(polygon(bad))).toBe('kml-invalid')
+    }
+    expect(shapesOf(polygon('100.5,13.7 100.6,13.7,0 100.6,13.8,12.5 100.5,13.7'))[0].points).toHaveLength(3)
   })
 
   it('refuses a file that is not well-formed XML or not KML coordinates', () => {

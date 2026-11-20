@@ -71,7 +71,7 @@ function UtmFields({ form, onChange }: { form: FrameForm; onChange: Change }) {
         <Field label={t('import.utm.hemisphere')}>
           {(id) => (
             <Select id={id} value={form.hemisphere} onChange={(e) => onChange({ hemisphere: e.target.value })}>
-              <option value="" />
+              <option value="">{t('import.utm.choose')}</option>
               {HEMISPHERES.map((side) => (
                 <option key={side} value={side}>
                   {t(`import.utm.hemisphere.${side}`)}

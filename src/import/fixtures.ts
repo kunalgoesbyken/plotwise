@@ -145,6 +145,11 @@ export const DXF_OPEN = dxfFile(6, lwpolyline('LOT', PLOT_UTM_47N, 0))
 
 export const DXF_CURVED = dxfFile(6, lwpolyline('LOT', PLOT_UTM_47N, CLOSED_FLAG, 0.4))
 
+export const DXF_CURVED_AND_STRAIGHT = dxfFile(6, [
+  ...lwpolyline('CURVED', PLOT_UTM_47N, CLOSED_FLAG, 0.4),
+  ...lwpolyline('STRAIGHT', PLOT_UTM_47N, CLOSED_FLAG),
+])
+
 export const DXF_NO_POLYLINE = dxfFile(6, [[0, 'LINE'], [8, 'ROAD'], [10, 0], [20, 0], [11, 10], [21, 10]])
 
 export const DXF_BINARY = 'AutoCAD Binary DXF\r\n\x1a\x00'

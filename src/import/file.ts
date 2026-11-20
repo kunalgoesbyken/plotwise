@@ -18,12 +18,16 @@ function extensionOf(name: string): string {
   return dot < 0 ? '' : name.slice(dot + 1).toLowerCase()
 }
 
+function withinShapeCap(result: Result<Source>): Result<Source> {
+  return result.ok && result.value.shapes.length > ASSUMPTIONS.importMaxShapes.value ? fail('too-many-shapes') : result
+}
+
 export async function readImportFile(file: File): Promise<Result<Source>> {
   const parse = PARSERS.get(extensionOf(file.name))
   if (!parse) return fail('file-unsupported')
   if (file.size > ASSUMPTIONS.importMaxFileBytes.value) return fail('file-too-large')
   try {
-    return parse(await file.text())
+    return withinShapeCap(parse(await file.text()))
   } catch {
     return fail('file-unreadable')
   }

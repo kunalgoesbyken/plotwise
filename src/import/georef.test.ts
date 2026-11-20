@@ -68,11 +68,11 @@ describe('shapeOf', () => {
   ]
 
   it('drops a repeated first point and marks the shape closed', () => {
-    expect(shapeOf('plot', [...square, square[0]], false)).toEqual({ name: 'plot', points: square, closed: true })
+    expect(shapeOf('plot', [...square, square[0]], false)).toEqual({ name: 'plot', points: square, closed: true, curved: false })
   })
 
   it('keeps the declared closure when the first point is not repeated', () => {
-    expect(shapeOf(null, square, true)).toEqual({ name: null, points: square, closed: true })
-    expect(shapeOf(null, square, false)).toEqual({ name: null, points: square, closed: false })
+    expect(shapeOf(null, square, true)).toEqual({ name: null, points: square, closed: true, curved: false })
+    expect(shapeOf(null, square, false)).toEqual({ name: null, points: square, closed: false, curved: false })
   })
 })

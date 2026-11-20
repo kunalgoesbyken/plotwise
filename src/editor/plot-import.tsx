@@ -4,8 +4,8 @@ import { useId, useRef, useState, type ChangeEvent } from 'react'
 import { FILE_ACCEPT, readImportFile } from '@/import/file'
 import { georefFor, initialForm, type FrameForm } from '@/import/frame'
 import { parsePasted } from '@/import/paste'
-import type { Georef, Problem, Result, Shape, Source } from '@/import/types'
-import { checkShape, shapeAreaSqm } from '@/import/validate'
+import { fail, type Georef, type Problem, type Result, type Shape, type Source } from '@/import/types'
+import { checkShape, shapeAreaSqm, shapeProblem, type Checked } from '@/import/validate'
 import { REGION } from '@/region/regions'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
@@ -28,7 +28,9 @@ const IDLE: Imported = { status: 'idle' }
 
 function importedFrom(result: Result<Source>): Imported {
   if (!result.ok) return { status: 'failed', problem: result.problem }
-  return { status: 'ready', source: result.value, shape: 0, form: initialForm(result.value.question) }
+  const { shapes, question } = result.value
+  const firstUsable = shapes.findIndex((shape) => shapeProblem(shape) === null)
+  return { status: 'ready', source: result.value, shape: Math.max(firstUsable, 0), form: initialForm(question) }
 }
 
 const cornerCount = (shape: Shape) => t('plot.corners', { count: shape.points.length })
@@ -36,8 +38,10 @@ const cornerCount = (shape: Shape) => t('plot.corners', { count: shape.points.le
 function shapeLabel(shape: Shape, index: number, georef: Georef | null): string {
   const name = shape.name ?? t('import.shape.unnamed', { number: String(index + 1) })
   const corners = cornerCount(shape)
-  if (!georef) return t('import.shape.option', { name, corners })
-  return t('import.shape.option-area', { name, corners, area: formatQuantity(shapeAreaSqm(shape, georef), 'sqm') })
+  const label = georef
+    ? t('import.shape.option-area', { name, corners, area: formatQuantity(shapeAreaSqm(shape, georef), 'sqm') })
+    : t('import.shape.option', { name, corners })
+  return shape.curved ? t('import.shape.curved', { label }) : label
 }
 
 function ShapePicker({ source, georef, value, onChange }: { source: Source; georef: Georef | null; value: number; onChange: (shape: number) => void }) {
@@ -57,28 +61,42 @@ function ShapePicker({ source, georef, value, onChange }: { source: Source; geor
   )
 }
 
-function Review({ ready, onChange }: { ready: Extract<Imported, { status: 'ready' }>; onChange: (next: Imported) => void }) {
+function Verdict({ checked }: { checked: Result<Checked> | null }) {
   const store = useEditorStore()
+  if (checked?.ok) {
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <p aria-live="polite" className="text-sm font-medium">
+          {t('import.result', { corners: t('plot.corners', { count: checked.value.ring.length }), area: formatQuantity(checked.value.areaSqm, 'sqm') })}
+        </p>
+        <Button onClick={() => store.dispatch({ type: 'import', ring: checked.value.ring })}>{t('import.use')}</Button>
+      </div>
+    )
+  }
+  return (
+    <p aria-live="polite" className={checked ? 'text-sm leading-relaxed text-destructive' : 'text-xs leading-relaxed text-muted-foreground'}>
+      {checked ? problemText(checked.problem) : t('import.incomplete')}
+    </p>
+  )
+}
+
+function Review({ ready, onChange }: { ready: Extract<Imported, { status: 'ready' }>; onChange: (next: Imported) => void }) {
   const { source, shape, form } = ready
+  const chosen = source.shapes[shape]
+  const unusable = shapeProblem(chosen)
   const georef = georefFor(source.question, form)
-  const checked = georef && checkShape(source.shapes[shape], georef, REGION.bounds.value)
   const patchForm = (patch: Partial<FrameForm>) => onChange({ ...ready, form: { ...form, ...patch } })
 
   return (
     <div className="flex flex-col gap-4">
       <ShapePicker source={source} georef={georef} value={shape} onChange={(next) => onChange({ ...ready, shape: next })} />
-      <ImportQuestions question={source.question} form={form} onChange={patchForm} />
-      {checked?.ok ? (
-        <div className="flex flex-col items-start gap-3">
-          <p aria-live="polite" className="text-sm font-medium">
-            {t('import.result', { corners: t('plot.corners', { count: checked.value.ring.length }), area: formatQuantity(checked.value.areaSqm, 'sqm') })}
-          </p>
-          <Button onClick={() => store.dispatch({ type: 'import', ring: checked.value.ring })}>{t('import.use')}</Button>
-        </div>
+      {unusable ? (
+        <Verdict checked={fail(unusable)} />
       ) : (
-        <p aria-live="polite" className={checked ? 'text-sm leading-relaxed text-destructive' : 'text-xs leading-relaxed text-muted-foreground'}>
-          {checked ? problemText(checked.problem) : t('import.incomplete')}
-        </p>
+        <>
+          <ImportQuestions question={source.question} form={form} onChange={patchForm} />
+          <Verdict checked={georef && checkShape(chosen, georef, REGION.bounds.value)} />
+        </>
       )}
     </div>
   )

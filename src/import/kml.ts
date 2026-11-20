@@ -16,9 +16,13 @@ function polygonsIn(node: XmlNode, inherited: string | null): Found[] {
   return node.children.flatMap((c) => polygonsIn(c, name))
 }
 
+const readComponent = (text: string) => (text === '' ? null : Number(text))
+
 function readTuple(tuple: string): Pair | null {
-  const [lng, lat] = tuple.split(',').map(Number)
-  return tuple.includes(',') && Number.isFinite(lng) && Number.isFinite(lat) ? [lng, lat] : null
+  const parts = tuple.split(',')
+  if (parts.length < 2 || parts.length > 3) return null
+  const numbers = parts.map(readComponent)
+  return numbers.every((value) => value !== null && Number.isFinite(value)) ? [numbers[0]!, numbers[1]!] : null
 }
 
 function readCoordinates(text: string): Pair[] | null {

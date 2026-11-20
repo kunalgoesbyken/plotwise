@@ -19,6 +19,8 @@ export function problemText(problem: Problem): string {
       return t('import.problem.too-small', { area: formatQuantity(ASSUMPTIONS.importMinPlotSqm.value, 'sqm') })
     case 'too-large':
       return t('import.problem.too-large', { area: formatQuantity(ASSUMPTIONS.importMaxPlotSqm.value, 'sqm') })
+    case 'too-many-shapes':
+      return t('import.problem.too-many-shapes', { count: ASSUMPTIONS.importMaxShapes.value })
     case 'file-too-large':
       return t('import.problem.file-too-large', { megabytes: formatNumber(ASSUMPTIONS.importMaxFileBytes.value / BYTES_PER_MEGABYTE, 'count') })
     default:

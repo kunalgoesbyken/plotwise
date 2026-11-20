@@ -70,8 +70,10 @@ const isFinitePolyline = ({ vertices }: Polyline) => vertices.every(({ x, y, bul
 
 const isCurved = ({ flags, vertices }: Polyline) => (flags & CURVE_FIT_FLAGS) !== 0 || vertices.some(({ bulge }) => bulge !== 0)
 
-const toShape = ({ layer, flags, vertices }: Polyline): Shape =>
-  shapeOf(layer, vertices.map(({ x, y }) => [x, y] as const), (flags & CLOSED_FLAG) !== 0)
+const toShape = (polyline: Polyline): Shape => {
+  const { layer, flags, vertices } = polyline
+  return { ...shapeOf(layer, vertices.map(({ x, y }) => [x, y] as const), (flags & CLOSED_FLAG) !== 0), curved: isCurved(polyline) }
+}
 
 function sectionsOf(entityList: readonly Entity[]) {
   const header: Group[] = []
@@ -97,7 +99,6 @@ export function parseDxf(text: string): Result<Source> {
   if (!hasEntities) return fail('dxf-invalid')
   const polylines = readPolylines(entities).filter(({ vertices }) => vertices.length > 0)
   if (!polylines.every(isFinitePolyline)) return fail('dxf-invalid')
-  const straight = polylines.filter((polyline) => !isCurved(polyline))
-  if (straight.length === 0) return fail(polylines.length === 0 ? 'no-polyline' : 'dxf-curved')
-  return succeed({ shapes: straight.map(toShape), question: { kind: 'drawing', unit: drawingUnit(header) } })
+  if (polylines.length === 0) return fail('no-polyline')
+  return succeed({ shapes: polylines.map(toShape), question: { kind: 'drawing', unit: drawingUnit(header) } })
 }

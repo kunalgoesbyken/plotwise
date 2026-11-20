@@ -62,6 +62,18 @@ export const ASSUMPTIONS = {
     value: 1_000_000,
     source: 'input guard, not a rule: 1 km² (625 rai) is far larger than any single plot checked here, so a bigger imported outline is a unit or coordinate mistake',
   },
+  importMaxShapes: {
+    value: 200,
+    source: 'input guard: the picker lists every shape of a file, and a survey drawing with more than a few hundred closed shapes is a whole site, not one plot, so the user is asked to export only the plot layer',
+  },
+  importMaxPasteChars: {
+    value: 20_000,
+    source: 'input guard: a plot has at most 100 corners of about 40 characters each, so ten times that bounds what is parsed on every keystroke',
+  },
+  importMaxXmlDepth: {
+    value: 100,
+    source: 'input guard: real KML nests Document, Folder and Placemark a handful of levels deep, so a deeper file is malformed or hostile and is refused before it is walked',
+  },
   importMaxFileBytes: {
     value: 10_000_000,
     source: 'input guard: the file is read whole in the browser, and a plot outline needs a few kilobytes, so this leaves room for a large survey drawing while bounding memory',

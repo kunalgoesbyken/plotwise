@@ -1,3 +1,5 @@
+import { MAX_CORNERS } from '@/plot/plot'
+import { ASSUMPTIONS } from '@/solve'
 import { locate } from './georef'
 import { shapeOf } from './shape'
 import {
@@ -29,9 +31,11 @@ function readEntry(entry: string): Pair | null {
 }
 
 function readEntries(text: string): Result<Pair[]> {
+  if (text.length > ASSUMPTIONS.importMaxPasteChars.value) return fail('paste-too-large')
   const entries = asciiDigits(text)
     .split(/[\r\n;]+/)
     .filter((entry) => entry.trim() !== '')
+  if (entries.length > MAX_CORNERS + 1) return fail('too-many-corners')
   const points: Pair[] = []
   for (const [index, entry] of entries.entries()) {
     const point = readEntry(entry)

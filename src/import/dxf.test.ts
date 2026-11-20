@@ -63,13 +63,24 @@ describe('parseDxf', () => {
     expect(sourceOf(DXF_MM.replaceAll('\n', '\r\n')).shapes).toHaveLength(1)
   })
 
-  it('refuses a drawing whose only polylines are curved', () => {
-    expect(reasonOf(DXF_CURVED)).toBe('dxf-curved')
+  it('lists a curved polyline and marks it curved, so it is never dropped without a word', () => {
+    const [shape] = sourceOf(DXF_CURVED).shapes
+    expect(shape).toMatchObject({ name: 'LOT', closed: true, curved: true })
+    expect(shape.points).toEqual(PLOT_UTM_47N)
   })
 
-  it('keeps straight polylines when others are curved', () => {
+  it('lists curved and straight polylines together, each marked', () => {
     const mixed = dxfFile(6, [...lwpolyline('CURVED', PLOT_UTM_47N, 1, 0.4), ...lwpolyline('STRAIGHT', PLOT_UTM_47N, 1)])
-    expect(sourceOf(mixed).shapes.map((s) => s.name)).toEqual(['STRAIGHT'])
+    expect(sourceOf(mixed).shapes.map((s) => [s.name, s.curved])).toEqual([
+      ['CURVED', true],
+      ['STRAIGHT', false],
+    ])
+  })
+
+  it('treats a curve-fit old-style polyline as curved', () => {
+    const vertices = PLOT_UTM_47N.flatMap(([x, y]): [number, string | number][] => [[0, 'VERTEX'], [10, x], [20, y]])
+    const fitted = dxfFile(6, [[0, 'POLYLINE'], [8, 'FIT'], [70, 3], ...vertices, [0, 'SEQEND']])
+    expect(sourceOf(fitted).shapes[0].curved).toBe(true)
   })
 
   it('says when the drawing has no polyline', () => {

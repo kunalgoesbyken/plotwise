@@ -4,7 +4,7 @@ import type { UtmZone } from './utm'
 
 export type Pair = readonly [number, number]
 
-export type Shape = { name: string | null; points: readonly Pair[]; closed: boolean }
+export type Shape = { name: string | null; points: readonly Pair[]; closed: boolean; curved: boolean }
 
 export type DegreeOrder = 'lng-lat' | 'lat-lng'
 export type UtmOrder = 'east-north' | 'north-east'
@@ -41,6 +41,8 @@ export type ProblemReason =
   | 'dxf-invalid'
   | 'dxf-binary'
   | 'dxf-curved'
+  | 'too-many-shapes'
+  | 'paste-too-large'
   | 'no-polygon'
   | 'no-polyline'
 

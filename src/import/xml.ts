@@ -1,11 +1,24 @@
+import { ASSUMPTIONS } from '@/solve'
+
 export type XmlNode = { name: string; text: string; children: XmlNode[] }
 
 type Tree = { stack: XmlNode[]; root: XmlNode | null }
 
-const MAX_DEPTH = 100
 const ENTITIES: Readonly<Record<string, string>> = { '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"', '&apos;': "'" }
+const MAX_CODE_POINT = 0x10ffff
+const FIRST_SURROGATE = 0xd800
+const LAST_SURROGATE = 0xdfff
 
-const decode = (text: string) => text.replace(/&(?:lt|gt|amp|quot|apos);/g, (entity) => ENTITIES[entity])
+function characterReference(entity: string, digits: string, radix: number): string {
+  const codePoint = Number.parseInt(digits, radix)
+  const isCharacter = codePoint > 0 && codePoint <= MAX_CODE_POINT && !(codePoint >= FIRST_SURROGATE && codePoint <= LAST_SURROGATE)
+  return isCharacter ? String.fromCodePoint(codePoint) : entity
+}
+
+const decode = (text: string) =>
+  text.replace(/&(?:lt|gt|amp|quot|apos|#(\d{1,8})|#x([0-9a-fA-F]{1,6}));/g, (entity, decimal?: string, hexadecimal?: string) =>
+    decimal ? characterReference(entity, decimal, 10) : hexadecimal ? characterReference(entity, hexadecimal, 16) : ENTITIES[entity],
+  )
 
 const localName = (qualified: string) => qualified.slice(qualified.lastIndexOf(':') + 1)
 
@@ -40,7 +53,7 @@ function openElement(tree: Tree, name: string, selfClosing: boolean): boolean {
   else if (tree.root) return false
   else tree.root = node
   if (!selfClosing) tree.stack.push(node)
-  return tree.stack.length <= MAX_DEPTH
+  return tree.stack.length <= ASSUMPTIONS.importMaxXmlDepth.value
 }
 
 const closeElement = (tree: Tree, name: string) => tree.stack.pop()?.name === name

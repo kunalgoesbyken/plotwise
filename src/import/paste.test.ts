@@ -1,5 +1,7 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
+import { MAX_CORNERS } from '@/plot/plot'
+import { ASSUMPTIONS } from '@/solve'
 import { parsePasted } from './paste'
 import type { Problem, Question, Shape } from './types'
 import type { Bounds } from './validate'
@@ -125,6 +127,18 @@ describe('parsePasted failures', () => {
         expect(question).toEqual({ kind: 'degrees', orders: [swap ? 'lat-lng' : 'lng-lat'] })
       }),
     )
+  })
+
+  it('refuses more text than a plot needs before reading any of it', () => {
+    const { value: limit } = ASSUMPTIONS.importMaxPasteChars
+    expect(problem(`${'1'.repeat(limit)}, 2`)).toEqual({ reason: 'paste-too-large' })
+  })
+
+  it('refuses more corners than a plot can have before reading any number', () => {
+    const entries = Array.from({ length: MAX_CORNERS + 2 }, () => 'not a number').join('\n')
+    expect(problem(entries)).toEqual({ reason: 'too-many-corners' })
+    const closed = Array.from({ length: MAX_CORNERS + 1 }, (_, i) => `${100.5 + i * 1e-4}, 13.7`).join('\n')
+    expect(parsePasted(closed, BANGKOK).ok).toBe(true)
   })
 
   it('never throws on any text', () => {
