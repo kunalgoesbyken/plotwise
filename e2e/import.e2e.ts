@@ -52,7 +52,6 @@ async function finishWithRoad(page: Page) {
   await expect(page.locator('.map-label-corner').getByText('D', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Mark as road, edge A–B' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('12')
-  await page.getByRole('button', { name: 'See what you can build' }).click()
   await expect(page.getByRole('region', { name: 'Results for the design shown in 3D' })).toBeVisible({ timeout: 30_000 })
   await expect.poll(() => new URL(page.url()).hash).toContain('plot=')
   const link = decodePlot(new URL(page.url()).hash)
