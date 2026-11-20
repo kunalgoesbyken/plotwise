@@ -47,6 +47,41 @@ function capArea(polygons: readonly Polygon[], maxSqm: number): readonly Polygon
   return capped
 }
 
+const CENT_SQM = 0.01
+const PLATE_SEARCH_STEPS = 40
+
+type Trial = { readonly insetM: number; readonly polygons: readonly Polygon[]; readonly areaSqm: number }
+
+function trial(polygons: readonly Polygon[], insetM: number): Trial {
+  const shrunk = shrink(polygons, insetM)
+  return { insetM, polygons: shrunk, areaSqm: totalArea(shrunk) }
+}
+
+function nextInset(over: Trial, under: Trial | null, goalSqm: number): number {
+  if (!under) return over.insetM + (over.areaSqm - goalSqm) / perimeter(over.polygons)
+  const secant = over.insetM + ((over.areaSqm - goalSqm) * (under.insetM - over.insetM)) / (over.areaSqm - under.areaSqm)
+  return secant > over.insetM && secant < under.insetM ? secant : (over.insetM + under.insetM) / 2
+}
+
+function insetToArea(polygons: readonly Polygon[], maxSqm: number): readonly Polygon[] {
+  const [highest, lowest] = [maxSqm - CENT_SQM / 2, maxSqm - CENT_SQM]
+  let over: Trial = { insetM: 0, polygons, areaSqm: totalArea(polygons) }
+  let under: Trial | null = null
+  for (let step = 0; step < PLATE_SEARCH_STEPS; step++) {
+    const next = trial(polygons, nextInset(over, under, (highest + lowest) / 2))
+    if (next.areaSqm > highest) over = next
+    else if (next.areaSqm >= lowest) return next.polygons
+    else under = next
+  }
+  return under?.polygons ?? []
+}
+
+export function shrinkFloor(floor: Floor, maxSqm: number): Floor {
+  if (floor.areaSqm <= maxSqm) return floor
+  const polygons = maxSqm > CENT_SQM ? insetToArea(floor.polygons, maxSqm) : []
+  return { ...floor, polygons, areaSqm: toCents(totalArea(polygons)) / 100 }
+}
+
 function limitFootprint(ground: readonly Polygon[], { footprint, maxFootprintSqm }: FootprintLimits): readonly Polygon[] {
   const clipped = footprint ? intersection(ground, footprint) : ground
   return maxFootprintSqm === undefined ? clipped : capArea(clipped, maxFootprintSqm)

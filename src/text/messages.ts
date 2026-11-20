@@ -1,4 +1,4 @@
-import type { CheckId, TypologyId } from '@/designs'
+import type { CheckId, DesignName, Form } from '@/designs'
 import type { GeometryErrorReason } from '@/geometry'
 import type { DegreeOrder, UtmOrder } from '@/import/types'
 import type { LengthUnit } from '@/import/units'
@@ -12,6 +12,8 @@ export const LOCALE = 'en'
 type Message = string | ((params: never) => string)
 
 const LANGUAGE_NAMES: Readonly<Record<SourceLanguage, string>> = { th: 'Thai', en: 'English' }
+
+const FORM_NAMES: Readonly<Record<Form, string>> = { 'podium-tower': 'podium and tower', slab: 'slab', block: 'block' }
 
 export type RatioCheckId = Extract<CheckId, 'far' | 'high-rise-far'>
 
@@ -31,7 +33,7 @@ type Saleable = Pick<AreaTerms, 'saleable'>
 const upperFirst = (text: string) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`
 
 type EngineMessages = Record<`check.${Exclude<CheckId, RatioCheckId>}`, string> &
-  Record<`design.${TypologyId}` | `design.${TypologyId}.summary`, string> &
+  Record<`design.summary.${Form}`, string> &
   Record<`building.${BuildingType}`, string> &
   Record<`feasibility.failed.${GeometryErrorReason | 'unknown'}`, string> &
   Record<`plot-limit.${PlotLimitField}` | `limits.custom.${PlotLimitField}`, string> &
@@ -542,12 +544,10 @@ const en = {
   'interpretation.decided': 'Decided',
   'interpretation.why': 'Why this reading',
 
-  'design.podium-tower': 'Podium and tower',
-  'design.podium-tower.summary': 'A wide podium with a slender tower set back above it.',
-  'design.slab': 'Slab on the main road',
-  'design.slab.summary': 'One deep block along the widest road, as tall as the rules allow.',
-  'design.low-rise': 'Low-rise block',
-  'design.low-rise.summary': 'Stays under the high-rise threshold: simpler rules, fewer floors.',
+  'design.name': ({ form, storeys, highRise }: DesignName) => `${storeys}-storey ${highRise ? 'high-rise ' : ''}${FORM_NAMES[form]}`,
+  'design.summary.podium-tower': 'A wide podium with a slender tower set back above it.',
+  'design.summary.slab': 'One deep block along the widest road.',
+  'design.summary.block': 'A single block, without a separate tower.',
   'design.show': ({ name }: { name: string }) => `Show ${name} in 3D`,
   'design.compare': 'Designs compared',
   'design.checklist': ({ name }: { name: string }) => `Checklist for ${name}`,
@@ -559,6 +559,7 @@ const en = {
   'limited-by.use': 'Limited by the zone’s size condition for this use.',
   'limited-by.use-unless': ({ road, station }: { road: string; station: string }) =>
     `Limited by the zone’s size condition for this use: going larger needs a ${road} road or a station within ${station}.`,
+  'limited-by.height': ({ height }: { height: string }) => `Limited by the height limit of ${height}.`,
   'limited-by.envelope': 'Limited by setbacks and the height the road width allows.',
 
   'metric.floor-area': 'Floor area',
@@ -567,7 +568,8 @@ const en = {
   'limiter.far': 'Floor area cap',
   'limiter.building-class': 'High-rise rules',
   'limiter.use': 'Use size cap',
-  'limiter.envelope': 'Setbacks, height',
+  'limiter.height': 'Height limit',
+  'limiter.envelope': 'Setbacks, road width',
   'metric.far': ({ ratioName }: RatioName) => ratioName,
   'metric.height': 'Height',
   'metric.storeys': 'Storeys',

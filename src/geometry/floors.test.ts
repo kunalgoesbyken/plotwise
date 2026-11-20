@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test'
 import { setbackSeeds, starPolygon } from './arbitraries'
 import { difference } from './clip'
 import { GeometryError } from './errors'
-import { floorPlates } from './floors'
+import { floorPlates, shrinkFloor, type Floor } from './floors'
 import { normalizeRing, totalArea, type Polygon } from './polygon'
 import { tieredEnvelope } from './volume'
 
@@ -103,6 +103,44 @@ describe('floorPlates', () => {
         },
       ),
       { numRuns: 100 },
+    )
+  })
+})
+
+const floorOf = (polygons: readonly Polygon[]): Floor => ({ level: 4, baseM: 12, topM: 15, polygons, areaSqm: cents(totalArea(polygons)) / 100 })
+
+describe('shrinkFloor', () => {
+  it('keeps a floor that already fits', () => {
+    const floor = floorOf([square(0, 0, 10)])
+    expect(shrinkFloor(floor, 100)).toBe(floor)
+    expect(shrinkFloor(floor, 250)).toBe(floor)
+  })
+
+  it('steps a square floor back evenly to the area asked for, on the same storey', () => {
+    const plate = shrinkFloor(floorOf([square(0, 0, 10)]), 64)
+    expect(plate).toMatchObject({ level: 4, baseM: 12, topM: 15 })
+    expect(plate.areaSqm).toBeLessThanOrEqual(64)
+    expect(plate.areaSqm).toBeGreaterThanOrEqual(63.98)
+    expect(totalArea(difference(plate.polygons, [square(1, 1, 8)]))).toBeLessThan(1e-2)
+  })
+
+  it('leaves nothing for an area of zero or less', () => {
+    expect(shrinkFloor(floorOf([square(0, 0, 10)]), 0)).toMatchObject({ polygons: [], areaSqm: 0 })
+    expect(shrinkFloor(floorOf([square(0, 0, 10)]), -5)).toMatchObject({ polygons: [], areaSqm: 0 })
+  })
+
+  it('fits any floor shape to within two cents under the area asked for, inside the floor', () => {
+    fc.assert(
+      fc.property(starPolygon(20), fc.double({ min: 0.01, max: 0.99, noNaN: true }), (points, share) => {
+        const floor = floorOf([{ outer: normalizeRing(points), holes: [] }])
+        const maxSqm = share * floor.areaSqm
+        const plate = shrinkFloor(floor, maxSqm)
+        expect(plate.areaSqm).toBeLessThanOrEqual(maxSqm)
+        expect(plate.areaSqm).toBeGreaterThanOrEqual(maxSqm - 0.02)
+        expect(Math.abs(plate.areaSqm - totalArea(plate.polygons))).toBeLessThanOrEqual(0.005)
+        expect(totalArea(difference(plate.polygons, floor.polygons))).toBeLessThan(1e-3)
+      }),
+      { numRuns: 200 },
     )
   })
 })

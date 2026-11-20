@@ -1,4 +1,5 @@
 export type { Check, CheckId, ManualCheckId, Unit } from './checks'
-export { designs, type Design, type Limiter, type Metrics } from './designs'
-export type { TypologyId } from './massing'
+export { designs, type Design, type DesignName, type Limiter, type Metrics } from './designs'
+export { headline } from './headline'
+export type { Form, TypologyId } from './massing'
 export type { Yield } from './programme'

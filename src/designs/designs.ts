@@ -1,17 +1,22 @@
-import type { FloorPlates } from '@/geometry'
+import { LENGTH_TOLERANCE_M, shrinkFloor, type Floor, type FloorPlates } from '@/geometry'
 import {
   highRiseAllows,
   isHighRiseOrExtraLarge,
   negate,
   compare,
   farCapFor,
+  satisfies,
   type Building,
   type EnvelopeKind,
   type Solution,
 } from '@/solve'
 import { checksFor, type Check } from './checks'
-import { stack, TYPOLOGIES, type Massing, type TypologyId } from './massing'
+import { stack, TYPOLOGIES, type Form, type Massing, type Shape, type TypologyId } from './massing'
 import { programme, type Programme, type Yield } from './programme'
+
+export const AREA_TOLERANCE_SQM = 0.1
+
+const HALF_CENT_SQM = 0.005
 
 export type Metrics = {
   readonly gfaSqm: number
@@ -26,11 +31,15 @@ export type Metrics = {
   readonly yield: Yield
 }
 
-export type Limiter = 'far' | 'building-class' | 'use' | 'envelope'
+export type Limiter = 'far' | 'building-class' | 'use' | 'height' | 'envelope'
+
+type Stop = Exclude<Limiter, 'far'>
+
+export type DesignName = { readonly form: Form; readonly storeys: number; readonly highRise: boolean }
 
 export type Design = {
   readonly id: TypologyId
-  readonly nameKey: `design.${TypologyId}`
+  readonly name: DesignName
   readonly envelope: EnvelopeKind
   readonly plates: FloorPlates
   readonly metrics: Metrics
@@ -38,7 +47,20 @@ export type Design = {
   readonly limitedBy: Limiter
 }
 
-type Candidate = { readonly building: Building; readonly programme: Programme }
+type Candidate = { readonly floors: readonly Floor[]; readonly building: Building; readonly programme: Programme }
+
+type Fit = Candidate & { readonly limitedBy: Limiter }
+
+const builtSqmOf = (floors: readonly Floor[]) => floors.reduce((sum, floor) => sum + floor.areaSqm, 0)
+
+function candidate(solution: Solution, floors: readonly Floor[]): Candidate {
+  const building = { heightM: floors[floors.length - 1].topM - floors[0].baseM, storeys: floors.length, floorAreaSqm: builtSqmOf(floors) }
+  return { floors, building, programme: programme(solution, building) }
+}
+
+const overCap = ({ farCap }: Solution, { programme: p }: Candidate) => p.farSqm > farCap.maxGfaSqm
+
+const reachesCap = ({ farCap }: Solution, { programme: p }: Candidate) => farCap.maxGfaSqm - p.farSqm <= AREA_TOLERANCE_SQM
 
 function fitsClass(solution: Solution, kind: EnvelopeKind, building: Building): boolean {
   if (!isHighRiseOrExtraLarge(solution.pack, building)) return true
@@ -51,27 +73,61 @@ function fitsUse({ limits }: Solution, { conditionMeasure }: Programme): boolean
   return compare(conditionMeasure, negate(use.threshold.cmp), use.threshold.value)
 }
 
-function limiter(solution: Solution, kind: EnvelopeKind, candidate: Candidate): Limiter | null {
-  if (candidate.programme.farSqm > solution.farCap.maxGfaSqm) return 'far'
-  if (!fitsClass(solution, kind, candidate.building)) return 'building-class'
-  if (!fitsUse(solution, candidate.programme)) return 'use'
+function blocker(solution: Solution, kind: EnvelopeKind, { building, programme: p }: Candidate): Stop | null {
+  if (!fitsClass(solution, kind, building)) return 'building-class'
+  if (!fitsUse(solution, p)) return 'use'
   return null
 }
 
-type Fit = Candidate & { readonly storeys: number; readonly limitedBy: Limiter }
+function topBlocker(solution: Solution, kind: EnvelopeKind, { building }: Candidate): Stop {
+  const taller = { ...building, heightM: building.heightM + solution.floorToFloorM, storeys: building.storeys + 1 }
+  if (!fitsClass(solution, kind, taller)) return 'building-class'
+  const { planLimitM } = solution.limits.height
+  return planLimitM !== null && taller.heightM > planLimitM + LENGTH_TOLERANCE_M ? 'height' : 'envelope'
+}
 
-function tallestFit(solution: Solution, { envelope, plates }: Massing): Fit | null {
-  let best: Fit | null = null
-  let builtSqm = 0
-  for (const [index, floor] of plates.floors.entries()) {
-    builtSqm += floor.areaSqm
-    const building = { heightM: floor.topM - plates.floors[0].baseM, storeys: index + 1, floorAreaSqm: builtSqm }
-    const candidate = { building, programme: programme(solution, building) }
-    const stop = limiter(solution, envelope.kind, candidate)
-    if (stop) return best && { ...best, limitedBy: stop }
-    best = { ...candidate, storeys: index + 1, limitedBy: 'envelope' }
+const finish = (solution: Solution, fitted: Candidate, stop: Stop): Fit => ({ ...fitted, limitedBy: reachesCap(solution, fitted) ? 'far' : stop })
+
+function roomUnderCap(solution: Solution, below: readonly Floor[], floor: Floor): number {
+  const building = (areaSqm: number) => ({
+    heightM: floor.topM - (below[0] ?? floor).baseM,
+    storeys: below.length + 1,
+    floorAreaSqm: builtSqmOf(below) + areaSqm,
+  })
+  const fits = (areaSqm: number) => programme(solution, building(areaSqm)).farSqm <= solution.farCap.maxGfaSqm
+  let [fitting, over] = [0, floor.areaSqm]
+  while (over - fitting > HALF_CENT_SQM) {
+    const middle = (fitting + over) / 2
+    if (fits(middle)) fitting = middle
+    else over = middle
   }
-  return best
+  return fitting
+}
+
+function partialTop(solution: Solution, below: readonly Floor[], floor: Floor): Candidate | null {
+  const plate = shrinkFloor(floor, roomUnderCap(solution, below, floor))
+  if (plate.polygons.length === 0) return null
+  const top = candidate(solution, [...below, plate])
+  return overCap(solution, top) ? null : top
+}
+
+function capped(solution: Solution, kind: EnvelopeKind, fitted: Candidate | null, next: Floor): Fit | null {
+  const top = fitted && reachesCap(solution, fitted) ? null : partialTop(solution, fitted?.floors ?? [], next)
+  const stop = top && blocker(solution, kind, top)
+  if (top && !stop) return { ...top, limitedBy: 'far' }
+  return fitted && { ...fitted, limitedBy: stop ?? 'far' }
+}
+
+function grow(solution: Solution, { envelope, plates }: Massing): Fit | null {
+  let fitted: Candidate | null = null
+  for (const floor of plates.floors) {
+    const next = candidate(solution, [...(fitted?.floors ?? []), floor])
+    if (overCap(solution, next)) return capped(solution, envelope.kind, fitted, floor)
+    const stop = blocker(solution, envelope.kind, next)
+    if (stop) return fitted && finish(solution, fitted, stop)
+    fitted = next
+  }
+  return fitted && finish(solution, fitted, topBlocker(solution, envelope.kind, fitted))
 }
 
 function metricsOf(solution: Solution, plates: FloorPlates, { building, programme: p }: Candidate): Metrics {
@@ -89,6 +145,12 @@ function metricsOf(solution: Solution, plates: FloorPlates, { building, programm
   }
 }
 
+function nameOf({ pack }: Solution, shape: Shape, { heightM, storeys }: Building): DesignName {
+  const form = shape.form === 'podium-tower' && storeys <= shape.podiumStoreys ? 'block' : shape.form
+  const highRise = pack.buildingClasses !== undefined && satisfies(heightM, pack.buildingClasses.highRiseFromHeightM)
+  return { form, storeys, highRise }
+}
+
 type Placed = { readonly massing: Massing; readonly fit: Fit }
 
 function massingTargets(solution: Solution): Solution[] {
@@ -99,7 +161,7 @@ function massingTargets(solution: Solution): Solution[] {
 function bestPlacement(solution: Solution, id: TypologyId): Placed | null {
   const placements = massingTargets(solution).flatMap((target) => {
     const massing = TYPOLOGIES[id](target)
-    const fit = massing && tallestFit(solution, massing)
+    const fit = massing && grow(solution, massing)
     return massing && fit ? [{ massing, fit }] : []
   })
   return placements.reduce<Placed | null>((best, next) => (!best || next.fit.programme.farSqm > best.fit.programme.farSqm ? next : best), null)
@@ -109,10 +171,10 @@ function design(solution: Solution, id: TypologyId): Design | null {
   const placed = bestPlacement(solution, id)
   if (!placed) return null
   const { massing, fit } = placed
-  const plates = stack(massing.plates, massing.plates.floors.slice(0, fit.storeys))
+  const plates = stack(fit.floors)
   return {
     id,
-    nameKey: `design.${id}`,
+    name: nameOf(solution, massing.shape, fit.building),
     envelope: massing.envelope.kind,
     plates,
     metrics: metricsOf(solution, plates, fit),

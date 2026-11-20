@@ -1,3 +1,4 @@
+import { headline } from '@/designs'
 import { MAX_ROAD_WIDTH_M, type Plot, type Road } from '@/plot/plot'
 import { ASSUMPTIONS, type FarChoice } from '@/solve'
 import type { RulePack } from '@/rules'
@@ -29,11 +30,8 @@ function withRoadWidth(plot: Plot, road: Road, widthM: number): Plot {
 }
 
 function bestOutcome(result: Feasibility): WidthOutcome | null {
-  if (result.status !== 'ready') return null
-  return result.designs.reduce<WidthOutcome | null>(
-    (top, { metrics }) => (!top || metrics.gfaSqm > top.gfaSqm ? { gfaSqm: metrics.gfaSqm, heightM: metrics.heightM } : top),
-    null,
-  )
+  const top = result.status === 'ready' ? headline(result.designs) : null
+  return top && { gfaSqm: top.metrics.gfaSqm, heightM: top.metrics.heightM }
 }
 
 export function widthSensitivity(plot: Plot, pack: RulePack, far: FarChoice): WidthRow[] {

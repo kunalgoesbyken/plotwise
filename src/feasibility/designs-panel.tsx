@@ -80,7 +80,7 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
           <tr className="border-b">
             <td className="w-[28%]" />
             {designs.map((design) => {
-              const name = t(design.nameKey)
+              const name = t('design.name', design.name)
               return (
                 <th key={design.id} scope="col" className="p-0 align-bottom">
                   <button
@@ -112,10 +112,10 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
           ))}
         </tbody>
       </table>
-      <p className="text-xs leading-relaxed text-muted-foreground">{t(`${selected.nameKey}.summary`)}</p>
+      <p className="text-xs leading-relaxed text-muted-foreground">{t(`design.summary.${selected.name.form}`)}</p>
       <ToCheck design={selected} id={toCheckId} />
       <VerificationNote solution={solution} detailed />
-      <Disclosure label={t('design.checklist', { name: t(selected.nameKey) })}>
+      <Disclosure label={t('design.checklist', { name: t('design.name', selected.name) })}>
         <ul className="divide-y">
           {selected.checks.map((check) => (
             <CheckItem key={check.id} row={checkRow(check, region.areaUnit)} />
