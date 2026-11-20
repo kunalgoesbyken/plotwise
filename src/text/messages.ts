@@ -581,6 +581,28 @@ const en = {
   'design.checklist': ({ name }: { name: string }) => `Checklist for ${name}`,
   'designs.none': 'No design fits this plot under these rules. Try a wider road, a larger plot or another building type.',
 
+  'standing.label': 'How it compares',
+  'standing.best': 'Most floor area.',
+  'standing.same-as': ({ name }: Name) => `Same result as the ${name}.`,
+  'standing.same-area': ({ name }: Name) => `Same floor area as the ${name}`,
+  'standing.less-area': ({ area, name }: Area & Name) => `${area} less floor area than the ${name}`,
+  'standing.dominated': ({ lead, worse, better }: { lead: string; worse: string; better: string }) =>
+    `${lead}${worse ? `, ${worse}` : ''}${better ? `; ${better}` : ''}.`,
+  'standing.alternative': ({ name, better }: Name & { better: string }) => `Against the ${name}: ${better}.`,
+  'standing.line': ({ name, standing }: Name & { standing: string }) => `${name}: ${standing}`,
+  'difference.worse.floor-area': ({ area }: Area) => `${area} less floor area`,
+  'difference.better.floor-area': ({ area }: Area) => `${area} more floor area`,
+  'difference.worse.open-space': ({ area }: Area) => `${area} less open space`,
+  'difference.better.open-space': ({ area }: Area) => `${area} more open space`,
+  'difference.worse.height': ({ height }: { height: string }) => `${height} taller`,
+  'difference.better.height': ({ height }: { height: string }) => `${height} lower`,
+  'difference.worse.high-rise': 'high-rise',
+  'difference.better.high-rise': 'not high-rise',
+  'difference.worse.failing-checks': ({ count }: Count) => plural(count, 'more failing check', 'more failing checks'),
+  'difference.better.failing-checks': ({ count }: Count) => plural(count, 'fewer failing check', 'fewer failing checks'),
+  'difference.worse.to-check': ({ count }: Count) => `${count} more to check`,
+  'difference.better.to-check': ({ count }: Count) => `${count} fewer to check`,
+
   'limited-by.far': 'Limited by the plot’s floor area cap.',
   'limited-by.building-class': ({ height }: { height: string }) =>
     `Limited by the high-rise rules, which apply from ${height} tall or to an extra-large floor area.`,

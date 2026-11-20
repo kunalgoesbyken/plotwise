@@ -1,7 +1,7 @@
 'use client'
 
 import { useId, type ReactNode } from 'react'
-import type { Design } from '@/designs'
+import { rank, type Design, type Ranked, type Standing } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import type { Region } from '@/region/regions'
 import { isParkingUnset, type Solution } from '@/solve'
@@ -15,6 +15,7 @@ import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { useFeasibility } from './feasibility-provider'
 import { WhenReady } from './ready'
 import { Sources } from './sources'
+import { standingLine } from './standing-text'
 import { Tally } from './tally'
 import { ToCheck } from './to-check'
 import { checkLabel } from './check-label'
@@ -63,6 +64,11 @@ function CheckItem({ row }: { row: CheckRow }) {
   )
 }
 
+const greyed = (standing: Standing) => standing.kind === 'dominated' && 'bg-muted'
+
+const twinsOf = (ranked: readonly Ranked[], design: Design) =>
+  ranked.flatMap(({ design: twin, standing }) => (standing.kind === 'same-as' && standing.of === design ? [twin] : []))
+
 type DesignTableProps = { readonly designs: readonly Design[]; readonly solution: Solution; readonly extraRows: readonly Row[] }
 
 function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
@@ -70,21 +76,30 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
   const region = useRegion()
   const toCheckId = useId()
   if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
-  const shown = (design: Design) => design.id === selected.id
+  const ranked = rank(designs)
+  const columns = ranked.filter(({ standing }) => standing.kind !== 'same-as')
+  const shown = (design: Design) => design.id === selected.id || twinsOf(ranked, design).includes(selected)
   const showChecks = (design: Design) => {
     selectDesign(design.id)
     requestAnimationFrame(() => document.getElementById(toCheckId)?.focus())
   }
   return (
     <div className="flex flex-col gap-4">
+      <ul aria-label={t('standing.label')} className="flex flex-col gap-1 text-xs leading-snug">
+        {ranked.map((option) => (
+          <li key={option.design.id} className={option.standing.kind === 'best' ? 'font-medium text-foreground' : 'text-muted-foreground'}>
+            {standingLine(option, region.areaUnit)}
+          </li>
+        ))}
+      </ul>
       <table aria-label={t('design.compare')} className="w-full table-fixed border-collapse text-sm">
         <thead>
           <tr className="border-b">
             <td className="w-[28%]" />
-            {designs.map((design) => {
+            {columns.map(({ design, standing }) => {
               const name = t('design.name', design.name)
               return (
-                <th key={design.id} scope="col" className="p-0 align-bottom">
+                <th key={design.id} scope="col" className={cn('p-0 align-bottom', greyed(standing))}>
                   <button
                     type="button"
                     aria-pressed={shown(design)}
@@ -105,8 +120,11 @@ function DesignTable({ designs, solution, extraRows }: DesignTableProps) {
               <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
                 {label}
               </th>
-              {designs.map((design) => (
-                <td key={design.id} className={cn('px-2 py-2 align-top transition-colors', shown(design) ? 'text-foreground' : 'text-muted-foreground')}>
+              {columns.map(({ design, standing }) => (
+                <td
+                  key={design.id}
+                  className={cn('px-2 py-2 align-top transition-colors', shown(design) ? 'text-foreground' : 'text-muted-foreground', greyed(standing))}
+                >
                   {cell(design)}
                 </td>
               ))}
