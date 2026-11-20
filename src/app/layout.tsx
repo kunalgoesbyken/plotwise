@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { REGION } from '@/region/regions'
+import { SHARE_PALETTE, SITE_ORIGIN } from '@/seo/identity'
+import { pageMetadata } from '@/seo/metadata'
 import { t } from '@/text/messages'
 import './globals.css'
 
@@ -10,12 +12,17 @@ const sans = Geist({
 })
 
 export const metadata: Metadata = {
-  title: t('landing.title', { city: REGION.city }),
-  description: t('landing.description', { city: REGION.city }),
+  metadataBase: new URL(SITE_ORIGIN.value),
+  ...pageMetadata({
+    title: t('landing.title', { city: REGION.city }),
+    description: t('landing.description', { city: REGION.city }),
+    path: '/',
+  }),
 }
 
 export const viewport: Viewport = {
   viewportFit: 'cover',
+  themeColor: SHARE_PALETTE.value.canvas,
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
