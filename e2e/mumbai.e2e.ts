@@ -129,10 +129,11 @@ test('Mumbai money: premium asks for the ASR land rate, TDR for its price, and t
   await expect(money.getByText('Extra floor area bought, estimated').locator('..')).not.toHaveText(before ?? '')
 
   await showTab(page, 'Designs')
-  const bought = panel(page, 'Designs').getByRole('table', { name: 'Designs compared' }).getByRole('row', { name: /Extra floor area bought/ }).getByRole('cell')
-  const cells = await bought.allTextContents()
+  const row = (name: RegExp) => panel(page, 'Designs').getByRole('table', { name: 'Designs compared' }).getByRole('row', { name }).getByRole('cell')
+  const [cells, areas] = await Promise.all([row(/^Extra floor area bought/).allTextContents(), row(/^Floor area/).allTextContents()])
   expect(cells.length).toBeGreaterThanOrEqual(2)
-  expect(new Set(cells).size).toBe(cells.length)
+  for (const cell of cells) expect(cell).toMatch(/\d/)
+  for (const [i, area] of areas.entries()) expect(cells[areas.indexOf(area)]).toBe(cells[i])
   expect(errors).toEqual([])
 })
 
