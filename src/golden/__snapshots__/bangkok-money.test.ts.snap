@@ -221,12 +221,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 9253.280000000002,
     "firstCost": {
       "high": {
-        "services": 129545920.00000003,
+        "services": 101786080.00000003,
         "substructure": 111039360.00000003,
         "superstructure": 222078720.00000006,
       },
       "low": {
-        "services": 92532800.00000003,
+        "services": 74026240.00000001,
         "substructure": 74026240.00000001,
         "superstructure": 157305760.00000003,
       },
@@ -235,12 +235,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 876425031.2000003,
     "id": "podium-tower",
     "landValue": {
-      "high": 301739341.05911523,
-      "low": 160483518.05026564,
+      "high": 320573450.7936285,
+      "low": 188734682.65203556,
     },
     "landValuePerUnit": {
-      "high": 765063.2739660871,
-      "low": 406907.6485226281,
+      "high": 812817.3573585484,
+      "low": 478538.77361131995,
     },
     "parking": {
       "basementLevels": 0,
@@ -255,12 +255,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 9451.230000000003,
     "firstCost": {
       "high": {
-        "services": 132317220.00000004,
+        "services": 103963530.00000003,
         "substructure": 113414760.00000004,
         "superstructure": 226829520.0000001,
       },
       "low": {
-        "services": 94512300.00000003,
+        "services": 75609840.00000003,
         "substructure": 75609840.00000003,
         "superstructure": 160670910.00000006,
       },
@@ -269,12 +269,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 894925780.5750004,
     "id": "slab",
     "landValue": {
-      "high": 308015555.6531419,
-      "low": 163737929.5469472,
+      "high": 327252572.4673012,
+      "low": 192593454.76818615,
     },
     "landValuePerUnit": {
-      "high": 780976.6821036063,
-      "low": 415159.24311332585,
+      "high": 829752.3406356437,
+      "low": 488322.73091138195,
     },
     "parking": {
       "basementLevels": 0,
@@ -289,12 +289,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 5902.1,
     "firstCost": {
       "high": {
-        "services": 82629400,
+        "services": 64923100.00000001,
         "substructure": 35412600,
         "superstructure": 106237800,
       },
       "low": {
-        "services": 59021000,
+        "services": 47216800,
         "substructure": 23608400,
         "superstructure": 76727300,
       },
@@ -303,12 +303,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 558417772.25,
     "id": "low-rise",
     "landValue": {
-      "high": 240081293.46150446,
-      "low": 174009112.0455753,
+      "high": 252094417.35530978,
+      "low": 192028797.88628325,
     },
     "landValuePerUnit": {
-      "high": 608728.6455553253,
-      "low": 441201.93440549,
+      "high": 639188.0475825681,
+      "low": 486891.03744635417,
     },
     "parking": {
       "basementLevels": 0,
@@ -328,12 +328,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 9253.280000000002,
     "firstCost": {
       "high": {
-        "services": 129545920.00000003,
+        "services": 101786080.00000003,
         "substructure": 111039360.00000003,
         "superstructure": 222078720.00000006,
       },
       "low": {
-        "services": 92532800.00000003,
+        "services": 74026240.00000001,
         "substructure": 74026240.00000001,
         "superstructure": 157305760.00000003,
       },
@@ -342,12 +342,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 876425031.2000003,
     "id": "podium-tower",
     "landValue": {
-      "high": 301739341.05911523,
-      "low": 160483518.05026564,
+      "high": 320573450.7936285,
+      "low": 188734682.65203556,
     },
     "landValuePerUnit": {
-      "high": 765063.2739660871,
-      "low": 406907.6485226281,
+      "high": 812817.3573585484,
+      "low": 478538.77361131995,
     },
     "parking": {
       "basementLevels": 0,
@@ -362,12 +362,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 9451.230000000003,
     "firstCost": {
       "high": {
-        "services": 132317220.00000004,
+        "services": 103963530.00000003,
         "substructure": 113414760.00000004,
         "superstructure": 226829520.0000001,
       },
       "low": {
-        "services": 94512300.00000003,
+        "services": 75609840.00000003,
         "substructure": 75609840.00000003,
         "superstructure": 160670910.00000006,
       },
@@ -376,12 +376,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 894925780.5750004,
     "id": "slab",
     "landValue": {
-      "high": 308015555.6531419,
-      "low": 163737929.5469472,
+      "high": 327252572.4673012,
+      "low": 192593454.76818615,
     },
     "landValuePerUnit": {
-      "high": 780976.6821036063,
-      "low": 415159.24311332585,
+      "high": 829752.3406356437,
+      "low": 488322.73091138195,
     },
     "parking": {
       "basementLevels": 0,
@@ -396,12 +396,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "builtSqm": 5902.1,
     "firstCost": {
       "high": {
-        "services": 82629400,
+        "services": 64923100.00000001,
         "substructure": 35412600,
         "superstructure": 106237800,
       },
       "low": {
-        "services": 59021000,
+        "services": 47216800,
         "substructure": 23608400,
         "superstructure": 76727300,
       },
@@ -410,12 +410,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors exa
     "grossValue": 558417772.25,
     "id": "low-rise",
     "landValue": {
-      "high": 240081293.46150446,
-      "low": 174009112.0455753,
+      "high": 252094417.35530978,
+      "low": 192028797.88628325,
     },
     "landValuePerUnit": {
-      "high": 608728.6455553253,
-      "low": 441201.93440549,
+      "high": 639188.0475825681,
+      "low": 486891.03744635417,
     },
     "parking": {
       "basementLevels": 0,
@@ -791,12 +791,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "firstCost": {
       "high": {
         "services": 361845000,
-        "substructure": 457152750,
+        "substructure": 444409000,
         "superstructure": 868428000,
       },
       "low": {
         "services": 253291500,
-        "substructure": 304768500,
+        "substructure": 297632000,
         "superstructure": 615136500,
       },
     },
@@ -804,12 +804,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 2878622906.25,
     "id": "slab",
     "landValue": {
-      "high": 879666434.2367257,
-      "low": 356335781.58185863,
+      "high": 886929243.971239,
+      "low": 369305084.6792038,
     },
     "landValuePerUnit": {
-      "high": 805488.1066087785,
-      "low": 326287.5822610845,
+      "high": 812138.4761511709,
+      "low": 338163.242158214,
     },
     "parking": {
       "basementLevels": 1,
@@ -863,12 +863,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 30578.540000000008,
     "firstCost": {
       "high": {
-        "services": 428099560.0000001,
+        "services": 336363940.0000001,
         "substructure": 366942480.0000001,
         "superstructure": 733884960.0000002,
       },
       "low": {
-        "services": 305785400.00000006,
+        "services": 244628320.00000006,
         "substructure": 244628320.00000006,
         "superstructure": 519835180.0000001,
       },
@@ -877,12 +877,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 2896534707.3500004,
     "id": "podium-tower",
     "landValue": {
-      "high": 997338952.9052215,
-      "low": 530542656.44504416,
+      "high": 1059578459.0999117,
+      "low": 623901915.7370796,
     },
     "landValuePerUnit": {
-      "high": 913237.8292004054,
-      "low": 485804.3721833177,
+      "high": 970228.9568026836,
+      "low": 571291.0635867353,
     },
     "parking": {
       "basementLevels": 0,
@@ -897,12 +897,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 30578.53999999999,
     "firstCost": {
       "high": {
-        "services": 428099559.9999999,
+        "services": 336363939.9999999,
         "substructure": 366942479.9999999,
         "superstructure": 733884959.9999998,
       },
       "low": {
-        "services": 305785399.9999999,
+        "services": 244628319.9999999,
         "substructure": 244628319.9999999,
         "superstructure": 519835179.9999998,
       },
@@ -911,12 +911,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 2896534707.349999,
     "id": "slab",
     "landValue": {
-      "high": 997338952.9052212,
-      "low": 530542656.4450444,
+      "high": 1059578459.0999115,
+      "low": 623901915.7370797,
     },
     "landValuePerUnit": {
-      "high": 913237.8292004052,
-      "low": 485804.37218331796,
+      "high": 970228.9568026834,
+      "low": 571291.0635867354,
     },
     "parking": {
       "basementLevels": 0,
@@ -931,12 +931,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 9877.050000000001,
     "firstCost": {
       "high": {
-        "services": 138278700.00000003,
+        "services": 108647550.00000001,
         "substructure": 59262300.00000001,
         "superstructure": 177786900.00000003,
       },
       "low": {
-        "services": 98770500.00000001,
+        "services": 79016400.00000001,
         "substructure": 39508200.00000001,
         "superstructure": 128401650.00000001,
       },
@@ -945,12 +945,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 935504290.1250001,
     "id": "low-rise",
     "landValue": {
-      "high": 402493884.6564161,
-      "low": 291923369.16969043,
+      "high": 422597614.7449117,
+      "low": 322078964.3024338,
     },
     "landValuePerUnit": {
-      "high": 368553.3793895592,
-      "low": 267306.77988342004,
+      "high": 386961.85202703904,
+      "low": 294919.48883963976,
     },
     "parking": {
       "basementLevels": 0,
@@ -970,12 +970,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 36694.25,
     "firstCost": {
       "high": {
-        "services": 513719500,
+        "services": 403636750,
         "substructure": 440331000,
         "superstructure": 880662000,
       },
       "low": {
-        "services": 366942500,
+        "services": 293554000,
         "substructure": 293554000,
         "superstructure": 623802250,
       },
@@ -984,12 +984,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 3477907755.125,
     "id": "podium-tower",
     "landValue": {
-      "high": 1198295000.1519914,
-      "low": 638139413.8688056,
+      "high": 1272982411.6564162,
+      "low": 750170531.1254429,
     },
     "landValuePerUnit": {
-      "high": 1097248.1536921377,
-      "low": 584327.9773151996,
+      "high": 1165637.510542396,
+      "low": 686912.0125905873,
     },
     "parking": {
       "basementLevels": 0,
@@ -1004,13 +1004,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 36694.24999999999,
     "firstCost": {
       "high": {
-        "services": 496983199.9999998,
-        "substructure": 479780849.9999999,
+        "services": 390486799.9999999,
+        "substructure": 449894599.9999999,
         "superstructure": 851971199.9999998,
       },
       "low": {
-        "services": 354987999.9999999,
-        "substructure": 319853899.9999999,
+        "services": 283990399.9999999,
+        "substructure": 303117599.9999999,
         "superstructure": 603479599.9999998,
       },
     },
@@ -1018,12 +1018,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 3477907755.1249986,
     "id": "slab",
     "landValue": {
-      "high": 1204378042.1873894,
-      "low": 644222455.9042037,
+      "high": 1293664754.5767698,
+      "low": 783018958.1165929,
     },
     "landValuePerUnit": {
-      "high": 1102818.2400576198,
-      "low": 589898.0636806817,
+      "high": 1184575.804185036,
+      "low": 716990.478964192,
     },
     "parking": {
       "basementLevels": 1,
@@ -1038,12 +1038,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "builtSqm": 9877.050000000001,
     "firstCost": {
       "high": {
-        "services": 138278700.00000003,
+        "services": 108647550.00000001,
         "substructure": 59262300.00000001,
         "superstructure": 177786900.00000003,
       },
       "low": {
-        "services": 98770500.00000001,
+        "services": 79016400.00000001,
         "substructure": 39508200.00000001,
         "superstructure": 128401650.00000001,
       },
@@ -1052,12 +1052,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 935504290.1250001,
     "id": "low-rise",
     "landValue": {
-      "high": 402493884.6564161,
-      "low": 291923369.16969043,
+      "high": 422597614.7449117,
+      "low": 322078964.3024338,
     },
     "landValuePerUnit": {
-      "high": 368553.3793895592,
-      "low": 267306.77988342004,
+      "high": 386961.85202703904,
+      "low": 294919.48883963976,
     },
     "parking": {
       "basementLevels": 0,
@@ -1219,12 +1219,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "firstCost": {
       "high": {
         "services": 687505500,
-        "substructure": 457152750,
+        "substructure": 444409000,
         "superstructure": 868428000,
       },
       "low": {
         "services": 470398500,
-        "substructure": 304768500,
+        "substructure": 297632000,
         "superstructure": 615136500,
       },
     },
@@ -1232,12 +1232,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors e2e
     "grossValue": 4537424500,
     "id": "slab",
     "landValue": {
-      "high": 1853641166.3716822,
-      "low": 1219835712.8318589,
+      "high": 1860903976.1061954,
+      "low": 1232805015.929204,
     },
     "landValuePerUnit": {
-      "high": 1697331.9150552151,
-      "low": 1116972.4346197885,
+      "high": 1703982.2845976076,
+      "low": 1128848.094516918,
     },
     "parking": {
       "basementLevels": 1,
@@ -1302,15 +1302,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
       },
     },
     "grossSqm": 24499.99,
-    "grossValue": 3683706384.0000005,
+    "grossValue": 4562366804.9775,
     "id": "podium-tower",
     "landValue": {
-      "high": 1855696782.8106203,
-      "low": 1506626128.8283193,
+      "high": 2488643316.151934,
+      "low": 2139572662.1696332,
     },
     "landValuePerUnit": {
-      "high": 2120796.3231778946,
-      "low": 1721858.4329188492,
+      "high": 2844163.789842002,
+      "low": 2445225.8995829565,
     },
     "parking": {
       "basementLevels": 0,
@@ -1336,15 +1336,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
       },
     },
     "grossSqm": 24499.99,
-    "grossValue": 3683706384.0000005,
+    "grossValue": 4562366804.9775,
     "id": "slab",
     "landValue": {
-      "high": 1855696782.8106203,
-      "low": 1506626128.8283193,
+      "high": 2488643316.151934,
+      "low": 2139572662.1696332,
     },
     "landValuePerUnit": {
-      "high": 2120796.3231778946,
-      "low": 1721858.4329188492,
+      "high": 2844163.789842002,
+      "low": 2445225.8995829565,
     },
     "parking": {
       "basementLevels": 0,
@@ -1370,15 +1370,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 958741.6427617639,
-      "low": 842433.2887813409,
+      "high": 1254008.8371326071,
+      "low": 1137700.4831521842,
     },
     "parking": {
       "basementLevels": 0,
@@ -1409,15 +1409,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
       },
     },
     "grossSqm": 29399.99,
-    "grossValue": 4423516944,
+    "grossValue": 5478641553.5775,
     "id": "podium-tower",
     "landValue": {
-      "high": 2229047044.6159296,
-      "low": 1810162231.3415937,
+      "high": 2989110258.9487486,
+      "low": 2570225445.6744123,
     },
     "landValuePerUnit": {
-      "high": 2547482.336662787,
-      "low": 2068756.8357855617,
+      "high": 3416126.0101719834,
+      "low": 2937400.5092947576,
     },
     "parking": {
       "basementLevels": 0,
@@ -1433,25 +1433,25 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "firstCost": {
       "high": {
         "services": 287071900,
-        "substructure": 375662280,
+        "substructure": 358342280,
         "superstructure": 688972560,
       },
       "low": {
         "services": 200950330.00000003,
-        "substructure": 250441520.00000003,
+        "substructure": 240742320.00000003,
         "superstructure": 488022230.00000006,
       },
     },
     "grossSqm": 29399.99,
-    "grossValue": 4423516944,
+    "grossValue": 5478641553.5775,
     "id": "slab",
     "landValue": {
-      "high": 2230457168.509735,
-      "low": 1810867293.2884963,
+      "high": 3000391250.0991907,
+      "low": 2588557056.293881,
     },
     "landValuePerUnit": {
-      "high": 2549093.9068271103,
-      "low": 2069562.620867723,
+      "high": 3429018.571486566,
+      "low": 2958350.9214309547,
     },
     "parking": {
       "basementLevels": 1,
@@ -1477,15 +1477,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 958741.6427617639,
-      "low": 842433.2887813409,
+      "high": 1254008.8371326071,
+      "low": 1137700.4831521842,
     },
     "parking": {
       "basementLevels": 0,
@@ -1505,12 +1505,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 24499.989999999994,
     "firstCost": {
       "high": {
-        "services": 342999859.99999994,
+        "services": 269499889.99999994,
         "substructure": 293999879.99999994,
         "superstructure": 587999759.9999999,
       },
       "low": {
-        "services": 244999899.99999994,
+        "services": 195999919.99999994,
         "substructure": 195999919.99999994,
         "superstructure": 416499829.9999999,
       },
@@ -1519,12 +1519,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 2322186564.4749994,
     "id": "podium-tower",
     "landValue": {
-      "high": 800119704.4094248,
-      "low": 426115432.28553104,
+      "high": 849986940.6926106,
+      "low": 500916286.7103098,
     },
     "landValuePerUnit": {
-      "high": 914422.5193102924,
-      "low": 486989.0654613153,
+      "high": 971413.6464901561,
+      "low": 572475.7562311108,
     },
     "parking": {
       "basementLevels": 0,
@@ -1539,13 +1539,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 24499.99,
     "firstCost": {
       "high": {
-        "services": 338435860,
-        "substructure": 304757880,
+        "services": 265913890.00000003,
+        "substructure": 296607880,
         "superstructure": 580175760,
       },
       "low": {
-        "services": 241739900.00000003,
-        "substructure": 203171920,
+        "services": 193391920,
+        "substructure": 198607920,
         "superstructure": 410957830,
       },
     },
@@ -1553,12 +1553,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 2322186564.4750004,
     "id": "slab",
     "landValue": {
-      "high": 801778553.9669476,
-      "low": 427774281.8430536,
+      "high": 855627029.1881865,
+      "low": 509874074.3209297,
     },
     "landValuePerUnit": {
-      "high": 916318.3473760021,
-      "low": 488884.8935270247,
+      "high": 977859.4619135673,
+      "low": 582713.2277859396,
     },
     "parking": {
       "basementLevels": 1,
@@ -1573,12 +1573,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -1587,12 +1587,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 372460.5305102947,
-      "low": 270109.0766560687,
+      "high": 391069.88575651764,
+      "low": 298023.1095254031,
     },
     "parking": {
       "basementLevels": 0,
@@ -1612,12 +1612,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 29399.98999999999,
     "firstCost": {
       "high": {
-        "services": 411599859.9999999,
+        "services": 323399889.9999999,
         "substructure": 352799879.9999999,
         "superstructure": 705599759.9999998,
       },
       "low": {
-        "services": 293999899.9999999,
+        "services": 235199919.99999994,
         "substructure": 235199919.99999994,
         "superstructure": 499799829.9999998,
       },
@@ -1626,12 +1626,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 2786624116.4749985,
     "id": "podium-tower",
     "landValue": {
-      "high": 960143746.2926102,
-      "low": 511338589.2129643,
+      "high": 1019984433.9032296,
+      "low": 601099620.6288935,
     },
     "landValuePerUnit": {
-      "high": 1097307.1386024086,
-      "low": 584386.9590910949,
+      "high": 1165696.4958705837,
+      "low": 686970.9949933577,
     },
     "parking": {
       "basementLevels": 0,
@@ -1646,13 +1646,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 29399.99000000001,
     "firstCost": {
       "high": {
-        "services": 392823060.0000001,
-        "substructure": 397059480.0000001,
+        "services": 308646690.0000001,
+        "substructure": 363529480.0000001,
         "superstructure": 673410960.0000002,
       },
       "low": {
-        "services": 280587900.00000006,
-        "substructure": 264706320.0000001,
+        "services": 224470320.00000006,
+        "substructure": 245929520.00000006,
         "superstructure": 476999430.0000001,
       },
     },
@@ -1660,12 +1660,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 2786624116.475001,
     "id": "slab",
     "landValue": {
-      "high": 966968436.558098,
-      "low": 518163279.47845167,
+      "high": 1043188380.8058856,
+      "low": 637952948.0625225,
     },
     "landValuePerUnit": {
-      "high": 1105106.7846199828,
-      "low": 592186.6051086689,
+      "high": 1192215.2923303337,
+      "low": 729089.0834882536,
     },
     "parking": {
       "basementLevels": 1,
@@ -1680,12 +1680,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -1694,12 +1694,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 372460.5305102947,
-      "low": 270109.0766560687,
+      "high": 391069.88575651764,
+      "low": 298023.1095254031,
     },
     "parking": {
       "basementLevels": 0,
@@ -1861,12 +1861,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "firstCost": {
       "high": {
         "services": 545436610,
-        "substructure": 375662280,
+        "substructure": 358342280,
         "superstructure": 688972560,
       },
       "low": {
         "services": 373193470.00000006,
-        "substructure": 250441520.00000003,
+        "substructure": 240742320.00000003,
         "superstructure": 488022230.00000006,
       },
     },
@@ -1874,12 +1874,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors typ
     "grossValue": 3636449740.0000005,
     "id": "slab",
     "landValue": {
-      "high": 1488198482.6194694,
-      "low": 980962761.8230097,
+      "high": 1498069349.8761067,
+      "low": 998589310.495576,
     },
     "landValuePerUnit": {
-      "high": 1700798.2658233605,
-      "low": 1121100.2992081952,
+      "high": 1712079.2569736212,
+      "low": 1141244.9262622315,
     },
     "parking": {
       "basementLevels": 1,
@@ -1944,15 +1944,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 8470.53999999999,
-    "grossValue": 1274198303.9999983,
+    "grossValue": 1578127961.1149979,
     "id": "podium-tower",
     "landValue": {
-      "high": 642019068.5451319,
-      "low": 521332613.6778755,
+      "high": 860956007.3872644,
+      "low": 740269552.520008,
     },
     "landValuePerUnit": {
-      "high": 1081295.2733390077,
-      "low": 878033.8756678693,
+      "high": 1450031.170336228,
+      "low": 1246769.77266509,
     },
     "parking": {
       "basementLevels": 0,
@@ -1978,15 +1978,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 6605.239999999998,
-    "grossValue": 992791103.9999998,
+    "grossValue": 1229597775.9899998,
     "id": "slab",
     "landValue": {
-      "high": 500052324.4743363,
-      "low": 405942267.8371683,
+      "high": 670636953.6777523,
+      "low": 576526897.0405841,
     },
     "landValuePerUnit": {
-      "high": 842193.3885882298,
-      "low": 683692.24056776,
+      "high": 1129493.8167202557,
+      "low": 970992.6686997857,
     },
     "parking": {
       "basementLevels": 0,
@@ -2012,15 +2012,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 5116.09,
-    "grossValue": 766679664.0000001,
+    "grossValue": 949552837.4025002,
     "id": "low-rise",
     "landValue": {
-      "high": 427321382.7398232,
-      "low": 375254980.08495593,
+      "high": 559054801.4563143,
+      "low": 506988398.8014471,
     },
     "landValuePerUnit": {
-      "high": 719699.1709301209,
-      "low": 632008.38751141,
+      "high": 941565.9813999673,
+      "low": 853875.1979812568,
     },
     "parking": {
       "basementLevels": 0,
@@ -2051,15 +2051,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 8470.53999999999,
-    "grossValue": 1274198303.9999983,
+    "grossValue": 1578127961.1149979,
     "id": "podium-tower",
     "landValue": {
-      "high": 642019068.5451319,
-      "low": 521332613.6778755,
+      "high": 860956007.3872644,
+      "low": 740269552.520008,
     },
     "landValuePerUnit": {
-      "high": 1081295.2733390077,
-      "low": 878033.8756678693,
+      "high": 1450031.170336228,
+      "low": 1246769.77266509,
     },
     "parking": {
       "basementLevels": 0,
@@ -2085,15 +2085,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 6605.239999999998,
-    "grossValue": 992791103.9999998,
+    "grossValue": 1229597775.9899998,
     "id": "slab",
     "landValue": {
-      "high": 500052324.4743363,
-      "low": 405942267.8371683,
+      "high": 670636953.6777523,
+      "low": 576526897.0405841,
     },
     "landValuePerUnit": {
-      "high": 842193.3885882298,
-      "low": 683692.24056776,
+      "high": 1129493.8167202557,
+      "low": 970992.6686997857,
     },
     "parking": {
       "basementLevels": 0,
@@ -2119,15 +2119,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
       },
     },
     "grossSqm": 5116.09,
-    "grossValue": 766679664.0000001,
+    "grossValue": 949552837.4025002,
     "id": "low-rise",
     "landValue": {
-      "high": 427321382.7398232,
-      "low": 375254980.08495593,
+      "high": 559054801.4563143,
+      "low": 506988398.8014471,
     },
     "landValuePerUnit": {
-      "high": 719699.1709301209,
-      "low": 632008.38751141,
+      "high": 941565.9813999673,
+      "low": 853875.1979812568,
     },
     "parking": {
       "basementLevels": 0,
@@ -2147,12 +2147,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 4346.8,
     "firstCost": {
       "high": {
-        "services": 60855200,
+        "services": 47814800,
         "substructure": 26080800,
         "superstructure": 78242400,
       },
       "low": {
-        "services": 43468000,
+        "services": 34774400,
         "substructure": 17387200,
         "superstructure": 56508400,
       },
@@ -2161,12 +2161,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 411212779,
     "id": "podium-tower",
     "landValue": {
-      "high": 176777931.06725666,
-      "low": 128116851.42123896,
+      "high": 185625400.09380534,
+      "low": 141388054.96106195,
     },
     "landValuePerUnit": {
-      "high": 297731.2523237561,
-      "low": 215775.74976205436,
+      "high": 312632.2527895201,
+      "low": 238127.25046070028,
     },
     "parking": {
       "basementLevels": 0,
@@ -2181,12 +2181,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 7020.13,
     "firstCost": {
       "high": {
-        "services": 98281820,
+        "services": 77221430,
         "substructure": 84241560,
         "superstructure": 168483120,
       },
       "low": {
-        "services": 70201300,
+        "services": 56161040,
         "substructure": 56161040,
         "superstructure": 119342210,
       },
@@ -2195,12 +2195,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 663675379.825,
     "id": "slab",
     "landValue": {
-      "high": 228027899.7146461,
-      "low": 120862198.38721251,
+      "high": 242316659.89163727,
+      "low": 142295338.6526992,
     },
     "landValuePerUnit": {
-      "high": 384046.9889930307,
-      "low": 203557.38675738007,
+      "high": 408112.26929111744,
+      "low": 239655.30720451014,
     },
     "parking": {
       "basementLevels": 0,
@@ -2215,12 +2215,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 5535.5,
     "firstCost": {
       "high": {
-        "services": 77497000,
+        "services": 60890500,
         "substructure": 33213000,
         "superstructure": 99639000,
       },
       "low": {
-        "services": 55355000,
+        "services": 44284000,
         "substructure": 22142000,
         "superstructure": 71961500,
       },
@@ -2229,12 +2229,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 522336827.75000006,
     "id": "low-rise",
     "landValue": {
-      "high": 224163630.78628325,
-      "low": 162195422.82168153,
+      "high": 235430577.68893814,
+      "low": 179095843.17566383,
     },
     "landValuePerUnit": {
-      "high": 377538.7465873679,
-      "low": 273171.23843647534,
+      "high": 396514.6571602575,
+      "low": 301635.1042958097,
     },
     "parking": {
       "basementLevels": 0,
@@ -2254,12 +2254,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 4346.8,
     "firstCost": {
       "high": {
-        "services": 60855200,
+        "services": 47814800,
         "substructure": 26080800,
         "superstructure": 78242400,
       },
       "low": {
-        "services": 43468000,
+        "services": 34774400,
         "substructure": 17387200,
         "superstructure": 56508400,
       },
@@ -2268,12 +2268,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 411212779,
     "id": "podium-tower",
     "landValue": {
-      "high": 176777931.06725666,
-      "low": 128116851.42123896,
+      "high": 185625400.09380534,
+      "low": 141388054.96106195,
     },
     "landValuePerUnit": {
-      "high": 297731.2523237561,
-      "low": 215775.74976205436,
+      "high": 312632.2527895201,
+      "low": 238127.25046070028,
     },
     "parking": {
       "basementLevels": 0,
@@ -2288,12 +2288,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 7020.13,
     "firstCost": {
       "high": {
-        "services": 98281820,
+        "services": 77221430,
         "substructure": 84241560,
         "superstructure": 168483120,
       },
       "low": {
-        "services": 70201300,
+        "services": 56161040,
         "substructure": 56161040,
         "superstructure": 119342210,
       },
@@ -2302,12 +2302,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 663675379.825,
     "id": "slab",
     "landValue": {
-      "high": 228027899.7146461,
-      "low": 120862198.38721251,
+      "high": 242316659.89163727,
+      "low": 142295338.6526992,
     },
     "landValuePerUnit": {
-      "high": 384046.9889930307,
-      "low": 203557.38675738007,
+      "high": 408112.26929111744,
+      "low": 239655.30720451014,
     },
     "parking": {
       "basementLevels": 0,
@@ -2322,12 +2322,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "builtSqm": 5535.5,
     "firstCost": {
       "high": {
-        "services": 77497000,
+        "services": 60890500,
         "substructure": 33213000,
         "superstructure": 99639000,
       },
       "low": {
-        "services": 55355000,
+        "services": 44284000,
         "substructure": 22142000,
         "superstructure": 71961500,
       },
@@ -2336,12 +2336,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors con
     "grossValue": 522336827.75000006,
     "id": "low-rise",
     "landValue": {
-      "high": 224163630.78628325,
-      "low": 162195422.82168153,
+      "high": 235430577.68893814,
+      "low": 179095843.17566383,
     },
     "landValuePerUnit": {
-      "high": 377538.7465873679,
-      "low": 273171.23843647534,
+      "high": 396514.6571602575,
+      "low": 301635.1042958097,
     },
     "parking": {
       "basementLevels": 0,
@@ -2586,15 +2586,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
       },
     },
     "grossSqm": 840,
-    "grossValue": 149184000,
+    "grossValue": 184768290,
     "id": "slab",
     "landValue": {
-      "high": 86948474.3362832,
-      "low": 78399801.76991153,
+      "high": 112581759.34513275,
+      "low": 104033086.77876107,
     },
     "landValuePerUnit": {
-      "high": 362285.3097490533,
-      "low": 326665.8407210751,
+      "high": 469090.6639568796,
+      "low": 433471.1949289014,
     },
     "parking": {
       "basementLevels": 0,
@@ -2620,15 +2620,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
       },
     },
     "grossSqm": 3144.9,
-    "grossValue": 470302559.99999994,
+    "grossValue": 582482034.2249999,
     "id": "low-rise",
     "landValue": {
-      "high": 261970835.25663716,
-      "low": 229965215.78761062,
+      "high": 342779766.2470354,
+      "low": 310774146.7780088,
     },
     "landValuePerUnit": {
-      "high": 1091545.1469464628,
-      "low": 958188.3991535001,
+      "high": 1428249.0260866354,
+      "low": 1294892.2782936725,
     },
     "parking": {
       "basementLevels": 0,
@@ -2659,15 +2659,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
       },
     },
     "grossSqm": 840,
-    "grossValue": 149184000,
+    "grossValue": 184768290,
     "id": "slab",
     "landValue": {
-      "high": 86948474.3362832,
-      "low": 78399801.76991153,
+      "high": 112581759.34513275,
+      "low": 104033086.77876107,
     },
     "landValuePerUnit": {
-      "high": 362285.3097490533,
-      "low": 326665.8407210751,
+      "high": 469090.6639568796,
+      "low": 433471.1949289014,
     },
     "parking": {
       "basementLevels": 0,
@@ -2693,15 +2693,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
       },
     },
     "grossSqm": 3144.9,
-    "grossValue": 470302559.99999994,
+    "grossValue": 582482034.2249999,
     "id": "low-rise",
     "landValue": {
-      "high": 261970835.25663716,
-      "low": 229965215.78761062,
+      "high": 342779766.2470354,
+      "low": 310774146.7780088,
     },
     "landValuePerUnit": {
-      "high": 1091545.1469464628,
-      "low": 958188.3991535001,
+      "high": 1428249.0260866354,
+      "low": 1294892.2782936725,
     },
     "parking": {
       "basementLevels": 0,
@@ -2721,12 +2721,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "builtSqm": 750,
     "firstCost": {
       "high": {
-        "services": 10500000,
+        "services": 8250000,
         "substructure": 4500000,
         "superstructure": 13500000,
       },
       "low": {
-        "services": 7500000,
+        "services": 6000000,
         "substructure": 3000000,
         "superstructure": 9750000,
       },
@@ -2735,12 +2735,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "grossValue": 69005703,
     "id": "slab",
     "landValue": {
-      "high": 29100125.877876114,
-      "low": 20704108.178761072,
+      "high": 30626674.550442487,
+      "low": 22993931.18761063,
     },
     "landValuePerUnit": {
-      "high": 121250.52449601673,
-      "low": 86267.1174149667,
+      "high": 127611.14396529857,
+      "low": 95808.04661888945,
     },
     "parking": {
       "basementLevels": 0,
@@ -2755,12 +2755,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "builtSqm": 2250,
     "firstCost": {
       "high": {
-        "services": 31500000,
+        "services": 24750000,
         "substructure": 13500000,
         "superstructure": 40500000,
       },
       "low": {
-        "services": 22500000,
+        "services": 18000000,
         "substructure": 9000000,
         "superstructure": 29250000,
       },
@@ -2769,12 +2769,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "grossValue": 212181777,
     "id": "low-rise",
     "landValue": {
-      "high": 91020766.79469028,
-      "low": 65832713.69734517,
+      "high": 95600412.8123894,
+      "low": 72702182.72389382,
     },
     "landValuePerUnit": {
-      "high": 379253.1949930971,
-      "low": 274302.97374994704,
+      "high": 398335.0534009426,
+      "low": 302925.7613617152,
     },
     "parking": {
       "basementLevels": 0,
@@ -2794,12 +2794,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "builtSqm": 750,
     "firstCost": {
       "high": {
-        "services": 10500000,
+        "services": 8250000,
         "substructure": 4500000,
         "superstructure": 13500000,
       },
       "low": {
-        "services": 7500000,
+        "services": 6000000,
         "substructure": 3000000,
         "superstructure": 9750000,
       },
@@ -2808,12 +2808,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "grossValue": 69005703,
     "id": "slab",
     "landValue": {
-      "high": 29100125.877876114,
-      "low": 20704108.178761072,
+      "high": 30626674.550442487,
+      "low": 22993931.18761063,
     },
     "landValuePerUnit": {
-      "high": 121250.52449601673,
-      "low": 86267.1174149667,
+      "high": 127611.14396529857,
+      "low": 95808.04661888945,
     },
     "parking": {
       "basementLevels": 0,
@@ -2828,12 +2828,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "builtSqm": 2250,
     "firstCost": {
       "high": {
-        "services": 31500000,
+        "services": 24750000,
         "substructure": 13500000,
         "superstructure": 40500000,
       },
       "low": {
-        "services": 22500000,
+        "services": 18000000,
         "substructure": 9000000,
         "superstructure": 29250000,
       },
@@ -2842,12 +2842,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nar
     "grossValue": 212181777,
     "id": "low-rise",
     "landValue": {
-      "high": 91020766.79469028,
-      "low": 65832713.69734517,
+      "high": 95600412.8123894,
+      "low": 72702182.72389382,
     },
     "landValuePerUnit": {
-      "high": 379253.1949930971,
-      "low": 274302.97374994704,
+      "high": 398335.0534009426,
+      "low": 302925.7613617152,
     },
     "parking": {
       "basementLevels": 0,
@@ -3024,15 +3024,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 13998.47,
-    "grossValue": 2106348432,
+    "grossValue": 2608767682.3575,
     "id": "podium-tower",
     "landValue": {
-      "high": 1061437104.1132745,
-      "low": 861989876.6796461,
+      "high": 1423356811.892925,
+      "low": 1223909584.4592967,
     },
     "landValuePerUnit": {
-      "high": 1769061.8402145344,
-      "low": 1436649.7944869832,
+      "high": 2372261.353189396,
+      "low": 2039849.3074618452,
     },
     "parking": {
       "basementLevels": 0,
@@ -3058,15 +3058,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 9279,
-    "grossValue": 1394763839.9999998,
+    "grossValue": 1727451534.1499999,
     "id": "slab",
     "landValue": {
-      "high": 702540323.681416,
-      "low": 570335102.442478,
+      "high": 942193229.0248673,
+      "low": 809988007.7859293,
     },
     "landValuePerUnit": {
-      "high": 1170900.5394860657,
-      "low": 950558.5040846292,
+      "high": 1570322.0483976302,
+      "low": 1349980.012996194,
     },
     "parking": {
       "basementLevels": 0,
@@ -3092,15 +3092,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 1398164.8957371605,
-      "low": 1228548.54617717,
+      "high": 1828762.8875411921,
+      "low": 1659146.5379812017,
     },
     "parking": {
       "basementLevels": 0,
@@ -3131,15 +3131,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 14559.659999999998,
-    "grossValue": 2190671135.999999,
+    "grossValue": 2713203559.034999,
     "id": "podium-tower",
     "landValue": {
-      "high": 1103903377.6141589,
-      "low": 896460434.251327,
+      "high": 1480311689.4287515,
+      "low": 1272868746.0659199,
     },
     "landValuePerUnit": {
-      "high": 1839838.9627170383,
-      "low": 1494100.723773954,
+      "high": 2467186.149083822,
+      "low": 2121447.910140738,
     },
     "parking": {
       "basementLevels": 0,
@@ -3165,15 +3165,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 9279,
-    "grossValue": 1394763839.9999998,
+    "grossValue": 1727451534.1499999,
     "id": "slab",
     "landValue": {
-      "high": 702540323.681416,
-      "low": 570335102.442478,
+      "high": 942193229.0248673,
+      "low": 809988007.7859293,
     },
     "landValuePerUnit": {
-      "high": 1170900.5394860657,
-      "low": 950558.5040846292,
+      "high": 1570322.0483976302,
+      "low": 1349980.012996194,
     },
     "parking": {
       "basementLevels": 0,
@@ -3199,15 +3199,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 1398164.8957371605,
-      "low": 1228548.54617717,
+      "high": 1828762.8875411921,
+      "low": 1659146.5379812017,
     },
     "parking": {
       "basementLevels": 0,
@@ -3227,12 +3227,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 11701.620000000006,
     "firstCost": {
       "high": {
-        "services": 163822680.0000001,
+        "services": 128717820.00000007,
         "substructure": 140419440.0000001,
         "superstructure": 280838880.0000002,
       },
       "low": {
-        "services": 117016200.00000006,
+        "services": 93612960.00000004,
         "substructure": 93612960.00000004,
         "superstructure": 198927540.00000012,
       },
@@ -3241,12 +3241,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 1107154183.0500007,
     "id": "podium-tower",
     "landValue": {
-      "high": 380737433.6307083,
-      "low": 202106508.8519471,
+      "high": 404554890.26787645,
+      "low": 237832693.80769932,
     },
     "landValuePerUnit": {
-      "high": 634562.389393748,
-      "low": 336844.18142481364,
+      "high": 674258.1504562726,
+      "low": 396387.82301860047,
     },
     "parking": {
       "basementLevels": 0,
@@ -3261,12 +3261,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 9017.5,
     "firstCost": {
       "high": {
-        "services": 126245000,
+        "services": 99192500,
         "substructure": 108210000,
         "superstructure": 216420000,
       },
       "low": {
-        "services": 90175000,
+        "services": 72140000,
         "substructure": 72140000,
         "superstructure": 153297500,
       },
@@ -3275,12 +3275,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 853401610.75,
     "id": "slab",
     "landValue": {
-      "high": 293552686.85884964,
-      "low": 155896160.31017712,
+      "high": 311906890.39867264,
+      "low": 183427465.61991164,
     },
     "landValuePerUnit": {
-      "high": 489254.47810520243,
-      "low": 259826.93385407623,
+      "high": 519844.8173386859,
+      "low": 305712.4427043015,
     },
     "parking": {
       "basementLevels": 0,
@@ -3295,12 +3295,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 9695,
     "firstCost": {
       "high": {
-        "services": 135730000,
+        "services": 106645000,
         "substructure": 58170000,
         "superstructure": 174510000,
       },
       "low": {
-        "services": 96950000,
+        "services": 77560000,
         "substructure": 38780000,
         "superstructure": 126035000,
       },
@@ -3309,12 +3309,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 918904425.5,
     "id": "low-rise",
     "landValue": {
-      "high": 395538453.41327435,
-      "low": 287005931.2893806,
+      "high": 415271639.2539823,
+      "low": 316605710.0504426,
     },
     "landValuePerUnit": {
-      "high": 659230.7556983838,
-      "low": 478343.21882259526,
+      "high": 692119.398766709,
+      "low": 527676.183425083,
     },
     "parking": {
       "basementLevels": 0,
@@ -3334,12 +3334,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 12261.930000000004,
     "firstCost": {
       "high": {
-        "services": 171667020.00000006,
+        "services": 134881230.00000003,
         "substructure": 147143160.00000006,
         "superstructure": 294286320.0000001,
       },
       "low": {
-        "services": 122619300.00000004,
+        "services": 98095440.00000003,
         "substructure": 98095440.00000003,
         "superstructure": 208452810.00000006,
       },
@@ -3348,12 +3348,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 1161228974.3250005,
     "id": "podium-tower",
     "landValue": {
-      "high": 399732480.17747825,
-      "low": 212548150.53146046,
+      "high": 424690390.7969473,
+      "low": 249985016.460664,
     },
     "landValuePerUnit": {
-      "high": 666220.800305492,
-      "low": 354246.9175575891,
+      "high": 707817.3180052123,
+      "low": 416641.6941071697,
     },
     "parking": {
       "basementLevels": 0,
@@ -3368,12 +3368,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 9017.5,
     "firstCost": {
       "high": {
-        "services": 126245000,
+        "services": 99192500,
         "substructure": 108210000,
         "superstructure": 216420000,
       },
       "low": {
-        "services": 90175000,
+        "services": 72140000,
         "substructure": 72140000,
         "superstructure": 153297500,
       },
@@ -3382,12 +3382,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 853401610.75,
     "id": "slab",
     "landValue": {
-      "high": 293552686.85884964,
-      "low": 155896160.31017712,
+      "high": 311906890.39867264,
+      "low": 183427465.61991164,
     },
     "landValuePerUnit": {
-      "high": 489254.47810520243,
-      "low": 259826.93385407623,
+      "high": 519844.8173386859,
+      "low": 305712.4427043015,
     },
     "parking": {
       "basementLevels": 0,
@@ -3402,12 +3402,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "builtSqm": 9695,
     "firstCost": {
       "high": {
-        "services": 135730000,
+        "services": 106645000,
         "substructure": 58170000,
         "superstructure": 174510000,
       },
       "low": {
-        "services": 96950000,
+        "services": 77560000,
         "substructure": 38780000,
         "superstructure": 126035000,
       },
@@ -3416,12 +3416,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors cor
     "grossValue": 918904425.5,
     "id": "low-rise",
     "landValue": {
-      "high": 395538453.41327435,
-      "low": 287005931.2893806,
+      "high": 415271639.2539823,
+      "low": 316605710.0504426,
     },
     "landValuePerUnit": {
-      "high": 659230.7556983838,
-      "low": 478343.21882259526,
+      "high": 692119.398766709,
+      "low": 527676.183425083,
     },
     "parking": {
       "basementLevels": 0,
@@ -3666,15 +3666,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
       },
     },
     "grossSqm": 70812.18,
-    "grossValue": 10654327008,
+    "grossValue": 13195662955.605,
     "id": "podium-tower",
     "landValue": {
-      "high": 5368791115.497347,
-      "low": 4359874214.612391,
+      "high": 7199452585.719001,
+      "low": 6190535684.834046,
     },
     "landValuePerUnit": {
-      "high": 1193064.6923364156,
-      "low": 968860.9365835133,
+      "high": 1599878.3523869242,
+      "low": 1375674.596634022,
     },
     "parking": {
       "basementLevels": 0,
@@ -3690,25 +3690,25 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "firstCost": {
       "high": {
         "services": 1002240000.0000002,
-        "substructure": 1441800000.0000002,
+        "substructure": 1308960000.0000002,
         "superstructure": 2405376000.0000005,
       },
       "low": {
         "services": 701568000.0000002,
-        "substructure": 961200000.0000002,
+        "substructure": 886809600.0000002,
         "superstructure": 1703808000.0000005,
       },
     },
     "grossSqm": 105537.60000000003,
-    "grossValue": 15881702400.000008,
+    "grossValue": 19669904244.000008,
     "id": "slab",
     "landValue": {
-      "high": 8014286153.6283245,
-      "low": 6505201197.876113,
+      "high": 10818839481.961067,
+      "low": 9369238632.403545,
     },
     "landValuePerUnit": {
-      "high": 1780952.4785895534,
-      "low": 1445600.266199141,
+      "high": 2404186.551554303,
+      "low": 2082053.029429418,
     },
     "parking": {
       "basementLevels": 1,
@@ -3734,15 +3734,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 186421.986096149,
-      "low": 163806.47282174308,
+      "high": 243835.05166936107,
+      "low": 221219.5383949552,
     },
     "parking": {
       "basementLevels": 0,
@@ -3773,15 +3773,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
       },
     },
     "grossSqm": 78734.15,
-    "grossValue": 11846443919.999998,
+    "grossValue": 14672130963.637499,
     "id": "podium-tower",
     "landValue": {
-      "high": 5969547460.955752,
-      "low": 4847760014.053098,
+      "high": 8005042375.57604,
+      "low": 6883254928.673387,
     },
     "landValuePerUnit": {
-      "high": 1326566.1024386946,
-      "low": 1077280.0031262261,
+      "high": 1778898.3056890394,
+      "low": 1529612.2063765714,
     },
     "parking": {
       "basementLevels": 0,
@@ -3797,25 +3797,25 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "firstCost": {
       "high": {
         "services": 1002240000.0000002,
-        "substructure": 1441800000.0000002,
+        "substructure": 1308960000.0000002,
         "superstructure": 2405376000.0000005,
       },
       "low": {
         "services": 701568000.0000002,
-        "substructure": 961200000.0000002,
+        "substructure": 886809600.0000002,
         "superstructure": 1703808000.0000005,
       },
     },
     "grossSqm": 105537.60000000003,
-    "grossValue": 15881702400.000008,
+    "grossValue": 19669904244.000008,
     "id": "slab",
     "landValue": {
-      "high": 8014286153.6283245,
-      "low": 6505201197.876113,
+      "high": 10818839481.961067,
+      "low": 9369238632.403545,
     },
     "landValuePerUnit": {
-      "high": 1780952.4785895534,
-      "low": 1445600.266199141,
+      "high": 2404186.551554303,
+      "low": 2082053.029429418,
     },
     "parking": {
       "basementLevels": 1,
@@ -3841,15 +3841,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 186421.986096149,
-      "low": 163806.47282174308,
+      "high": 243835.05166936107,
+      "low": 221219.5383949552,
     },
     "parking": {
       "basementLevels": 0,
@@ -3869,12 +3869,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 103850.72999999997,
     "firstCost": {
       "high": {
-        "services": 1453910219.9999995,
+        "services": 1142358029.9999995,
         "substructure": 1246208759.9999995,
         "superstructure": 2492417519.999999,
       },
       "low": {
-        "services": 1038507299.9999996,
+        "services": 830805839.9999998,
         "substructure": 830805839.9999998,
         "superstructure": 1765462409.9999995,
       },
@@ -3883,12 +3883,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 9843609734.324995,
     "id": "podium-tower",
     "landValue": {
-      "high": 3391775611.7172995,
-      "low": 1806443671.4518135,
+      "high": 3603153203.7526975,
+      "low": 2123510059.504911,
     },
     "landValuePerUnit": {
-      "high": 753727.9137172753,
-      "low": 401431.92699052737,
+      "high": 800700.7119475083,
+      "low": 471891.124335877,
     },
     "parking": {
       "basementLevels": 0,
@@ -3903,13 +3903,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 105300,
     "firstCost": {
       "high": {
-        "services": 1357776000,
-        "substructure": 1538028000,
+        "services": 1066824000,
+        "substructure": 1330128000,
         "superstructure": 2327616000,
       },
       "low": {
-        "services": 969840000,
-        "substructure": 1025352000,
+        "services": 775872000,
+        "substructure": 908928000,
         "superstructure": 1648728000,
       },
     },
@@ -3917,12 +3917,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 9980720910,
     "id": "slab",
     "landValue": {
-      "high": 3481237894.4601784,
-      "low": 1873782142.2477884,
+      "high": 3797123558.1769924,
+      "low": 2381463381.1858416,
     },
     "landValuePerUnit": {
-      "high": 773608.4209935317,
-      "low": 416396.0316119012,
+      "high": 843805.2351530398,
+      "low": 529214.0847095936,
     },
     "parking": {
       "basementLevels": 1,
@@ -3937,12 +3937,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -3951,12 +3951,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 72422.88093394956,
-      "low": 52521.209350800804,
+      "high": 76041.36667634024,
+      "low": 57948.93796438684,
     },
     "parking": {
       "basementLevels": 0,
@@ -3976,12 +3976,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 103850.72999999997,
     "firstCost": {
       "high": {
-        "services": 1453910219.9999995,
+        "services": 1142358029.9999995,
         "substructure": 1246208759.9999995,
         "superstructure": 2492417519.999999,
       },
       "low": {
-        "services": 1038507299.9999996,
+        "services": 830805839.9999998,
         "substructure": 830805839.9999998,
         "superstructure": 1765462409.9999995,
       },
@@ -3990,12 +3990,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 9843609734.324995,
     "id": "podium-tower",
     "landValue": {
-      "high": 3391775611.7172995,
-      "low": 1806443671.4518135,
+      "high": 3603153203.7526975,
+      "low": 2123510059.504911,
     },
     "landValuePerUnit": {
-      "high": 753727.9137172753,
-      "low": 401431.92699052737,
+      "high": 800700.7119475083,
+      "low": 471891.124335877,
     },
     "parking": {
       "basementLevels": 0,
@@ -4010,13 +4010,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 105300,
     "firstCost": {
       "high": {
-        "services": 1357776000,
-        "substructure": 1538028000,
+        "services": 1066824000,
+        "substructure": 1330128000,
         "superstructure": 2327616000,
       },
       "low": {
-        "services": 969840000,
-        "substructure": 1025352000,
+        "services": 775872000,
+        "substructure": 908928000,
         "superstructure": 1648728000,
       },
     },
@@ -4024,12 +4024,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 9980720910,
     "id": "slab",
     "landValue": {
-      "high": 3481237894.4601784,
-      "low": 1873782142.2477884,
+      "high": 3797123558.1769924,
+      "low": 2381463381.1858416,
     },
     "landValuePerUnit": {
-      "high": 773608.4209935317,
-      "low": 416396.0316119012,
+      "high": 843805.2351530398,
+      "low": 529214.0847095936,
     },
     "parking": {
       "basementLevels": 1,
@@ -4044,12 +4044,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -4058,12 +4058,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 72422.88093394956,
-      "low": 52521.209350800804,
+      "high": 76041.36667634024,
+      "low": 57948.93796438684,
     },
     "parking": {
       "basementLevels": 0,
@@ -4118,12 +4118,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "firstCost": {
       "high": {
         "services": 1904256000.0000005,
-        "substructure": 1441800000.0000002,
+        "substructure": 1308960000.0000002,
         "superstructure": 2405376000.0000005,
       },
       "low": {
         "services": 1302912000.0000005,
-        "substructure": 961200000.0000002,
+        "substructure": 886809600.0000002,
         "superstructure": 1703808000.0000005,
       },
     },
@@ -4131,12 +4131,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 13055904000.000004,
     "id": "slab",
     "landValue": {
-      "high": 5366723766.371684,
-      "low": 3551645182.300887,
+      "high": 5442430810.6194725,
+      "low": 3686836332.743365,
     },
     "landValuePerUnit": {
-      "high": 1192605.2814196004,
-      "low": 789254.4849581819,
+      "high": 1209429.0690302718,
+      "low": 819296.9628343805,
     },
     "parking": {
       "basementLevels": 1,
@@ -4225,12 +4225,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "firstCost": {
       "high": {
         "services": 1904256000.0000005,
-        "substructure": 1441800000.0000002,
+        "substructure": 1308960000.0000002,
         "superstructure": 2405376000.0000005,
       },
       "low": {
         "services": 1302912000.0000005,
-        "substructure": 961200000.0000002,
+        "substructure": 886809600.0000002,
         "superstructure": 1703808000.0000005,
       },
     },
@@ -4238,12 +4238,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors lar
     "grossValue": 13055904000.000004,
     "id": "slab",
     "landValue": {
-      "high": 5366723766.371684,
-      "low": 3551645182.300887,
+      "high": 5442430810.6194725,
+      "low": 3686836332.743365,
     },
     "landValuePerUnit": {
-      "high": 1192605.2814196004,
-      "low": 789254.4849581819,
+      "high": 1209429.0690302718,
+      "low": 819296.9628343805,
     },
     "parking": {
       "basementLevels": 1,
@@ -4308,15 +4308,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
       },
     },
     "grossSqm": 862.65,
-    "grossValue": 153206640,
+    "grossValue": 189750434.96249998,
     "id": "slab",
     "landValue": {
-      "high": 89292977.84070799,
-      "low": 80513796.42477877,
+      "high": 115617446.07033187,
+      "low": 106838264.65440267,
     },
     "landValuePerUnit": {
-      "high": 1190573.0378934317,
-      "low": 1073517.2856793387,
+      "high": 1541565.9476268578,
+      "low": 1424510.195412765,
     },
     "parking": {
       "basementLevels": 0,
@@ -4342,15 +4342,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
       },
     },
     "grossSqm": 862.65,
-    "grossValue": 153206640,
+    "grossValue": 189750434.96249998,
     "id": "low-rise",
     "landValue": {
-      "high": 89292977.84070799,
-      "low": 80513796.42477877,
+      "high": 115617446.07033187,
+      "low": 106838264.65440267,
     },
     "landValuePerUnit": {
-      "high": 1190573.0378934317,
-      "low": 1073517.2856793387,
+      "high": 1541565.9476268578,
+      "low": 1424510.195412765,
     },
     "parking": {
       "basementLevels": 0,
@@ -4381,15 +4381,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
       },
     },
     "grossSqm": 862.65,
-    "grossValue": 153206640,
+    "grossValue": 189750434.96249998,
     "id": "slab",
     "landValue": {
-      "high": 89292977.84070799,
-      "low": 80513796.42477877,
+      "high": 115617446.07033187,
+      "low": 106838264.65440267,
     },
     "landValuePerUnit": {
-      "high": 1190573.0378934317,
-      "low": 1073517.2856793387,
+      "high": 1541565.9476268578,
+      "low": 1424510.195412765,
     },
     "parking": {
       "basementLevels": 0,
@@ -4415,15 +4415,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
       },
     },
     "grossSqm": 862.65,
-    "grossValue": 153206640,
+    "grossValue": 189750434.96249998,
     "id": "low-rise",
     "landValue": {
-      "high": 89292977.84070799,
-      "low": 80513796.42477877,
+      "high": 115617446.07033187,
+      "low": 106838264.65440267,
     },
     "landValuePerUnit": {
-      "high": 1190573.0378934317,
-      "low": 1073517.2856793387,
+      "high": 1541565.9476268578,
+      "low": 1424510.195412765,
     },
     "parking": {
       "basementLevels": 0,
@@ -4443,12 +4443,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "builtSqm": 623.25,
     "firstCost": {
       "high": {
-        "services": 8725500,
+        "services": 6855750,
         "substructure": 3739500,
         "superstructure": 11218500,
       },
       "low": {
-        "services": 6232500,
+        "services": 4986000,
         "substructure": 2493000,
         "superstructure": 8102250,
       },
@@ -4457,12 +4457,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "grossValue": 59017091.62499999,
     "id": "slab",
     "landValue": {
-      "high": 25387610.692699116,
-      "low": 18410519.984734517,
+      "high": 26656172.63960177,
+      "low": 20313362.9050885,
     },
     "landValuePerUnit": {
-      "high": 338501.4759075807,
-      "low": 245473.59980003233,
+      "high": 355415.63519986224,
+      "low": 270844.8387384546,
     },
     "parking": {
       "basementLevels": 0,
@@ -4477,12 +4477,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "builtSqm": 623.25,
     "firstCost": {
       "high": {
-        "services": 8725500,
+        "services": 6855750,
         "substructure": 3739500,
         "superstructure": 11218500,
       },
       "low": {
-        "services": 6232500,
+        "services": 4986000,
         "substructure": 2493000,
         "superstructure": 8102250,
       },
@@ -4491,12 +4491,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "grossValue": 59017091.62499999,
     "id": "low-rise",
     "landValue": {
-      "high": 25387610.692699116,
-      "low": 18410519.984734517,
+      "high": 26656172.63960177,
+      "low": 20313362.9050885,
     },
     "landValuePerUnit": {
-      "high": 338501.4759075807,
-      "low": 245473.59980003233,
+      "high": 355415.63519986224,
+      "low": 270844.8387384546,
     },
     "parking": {
       "basementLevels": 0,
@@ -4516,12 +4516,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "builtSqm": 623.25,
     "firstCost": {
       "high": {
-        "services": 8725500,
+        "services": 6855750,
         "substructure": 3739500,
         "superstructure": 11218500,
       },
       "low": {
-        "services": 6232500,
+        "services": 4986000,
         "substructure": 2493000,
         "superstructure": 8102250,
       },
@@ -4530,12 +4530,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "grossValue": 59017091.62499999,
     "id": "slab",
     "landValue": {
-      "high": 25387610.692699116,
-      "low": 18410519.984734517,
+      "high": 26656172.63960177,
+      "low": 20313362.9050885,
     },
     "landValuePerUnit": {
-      "high": 338501.4759075807,
-      "low": 245473.59980003233,
+      "high": 355415.63519986224,
+      "low": 270844.8387384546,
     },
     "parking": {
       "basementLevels": 0,
@@ -4550,12 +4550,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "builtSqm": 623.25,
     "firstCost": {
       "high": {
-        "services": 8725500,
+        "services": 6855750,
         "substructure": 3739500,
         "superstructure": 11218500,
       },
       "low": {
-        "services": 6232500,
+        "services": 4986000,
         "substructure": 2493000,
         "superstructure": 8102250,
       },
@@ -4564,12 +4564,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors sma
     "grossValue": 59017091.62499999,
     "id": "low-rise",
     "landValue": {
-      "high": 25387610.692699116,
-      "low": 18410519.984734517,
+      "high": 26656172.63960177,
+      "low": 20313362.9050885,
     },
     "landValuePerUnit": {
-      "high": 338501.4759075807,
-      "low": 245473.59980003233,
+      "high": 355415.63519986224,
+      "low": 270844.8387384546,
     },
     "parking": {
       "basementLevels": 0,
@@ -4746,15 +4746,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 13999.989999999994,
-    "grossValue": 2106618383.999999,
+    "grossValue": 2609102024.9774985,
     "id": "podium-tower",
     "landValue": {
-      "high": 1061582064.2265483,
-      "low": 862113180.155752,
+      "high": 1423548156.0457382,
+      "low": 1224079271.9749417,
     },
     "landValuePerUnit": {
-      "high": 2123164.128483993,
-      "low": 1724226.360336595,
+      "high": 2847096.3121329076,
+      "low": 2448158.5439855093,
     },
     "parking": {
       "basementLevels": 0,
@@ -4780,15 +4780,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 13999.99,
-    "grossValue": 2106618384.0000002,
+    "grossValue": 2609102024.9775004,
     "id": "slab",
     "landValue": {
-      "high": 1061582064.2265489,
-      "low": 862113180.1557525,
+      "high": 1423548156.0457397,
+      "low": 1224079271.9749432,
     },
     "landValuePerUnit": {
-      "high": 2123164.1284839944,
-      "low": 1724226.3603365961,
+      "high": 2847096.3121329104,
+      "low": 2448158.543985512,
     },
     "parking": {
       "basementLevels": 0,
@@ -4814,15 +4814,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 9791.25,
-    "grossValue": 1470394800,
+    "grossValue": 1821122458.3125,
     "id": "low-rise",
     "landValue": {
-      "high": 820055634.6902657,
-      "low": 720410170.0884957,
+      "high": 1072703700.0587391,
+      "low": 973058235.4569691,
     },
     "landValuePerUnit": {
-      "high": 1640111.2694043983,
-      "low": 1440820.3401979583,
+      "high": 2145407.400148698,
+      "low": 1946116.4709422581,
     },
     "parking": {
       "basementLevels": 0,
@@ -4853,15 +4853,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 16799.989999999994,
-    "grossValue": 2527175183.999999,
+    "grossValue": 3129972632.9774985,
     "id": "podium-tower",
     "landValue": {
-      "high": 1273345989.1823006,
-      "low": 1033983299.8017696,
+      "high": 1707573532.074057,
+      "low": 1468210842.693526,
     },
     "landValuePerUnit": {
-      "high": 2546691.9784016605,
-      "low": 2067966.5996336322,
+      "high": 3415147.0641978113,
+      "low": 2936421.685429783,
     },
     "parking": {
       "basementLevels": 0,
@@ -4887,15 +4887,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 16799.99,
-    "grossValue": 2527175184.0000005,
+    "grossValue": 3129972632.9775004,
     "id": "slab",
     "landValue": {
-      "high": 1273345989.1823015,
-      "low": 1033983299.8017704,
+      "high": 1707573532.0740583,
+      "low": 1468210842.6935272,
     },
     "landValuePerUnit": {
-      "high": 2546691.978401663,
-      "low": 2067966.599633634,
+      "high": 3415147.064197814,
+      "low": 2936421.6854297854,
     },
     "parking": {
       "basementLevels": 0,
@@ -4921,15 +4921,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
       },
     },
     "grossSqm": 9791.25,
-    "grossValue": 1470394800,
+    "grossValue": 1821122458.3125,
     "id": "low-rise",
     "landValue": {
-      "high": 820055634.6902657,
-      "low": 720410170.0884957,
+      "high": 1072703700.0587391,
+      "low": 973058235.4569691,
     },
     "landValuePerUnit": {
-      "high": 1640111.2694043983,
-      "low": 1440820.3401979583,
+      "high": 2145407.400148698,
+      "low": 1946116.4709422581,
     },
     "parking": {
       "basementLevels": 0,
@@ -4949,12 +4949,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 13999.990000000002,
     "firstCost": {
       "high": {
-        "services": 195999860.00000003,
+        "services": 153999890.00000003,
         "substructure": 167999880.00000003,
         "superstructure": 335999760.00000006,
       },
       "low": {
-        "services": 139999900.00000003,
+        "services": 111999920.00000001,
         "substructure": 111999920.00000001,
         "superstructure": 237999830.00000003,
       },
@@ -4963,12 +4963,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 1325118714.4750001,
     "id": "podium-tower",
     "landValue": {
-      "high": 455882332.81650454,
-      "low": 242165671.31207973,
+      "high": 484377887.6837613,
+      "low": 284909003.6129647,
     },
     "landValuePerUnit": {
-      "high": 911764.6656462771,
-      "low": 484331.3426312075,
+      "high": 968755.7753816199,
+      "low": 569818.0072342214,
     },
     "parking": {
       "basementLevels": 0,
@@ -4983,12 +4983,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 13999.99,
     "firstCost": {
       "high": {
-        "services": 195999860,
+        "services": 153999890,
         "substructure": 167999880,
         "superstructure": 335999760,
       },
       "low": {
-        "services": 139999900,
+        "services": 111999920,
         "substructure": 111999920,
         "superstructure": 237999830,
       },
@@ -4997,12 +4997,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 1325118714.475,
     "id": "slab",
     "landValue": {
-      "high": 455882332.8165044,
-      "low": 242165671.31207973,
+      "high": 484377887.68376106,
+      "low": 284909003.6129646,
     },
     "landValuePerUnit": {
-      "high": 911764.6656462769,
-      "low": 484331.3426312075,
+      "high": 968755.7753816195,
+      "low": 569818.0072342211,
     },
     "parking": {
       "basementLevels": 0,
@@ -5017,12 +5017,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 7650,
     "firstCost": {
       "high": {
-        "services": 107100000,
+        "services": 84150000,
         "substructure": 45900000,
         "superstructure": 137700000,
       },
       "low": {
-        "services": 76500000,
+        "services": 61200000,
         "substructure": 30600000,
         "superstructure": 99450000,
       },
@@ -5031,12 +5031,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 723483909,
     "id": "low-rise",
     "landValue": {
-      "high": 310958762.7663717,
-      "low": 225319382.23539826,
+      "high": 326529559.22654873,
+      "low": 248675576.92566374,
     },
     "landValuePerUnit": {
-      "high": 621917.5255417937,
-      "low": 450638.76447735424,
+      "high": 653059.1184626007,
+      "low": 497351.15385856497,
     },
     "parking": {
       "basementLevels": 0,
@@ -5056,12 +5056,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 16799.99,
     "firstCost": {
       "high": {
-        "services": 235199860.00000003,
+        "services": 184799890.00000003,
         "substructure": 201599880.00000003,
         "superstructure": 403199760.00000006,
       },
       "low": {
-        "services": 167999900.00000003,
+        "services": 134399920,
         "substructure": 134399920,
         "superstructure": 285599830,
       },
@@ -5070,12 +5070,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 1592725030.4750001,
     "id": "podium-tower",
     "landValue": {
-      "high": 548919094.9616374,
-      "low": 292459070.62535405,
+      "high": 583113764.8731418,
+      "low": 343751075.4926107,
     },
     "landValuePerUnit": {
-      "high": 1097838.1899392505,
-      "low": 584918.1412592198,
+      "high": 1166227.5297632546,
+      "low": 687502.150995226,
     },
     "parking": {
       "basementLevels": 0,
@@ -5090,12 +5090,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 16799.990000000005,
     "firstCost": {
       "high": {
-        "services": 235199860.00000006,
+        "services": 184799890.00000006,
         "substructure": 201599880.00000006,
         "superstructure": 403199760.0000001,
       },
       "low": {
-        "services": 167999900.00000006,
+        "services": 134399920.00000003,
         "substructure": 134399920.00000003,
         "superstructure": 285599830.00000006,
       },
@@ -5104,12 +5104,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 1592725030.4750004,
     "id": "slab",
     "landValue": {
-      "high": 548919094.9616374,
-      "low": 292459070.6253542,
+      "high": 583113764.8731419,
+      "low": 343751075.4926108,
     },
     "landValuePerUnit": {
-      "high": 1097838.1899392505,
-      "low": 584918.1412592201,
+      "high": 1166227.5297632548,
+      "low": 687502.1509952262,
     },
     "parking": {
       "basementLevels": 0,
@@ -5124,12 +5124,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "builtSqm": 7650,
     "firstCost": {
       "high": {
-        "services": 107100000,
+        "services": 84150000,
         "substructure": 45900000,
         "superstructure": 137700000,
       },
       "low": {
-        "services": 76500000,
+        "services": 61200000,
         "substructure": 30600000,
         "superstructure": 99450000,
       },
@@ -5138,12 +5138,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors wid
     "grossValue": 723483909,
     "id": "low-rise",
     "landValue": {
-      "high": 310958762.7663717,
-      "low": 225319382.23539826,
+      "high": 326529559.22654873,
+      "low": 248675576.92566374,
     },
     "landValuePerUnit": {
-      "high": 621917.5255417937,
-      "low": 450638.76447735424,
+      "high": 653059.1184626007,
+      "low": 497351.15385856497,
     },
     "parking": {
       "basementLevels": 0,
@@ -5388,15 +5388,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 29528,
-    "grossValue": 4442415359.999999,
+    "grossValue": 5502047736.599999,
     "id": "podium-tower",
     "landValue": {
-      "high": 2238491772.6017694,
-      "low": 1817783100.0353982,
+      "high": 3001802174.860531,
+      "low": 2581093502.2941594,
     },
     "landValuePerUnit": {
-      "high": 1865409.8104808992,
-      "low": 1514819.2500127903,
+      "high": 2501501.8123561842,
+      "low": 2150911.2518880754,
     },
     "parking": {
       "basementLevels": 0,
@@ -5422,15 +5422,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 29760,
-    "grossValue": 4475946240.000001,
+    "grossValue": 5543576609.400001,
     "id": "slab",
     "landValue": {
-      "high": 2255090477.309736,
-      "low": 1831076318.0177004,
+      "high": 3024162265.53239,
+      "low": 2600148106.2403545,
     },
     "landValuePerUnit": {
-      "high": 1879242.064404052,
-      "low": 1525896.9316645865,
+      "high": 2520135.221249195,
+      "low": 2166790.088509729,
     },
     "parking": {
       "basementLevels": 0,
@@ -5456,15 +5456,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 699082.4478506963,
-      "low": 614274.2730728707,
+      "high": 914381.4437472043,
+      "low": 829573.2689693787,
     },
     "parking": {
       "basementLevels": 0,
@@ -5495,15 +5495,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 29947.86,
-    "grossValue": 4505474016,
+    "grossValue": 5580147533.085,
     "id": "podium-tower",
     "landValue": {
-      "high": 2270243009.7557526,
-      "low": 1843552261.0831864,
+      "high": 3044388357.4612308,
+      "low": 2617697608.7886643,
     },
     "landValuePerUnit": {
-      "high": 1891869.1747755934,
-      "low": 1536293.5508857102,
+      "high": 2536990.297856376,
+      "low": 2181414.673966493,
     },
     "parking": {
       "basementLevels": 0,
@@ -5529,15 +5529,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 29760,
-    "grossValue": 4475946240.000001,
+    "grossValue": 5543576609.400001,
     "id": "slab",
     "landValue": {
-      "high": 2255090477.309736,
-      "low": 1831076318.0177004,
+      "high": 3024162265.53239,
+      "low": 2600148106.2403545,
     },
     "landValuePerUnit": {
-      "high": 1879242.064404052,
-      "low": 1525896.9316645865,
+      "high": 2520135.221249195,
+      "low": 2166790.088509729,
     },
     "parking": {
       "basementLevels": 0,
@@ -5563,15 +5563,15 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
       },
     },
     "grossSqm": 9999.99,
-    "grossValue": 1503630864,
+    "grossValue": 1862286193.7775,
     "id": "low-rise",
     "landValue": {
-      "high": 838898937.4300885,
-      "low": 737129127.6955752,
+      "high": 1097257732.5087478,
+      "low": 995487922.7742345,
     },
     "landValuePerUnit": {
-      "high": 699082.4478506963,
-      "low": 614274.2730728707,
+      "high": 914381.4437472043,
+      "low": 829573.2689693787,
     },
     "parking": {
       "basementLevels": 0,
@@ -5591,12 +5591,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 29792,
     "firstCost": {
       "high": {
-        "services": 417088000,
+        "services": 327712000,
         "substructure": 357504000,
         "superstructure": 715008000,
       },
       "low": {
-        "services": 297920000,
+        "services": 238336000,
         "substructure": 238336000,
         "superstructure": 506464000,
       },
@@ -5605,12 +5605,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 2823160556.0000005,
     "id": "podium-tower",
     "landValue": {
-      "high": 972499727.9504431,
-      "low": 517710347.41946983,
+      "high": 1033138312.0212395,
+      "low": 608668223.5256644,
     },
     "landValuePerUnit": {
-      "high": 810416.4399497638,
-      "low": 431425.2895114663,
+      "high": 860948.5933415367,
+      "low": 507223.5195991258,
     },
     "parking": {
       "basementLevels": 0,
@@ -5625,13 +5625,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 30000,
     "firstCost": {
       "high": {
-        "services": 416908800,
-        "substructure": 367286400,
+        "services": 327571200,
+        "substructure": 361766400,
         "superstructure": 714700800,
       },
       "low": {
-        "services": 297792000,
-        "substructure": 244857600,
+        "services": 238233600,
+        "substructure": 241766400,
         "superstructure": 506246400,
       },
     },
@@ -5639,12 +5639,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 2842862807.9999995,
     "id": "slab",
     "landValue": {
-      "high": 980407013.9044248,
-      "low": 522442412.13451344,
+      "high": 1044165456.3823009,
+      "low": 618978907.7097347,
     },
     "landValuePerUnit": {
-      "high": 817005.8449113425,
-      "low": 435368.67677395913,
+      "high": 870137.8803089865,
+      "low": 515815.7564190895,
     },
     "parking": {
       "basementLevels": 1,
@@ -5659,12 +5659,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -5673,12 +5673,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 271585.8034984794,
-      "low": 196954.53506272446,
+      "high": 285155.1250322531,
+      "low": 217308.51736338492,
     },
     "parking": {
       "basementLevels": 0,
@@ -5698,12 +5698,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 29792,
     "firstCost": {
       "high": {
-        "services": 417088000,
+        "services": 327712000,
         "substructure": 357504000,
         "superstructure": 715008000,
       },
       "low": {
-        "services": 297920000,
+        "services": 238336000,
         "substructure": 238336000,
         "superstructure": 506464000,
       },
@@ -5712,12 +5712,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 2823160556.0000005,
     "id": "podium-tower",
     "landValue": {
-      "high": 972499727.9504431,
-      "low": 517710347.41946983,
+      "high": 1033138312.0212395,
+      "low": 608668223.5256644,
     },
     "landValuePerUnit": {
-      "high": 810416.4399497638,
-      "low": 431425.2895114663,
+      "high": 860948.5933415367,
+      "low": 507223.5195991258,
     },
     "parking": {
       "basementLevels": 0,
@@ -5732,13 +5732,13 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 30000,
     "firstCost": {
       "high": {
-        "services": 416908800,
-        "substructure": 367286400,
+        "services": 327571200,
+        "substructure": 361766400,
         "superstructure": 714700800,
       },
       "low": {
-        "services": 297792000,
-        "substructure": 244857600,
+        "services": 238233600,
+        "substructure": 241766400,
         "superstructure": 506246400,
       },
     },
@@ -5746,12 +5746,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 2842862807.9999995,
     "id": "slab",
     "landValue": {
-      "high": 980407013.9044248,
-      "low": 522442412.13451344,
+      "high": 1044165456.3823009,
+      "low": 618978907.7097347,
     },
     "landValuePerUnit": {
-      "high": 817005.8449113425,
-      "low": 435368.67677395913,
+      "high": 870137.8803089865,
+      "low": 515815.7564190895,
     },
     "parking": {
       "basementLevels": 1,
@@ -5766,12 +5766,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "builtSqm": 8000,
     "firstCost": {
       "high": {
-        "services": 112000000,
+        "services": 88000000,
         "substructure": 48000000,
         "superstructure": 144000000,
       },
       "low": {
-        "services": 80000000,
+        "services": 64000000,
         "substructure": 32000000,
         "superstructure": 104000000,
       },
@@ -5780,12 +5780,12 @@ exports[`Bangkok money estimates stay byte-identical across engine refactors nea
     "grossValue": 757580282,
     "id": "low-rise",
     "landValue": {
-      "high": 325902964.20177,
-      "low": 236345442.0778762,
+      "high": 342186150.04247797,
+      "low": 260770220.83893818,
     },
     "landValuePerUnit": {
-      "high": 271585.8034984794,
-      "low": 196954.53506272446,
+      "high": 285155.1250322531,
+      "low": 217308.51736338492,
     },
     "parking": {
       "basementLevels": 0,
