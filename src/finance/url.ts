@@ -1,3 +1,4 @@
+import { isAskingPrice } from './asking-price'
 import { isValidValue, STORAGE_KEYS } from './parameters'
 import type { Overrides } from './values'
 
@@ -22,4 +23,12 @@ export function decodeAssumptions(encoded: string | null): Overrides {
     return parameter && isValidValue(parameter, value) ? [[key, value] as const] : []
   })
   return Object.fromEntries(entries)
+}
+
+export const encodeAskingPrice = (price: number | null) => (price === null ? null : String(price))
+
+export function decodeAskingPrice(encoded: string | null): number | null {
+  if (encoded === null) return null
+  const price = strictNumber(encoded)
+  return isAskingPrice(price) ? price : null
 }

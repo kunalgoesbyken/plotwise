@@ -9,7 +9,8 @@ import type { Region } from '@/region/regions'
 import { tally } from '@/feasibility/checklist'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { VerificationNote } from '@/feasibility/verification-note'
-import { firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
+import { useAssumptions } from '@/finance/assumptions-provider'
+import { askingText, firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
 import { formatMoney } from '@/finance/format-money'
 import { SCALARS, type Parameter, type ScalarId } from '@/finance/parameters'
 import { useFinance, type Finance, type Priced } from '@/finance/use-finance'
@@ -115,6 +116,7 @@ function useLinkAtPrint() {
 export function PrintSummary() {
   const { result, design } = useFeasibility()
   const finance = useFinance()
+  const { askingPrice } = useAssumptions()
   const region = useRegion()
   const href = useLinkAtPrint()
   if (result?.status !== 'ready' || !design || !finance) return null
@@ -137,6 +139,7 @@ export function PrintSummary() {
             {t('report.plot', { area: formatQuantity(site.areaSqm, area), allowed: formatQuantity(farCap.maxGfaSqm, area) })}
           </p>
           <DesignFacts design={design} finance={finance} area={area} />
+          {askingPrice !== null && <p className="mt-2 text-sm font-medium">{askingText(askingPrice, finance, design)}</p>}
         </div>
       </section>
       {toCheck.length > 0 && (

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { MONEY_REGIONS } from '@/solve'
-import { decodeAssumptions, encodeAssumptions } from './url'
+import { MAX_ASKING_PRICE } from './asking-price'
+import { decodeAskingPrice, decodeAssumptions, encodeAskingPrice, encodeAssumptions } from './url'
 import { resolveValues } from './values'
 
 const prices = MONEY_REGIONS.bkk.prices
@@ -48,5 +49,23 @@ describe('assumption share links', () => {
   it('writes nothing when there are no overrides', () => {
     expect(encodeAssumptions({})).toBeNull()
     expect(decodeAssumptions(null)).toEqual({})
+  })
+})
+
+describe('asking price share links', () => {
+  it('round-trips the price it encodes', () => {
+    expect(decodeAskingPrice(encodeAskingPrice(200_000_000))).toBe(200_000_000)
+    expect(decodeAskingPrice(encodeAskingPrice(1234.5))).toBe(1234.5)
+  })
+
+  it('writes nothing for a blank price and reads an old link without one as blank', () => {
+    expect(encodeAskingPrice(null)).toBeNull()
+    expect(decodeAskingPrice(null)).toBeNull()
+  })
+
+  it('reads a price that is not positive, finite and at most the maximum as blank', () => {
+    for (const text of ['', ' ', 'abc', '0', '-5', 'Infinity', 'NaN', '1e400', String(MAX_ASKING_PRICE * 10), '200M', '2,000']) {
+      expect(decodeAskingPrice(text)).toBeNull()
+    }
   })
 })

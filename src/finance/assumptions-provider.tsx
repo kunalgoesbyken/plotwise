@@ -5,7 +5,7 @@ import { useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
 import { DEFAULT_REGION } from '@/region/regions'
 import { MONEY_REGIONS, type MoneyRegion, type RegionId } from '@/solve'
-import { decodeAssumptions, encodeAssumptions } from './url'
+import { decodeAskingPrice, decodeAssumptions, encodeAskingPrice, encodeAssumptions } from './url'
 import type { Overrides } from './values'
 
 export type AssumptionsView = {
@@ -13,25 +13,32 @@ export type AssumptionsView = {
   readonly overrides: Overrides
   readonly setOverride: (key: string, value: number) => void
   readonly clearAll: () => void
+  readonly askingPrice: number | null
+  readonly setAskingPrice: (price: number | null) => void
 }
 
 const AssumptionsContext = createContext<AssumptionsView | null>(null)
 
 const OVERRIDES_IN_URL = { decode: decodeAssumptions, encode: encodeAssumptions }
 
-const overridesParam = (region: RegionId) => (region === DEFAULT_REGION.id ? 'assume' : `assume-${region}`)
+const ASKING_PRICE_IN_URL = { decode: decodeAskingPrice, encode: encodeAskingPrice }
+
+const regionParam = (name: string, region: RegionId) => (region === DEFAULT_REGION.id ? name : `${name}-${region}`)
 
 export function AssumptionsProvider({ children }: { readonly children: ReactNode }) {
   const { id } = useRegion()
-  const [overrides, setOverrides] = useHashState(overridesParam(id), OVERRIDES_IN_URL)
+  const [overrides, setOverrides] = useHashState(regionParam('assume', id), OVERRIDES_IN_URL)
+  const [askingPrice, setAskingPrice] = useHashState(regionParam('ask', id), ASKING_PRICE_IN_URL)
   const view = useMemo<AssumptionsView>(
     () => ({
       region: MONEY_REGIONS[id],
       overrides,
       setOverride: (key, value) => setOverrides((current) => ({ ...current, [key]: value })),
       clearAll: () => setOverrides({}),
+      askingPrice,
+      setAskingPrice,
     }),
-    [id, overrides, setOverrides],
+    [id, overrides, setOverrides, askingPrice, setAskingPrice],
   )
   return <AssumptionsContext value={view}>{children}</AssumptionsContext>
 }
