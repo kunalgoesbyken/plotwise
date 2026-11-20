@@ -24,9 +24,9 @@ function OutcomeCells({ row }: { row: WidthRow }) {
 }
 
 export function WidthSensitivity() {
-  const { plot, result } = useFeasibility()
+  const { plot, result, farBonus } = useFeasibility()
   const ready = result?.status === 'ready'
-  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot) : null), [plot, ready])
+  const rows = useMemo(() => (plot && ready ? widthSensitivity(plot, farBonus ? 'bonus' : 'standard') : null), [plot, ready, farBonus])
   if (!rows) return null
   return (
     <section aria-label={t('sensitivity.label')}>

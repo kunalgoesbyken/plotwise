@@ -20,7 +20,9 @@ export async function GET(request: NextRequest): Promise<Response> {
   try {
     return Response.json(await lookupZone(ring.data), { headers: { 'Cache-Control': CACHEABLE } })
   } catch (error) {
-    if (!(error instanceof ZoneServiceUnavailableError)) throw error
-    return Response.json(unknownVerdict(sourceFor(ring.data), 'unreachable'), { headers: { 'Cache-Control': UNCACHEABLE } })
+    if (error instanceof ZoneServiceUnavailableError) {
+      return Response.json(unknownVerdict(sourceFor(ring.data), 'unreachable'), { headers: { 'Cache-Control': UNCACHEABLE } })
+    }
+    return Response.json({ error: 'Zone check failed' }, { status: 502, headers: { 'Cache-Control': UNCACHEABLE } })
   }
 }

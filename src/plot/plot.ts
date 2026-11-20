@@ -7,6 +7,8 @@ export const LngLatSchema = z.tuple([z.number().min(-180).max(180), z.number().m
 
 export const MAX_ROAD_WIDTH_M = 200
 
+export const MAX_CORNERS = 100
+
 export const RoadWidthSchema = z.number().positive().max(MAX_ROAD_WIDTH_M)
 
 const RoadSchema = z.object({

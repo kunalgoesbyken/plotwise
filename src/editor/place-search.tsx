@@ -62,8 +62,9 @@ export function PlaceSearch() {
   const id = useId()
   const listId = `${id}-list`
   const [query, setQuery] = useState('')
+  const [picked, setPicked] = useState<string | null>(null)
   const [active, setActive] = useState(0)
-  const { search, close } = useLiveSearch(query)
+  const { search, close } = useLiveSearch(query === picked ? '' : query)
   const places = placesOf(search)
   const open = places.length > 0
   const highlighted = Math.min(active, places.length - 1)
@@ -71,6 +72,7 @@ export function PlaceSearch() {
   const pick = (place: Place) => {
     store.dispatch({ type: 'focus', at: place.lngLat })
     setQuery(place.label)
+    setPicked(place.label)
     close()
   }
   const submit = (event: FormEvent) => {

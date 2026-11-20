@@ -1,6 +1,7 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { flushSync } from 'react-dom'
 import type { Design } from '@/designs'
 import { tally } from '@/feasibility/checklist'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
@@ -84,9 +85,20 @@ function DesignFacts({ design, finance }: { design: Design; finance: Finance }) 
   )
 }
 
+function useLinkAtPrint() {
+  const [href, setHref] = useState('')
+  useEffect(() => {
+    const capture = () => flushSync(() => setHref(location.href))
+    addEventListener('beforeprint', capture)
+    return () => removeEventListener('beforeprint', capture)
+  }, [])
+  return href
+}
+
 export function PrintSummary() {
   const { result, design } = useFeasibility()
   const finance = useFinance()
+  const href = useLinkAtPrint()
   if (result?.status !== 'ready' || !design || !finance) return null
   const { site, farCap } = result.solution
   const toCheck = design.checks.filter((check) => check.status !== 'pass')
@@ -123,7 +135,7 @@ export function PrintSummary() {
         <Assumptions finance={finance} />
       </section>
       <footer className="border-t pt-3 text-2xs break-all text-muted-foreground">
-        {t('report.disclaimer')} {location.href}
+        {t('report.disclaimer')} {href}
       </footer>
     </article>
   )

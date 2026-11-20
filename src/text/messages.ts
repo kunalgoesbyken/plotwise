@@ -109,6 +109,7 @@ const en = {
   'tab.money': 'Money',
   'share.copy': 'Copy link',
   'share.copied': 'Link copied',
+  'share.failed': 'Copy the address bar',
   'share.print': 'Print',
   'assumptions.all': 'All money assumptions',
   'report.title': ({ city }: { city: string }) => `Plotwise · ${city} plot summary`,

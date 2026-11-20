@@ -164,7 +164,6 @@ function withFrontageEstimates(before: EditorState, after: EditorState): EditorS
   if (draft.status !== 'closed' || siteRoads.length === 0 || sameFrontageInputs(before, after)) return after
   const estimated = [...draft.corners.keys()].reduce<Draft>((current, edge) => {
     const widthM = mappedWidth(draft.corners, edge, siteRoads)
-    if (widthM === null) return current
     const result = editDraft(current, { type: 'estimate-road', edge, widthM })
     return result.ok ? result.draft : current
   }, draft)

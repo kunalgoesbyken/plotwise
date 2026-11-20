@@ -24,6 +24,7 @@
   --color-plot: #2f5bea;
   --color-road: #f0a92a;
   --color-road-foreground: #8a5a00;
+  --breakpoint-xl: 80rem;
   --color-canvas: #f7f6f3;
   --color-canvas-edge: #ecebe5;
 }

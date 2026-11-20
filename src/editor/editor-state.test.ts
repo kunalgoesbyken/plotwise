@@ -133,6 +133,16 @@ describe('road width estimates', () => {
     expect(before.draft).toEqual(after.draft)
   })
 
+  it('re-estimates an estimated road when the mapped roads change, and drops it when no road runs along the edge', () => {
+    const drawn: EditorAction[] = [...lot.ring.map((at): EditorAction => ({ type: 'add', at })), { type: 'close' }]
+    const wider: SiteRoad = { ...soi, id: 'wider', widthM: 10 }
+    const elsewhere: SiteRoad = { ...soi, id: 'elsewhere', line: [frame.toLngLat([300, 300]), frame.toLngLat([360, 300])] }
+    const updated = run(...drawn, { type: 'site', roads: [soi], stations: [] }, { type: 'site', roads: [wider], stations: [] })
+    expect(updated.plot?.roads).toEqual([{ edge: 2, widthM: 10 }])
+    const gone = run(...drawn, { type: 'site', roads: [soi], stations: [] }, { type: 'site', roads: [elsewhere], stations: [] })
+    expect(gone.plot).toBeNull()
+  })
+
   it('never overrides what the user or a shared link decided about an edge', () => {
     const link = run({ type: 'load', plot: lot }, { type: 'site', roads: [soi], stations: [] })
     expect(link.plot?.roads).toEqual(lot.roads)

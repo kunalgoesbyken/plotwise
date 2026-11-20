@@ -1,9 +1,7 @@
 import type { LngLat } from '@/geo/projection'
-import { PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
+import { MAX_CORNERS, PlotSchema, RoadWidthSchema, type BuildingType, type Plot, type Road } from '@/plot/plot'
 import { checkOutline, isOnEarth, NEIGHBOUR, normalizeOutline, SIDE, type Corner, type Edge, type OutlineRejection } from './outline'
 import { isSimplePath } from './path'
-
-export const MAX_CORNERS = 100
 
 const COORDINATE_SCALE = 1e7
 
@@ -27,7 +25,7 @@ export type DraftAction =
   | { type: 'unmark-road'; edge: number }
   | { type: 'set-road-width'; edge: number; widthM: number }
   | { type: 'estimate-road-width'; edge: number; widthM: number }
-  | { type: 'estimate-road'; edge: number; widthM: number }
+  | { type: 'estimate-road'; edge: number; widthM: number | null }
   | { type: 'set-building-type'; buildingType: BuildingType }
   | { type: 'set-near-station'; nearStation: boolean }
   | { type: 'estimate-near-station'; nearStation: boolean }
@@ -137,11 +135,15 @@ function editClosed(draft: ClosedDraft, action: DraftAction): EditResult {
       return replaceEdge(draft, action.edge, (edge) =>
         edge.road && edge.widthM === null ? { road: true, widthM: action.widthM, estimated: true } : edge,
       )
-    case 'estimate-road':
-      if (!isRoadWidth(action.widthM)) return accept(draft)
-      return replaceEdge(draft, action.edge, (edge) =>
-        edge.road || edge.touched ? edge : { road: true, widthM: action.widthM, estimated: true },
-      )
+    case 'estimate-road': {
+      const { widthM } = action
+      if (widthM !== null && !isRoadWidth(widthM)) return accept(draft)
+      return replaceEdge(draft, action.edge, (edge) => {
+        const open = edge.road ? edge.estimated : !edge.touched
+        if (!open) return edge
+        return widthM === null ? SIDE : { road: true, widthM, estimated: true }
+      })
+    }
     default:
       return accept(draft)
   }

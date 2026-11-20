@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import { BUILDING_TYPES, PlotSchema, type Plot } from '@/plot/plot'
 import { initialEditorState, nextStep, reduceEditor, type EditorAction, type EditorState } from './editor-state'
-import { MAX_CORNERS } from './plot-draft'
+import { MAX_CORNERS } from '@/plot/plot'
 
 const BANGKOK: LngLat = [100.5636, 13.7466]
 const STEP_DEGREES = 1e-4

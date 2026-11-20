@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
+import { MAX_CORNERS } from '@/plot/plot'
+import { MAX_BBOX_SIDE_M } from '@/site/assumptions'
 import { bboxSideLengthsM } from '@/site/bbox'
-import { ZONE_MAX_SIDE_M, ZONE_MAX_VERTICES, ZONE_RING_DECIMALS } from './assumptions'
+import { ZONE_RING_DECIMALS } from './assumptions'
 
 const VERTEX_SEPARATOR = ';'
 const COORDINATE_SEPARATOR = ','
@@ -41,14 +43,14 @@ function isPlotSized(ring: readonly LngLat[]): boolean {
   const lngs = ring.map(([lng]) => lng)
   const lats = ring.map(([, lat]) => lat)
   const { widthM, heightM } = bboxSideLengthsM([Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)])
-  return Math.max(widthM, heightM) <= ZONE_MAX_SIDE_M.value
+  return Math.max(widthM, heightM) <= MAX_BBOX_SIDE_M.value
 }
 
 const RingSchema = z
   .array(VertexSchema, { error: MALFORMED })
   .min(3, { error: MALFORMED })
-  .max(ZONE_MAX_VERTICES.value)
-  .refine(isPlotSized, { error: `ring must fit within ${ZONE_MAX_SIDE_M.value} m on each side`, abort: true })
+  .max(MAX_CORNERS)
+  .refine(isPlotSized, { error: `ring must fit within ${MAX_BBOX_SIDE_M.value} m on each side`, abort: true })
 
 const parseRing = (text: string) => text.split(VERTEX_SEPARATOR).map((vertex) => vertex.split(COORDINATE_SEPARATOR).map(strictNumber))
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { CaretDownIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { REGION } from '@/region/regions'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
@@ -30,6 +30,16 @@ export type EditorSlots = {
 }
 
 const VIEW_3D = 'view3d'
+
+const insetQuery = () => `(min-width: ${getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-xl')})`
+
+function subscribeToInset(onChange: () => void) {
+  const query = matchMedia(insetQuery())
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
+
+const useSceneInset = () => useSyncExternalStore(subscribeToInset, () => matchMedia(insetQuery()).matches, () => false)
 
 const INTERACTIVE = 'input, select, textarea, button, a[href], [contenteditable]'
 
@@ -145,7 +155,9 @@ export function EditorShell({ summary, panels = [], view3d, overlay }: EditorSlo
   const [open, setOpen] = useState(true)
   const [step, setStep] = useStep(state, () => setOpen(true))
   const [chosenTab, setTab] = useState<string | null>(null)
-  const tab = chosenTab ?? panels[0]?.id ?? VIEW_3D
+  const sceneInset = useSceneInset()
+  const firstPanel = panels[0]?.id ?? VIEW_3D
+  const tab = chosenTab === VIEW_3D && sceneInset ? firstPanel : (chosenTab ?? firstPanel)
   useShortcuts(store)
 
   const ready = state.plot !== null

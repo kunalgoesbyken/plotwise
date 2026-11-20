@@ -251,6 +251,8 @@ test('suggests places while typing and draws the plot at the one picked', async 
   await expect(result).toHaveText('Asok, Watthana, Bangkok')
   await result.click()
   await expect(page.getByRole('listbox', { name: 'Places found' })).toBeHidden()
+  await page.waitForTimeout(1_000)
+  await expect(page.getByRole('listbox', { name: 'Places found' })).toBeHidden()
   await page.waitForTimeout(4_000)
   await draw(page, [
     [600, 380],

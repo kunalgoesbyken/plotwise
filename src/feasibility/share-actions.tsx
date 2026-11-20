@@ -7,24 +7,34 @@ import { Button } from '@/ui/button'
 
 const COPIED_FOR_MS = 2000
 
+type CopyState = 'idle' | 'copied' | 'failed'
+
 function useCopyLink() {
-  const [copied, setCopied] = useState(false)
+  const [state, setState] = useState<CopyState>('idle')
   useEffect(() => {
-    if (!copied) return
-    const timer = setTimeout(() => setCopied(false), COPIED_FOR_MS)
+    if (state === 'idle') return
+    const timer = setTimeout(() => setState('idle'), COPIED_FOR_MS)
     return () => clearTimeout(timer)
-  }, [copied])
-  const copy = () => navigator.clipboard.writeText(location.href).then(() => setCopied(true))
-  return { copied, copy }
+  }, [state])
+  const copy = () => {
+    if (!navigator.clipboard) return setState('failed')
+    navigator.clipboard.writeText(location.href).then(
+      () => setState('copied'),
+      () => setState('failed'),
+    )
+  }
+  return { state, copy }
 }
 
+const COPY_LABEL = { idle: 'share.copy', copied: 'share.copied', failed: 'share.failed' } as const
+
 export function ShareActions() {
-  const { copied, copy } = useCopyLink()
+  const { state, copy } = useCopyLink()
   return (
     <div className="flex gap-1 print:hidden">
       <Button variant="ghost" size="sm" onClick={copy} aria-live="polite">
         <LinkSimpleIcon aria-hidden="true" />
-        {t(copied ? 'share.copied' : 'share.copy')}
+        {t(COPY_LABEL[state])}
       </Button>
       <Button variant="ghost" size="sm" onClick={() => print()}>
         <PrinterIcon aria-hidden="true" />

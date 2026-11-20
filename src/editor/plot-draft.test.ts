@@ -2,7 +2,8 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import type { Plot } from '@/plot/plot'
-import { MAX_CORNERS, editDraft, emptyDraft, roundLngLat, toPlot, type Draft, type DraftAction } from './plot-draft'
+import { MAX_CORNERS } from '@/plot/plot'
+import { editDraft, emptyDraft, roundLngLat, toPlot, type Draft, type DraftAction } from './plot-draft'
 
 const lShape: Plot['ring'] = [
   [100.53, 13.724],

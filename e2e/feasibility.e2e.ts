@@ -325,3 +325,11 @@ test('share copies the link and print shows a one-page summary', async ({ page, 
   await expect(page.getByText('Assumptions used (estimated, editable)')).toBeVisible()
   await expect(page.getByRole('complementary', { name: 'Plot settings' })).toBeHidden()
 })
+
+test('widening the window from the 3D tab falls back to the designs, not an empty panel', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 })
+  await open(page)
+  await showTab(page, '3D')
+  await page.setViewportSize({ width: 1300, height: 800 })
+  await expect(designTable(page)).toBeVisible()
+})

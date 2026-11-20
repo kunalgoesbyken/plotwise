@@ -17,17 +17,12 @@ export const ZONE_RING_DECIMALS: Assumption<number> = {
   source: 'assumption: five decimal degrees is about 1 m, finer than a zone boundary drawn at 1:10,000, and lets repeat checks share one cache entry',
 }
 
-export const ZONE_MAX_VERTICES: Assumption<number> = {
-  value: 64,
-  source: 'assumption: a plot outline has a handful of corners; more than this is not a plot and would only bloat the query URL',
-}
-
 export const ZONE_DEBOUNCE_MS: Assumption<number> = {
   value: 400,
   source: 'assumption: waits for a dragged corner to settle, so one drag sends one request rather than dozens',
 }
 
-export const ZONE_MAX_SIDE_M: Assumption<number> = {
-  value: 1000,
-  source: 'assumption: wider than any single plot the tool is meant for, and small enough to keep each query to the city-plan layer cheap',
+export const ZONE_EDGE_TOLERANCE_M: Assumption<number> = {
+  value: 2,
+  source: 'assumption: the plot is shrunk by this much before the zone query, so a zone that only touches its boundary or the 1 m rounding of its corners is not counted',
 }
