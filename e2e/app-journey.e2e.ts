@@ -1,4 +1,4 @@
-import { DEVICES, DRAWN_PLOT, allowedArea, designTable, drawPlot, dragBy, frontageWidth, goTo, hint, openApp, plotInUrl, settledCorner, summary } from './support/app'
+import { DEVICES, DRAWN_PLOT, READY_TIMEOUT, allowedArea, designTable, drawPlot, dragBy, frontageWidth, goTo, hint, openApp, plotInUrl, settledCorner, summary } from './support/app'
 import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
@@ -40,7 +40,7 @@ for (const device of DEVICES)
 
       await test.step('see what the plot can hold', async () => {
         await page.getByRole('button', { name: 'See what you can build' }).click()
-        await expect(designTable(page)).toBeAttached({ timeout: 30_000 })
+        await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
         await expect(summary(page)).toContainText('You can build up to')
         expect(await allowedArea(page)).toBeGreaterThan(0)
       })

@@ -1,11 +1,10 @@
 import type { Page } from '@playwright/test'
 import { expectNoSeriousViolations } from './support/axe'
-import { DEVICES, designTable } from './support/app'
-import { INSIDE, mockSite, mockZone } from './support/site'
+import { DEVICES, READY_TIMEOUT, designTable } from './support/app'
+import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
 const REPO = 'https://github.com/kunalgoesbyken/plotwise'
-const SCROLL_STEP_PAUSE_MS = 50
 
 const UNUSED_MAPLIBRE_CSS_PRELOAD =
   'The resource http://localhost/_next/static/chunks/maplibre.css was preloaded using link preload but not used within a few seconds from the window\'s load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.'
@@ -15,22 +14,28 @@ const collapsedQuestions = (page: Page) => mainButtons(page).and(page.locator('[
 const question = (page: Page, name: string) => page.getByRole('main').getByRole('button', { name, exact: true })
 
 async function scrollThroughPage(page: Page) {
-  await page.evaluate(async (pause) => {
+  await page.evaluate(async () => {
+    const nextFrame = () => new Promise(requestAnimationFrame)
     for (let y = 0; y < document.body.scrollHeight; y += innerHeight) {
       scrollTo(0, y)
-      await new Promise((resolve) => setTimeout(resolve, pause))
+      await nextFrame()
     }
     scrollTo(0, 0)
-  }, SCROLL_STEP_PAUSE_MS)
+  })
 }
+
+const finiteAnimationsRunning = (page: Page) =>
+  page.evaluate(() => document.getAnimations().filter(({ playState, effect }) => playState === 'running' && Number.isFinite(effect?.getComputedTiming().endTime)).length)
+
+const imagesNotLoaded = (page: Page) =>
+  page.evaluate(() => [...document.images].filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src))
 
 for (const device of DEVICES)
   test.describe(`landing on ${device.name}`, () => {
     test.use({ viewport: { width: device.width, height: device.height }, allowedConsoleMessages: [UNUSED_MAPLIBRE_CSS_PRELOAD] })
 
     test.beforeEach(async ({ page }) => {
-      await mockZone(page, INSIDE)
-      await mockSite(page)
+      await mockApp(page)
       await page.goto('/')
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     })
@@ -68,7 +73,7 @@ for (const device of DEVICES)
         await page.goto('/')
         await page.getByRole('link', { name: 'Try the example plot' }).nth(index).click()
         await expect(page).toHaveURL(/\/app#plot=/)
-        await expect(designTable(page)).toBeAttached({ timeout: 30_000 })
+        await expect(designTable(page)).toBeAttached({ timeout: READY_TIMEOUT })
       }
     })
 
@@ -100,13 +105,12 @@ for (const device of DEVICES)
 
     test('every image on the page loads', async ({ page }) => {
       await scrollThroughPage(page)
-      const broken = await page.evaluate(() => [...document.images].filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src))
-      expect(broken).toEqual([])
+      await expect.poll(() => imagesNotLoaded(page)).toEqual([])
     })
 
     test('has no serious or critical accessibility violations', async ({ page }) => {
       await scrollThroughPage(page)
-      await page.waitForTimeout(500)
+      await expect.poll(() => finiteAnimationsRunning(page)).toBe(0)
       await expectNoSeriousViolations(page)
     })
   })

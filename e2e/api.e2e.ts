@@ -1,11 +1,10 @@
 import type { APIResponse } from '@playwright/test'
 import { expect, test } from '@playwright/test'
-import { encodeRing } from '../src/zone/schema'
-import { RESULTS_PLOT } from './support/site'
+import { ROUTE_RATE_LIMITS } from '../src/rate-limit/assumptions'
 
 const BANGKOK_BBOX = '100.5671,13.7632,100.5709,13.7668'
-const BANGKOK_RING = encodeRing(RESULTS_PLOT.ring)
-const BURST_REQUESTS = 120
+const BURSTING_CLIENT = '203.0.113.77'
+const EXTRA_REQUESTS = 5
 
 const MUST_NOT_BE_CACHED = 'no-store'
 const PUBLICLY_CACHED = /^public, max-age=\d+, s-maxage=\d+, stale-while-revalidate=\d+$/
@@ -21,11 +20,6 @@ const rejections = [
   { route: '/api/geocode', query: '?q=a', message: 'at least' },
   { route: '/api/geocode', query: `?q=${'a'.repeat(101)}`, message: 'at most' },
   { route: '/api/geocode', query: '?q=%21%21%21', message: 'letter or digit' },
-  { route: '/api/zone', query: '', message: 'ring is required' },
-  { route: '/api/zone', query: '?ring=100.5,13.7', message: 'at least three' },
-  { route: '/api/zone', query: '?ring=a,b;c,d;e,f', message: 'at least three' },
-  { route: '/api/zone', query: '?ring=500,13.7;100.5,13.7;100.5,13.8', message: 'at least three' },
-  { route: '/api/zone', query: '?ring=100.5,13.7;100.9,13.7;100.9,14.2', message: 'must fit within' },
 ]
 
 async function expectJsonError(response: APIResponse, message: string) {
@@ -49,7 +43,7 @@ test.describe('input validation', () => {
       await expectJsonError(await request.get(`${route}${query}`), message)
     })
 
-  for (const route of ['/api/site', '/api/geocode', '/api/zone'])
+  for (const route of ['/api/site', '/api/geocode'])
     test(`${route} accepts only GET`, async ({ request }) => {
       expect((await request.post(route)).status()).toBe(405)
     })
@@ -71,25 +65,30 @@ test.describe('caching headers', () => {
   })
 
   test('/api/geocode serves the same cached answer for a query written in other letter case and spacing', async ({ request }) => {
-    const [plain, spaced] = await Promise.all([request.get('/api/geocode?q=asok'), request.get('/api/geocode?q=%20%20ASOK%20')])
-    expect(spaced.status()).toBe(plain.status())
-    if (plain.ok()) expect(await spaced.json()).toEqual(await plain.json())
-  })
-
-  test('/api/zone caches a checked zone publicly and never an unchecked one', async ({ request }) => {
-    const response = await request.get(`/api/zone?ring=${BANGKOK_RING}`)
-    expect(response.status()).toBe(200)
-    const verdict = await response.json()
-    expect(['inside', 'outside', 'mixed', 'unknown']).toContain(verdict.status)
-    expectCachingToFollowOutcome(response, verdict.status !== 'unknown')
+    const plain = await request.get('/api/geocode?q=asok')
+    test.skip(!plain.ok(), 'the geocoder is unreachable from here')
+    const spaced = await request.get('/api/geocode?q=%20%20ASOK%20')
+    expect(spaced.status()).toBe(200)
+    expect(await spaced.json()).toEqual(await plain.json())
+    expect(spaced.headers()['cache-control']).toBe(plain.headers()['cache-control'])
   })
 })
 
 test.describe('rate limiting', () => {
-  test.fixme('waits for the rate limiter to merge: a burst of /api/zone requests gets a 429 with a Retry-After header', async ({ request }) => {
-    const responses = await Promise.all(Array.from({ length: BURST_REQUESTS }, () => request.get(`/api/zone?ring=${BANGKOK_RING}`)))
-    const limited = responses.filter((response) => response.status() === 429)
-    expect(limited.length).toBeGreaterThan(0)
-    for (const response of limited) expect(Number(response.headers()['retry-after'])).toBeGreaterThan(0)
+  test.skip(!!process.env.E2E_URL, 'the live site overwrites the forwarded address, so one client cannot be simulated there')
+
+  test('a concurrent burst on /api/site lets the limit through and refuses the rest with Retry-After', async ({ request }) => {
+    const { limit, windowMs } = ROUTE_RATE_LIMITS.value.site
+    const responses = await Promise.all(
+      Array.from({ length: limit + EXTRA_REQUESTS }, () => request.get('/api/site', { headers: { 'x-forwarded-for': BURSTING_CLIENT } })),
+    )
+    const statuses = responses.map((response) => response.status())
+    expect(statuses.filter((status) => status === 400)).toHaveLength(limit)
+    const refused = responses.filter((response) => response.status() === 429)
+    expect(refused).toHaveLength(EXTRA_REQUESTS)
+    for (const response of refused) {
+      expect(Number(response.headers()['retry-after'])).toBeGreaterThan(0)
+      expect(Number(response.headers()['retry-after'])).toBeLessThanOrEqual(windowMs / 1000)
+    }
   })
 })

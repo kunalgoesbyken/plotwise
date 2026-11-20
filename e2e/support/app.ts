@@ -19,7 +19,7 @@ export const DRAWN_PLOT: readonly Point[] = [
 ]
 
 const CORNER_LABEL_OFFSET = 14
-const READY_TIMEOUT = 30_000
+export const READY_TIMEOUT = 30_000
 
 export const designsRegion = (page: Page) => page.getByRole('tabpanel', { name: 'Designs', includeHidden: true })
 export const moneyRegion = (page: Page) => page.getByRole('tabpanel', { name: 'Money', includeHidden: true })
@@ -28,6 +28,7 @@ export const designTable = (page: Page) => page.getByRole('table', { name: 'Desi
 export const summary = (page: Page) => page.getByRole('region', { name: 'Results for the design shown in 3D' })
 export const zoneCheck = (page: Page) => page.getByRole('region', { name: 'Zone check' })
 export const scene = (page: Page) => page.locator('[data-scene-ready="true"]')
+export const hashParams = (page: Page) => Object.fromEntries(new URLSearchParams(new URL(page.url()).hash.slice(1)))
 export const hint = (page: Page) => page.getByRole('status')
 export const frontageWidth = (page: Page, edge: string) => page.getByLabel(`Road width on edge ${edge}, in metres`)
 export const showTab = (page: Page, name: 'Designs' | 'Money' | 'Rules' | '3D') => page.getByRole('tab', { name, exact: true }).click()

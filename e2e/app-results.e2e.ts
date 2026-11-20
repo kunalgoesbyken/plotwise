@@ -1,10 +1,12 @@
 import type { Page } from '@playwright/test'
 import {
   DEVICES,
+  READY_TIMEOUT,
   allowedArea,
   designTable,
   designsRegion,
   goTo,
+  hashParams,
   moneyRegion,
   openResults,
   rulesRegion,
@@ -18,13 +20,12 @@ import { expect, test } from './support/test'
 const SALE_PRICE = '300000'
 const PRINTED_SALE_PRICE = '฿300K'
 const NARROWER_ROAD_M = '24'
-const READY_TIMEOUT = 30_000
 
-const salePrice = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value' }).getByLabel('Sale price per m² of saleable area')
-const landValue = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value' }).getByText(/supports land worth/)
+const landValueRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value', includeHidden: true })
+const salePrice = (page: Page) => landValueRegion(page).getByLabel('Sale price per m² of saleable area')
+const landValue = (page: Page) => landValueRegion(page).getByText(/supports land worth/)
 const farBonus = (page: Page) => designsRegion(page).getByRole('switch', { name: /FAR bonus/ })
 const buildingType = (page: Page, name: string) => page.getByRole('radio', { name })
-const hashParams = (page: Page) => Object.fromEntries(new URLSearchParams(new URL(page.url()).hash.slice(1)))
 
 async function readState(page: Page) {
   return {
@@ -52,7 +53,7 @@ for (const device of DEVICES)
       expect(await designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ }).count()).toBeGreaterThanOrEqual(2)
 
       await showTab(page, 'Money')
-      await expect(moneyRegion(page).getByRole('region', { name: 'Land value' })).toBeVisible()
+      await expect(landValueRegion(page)).toBeVisible()
 
       await showTab(page, 'Rules')
       await expect(rulesRegion(page).getByRole('region', { name: 'Setbacks' })).toBeVisible()
