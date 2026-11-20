@@ -168,6 +168,6 @@ test('the print summary of custom rules carries the unverified label', async ({ 
   await expect(summary(page)).toContainText('Unverified: your own rules', { timeout: 30_000 })
   await page.emulateMedia({ media: 'print' })
   const report = page.locator('article')
-  await expect(report.getByRole('heading', { level: 1, name: 'Plotwise plot summary · Custom rules' })).toBeVisible()
+  await expect(report.getByRole('heading', { level: 1, name: 'Plotwise · Custom rules plot summary' })).toBeVisible()
   await expect(report.getByText('Unverified: your own rules')).toBeVisible()
 })

@@ -166,7 +166,7 @@ const en = {
   'share.failed': 'Copy the address bar',
   'share.print': 'Print',
   'assumptions.all': 'All money assumptions',
-  'report.title': ({ region }: { region: string }) => `Plotwise plot summary · ${region}`,
+  'report.title': ({ region }: { region: string }) => `Plotwise · ${region} plot summary`,
   'report.plot': ({ area, allowed }: { area: string; allowed: string }) => `Plot ${area}. Up to ${allowed} of floor area allowed.`,
   'report.open': 'Not passed yet',
   'report.assumptions': 'Assumptions used (estimated, editable)',
