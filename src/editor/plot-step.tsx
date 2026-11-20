@@ -58,7 +58,7 @@ export function PlotStep() {
       {count > 0 && <Outline count={count} />}
       {plot ? (
         <div className="border-t px-(--pad) py-4">
-          <ZoneStatus ring={plot.ring} />
+          <ZoneStatus />
         </div>
       ) : (
         <ZoneScope />

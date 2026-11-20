@@ -2,6 +2,10 @@ import { expect, test } from '@playwright/test'
 import { encodePlot } from '../src/editor/plot-url'
 import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+})
+
 test('the landing page says what Plotwise does and opens the example in the app', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))

@@ -333,3 +333,32 @@ test('widening the window from the 3D tab falls back to the designs, not an empt
   await page.setViewportSize({ width: 1300, height: 800 })
   await expect(designTable(page)).toBeVisible()
 })
+
+async function openWithZone(page: Page, verdict: object, hash = '') {
+  await page.route('**/api/site?**', fulfilSite)
+  await page.route('**/api/zone?**', (route) => route.fulfill({ json: verdict }))
+  await page.goto(`/app#${encodePlot(PLOT)}${hash}`)
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+}
+
+const UNREACHABLE = { status: 'unknown', reason: 'unreachable', plan: { name: 'BMA city plan', url: 'https://webportal.bangkok.go.th/cpud' } }
+
+test('an unchecked zone holds the figures back until the user confirms it, and the link keeps the confirmation', async ({ page }) => {
+  await openWithZone(page, UNREACHABLE)
+  const held = page.getByRole('region', { name: 'Zone check' })
+  await expect(held).toContainText('The city-plan service did not answer')
+  await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toHaveCount(0)
+  await held.getByRole('button', { name: 'I checked: the plot is in this zone' }).click()
+  await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached()
+  await expect(page).toHaveURL(/zone=confirmed/)
+  await page.reload()
+  await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
+})
+
+test('a plot outside the covered zone shows no figures and offers no override', async ({ page }) => {
+  await openWithZone(page, { status: 'outside', zone: 'blue zone', covered: 'brown zone 9 (very high-density residential)' }, '&zone=confirmed')
+  const held = page.getByRole('region', { name: 'Zone check' })
+  await expect(held).toContainText('This plot is in the blue zone')
+  await expect(held.getByRole('button')).toHaveCount(0)
+  await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toHaveCount(0)
+})

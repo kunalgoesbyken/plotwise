@@ -196,6 +196,12 @@ const en = {
   'zone.unknown.unrecognised': 'The city plan uses a zone code Plotwise does not know, so it could not check the zone.',
   'zone.unknown.unreachable': 'The city-plan service did not answer, so Plotwise could not check the zone here.',
   'zone.confirm': ({ plan }: { plan: string }) => `Confirm it on the ${plan}.`,
+  'zone.hold.label': 'Zone check',
+  'zone.hold.confirmable': ({ zone }: { zone: string }) =>
+    `Plotwise's figures hold only in the ${zone}. Check the plot on the city plan, then confirm to see the floor area, designs and money.`,
+  'zone.hold.refused': 'Plotwise shows no floor area, designs or money for a plot outside the zone it covers.',
+  'zone.hold.confirm': 'I checked: the plot is in this zone',
+  'zone.hold.panel': 'Results appear once the zone is confirmed.',
 
   'search.title': 'Find the site',
   'search.label': ({ country }: { country: string }) => `Search for an address or place in ${country}`,
