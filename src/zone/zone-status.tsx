@@ -53,7 +53,7 @@ function ZoneText({ verdict }: { verdict: ZoneVerdict }) {
 export function ZoneStatus({ ring }: { readonly ring: readonly LngLat[] }) {
   const verdict = useZone(ring)
   return (
-    <p role="status" className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs leading-relaxed">
+    <p aria-live="polite" className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs leading-relaxed">
       {verdict ? <ZoneText verdict={verdict} /> : <span className="text-muted-foreground">{t('zone.checking')}</span>}
     </p>
   )

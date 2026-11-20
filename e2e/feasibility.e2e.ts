@@ -25,12 +25,13 @@ const fulfilSite = (route: Route) => {
   return route.fulfill({ json: { bbox, ...recorded, attribution: '© OpenStreetMap contributors (ODbL)' } })
 }
 
-async function open(page: Page, plot: Plot = PLOT) {
+async function open(page: Page, plot: Plot = PLOT, hash = '') {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   await page.route('**/api/site?**', fulfilSite)
-  await page.goto(`/#${encodePlot(plot)}`)
+  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+  await page.goto(`/#${encodePlot(plot)}${hash}`)
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached({ timeout: 30_000 })
   return errors
@@ -38,7 +39,9 @@ async function open(page: Page, plot: Plot = PLOT) {
 
 const rules = (page: Page) => page.getByRole('tabpanel', { name: 'Rules', includeHidden: true })
 const designsRegion = (page: Page) => page.getByRole('tabpanel', { name: 'Designs', includeHidden: true })
-const showTab = (page: Page, name: 'Designs' | 'Rules' | '3D') => page.getByRole('tab', { name, exact: true }).click()
+const moneyRegion = (page: Page) => page.getByRole('tabpanel', { name: 'Money', includeHidden: true })
+const summary = (page: Page) => page.getByRole('region', { name: 'Results for the design shown in 3D' })
+const showTab = (page: Page, name: 'Designs' | 'Money' | 'Rules' | '3D') => page.getByRole('tab', { name, exact: true }).click()
 const goTo = (page: Page, step: 'Roads' | 'Results') => page.getByRole('navigation', { name: 'Steps' }).getByRole('button', { name: step }).click()
 const designTable = (page: Page) => designsRegion(page).getByRole('table', { name: 'Designs compared' })
 const designButtons = (page: Page) => designTable(page).getByRole('button', { name: /^Show .+ in 3D$/ })
@@ -82,7 +85,7 @@ test('shows the rules that apply with their sources, and at least two designs wi
   await designsRegion(page).getByRole('button', { name: /^Checklist for / }).click()
   await expect(designsRegion(page).getByText('Floor area within the FAR limit')).toBeVisible()
   await expect(designsRegion(page).getByText(/m² ≤ .*m²/).first()).toBeVisible()
-  await expect(designsRegion(page).getByText('Verify on site or with the authority').first()).toBeVisible()
+  await expect(designsRegion(page).getByText('Check on site or with the authority').first()).toBeVisible()
   await page.screenshot({ path: 'e2e/.results/feasibility-1280.png' })
   await designsRegion(page).scrollIntoViewIfNeeded()
   await page.screenshot({ path: 'e2e/.results/feasibility-designs-1280.png' })
@@ -177,7 +180,7 @@ async function targets(page: Page) {
 test('phone layout at 375 px: each panel fits the sheet with 44 px targets', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await open(page)
-  for (const tab of ['Rules', 'Designs', '3D'] as const) {
+  for (const tab of ['Rules', 'Designs', 'Money', '3D'] as const) {
     await showTab(page, tab)
     if (tab === '3D') await expect(scene(page)).toHaveAttribute('data-scene-buildings', /\d+/, { timeout: 30_000 })
     const layout = await targets(page)
@@ -250,4 +253,75 @@ test('performance: frame time while dragging a corner with the designs recomputi
     expect(m.fps).toBeGreaterThanOrEqual(30)
     expect(m.p95FrameMs).toBeLessThan(50)
   }
+})
+
+test('lists what is left to check, why, and who confirms it', async ({ page }) => {
+  const errors = await open(page)
+  const toCheck = designTable(page).getByRole('button', { name: /to check$/ }).first()
+  await toCheck.click()
+  const list = designsRegion(page).getByRole('region', { name: /to check before you buy$/ })
+  await expect(list).toBeFocused()
+  await expect(list.getByRole('listitem').first()).toContainText('confirms')
+  await expect(list.getByRole('listitem').first()).toContainText('the BMA')
+  expect(errors).toEqual([])
+})
+
+test('money: estimates are labelled, editable, and travel in the share link', async ({ page }) => {
+  const errors = await open(page)
+  await expect(designTable(page).getByRole('row', { name: /^Saleable area/ })).toBeAttached()
+  await expect(designTable(page).getByRole('row', { name: /^First cost/ })).toContainText('฿')
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  await expect(land.getByText('Estimated')).toBeVisible()
+  const before = await land.getByText(/supports land worth/).textContent()
+  await land.getByLabel('Sale price per m² of saleable area').fill('300000')
+  await expect(land.getByText(/supports land worth/)).not.toHaveText(before!)
+  await expect.poll(() => page.url()).toContain('assume=')
+
+  await page.reload()
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+  await showTab(page, 'Money')
+  await expect(moneyRegion(page).getByLabel('Sale price per m² of saleable area')).toHaveValue('300000')
+  expect(errors).toEqual([])
+})
+
+test('an old share link without the new parameters still opens with the defaults', async ({ page }) => {
+  const errors = await open(page)
+  expect(page.url()).not.toContain('assume=')
+  await expect(summary(page)).toContainText('of floor area')
+  expect(errors).toEqual([])
+})
+
+test('the FAR bonus switch raises the allowed area and is kept in the link', async ({ page }) => {
+  const errors = await open(page)
+  const allowed = async () => Number((await summary(page).locator('.text-2xl').textContent())!.replace(/\D/g, ''))
+  const standard = await allowed()
+  const bonus = designsRegion(page).getByRole('switch', { name: /FAR bonus/ })
+  test.skip((await bonus.count()) === 0, 'this plot has no FAR bonus')
+  await bonus.click()
+  await expect.poll(allowed).toBeGreaterThan(standard)
+  await expect.poll(() => page.url()).toContain('far=bonus')
+  expect(errors).toEqual([])
+})
+
+test('road width sensitivity shows the result two metres either side', async ({ page }) => {
+  await open(page)
+  await designsRegion(page).getByRole('button', { name: 'How road width changes the result' }).click()
+  const table = designsRegion(page).getByRole('region', { name: 'How road width changes the result' }).getByRole('table')
+  await expect(table.getByRole('row')).not.toHaveCount(0)
+  await expect(table).toContainText('28 m')
+  await expect(table).toContainText('32 m')
+})
+
+test('share copies the link and print shows a one-page summary', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await open(page)
+  await summary(page).getByRole('button', { name: 'Copy link' }).click()
+  await expect(summary(page).getByRole('button', { name: 'Link copied' })).toBeVisible()
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(page.url())
+
+  await page.emulateMedia({ media: 'print' })
+  await expect(page.getByRole('heading', { name: 'Plotwise · Bangkok plot summary' })).toBeVisible()
+  await expect(page.getByText('Assumptions used (estimated, editable)')).toBeVisible()
+  await expect(page.getByRole('complementary', { name: 'Plot settings' })).toBeHidden()
 })

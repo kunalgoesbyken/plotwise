@@ -243,15 +243,14 @@ for (const width of [536, 1280])
     expect(Math.round(roadInput!.x)).toBe(rows[0].width)
   })
 
-test('finds a place by name and draws the plot there', async ({ page }) => {
+test('suggests places while typing and draws the plot at the one picked', async ({ page }) => {
   await page.route('**/api/geocode?**', (route) => route.fulfill({ json: [ASOK] }))
   const errors = await open(page)
-  await page.getByLabel('Search for an address or place in Thailand').fill('asok')
-  await page.getByRole('button', { name: 'Search', exact: true }).click()
-  const result = page.getByRole('list', { name: 'Places found' }).getByRole('button')
+  await page.getByRole('combobox', { name: 'Search for an address or place in Thailand' }).fill('asok')
+  const result = page.getByRole('listbox', { name: 'Places found' }).getByRole('option')
   await expect(result).toHaveText('Asok, Watthana, Bangkok')
   await result.click()
-  await expect(page.getByRole('list', { name: 'Places found' })).toBeHidden()
+  await expect(page.getByRole('listbox', { name: 'Places found' })).toBeHidden()
   await page.waitForTimeout(4_000)
   await draw(page, [
     [600, 380],
@@ -270,16 +269,15 @@ test('says when place search is down instead of failing silently', async ({ page
   await page.route('**/api/geocode?**', (route) => route.fulfill({ status: 502, json: { error: 'down' } }))
   await open(page)
   await page.getByLabel('Search for an address or place in Thailand').fill('asok')
-  await page.keyboard.press('Enter')
   await expect(site(page).getByText('Place search is unavailable right now')).toBeVisible()
 })
 
-test('ticks the station box from the nearest mapped platform as an estimate the user can override', async ({ page }) => {
+test('turns on the station switch from the nearest mapped platform as an estimate the user can override', async ({ page }) => {
   await open(page, '/', [], [PLATFORM_THROUGH_START_VIEW])
   await draw(page, L_SHAPE)
   await page.getByRole('button', { name: 'Mark edge A–B as a road' }).click()
   await page.getByLabel('Road width on edge A–B, in metres').fill('10')
-  const near = page.getByRole('checkbox', { name: /Within 500\sm of a BTS\/MRT station/ })
+  const near = page.getByRole('switch', { name: /Within 500\sm of a BTS\/MRT station/ })
   await expect(site(page).getByText(/Nearest mapped platform: Test Platform, [\d.,]+\sm from the plot/)).toBeVisible()
   await expect(near).toBeChecked()
   await near.uncheck()
