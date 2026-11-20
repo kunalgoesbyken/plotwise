@@ -62,9 +62,9 @@ const overCap = ({ farCap }: Solution, { programme: p }: Candidate) => p.farSqm 
 
 const reachesCap = ({ farCap }: Solution, { programme: p }: Candidate) => farCap.maxGfaSqm - p.farSqm <= AREA_TOLERANCE_SQM
 
-function fitsClass(solution: Solution, kind: EnvelopeKind, building: Building): boolean {
-  if (!isHighRiseOrExtraLarge(solution.pack, building)) return true
-  return kind === 'highRise' && highRiseAllows(solution.limits, building.floorAreaSqm)
+function fitsClass({ pack, limits }: Solution, kind: EnvelopeKind, building: Building): boolean {
+  if (!limits.highRise || !isHighRiseOrExtraLarge(pack, building)) return true
+  return kind === 'highRise' && highRiseAllows(limits, building.floorAreaSqm)
 }
 
 function fitsUse({ limits }: Solution, { conditionMeasure }: Programme): boolean {

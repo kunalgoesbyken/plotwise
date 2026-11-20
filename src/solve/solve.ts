@@ -25,6 +25,14 @@ export type Solution = {
   readonly envelopes: readonly Envelope[]
 }
 
+type EnvelopeRules = Pick<Solution, 'pack' | 'readings' | 'site' | 'floorToFloorM' | 'limits'>
+
+function envelopesFor({ pack, readings, site, floorToFloorM, limits }: EnvelopeRules): Envelope[] {
+  const input = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM }
+  const highRisePermitted = limits.highRise?.access.some((band) => band.qualifies) ?? false
+  return [ordinaryEnvelope(input), ...(highRisePermitted ? [highRiseEnvelope(input)] : [])]
+}
+
 export const coversBuildingType = (pack: RulePack, plot: Plot) => !pack.buildingTypes || pack.buildingTypes.includes(plot.buildingType)
 
 export function solve(plot: Plot, authored: RulePack, readings: Interpretations, far: FarChoice = STANDARD): Solution {
@@ -47,9 +55,6 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     purchase: purchaseRatios(far),
     inLieu,
   })
-  const input = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM }
-  const highRisePermitted = limits.highRise?.access.some((band) => band.qualifies) ?? false
-  const envelopes = [ordinaryEnvelope(input), ...(highRisePermitted ? [highRiseEnvelope(input)] : [])]
   const entersValues = plotLimitFields(pack).length > 0
   return {
     pack,
@@ -63,6 +68,12 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     floorToFloorM,
     limits,
     farCap: farCapFor(limits, far.mode),
-    envelopes,
+    envelopes: envelopesFor({ pack, readings, site, floorToFloorM, limits }),
   }
+}
+
+export function withoutHighRiseRules(solution: Solution): Solution {
+  const limits = { ...solution.limits, highRise: null }
+  const pack = { ...solution.pack, buildingClasses: undefined, highRise: undefined }
+  return { ...solution, limits, envelopes: envelopesFor({ ...solution, pack, limits }) }
 }
