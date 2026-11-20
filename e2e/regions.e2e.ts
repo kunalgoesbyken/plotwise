@@ -142,7 +142,7 @@ for (const viewport of [DESKTOP, PHONE]) {
     await goTo(page, 'Roads')
     const plan = page.getByRole('region', { name: 'From the affection plan' })
     await expect(plan.getByLabel('Gross floor area (GFA)')).toBeVisible()
-    await expect(plan.getByText('sq ft').first()).toBeVisible()
+    await plan.getByRole('radiogroup', { name: 'Areas in' }).getByRole('radio', { name: 'sq ft' }).click()
     await enterLimit(page, 'Gross floor area (GFA)', '32,291')
     await enterLimit(page, 'Floors', '4')
     await enterLimit(page, 'Setback from neighbour', '3')

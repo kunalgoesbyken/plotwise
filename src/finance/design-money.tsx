@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import type { Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
+import { isParkingUnset } from '@/solve'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
@@ -14,16 +15,24 @@ import { useFinance } from './use-finance'
 
 export type MoneyRow = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
+function useParkingUnset() {
+  const { result } = useFeasibility()
+  return result?.status === 'ready' && isParkingUnset(result.solution)
+}
+
+const parkingShown = (unset: boolean, shown: string) => (unset ? t('parking.not-set') : shown)
+
 export function useMoneyRows(): readonly MoneyRow[] {
   const finance = useFinance()
   const { areaUnit, areaTerms } = useRegion()
+  const unset = useParkingUnset()
   const priced = finance?.priced
   if (!finance || !priced) return []
   const { currency } = finance.region
   return [
     { label: t('money.built-up'), cell: (design) => formatQuantity(priced.estimateFor(design).builtSqm, areaUnit) },
     { label: t('money.saleable', areaTerms), cell: (design) => formatQuantity(priced.estimateFor(design).saleableSqm, areaUnit) },
-    { label: t('money.parking-levels'), cell: (design) => parkingText(priced.estimateFor(design).parking) },
+    { label: t('money.parking-levels'), cell: (design) => parkingShown(unset, parkingText(priced.estimateFor(design).parking)) },
     { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(priced.estimateFor(design)), currency) },
     ...(finance.purchasePrices.length > 0 ? [{ label: t('money.purchase'), cell: (design: Design) => formatMoney(priced.estimateFor(design).purchaseCost, currency) }] : []),
     { label: t('money.land-value'), cell: (design) => rangeText(priced.estimateFor(design).landValue, currency) },
@@ -49,6 +58,7 @@ export function DesignMoney() {
   const { design } = useFeasibility()
   const finance = useFinance()
   const { areaUnit, areaTerms } = useRegion()
+  const unset = useParkingUnset()
   if (!design || !finance?.priced) return null
   const estimate = finance.priced.estimateFor(design)
   const { currency } = finance.region
@@ -62,8 +72,8 @@ export function DesignMoney() {
         <Figure label={t('money.built-up')} value={formatQuantity(estimate.builtSqm, areaUnit)} />
         <Figure label={t('money.gross')} value={formatQuantity(estimate.grossSqm, areaUnit)} />
         <Figure label={t('money.saleable', areaTerms)} value={formatQuantity(estimate.saleableSqm, areaUnit)} />
-        <Figure label={t('money.parking-area')} value={formatQuantity(estimate.parkingSqm, areaUnit)} />
-        <Figure label={t('money.parking-levels')} value={parkingText(estimate.parking)} />
+        <Figure label={t('money.parking-area')} value={parkingShown(unset, formatQuantity(estimate.parkingSqm, areaUnit))} />
+        <Figure label={t('money.parking-levels')} value={parkingShown(unset, parkingText(estimate.parking))} />
         {finance.buildClasses && <Figure label={t('money.class')} value={t(`money.class.${estimate.buildClass}`)} />}
         {COST_PARTS.map(({ part, label }) => (
           <Figure key={part} label={label} value={rangeText({ low: estimate.firstCost.low[part], high: estimate.firstCost.high[part] }, currency)} />

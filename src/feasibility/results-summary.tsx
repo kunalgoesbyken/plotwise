@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { useRegion } from '@/editor/plot-store'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { failureText } from './failure-text'
+import { FailureNotice } from './failure-notice'
 import { useFeasibility } from './feasibility-provider'
 import { limiterText } from './limiter-text'
 import { SummarySkeleton } from './results-skeleton'
@@ -13,10 +13,9 @@ import { VerificationNote } from './verification-note'
 
 export function ResultsSummary({ children }: { children?: ReactNode }) {
   const { result, design } = useFeasibility()
-  const region = useRegion()
-  const { areaUnit } = region
+  const { areaUnit } = useRegion()
   if (!result) return <SummarySkeleton />
-  if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{failureText(result, region)}</p>
+  if (result.status === 'failed') return <FailureNotice failure={result} />
   if (!design) return <p className="text-sm leading-snug text-muted-foreground">{t('designs.none')}</p>
   const { solution } = result
   const best = t('summary.best', { name: t(design.nameKey), area: formatQuantity(design.metrics.gfaSqm, areaUnit) })

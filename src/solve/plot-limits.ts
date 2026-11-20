@@ -1,5 +1,6 @@
 import type { PlotLimitField, PlotLimits } from '@/plot/plot'
 import { enteredBoundarySetback, enteredOpenSpace, enteredParking, enteredRoadSetback, type RulePack } from '@/rules'
+import type { Solution } from './solve'
 
 export function plotLimitFields({ far, height, coverage, plotSetbacks, plotOpenSpace, plotParking }: RulePack): PlotLimitField[] {
   return [
@@ -15,6 +16,8 @@ export function plotLimitFields({ far, height, coverage, plotSetbacks, plotOpenS
 
 export const isUnentered = (pack: RulePack, plotLimits: PlotLimits | undefined, field: PlotLimitField) =>
   plotLimitFields(pack).includes(field) && plotLimits?.[field] === undefined
+
+export const isParkingUnset = ({ pack, plot }: Solution) => isUnentered(pack, plot.limits, 'parkingSqmPerSpace')
 
 const given = <T>(value: number | undefined, build: (value: number) => T): T[] => (value === undefined ? [] : [build(value)])
 

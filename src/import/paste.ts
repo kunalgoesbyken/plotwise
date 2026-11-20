@@ -30,11 +30,22 @@ function readEntry(entry: string): Pair | null {
   return [numbers[0], numbers[1]]
 }
 
+function isJoinedPair(word: string) {
+  const numbers = word.split(',')
+  return numbers.length > 1 && numbers.every((number) => number !== '')
+}
+
+function splitJoinedPairs(line: string): string[] {
+  const words = line.trim().split(/\s+/)
+  return words.length > 1 && words.every(isJoinedPair) ? words : [line]
+}
+
 function readEntries(text: string): Result<Pair[]> {
   if (text.length > ASSUMPTIONS.importMaxPasteChars.value) return fail('paste-too-large')
   const entries = asciiDigits(text)
     .split(/[\r\n;]+/)
     .filter((entry) => entry.trim() !== '')
+    .flatMap(splitJoinedPairs)
   if (entries.length > MAX_CORNERS + 1) return fail('too-many-corners')
   const points: Pair[] = []
   for (const [index, entry] of entries.entries()) {

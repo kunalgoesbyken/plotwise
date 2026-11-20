@@ -3,7 +3,7 @@ import { encodeRegion } from '@/editor/plot-url'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { EXAMPLE_LINK, exampleFigures } from './example'
+import { EXAMPLE_LINK, exampleFigures, OTHER_EXAMPLES } from './example'
 import { FaqItem } from './faq'
 import { Footer } from './footer'
 import { HeroMedia } from './hero-media'
@@ -45,6 +45,11 @@ function Hero({ plotSqm, allowedSqm }: { plotSqm: number; allowedSqm: number }) 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">{t('landing.hero.lede', { city: CITY, elsewhere: ELSEWHERE })}</p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <PillLink href={EXAMPLE_LINK}>{t('landing.hero.example')}</PillLink>
+          {OTHER_EXAMPLES.map(({ name, link }) => (
+            <PillLink key={link} href={link} quiet>
+              {t('landing.hero.example-in', { name })}
+            </PillLink>
+          ))}
           <PillLink href={APP_PATH} quiet>
             {t('landing.hero.draw')}
           </PillLink>

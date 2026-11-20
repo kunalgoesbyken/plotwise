@@ -1,8 +1,21 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { PlotLimitsSchema, type PlotLimitField } from '@/plot/plot'
+import { PlotLimitsSchema, type Plot, type PlotLimitField } from '@/plot/plot'
+import { REGIONS } from '@/region/regions'
 import { AREA_UNITS } from '@/units/area'
-import { FIELD_UNITS, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
+import { FIELD_UNITS, limitDisplay, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
+import { decodePlot, encodePlot } from './plot-url'
+
+const PLOT: Plot = {
+  ring: [
+    [55.208, 25.058],
+    [55.2084, 25.058],
+    [55.2084, 25.0583],
+  ],
+  roads: [{ edge: 0, widthM: 12 }],
+  buildingType: 'condo',
+  nearStation: false,
+}
 
 const BANGKOK: LimitDisplay = { area: 'sqm', floors: 'storeys' }
 const DUBAI: LimitDisplay = { area: 'sqft', floors: 'gPlus' }
@@ -35,6 +48,36 @@ describe('entered limits shown in the region’s units', () => {
     expect(shownLimit('maxStoreys', 11, DUBAI)).toBe('10')
     expect(shownLimit('maxGfaSqm', 1000, DUBAI)).toBe('10763.9104167')
     expect(shownLimit('maxCoverageShare', 0.6, BANGKOK)).toBe('60')
+  })
+
+  it('reads Dubai areas in square metres unless square feet are chosen, as the affection plan states them', () => {
+    const dubai = limitDisplay(REGIONS.dxb, REGIONS.dxb.limitAreaUnit)
+    expect(dubai).toEqual({ area: 'sqm', floors: 'gPlus' })
+    expect(read('maxGfaSqm', '3000', dubai)).toBe(3000)
+    expect(read('parkingSqmPerSpace', '50', dubai)).toBe(50)
+    expect(read('maxGfaSqm', '32291.7', limitDisplay(REGIONS.dxb, 'sqft'))).toBeCloseTo(3000, 2)
+  })
+
+  it('shows a stored floor area the same in either unit after a link round-trip, as links made before the toggle store it', () => {
+    const link = `${encodePlot({ ...PLOT, limits: { maxGfaSqm: 3000 } })}`
+    expect(link).toContain('limits=maxGfaSqm:3000')
+    const decoded = decodePlot(link)
+    const stored = decoded?.ok ? decoded.plot.limits?.maxGfaSqm : undefined
+    expect(stored).toBe(3000)
+    expect(shownLimit('maxGfaSqm', 3000, limitDisplay(REGIONS.dxb, 'sqm'))).toBe('3000')
+    expect(shownLimit('maxGfaSqm', 3000, limitDisplay(REGIONS.dxb, 'sqft'))).toBe('32291.7312501')
+  })
+
+  it('stores the same square metres in the link whichever unit a floor area is typed in', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 1, max: 1e5, noNaN: true }), fc.constantFrom(...AREA_UNITS), (sqm, unit) => {
+        const display = limitDisplay(REGIONS.dxb, unit)
+        const typed = read('maxGfaSqm', shownLimit('maxGfaSqm', sqm, display), display)
+        const decoded = decodePlot(encodePlot({ ...PLOT, limits: { maxGfaSqm: typed } }))
+        expect(decoded?.ok && decoded.plot.limits?.maxGfaSqm).toBe(typed)
+        expect(typed / sqm).toBeCloseTo(1, 9)
+      }),
+    )
   })
 
   it('reads blank text as no limit and anything else unreadable as nothing', () => {

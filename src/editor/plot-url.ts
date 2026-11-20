@@ -1,5 +1,5 @@
 import { isPlotLimitField, PlotLimitsSchema, PlotSchema, type Plot, type PlotLimits } from '@/plot/plot'
-import { DEFAULT_REGION, RegionIdSchema } from '@/region/regions'
+import { DEFAULT_REGION, RegionIdSchema, REGIONS } from '@/region/regions'
 import type { RegionId } from '@/solve'
 
 const LIST = ';'
@@ -32,8 +32,6 @@ export function encodePlot(plot: Plot) {
 }
 
 export const EXAMPLE_FRAGMENT = 'example'
-
-export const isExampleLink = (fragment: string) => new URLSearchParams(fragment.replace(/^#/, '')).has(EXAMPLE_FRAGMENT)
 
 export type LinkProblem = 'link-incomplete' | 'link-invalid' | 'link-limits'
 export type DecodedLink = { ok: true; plot: Plot } | { ok: false; problem: LinkProblem }
@@ -85,4 +83,15 @@ export function decodeRegion(fragment: string): DecodedRegion {
   if (named.length === 0) return { ok: true, region: DEFAULT_REGION.id }
   const parsed = RegionIdSchema.safeParse(named.length === 1 ? named[0] : null)
   return parsed.success ? { ok: true, region: parsed.data } : rejected('link-invalid')
+}
+
+export const exampleFragment = (region: RegionId) => [encodeRegion(region), EXAMPLE_FRAGMENT].filter(Boolean).join('&')
+
+export type LinkedExample = { readonly region: RegionId; readonly plot: Plot }
+
+export function linkedExample(fragment: string): LinkedExample | null {
+  if (!paramsOf(fragment).has(EXAMPLE_FRAGMENT)) return null
+  const rules = decodeRegion(fragment)
+  const { id, example } = rules.ok ? REGIONS[rules.region] : DEFAULT_REGION
+  return example ? { region: id, plot: example } : { region: DEFAULT_REGION.id, plot: DEFAULT_REGION.example }
 }

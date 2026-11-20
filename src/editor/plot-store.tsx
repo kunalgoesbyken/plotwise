@@ -1,11 +1,10 @@
 'use client'
 
 import { createContext, use, useDeferredValue, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { BUILDING_TYPES, type Plot } from '@/plot/plot'
-import { DEFAULT_REGION, REGIONS, type Region } from '@/region/regions'
+import { REGIONS, type Region } from '@/region/regions'
 import { initialEditorState, reduceEditor, type EditorAction, type EditorState } from './editor-state'
-import { decodePlot, decodeRegion, encodePlot, encodeRegion, EXAMPLE_FRAGMENT, isExampleLink } from './plot-url'
+import { decodePlot, decodeRegion, encodePlot, encodeRegion, EXAMPLE_FRAGMENT, linkedExample } from './plot-url'
 import { syncSite } from './site-sync'
 import { writeHash } from './url-hash'
 
@@ -45,9 +44,10 @@ const writeUrl = (linked: Linked) => writeHash(LINK_PARAMS, fragmentFor(linked))
 
 function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
-    if (isExampleLink(location.hash)) {
-      store.dispatch({ type: 'set-region', region: DEFAULT_REGION.id })
-      store.dispatch({ type: 'load-example', plot: EXAMPLE_PLOT })
+    const example = linkedExample(location.hash)
+    if (example) {
+      store.dispatch({ type: 'set-region', region: example.region })
+      store.dispatch({ type: 'load-example', plot: example.plot })
       writeUrl(store.getState())
       return
     }

@@ -5,7 +5,7 @@ import type { PlotLimits } from '@/plot/plot'
 import { containsEntered, enteredCite, isSourceCite, loadPack, type Cite, type RulePack } from '@/rules'
 import { SolveError } from './errors'
 import { packInterpretations } from './interpretations'
-import { plotLimitFields } from './plot-limits'
+import { isParkingUnset, plotLimitFields } from './plot-limits'
 import { solve } from './solve'
 import { plotFromMetres, rectangle } from './test-plots'
 
@@ -125,6 +125,17 @@ describe('entered coverage, open space and parking are optional', () => {
     const [rule] = solution.limits.parking.rules
     expect(rule).toMatchObject({ scope: 'entered', condo: { kind: 'perGrossArea', sqmPerSpace: { value: 50 } } })
     for (const design of designs(solution)) expect(design.metrics.parkingSpaces).toBeGreaterThan(0)
+  })
+
+  it('says parking is not set only when the plot asks for it and it was left blank', () => {
+    expect(isParkingUnset(solveWith(CUSTOM, REQUIRED))).toBe(true)
+    expect(isParkingUnset(solveWith(DUBAI, REQUIRED))).toBe(true)
+    expect(isParkingUnset(solveWith(CUSTOM, { ...REQUIRED, parkingSqmPerSpace: 50 }))).toBe(false)
+    expect(isParkingUnset(solveWith(DUBAI, { ...REQUIRED, parkingSqmPerSpace: 50 }))).toBe(false)
+    for (const id of ['bkk-y9', 'mum-suburbs-res'] as const) {
+      const pack = loadPack(id)
+      expect(isParkingUnset(solve(lot({}), pack, packInterpretations(pack)))).toBe(false)
+    }
   })
 })
 

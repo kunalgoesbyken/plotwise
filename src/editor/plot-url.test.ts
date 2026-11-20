@@ -1,9 +1,11 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
+import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { BUILDING_TYPES, MAX_CORNERS, type Plot } from '@/plot/plot'
+import { REGIONS } from '@/region/regions'
 import { ASSUMPTIONS } from '@/solve/assumptions'
 import { roundLngLat } from './plot-draft'
-import { decodePlot, decodeRegion, encodePlot, encodeRegion, isExampleLink } from './plot-url'
+import { decodePlot, decodeRegion, encodePlot, encodeRegion, exampleFragment, linkedExample } from './plot-url'
 
 const plot: Plot = {
   ring: [
@@ -117,8 +119,27 @@ describe('plot URL encoding', () => {
   })
 
   it('recognises the example link, with or without the leading # and beside the zone confirmation', () => {
-    for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(isExampleLink(hash)).toBe(true)
-    for (const hash of ['', '#', encodePlot(plot), '#examples']) expect(isExampleLink(hash)).toBe(false)
+    for (const hash of ['example', '#example', '#example&zone=confirmed']) expect(linkedExample(hash)).toEqual({ region: 'bkk', plot: EXAMPLE_PLOT })
+    for (const hash of ['', '#', encodePlot(plot), '#examples']) expect(linkedExample(hash)).toBeNull()
+  })
+
+  it('opens the example of the region the link names, and Bangkok’s when that region has none or the name is broken', () => {
+    expect(exampleFragment('bkk')).toBe('example')
+    for (const region of ['mum', 'dxb'] as const) {
+      expect(linkedExample(`#${exampleFragment(region)}`)).toEqual({ region, plot: REGIONS[region].example })
+      expect(linkedExample(`#example&rules=${region}`)).toEqual({ region, plot: REGIONS[region].example })
+    }
+    for (const hash of [exampleFragment('custom'), 'rules=nowhere&example', 'rules=mum&rules=dxb&example']) {
+      expect(linkedExample(hash)).toEqual({ region: 'bkk', plot: EXAMPLE_PLOT })
+    }
+  })
+
+  it('gives every region’s example as a plot a link carries unchanged, so it opens the same after sharing', () => {
+    for (const { id, example } of Object.values(REGIONS)) {
+      if (!example) continue
+      expect(decodePlot(encodePlot(example))).toEqual({ ok: true, plot: example })
+      expect(decodeRegion(`#${exampleFragment(id)}`)).toEqual({ ok: true, region: id })
+    }
   })
 })
 

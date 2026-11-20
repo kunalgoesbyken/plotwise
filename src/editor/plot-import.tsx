@@ -13,6 +13,7 @@ import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { Select } from '@/ui/select'
 import { Textarea } from '@/ui/textarea'
+import { exampleCorners } from './corner-example'
 import { ImportQuestions } from './import-questions'
 import { problemText } from './import-problem'
 import { useEditorStore, useRegion } from './plot-store'
@@ -129,6 +130,7 @@ export function PlotImport() {
   const [text, setText] = useState('')
   const [imported, setImported] = useState<Imported>(IDLE)
   const latest = useRef(0)
+  const region = useRegion()
   const bounds = useImportBounds()
 
   const paste = (value: string) => {
@@ -158,7 +160,7 @@ export function PlotImport() {
           id={pasteId}
           value={text}
           onChange={(e) => paste(e.target.value)}
-          placeholder={t('import.paste.placeholder')}
+          placeholder={exampleCorners(region).join('\n')}
           spellCheck={false}
           autoComplete="off"
           className="font-mono text-sm"

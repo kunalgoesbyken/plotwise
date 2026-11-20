@@ -1,14 +1,21 @@
-import { EXAMPLE_FRAGMENT } from '@/editor/plot-url'
+import { exampleFragment } from '@/editor/plot-url'
 import { feasibility } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
 import { basisOf, estimate, financeSite } from '@/finance/estimate'
 import { resolveValues } from '@/finance/values'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
-import { DEFAULT_REGION } from '@/region/regions'
+import { DEFAULT_REGION, REGIONS } from '@/region/regions'
 import { isSourceCite, loadPack } from '@/rules'
-import { MONEY_REGIONS } from '@/solve'
+import { MONEY_REGIONS, type RegionId } from '@/solve'
+import { APP_PATH } from './links'
 
-export const EXAMPLE_LINK = `/app#${EXAMPLE_FRAGMENT}`
+const exampleLink = (region: RegionId) => `${APP_PATH}#${exampleFragment(region)}`
+
+export const EXAMPLE_LINK = exampleLink(DEFAULT_REGION.id)
+
+export const OTHER_EXAMPLES = Object.values(REGIONS)
+  .filter((region) => region.example && region.id !== DEFAULT_REGION.id)
+  .map(({ id, name }) => ({ name, link: exampleLink(id) }))
 
 const CITED_CHECKS = 3
 

@@ -1,12 +1,13 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { EXAMPLE_PLOT } from '@/plot/example-plot'
-import type { Plot, PlotLimitField } from '@/plot/plot'
+import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
+import type { BuildingType, Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
 import type { RegionId } from '@/solve'
 import { AFFECTION_PLAN_TERMS, DCPR_TERMS } from '@/solve/assumptions'
+import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 
 export type RulesSource = 'pack' | 'draftPack' | 'affectionPlan' | 'custom'
@@ -28,6 +29,8 @@ export type LimitTerms = {
 
 export type AreaTerms = { readonly ratio: string; readonly ratioName: string; readonly saleable: string; readonly landRate: string }
 
+export type BuildingNames = Readonly<Record<BuildingType, string>>
+
 export type Region = {
   readonly id: RegionId
   readonly name: string
@@ -38,10 +41,12 @@ export type Region = {
   readonly floors: FloorCount
   readonly example: Plot | null
   readonly areaUnit: AreaUnit
+  readonly limitAreaUnit: AreaUnit
   readonly zone: { readonly name: string; readonly scope: string } | null
   readonly authority: string
   readonly cityPlan: { readonly name: string; readonly version: string; readonly url: string } | null
   readonly areaTerms: AreaTerms
+  readonly buildingNames: BuildingNames
   readonly mapStart: Assumption<{ readonly centre: LngLat; readonly zoom: number }>
   readonly bounds: Assumption<Bbox> | null
   readonly searchBias: Assumption<LngLat> | null
@@ -49,6 +54,8 @@ export type Region = {
 }
 
 const FAR_TERMS = { ratio: 'FAR', ratioName: 'Floor area ratio', saleable: 'saleable area', landRate: 'land rate' } as const
+
+const BUILDING_NAMES: BuildingNames = { condo: t('building.condo'), office: t('building.office'), hotel: t('building.hotel') }
 
 const STREET_ZOOM = 17
 
@@ -63,6 +70,7 @@ export const REGIONS = {
     floors: 'storeys',
     example: EXAMPLE_PLOT,
     areaUnit: 'sqm',
+    limitAreaUnit: 'sqm',
     zone: {
       name: 'Brown zone · very high-density residential',
       scope: 'Plotwise covers only this zone of the Bangkok city plan.',
@@ -70,6 +78,7 @@ export const REGIONS = {
     authority: 'the BMA',
     cityPlan: { name: 'BMA city plan', version: 'Bangkok Comprehensive Plan B.E. 2556 (2013)', url: 'https://webportal.bangkok.go.th/cpud' },
     areaTerms: FAR_TERMS,
+    buildingNames: BUILDING_NAMES,
     mapStart: { value: { centre: [100.5268, 13.7236], zoom: STREET_ZOOM }, source: 'assumption: opening map view over central Bangkok' },
     bounds: {
       value: [97.3, 5.6, 105.7, 20.5],
@@ -100,12 +109,14 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: null,
+    example: DUBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
+    limitAreaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
     cityPlan: null,
     areaTerms: FAR_TERMS,
+    buildingNames: BUILDING_NAMES,
     mapStart: { value: { centre: [55.2744, 25.1972], zoom: STREET_ZOOM }, source: 'assumption: opening map view over Downtown Dubai' },
     bounds: {
       value: [54.85, 24.6, 56.25, 25.4],
@@ -125,8 +136,9 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: DCPR_TERMS,
     floors: 'storeys',
-    example: null,
+    example: MUMBAI_EXAMPLE_PLOT,
     areaUnit: 'sqft',
+    limitAreaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',
     cityPlan: {
@@ -135,6 +147,7 @@ export const REGIONS = {
       url: 'https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf',
     },
     areaTerms: { ratio: 'FSI', ratioName: 'Floor space index', saleable: 'carpet area', landRate: 'ASR land rate' },
+    buildingNames: { ...BUILDING_NAMES, condo: t('building.apartments') },
     mapStart: {
       value: { centre: [72.8468, 19.1197], zoom: STREET_ZOOM },
       source: 'assumption: opening map view over Andheri West, in the suburbs the draft rules cover',
@@ -156,10 +169,12 @@ export const REGIONS = {
     floors: 'storeys',
     example: null,
     areaUnit: 'sqm',
+    limitAreaUnit: 'sqm',
     zone: null,
     authority: 'your local planning authority',
     cityPlan: null,
     areaTerms: FAR_TERMS,
+    buildingNames: BUILDING_NAMES,
     mapStart: {
       value: { centre: [0, 20], zoom: 1.5 },
       source: 'assumption: custom rules apply anywhere, so the map opens on the whole world and moves to the place searched or drawn',
