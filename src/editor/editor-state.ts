@@ -1,6 +1,6 @@
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType, Plot } from '@/plot/plot'
-import { DEFAULT_REGION, REGIONS } from '@/region/regions'
+import { DEFAULT_REGION, isExampleSite, REGIONS } from '@/region/regions'
 import { loadPack, type RulePack } from '@/rules'
 import { nearestRoad } from '@/site/nearest-road'
 import { nearestStation, type NearestStation } from '@/site/nearest-station'
@@ -30,7 +30,8 @@ export type EditorState = {
 }
 
 export type EditorAction =
-  | DraftAction
+  | Exclude<DraftAction, { type: 'load' }>
+  | { type: 'load'; plot: Plot }
   | { type: 'select'; selection: Selection }
   | { type: 'site'; roads: readonly SiteRoad[]; stations: readonly Station[] | null }
   | { type: 'focus'; at: LngLat }
@@ -184,8 +185,15 @@ function withFrontageEstimates(before: EditorState, after: EditorState): EditorS
   return estimated === draft ? after : { ...after, draft: estimated, plot: toPlot(estimated) }
 }
 
+function linkedLoad(id: RegionId, plot: Plot): DraftAction {
+  const region = REGIONS[id]
+  return { type: 'load', plot, roadsEstimated: isExampleSite(region, plot.ring) && region.example?.roadsEstimated === true }
+}
+
 function reduceAction(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
+    case 'load':
+      return applyDraft(state, linkedLoad(state.region, action.plot))
     case 'select':
       return { ...state, selection: action.selection, notice: null }
     case 'site':

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
+import { encodeAssumptions } from '../src/finance/url'
 import { localFrame, type LngLat } from '../src/geo/projection'
 import type { Plot } from '../src/plot/plot'
 import type { RegionId } from '../src/solve'
@@ -162,7 +163,7 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('')
     await expect(land.getByText('AED per m²')).toBeVisible()
     await land.getByLabel('Sale price per m² of saleable area').fill('16000')
-    await expect.poll(() => decodeURIComponent(page.url())).toContain('assume-dxb=salePrice.condo:16000')
+    await expect.poll(() => decodeURIComponent(page.url())).toContain(`assume-dxb=${encodeAssumptions({ 'salePrice.condo': 16000 })}`)
 
     expect(zoneRequests).toEqual([])
     await expectSharedLinkReopens(page, 'Unverified: from your affection plan')

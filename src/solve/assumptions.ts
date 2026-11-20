@@ -158,6 +158,7 @@ export type MoneyPrices = {
 export type MoneyRegion = {
   readonly currency: string | null
   readonly landUnit: { readonly name: string; readonly sqm: Assumption }
+  readonly oldLinkLandUnitSqm: Assumption | null
   readonly landWarningFactor: Assumption
   readonly prices: MoneyPrices | null
 }
@@ -226,7 +227,7 @@ const BOI_OFFICE_SERVICES_BAND: Band = { low: officeServices('low'), high: offic
 
 const BOI_OFFICE_SERVICES: AssumedRange = {
   ...BOI_OFFICE_SERVICES_BAND,
-  source: `${EDITABLE}; BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality ("The cost includes communal air conditioning, general electrics, and sanitary"), less the low-rise substructure and superstructure rates, which are unsourced Plotwise estimates, so a low-rise office totals the BOI range. BOI gives one range for every height: at the default rates a high-rise office totals ${band(buildingTotal(HIGH_RISE_STRUCTURE, BOI_OFFICE_SERVICES_BAND))} per m², above both the BOI range and RHLB's office range of THB 26,000 to 39,000, ${RHLB_COSTS}. ${BOI_COSTS}`,
+  source: `${EDITABLE}; BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality ("The cost includes communal air conditioning, general electrics, and sanitary"), less the low-rise substructure and superstructure rates, which are unsourced Plotwise estimates, so a low-rise office totals the BOI range. BOI gives one range for every height: at the default rates a high-rise office totals ${band(buildingTotal(HIGH_RISE_STRUCTURE, BOI_OFFICE_SERVICES_BAND))} per m², which extends above both the BOI range and RHLB's office range of THB 26,000 to 39,000, ${RHLB_COSTS}. ${BOI_COSTS}`,
 }
 
 const everyTier = (assumption: Assumption): PerTier<Assumption> => ({ cbd: assumption, cityFringe: assumption, suburban: assumption })
@@ -335,6 +336,7 @@ export const MONEY_REGIONS = {
       name: 'square wah',
       sqm: { value: 4, source: 'Thai land measure: 1 rai = 400 square wah = 1,600 m², so 1 square wah = 4 m²; stated conversion, not fetched in research' },
     },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: BANGKOK_PRICES,
   },
@@ -343,6 +345,10 @@ export const MONEY_REGIONS = {
     landUnit: {
       name: 'm²',
       sqm: { value: 1, source: 'one square metre, the unit Dubai affection plans state areas in, as in the Trakhees site plan for International City plot IC1-CTYL-16_013 (12 May 2026): "GFA=4804.84 Sq. m"' },
+    },
+    oldLinkLandUnitSqm: {
+      value: SQM_PER_SQFT,
+      source: 'one square foot, from the international foot of exactly 0.3048 m: share links written before 20 Nov 2026, when Dubai land prices were entered per sq ft, carry them per sq ft',
     },
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
@@ -353,12 +359,14 @@ export const MONEY_REGIONS = {
       name: 'sq ft',
       sqm: { value: SQM_PER_SQFT, source: 'one square foot, from the international foot of exactly 0.3048 m; Mumbai areas are shown in square feet' },
     },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
   },
   custom: {
     currency: null,
     landUnit: { name: 'm²', sqm: { value: 1, source: 'one square metre, the unit areas are shown in for custom rules' } },
+    oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
     prices: null,
   },
@@ -432,3 +440,20 @@ export const AFFECTION_PLAN_TERMS = {
     },
   },
 } as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }
+
+const DCPR_2034 =
+  'Greater Mumbai Development Control and Promotion Regulations 2034, sanctioned text of 8 May 2018 (MCGM), https://portal.mcgm.gov.in/irj/go/km/docs/documents/MCGM%20Department%20List/Chief%20Engineer%20(Development%20Plan)/Docs/SANCTIONED%20DP2034/DCPR/DCPR%202034.pdf'
+
+export const DCPR_RESIDENTIAL_USE = {
+  value: 'Residential (R zone), Suburbs and Extended Suburbs',
+  source: `${DCPR_2034}, PDF page 127, Reg 30(A)(1) Table 12 Sr II(iii): "The remaining area in Suburbs and Extended Suburbs, Residential/ Commercial"`,
+} as const satisfies Term
+
+export const MUMBAI_EXAMPLE_LAND_RATE: Assumption = {
+  value: 64_240,
+  source:
+    'Department of Registration and Stamps, Government of Maharashtra, Annual Statement of Rates (Ready Reckoner) 2026-27, Mumbai Suburban district, village Mulund (W), open land ₹64,240 per m² in zone 123/567. The zone is matched by position and not confirmed for this plot: on OpenStreetMap the plot lies between L.B.S. Marg and Purushottam Kheraj Road, which zone 123/567 covers: "एल.बी.एस.मार्ग व पुरूषोत्तम खेराज रोड या मधील विभाग क्रमांक 123/568 मधील मिळकती सोडून उर्वरीत सर्व मिळकती" (all properties between L.B.S. Marg and Purushottam Kheraj Road except those of zone 123/568); if it lies in zone 123/568 the rate is ₹63,400. https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains, fetched 2026-11-20',
+}
+
+export const DUBAI_EXAMPLE_LIMITS_SOURCE =
+  'Setbacks and plot coverage copied from a public Nakheel affection plan, not this plot’s own: Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only and refers parking to the Trakhees regulations, so height in metres and parking stay blank. Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20'

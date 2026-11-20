@@ -45,7 +45,7 @@ test('money: the office services rate and the basement rate are estimates from t
     await expect(row.getByText('Estimated')).toBeVisible()
     await expect(row.getByText(BOI)).toBeVisible()
   }
-  await expect(rateRow(page, /^Services/).getByText(/unsourced Plotwise estimates.*a high-rise office totals THB 33,000 to THB 47,000 per m², above both the BOI range/)).toBeVisible()
+  await expect(rateRow(page, /^Services/).getByText(/unsourced Plotwise estimates.*a high-rise office totals THB 33,000 to THB 47,000 per m², which extends above both the BOI range/)).toBeVisible()
   await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue('8000')
   await expect(rateRow(page, /^Basement/).getByLabel('High')).toHaveValue('20000')
 })

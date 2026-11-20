@@ -5,6 +5,7 @@ import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
+import { t } from '../src/text/messages'
 import { mockZoneInside } from './app-fixtures'
 import { allowedArea } from './support/app'
 import { CHATUCHAK_PARK_PLOT } from './support/site'
@@ -101,7 +102,7 @@ test('the Rules tab reads the 2026 bylaw as factory uses plus the state medical 
   const errors = await open(page)
   await showTab(page, 'Rules')
   const banner = rules(page).getByRole('note').filter({ hasText: '2026 plan amendment' })
-  await expect(banner).toContainText('changes the factory uses and exempts state medical and public-health land use')
+  await expect(banner).toContainText(t('rules.bylaw.factories-and-state-medical'))
   await expect(banner).not.toContainText('machine-read')
 
   const decision = rules(page).getByRole('listitem').filter({ hasText: 'Does the 13 Mar 2026 Bangkok bylaw change anything' })

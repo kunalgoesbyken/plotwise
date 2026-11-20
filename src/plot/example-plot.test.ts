@@ -8,7 +8,8 @@ import fixture from '@/site/__fixtures__/mulund-west.overpass.json'
 import { nearestRoad } from '@/site/nearest-road'
 import { OverpassResponseSchema } from '@/site/overpass-response'
 import { parseOverpass } from '@/site/parse'
-import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_LAND_RATE, MUMBAI_EXAMPLE_PLOT } from './example-plot'
+import { MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
+import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from './example-plot'
 
 function solved(region: 'mum' | 'dxb') {
   const { example, packId } = REGIONS[region]

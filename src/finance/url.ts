@@ -1,9 +1,11 @@
+import type { MoneyRegion } from '@/solve'
 import { isAskingPrice } from './asking-price'
 import { isValidValue, STORAGE_KEYS } from './parameters'
 import type { Overrides } from './values'
 
 const LIST = ';'
 const PAIR = ':'
+const VERSION = `v${PAIR}2`
 
 function strictNumber(text: string) {
   return text.trim() === '' ? Number.NaN : Number(text)
@@ -11,16 +13,22 @@ function strictNumber(text: string) {
 
 export function encodeAssumptions(overrides: Overrides): string | null {
   const pairs = Object.entries(overrides).map(([key, value]) => `${key}${PAIR}${value}`)
-  return pairs.length === 0 ? null : pairs.join(LIST)
+  return pairs.length === 0 ? null : [VERSION, ...pairs].join(LIST)
 }
 
-export function decodeAssumptions(encoded: string | null): Overrides {
+const landPriceScale = (pairs: readonly string[], { landUnit, oldLinkLandUnitSqm }: MoneyRegion) =>
+  oldLinkLandUnitSqm === null || pairs.includes(VERSION) ? 1 : landUnit.sqm.value / oldLinkLandUnitSqm.value
+
+export function decodeAssumptions(encoded: string | null, region: MoneyRegion): Overrides {
   if (encoded === null) return {}
-  const entries = encoded.split(LIST).flatMap((pair) => {
+  const pairs = encoded.split(LIST)
+  const landScale = landPriceScale(pairs, region)
+  const entries = pairs.flatMap((pair) => {
     const [key, text] = pair.split(PAIR)
     const parameter = STORAGE_KEYS.get(key)
-    const value = strictNumber(text ?? '')
-    return parameter && isValidValue(parameter, value) ? [[key, value] as const] : []
+    if (!parameter) return []
+    const value = strictNumber(text ?? '') * (parameter.unit === 'landMoney' ? landScale : 1)
+    return isValidValue(parameter, value) ? [[key, value] as const] : []
   })
   return Object.fromEntries(entries)
 }

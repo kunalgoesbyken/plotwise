@@ -437,7 +437,7 @@ const en = {
   'rules.plot-area': ({ area }: Area) => `Plot ${area}`,
   'rules.bylaw.title': '2026 plan amendment: read with care',
   'rules.bylaw.factories-and-state-medical':
-    'The Bangkok bylaw of 13 Mar 2026 amends this plan. Read from the gazette pages, it changes the factory uses and exempts state medical and public-health land use from the land-use rules. It does not touch the floor area, open space, hotel or office limits, so the values below are treated as unchanged. Confirm with the BMA before relying on them.',
+    'The Bangkok bylaw of 13 Mar 2026 amends this plan. Read from the gazette pages, it changes the factory uses, adds state-run water-supply works (factory type 90), and takes medical and public-health land use run by the state out of the plan’s land-use rules. For condominiums, offices and hotels it does not touch the floor area, open space, hotel or office limits, so the values below are treated as unchanged. Confirm with the BMA before relying on them.',
   'rules.bylaw.unverified':
     'The Bangkok bylaw of 13 Mar 2026 amends this plan, and this reading treats it as unread. Every value below is unverified against it. Confirm with the BMA before relying on them.',
   'rules.estimated-roads': ({ edges }: { edges: string }) =>
@@ -590,8 +590,6 @@ const en = {
     `${lead}${worse ? `, ${worse}` : ''}${better ? `; ${better}` : ''}.`,
   'standing.alternative': ({ name, better }: Name & { better: string }) => `Against the ${name}: ${better}.`,
   'standing.line': ({ name, standing }: Name & { standing: string }) => `${name}: ${standing}`,
-  'difference.worse.floor-area': ({ area }: Area) => `${area} less floor area`,
-  'difference.better.floor-area': ({ area }: Area) => `${area} more floor area`,
   'difference.worse.open-space': ({ area }: Area) => `${area} less open space`,
   'difference.better.open-space': ({ area }: Area) => `${area} more open space`,
   'difference.worse.height': ({ height }: { height: string }) => `${height} taller`,
