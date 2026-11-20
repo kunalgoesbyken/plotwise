@@ -1,6 +1,8 @@
+import type { Design } from '@/designs'
 import type { Region } from '@/region/regions'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
+import { askingVerdict } from './asking-price'
 import { formatMoney } from './format-money'
 import { totalOf, type Estimate, type Parking, type Range } from './estimate'
 import { SCALARS, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
@@ -8,6 +10,21 @@ import type { Finance } from './use-finance'
 
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
   t('money.range', { low: formatMoney(low, currency), high: formatMoney(high, currency) })
+
+export function askingText(asking: number, { priced, region }: Pick<Finance, 'priced' | 'region'>, design: Design): string {
+  const verdict = askingVerdict(asking, priced && priced.estimateFor(design).landValue)
+  const shown = formatMoney(asking, region.currency)
+  switch (verdict.kind) {
+    case 'within':
+      return t('asking.within', { asking: shown })
+    case 'above':
+      return t('asking.above', { asking: shown, margin: formatMoney(verdict.margin, region.currency) })
+    case 'below':
+      return t('asking.below', { asking: shown, margin: formatMoney(verdict.margin, region.currency) })
+    case 'unavailable':
+      return t('asking.unavailable', { asking: shown })
+  }
+}
 
 export const parkingText = ({ levelsAboveGround, basementLevels }: Parking) =>
   t('money.parking-levels-value', { above: levelsAboveGround, basement: basementLevels })

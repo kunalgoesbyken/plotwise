@@ -640,6 +640,12 @@ const en = {
     `This is more than ${factor} times the typical asking price nearby. Check the sale price and cost assumptions before relying on it.`,
   'land.indicative': 'Indicative only: a rough residual on editable assumptions, not a valuation.',
 
+  'asking.label': 'Asking price for the plot',
+  'asking.within': ({ asking }: { asking: string }) => `Asking ${asking} → within range.`,
+  'asking.above': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} over.`,
+  'asking.below': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} under.`,
+  'asking.unavailable': ({ asking }: { asking: string }) => `Asking ${asking} → no verdict until every money value is entered.`,
+
   'assumptions.title': 'Money assumptions',
   'assumptions.note': 'Every value is an estimate you can change. None of them is law.',
   'assumptions.price': 'Price and margin',

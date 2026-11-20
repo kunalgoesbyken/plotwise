@@ -7,6 +7,7 @@ import { formatList, formatNumber } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Disclosure } from '@/ui/disclosure'
+import { AskingPrice } from './asking-price-field'
 import { everyValueLabel, purchasePriceLabel, rangeText } from './figures'
 import { ParameterInput } from './parameter-input'
 import { SCALARS } from './parameters'
@@ -82,6 +83,7 @@ export function LandValue() {
         ))}
       </div>
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}
+      <AskingPrice finance={finance} design={design} />
       <p className="text-xs leading-relaxed text-muted-foreground">{t('land.indicative')}</p>
       <PriceSources finance={finance} />
     </section>
