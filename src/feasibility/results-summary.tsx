@@ -5,11 +5,12 @@ import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { useFeasibility } from './feasibility-provider'
 import { limiterText } from './limiter-text'
+import { SummarySkeleton } from './results-skeleton'
 import { ShareActions } from './share-actions'
 
 export function ResultsSummary({ children }: { children?: ReactNode }) {
   const { result, design } = useFeasibility()
-  if (!result) return null
+  if (!result) return <SummarySkeleton />
   if (result.status === 'failed') return <p className="text-sm leading-snug text-destructive">{t(`feasibility.failed.${result.reason}`)}</p>
   if (!design) return <p className="text-sm leading-snug text-muted-foreground">{t('designs.none')}</p>
   const { limits, farCap } = result.solution
@@ -20,7 +21,7 @@ export function ResultsSummary({ children }: { children?: ReactNode }) {
         <p className="pt-1 text-xs text-muted-foreground">{t('summary.allowed')}</p>
         <ShareActions />
       </div>
-      <p className="flex flex-wrap items-baseline gap-x-2">
+      <p aria-live="polite" aria-atomic="true" className="flex flex-wrap items-baseline gap-x-2">
         <span key={farCap.maxGfaSqm} className="animate-flash rounded text-2xl font-semibold tracking-tight">
           {formatQuantity(farCap.maxGfaSqm, 'sqm')}
         </span>

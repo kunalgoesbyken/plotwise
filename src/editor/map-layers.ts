@@ -1,4 +1,4 @@
-import type { ExpressionSpecification, Map as MapLibreMap } from 'maplibre-gl'
+import type { ExpressionSpecification, Map as MapLibreMap, StyleSpecification } from 'maplibre-gl'
 
 export const PLOT_SOURCE = 'plotwise-plot'
 export const PREVIEW_SOURCE = 'plotwise-preview'
@@ -28,6 +28,13 @@ export type Palette = { plot: string; road: string; ink: string; paper: string }
 const kind = (k: string): ExpressionSpecification => ['==', ['get', 'kind'], k]
 const flag = (name: string): ExpressionSpecification => ['==', ['get', name], true]
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
+
+const UNUSED_BASE_LAYERS: ReadonlySet<string> = new Set(['highway-shield-non-us', 'highway-shield-us-interstate', 'road_shield_us'])
+
+export const withoutUnusedBaseLayers = (_previous: StyleSpecification | undefined, style: StyleSpecification): StyleSpecification => ({
+  ...style,
+  layers: style.layers.filter((layer) => !UNUSED_BASE_LAYERS.has(layer.id)),
+})
 
 const ENGLISH_LABEL: ExpressionSpecification = ['coalesce', ['get', 'name:en'], ['get', 'name:latin']]
 

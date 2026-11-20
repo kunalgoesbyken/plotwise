@@ -51,8 +51,9 @@ function useLiveSearch(query: string) {
   return { search, close: () => setSearch({ status: 'idle' }) }
 }
 
-function StatusLine({ search }: { search: SearchState }) {
+function statusText(search: SearchState) {
   if (search.status === 'failed') return t('search.failed')
+  if (search.status === 'searching') return search.places.length === 0 ? t('search.searching') : null
   if (search.status === 'found' && search.places.length === 0) return t('search.none')
   return null
 }
@@ -125,7 +126,7 @@ export function PlaceSearch() {
         </div>
       </form>
       <p aria-live="polite" className="mt-2 text-xs leading-relaxed text-muted-foreground empty:hidden">
-        <StatusLine search={search} />
+        {statusText(search)}
       </p>
       <ul
         id={listId}
