@@ -20,7 +20,7 @@ export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSit
   pack: solution.pack,
   use: solution.plot.buildingType,
   area: placementOf(solution.site.frame.origin, region.areas),
-  plotAreaSqm: solution.site.areaSqm,
+  plotAreaSqm: solution.landAreaSqm,
   landUnitSqm: region.landUnit.sqm.value,
 })
 

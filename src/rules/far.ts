@@ -66,13 +66,28 @@ export const FarBonusSchema = z.discriminatedUnion('kind', [
 
 export const FarBonusBlockSchema = z.object({ combinedMaxShare: CitedSchema, measures: z.array(FarBonusSchema).min(1) })
 
+const RoadWidthCapSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('ratio'), roadWidthM: RangeSchema, ratio: CitedSchema }),
+  z.object({ kind: z.literal('none'), roadWidthM: RangeSchema, cite: CiteSchema }),
+])
+
 const PurchaseCapSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('extraRatio'), ratio: CitedSchema }),
-  z.object({ kind: z.literal('shareOfBase'), share: CitedSchema }),
+  z.object({
+    kind: z.literal('extraRatioByRoadWidth'),
+    bands: z
+      .array(RoadWidthCapSchema)
+      .min(1)
+      .refine((bands) => bandsCoverEverything(bands.map((band) => band.roadWidthM)), {
+        message: 'road widths must run from 0 without gaps to unlimited',
+      }),
+  }),
+  z.object({ kind: z.literal('shareOf'), of: z.enum(['base', 'permissible']), share: CitedSchema }),
 ])
 
 const PurchasePriceSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('perSqm'), value: CitedSchema }),
+  z.object({ kind: z.literal('shareOfLandRate'), share: CitedSchema }),
   z.object({ kind: z.literal('userSupplied') }),
 ])
 

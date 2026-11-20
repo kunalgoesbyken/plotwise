@@ -9,6 +9,7 @@ export const CoverageSchema = z.discriminatedUnion('kind', [
 export const ReservationSchema = z.object({
   kind: z.literal('roadWidening'),
   targetWidthM: CitedSchema,
+  farOn: z.enum(['gross', 'net']),
   notes: z.array(CiteSchema),
 })
 

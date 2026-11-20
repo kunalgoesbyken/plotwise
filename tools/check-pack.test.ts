@@ -27,6 +27,16 @@ describe('checkPack', () => {
     expect(errorsOf(mutate((p) => void (p.openSpaceRatio!.minShareOfFloorArea.value = 4.5)))).toContain('openSpaceRatio')
   })
 
+  it('flags a purchasable FAR cap or price outside its plausible range', () => {
+    const cite = shipped.far.kind === 'zone' ? shipped.far.max.cite : shipped.zone!.cite
+    const withPurchase = (cap: unknown, price: unknown) => mutate((p) => void (p.farPurchases = [{ kind: 'premium', cap, price, notes: [] } as never]))
+    const banded = { kind: 'extraRatioByRoadWidth', bands: [{ kind: 'ratio', roadWidthM: {}, ratio: { value: 70, cite } }] }
+    expect(errorsOf(withPurchase(banded, { kind: 'userSupplied' }))).toContain('farPurchases.0.cap.bands.0')
+    const fungible = { kind: 'shareOf', of: 'permissible', share: { value: 0.35, cite } }
+    expect(errorsOf(withPurchase(fungible, { kind: 'shareOfLandRate', share: { value: 1.5, cite } }))).toContain('farPurchases.0.price')
+    expect(errorsOf(withPurchase(fungible, { kind: 'shareOfLandRate', share: { value: 0.5, cite } }))).not.toContain('farPurchases')
+  })
+
   it('flags a gap between road-width bands', () => {
     expect(errorsOf(mutate((p) => void (p.roadSetbacks[0].bands[1].roadWidthM.min!.value = 12)))).toContain('roadSetbacks.0')
   })

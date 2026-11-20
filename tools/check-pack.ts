@@ -1,6 +1,6 @@
 import { bandGaps, endsOpen, meets } from '../src/rules/bands'
 import { isSourceCite, type Cited, type Range, type SourceCite } from '../src/rules/cite'
-import type { FarRule } from '../src/rules/far'
+import type { FarPurchase, FarRule } from '../src/rules/far'
 import { RulePackSchema, type RulePack } from '../src/rules/pack'
 
 export type CheckResult = { errors: string[]; info: string[] }
@@ -58,13 +58,36 @@ function farRanges(far: FarRule): string[] {
   }
 }
 
+function capRanges(path: string, cap: FarPurchase['cap']): string[] {
+  switch (cap.kind) {
+    case 'extraRatio':
+      return outOfRange(path, cap.ratio.value, FAR_RATIO)
+    case 'extraRatioByRoadWidth':
+      return [
+        ...contiguous(`${path}.bands`, cap.bands.map((band) => band.roadWidthM)),
+        ...cap.bands.flatMap((band, j) => (band.kind === 'ratio' ? outOfRange(`${path}.bands.${j}`, band.ratio.value, FAR_RATIO) : [])),
+      ]
+    case 'shareOf':
+      return outOfRange(path, cap.share.value, SHARE)
+  }
+}
+
+function priceRanges(path: string, price: FarPurchase['price']): string[] {
+  switch (price.kind) {
+    case 'perSqm':
+      return outOfRange(path, price.value.value, PRICE_PER_SQM)
+    case 'shareOfLandRate':
+      return outOfRange(path, price.share.value, SHARE)
+    case 'userSupplied':
+      return []
+  }
+}
+
 const checkRanges: Check = (pack) => [
   ...farRanges(pack.far),
   ...(pack.farPurchases ?? []).flatMap((purchase, i) => [
-    ...(purchase.cap.kind === 'extraRatio'
-      ? outOfRange(`farPurchases.${i}.cap`, purchase.cap.ratio.value, FAR_RATIO)
-      : outOfRange(`farPurchases.${i}.cap`, purchase.cap.share.value, SHARE)),
-    ...(purchase.price.kind === 'perSqm' ? outOfRange(`farPurchases.${i}.price`, purchase.price.value.value, PRICE_PER_SQM) : []),
+    ...capRanges(`farPurchases.${i}.cap`, purchase.cap),
+    ...priceRanges(`farPurchases.${i}.price`, purchase.price),
   ]),
   ...(pack.coverage?.kind === 'maxShare' ? outOfRange('coverage.share', pack.coverage.share.value, SHARE) : []),
   ...(pack.height.planLimit.kind === 'maxMetres' ? outOfRange('height.planLimit.maxM', pack.height.planLimit.maxM.value, HEIGHT_M) : []),

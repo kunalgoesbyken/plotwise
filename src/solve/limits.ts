@@ -7,6 +7,7 @@ import { coverageLimit, type CoverageLimit } from './coverage'
 import { farLimits, type FarLimits } from './far'
 import { planHeight } from './height'
 import { posesQuestion, readingCites, readingSources, type Interpretations } from './interpretations'
+import { mainRoad } from './envelope'
 import { heightVsRoadMultiple } from './setbacks'
 
 export type Sourced = { readonly value: number; readonly cites: readonly Cite[] }
@@ -69,6 +70,7 @@ export type LimitsInput = {
   readonly pack: RulePack
   readonly readings: Interpretations
   readonly site: Site
+  readonly farAreaSqm: number
   readonly buildingType: BuildingType
   readonly nearStation: boolean
   readonly floorToFloorM: number
@@ -164,11 +166,11 @@ function parkingLimits({ pack, readings }: LimitsInput): Limits['parking'] {
 }
 
 export function limitsFor(input: LimitsInput): Limits {
-  const { pack, readings, buildingType, site, plotLimits, floorToFloorM, nearStation } = input
+  const { pack, readings, buildingType, site, farAreaSqm, plotLimits, floorToFloorM, nearStation } = input
   const classes = classesFor(pack, readings, buildingType)
   const plan = planHeight(pack, plotLimits, floorToFloorM)
   return {
-    ...farLimits({ pack, site, plotLimits, classes, nearStation }),
+    ...farLimits({ pack, areaSqm: farAreaSqm, roadWidthM: site.edges[mainRoad(site)].roadWidthM ?? 0, plotLimits, classes, nearStation }),
     classes,
     openSpace: openSpaceLimits(input, classes.residential),
     height: { planLimitM: plan.limitM, cites: plan.cites, vsRoadMultiple: heightVsRoadMultiple(pack) },

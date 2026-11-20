@@ -78,7 +78,7 @@ function metricsOf(solution: Solution, plates: FloorPlates, { building, programm
   return {
     gfaSqm: p.farSqm,
     builtSqm: p.builtSqm,
-    far: p.farSqm / solution.site.areaSqm,
+    far: p.farSqm / solution.farAreaSqm,
     heightM: building.heightM,
     storeys: building.storeys,
     footprintSqm: plates.footprintSqm,

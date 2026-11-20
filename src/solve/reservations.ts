@@ -6,6 +6,7 @@ export type Widening = {
   readonly grossAreaSqm: number
   readonly reservedSqm: number
   readonly depthsM: readonly number[]
+  readonly farOn: Reservation['farOn']
   readonly cites: readonly Cite[]
 }
 
@@ -25,13 +26,16 @@ export function reserveRoadWidening(site: Site, reservations: readonly Reservati
   const ring = offsetEdges(site.ring, strips.map(({ depthM }) => depthM))
   const areaSqm = polygonArea({ outer: ring, holes: [] })
   const bites = (r: Reservation) => site.edges.some((edge) => edge.roadWidthM !== null && edge.roadWidthM < r.targetWidthM.value)
+  const biting = reservations.filter(bites)
+  const governing = biting.reduce((widest, r) => (r.targetWidthM.value > widest.targetWidthM.value ? r : widest))
   return {
     site: { ...site, ring, areaSqm, edges: edgeLengths(ring).map((lengthM, i) => ({ lengthM, roadWidthM: strips[i].roadWidthM })) },
     widening: {
       grossAreaSqm: site.areaSqm,
       reservedSqm: site.areaSqm - areaSqm,
       depthsM: strips.map(({ depthM }) => depthM),
-      cites: reservations.filter(bites).flatMap((r) => [r.targetWidthM.cite, ...r.notes]),
+      farOn: governing.farOn,
+      cites: biting.flatMap((r) => [r.targetWidthM.cite, ...r.notes]),
     },
   }
 }

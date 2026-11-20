@@ -1,9 +1,7 @@
 import type { PlotLimits } from '@/plot/plot'
-import type { Site } from '@/plot/site'
 import { enteredCite, type Cite, type FarBonus, type FarPurchase, type FarRule, type RulePack } from '@/rules'
 import { inRange } from './bound'
 import type { Classes } from './classes'
-import { mainRoad } from './envelope'
 import { SolveError } from './errors'
 
 export type FarMode = 'standard' | 'bonus' | 'purchased'
@@ -24,7 +22,7 @@ export type BonusMeasure = {
 export type PurchaseOption = {
   readonly kind: FarPurchase['kind']
   readonly maxExtraGfaSqm: number
-  readonly pricePerSqm: number | null
+  readonly price: FarPurchase['price']['kind']
   readonly cites: readonly Cite[]
 }
 
@@ -41,14 +39,14 @@ export type FarLimits = {
     readonly options: readonly PurchaseOption[]
     readonly extraGfaSqm: number
     readonly maxGfaSqm: number
-    readonly fullCost: number | null
     readonly cites: readonly Cite[]
   }
 }
 
 export type FarInput = {
   readonly pack: RulePack
-  readonly site: Site
+  readonly areaSqm: number
+  readonly roadWidthM: number
   readonly plotLimits: PlotLimits | undefined
   readonly classes: Classes
   readonly nearStation: boolean
@@ -59,20 +57,19 @@ function required<T>(found: T | undefined, what: string): T {
   return found
 }
 
-function baseFar(rule: FarRule, site: Site, plotLimits: PlotLimits | undefined): FarLimits['far'] {
+function baseFar(rule: FarRule, { areaSqm, roadWidthM, plotLimits }: FarInput): FarLimits['far'] {
   switch (rule.kind) {
     case 'zone':
-      return { ratio: rule.max.value, maxGfaSqm: rule.max.value * site.areaSqm, cites: [rule.max.cite, ...rule.notes] }
+      return { ratio: rule.max.value, maxGfaSqm: rule.max.value * areaSqm, cites: [rule.max.cite, ...rule.notes] }
     case 'byRoadWidthAndPlotSize': {
-      const roadWidthM = site.edges[mainRoad(site)].roadWidthM ?? 0
       const band = required(rule.roadWidthBands.find((b) => inRange(roadWidthM, b.roadWidthM)), 'road width bands')
-      const row = required(band.byPlotSize.find((r) => inRange(site.areaSqm, r.plotAreaSqm)), 'plot size bands')
-      return { ratio: row.ratio.value, maxGfaSqm: row.ratio.value * site.areaSqm, cites: [row.ratio.cite, ...rule.notes] }
+      const row = required(band.byPlotSize.find((r) => inRange(areaSqm, r.plotAreaSqm)), 'plot size bands')
+      return { ratio: row.ratio.value, maxGfaSqm: row.ratio.value * areaSqm, cites: [row.ratio.cite, ...rule.notes] }
     }
     case 'plotSpecific': {
       const maxGfaSqm = plotLimits?.maxGfaSqm
       if (maxGfaSqm === undefined) throw new SolveError('plot-limit-missing', ['maxGfaSqm'])
-      return { ratio: maxGfaSqm / site.areaSqm, maxGfaSqm, cites: [enteredCite('maxGfaSqm'), ...rule.notes] }
+      return { ratio: maxGfaSqm / areaSqm, maxGfaSqm, cites: [enteredCite('maxGfaSqm'), ...rule.notes] }
     }
   }
 }
@@ -122,33 +119,59 @@ function bonusLimits({ pack, classes, nearStation }: FarInput, base: FarLimits['
   }
 }
 
-function purchaseOption({ cap, price, kind, notes }: FarPurchase, base: FarLimits['far'], site: Site): PurchaseOption {
-  const capCite = cap.kind === 'extraRatio' ? cap.ratio.cite : cap.share.cite
-  const maxExtraGfaSqm = cap.kind === 'extraRatio' ? cap.ratio.value * site.areaSqm : cap.share.value * base.maxGfaSqm
-  const priceCites = price.kind === 'perSqm' ? [price.value.cite] : []
-  return {
-    kind,
-    maxExtraGfaSqm,
-    pricePerSqm: price.kind === 'perSqm' ? price.value.value : null,
-    cites: [capCite, ...priceCites, ...notes],
+type Extra = { readonly gfaSqm: number; readonly cites: readonly Cite[] }
+
+function roadWidthExtra(cap: Extract<FarPurchase['cap'], { kind: 'extraRatioByRoadWidth' }>, { areaSqm, roadWidthM }: FarInput): Extra {
+  const band = required(cap.bands.find((b) => inRange(roadWidthM, b.roadWidthM)), 'purchase road width bands')
+  return band.kind === 'none' ? { gfaSqm: 0, cites: [band.cite] } : { gfaSqm: band.ratio.value * areaSqm, cites: [band.ratio.cite] }
+}
+
+function capExtra(cap: FarPurchase['cap'], input: FarInput, baseSqm: number, permissibleSqm: number): Extra {
+  switch (cap.kind) {
+    case 'extraRatio':
+      return { gfaSqm: cap.ratio.value * input.areaSqm, cites: [cap.ratio.cite] }
+    case 'extraRatioByRoadWidth':
+      return roadWidthExtra(cap, input)
+    case 'shareOf':
+      return { gfaSqm: cap.share.value * (cap.of === 'base' ? baseSqm : permissibleSqm), cites: [cap.share.cite] }
   }
 }
 
-function purchaseLimits({ pack, site }: FarInput, base: FarLimits['far']): FarLimits['farPurchase'] {
-  const options = (pack.farPurchases ?? []).map((purchase) => purchaseOption(purchase, base, site))
-  const extraGfaSqm = options.reduce((sum, option) => sum + option.maxExtraGfaSqm, 0)
-  const priced = options.every((option) => option.pricePerSqm !== null)
-  return {
-    options,
-    extraGfaSqm,
-    maxGfaSqm: base.maxGfaSqm + extraGfaSqm,
-    fullCost: priced ? options.reduce((sum, option) => sum + option.maxExtraGfaSqm * (option.pricePerSqm ?? 0), 0) : null,
-    cites: options.flatMap((option) => option.cites),
+const priceCites = (price: FarPurchase['price']): Cite[] => {
+  switch (price.kind) {
+    case 'perSqm':
+      return [price.value.cite]
+    case 'shareOfLandRate':
+      return [price.share.cite]
+    case 'userSupplied':
+      return []
   }
+}
+
+const onPermissible = ({ cap }: FarPurchase) => cap.kind === 'shareOf' && cap.of === 'permissible'
+
+function purchaseOption(purchase: FarPurchase, input: FarInput, baseSqm: number, permissibleSqm: number): PurchaseOption {
+  const extra = capExtra(purchase.cap, input, baseSqm, permissibleSqm)
+  return {
+    kind: purchase.kind,
+    maxExtraGfaSqm: extra.gfaSqm,
+    price: purchase.price.kind,
+    cites: [...extra.cites, ...priceCites(purchase.price), ...purchase.notes],
+  }
+}
+
+function purchaseLimits(input: FarInput, base: FarLimits['far']): FarLimits['farPurchase'] {
+  const purchases = input.pack.farPurchases ?? []
+  const permissibleSqm = purchases
+    .filter((purchase) => !onPermissible(purchase))
+    .reduce((sum, purchase) => sum + capExtra(purchase.cap, input, base.maxGfaSqm, 0).gfaSqm, base.maxGfaSqm)
+  const options = purchases.map((purchase) => purchaseOption(purchase, input, base.maxGfaSqm, permissibleSqm))
+  const extraGfaSqm = options.reduce((sum, option) => sum + option.maxExtraGfaSqm, 0)
+  return { options, extraGfaSqm, maxGfaSqm: base.maxGfaSqm + extraGfaSqm, cites: options.flatMap((option) => option.cites) }
 }
 
 export function farLimits(input: FarInput): FarLimits {
-  const far = baseFar(input.pack.far, input.site, input.plotLimits)
+  const far = baseFar(input.pack.far, input)
   return { far, farBonus: bonusLimits(input, far), farPurchase: purchaseLimits(input, far) }
 }
 

@@ -155,20 +155,30 @@ describe('ground coverage', () => {
 })
 
 describe('road widening', () => {
-  const WIDENING = unverified({ reservations: [{ kind: 'roadWidening', targetWidthM: value(12), notes: [] }] })
+  const widening = (farOn: 'gross' | 'net') => unverified({ reservations: [{ kind: 'roadWidening', targetWidthM: value(12), farOn, notes: [] }] })
 
-  it('reserves half the missing width along a narrow road and solves on what is left', () => {
-    const { site, widening, limits } = solveWith(WIDENING, lot(40, 50, onRoad(8)))
-    expect(widening).toMatchObject({ grossAreaSqm: expect.closeTo(2000, 6), reservedSqm: expect.closeTo(80, 6), depthsM: [2, 0, 0, 0] })
+  it('reserves half the missing width along a narrow road and solves the envelope on what is left', () => {
+    const { site, widening: strip, landAreaSqm } = solveWith(widening('net'), lot(40, 50, onRoad(8)))
+    expect(strip).toMatchObject({ grossAreaSqm: expect.closeTo(2000, 6), reservedSqm: expect.closeTo(80, 6), depthsM: [2, 0, 0, 0], farOn: 'net' })
     expect(site.areaSqm).toBeCloseTo(1920, 6)
     expect(site.edges[0].roadWidthM).toBe(12)
-    expect(limits.far.maxGfaSqm).toBeCloseTo(7 * 1920, 6)
+    expect(landAreaSqm).toBeCloseTo(2000, 6)
+  })
+
+  it('takes FAR on the land left after the strip, or on the whole plot where the rules give FAR in lieu', () => {
+    const net = solveWith(widening('net'), lot(40, 50, onRoad(8)))
+    const gross = solveWith(widening('gross'), lot(40, 50, onRoad(8)))
+    expect(net.farAreaSqm).toBeCloseTo(1920, 6)
+    expect(net.limits.far.maxGfaSqm).toBeCloseTo(7 * 1920, 6)
+    expect(gross.farAreaSqm).toBeCloseTo(2000, 6)
+    expect(gross.limits.far.maxGfaSqm).toBeCloseTo(7 * 2000, 6)
+    for (const design of designs(gross)) expect(design.metrics.far).toBeCloseTo(design.metrics.gfaSqm / 2000, 9)
   })
 
   it('leaves a plot on a road already that wide untouched', () => {
-    const { site, widening } = solveWith(WIDENING, lot(40, 50, onRoad(16)))
-    expect(widening).toBeNull()
-    expect(site.areaSqm).toBeCloseTo(2000, 6)
+    const { site, widening: strip, landAreaSqm, farAreaSqm } = solveWith(widening('gross'), lot(40, 50, onRoad(16)))
+    expect(strip).toBeNull()
+    expect([site.areaSqm, landAreaSqm, farAreaSqm].map(Math.round)).toEqual([2000, 2000, 2000])
   })
 })
 
@@ -176,21 +186,85 @@ describe('purchasable FAR', () => {
   const premium = (cap: FarPurchase['cap'], price: FarPurchase['price']): RulePack =>
     unverified({ farPurchases: [{ kind: 'premium', cap, price, notes: [] }] })
 
-  it('adds floor area capped as extra ratio and prices it per m²', () => {
+  it('adds floor area capped as an extra ratio of the plot', () => {
     const solution = solveWith(premium({ kind: 'extraRatio', ratio: value(0.5) }, { kind: 'perSqm', value: value(1000) }), lot(40, 50, onRoad(16)), 'purchased')
-    expect(solution.limits.farPurchase).toMatchObject({ extraGfaSqm: expect.closeTo(1000, 6), fullCost: expect.closeTo(1_000_000, 3) })
+    expect(solution.limits.farPurchase.extraGfaSqm).toBeCloseTo(1000, 6)
     expect(solution.farCap).toMatchObject({ mode: 'purchased', maxGfaSqm: expect.closeTo(15000, 6) })
   })
 
-  it('caps extra floor area as a share of the base and leaves an unpriced purchase without a cost', () => {
-    const { farPurchase } = solveWith(premium({ kind: 'shareOfBase', share: value(0.1) }, { kind: 'userSupplied' }), lot(40, 50, onRoad(16))).limits
-    expect(farPurchase).toMatchObject({ extraGfaSqm: expect.closeTo(1400, 6), fullCost: null })
+  it('caps extra floor area as a share of the base', () => {
+    const { farPurchase } = solveWith(premium({ kind: 'shareOf', of: 'base', share: value(0.1) }, { kind: 'userSupplied' }), lot(40, 50, onRoad(16))).limits
+    expect(farPurchase.extraGfaSqm).toBeCloseTo(1400, 6)
   })
 
   it('falls back to the standard cap where nothing can be bought, and lists the purchase as a check', () => {
     expect(solveWith(BANGKOK, lot(40, 50, onRoad(16)), 'purchased').farCap.mode).toBe('standard')
     const solution = solveWith(premium({ kind: 'extraRatio', ratio: value(0.5) }, { kind: 'userSupplied' }), lot(40, 50, onRoad(16)), 'purchased')
     for (const design of designs(solution)) expect(design.checks.find((c) => c.id === 'far-purchase')).toMatchObject({ status: 'manual' })
+  })
+})
+
+describe('purchasable FAR shaped like Mumbai: premium and TDR by road width, fungible on the permissible total', () => {
+  const NARROW_M = 9
+  const WIDE_M = 12
+  const byRoad = (middle: number, wide: number): FarPurchase['cap'] => ({
+    kind: 'extraRatioByRoadWidth',
+    bands: [
+      { kind: 'none', roadWidthM: band(undefined, NARROW_M), cite: enteredCite('test') },
+      { kind: 'ratio', roadWidthM: band(NARROW_M, WIDE_M), ratio: value(middle) },
+      { kind: 'ratio', roadWidthM: band(WIDE_M), ratio: value(wide) },
+    ],
+  })
+  const landRateShare: FarPurchase['price'] = { kind: 'shareOfLandRate', share: value(0.5) }
+  const MUMBAI_SHAPED = unverified({
+    far: {
+      kind: 'byRoadWidthAndPlotSize',
+      roadWidthBands: [{ roadWidthM: band(), byPlotSize: [{ plotAreaSqm: band(), ratio: value(1) }] }],
+      notes: [],
+    },
+    farBonus: undefined,
+    farPurchases: [
+      { kind: 'premium', cap: byRoad(0.5, 0.8), price: landRateShare, notes: [] },
+      { kind: 'transferableRights', cap: byRoad(0.5, 0.7), price: { kind: 'userSupplied' }, notes: [] },
+      { kind: 'fungible', cap: { kind: 'shareOf', of: 'permissible', share: value(0.35) }, price: landRateShare, notes: [] },
+    ],
+  })
+  const extras = (roadM: number) => solveWith(MUMBAI_SHAPED, lot(40, 50, onRoad(roadM)), 'purchased').limits.farPurchase
+
+  it('reads the premium and TDR caps from the band of the main road', () => {
+    expect(extras(10).options.map((o) => [o.kind, Math.round(o.maxExtraGfaSqm)])).toEqual([
+      ['premium', 1000],
+      ['transferableRights', 1000],
+      ['fungible', 1400],
+    ])
+    expect(extras(16).options.map((o) => Math.round(o.maxExtraGfaSqm))).toEqual([1600, 1400, 1750])
+  })
+
+  it('allows no premium or TDR below the narrowest band, so fungible applies to the base alone', () => {
+    expect(extras(8).options.map((o) => Math.round(o.maxExtraGfaSqm))).toEqual([0, 0, 700])
+  })
+
+  it('caps the purchased total at base plus every extra, with fungible at its share of the permissible total', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 3, max: 40, noNaN: true }), (roadM) => {
+        const purchase = extras(roadM)
+        const [premiumExtra, tdrExtra, fungibleExtra] = purchase.options.map((o) => o.maxExtraGfaSqm)
+        expect(fungibleExtra).toBeCloseTo(0.35 * (2000 + premiumExtra + tdrExtra), 6)
+        expect(purchase.maxGfaSqm).toBeCloseTo(2000 + premiumExtra + tdrExtra + fungibleExtra, 6)
+      }),
+      { numRuns: 30 },
+    )
+  })
+
+  it('refuses road-width caps with a gap between bands', () => {
+    const gap: FarPurchase['cap'] = {
+      kind: 'extraRatioByRoadWidth',
+      bands: [
+        { kind: 'ratio', roadWidthM: band(undefined, NARROW_M), ratio: value(0.5) },
+        { kind: 'ratio', roadWidthM: band(WIDE_M), ratio: value(0.5) },
+      ],
+    }
+    expect(() => unverified({ farPurchases: [{ kind: 'premium', cap: gap, price: { kind: 'userSupplied' }, notes: [] }] })).toThrow()
   })
 })
 

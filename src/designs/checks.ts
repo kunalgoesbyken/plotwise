@@ -246,7 +246,7 @@ function highRiseChecks({ solution, building, programme, ground }: Context): Che
   const frontage = Math.max(0, ...site.edges.map((e) => (e.roadWidthM !== null && satisfies(e.roadWidthM, band.roadWidthM) ? e.lengthM : 0)))
   const fireLane = Math.min(...ground.clearanceM)
   return [
-    measured('high-rise-far', programme.farSqm / site.areaSqm, 'lte', farMax.value, 'ratio', farMax.cites),
+    measured('high-rise-far', programme.farSqm / solution.farAreaSqm, 'lte', farMax.value, 'ratio', farMax.cites),
     measured('high-rise-access', frontage, band.frontageM.cmp, band.frontageM.value, 'm', [band.frontageM.cite, band.roadWidthM.cite]),
     manual('high-rise-road-network', [band.roadWidthM.cite, highRise.accessStripWidthM.cite]),
     measured('fire-lane', fireLane, fireLaneWidthM.cmp, fireLaneWidthM.value, 'm', [fireLaneWidthM.cite]),
