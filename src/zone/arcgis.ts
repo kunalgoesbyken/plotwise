@@ -1,23 +1,25 @@
 import { z } from 'zod'
 import type { LngLat } from '@/geo/projection'
-import { USER_AGENT } from '@/site/user-agent'
-import { ZONE_TIMEOUT_MS } from './assumptions'
-import type { ZoneSource } from './sources'
+import { ZONE_GENERALISATION_DEGREES, ZONE_TIMEOUT_MS } from './assumptions'
+import type { ArcGisLayer } from './sources'
 
 const WGS84 = 4326
+const COORDINATE_DECIMALS = 6
 
 export class ZoneServiceUnavailableError extends Error {}
 
+export type ZoneFeature = { readonly code: string; readonly rings: readonly (readonly LngLat[])[] }
+
 const ArcGisErrorSchema = z.object({ error: z.object({ message: z.string() }) })
 
-function featuresSchema(zoneField: string) {
-  return z.object({ features: z.array(z.object({ attributes: z.record(z.string(), z.unknown()) })) }).transform(({ features }) =>
-    features.flatMap(({ attributes }) => {
-      const code = attributes[zoneField]
-      return typeof code === 'string' ? [code] : []
-    }),
-  )
-}
+const VertexSchema = z.array(z.number()).min(2).transform(([lng, lat]): LngLat => [lng, lat])
+
+const FeatureSchema = z.object({
+  attributes: z.record(z.string(), z.unknown()),
+  geometry: z.object({ rings: z.array(z.array(VertexSchema)) }).nullish(),
+})
+
+const FeaturesSchema = z.object({ features: z.array(FeatureSchema) })
 
 function isClockwise(ring: readonly LngLat[]): boolean {
   const twiceArea = ring.reduce((sum, [lng, lat], index) => {
@@ -32,44 +34,54 @@ function closedClockwise(ring: readonly LngLat[]): LngLat[] {
   return [...ordered, ordered[0]]
 }
 
-export function zoneQueryUrl({ layerUrl, zoneField }: ZoneSource, rings: readonly (readonly LngLat[])[]): string {
+export function zoneQueryUrl({ url, zoneField }: ArcGisLayer, plot: readonly LngLat[]): string {
   const params = new URLSearchParams({
     f: 'json',
     where: '1=1',
     geometryType: 'esriGeometryPolygon',
-    geometry: JSON.stringify({ rings: rings.map(closedClockwise), spatialReference: { wkid: WGS84 } }),
+    geometry: JSON.stringify({ rings: [closedClockwise(plot)], spatialReference: { wkid: WGS84 } }),
     inSR: String(WGS84),
+    outSR: String(WGS84),
     spatialRel: 'esriSpatialRelIntersects',
     outFields: zoneField,
-    returnDistinctValues: 'true',
-    returnGeometry: 'false',
+    returnGeometry: 'true',
+    maxAllowableOffset: String(ZONE_GENERALISATION_DEGREES.value),
+    geometryPrecision: String(COORDINATE_DECIMALS),
   })
-  return `${layerUrl}/query?${params}`
+  return `${url}/query?${params}`
 }
 
-export function parseZoneCodes(source: ZoneSource, body: unknown): string[] {
+export function parseZoneFeatures({ zoneField }: ArcGisLayer, body: unknown): ZoneFeature[] {
   const failure = ArcGisErrorSchema.safeParse(body)
   if (failure.success) throw new Error(failure.data.error.message)
-  const parsed = featuresSchema(source.zoneField).safeParse(body)
+  const parsed = FeaturesSchema.safeParse(body)
   if (!parsed.success) throw new Error('unexpected response shape')
-  return [...new Set(parsed.data)]
+  return parsed.data.features.flatMap(({ attributes, geometry }) => {
+    const code = attributes[zoneField]
+    return typeof code === 'string' && geometry ? [{ code, rings: geometry.rings }] : []
+  })
 }
 
-export type FetchZoneCodesOptions = { timeoutMs?: number; fetchImpl?: typeof fetch }
+export type FetchZoneFeaturesOptions = { signal?: AbortSignal; timeoutMs?: number; fetchImpl?: typeof fetch }
 
-export async function fetchZoneCodes(
-  source: ZoneSource,
-  rings: readonly (readonly LngLat[])[],
-  { timeoutMs = ZONE_TIMEOUT_MS.value, fetchImpl = fetch }: FetchZoneCodesOptions = {},
-): Promise<string[]> {
+export async function fetchZoneFeatures(
+  layer: ArcGisLayer,
+  plot: readonly LngLat[],
+  { signal, timeoutMs = ZONE_TIMEOUT_MS.value, fetchImpl = fetch }: FetchZoneFeaturesOptions = {},
+): Promise<ZoneFeature[]> {
+  const request = new AbortController()
+  const cancel = () => request.abort()
+  const timer = setTimeout(cancel, timeoutMs)
+  signal?.addEventListener('abort', cancel, { once: true })
+  if (signal?.aborted) cancel()
   try {
-    const response = await fetchImpl(zoneQueryUrl(source, rings), {
-      headers: { 'User-Agent': USER_AGENT },
-      signal: AbortSignal.timeout(timeoutMs),
-    })
+    const response = await fetchImpl(zoneQueryUrl(layer, plot), { signal: request.signal })
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    return parseZoneCodes(source, await response.json())
+    return parseZoneFeatures(layer, await response.json())
   } catch (error) {
     throw new ZoneServiceUnavailableError(`Zone service is unavailable: ${error instanceof Error ? error.message : String(error)}`)
+  } finally {
+    clearTimeout(timer)
+    signal?.removeEventListener('abort', cancel)
   }
 }

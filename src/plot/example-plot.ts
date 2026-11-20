@@ -7,7 +7,11 @@ export const EXAMPLE_PLOT: Plot = {
     [100.575694, 13.779116],
     [100.575382, 13.779044],
   ],
-  roads: [{ edge: 0, widthM: 12 }],
+  roads: [
+    { edge: 0, widthM: 12 },
+    { edge: 1, widthM: 5 },
+    { edge: 3, widthM: 5 },
+  ],
   buildingType: 'condo',
   nearStation: false,
 }

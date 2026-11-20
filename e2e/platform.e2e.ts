@@ -3,11 +3,11 @@ import { encodePlot } from '../src/editor/plot-url'
 import { PLACES_CACHE_S } from '../src/geocode/assumptions'
 import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 import { ROUTE_RATE_LIMITS } from '../src/rate-limit/assumptions'
+import { BROWN_ZONE, mockZoneStrips } from './zone-layers'
 
 const ROUTES = {
   geocode: '/api/geocode',
   site: '/api/site',
-  zone: '/api/zone',
 } as const
 
 const addresses = new Map<string, string>()
@@ -70,7 +70,7 @@ test('the map, its worker and the place search run without a single policy viola
 
 test('the results and the 3D view run without a single policy violation', async ({ page }) => {
   const reports = await recordViolations(page)
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+  await mockZoneStrips(page, 'bkk', [{ code: BROWN_ZONE, width: 1 }])
   await page.goto(`/app#${encodePlot(EXAMPLE_PLOT)}`)
   await expect(page.locator('[data-scene-ready="true"]')).toBeVisible({ timeout: 30_000 })
   await expect(page.getByRole('table', { name: 'Designs compared', includeHidden: true })).toBeAttached()
@@ -147,8 +147,8 @@ test.describe('rate limits', () => {
   }
 
   test('one client being refused does not affect another', async ({ request }) => {
-    await exhaust(request, 'zone', 'noisy')
-    const other = await request.get(ROUTES.zone, { headers: { 'x-forwarded-for': clientFor('bystander') } })
+    await exhaust(request, 'site', 'noisy')
+    const other = await request.get(ROUTES.site, { headers: { 'x-forwarded-for': clientFor('bystander') } })
     expect(other.status()).toBe(400)
   })
 })

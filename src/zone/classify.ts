@@ -1,33 +1,53 @@
 import type { LngLat } from '@/geo/projection'
-import type { UnknownReason, ZoneVerdict } from './schema'
-import { ZONE_SOURCES, type ZoneSource } from './sources'
+import { ZONE_SLIVER_SHARE } from './assumptions'
+import type { ZoneShare } from './shares'
+import { ZONE_SOURCES, type ZoneNaming, type ZoneRegionId, type ZoneSource } from './sources'
+import type { UnknownReason, ZonePart, ZoneVerdict } from './verdict'
 
-export function sourceFor(ring: readonly LngLat[]): ZoneSource | undefined {
+const ZONE_REGION_IDS = Object.keys(ZONE_SOURCES) as ZoneRegionId[]
+
+export function zoneRegionFor(ring: readonly LngLat[]): ZoneRegionId | undefined {
   const lng = ring.reduce((sum, vertex) => sum + vertex[0], 0) / ring.length
   const lat = ring.reduce((sum, vertex) => sum + vertex[1], 0) / ring.length
-  return Object.values(ZONE_SOURCES).find(
-    ({ coverage: [west, south, east, north] }) => lng >= west && lng <= east && lat >= south && lat <= north,
-  )
+  return ZONE_REGION_IDS.find((id) => {
+    const [west, south, east, north] = ZONE_SOURCES[id].coverage
+    return lng >= west && lng <= east && lat >= south && lat <= north
+  })
 }
 
 export function unknownVerdict(source: ZoneSource | undefined, reason: UnknownReason): ZoneVerdict {
   return { status: 'unknown', reason, plan: source?.plan ?? null }
 }
 
-function coveredName(source: ZoneSource): string {
-  const covered = source.zones.find((zone) => zone.packCode === source.coveredCode)
-  if (!covered) throw new Error(`Zone source lists no zone for the covered code ${source.coveredCode}`)
+function nameOf(naming: ZoneNaming, code: string): string | undefined {
+  return naming.zones.find((zone) => zone.sourceCode === code)?.name
+}
+
+function coveredName(naming: ZoneNaming): string {
+  const covered = naming.zones.find((zone) => zone.packCode === naming.coveredCode)
+  if (!covered) throw new Error(`Zone source lists no zone for the covered code ${naming.coveredCode}`)
   return covered.name
 }
 
-export function classifyZones(source: ZoneSource, codes: readonly string[]): ZoneVerdict {
-  if (codes.length === 0) return unknownVerdict(source, 'no-zone')
-  const entries = codes.flatMap((code) => source.zones.find((zone) => zone.sourceCode === code) ?? [])
-  if (entries.length < codes.length) return unknownVerdict(source, 'unrecognised')
-  const covered = coveredName(source)
-  if (entries.length > 1) return { status: 'mixed', zones: entries.map((entry) => entry.name), covered }
-  const [entry] = entries
-  return entry.packCode === source.coveredCode
-    ? { status: 'inside', zone: entry.name }
-    : { status: 'outside', zone: entry.name, covered }
+function namedParts(naming: ZoneNaming, shares: readonly ZoneShare[]): (ZonePart & { readonly code: string })[] | null {
+  const parts = shares.flatMap(({ code, share }) => {
+    const zone = nameOf(naming, code)
+    return zone === undefined ? [] : [{ code, zone, share }]
+  })
+  return parts.length === shares.length ? parts : null
+}
+
+export function classifyShares(source: ZoneSource, shares: readonly ZoneShare[]): ZoneVerdict {
+  const sliver = ZONE_SLIVER_SHARE.value
+  const significant = shares.filter(({ share }) => share >= sliver).sort((a, b) => b.share - a.share)
+  if (significant.reduce((sum, { share }) => sum + share, 0) < 1 - sliver) return unknownVerdict(source, 'no-zone')
+  const { naming } = source
+  const named = namedParts(naming, significant)
+  if (!named) return unknownVerdict(source, 'unrecognised')
+  const parts = named.map(({ zone, share }) => ({ zone, share }))
+  const covered = coveredName(naming)
+  if (parts.length > 1) return { status: 'straddles', parts, covered }
+  const [{ code, zone }] = named
+  const inside = naming.zones.some((entry) => entry.sourceCode === code && entry.packCode === naming.coveredCode)
+  return inside ? { status: 'inside', zone } : { status: 'outside', zone, covered }
 }

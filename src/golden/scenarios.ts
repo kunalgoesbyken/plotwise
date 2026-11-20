@@ -17,6 +17,8 @@ const E2E_PLOT: Plot = {
   nearStation: false,
 }
 
+const EXAMPLE_LOT: Plot = { ...EXAMPLE_PLOT, roads: [{ edge: 0, widthM: 12 }] }
+
 const L_SHAPE: Vec2[] = [
   [0, 0],
   [60, 0],
@@ -75,7 +77,7 @@ const layoutScenarios = LAYOUTS.flatMap(({ name, points, roads, nearStation }) =
 )
 
 const drawnScenarios = [
-  { name: 'example plot', plot: EXAMPLE_PLOT },
+  { name: 'example plot', plot: EXAMPLE_LOT },
   { name: 'e2e plot', plot: E2E_PLOT },
 ].flatMap(({ name, plot }) =>
   BUILDING_TYPES.flatMap((type) => FAR_MODES.map((farMode) => ({ name: `${name}, ${type}, FAR ${farMode}`, plot: withType(plot, type), farMode }))),
