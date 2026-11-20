@@ -2,13 +2,14 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
-import type { Design } from '@/designs'
+import { rank, type Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
 import { CapLine, capFigures } from '@/feasibility/cap-line'
 import { checkLabel } from '@/feasibility/check-label'
 import type { Region } from '@/region/regions'
 import { tally } from '@/feasibility/checklist'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
+import { standingLine } from '@/feasibility/standing-text'
 import { VerificationNote } from '@/feasibility/verification-note'
 import { useAssumptions } from '@/finance/assumptions-provider'
 import { askingText, firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
@@ -148,6 +149,16 @@ export function PrintSummary() {
           <DesignFacts design={design} finance={finance} area={area} />
           {askingPrice !== null && <p className="mt-2 text-sm font-medium">{askingText(askingPrice, finance, design)}</p>}
         </div>
+      </section>
+      <section>
+        <h2 className="mb-1 text-sm font-semibold">{t('design.compare')}</h2>
+        <ul className="text-xs">
+          {rank(result.designs).map((option) => (
+            <li key={option.design.id} className="border-b border-dotted py-1">
+              {standingLine(option, area)}
+            </li>
+          ))}
+        </ul>
       </section>
       {toCheck.length > 0 && (
         <section>
