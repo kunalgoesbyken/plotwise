@@ -1672,8 +1672,8 @@
     },
     {
       "id": "table-a-tower-rules",
-      "what": "Tower open spaces and step-backs above 32 m, 70 m and 120 m (Reg 41(2)(c), p289), the dead-wall column of Table A and its 4.5 m minimum for commercial buildings",
-      "why": "Plotwise applies the light-and-ventilation column of Table A for a residential building on every side but the front, at the height of each floor, as a step-back would; it assumes every side has windows, so the smaller dead-wall open space is never used. The tower rules are not applied."
+      "what": "Step-backs at upper levels and tower-like structures (Reg 41(2)(b) and (c), p289), the dead-wall column of Table A and its minimum for commercial buildings",
+      "why": "H in Table A is the height of the building, and Reg 41(1)(a) relates the side and rear open spaces to the height needed to consume the full FSI, so Plotwise keeps the open space for a design's full height on every floor. Smaller step-backs at upper levels, and the step-backs of a tower-like structure with their ground-level minimums and their limited number, are a relaxation the Commissioner may grant; Plotwise does not apply them. Every side is taken to have windows, so the smaller dead-wall open space is never used."
     },
     {
       "id": "height-exemptions",
@@ -1734,6 +1734,16 @@
       "id": "table-a-plot-class",
       "what": "How Table A measures the average width and depth of a plot, and a plot of more than 1000 m² whose average width or depth is exactly 20 m",
       "why": "DCPR 2034 does not define them. Plotwise measures the plot left after any road-widening strip, along and across its main road (area over its depth, area over its width), and puts a plot that is not up to 1000 m² and not under 20 m wide or deep in the larger plot class, whose open spaces are larger. Table A leaves buildings above 70 m on the smaller plot class blank, so Plotwise draws none."
+    },
+    {
+      "id": "table-a-row-1",
+      "what": "How the minimum and the share of the height combine in the first row of Table A",
+      "why": "The cell reads \"Min - … in case of Residential building … subject to H/5\" (H/4 for larger plots). Plotwise takes the larger of the two: \"Min\" makes the stated distance a floor, and the share of the height applies once it is more."
+    },
+    {
+      "id": "table-a-row-3",
+      "what": "\"H/4 or 16 m Max.\" in the third row of Table A (larger plots)",
+      "why": "Plotwise reads \"Max.\" as a cap on H/4. In that row H/4 is always more than the cap, so the open space is the cap."
     }
   ]
 }
