@@ -1,8 +1,13 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
-import { siteOf } from '@/plot/site'
+import type { Vec2 } from '@/geo/projection'
+import { segmentDistance, type Polygon } from '@/geometry'
+import { convexPolygon, starPolygon } from '@/geometry/arbitraries'
+import { siteOf, type Site } from '@/plot/site'
 import { loadPack } from '@/rules'
+import { packInterpretations } from './interpretations'
 import { sideRearCeilingM, sideRearLimit, sideRearOpenSpace, storeysToHold, type SideRearLimit } from './side-rear'
+import { solve } from './solve'
 import { plotFromMetres, rectangle } from './test-plots'
 
 const MUMBAI = loadPack('mum-suburbs-res')
@@ -74,6 +79,34 @@ describe('Table A open space by building height', () => {
         expect(at(limit, high)).toBeGreaterThanOrEqual(at(limit, low))
         expect(at(limit, low)).toBeGreaterThanOrEqual(3.6)
       }),
+    )
+  })
+})
+
+describe('the allowed envelope on a Table A plot', () => {
+  const allowed = (points: Vec2[], roadWidthM: number) => solve(plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }]), MUMBAI, packInterpretations(MUMBAI))
+
+  function clearanceM({ ring }: Site, polygons: readonly Polygon[], edge: number): number {
+    const [a, b] = [ring[edge], ring[(edge + 1) % ring.length]]
+    return Math.min(...polygons.flatMap((polygon) => polygon.outer.map((p, i) => segmentDistance(p, polygon.outer[(i + 1) % polygon.outer.length], a, b))))
+  }
+
+  it('empties a 10 m × 12 m plot at 24.8 m, the tallest building Table A leaves room for, not at the 40.3 m road limit', () => {
+    const [envelope] = allowed(rectangle(10, 12), 9).envelopes
+    expect(envelope.prisms.at(-1)!.topM).toBeCloseTo(24.8, 9)
+  })
+
+  it('keeps every band outside the open space for the lowest building that reaches the top of the band', () => {
+    fc.assert(
+      fc.property(fc.oneof(convexPolygon(10), starPolygon(16)), fc.double({ min: 4, max: 40, noNaN: true }), (points: Vec2[], roadWidthM) => {
+        const { site, limits, envelopes } = allowed(points, roadWidthM)
+        const boundaries = site.edges.flatMap((edge, i) => (edge.roadWidthM === null ? [i] : []))
+        for (const prism of envelopes.flatMap((e) => e.prisms)) {
+          const requiredM = sideRearOpenSpace(limits.sideRear, prism.topM).distanceM
+          for (const edge of boundaries) expect(clearanceM(site, prism.polygons, edge)).toBeGreaterThanOrEqual(requiredM - 1e-3)
+        }
+      }),
+      { numRuns: 40 },
     )
   })
 })

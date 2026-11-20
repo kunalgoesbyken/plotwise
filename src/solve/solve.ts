@@ -2,9 +2,10 @@ import type { Plot } from '@/plot/plot'
 import { siteOf, type Site } from '@/plot/site'
 import type { RulePack } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
-import { highRiseEnvelope, ordinaryEnvelope, type Envelope, type EnvelopeInput } from './envelope'
+import type { Envelope } from './envelope'
 import { SolveError } from './errors'
 import { farCapFor, purchaseRatios, STANDARD, type FarCap, type FarChoice } from './far'
+import { allowedEnvelopes, type Hold } from './holds'
 import type { Interpretations } from './interpretations'
 import { limitsFor, type Limits } from './limits'
 import { plotLimitFields, withPlotLimits } from './plot-limits'
@@ -23,17 +24,8 @@ export type Solution = {
   readonly limits: Limits
   readonly farCap: FarCap
   readonly envelopes: readonly Envelope[]
+  readonly holds: readonly Hold[]
 }
-
-type EnvelopeBasis = Pick<Solution, 'pack' | 'readings' | 'site' | 'floorToFloorM' | 'limits'>
-
-function envelopesFor({ pack, readings, site, floorToFloorM, limits }: EnvelopeBasis, heldStoreys: number | null): Envelope[] {
-  const input: EnvelopeInput = { pack, readings, site, floorToFloorM, planLimitM: limits.height.planLimitM, sideRear: limits.sideRear, heldStoreys }
-  const highRisePermitted = limits.highRise?.access.some((band) => band.qualifies) ?? false
-  return [ordinaryEnvelope(input), ...(highRisePermitted ? [highRiseEnvelope(input)] : [])]
-}
-
-export const heldAt = (solution: Solution, storeys: number): Solution => ({ ...solution, envelopes: envelopesFor(solution, storeys) })
 
 export const coversBuildingType = (pack: RulePack, plot: Plot) => !pack.buildingTypes || pack.buildingTypes.includes(plot.buildingType)
 
@@ -57,7 +49,7 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     purchase: purchaseRatios(far),
     inLieu,
   })
-  const envelopes = envelopesFor({ pack, readings, site, floorToFloorM, limits }, null)
+  const { envelopes, holds } = allowedEnvelopes({ pack, readings, site, floorToFloorM, limits })
   const entersValues = plotLimitFields(pack).length > 0
   return {
     pack,
@@ -72,5 +64,6 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
     limits,
     farCap: farCapFor(limits, far.mode),
     envelopes,
+    holds,
   }
 }
