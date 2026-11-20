@@ -5,6 +5,7 @@ import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
+import { BROWN_ZONE, mockZoneStrips } from './zone-layers'
 
 const recorded = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.bkk.transit)
 
@@ -14,7 +15,7 @@ const fulfilSite = (route: Route) => {
 }
 
 export async function mockZoneInside(page: Page) {
-  await page.route('**/api/zone?**', (route) => route.fulfill({ json: { status: 'inside', zone: 'brown zone 9 (very high-density residential)' } }))
+  await mockZoneStrips(page, 'bkk', [{ code: BROWN_ZONE, width: 1 }])
 }
 
 export async function mockSite(page: Page) {

@@ -2,7 +2,7 @@
 
 import { createContext, use, useMemo, type ReactNode } from 'react'
 import type { LngLat } from '@/geo/projection'
-import type { ZoneVerdict } from './schema'
+import type { ZoneVerdict } from './verdict'
 import { useZone } from './use-zone'
 
 export type ZoneGate = {
@@ -15,7 +15,7 @@ export type ZoneGate = {
 
 const ZoneGateContext = createContext<ZoneGate | null>(null)
 
-const isRefused = (verdict: ZoneVerdict | null) => verdict?.status === 'outside' || verdict?.status === 'mixed'
+const isRefused = (verdict: ZoneVerdict | null) => verdict?.status === 'outside' || verdict?.status === 'straddles'
 
 type ZoneGateProps = {
   readonly zone: string | null

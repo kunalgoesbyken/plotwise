@@ -3,10 +3,13 @@
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Button } from '@/ui/button'
-import type { ZoneVerdict } from './schema'
+import type { ZonePart, ZoneVerdict } from './verdict'
 import { useZoneGate } from './zone-gate'
 
 type Presentation = { readonly badge: string; readonly variant: 'default' | 'destructive' | 'secondary'; readonly text: string }
+
+const formatParts = (parts: readonly ZonePart[]) =>
+  parts.length === 1 ? parts[0].zone : parts.map(({ zone, share }) => `${zone} (${Math.round(share * 100)}%)`).join(', ')
 
 function presentationOf(verdict: ZoneVerdict): Presentation {
   switch (verdict.status) {
@@ -18,11 +21,11 @@ function presentationOf(verdict: ZoneVerdict): Presentation {
         variant: 'destructive',
         text: t('zone.outside', { zone: verdict.zone, covered: verdict.covered }),
       }
-    case 'mixed':
+    case 'straddles':
       return {
         badge: t('zone.badge.not-covered'),
         variant: 'destructive',
-        text: t('zone.mixed', { zones: verdict.zones.join(', '), covered: verdict.covered }),
+        text: t('zone.straddles', { parts: formatParts(verdict.parts), covered: verdict.covered }),
       }
     case 'unknown':
       return { badge: t('zone.badge.unchecked'), variant: 'secondary', text: t(`zone.unknown.${verdict.reason}`) }

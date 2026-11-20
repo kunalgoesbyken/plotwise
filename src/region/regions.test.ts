@@ -26,7 +26,7 @@ describe('regions', () => {
   })
 
   it('holds the zone gate to regions with a zone source, which is Bangkok alone', () => {
-    for (const id of REGION_IDS) expect(REGIONS[id].zone !== null).toBe(ZONE_SOURCES[id] !== undefined)
+    for (const id of REGION_IDS) expect(REGIONS[id].zone !== null).toBe(id in ZONE_SOURCES)
     expect(REGION_IDS.filter((id) => REGIONS[id].zone)).toEqual(['bkk'])
   })
 

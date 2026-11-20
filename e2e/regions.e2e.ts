@@ -3,6 +3,7 @@ import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { localFrame, type LngLat } from '../src/geo/projection'
 import type { Plot } from '../src/plot/plot'
 import type { RegionId } from '../src/solve'
+import { ZONE_SOURCES } from '../src/zone/sources'
 import { mockSite, mockZoneInside } from './app-fixtures'
 
 const PHONE = { width: 375, height: 812 }
@@ -40,7 +41,7 @@ function collectErrors(page: Page) {
 
 function watchZoneRequests(page: Page) {
   const requests: string[] = []
-  page.on('request', (request) => request.url().includes('/api/zone') && requests.push(request.url()))
+  page.on('request', (request) => request.url().startsWith(ZONE_SOURCES.bkk.layer.url) && requests.push(request.url()))
   return requests
 }
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { CLIENT_ADDRESS } from './assumptions'
 import { clientKey, createRateLimitGuard } from './guard'
 
-const request = (headers: Record<string, string> = {}) => new Request('http://localhost/api/zone', { headers })
+const request = (headers: Record<string, string> = {}) => new Request('http://localhost/api/site', { headers })
 
 describe('clientKey', () => {
   it('uses the first address the platform forwarded', () => {

@@ -36,18 +36,18 @@ flowchart LR
   ui <--> url[(URL hash: rules, plot, roads, limits, assumptions)]
   map -.-> site[/api/site/] -.-> osm[OpenStreetMap via Overpass]
   map -.-> geocode[/api/geocode/] -.-> photon[Photon place search]
-  map -.-> zone[/api/zone/] -.-> bma[BMA city-plan layer]
+  map -.-> bma[BMA city-plan layer, queried by the browser]
 ```
 
-Solid arrows are deterministic code that runs in the browser. Dotted arrows are server routes that proxy a free public service, each with input validation, CDN caching and a per-IP rate limit.
+Solid arrows are deterministic code that runs in the browser. Dotted arrows are calls to a free public service: the two server routes add input validation, CDN caching and a per-IP rate limit, and the browser calls the BMA layer itself.
 
 ### Key decisions and trade-offs
 
 - **Rule values are compiled from the official PDFs, never typed.** Each value keeps its page, line and Thai quote, so a reviewer can check it against the source. The price is that adding a rule means writing a pointer, and the pack schema still has Thai-law shapes.
 - **No model runs at runtime.** Areas, limits and costs are computed by tested code, so they cannot be invented. The price is that there is no free-text input beyond the place search.
-- **The share link is the URL hash.** There is no account or database, and the whole state (plot, roads, building type, assumptions) lives in the hash, which browsers never send to a server. The plot is not kept anywhere, but it is not private from the routes either: `/api/zone` receives the plot outline to check the zone and `/api/site` receives its bounding box to load the surroundings. The price is that a shared link cannot show a preview of its own plot, so every link unfurls with the same card.
-- **A static Content Security Policy with inline scripts allowed.** A nonce-based policy makes every page render per request, which turns off the static shell and CDN caching ([Next.js guide](https://nextjs.org/docs/app/guides/content-security-policy)). Instead the policy limits every other source to the site itself and the map-tile host, and forbids objects, framing and foreign form targets.
-- **Free services only, so the routes protect them.** Overpass, Photon and the BMA layer are public and slow at times. Answers are cached hard and each route allows 60 (search), 30 (zone) or 20 (site) requests a minute per client. The limits live in memory, so they apply per server instance.
+- **The share link is the URL hash.** There is no account or database, and the whole state (plot, roads, building type, assumptions) lives in the hash, which browsers never send to a server. The plot is not kept anywhere, but it is not private from the services either: the browser sends the plot outline to the BMA city-plan layer to check the zone, and `/api/site` receives its bounding box to load the surroundings. The price is that a shared link cannot show a preview of its own plot, so every link unfurls with the same card.
+- **A static Content Security Policy with inline scripts allowed.** A nonce-based policy makes every page render per request, which turns off the static shell and CDN caching ([Next.js guide](https://nextjs.org/docs/app/guides/content-security-policy)). Instead the policy limits every other source to the site itself, the map-tile host and the BMA city-plan host, and forbids objects, framing and foreign form targets.
+- **Free services only, so the routes protect them.** Overpass and Photon are public and slow at times. Answers are cached hard and each route allows 60 (search) or 20 (site) requests a minute per client. The BMA layer is called by the browser, so the app remembers each answer for an hour and skips a server that just failed for a minute. The limits live in memory, so they apply per server instance.
 - **Estimates stay editable.** Cost, sales value and land value are first-look figures on assumptions with sources, not valuations.
 
 ### What is verified and what is estimated
@@ -121,7 +121,7 @@ Both are always labelled unverified, in the results, the checklist and the print
    The condo sale price and the asking-price reference depend on the plot's area: central Bangkok (CBD), city fringe or suburban, set by straight-line distance from Ratchaprasong. If the area cannot be told, the city fringe values are used.
 
    Every rate and price is an editable assumption with its source, shown as "estimated". None of it is law.
-7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass), Photon and the BMA city-plan layer, with input validation at the boundary, caching and a per-IP rate limit. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
+7. **Site, search and zone.** Server routes proxy OpenStreetMap (Overpass) and Photon, with input validation at the boundary, caching and a per-IP rate limit. The browser asks the BMA city-plan layer directly which zone the plot is in and what share of it lies in each, because the BMA servers do not answer requests from outside Thailand. Road widths, building heights, station distance and the zone verdict are labelled as estimates or as unchecked, and stay editable.
 
 ## Region and design system
 
@@ -154,7 +154,7 @@ bun run dev            # http://localhost:3000 (landing), /app (the app)
 | Recompile / check the rule pack | `bun tools/compile-pack.ts bkk-y9` / `bun tools/check-pack.ts bkk-y9` |
 | Type check and lint | `bun run typecheck` and `bun run lint` |
 
-CI (`.github/workflows/ci.yml`) runs on every push to main and every pull request: type check, lint and `bun test` (without the two timing files), the timing job, then the production build and the Playwright suite in headless Chromium with software WebGL. Frame-rate assertions are skipped on a software renderer. The two millisecond-budget files (`performance.test.ts`) run in their own CI job, so a slow shared runner shows up as a failure of that job alone and the budgets are never loosened. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon and skips itself when it is unreachable, and tests that do not mock `/api/zone` query the BMA layer, which answers "not checked" outside Thailand. Overpass is always mocked. On failure the Playwright report is uploaded.
+CI (`.github/workflows/ci.yml`) runs on every push to main and every pull request: type check, lint and `bun test` (without the two timing files), the timing job, then the production build and the Playwright suite in headless Chromium with software WebGL. Frame-rate assertions are skipped on a software renderer. The two millisecond-budget files (`performance.test.ts`) run in their own CI job, so a slow shared runner shows up as a failure of that job alone and the budgets are never loosened. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon and skips itself when it is unreachable, and tests that do not mock the BMA layer query it from the browser, and it answers "not checked" outside Thailand. Overpass is always mocked. On failure the Playwright report is uploaded.
 
 ## Code layout
 
