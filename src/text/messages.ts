@@ -428,10 +428,10 @@ const en = {
   'rules.plan': ({ plan }: { plan: string }) => `City plan: ${plan}`,
   'rules.plot-area': ({ area }: Area) => `Plot ${area}`,
   'rules.bylaw.title': '2026 plan amendment: read with care',
-  'rules.bylaw.factories-only':
-    'The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Its readable parts change only factory uses, so the values below are treated as unchanged. Confirm with the BMA before relying on them.',
+  'rules.bylaw.factories-and-state-medical':
+    'The Bangkok bylaw of 13 Mar 2026 amends this plan. Read from the gazette pages, it changes the factory uses and exempts state medical and public-health land use from the land-use rules. It does not touch the floor area, open space, hotel or office limits, so the values below are treated as unchanged. Confirm with the BMA before relying on them.',
   'rules.bylaw.unverified':
-    'The Bangkok bylaw of 13 Mar 2026 amends this plan, but its body text could not be machine-read. Every value below is unverified against it. Confirm with the BMA before relying on them.',
+    'The Bangkok bylaw of 13 Mar 2026 amends this plan, and this reading treats it as unread. Every value below is unverified against it. Confirm with the BMA before relying on them.',
   'rules.estimated-roads': ({ edges }: { edges: string }) =>
     `The road width on ${edges} is estimated from OpenStreetMap. Setbacks, height and use limits depend on it, so measure it on site.`,
   'rules.group.floor-area': 'Floor area',
