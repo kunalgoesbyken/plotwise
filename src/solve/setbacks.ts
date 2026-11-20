@@ -1,4 +1,4 @@
-import type { Cite, Cited, FrontOpenSpace, RoadSetbackDistance, RulePack } from '@/rules'
+import type { Cite, Cited, FrontOpenSpace, RoadSetbackDistance, RoadSetbackRule, RulePack } from '@/rules'
 import { inRange, satisfies } from './bound'
 import { isHighRiseOrExtraLarge, type Building } from './building'
 
@@ -36,10 +36,11 @@ function roadDistance(setback: RoadSetbackDistance, roadWidthM: number): Setback
   }
 }
 
+const appliesTo = ({ storeys, heightM }: RoadSetbackRule['appliesAbove'], building: Building) =>
+  (storeys !== undefined && satisfies(building.storeys, storeys)) || (heightM !== undefined && satisfies(building.heightM, heightM))
+
 export function roadSetback(pack: RulePack, building: Building, roadWidthM: number): Setback {
-  const applicable = pack.roadSetbacks.filter(
-    ({ appliesAbove }) => satisfies(building.storeys, appliesAbove.storeys) || satisfies(building.heightM, appliesAbove.heightM),
-  )
+  const applicable = pack.roadSetbacks.filter(({ appliesAbove }) => appliesTo(appliesAbove, building))
   return strictest(
     applicable.flatMap((rule) =>
       rule.bands.filter((band) => inRange(roadWidthM, band.roadWidthM)).map((band) => roadDistance(band.setback, roadWidthM)),

@@ -3,7 +3,7 @@ import type { BoundarySetbackRule, RoadSetbackRule } from './setbacks'
 
 export function enteredRoadSetback(distanceM: number, field: string): RoadSetbackRule {
   return {
-    appliesAbove: { storeys: enteredBound(0, 'gte', field), heightM: enteredBound(0, 'gte', field) },
+    appliesAbove: { storeys: enteredBound(0, 'gte', field) },
     bands: [{ roadWidthM: {}, setback: { kind: 'fromRoadBoundary', distanceM: entered(distanceM, field) } }],
   }
 }

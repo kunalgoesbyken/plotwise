@@ -17,7 +17,9 @@ const RoadSetbackDistanceSchema = z.discriminatedUnion('kind', [
 ])
 
 export const RoadSetbackSchema = z.object({
-  appliesAbove: z.object({ storeys: BoundSchema, heightM: BoundSchema }),
+  appliesAbove: z
+    .object({ storeys: BoundSchema.optional(), heightM: BoundSchema.optional() })
+    .refine((above) => above.storeys || above.heightM, { message: 'a road setback must say the storeys or height it applies from' }),
   bands: z.array(z.object({ roadWidthM: RangeSchema, setback: RoadSetbackDistanceSchema })).min(1),
 })
 

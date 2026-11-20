@@ -2,12 +2,13 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { designs } from '@/designs'
 import type { PlotLimits, Road } from '@/plot/plot'
-import { enteredCite, type FarPurchase, type RulePack } from '@/rules'
+import { enteredBound, enteredCite, type FarPurchase, type RoadSetbackRule, type RulePack } from '@/rules'
 import { band, BANGKOK, PER_PLOT, unverified, value } from '@/rules/test-packs'
 import { ASSUMPTIONS } from './assumptions'
 import { SolveError } from './errors'
 import { packInterpretations } from './interpretations'
 import { plotLimitFields } from './plot-limits'
+import { roadSetback } from './setbacks'
 import { solve } from './solve'
 import { plotFromMetres, rectangle } from './test-plots'
 
@@ -192,3 +193,29 @@ describe('purchasable FAR', () => {
     for (const design of designs(solution)) expect(design.checks.find((c) => c.id === 'far-purchase')).toMatchObject({ status: 'manual' })
   })
 })
+
+describe('road setbacks by building height and road width', () => {
+  const row = (appliesAbove: RoadSetbackRule['appliesAbove'], narrowM: number, wideM: number): RoadSetbackRule => ({
+    appliesAbove,
+    bands: [
+      { roadWidthM: band(undefined, 12), setback: { kind: 'fromRoadBoundary', distanceM: value(narrowM) } },
+      { roadWidthM: band(12), setback: { kind: 'fromRoadBoundary', distanceM: value(wideM) } },
+    ],
+  })
+  const TABLE = unverified({
+    roadSetbacks: [row({ storeys: enteredBound(1, 'gte', 'test') }, 3, 4.5), row({ heightM: enteredBound(24, 'gte', 'test') }, 6, 9)],
+  })
+  const building = (heightM: number) => ({ heightM, storeys: Math.round(heightM / 3), floorAreaSqm: 5000 })
+
+  it('reads the row for the building height and the column for the road width', () => {
+    expect(roadSetback(TABLE, building(15), 8).distanceM).toBe(3)
+    expect(roadSetback(TABLE, building(15), 16).distanceM).toBe(4.5)
+    expect(roadSetback(TABLE, building(30), 8).distanceM).toBe(6)
+    expect(roadSetback(TABLE, building(30), 16).distanceM).toBe(9)
+  })
+
+  it('refuses a row that says neither the height nor the storeys it starts from', () => {
+    expect(() => unverified({ roadSetbacks: [row({}, 3, 4.5)] })).toThrow()
+  })
+})
+
