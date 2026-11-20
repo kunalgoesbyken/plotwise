@@ -89,6 +89,10 @@ const en = {
 
   'frontage.title': 'Road frontage',
   'frontage.roads': ({ count }: Count) => plural(count, 'road', 'roads'),
+  'sensitivity.label': 'How road width changes the result',
+  'sensitivity.hint': 'Road width sets how tall you can build.',
+  'sensitivity.width': 'Road width',
+  'sensitivity.unavailable': 'No design fits',
   'frontage.width-label': ({ edge }: { edge: string }) => `Road width on edge ${edge}, in metres`,
   'frontage.width-placeholder': 'width',
   'frontage.metres': 'm',
