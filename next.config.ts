@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { securityHeaders } from "./src/security/headers";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -11,6 +12,9 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders(process.env.NODE_ENV === "development") }];
   },
 };
 
