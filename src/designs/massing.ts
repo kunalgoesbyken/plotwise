@@ -7,6 +7,7 @@ import {
   length,
   polygonArea,
   subtract,
+  totalArea,
   type Floor,
   type FloorPlates,
   type Polygon,
@@ -72,6 +73,9 @@ function reachableSqm({ limits, farCap }: Solution, envelope: Envelope): number 
 
 const storeysOf = (envelope: Envelope) => Math.round(envelope.prisms[envelope.prisms.length - 1].topM / envelope.floorToFloorM)
 
+const capacitySqm = ({ prisms, floorToFloorM }: Envelope) =>
+  prisms.reduce((sum, prism) => sum + totalArea(prism.polygons) * Math.round((prism.topM - prism.baseM) / floorToFloorM), 0)
+
 function openSpaceFootprintCap(solution: Solution, envelope: Envelope): number {
   const { limits, site } = solution
   const targetSqm = reachableSqm(solution, envelope)
@@ -108,7 +112,9 @@ function lowRise(solution: Solution): Massing | null {
   const frame = roadFrame(solution)
   const ground = extentOf(frame, envelope.prisms[0].polygons)
   const [lengthM, depthM] = [ground.maxAlong - ground.minAlong, ground.maxIn - ground.minIn]
-  const half = Math.min(1, Math.sqrt(reachableSqm(solution, envelope) / storeysOf(envelope) / (lengthM * depthM))) / 2
+  const targetSqm = reachableSqm(solution, envelope)
+  const share = capacitySqm(envelope) <= targetSqm ? 1 : Math.min(1, Math.sqrt(targetSqm / storeysOf(envelope) / (lengthM * depthM)))
+  const half = share / 2
   const middle: Vec2 = [(ground.minAlong + ground.maxAlong) / 2, (ground.minIn + ground.maxIn) / 2]
   const block = centred(frame, middle, half * lengthM, half * depthM)
   const limits = { footprint: [block], maxFootprintSqm: footprintCap(solution, envelope) }

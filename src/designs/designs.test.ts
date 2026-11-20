@@ -75,6 +75,20 @@ describe('concept designs', () => {
     expect(isHighRiseOrExtraLarge(pack, { heightM: low.metrics.heightM, storeys: low.metrics.storeys, floorAreaSqm: low.metrics.builtSqm })).toBe(false)
   })
 
+  it('fills the ground of an envelope too small for the floor area target, instead of a block sized for storeys it cannot use', () => {
+    const lShape: Vec2[] = [
+      [0, 0],
+      [60, 0],
+      [60, 25],
+      [25, 25],
+      [25, 60],
+      [0, 60],
+    ]
+    const { solution, options } = designed(plotFromMetres(lShape, [{ edge: 0, widthM: 12 }], 'office'))
+    const [ground] = solution.envelopes.find((e) => e.kind === 'ordinary')!.prisms
+    expect(byId(options, 'low-rise')!.plates.floors[0].areaSqm).toBeCloseTo(totalArea(ground.polygons), 1)
+  })
+
   it('adds the network part of the high-rise access rule as a manual check', () => {
     const tower = byId(designed(lot(50, 70, 16)).options, 'podium-tower')!
     expect(tower.checks.find((c) => c.id === 'high-rise-road-network')?.status).toBe('manual')

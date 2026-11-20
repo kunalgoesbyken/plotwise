@@ -48247,7 +48247,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
     {
       "checks": [
         {
-          "actual": 5535.5,
+          "actual": 8950.6,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -48260,31 +48260,31 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 249.0975,
+          "limit": 402.777,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 124.54875,
+          "limit": 201.3885,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "bb44-03 p15 l29 ข้อ 52 (2)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -48312,7 +48312,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "m",
         },
         {
-          "actual": 6.3697,
+          "actual": 1.2,
           "cites": [
             "mr43-55-upd68 p9 l27 ข้อ 41 วรรคสอง (2)",
             "bb44-03 p15 l15 ข้อ 50 วรรคสอง (2)",
@@ -48331,12 +48331,12 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 36.7394,
+          "limit": 26.4,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.247677351024,
+          "actual": 0.247346364004,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -48348,7 +48348,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "ratio",
         },
         {
-          "actual": 5535.5,
+          "actual": 8950.6,
           "cites": [
             "mr56-bma p33 l39 ข้อ 16 วรรคสอง (10)",
           ],
@@ -48363,18 +48363,18 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       "id": "low-rise",
       "limitedBy": "building-class",
       "metrics": {
-        "builtSqm": 5535.5,
-        "far": 2.3307368421,
-        "footprintSqm": 1107.1,
-        "gfaSqm": 5535.5,
+        "builtSqm": 8950.6,
+        "far": 3.76867368421,
+        "footprintSqm": 1790.12,
+        "gfaSqm": 8950.6,
         "heightM": 19.5,
-        "openSpaceSqm": 1267.9,
-        "parkingSpaces": 54,
-        "parkingSqm": 1166.4,
+        "openSpaceSqm": 584.88,
+        "parkingSpaces": 86,
+        "parkingSqm": 1857.6,
         "storeys": 5,
         "yield": {
           "kind": "netArea",
-          "sqm": 3167.5975,
+          "sqm": 5142.425,
         },
       },
       "name": {
@@ -48385,7 +48385,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       "plates": {
         "floors": [
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -48396,7 +48396,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 3.9,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 3.9,
             "level": 1,
             "loops": [
@@ -48407,7 +48407,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 7.8,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 7.8,
             "level": 2,
             "loops": [
@@ -48418,7 +48418,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 11.7,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 11.7,
             "level": 3,
             "loops": [
@@ -48429,7 +48429,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 15.6,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 15.6,
             "level": 4,
             "loops": [
@@ -48445,7 +48445,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "holes": [],
             "outer": [
               [
-                51.99707,
+                57,
                 22,
               ],
               [
@@ -48514,25 +48514,25 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
               ],
               [
                 22,
-                51.8303,
+                57,
               ],
               [
-                8.00293,
-                51.8303,
+                3,
+                57,
               ],
               [
-                8.00293,
-                6.3697,
+                3,
+                1.2,
               ],
               [
-                51.99707,
-                6.3697,
+                57,
+                1.2,
               ],
             ],
           },
         ],
-        "footprintSqm": 1107.1,
-        "gfaSqm": 5535.5,
+        "footprintSqm": 1790.12,
+        "gfaSqm": 8950.6,
       },
     },
   ],
@@ -51556,7 +51556,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
     {
       "checks": [
         {
-          "actual": 5535.5,
+          "actual": 8950.6,
           "cites": [
             "mr56-bma p35 l8 ข้อ 16 วรรคสาม (1)",
             "mr56-bma p2 l5 ข้อ 4",
@@ -51570,31 +51570,31 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p2 l8 ข้อ 4",
           ],
           "cmp": "gte",
           "id": "open-space-ratio",
-          "limit": 249.0975,
+          "limit": 402.777,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "mr56-bma p35 l15 ข้อ 16 วรรคสาม (2)",
             "mr56-bma p35 l11 ข้อ 16 วรรคสาม (2)",
           ],
           "cmp": "gte",
           "id": "permeable",
-          "limit": 124.54875,
+          "limit": 201.3885,
           "status": "pass",
           "unit": "sqm",
         },
         {
-          "actual": 1267.9,
+          "actual": 584.88,
           "cites": [
             "bb44-03 p15 l29 ข้อ 52 (2)",
             "mr56-bma p35 l12 ข้อ 16 วรรคสาม (2)",
@@ -51630,7 +51630,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "m",
         },
         {
-          "actual": 6.3697,
+          "actual": 1.2,
           "cites": [
             "mr43-55-upd68 p9 l27 ข้อ 41 วรรคสอง (2)",
             "bb44-03 p15 l15 ข้อ 50 วรรคสอง (2)",
@@ -51649,12 +51649,12 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           ],
           "cmp": "lte",
           "id": "height-vs-road",
-          "limit": 36.7394,
+          "limit": 26.4,
           "status": "pass",
           "unit": "m",
         },
         {
-          "actual": 0.247677351024,
+          "actual": 0.247346364004,
           "cites": [
             "bb44-03 p16 l4 ข้อ 53",
             "bb44-03 p16 l5 ข้อ 53",
@@ -51666,7 +51666,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
           "unit": "ratio",
         },
         {
-          "actual": 5535.5,
+          "actual": 8950.6,
           "cites": [
             "mr56-bma p33 l39 ข้อ 16 วรรคสอง (10)",
           ],
@@ -51681,18 +51681,18 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       "id": "low-rise",
       "limitedBy": "building-class",
       "metrics": {
-        "builtSqm": 5535.5,
-        "far": 2.3307368421,
-        "footprintSqm": 1107.1,
-        "gfaSqm": 5535.5,
+        "builtSqm": 8950.6,
+        "far": 3.76867368421,
+        "footprintSqm": 1790.12,
+        "gfaSqm": 8950.6,
         "heightM": 19.5,
-        "openSpaceSqm": 1267.9,
-        "parkingSpaces": 54,
-        "parkingSqm": 1166.4,
+        "openSpaceSqm": 584.88,
+        "parkingSpaces": 86,
+        "parkingSqm": 1857.6,
         "storeys": 5,
         "yield": {
           "kind": "netArea",
-          "sqm": 3167.5975,
+          "sqm": 5142.425,
         },
       },
       "name": {
@@ -51703,7 +51703,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
       "plates": {
         "floors": [
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 0,
             "level": 0,
             "loops": [
@@ -51714,7 +51714,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 3.9,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 3.9,
             "level": 1,
             "loops": [
@@ -51725,7 +51725,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 7.8,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 7.8,
             "level": 2,
             "loops": [
@@ -51736,7 +51736,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 11.7,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 11.7,
             "level": 3,
             "loops": [
@@ -51747,7 +51747,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "topM": 15.6,
           },
           {
-            "areaSqm": 1107.1,
+            "areaSqm": 1790.12,
             "baseM": 15.6,
             "level": 4,
             "loops": [
@@ -51763,7 +51763,7 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
             "holes": [],
             "outer": [
               [
-                51.99707,
+                57,
                 22,
               ],
               [
@@ -51832,25 +51832,25 @@ exports[`Bangkok results stay byte-identical across engine refactors concave L-s
               ],
               [
                 22,
-                51.8303,
+                57,
               ],
               [
-                8.00293,
-                51.8303,
+                3,
+                57,
               ],
               [
-                8.00293,
-                6.3697,
+                3,
+                1.2,
               ],
               [
-                51.99707,
-                6.3697,
+                57,
+                1.2,
               ],
             ],
           },
         ],
-        "footprintSqm": 1107.1,
-        "gfaSqm": 5535.5,
+        "footprintSqm": 1790.12,
+        "gfaSqm": 8950.6,
       },
     },
   ],
