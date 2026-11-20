@@ -5,7 +5,7 @@ import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
 import { REGIONS } from '../src/region/regions'
 import { parseOverpass } from '../src/site/parse'
-import { BROWN_ZONE, mockZoneStrips } from './zone-layers'
+import { BROWN_ZONE, mockZoneSnapshotCovering, mockZoneStrips } from './zone-layers'
 
 const recorded = parseOverpass(OverpassResponseSchema.parse(fixture), REGIONS.bkk.transit)
 
@@ -15,6 +15,7 @@ const fulfilSite = (route: Route) => {
 }
 
 export async function mockZoneInside(page: Page) {
+  await mockZoneSnapshotCovering(page, 'bkk')
   await mockZoneStrips(page, 'bkk', [{ code: BROWN_ZONE, width: 1 }])
 }
 

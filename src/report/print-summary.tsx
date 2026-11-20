@@ -17,6 +17,7 @@ import type { Loop, Polygon } from '@/geometry'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { perAreaToDisplay, type AreaUnit } from '@/units/area'
+import { ZoneStatus } from '@/zone'
 
 const DRAWING_PX = 220
 
@@ -126,6 +127,7 @@ export function PrintSummary() {
         <h1 className="text-xl font-semibold">{t('report.title', { region: region.name })}</h1>
         {region.zone && <p className="text-xs text-muted-foreground">{region.zone.name}</p>}
       </header>
+      <ZoneStatus />
       <VerificationNote solution={result.solution} detailed />
       <section className="flex gap-8">
         <PlotDrawing ring={site.ring} footprint={design.plates.footprint} />

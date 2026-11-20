@@ -4,11 +4,11 @@ import type { Link } from './sources'
 
 export type UnknownReason = 'no-region' | 'too-large' | 'no-zone' | 'unrecognised' | 'unreachable'
 
-export type ZonePart = { readonly zone: string; readonly share: number }
+export type ZonePart = { readonly zone: string | null; readonly share: number }
 
 export type ZoneVerdict =
   | { readonly status: 'inside'; readonly zone: string }
-  | { readonly status: 'outside'; readonly zone: string; readonly covered: string }
+  | { readonly status: 'outside'; readonly zone: string | null; readonly covered: string }
   | { readonly status: 'straddles'; readonly parts: readonly ZonePart[]; readonly covered: string }
   | { readonly status: 'unknown'; readonly reason: UnknownReason; readonly plan: Link | null }
 

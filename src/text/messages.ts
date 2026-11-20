@@ -349,9 +349,16 @@ const en = {
   'zone.badge.covered': 'Covered',
   'zone.badge.not-covered': 'Not covered',
   'zone.badge.unchecked': 'Not checked',
+  'zone.badge.confirmed': 'Confirmed by you',
   'zone.inside': ({ zone }: { zone: string }) => `Inside the ${zone}. Plotwise covers this zone.`,
   'zone.outside': ({ zone, covered }: { zone: string; covered: string }) =>
     `This plot is in the ${zone}. Plotwise covers only the ${covered} for now.`,
+  'zone.outside.unnamed': ({ covered }: { covered: string }) => `This plot is outside the ${covered}. Plotwise covers only that zone for now.`,
+  'zone.part.unnamed': 'other zones',
+  'zone.confirmed': ({ zone }: { zone: string }) => `You checked the city plan and confirmed the plot is in the ${zone}.`,
+  'zone.as-of': ({ layer, date }: { layer: string; date: string }) => `${layer} as of ${date}.`,
+  'zone.live-differs': ({ layer, date }: { layer: string; date: string }) =>
+    `The live ${layer} answers differently from Plotwise's copy of ${date}, which this check follows.`,
   'zone.straddles': ({ parts, covered }: { parts: string; covered: string }) =>
     `This plot spans more than one zone: ${parts}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
   'zone.unknown.no-region': 'Plotwise has no zone data for this location, so it could not check the zone.',

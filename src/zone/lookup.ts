@@ -8,7 +8,7 @@ import { zoneShares } from './shares'
 import { ZONE_SOURCES, type ZoneRegionId } from './sources'
 import { ringKey, type ZoneVerdict } from './verdict'
 
-function isPlotSized(ring: readonly LngLat[]): boolean {
+export function isPlotSized(ring: readonly LngLat[]): boolean {
   const lngs = ring.map(([lng]) => lng)
   const lats = ring.map(([, lat]) => lat)
   const { widthM, heightM } = bboxSideLengthsM([Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)])

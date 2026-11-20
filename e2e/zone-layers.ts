@@ -1,4 +1,7 @@
 import type { Page } from '@playwright/test'
+import type { Bbox } from '../src/site/bbox'
+import { coveredEntry } from '../src/zone/classify'
+import type { ZoneSnapshot } from '../src/zone/snapshot'
 import { ZONE_SOURCES, type ZoneRegionId } from '../src/zone/sources'
 
 export const BROWN_ZONE = 'ย.๙'
@@ -41,4 +44,29 @@ export async function mockZoneStrips(page: Page, region: ZoneRegionId, strips: r
 
 export async function mockZoneDown(page: Page, region: ZoneRegionId) {
   await page.route(layerPattern(region), (route) => route.fulfill({ status: 503, headers: ALLOW_ANY_ORIGIN }))
+}
+
+export const SNAPSHOT_DOWN_MESSAGE = 'Failed to load resource: the server responded with a status of 503 (Service Unavailable)'
+
+export async function mockZoneSnapshotDown(page: Page, region: ZoneRegionId) {
+  await page.route(`**${ZONE_SOURCES[region].snapshot}`, (route) => route.fulfill({ status: 503 }))
+}
+
+function snapshotCovering(region: ZoneRegionId, [west, south, east, north]: Bbox): ZoneSnapshot {
+  const { layer, naming } = ZONE_SOURCES[region]
+  const code = coveredEntry(naming).sourceCode
+  const ring: [number, number][] = [[west, south], [west, north], [east, north], [east, south], [west, south]]
+  return {
+    layer: layer.url,
+    url: `${layer.url}/query`,
+    where: `${layer.zoneField}='${code}'`,
+    fetchedAt: '2026-11-20T00:00:00Z',
+    via: 'Playwright mock: one brown box',
+    featureCount: 1,
+    features: [{ code, rings: [ring] }],
+  }
+}
+
+export async function mockZoneSnapshotCovering(page: Page, region: ZoneRegionId, box: Bbox = ZONE_SOURCES[region].coverage) {
+  await page.route(`**${ZONE_SOURCES[region].snapshot}`, (route) => route.fulfill({ json: snapshotCovering(region, box) }))
 }

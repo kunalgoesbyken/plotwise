@@ -3,7 +3,19 @@ import type { Assumption } from '@/site/assumptions'
 export const ZONE_TIMEOUT_MS: Assumption<number> = {
   value: 2_000,
   source:
-    'assumption: a spatial query on a small polygon layer answers well within two seconds, so a slower server is reported as an unchecked zone rather than keeping the user waiting',
+    'assumption: a spatial query on a small polygon layer answers well within two seconds, so a slower server leaves the dated snapshot verdict standing rather than keeping the user waiting',
+}
+
+export const ZONE_SNAPSHOT_TIMEOUT_MS: Assumption<number> = {
+  value: 10_000,
+  source:
+    'assumption: the zone snapshot is a static file of about 160 KB on this site, which a slow mobile connection still fetches within ten seconds; a longer wait leaves the check to the live layer rather than showing a loading state for good',
+}
+
+export const ZONE_SNAPSHOT_ATTEMPTS: Assumption<number> = {
+  value: 2,
+  source:
+    'assumption: one immediate retry rides out a single dropped request or 5xx from the host, so one hiccup does not leave a plot unchecked; a failure after that is tried again only when the plot changes',
 }
 
 export const ZONE_UNREACHABLE_MEMORY_MS: Assumption<number> = {

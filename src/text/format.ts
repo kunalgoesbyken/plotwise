@@ -18,6 +18,8 @@ const LIST_FORMAT = new Intl.ListFormat(LOCALE, { type: 'conjunction' })
 
 const ALTERNATIVES_FORMAT = new Intl.ListFormat(LOCALE, { type: 'disjunction' })
 
+const DATE_FORMAT = new Intl.DateTimeFormat(LOCALE, { dateStyle: 'medium', timeZone: 'UTC' })
+
 const COMPARATORS: Readonly<Record<Comparator, string>> = { lt: '<', lte: '≤', gt: '>', gte: '≥' }
 
 export function formatNumber(value: number, quantity: Quantity): string {
@@ -43,3 +45,5 @@ export const formatComparator = (cmp: Comparator) => COMPARATORS[cmp]
 export const formatList = (items: readonly string[]) => LIST_FORMAT.format(items)
 
 export const formatAlternatives = (items: readonly string[]) => ALTERNATIVES_FORMAT.format(items)
+
+export const formatDate = (isoDateTime: string) => DATE_FORMAT.format(new Date(isoDateTime))

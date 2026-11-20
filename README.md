@@ -140,7 +140,7 @@ flowchart LR
   browser --> guard
   guard --> site --> overpass["Overpass<br/>OSM buildings, roads, stations"]
   guard --> geocode --> photon["Photon<br/>place search"]
-  browser -->|"plot outline, direct"| bma["BMA city-plan layer<br/>answers only from Thai networks"]
+  browser -->|"plot outline, direct"| bma["BMA city-plan layer<br/>checked against the dated snapshot;<br/>answers only from Thai networks"]
   browser -->|"tiles, direct"| tiles["OpenFreeMap"]
   csp["CSP connect-src:<br/>self, OpenFreeMap, BMA"] -.-> browser
 ```
@@ -164,13 +164,13 @@ Nothing stores the plot, but it is not private from these services: the BMA laye
 | Rule values, by `tools/check-pack.ts` | Road widths (OSM lanes or road class, not the right-of-way) |
 | Setbacks, limits, envelopes, design checks, by `bun test` | Building heights, station distance |
 | Route input validation, rate limiter, share-link encoding | Saleable area, first cost, sale and land value |
-| The interface in a real browser, by Playwright | The zone verdict (live BMA layer; unchecked when unreachable) |
+| The interface in a real browser, by Playwright | The zone verdict (a dated snapshot of the BMA layer, checked against the live layer where it answers) |
 
 ## Known limits
 
 | Area | Limit |
 |---|---|
-| Zone | One zone. The BMA service answers only from Thai networks; elsewhere the app says the zone was not checked and links the official map. Other regions have no zone check |
+| Zone | One zone. The check reads a dated snapshot of the BMA brown-zone polygons (20 Nov 2026) and checks the live BMA layer, which answers only from Thai networks, against it; where the two differ, the snapshot still decides and the app says the live layer differs and links the official map. Outside the brown zone the snapshot cannot name the zone. Other regions have no zone check |
 | Build cost | No published Bangkok rate per element (`NO_BKK_COST`); the total is only cross-checked against RHLB (Siam) Ltd.'s July 2025 residential condominium range |
 | Land and prices | Holding cost, land finance and area distances are unsourced. Condo prices are Knight Frank asking prices by area, the margin a listed developer's; office and hotel prices are not split by area. The land check compares asking prices. All editable, all in the link |
 | OSM | Heights exist for about a third of central Bangkok buildings; roads have no width tags, so widths are carriageway estimates. Station distance: BTS 52 of 64, MRT 15 of 52, monorail 1 of 55 |
@@ -218,7 +218,7 @@ bun run dev            # http://localhost:3000 (landing), /app (the app)
 | Recompile / check the rule pack | `bun tools/compile-pack.ts bkk-y9` / `bun tools/check-pack.ts bkk-y9` |
 | Type check and lint | `bun run typecheck` and `bun run lint` |
 
-CI runs type check, lint, `bun test` and the two millisecond-budget `performance.test.ts` files (in a job of their own, so budgets are never loosened), then the production build and Playwright in headless Chromium with software WebGL. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon, and tests that do not mock the BMA layer see "not checked" outside Thailand. Overpass is always mocked.
+CI runs type check, lint, `bun test` and the two millisecond-budget `performance.test.ts` files (in a job of their own, so budgets are never loosened), then the production build and Playwright in headless Chromium with software WebGL. The suite needs the internet: OpenFreeMap tiles load live, the cache-header test calls live Photon, and tests that do not mock the BMA layer get the snapshot verdict, as the live layer does not answer outside Thailand. Overpass is always mocked.
 
 ## Code layout
 
@@ -258,6 +258,6 @@ Design tokens are defined once in `src/app/globals.css` (`@theme`); the map and 
 - Bangkok bylaw of 13 March 2026 amending the plan (text layer unreadable; treated as factory-only, shown with a note)
 - Ministerial Regulations 55 (building setbacks, open space, height vs road), 33 (high-rise and extra-large buildings) and 7 (parking)
 - Bangkok Building Control Bylaw B.E. 2544
-- BMA City Planning GIS, comprehensive plan 2556 land-use layer (queried live, not stored)
+- BMA City Planning GIS, comprehensive plan 2556 land-use layer: brown zone 9 polygons stored as a dated snapshot (`public/zone/bma-2556-y9.json`, built by `tools/zone-snapshot.ts`; not copyright works under section 7(2), (3) and (5) of the Copyright Act B.E. 2537) and checked against the live layer
 - Greater Mumbai Development Control and Promotion Regulations (DCPR) 2034, as sanctioned in 2018 (MCGM)
 - © OpenStreetMap contributors (ODbL); base map by OpenFreeMap / OpenMapTiles

@@ -2,7 +2,7 @@ import { localFrame, type LngLat, type LocalFrame } from '@/geo/projection'
 import { intersection, polygonArea, signedArea, totalArea, type Polygon } from '@/geometry'
 import type { ZoneFeature } from './arcgis'
 
-export type ZoneShare = { readonly code: string; readonly share: number }
+export type ZoneShare = { readonly code: string | null; readonly share: number }
 
 function ringSign(ring: readonly LngLat[], frame: LocalFrame): { loop: Polygon; sign: 1 | -1 } {
   const loop = ring.map(frame.toLocal)
