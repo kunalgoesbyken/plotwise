@@ -151,18 +151,17 @@ describe('podium and tower', () => {
   })
 
   it('names the rule that stops each design growing', () => {
-    const office = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)), 'podium-tower')!
-    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    const office = byId(designed(lot(60, 80, 12, 'office')).options, 'podium-tower')!
+    const nearStation = byId(designed(lot(60, 80, 12, 'office', true)).options, 'podium-tower')!
     expect(office.limitedBy).toBe('use')
     expect(nearStation.limitedBy).not.toBe('use')
-    const lowRise = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'condo' }, pack, readings)), 'low-rise')!
+    const lowRise = byId(designed(lot(60, 80, 12)).options, 'low-rise')!
     expect(['building-class', 'envelope']).toContain(lowRise.limitedBy)
   })
 
   it('stops an office on a narrow soi at the zone office-size condition, not at the envelope', () => {
-    const solution = solve({ ...EXAMPLE_PLOT, buildingType: 'office' }, pack, readings)
-    const tower = byId(designs(solution), 'podium-tower')!
-    const nearStation = byId(designs(solve({ ...EXAMPLE_PLOT, buildingType: 'office', nearStation: true }, pack, readings)), 'podium-tower')!
+    const tower = byId(designed(lot(60, 80, 12, 'office')).options, 'podium-tower')!
+    const nearStation = byId(designed(lot(60, 80, 12, 'office', true)).options, 'podium-tower')!
     const size = tower.checks.find((c) => c.id === 'use-size')
     expect(size?.status === 'pass' && size.actual / size.limit).toBeGreaterThan(0.95)
     expect(nearStation.metrics.gfaSqm).toBeGreaterThan(tower.metrics.gfaSqm)

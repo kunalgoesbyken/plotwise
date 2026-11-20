@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { decodePlot } from '../src/editor/plot-url'
 import type { Place } from '../src/geocode/schema'
+import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Road, Station } from '../src/site/schema'
 
 const L_SHAPE = [
@@ -15,8 +16,8 @@ const L_SHAPE = [
 const SOI_NORTH_OF_EXAMPLE: Road = {
   id: 'soi',
   line: [
-    [100.5265, 13.7231239],
-    [100.5269, 13.7231239],
+    [100.5758031, 13.7792149],
+    [100.5752386, 13.7790861],
   ],
   highway: 'residential',
   widthM: 9,
@@ -235,7 +236,7 @@ for (const width of [536, 1280])
     await page.getByRole('button', { name: 'Mark edge C–D as a road' }).click()
     await expect(site(page).getByText('Estimated from OpenStreetMap, check on site.')).toBeVisible()
     const rows = await frontageColumns(page)
-    expect(rows).toHaveLength(6)
+    expect(rows).toHaveLength(EXAMPLE_PLOT.ring.length)
     for (const key of ['width', 'actionLeft', 'actionRight', 'height'] as const)
       expect(new Set(rows.map((row) => row[key])).size, `${key} differs between rows`).toBe(1)
     const roadInput = await page.getByLabel('Road width on edge C–D, in metres').boundingBox()
