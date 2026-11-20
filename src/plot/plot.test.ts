@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { MAX_ROAD_WIDTH_M, PlotSchema } from './plot'
+import { MAX_PLOT_LIMIT, MAX_ROAD_WIDTH_M, MAX_STOREYS, PlotSchema } from './plot'
 
 const ring = [
   [100.56, 13.74],
@@ -51,5 +51,27 @@ describe('PlotSchema', () => {
   it('rejects a non-positive road width and an unknown building type', () => {
     expect(PlotSchema.safeParse({ ...valid, roads: [{ edge: 0, widthM: 0 }] }).success).toBe(false)
     expect(PlotSchema.safeParse({ ...valid, buildingType: 'castle' }).success).toBe(false)
+  })
+})
+
+describe('limits entered for a plot', () => {
+  const withLimits = (limits: object) => PlotSchema.safeParse({ ...valid, limits }).success
+
+  it('accepts a plot without limits and one with every limit in range', () => {
+    expect(withLimits({})).toBe(true)
+    expect(PlotSchema.parse(valid).limits).toBeUndefined()
+    expect(withLimits({ maxGfaSqm: 5000, maxHeightM: 40, maxStoreys: 12, maxCoverageShare: 0.6, roadSetbackM: 0, boundarySetbackM: 3 })).toBe(true)
+  })
+
+  it('rejects limits that are not positive, not finite or beyond any real plot', () => {
+    for (const bad of [0, -1, Infinity, NaN, MAX_PLOT_LIMIT + 1]) {
+      expect(withLimits({ maxGfaSqm: bad })).toBe(false)
+      expect(withLimits({ maxHeightM: bad })).toBe(false)
+    }
+    expect(withLimits({ maxStoreys: 2.5 })).toBe(false)
+    expect(withLimits({ maxStoreys: MAX_STOREYS + 1 })).toBe(false)
+    expect(withLimits({ maxCoverageShare: 1.01 })).toBe(false)
+    expect(withLimits({ roadSetbackM: -0.5 })).toBe(false)
+    expect(withLimits({ boundarySetbackM: MAX_ROAD_WIDTH_M + 1 })).toBe(false)
   })
 })
