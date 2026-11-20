@@ -7,7 +7,7 @@ import { formatList, formatNumber } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import { Disclosure } from '@/ui/disclosure'
-import { everyValueLabel, rangeText } from './figures'
+import { everyValueLabel, purchasePriceLabel, rangeText } from './figures'
 import { ParameterInput } from './parameter-input'
 import { SCALARS } from './parameters'
 import { useFinance, type Finance, type Priced } from './use-finance'
@@ -63,7 +63,8 @@ function PriceSources({ finance }: { finance: Finance }) {
 export function LandValue() {
   const { design } = useFeasibility()
   const finance = useFinance()
-  const { areaUnit, areaTerms } = useRegion()
+  const region = useRegion()
+  const { areaUnit, areaTerms } = region
   if (!design || !finance) return null
   const area = areaText(finance)
   return (
@@ -76,6 +77,9 @@ export function LandValue() {
       <div className="flex flex-wrap gap-4">
         <ParameterInput finance={finance} parameter={SCALARS.salePrice} label={t('land.sale-price', { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })} />
         <ParameterInput finance={finance} parameter={SCALARS.margin} label={t('land.margin')} />
+        {finance.purchasePrices.map((input) => (
+          <ParameterInput key={input.id} finance={finance} parameter={input} label={purchasePriceLabel(input.id, region)} />
+        ))}
       </div>
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}
       <p className="text-xs leading-relaxed text-muted-foreground">{t('land.indicative')}</p>

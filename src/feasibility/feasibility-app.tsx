@@ -15,6 +15,7 @@ import { FarBonusToggle } from './far-bonus-toggle'
 import { FeasibilityProvider, useFeasibility } from './feasibility-provider'
 import { FeasibilityScene } from './feasibility-scene'
 import { mapOverlay } from './map-overlay'
+import { PurchaseSliders } from './purchase-sliders'
 import { ResultsSummary } from './results-summary'
 import { RulesPanel } from './rules-panel'
 import { WidthSensitivity } from './width-sensitivity-table'
@@ -29,6 +30,7 @@ function usePanels(): readonly ResultPanel[] {
       content: (
         <div className="flex flex-col gap-5">
           <FarBonusToggle />
+          <PurchaseSliders />
           <DesignsPanel extraRows={moneyRows} />
           <Disclosure label={t('sensitivity.label')}>
             <WidthSensitivity />
@@ -68,13 +70,13 @@ function PlotZone() {
 }
 
 function Workspace() {
-  const { result, design, layers } = useFeasibility()
+  const { result, design, layers, strip } = useFeasibility()
   const { cleared } = useZoneGate()
   const panels = usePanels()
   const overlay = useMemo(() => {
     if (result?.status !== 'ready' || !layers) return undefined
-    return mapOverlay(result.solution.site.frame, layers.shown[0]?.polygons ?? [], design?.plates.footprint ?? [])
-  }, [result, design, layers])
+    return mapOverlay(result.solution.site.frame, layers.shown[0]?.polygons ?? [], design?.plates.footprint ?? [], strip)
+  }, [result, design, layers, strip])
   return (
     <>
       <div className="contents print:hidden">

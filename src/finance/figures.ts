@@ -3,7 +3,7 @@ import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 import { formatMoney } from './format-money'
 import { totalOf, type Estimate, type Parking, type Range } from './estimate'
-import { RATES, SCALARS, type RateRow, type ScalarId } from './parameters'
+import { RATES, SCALARS, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
 
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
   t('money.range', { low: formatMoney(low, currency), high: formatMoney(high, currency) })
@@ -17,6 +17,9 @@ export function scalarLabel(id: ScalarId, { areaUnit, areaTerms }: Region): stri
   if (id === 'salePrice') return t('assumptions.salePrice', { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })
   return id === 'saleableShare' ? t('assumptions.saleableShare', areaTerms) : t(`assumptions.${id}`)
 }
+
+export const purchasePriceLabel = (id: PurchasePriceId, { areaUnit, areaTerms }: Region) =>
+  id === 'landRate' ? t('land.landRate', { rate: areaTerms.landRate, unit: t(`area-unit.${areaUnit}`) }) : t('land.tdrPrice', { unit: t(`area-unit.${areaUnit}`) })
 
 export const everyValueLabel = (region: Region) => [
   ...(Object.keys(SCALARS) as ScalarId[]).map((id) => scalarLabel(id, region)),

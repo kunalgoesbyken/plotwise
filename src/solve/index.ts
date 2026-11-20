@@ -39,6 +39,6 @@ export {
 export { buildingControlOpenSpace, footprintCapSqm, permeableArea, ratioOpenSpace, type OpenSpaceNeed } from './open-space'
 export { parkingSpaces, type ParkingNeed } from './parking'
 export { plotLimitFields } from './plot-limits'
-export type { Widening } from './reservations'
+export { wideningStrip, type Widening } from './reservations'
 export { boundarySetback, frontOpenSpaceDepth, roadSetback, streetHeightLimitM, strictest, type HeightVsRoad, type Setback } from './setbacks'
 export { coversBuildingType, solve, type Solution } from './solve'

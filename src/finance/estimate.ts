@@ -1,10 +1,10 @@
 import type { Metrics } from '@/designs'
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType } from '@/plot/plot'
-import type { RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge, type MoneyPrices, type MoneyRegion, type Solution } from '@/solve'
+import type { FarPurchase, RulePack } from '@/rules'
+import { isHighRiseOrExtraLarge, type MoneyPrices, type MoneyRegion, type PurchaseOption, type Solution } from '@/solve'
 import { placementOf, type Placement } from './area'
-import type { Basis, Bound, RateRow } from './parameters'
+import type { Basis, Bound, PurchasePriceId, RateRow } from './parameters'
 import type { Values } from './values'
 
 export type BuildClass = 'lowRise' | 'highRise'
@@ -15,7 +15,10 @@ export type FinanceSite = {
   readonly origin: LngLat
   readonly plotAreaSqm: number
   readonly landUnitSqm: number
+  readonly purchases: readonly PurchaseOption[]
 }
+
+export type PurchasePrices = Readonly<Partial<Record<PurchasePriceId, number>>>
 
 export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSite => ({
   pack: solution.pack,
@@ -23,7 +26,37 @@ export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSit
   origin: solution.site.frame.origin,
   plotAreaSqm: solution.landAreaSqm,
   landUnitSqm: region.landUnit.sqm.value,
+  purchases: solution.limits.farPurchase.options.filter((option) => option.chosenGfaSqm > 0),
 })
+
+function priceInputOf(price: FarPurchase['price']): PurchasePriceId | null {
+  switch (price.kind) {
+    case 'shareOfLandRate':
+      return 'landRate'
+    case 'userSupplied':
+      return 'tdrPrice'
+    case 'perSqm':
+      return null
+  }
+}
+
+export const neededPrices = ({ purchases }: FinanceSite): PurchasePriceId[] => [
+  ...new Set(purchases.flatMap((option) => priceInputOf(option.price) ?? [])),
+]
+
+function pricePerSqm(price: FarPurchase['price'], prices: PurchasePrices): number {
+  switch (price.kind) {
+    case 'shareOfLandRate':
+      return price.share.value * (prices.landRate ?? Number.NaN)
+    case 'userSupplied':
+      return prices.tdrPrice ?? Number.NaN
+    case 'perSqm':
+      return price.value.value
+  }
+}
+
+const purchaseCost = ({ purchases }: FinanceSite, prices: PurchasePrices) =>
+  purchases.reduce((sum, option) => sum + option.chosenGfaSqm * pricePerSqm(option.price, prices), 0)
 
 export const placementIn = ({ origin }: FinanceSite, prices: MoneyPrices): Placement => placementOf(origin, prices.areas)
 
@@ -45,6 +78,7 @@ export type Estimate = {
   readonly grossValue: number
   readonly landValue: Range
   readonly landValuePerUnit: Range
+  readonly purchaseCost: number
 }
 
 const LEVEL_TOLERANCE = 1e-6
@@ -55,8 +89,8 @@ export const totalOf = ({ substructure, superstructure, services }: CostSplit) =
 
 export const acquisitionShare = ({ transferCosts, holdingCost, landFinance }: Values) => transferCosts + holdingCost + landFinance
 
-export function landResidual(grossValue: number, buildCost: number, values: Values) {
-  const afterBuild = grossValue * (1 - values.margin) - buildCost * (1 + values.softCost)
+export function landResidual(grossValue: number, buildCost: number, values: Values, purchaseCost = 0) {
+  const afterBuild = grossValue * (1 - values.margin) - buildCost * (1 + values.softCost) - purchaseCost
   return afterBuild < 0 ? afterBuild : afterBuild / (1 + acquisitionShare(values))
 }
 
@@ -79,7 +113,7 @@ function costAt(bound: Bound, buildClass: BuildClass, aboveGroundSqm: number, ba
   }
 }
 
-export function estimate(metrics: Metrics, site: FinanceSite, values: Values): Estimate {
+export function estimate(metrics: Metrics, site: FinanceSite, values: Values, prices: PurchasePrices = {}): Estimate {
   const buildClass = isHighRiseOrExtraLarge(site.pack, { heightM: metrics.heightM, storeys: metrics.storeys, floorAreaSqm: metrics.builtSqm })
     ? 'highRise'
     : 'lowRise'
@@ -90,7 +124,8 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values): E
   const firstCost = totalOf(atLow) <= totalOf(atHigh) ? { low: atLow, high: atHigh } : { low: atHigh, high: atLow }
   const saleableSqm = Math.max(0, metrics.builtSqm - metrics.parkingSqm) * values.saleableShare
   const grossValue = saleableSqm * values.salePrice
-  const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values)
+  const bought = purchaseCost(site, prices)
+  const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values, bought)
   const landValue = { low: landFor(firstCost.high), high: landFor(firstCost.low) }
   const landUnits = site.plotAreaSqm / site.landUnitSqm
   return {
@@ -104,5 +139,6 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values): E
     grossValue,
     landValue,
     landValuePerUnit: { low: landValue.low / landUnits, high: landValue.high / landUnits },
+    purchaseCost: bought,
   }
 }

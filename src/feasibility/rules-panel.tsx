@@ -67,7 +67,8 @@ function EstimatedRoads() {
   )
 }
 
-function FloorArea({ limits }: { limits: Limits }) {
+function FloorArea({ solution }: Pick<Ready, 'solution'>) {
+  const { limits, widening, farAreaSqm } = solution
   const { areaUnit, areaTerms } = useRegion()
   const { farBonus } = useFeasibility()
   const eligible = limits.farBonus.measures.filter((m) => m.eligible)
@@ -98,6 +99,35 @@ function FloorArea({ limits }: { limits: Limits }) {
             </>
           }
           cites={[...limits.farBonus.cites, ...eligible.flatMap((m) => m.cites)]}
+        />
+      )}
+      {limits.farPurchase.options.map((option) => (
+        <LimitRow
+          key={option.kind}
+          label={t(`limit.purchase.${option.kind}`)}
+          value={option.maxExtraGfaSqm > 0 ? bound({ cmp: 'lte', value: option.maxExtraGfaSqm / farAreaSqm }, 'ratio') : t('value.none')}
+          detail={
+            option.maxExtraGfaSqm > 0
+              ? t('limit.purchase.detail', { area: formatQuantity(option.maxExtraGfaSqm, areaUnit), chosen: formatQuantity(option.chosenGfaSqm, areaUnit) })
+              : t('limit.purchase.none')
+          }
+          cites={option.cites}
+        />
+      ))}
+      {widening && (
+        <LimitRow
+          label={t('limit.widening')}
+          value={formatQuantity(widening.reservedSqm, areaUnit)}
+          detail={t('limit.widening.detail', { area: formatQuantity(widening.reservedSqm, areaUnit), gross: formatQuantity(widening.grossAreaSqm, areaUnit) })}
+          cites={widening.cites}
+        />
+      )}
+      {limits.inLieu && (
+        <LimitRow
+          label={t('limit.in-lieu')}
+          value={formatQuantity(limits.inLieu.gfaSqm, areaUnit)}
+          detail={t('limit.in-lieu.detail', { area: formatQuantity(limits.inLieu.gfaSqm, areaUnit) })}
+          cites={limits.inLieu.cites}
         />
       )}
       {limits.coverage && (
@@ -310,7 +340,7 @@ function Rules({ plot, solution }: Ready) {
         </p>
         {region.cityPlan && <p className="mt-1 text-xs text-muted-foreground">{t('rules.plan', { plan: region.cityPlan.version })}</p>}
       </div>
-      <FloorArea limits={limits} />
+      <FloorArea solution={solution} />
       <OpenSpace limits={limits} maxGfaSqm={solution.farCap.maxGfaSqm} />
       <SetbackTable plot={plot} solution={solution} />
       <Height solution={solution} />

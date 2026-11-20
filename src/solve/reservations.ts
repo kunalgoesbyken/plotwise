@@ -1,4 +1,4 @@
-import { edgeLengths, offsetEdges, polygonArea, type Ring } from '@/geometry'
+import { difference, edgeLengths, offsetEdges, polygonArea, type Polygon, type Ring } from '@/geometry'
 import type { Site, SiteEdge } from '@/plot/site'
 import type { Cite, Reservation } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
@@ -13,6 +13,9 @@ export type Widening = {
   readonly inLieuCites: readonly Cite[]
   readonly cites: readonly Cite[]
 }
+
+export const wideningStrip = ({ grossRing }: Widening, netRing: Ring): Polygon[] =>
+  difference([{ outer: grossRing, holes: [] }], [{ outer: netRing, holes: [] }])
 
 export type Reserved = { readonly site: Site; readonly widening: Widening | null }
 

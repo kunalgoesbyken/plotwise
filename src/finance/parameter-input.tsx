@@ -8,7 +8,7 @@ import { readNumber } from '@/text/read-number'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { perAreaFromDisplay, perAreaToDisplay, type AreaUnit } from '@/units/area'
-import { isValidValue, type Parameter } from './parameters'
+import { isValidValue, type Input as MoneyInput } from './parameters'
 import type { Finance } from './use-finance'
 
 const SHARE_SCALE = 100
@@ -16,24 +16,24 @@ const PRECISION = 12
 
 const roundOff = (value: number) => Number(value.toPrecision(PRECISION))
 
-function toShown({ unit }: Parameter, value: number, area: AreaUnit): number {
+function toShown({ unit }: MoneyInput, value: number, area: AreaUnit): number {
   if (unit === 'share') return value * SHARE_SCALE
   return unit === 'money' ? perAreaToDisplay(value, area) : value
 }
 
-function fromShown({ unit }: Parameter, shown: number, area: AreaUnit): number {
+function fromShown({ unit }: MoneyInput, shown: number, area: AreaUnit): number {
   if (unit === 'share') return shown / SHARE_SCALE
   return unit === 'money' ? perAreaFromDisplay(shown, area) : shown
 }
 
-function parse(text: string, parameter: Parameter, area: AreaUnit) {
+function parse(text: string, parameter: MoneyInput, area: AreaUnit) {
   const read = readNumber(text)
   return read.kind === 'number' ? roundOff(fromShown(parameter, read.value, area)) : Number.NaN
 }
 
 const perUnit = ({ currency }: MoneyRegion, unit: string) => (currency ? t('money.per-unit-in', { currency, unit }) : t('money.per-unit', { unit }))
 
-function suffixFor({ unit }: Parameter, region: MoneyRegion, area: AreaUnit) {
+function suffixFor({ unit }: MoneyInput, region: MoneyRegion, area: AreaUnit) {
   switch (unit) {
     case 'money':
       return perUnit(region, t(`area-unit.${area}`))
@@ -48,7 +48,7 @@ function suffixFor({ unit }: Parameter, region: MoneyRegion, area: AreaUnit) {
 
 type ParameterInputProps = {
   readonly finance: Finance
-  readonly parameter: Parameter
+  readonly parameter: MoneyInput
   readonly label: string
   readonly hideLabel?: boolean
 }

@@ -584,6 +584,7 @@ const en = {
   'money.parking-levels-value': ({ above, basement }: { above: number; basement: number }) =>
     basement === 0 ? `${above} above ground` : `${above} above ground, ${plural(basement, 'basement', 'basements')}`,
   'money.first-cost': 'First cost, estimated',
+  'money.purchase': 'Extra floor area bought, estimated',
   'money.land-value': 'Land value supported, estimated',
   'money.substructure': 'Substructure',
   'money.superstructure': 'Superstructure',
@@ -598,6 +599,8 @@ const en = {
   'land.title': 'Land value',
   'land.sale-price': ({ unit, saleable }: { unit: string } & Saleable) => `Sale price per ${unit} of ${saleable}`,
   'land.margin': 'Target margin',
+  'land.landRate': ({ rate, unit }: { rate: string; unit: string }) => `${upperFirst(rate)} per ${unit} of land`,
+  'land.tdrPrice': ({ unit }: { unit: string }) => `TDR price per ${unit} of floor area`,
   'land.headline': ({ range }: { range: string }) => `This design supports land worth about ${range}.`,
   'land.per-unit': ({ range, unit }: { range: string; unit: string }) => `${range} per ${unit}`,
   'land.negative': 'At these prices the costs exceed the value, so the land supports nothing.',

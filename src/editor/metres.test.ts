@@ -1,13 +1,17 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { MAX_ROAD_WIDTH_M } from '@/plot/plot'
-import { parseMetres } from './metres'
+import { hasDecimalComma, parseMetres } from './metres'
 
 describe('parseMetres', () => {
-  it('reads plain and comma decimals', () => {
+  it('reads plain decimals and refuses a decimal comma instead of guessing it', () => {
     expect(parseMetres('16')).toBe(16)
     expect(parseMetres(' 6.5 ')).toBe(6.5)
-    expect(parseMetres('6,5')).toBe(6.5)
+    for (const text of ['6,5', '12,75', ',5']) {
+      expect(parseMetres(text)).toBeNull()
+      expect(hasDecimalComma(text)).toBe(true)
+    }
+    expect(hasDecimalComma('6.5')).toBe(false)
   })
 
   it('rejects empty, zero, negative and non-numeric input', () => {

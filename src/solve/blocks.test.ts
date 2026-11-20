@@ -1,6 +1,7 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { designs } from '@/designs'
+import { totalArea } from '@/geometry'
 import type { PlotLimits, Road } from '@/plot/plot'
 import { enteredBound, enteredCite, type FarPurchase, type RoadSetbackRule, type RulePack } from '@/rules'
 import { loadPack } from '@/rules'
@@ -10,6 +11,7 @@ import { SolveError } from './errors'
 import { packInterpretations } from './interpretations'
 import { plotLimitFields } from './plot-limits'
 import type { FarChoice } from './far'
+import { wideningStrip } from './reservations'
 import { roadSetback } from './setbacks'
 import { solve } from './solve'
 import { plotFromMetres, rectangle } from './test-plots'
@@ -247,6 +249,17 @@ describe('road widening', () => {
       [null, null],
     ])
     expect(solveWith(perFrontage, lot(40, 50, onRoad(9))).widening).toBeNull()
+  })
+
+  it('draws the strip handed over between the plot and the land left, with exactly the reserved area', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 3, max: 20, noNaN: true }), fc.double({ min: 0.5, max: 20, noNaN: true }), (roadM, extraM) => {
+        const solution = solveWith(perFrontage, lot(40, 50, [{ edge: 0, widthM: roadM, prescribedWidthM: roadM + extraM }]))
+        const strip = wideningStrip(solution.widening!, solution.site.ring)
+        expect(totalArea(strip)).toBeCloseTo(solution.widening!.reservedSqm, 2)
+      }),
+      { numRuns: 20 },
+    )
   })
 
   it('ignores a prescribed width where the rules take no widening', () => {

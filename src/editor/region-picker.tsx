@@ -15,7 +15,7 @@ export function RegionPicker() {
   }
   return (
     <PanelSection title={t('region.title')} description={t(`region.${region.rules}`)}>
-      <ToggleGroup type="single" variant="outline" aria-label={t('region.title')} value={region.id} onValueChange={choose} className="grid w-full grid-cols-3">
+      <ToggleGroup type="single" variant="outline" aria-label={t('region.title')} value={region.id} onValueChange={choose} className="grid w-full grid-cols-2">
         {REGION_IDS.map((id) => (
           <ToggleGroupItem key={id} value={id} className="w-full data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
             {REGIONS[id].name}

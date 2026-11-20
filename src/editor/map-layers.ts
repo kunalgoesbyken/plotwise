@@ -4,12 +4,13 @@ export const PLOT_SOURCE = 'plotwise-plot'
 export const PREVIEW_SOURCE = 'plotwise-preview'
 export const OVERLAY_SOURCE = 'plotwise-overlay'
 
-export type OverlayKind = 'envelope' | 'building'
+export type OverlayKind = 'envelope' | 'building' | 'strip'
 export type MapOverlay = GeoJSON.FeatureCollection<GeoJSON.MultiPolygon, { kind: OverlayKind }>
 
 export const EMPTY_OVERLAY: MapOverlay = { type: 'FeatureCollection', features: [] }
 
 export const LAYERS = {
+  strip: 'plotwise-strip',
   envelope: 'plotwise-envelope',
   envelopeOutline: 'plotwise-envelope-outline',
   building: 'plotwise-building',
@@ -62,6 +63,13 @@ export function addEditorLayers(map: MapLibreMap, palette: Palette) {
     source,
     filter: kind('area'),
     paint: { 'fill-color': palette.plot, 'fill-opacity': 0.1 },
+  })
+  map.addLayer({
+    id: LAYERS.strip,
+    type: 'fill',
+    source: OVERLAY_SOURCE,
+    filter: kind('strip'),
+    paint: { 'fill-color': palette.road, 'fill-opacity': 0.45, 'fill-outline-color': palette.road },
   })
   map.addLayer({
     id: LAYERS.envelope,

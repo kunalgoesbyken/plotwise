@@ -80,6 +80,7 @@ function MoneyFacts({ design, finance, priced, area }: { design: Design; finance
       <Fact label={t('money.built-up')}>{formatQuantity(estimate.builtSqm, area)}</Fact>
       <Fact label={t('money.saleable', areaTerms)}>{formatQuantity(estimate.saleableSqm, area)}</Fact>
       <Fact label={t('money.first-cost')}>{rangeText(firstCostRange(estimate), currency)}</Fact>
+      {estimate.purchaseCost > 0 && <Fact label={t('money.purchase')}>{formatMoney(estimate.purchaseCost, currency)}</Fact>}
       <Fact label={t('money.land-value')}>{rangeText(estimate.landValue, currency)}</Fact>
     </>
   )

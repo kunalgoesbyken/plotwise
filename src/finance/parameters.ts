@@ -17,15 +17,20 @@ export type ScalarId =
   | 'landReferenceLow'
   | 'landReferenceHigh'
 export type ParameterId = ScalarId | `${RateRow}.${Bound}`
+export type PurchasePriceId = 'landRate' | 'tdrPrice'
 
 export type Assumed = { readonly value: number; readonly source: string }
 export type Basis = { readonly use: BuildingType; readonly tier: AreaTier }
 
-export type Parameter = {
-  readonly id: ParameterId
-  readonly unit: Unit
-  readonly perUse: boolean
-  readonly assumed: (prices: MoneyPrices, basis: Basis) => Assumed
+export type Input = { readonly id: ParameterId | PurchasePriceId; readonly unit: Unit; readonly perUse: boolean }
+
+export type Parameter = Input & { readonly id: ParameterId; readonly assumed: (prices: MoneyPrices, basis: Basis) => Assumed }
+
+export type PurchasePrice = Input & { readonly id: PurchasePriceId }
+
+export const PURCHASE_PRICES: Readonly<Record<PurchasePriceId, PurchasePrice>> = {
+  landRate: { id: 'landRate', unit: 'money', perUse: false },
+  tdrPrice: { id: 'tdrPrice', unit: 'money', perUse: false },
 }
 
 export const RATE_ROWS: readonly RateRow[] = [
@@ -99,12 +104,12 @@ export const RATES: readonly RateParameters[] = RATE_ROWS.map((row) => ({
 
 export const PARAMETERS: readonly Parameter[] = [...Object.values(SCALARS), ...RATES.flatMap(({ low, high }) => [low, high])]
 
-export const storageKey = ({ id, perUse }: Parameter, use: BuildingType) => (perUse ? `${id}.${use}` : id)
+export const storageKey = ({ id, perUse }: Input, use: BuildingType) => (perUse ? `${id}.${use}` : id)
 
-export const STORAGE_KEYS: ReadonlyMap<string, Parameter> = new Map(
-  PARAMETERS.flatMap((parameter) =>
-    parameter.perUse ? BUILDING_TYPES.map((use) => [storageKey(parameter, use), parameter] as const) : [[parameter.id, parameter] as const],
+export const STORAGE_KEYS: ReadonlyMap<string, Input> = new Map(
+  [...PARAMETERS, ...Object.values(PURCHASE_PRICES)].flatMap((input) =>
+    input.perUse ? BUILDING_TYPES.map((use) => [storageKey(input, use), input] as const) : [[input.id, input] as const],
   ),
 )
 
-export const isValidValue = ({ unit }: Parameter, value: number) => UNIT_SCHEMAS[unit].safeParse(value).success
+export const isValidValue = ({ unit }: Input, value: number) => UNIT_SCHEMAS[unit].safeParse(value).success

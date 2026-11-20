@@ -2,7 +2,7 @@
 
 import { Line } from '@react-three/drei'
 import { useEffect, useMemo } from 'react'
-import type { Floor, Loop, Prism } from '@/geometry'
+import type { Floor, Loop, Polygon, Prism } from '@/geometry'
 import type { ContextBuilding, ContextRoad } from './context'
 import {
   buildingsGeometry,
@@ -84,6 +84,16 @@ export function PlotMarks({ ring, roadEdges, palette }: PlotMarksProps) {
       <Line segments points={outline} color={palette.plot} lineWidth={2.5} />
       {frontage.length > 0 && <Line segments points={frontage} color={palette.road} lineWidth={5} />}
     </>
+  )
+}
+
+export function Strip({ polygons, color }: { polygons: readonly Polygon[]; color: string }) {
+  const geometry = useMemo(() => flatGeometry(polygons), [polygons])
+  useDisposal(geometry)
+  return (
+    <mesh geometry={geometry}>
+      <meshBasicMaterial color={color} transparent opacity={0.5} depthWrite={false} polygonOffset polygonOffsetFactor={-3} polygonOffsetUnits={-3} />
+    </mesh>
   )
 }
 
