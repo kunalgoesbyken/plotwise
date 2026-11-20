@@ -6,6 +6,7 @@ import { intersection } from '@/geometry/clip'
 import { totalArea } from '@/geometry'
 import type { BuildingType } from '@/plot/plot'
 import { loadPack } from '@/rules'
+import { zoneFar } from '@/rules/zone-far'
 import { buildingControlOpenSpace, isHighRiseOrExtraLarge, packInterpretations, ratioOpenSpace, solve, type Interpretations } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
@@ -136,7 +137,7 @@ describe('designs follow the rules as inputs change', () => {
     const slab = (roadWidthM: number) => byId(designed(lot(40, 70, roadWidthM)).options, 'slab')!
     const fromRoad = (d: Design) => d.checks.find((c) => c.id === 'road-setback')
     const [wide, narrow] = [slab(30), slab(10)]
-    for (const d of [wide, narrow]) expect(d.metrics.far).toBeGreaterThan(0.9 * pack.far.max.value)
+    for (const d of [wide, narrow]) expect(d.metrics.far).toBeGreaterThan(0.9 * zoneFar(pack).max.value)
     expect(fromRoad(wide)).toMatchObject({ status: 'pass' })
     expect((fromRoad(wide) as { actual: number }).actual).toBeLessThan((fromRoad(narrow) as { actual: number }).actual)
   })

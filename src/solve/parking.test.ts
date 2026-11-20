@@ -1,6 +1,7 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { loadPack, type ParkingRule } from '@/rules'
+import { band, value } from '@/rules/test-packs'
 import { parkingSpaces, type ParkingNeed } from './parking'
 
 const pack = loadPack('bkk-y9')
@@ -28,7 +29,7 @@ describe('parking spaces', () => {
 
   it('asks a large building for one space per 120 m² when that is more than the per-use count', () => {
     const condo = need({ units: 100, unitSqm: 35, floorAreaSqm: 12000, large: true })
-    expect(parkingSpaces([bylaw], condo)).toMatchObject({ value: 100, cites: expect.arrayContaining([bylaw.largeBuildingSqmPerSpace.cite]) })
+    expect(parkingSpaces([bylaw], condo)).toMatchObject({ value: 100, cites: expect.arrayContaining([bylaw.largeBuildingSqmPerSpace!.cite]) })
     expect(parkingSpaces([bylaw], { ...condo, units: 150, unitSqm: 60 }).value).toBe(150)
   })
 
@@ -58,5 +59,32 @@ describe('parking spaces', () => {
         expect(at(rooms + extra)).toBeGreaterThanOrEqual(at(rooms))
       }),
     )
+  })
+})
+
+describe('parking demand shapes beyond Bangkok', () => {
+  const bySize: ParkingRule = {
+    ...bylaw,
+    condo: {
+      kind: 'perUnitBySize',
+      bands: [
+        { unitSqm: band(undefined, 50), spacesPerUnit: value(0.5) },
+        { unitSqm: band(50, 100), spacesPerUnit: value(1) },
+        { unitSqm: band(100), spacesPerUnit: value(2) },
+      ],
+    },
+    office: { kind: 'perGrossArea', sqmPerSpace: value(100) },
+    hallSqmPerSpace: undefined,
+    largeBuildingSqmPerSpace: undefined,
+  }
+
+  it('counts spaces per unit by the size band the unit falls in', () => {
+    expect(parkingSpaces([bySize], need({ units: 40, unitSqm: 49 })).value).toBe(20)
+    expect(parkingSpaces([bySize], need({ units: 40, unitSqm: 50 })).value).toBe(40)
+    expect(parkingSpaces([bySize], need({ units: 40, unitSqm: 120, large: true, floorAreaSqm: 50_000 })).value).toBe(80)
+  })
+
+  it('counts one space per stated area of gross floor area, rounded up', () => {
+    expect(parkingSpaces([bySize], need({ use: 'office', floorAreaSqm: 1001 })).value).toBe(11)
   })
 })

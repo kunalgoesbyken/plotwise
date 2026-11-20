@@ -1,4 +1,4 @@
-import type { RulePack } from '../src/rules/types'
+import type { RulePack } from '../src/rules'
 import { checkPack } from '../tools/check-pack'
 import { truthValues, type Answers, type Field, type Truth, type TruthEntry, type WriteRun } from './inputs'
 

@@ -1,6 +1,6 @@
 import type { BuildingType } from '@/plot/plot'
 import type { Cite, ParkingDemand, ParkingRule } from '@/rules'
-import { satisfies } from './bound'
+import { inRange, satisfies } from './bound'
 import type { Sourced } from './limits'
 
 export type ParkingNeed = {
@@ -33,9 +33,15 @@ function demandByUse(demand: ParkingDemand, need: ParkingNeed): Demand {
     case 'perUnit':
       if (!satisfies(need.unitSqm, demand.unitsFromSqm)) return NONE
       return { spaces: need.units * demand.spacesPerUnit.value, cites: [demand.spacesPerUnit.cite, demand.unitsFromSqm.cite] }
+    case 'perUnitBySize': {
+      const band = demand.bands.find((b) => inRange(need.unitSqm, b.unitSqm))
+      return band ? { spaces: need.units * band.spacesPerUnit.value, cites: [band.spacesPerUnit.cite] } : NONE
+    }
     case 'perFloorArea':
       if (!satisfies(need.officeSqm, demand.appliesFromSqm)) return NONE
       return { spaces: need.officeSqm / demand.sqmPerSpace.value, cites: [demand.sqmPerSpace.cite, demand.appliesFromSqm.cite] }
+    case 'perGrossArea':
+      return { spaces: need.floorAreaSqm / demand.sqmPerSpace.value, cites: [demand.sqmPerSpace.cite] }
     case 'perRoomTiers':
       if (need.rooms === 0) return NONE
       return { spaces: roomTierSpaces(demand, need.rooms), cites: [demand.firstSpaces.cite, ...demand.tiers.map((t) => t.roomsPerSpace.cite)] }
@@ -45,9 +51,9 @@ function demandByUse(demand: ParkingDemand, need: ParkingNeed): Demand {
   }
 }
 
-function hallDemand(rule: ParkingRule, demand: ParkingDemand, need: ParkingNeed): Demand {
-  if (demand.kind === 'perLobbyAndCommercialArea' || need.lobbySqm === 0) return NONE
-  return { spaces: need.lobbySqm / rule.hallSqmPerSpace.value, cites: [rule.hallSqmPerSpace.cite] }
+function hallDemand({ hallSqmPerSpace }: ParkingRule, demand: ParkingDemand, need: ParkingNeed): Demand {
+  if (!hallSqmPerSpace || demand.kind === 'perLobbyAndCommercialArea' || need.lobbySqm === 0) return NONE
+  return { spaces: need.lobbySqm / hallSqmPerSpace.value, cites: [hallSqmPerSpace.cite] }
 }
 
 function ruleDemand(rule: ParkingRule, need: ParkingNeed): Demand {
@@ -55,12 +61,13 @@ function ruleDemand(rule: ParkingRule, need: ParkingNeed): Demand {
   const parts = [demandByUse(demand, need), hallDemand(rule, demand, need)]
   const byUse = {
     spaces: parts.reduce((sum, part) => sum + Math.ceil(part.spaces), 0),
-    cites: [...parts.flatMap((part) => part.cites), rule.fractionsRoundUp],
+    cites: [...parts.flatMap((part) => part.cites), ...(rule.fractionsRoundUp ? [rule.fractionsRoundUp] : [])],
   }
-  if (!need.large) return byUse
+  const { largeBuildingSqmPerSpace, largerOfSumOrArea } = rule
+  if (!need.large || !largeBuildingSqmPerSpace) return byUse
   const byArea = {
-    spaces: Math.ceil(need.floorAreaSqm / rule.largeBuildingSqmPerSpace.value),
-    cites: [rule.largeBuildingSqmPerSpace.cite, rule.largerOfSumOrArea],
+    spaces: Math.ceil(need.floorAreaSqm / largeBuildingSqmPerSpace.value),
+    cites: [largeBuildingSqmPerSpace.cite, ...(largerOfSumOrArea ? [largerOfSumOrArea] : [])],
   }
   return byArea.spaces > byUse.spaces ? byArea : byUse
 }

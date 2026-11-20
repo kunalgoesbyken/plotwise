@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { RulePackSchema, type Cite, type RulePack } from '../src/rules/types'
+import type { SourceCite } from '../src/rules/cite'
+import { RulePackSchema, type RulePack } from '../src/rules/pack'
 import { lineAt, rawToken, readSource, type Pages } from './pages'
 import { COMPARATOR_PHRASES, parseComparator, parseQuantity, thaiSkeleton, unitToMetres, type Comparator } from './quantity'
 
@@ -54,13 +55,13 @@ function sourcePages(sources: Sources, src: string): Pages {
   return pages
 }
 
-function quoteLine(sources: Sources, src: string, page: number, line: number, clause: string): Cite {
+function quoteLine(sources: Sources, src: string, page: number, line: number, clause: string): SourceCite {
   const text = lineAt(sourcePages(sources, src), page, line)
   if (text === undefined) throw new RefError('line_missing', `${src} p${page} l${line} does not exist`)
   return { source: src, clause, page, line, quote: text.trim() }
 }
 
-function findToken(sources: Sources, ref: Ref, phrase: string): { cite: Cite; raw: string } {
+function findToken(sources: Sources, ref: Ref, phrase: string): { cite: SourceCite; raw: string } {
   const cite = quoteLine(sources, ref.src, ref.page, ref.line, ref.clause)
   const raw = rawToken(cite.quote, phrase)
   if (raw === undefined) {
@@ -69,7 +70,7 @@ function findToken(sources: Sources, ref: Ref, phrase: string): { cite: Cite; ra
   return { cite, raw }
 }
 
-const citeToken = (sources: Sources, ref: Ref): Cite => findToken(sources, ref, ref.token).cite
+const citeToken = (sources: Sources, ref: Ref): SourceCite => findToken(sources, ref, ref.token).cite
 
 function parseWith<T>(parse: (token: string) => T, token: string): T {
   try {

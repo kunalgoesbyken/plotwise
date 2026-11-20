@@ -8,7 +8,7 @@ import { fetchOverpass, overpassQuery } from './overpass'
 import { parseOverpass } from './parse'
 import type { Site } from './schema'
 
-const STATION_SEARCH_MARGIN_M = stationDistance(loadPack(REGION.packId)).value + STATION_PLATFORM_RADIUS_M.value
+const STATION_SEARCH_MARGIN_M = (stationDistance(loadPack(REGION.packId))?.value ?? 0) + STATION_PLATFORM_RADIUS_M.value
 
 export async function loadSite(bbox: Bbox): Promise<Site> {
   'use cache'
