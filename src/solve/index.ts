@@ -1,4 +1,4 @@
-export { ASSUMPTIONS, type Assumption } from './assumptions'
+export { ASSUMPTIONS, MONEY_REGIONS, type AssumedRange, type Assumption, type MoneyRegion, type RegionId } from './assumptions'
 export { compare, inRange, negate, satisfies } from './bound'
 export { isHighRiseOrExtraLarge, isLarge, type Building } from './building'
 export { mainRoad, type Envelope, type EnvelopeKind, type EnvelopeTier } from './envelope'
