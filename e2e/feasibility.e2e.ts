@@ -88,11 +88,11 @@ test('updates every panel live when the road width or the building type changes'
   await markSameDocument(page)
   const setbackRow = rules(page).getByRole('region', { name: 'Setbacks' }).getByRole('row', { name: /A–B/ })
   await expect(setbackRow).toContainText('Road 30 m')
-  const heightsBefore = await designsRegion(page).getByText(/^\d+(\.\d)? m$/).allTextContents()
+  const heightsBefore = await designsRegion(page).getByText(/^\d+(\.\d)?\sm$/).allTextContents()
 
   await page.getByLabel('Road width on edge A–B, in metres').fill('8')
   await expect(setbackRow).toContainText('Road 8 m')
-  await expect.poll(() => designsRegion(page).getByText(/^\d+(\.\d)? m$/).allTextContents()).not.toEqual(heightsBefore)
+  await expect.poll(() => designsRegion(page).getByText(/^\d+(\.\d)?\sm$/).allTextContents()).not.toEqual(heightsBefore)
   await expect(rules(page).getByText('Envelope top, high-rise')).toBeHidden()
 
   await page.getByText('Hotel', { exact: true }).click()

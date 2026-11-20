@@ -4,9 +4,9 @@ import { formatComparator, formatList, formatNumber, formatQuantity } from './fo
 
 describe('formatQuantity', () => {
   it('writes metres to one decimal and square metres as whole numbers with grouping', () => {
-    expect(formatQuantity(12.25, 'm')).toBe('12.3 m')
-    expect(formatQuantity(6, 'm')).toBe('6 m')
-    expect(formatQuantity(19329.6, 'sqm')).toBe('19,330 m²')
+    expect(formatQuantity(12.25, 'm')).toBe('12.3\u00a0m')
+    expect(formatQuantity(6, 'm')).toBe('6\u00a0m')
+    expect(formatQuantity(19329.6, 'sqm')).toBe('19,330\u00a0m²')
   })
 
   it('writes shares as percentages and ratios to two decimals', () => {

@@ -61,7 +61,7 @@ describe('mapLabels', () => {
   it('labels every corner and every road with its width', () => {
     const labels = mapLabels(loaded.draft)
     expect(labels.filter((l) => l.kind === 'corner').map((l) => l.text)).toEqual(['A', 'B', 'C', 'D'])
-    expect(labels.filter((l) => l.kind === 'road')).toEqual([{ id: 'road-1', kind: 'road', at: [2, 1], text: '12.5 m' }])
+    expect(labels.filter((l) => l.kind === 'road')).toEqual([{ id: 'road-1', kind: 'road', at: [2, 1], text: '12.5\u00a0m' }])
   })
 
   it('labels a road without a width so it is visibly unfinished', () => {

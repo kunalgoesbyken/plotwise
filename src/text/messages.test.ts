@@ -54,7 +54,7 @@ describe('messages', () => {
   it('fills parameters and pluralises counts', () => {
     expect(t('plot.corners', { count: 1 })).toBe('1 corner')
     expect(t('plot.corners', { count: 6 })).toBe('6 corners')
-    expect(t('unit.sqm', { number: '1,200' })).toBe('1,200 m²')
+    expect(t('unit.sqm', { number: '1,200' })).toBe('1,200\u00a0m²')
     expect(t('source.toggle', { count: 3 })).toBe('Sources (3)')
   })
 })

@@ -29,8 +29,8 @@ const en = {
   'verb.click': 'Click',
   'verb.tap': 'Tap',
 
-  'unit.m': ({ number }: Num) => `${number} m`,
-  'unit.sqm': ({ number }: Num) => `${number} m²`,
+  'unit.m': ({ number }: Num) => `${number}\u00a0m`,
+  'unit.sqm': ({ number }: Num) => `${number}\u00a0m²`,
   'unit.rooms': ({ number }: Num) => `${number} rooms`,
 
   'building.condo': 'Condominium',

@@ -17,8 +17,8 @@ const checks: Check[] = [
 describe('checkRow', () => {
   it('reads each measured check as actual, sign and limit in its own unit', () => {
     expect(checks.map((c) => checkRow(c).reading)).toEqual([
-      '19,010 m² ≤ 19,330 m²',
-      '1.9 m ≥ 2 m',
+      '19,010\u00a0m² ≤ 19,330\u00a0m²',
+      '1.9\u00a0m ≥ 2\u00a0m',
       '50% > 12.5%',
       '6.88 ≤ 10',
       '96 rooms ≤ 80 rooms',
