@@ -41,7 +41,7 @@ function StatusLine({ search }: { search: SearchState }) {
 
 function PlaceList({ places, onPick }: { places: readonly Place[]; onPick: (place: Place) => void }) {
   return (
-    <ul aria-label={t('search.results')} className="mt-2 divide-y overflow-hidden rounded-md border">
+    <ul aria-label={t('search.results')} className="mt-2 divide-y border-y">
       {places.map((place) => (
         <li key={place.id}>
           <button

@@ -1,51 +1,39 @@
 'use client'
 
-import { Box } from 'lucide-react'
-import type { Design, Limiter, Metrics } from '@/designs'
-import type { Limits } from '@/solve'
+import type { ReactNode } from 'react'
+import type { Design } from '@/designs'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { Button } from '@/ui/button'
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/ui/card'
 import { cn } from '@/ui/cn'
 import { Disclosure } from '@/ui/disclosure'
-import { Progress } from '@/ui/progress'
 import { Placeholder } from '@/ui/section'
 import { checkRow, type CheckRow, type CheckStatus } from './checklist'
 import { useFeasibility } from './feasibility-provider'
-import { limiterText } from './limiter-text'
 import { WhenReady } from './ready'
 import { Sources } from './sources'
 import { Tally } from './tally'
-import { yieldFigure, type Figure } from './yield-figure'
+import { yieldFigure } from './yield-figure'
 
 const STATUS_STYLE: Readonly<Record<CheckStatus, { mark: string; tone: string }>> = {
-  pass: { mark: '✓', tone: 'bg-accent text-primary' },
-  fail: { mark: '✕', tone: 'bg-destructive text-white' },
-  manual: { mark: '?', tone: 'bg-road/20 text-road-foreground' },
+  pass: { mark: '✓', tone: 'text-primary' },
+  fail: { mark: '✕', tone: 'text-destructive' },
+  manual: { mark: '?', tone: 'text-road-foreground' },
 }
 
-function Metric({ label, value }: Figure) {
-  return (
-    <div className="flex min-w-0 flex-col gap-0.5">
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="text-sm font-medium">{value}</dd>
-    </div>
-  )
-}
+type Row = { readonly label: string; readonly cell: (design: Design) => ReactNode }
 
-function FloorAreaBar({ metrics, limitedBy, limits }: { metrics: Metrics; limitedBy: Limiter; limits: Limits }) {
-  const share = Math.min(1, metrics.gfaSqm / limits.far.maxGfaSqm)
-  return (
-    <div>
-      <p className="flex flex-wrap items-baseline justify-between gap-x-3">
-        <span className="text-lg font-semibold">{formatQuantity(metrics.gfaSqm, 'sqm')}</span>
-        <span className="text-xs text-muted-foreground">{t('metric.gfa-of-max', { max: formatQuantity(limits.far.maxGfaSqm, 'sqm') })}</span>
-      </p>
-      <Progress value={share * 100} aria-hidden="true" className="mt-1.5 h-1.5" />
-      <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{limiterText(limitedBy, limits)}</p>
-    </div>
-  )
+function rowsFor([first]: readonly Design[]): readonly Row[] {
+  return [
+    { label: t('metric.floor-area'), cell: (d) => formatQuantity(d.metrics.gfaSqm, 'sqm') },
+    { label: t('metric.height'), cell: (d) => formatQuantity(d.metrics.heightM, 'm') },
+    { label: t('metric.storeys'), cell: (d) => formatQuantity(d.metrics.storeys, 'count') },
+    { label: yieldFigure(first.metrics.yield).label, cell: (d) => yieldFigure(d.metrics.yield).value },
+    { label: t('metric.far'), cell: (d) => formatQuantity(d.metrics.far, 'ratio') },
+    { label: t('metric.parking'), cell: (d) => formatQuantity(d.metrics.parkingSpaces, 'count') },
+    { label: t('metric.open-space'), cell: (d) => formatQuantity(d.metrics.openSpaceSqm, 'sqm') },
+    { label: t('metric.limited-by'), cell: (d) => t(`limiter.${d.limitedBy}`) },
+    { label: t('metric.checks'), cell: (d) => <Tally checks={d.checks} /> },
+  ]
 }
 
 function CheckItem({ row }: { row: CheckRow }) {
@@ -53,7 +41,7 @@ function CheckItem({ row }: { row: CheckRow }) {
   const failed = row.status === 'fail'
   return (
     <li className="flex gap-3 py-2.5">
-      <span className={`mt-px grid size-5 shrink-0 place-items-center rounded-full text-2xs font-medium ${tone}`}>
+      <span className={cn('w-4 shrink-0 text-center text-sm font-semibold', tone)}>
         <span aria-hidden="true">{mark}</span>
         <span className="sr-only">{t(`status.${row.status}`)}</span>
       </span>
@@ -66,64 +54,61 @@ function CheckItem({ row }: { row: CheckRow }) {
   )
 }
 
-type DesignCardProps = { design: Design; limits: Limits; selected: boolean; onSelect: () => void }
-
-function DesignCard({ design, limits, selected, onSelect }: DesignCardProps) {
-  const { metrics } = design
-  const name = t(design.nameKey)
-  return (
-    <li aria-label={name}>
-      <Card className={cn('@container gap-4 py-4 transition-[border-color,box-shadow]', selected && 'border-primary shadow-[0_0_0_1px_var(--color-primary)]')}>
-        <CardHeader className="px-4">
-          <CardTitle>
-            <h3 className="text-base leading-snug font-semibold">{name}</h3>
-          </CardTitle>
-          <CardDescription className="text-xs leading-relaxed">{t(`${design.nameKey}.summary`)}</CardDescription>
-          <CardAction>
-            <Button variant={selected ? 'default' : 'outline'} size="sm" aria-pressed={selected} aria-label={t('design.show', { name })} onClick={onSelect}>
-              <Box aria-hidden="true" />
-              {t(selected ? 'design.shown' : 'design.view')}
-            </Button>
-          </CardAction>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 px-4">
-          <FloorAreaBar metrics={metrics} limitedBy={design.limitedBy} limits={limits} />
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-3 @[17rem]:grid-cols-3">
-            <Metric label={t('metric.far')} value={formatQuantity(metrics.far, 'ratio')} />
-            <Metric label={t('metric.height')} value={formatQuantity(metrics.heightM, 'm')} />
-            <Metric label={t('metric.storeys')} value={formatQuantity(metrics.storeys, 'count')} />
-            <Metric {...yieldFigure(metrics.yield)} />
-            <Metric label={t('metric.parking')} value={t('metric.spaces', { count: formatQuantity(metrics.parkingSpaces, 'count') })} />
-            <Metric label={t('metric.open-space')} value={formatQuantity(metrics.openSpaceSqm, 'sqm')} />
-          </dl>
-        </CardContent>
-        <CardFooter className="flex-col items-start gap-1 border-t px-4 pt-3 [.border-t]:pt-3">
-          <Tally checks={design.checks} />
-          <Disclosure label={t('design.checklist')}>
-            <ul className="divide-y">
-              {design.checks.map((check) => (
-                <CheckItem key={check.id} row={checkRow(check)} />
-              ))}
-            </ul>
-          </Disclosure>
-        </CardFooter>
-      </Card>
-    </li>
-  )
-}
-
-function DesignList({ designs, limits }: { designs: readonly Design[]; limits: Limits }) {
+function DesignTable({ designs }: { designs: readonly Design[] }) {
   const { design: selected, selectDesign } = useFeasibility()
-  if (designs.length === 0) return <Placeholder>{t('designs.none')}</Placeholder>
+  if (designs.length === 0 || !selected) return <Placeholder>{t('designs.none')}</Placeholder>
+  const shown = (design: Design) => design.id === selected.id
   return (
-    <ul aria-label={t('tab.designs')} className="flex flex-col gap-3">
-      {designs.map((design) => (
-        <DesignCard key={design.id} design={design} limits={limits} selected={design.id === selected?.id} onSelect={() => selectDesign(design.id)} />
-      ))}
-    </ul>
+    <div className="flex flex-col gap-4">
+      <table aria-label={t('design.compare')} className="w-full table-fixed border-collapse text-sm">
+        <thead>
+          <tr className="border-b">
+            <td className="w-[28%]" />
+            {designs.map((design) => {
+              const name = t(design.nameKey)
+              return (
+                <th key={design.id} scope="col" className={cn('p-0 align-bottom', shown(design) && 'bg-accent')}>
+                  <button
+                    type="button"
+                    aria-pressed={shown(design)}
+                    aria-label={t('design.show', { name })}
+                    onClick={() => selectDesign(design.id)}
+                    className="flex min-h-11 w-full items-end px-2 py-2 text-left text-xs leading-snug font-semibold text-muted-foreground transition-colors hover:text-foreground aria-pressed:text-primary"
+                  >
+                    {name}
+                  </button>
+                </th>
+              )
+            })}
+          </tr>
+        </thead>
+        <tbody className="divide-y">
+          {rowsFor(designs).map(({ label, cell }) => (
+            <tr key={label}>
+              <th scope="row" className="py-2 pr-2 text-left text-xs font-normal text-muted-foreground">
+                {label}
+              </th>
+              {designs.map((design) => (
+                <td key={design.id} className={cn('px-2 py-2 align-top', shown(design) && 'bg-accent font-medium')}>
+                  {cell(design)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="text-xs leading-relaxed text-muted-foreground">{t(`${selected.nameKey}.summary`)}</p>
+      <Disclosure label={t('design.checklist', { name: t(selected.nameKey) })}>
+        <ul className="divide-y">
+          {selected.checks.map((check) => (
+            <CheckItem key={check.id} row={checkRow(check)} />
+          ))}
+        </ul>
+      </Disclosure>
+    </div>
   )
 }
 
 export function DesignsPanel() {
-  return <WhenReady render={({ solution, designs }) => <DesignList designs={designs} limits={solution.limits} />} />
+  return <WhenReady render={({ designs }) => <DesignTable designs={designs} />} />
 }

@@ -17,7 +17,7 @@ Bangkok plot → allowed envelope → at least two concept designs in 3D, each w
 - Internal units: metres, sqm, baht.
 - AI never computes an area, a limit or a cost. AI reads rules, reads briefs, explains trade-offs.
 - Free only. No paid APIs. Never call the Claude API from code, scripts or evals.
-- Tests first for anything numeric (bun test + fast-check, import from "bun:test"). Show the real test output when done. Browser tests are Playwright files named *.e2e.ts.
+- Tests first for anything numeric (bun test + fast-check, import from "bun:test"): rules, geometry, the solver, designs, site data and input validation. No unit tests for UI logic, map or 3D drawing, or text formatting; the Playwright files (*.e2e.ts) cover those. Show the real test output when done.
 - Commits: author "Kunal Roy Choudhury <71250874+kunalgoesbyken@users.noreply.github.com>", no co-author lines.
 - Ask before deleting files, force-pushing or changing a rule pack's verified values.
 - Never commit transcripts (*-session.md) or secrets.

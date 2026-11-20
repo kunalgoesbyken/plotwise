@@ -2,7 +2,7 @@
 
 import { edgeName } from '@/editor/map-features'
 import { useEditorState } from '@/editor/plot-store'
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert'
+import type { ReactNode } from 'react'
 import type { Bound, Range } from '@/rules'
 import { negate, ratioOpenSpace, stationDistance, type Limits, type UseLimit } from '@/solve'
 import { formatComparator, formatList, formatQuantity, type Quantity } from '@/text/format'
@@ -27,18 +27,24 @@ function rangeText({ min, max }: Range): string {
   return only ? bound(only, 'sqm') : t('range.any')
 }
 
+function Caution({ title, children }: { title?: string; children: ReactNode }) {
+  return (
+    <div role="note" className="border-l-2 border-road pl-3 text-xs leading-relaxed">
+      {title && <p className="font-semibold text-road-foreground">{title}</p>}
+      {children}
+    </div>
+  )
+}
+
 function BylawBanner({ solution }: Pick<Ready, 'solution'>) {
   const reading = solution.readings['bylaw-2569-scope']
   const question = PACK.questions.find((q) => q.id === 'bylaw-2569-scope')
   const cites = question?.readings.find((r) => r.id === reading)?.cites ?? []
   return (
-    <Alert role="note" className="border-road/50 bg-road/10">
-      <AlertTitle className="line-clamp-none text-road-foreground">{t('rules.bylaw.title')}</AlertTitle>
-      <AlertDescription className="text-xs text-foreground">
-        <p>{t(`rules.bylaw.${reading}`)}</p>
-        <Sources cites={cites} />
-      </AlertDescription>
-    </Alert>
+    <Caution title={t('rules.bylaw.title')}>
+      <p>{t(`rules.bylaw.${reading}`)}</p>
+      <Sources cites={cites} />
+    </Caution>
   )
 }
 
@@ -48,9 +54,9 @@ function EstimatedRoads() {
   const names = draft.corners.flatMap((c, i) => (c.edge.road && c.edge.estimated ? [edgeName(i, draft.corners.length)] : []))
   if (names.length === 0) return null
   return (
-    <Alert role="note" className="border-road/50 bg-road/10">
-      <AlertDescription className="text-xs text-foreground">{t('rules.estimated-roads', { edges: formatList(names) })}</AlertDescription>
-    </Alert>
+    <Caution>
+      <p>{t('rules.estimated-roads', { edges: formatList(names) })}</p>
+    </Caution>
   )
 }
 

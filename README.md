@@ -1,10 +1,14 @@
-# Plotwise
+<p align="center"><img src="src/app/icon.svg" width="72" height="72" alt="Plotwise logo: a plot outline with its road edge"></p>
 
-Bangkok plot feasibility in the browser. Draw a plot on the map, mark the roads it faces, pick a building type, and Plotwise shows the rules that apply, the allowed building envelope, and concept designs with pass/fail checklists, in 3D among the real surrounding buildings. Every change updates live.
+<h1 align="center">Plotwise</h1>
 
-**Live:** https://plotwise-ashy.vercel.app
+<p align="center">What can you build on a Bangkok plot? Draw it, mark its roads, and see the answer in numbers and in 3D.</p>
 
-Scope: zone ย.9 (very high-density residential) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels.
+<p align="center"><a href="https://plotwise-ashy.vercel.app"><b>plotwise-ashy.vercel.app</b></a></p>
+
+Plotwise walks a developer through three steps. **Plot**: find the site and trace its outline on the map. **Roads**: mark the edges that face a road and their widths. **Results**: the floor area the rules allow, concept designs compared side by side with pass/fail checklists, the rules that apply with their legal sources, and the allowed envelope in 3D among the real surrounding buildings. Every edit updates the results live, and the interface is in English throughout.
+
+Scope: the brown zone (very high-density residential, coded ย.9) of the Bangkok Comprehensive Plan B.E. 2556, for condominiums, offices and hotels.
 
 ## How it works
 
@@ -17,13 +21,13 @@ OpenStreetMap (Overpass) ─► /api/site ────────────�
 Photon (OSM place search) ─► /api/geocode ─► find a plot by address or place name
 ```
 
-1. **Rules are compiled, never typed.** `pointers/bkk-y9.json` points at a page, a line and a token in the text of each source PDF (`sources/`). `tools/compile-pack.ts` parses the Thai number at that spot (Thai digits and number words included) into `src/rules/packs/bkk-y9.json`. Every value keeps its citation: source, clause, page, line and the Thai quote. `tools/check-pack.ts` checks ranges, band gaps and overlaps, cross-source agreement and bonus caps, and fails on any undecided interpretation question.
+1. **Rules are compiled, never typed.** `pointers/bkk-y9.json` points at a page, a line and a token in the text of each source PDF (`sources/`). `tools/compile-pack.ts` parses the Thai number at that spot (Thai digits and number words included) into `src/rules/packs/bkk-y9.json`. Every value keeps its citation: source, clause, page, line and the Thai quote. The interface names each source in English with its page and line and links the official PDF; the Thai quote stays in the pack as the audit trail. `tools/check-pack.ts` checks ranges, band gaps and overlaps, cross-source agreement and bonus caps, and fails on any undecided interpretation question.
 2. **Interpretations are decided by a person.** Where the law is ambiguous, the pack holds a question with its candidate readings. The engine refuses to run until each one has a recorded decision. The Rules panel lists every decision in use with its sources.
 3. **Solve.** `src/solve` turns the plot and the pack into limits (FAR and maximum floor area, open space and permeable ground, use conditions, parking). It also produces per-edge setbacks that change with height: road setbacks by road width, neighbour setbacks, the height-to-road rule, and the 6 m high-rise distance. There are two envelopes, ordinary and high-rise, because Thai boundary setbacks apply to the whole building rather than floor by floor.
 4. **Geometry.** `src/geometry` builds each envelope from the real outline: a per-edge setback for any polygon (concave and multi-piece included), with tiers clipped by clipper2-ts. The envelope never encroaches on a setback; at rounded corners it can be up to 5 mm too cautious.
 5. **Designs.** `src/designs` generates podium + tower, slab and low-rise block concepts inside the envelope, aiming at the floor-area limit. Each comes with a checklist computed from its own geometry. Items the data cannot verify, such as the road network or the station distance, are marked "verify".
 6. **Site context.** `/api/site` fetches buildings, roads and mass-transit platforms and stations from OpenStreetMap through Overpass in one request, with failover across instances, and caches them for a day. Stations are searched in a wider box, the pack's station distance plus a margin beyond the site. Road widths, building heights and the distance to the nearest station platform are estimates, so the UI labels them and keeps them editable.
-7. **Place search.** `/api/geocode?q=` proxies the public [Photon](https://photon.komoot.io) geocoder, biased to Bangkok and limited to Thailand, and returns places with English and Thai labels. Answers are cached for a week to keep the load on the free service low.
+7. **Place search.** `/api/geocode?q=` proxies the public [Photon](https://photon.komoot.io) geocoder, biased to Bangkok and limited to Thailand, and returns English place names. Answers are cached for a week to keep the load on the free service low.
 
 The rule stepper (Plot → Setbacks → Road height → High-rise) rebuilds the envelope one rule group at a time, so you can see what each rule removes.
 
@@ -38,7 +42,7 @@ bun run dev            # http://localhost:3000
 
 | Task | Command |
 |---|---|
-| Unit and property tests | `bun test` |
+| Unit and property tests for the numbers: rules, geometry, solver, designs, site data, input validation | `bun test` |
 | Browser tests (local production build) | `bun run build && bun run e2e` |
 | Browser tests against the live site | `E2E_URL=https://plotwise-ashy.vercel.app bun run e2e` |
 | Real-GPU performance numbers (default headless is a software renderer) | add `E2E_GPU=1` |
@@ -52,7 +56,7 @@ Feature-first folders under `src/`:
 
 | Folder | Responsibility |
 |---|---|
-| `editor` | Drawing and editing the plot on MapLibre, road edges and widths, building type, URL state |
+| `editor` | The three-step panel, drawing and editing the plot on MapLibre, road edges and widths, building type, URL state |
 | `plot`, `geo` | The validated plot contract and the local metric projection |
 | `rules` | Rule pack types and loader |
 | `solve` | Rules → limits, setbacks by height, envelopes; `assumptions.ts` holds every engineering assumption with its source |
@@ -62,6 +66,7 @@ Feature-first folders under `src/`:
 | `geocode` | Place search through Photon: query validation, the cached proxy and a typed client |
 | `scene` | three.js / react-three-fiber view of the context, envelope and designs |
 | `feasibility` | Runs solve + designs once for every panel, plus the Rules and Designs panels and the rule stepper |
+| `ui` | shadcn/ui components on Radix, plus the panel section and disclosure built from them |
 | `text` | One typed message dictionary and the number formatter, ready for a Thai translation |
 
 `tools/` holds the rule compiler and checker, `pointers/` the rule pointers, and `sources/` the legal PDFs with their extracted text.

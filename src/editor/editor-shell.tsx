@@ -1,6 +1,7 @@
 'use client'
 
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { t } from '@/text/messages'
 import { Button } from '@/ui/button'
@@ -79,10 +80,7 @@ function useStep(state: EditorState, onMove: () => void) {
 function Wordmark() {
   return (
     <div className="flex items-center gap-2.5">
-      <svg viewBox="0 0 24 24" className="size-6" aria-hidden="true">
-        <path d="M4 8 L14 3 L21 9 L18 20 L6 19 Z" fill="none" className="stroke-primary" strokeWidth="1.75" strokeLinejoin="round" />
-        <path d="M6 19 L18 20" className="stroke-road" strokeWidth="3.5" strokeLinecap="round" />
-      </svg>
+      <Image src="/icon.svg" width={24} height={24} alt="" unoptimized priority />
       <span className="text-lg leading-none font-semibold tracking-tight">{t('app.name')}</span>
       <span className="text-sm leading-none text-muted-foreground">{t('app.city')}</span>
     </div>
@@ -119,7 +117,7 @@ function Results({ summary, rules, designs, tab, onTab, sceneId }: ResultsProps)
       <BuildingTypePicker />
       {summary && <div className={cn('sticky top-0 z-10 border-y bg-background px-(--pad) py-4', tab === 'view3d' && 'max-lg:hidden')}>{summary}</div>}
       <Tabs value={tab} onValueChange={(value) => isResultTab(value) && onTab(value)} className="gap-4 px-(--pad) pt-4 pb-5">
-        <TabsList aria-label={t('tab.label')} className="w-full">
+        <TabsList variant="line" aria-label={t('tab.label')} className="w-full justify-start border-b">
           <TabsTrigger value="designs">{t('tab.designs')}</TabsTrigger>
           <TabsTrigger value="rules">{t('tab.rules')}</TabsTrigger>
           <TabsTrigger value="view3d" aria-controls={sceneId} className="lg:hidden">

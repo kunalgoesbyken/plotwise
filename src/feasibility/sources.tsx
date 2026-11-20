@@ -10,7 +10,7 @@ const unique = (cites: readonly Cite[]) => [...new Map(cites.map((cite) => [cite
 function CiteItem({ cite }: { cite: Cite }) {
   const source = PACK.sources[cite.source]
   return (
-    <li className="flex flex-col gap-0.5 rounded-lg bg-muted px-3 py-2.5 text-xs">
+    <li className="flex flex-col gap-0.5 py-1.5 text-xs">
       <p className="font-medium text-foreground">{source?.name ?? cite.source}</p>
       <p className="text-muted-foreground">{t('source.location', { page: cite.page, line: cite.line })}</p>
       {source && (
@@ -33,7 +33,7 @@ export function Sources({ cites, className }: { cites: readonly Cite[]; classNam
   if (shown.length === 0) return null
   return (
     <Disclosure label={t('source.toggle', { count: shown.length })} className={className}>
-      <ul className="mt-1 mb-2 flex flex-col gap-2">
+      <ul className="mb-2 flex flex-col divide-y">
         {shown.map((cite) => (
           <CiteItem key={citeKey(cite)} cite={cite} />
         ))}
