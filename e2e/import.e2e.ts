@@ -105,7 +105,7 @@ test('one line of latitude,longitude pairs is detected too, and a broken pair is
 
 const PLACEHOLDERS = [
   { region: 'Bangkok', lines: ['100.5754, 13.7787', '100.5757, 13.7787', '100.5757, 13.7791'] },
-  { region: 'Mumbai', lines: ['72.8416, 19.1168', '72.8420, 19.1168', '72.8420, 19.1172'] },
+  { region: 'Mumbai', lines: ['72.9495, 19.1805', '72.9495, 19.1802', '72.9503, 19.1800'] },
   { region: 'Dubai', lines: ['55.2096, 25.0605', '55.2095, 25.0601', '55.2099, 25.0600'] },
   { region: 'Custom rules', lines: ['longitude, latitude', 'longitude, latitude', 'longitude, latitude'] },
 ] as const
