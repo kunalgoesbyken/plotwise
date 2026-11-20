@@ -226,7 +226,7 @@ const BOI_OFFICE_SERVICES_BAND: Band = { low: officeServices('low'), high: offic
 
 const BOI_OFFICE_SERVICES: AssumedRange = {
   ...BOI_OFFICE_SERVICES_BAND,
-  source: `${EDITABLE}; BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality ("The cost includes communal air conditioning, general electrics, and sanitary"), less the low-rise substructure and superstructure rates, which are unsourced Plotwise estimates, so a low-rise office totals the BOI range. BOI gives one range for every height: at the default rates a high-rise office totals ${band(buildingTotal(HIGH_RISE_STRUCTURE, BOI_OFFICE_SERVICES_BAND))} per m², above both the BOI range and RHLB's office range of THB 26,000 to 39,000, ${RHLB_COSTS}. ${BOI_COSTS}`,
+  source: `${EDITABLE}; BOI office (construction) ${band(BOI_OFFICE)} per m² for medium to high quality ("The cost includes communal air conditioning, general electrics, and sanitary"), less the low-rise substructure and superstructure rates, which are unsourced Plotwise estimates, so a low-rise office totals the BOI range. BOI gives one range for every height: at the default rates a high-rise office totals ${band(buildingTotal(HIGH_RISE_STRUCTURE, BOI_OFFICE_SERVICES_BAND))} per m², which extends above both the BOI range and RHLB's office range of THB 26,000 to 39,000, ${RHLB_COSTS}. ${BOI_COSTS}`,
 }
 
 const everyTier = (assumption: Assumption): PerTier<Assumption> => ({ cbd: assumption, cityFringe: assumption, suburban: assumption })
