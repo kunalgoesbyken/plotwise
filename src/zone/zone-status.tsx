@@ -28,8 +28,6 @@ function presentationOf(verdict: ZoneVerdict): Presentation {
         variant: 'destructive',
         text: t('zone.straddles', { parts: formatParts(verdict.parts), covered: verdict.covered }),
       }
-    case 'unsupported':
-      return { badge: t('zone.badge.not-covered'), variant: 'destructive', text: t('zone.unsupported', { parts: formatParts(verdict.parts) }) }
     case 'unknown':
       return { badge: t('zone.badge.unchecked'), variant: 'secondary', text: t(`zone.unknown.${verdict.reason}`) }
   }
@@ -66,12 +64,11 @@ export function ZoneStatus() {
 }
 
 export function ZoneHold() {
-  const { verdict, confirmable, confirm } = useZoneGate()
-  const refusal = verdict?.status === 'unsupported' ? t('zone.hold.unsupported') : t('zone.hold.refused')
+  const { confirmable, confirm } = useZoneGate()
   return (
     <section aria-label={t('zone.hold.label')} className="flex flex-col gap-3">
       <ZoneStatus />
-      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : refusal}</p>
+      <p className="text-sm leading-snug">{confirmable ? t('zone.hold.confirmable', { zone: REGION.zone.name }) : t('zone.hold.refused')}</p>
       {confirmable && (
         <Button size="sm" variant="outline" className="self-start" onClick={confirm}>
           {t('zone.hold.confirm')}

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'bun:test'
 import fc from 'fast-check'
 import type { LngLat } from '@/geo/projection'
-import { classifyShares, unknownVerdict, zoneRegionFor, ZONE_REGION_IDS } from './classify'
+import { classifyShares, unknownVerdict, zoneRegionFor } from './classify'
 import { ZONE_SOURCES } from './sources'
 
 const brown = 'ย.๙'
 const blue = 'ส.'
-const { bkk, nyc } = ZONE_SOURCES
+const { bkk } = ZONE_SOURCES
 
 const square = ([lng, lat]: LngLat): LngLat[] => [
   [lng, lat],
@@ -18,21 +18,10 @@ const square = ([lng, lat]: LngLat): LngLat[] => [
 describe('zoneRegionFor', () => {
   it('finds the region whose coverage holds the plot', () => {
     expect(zoneRegionFor(square([100.5755, 13.7789]))).toBe('bkk')
-    expect(zoneRegionFor(square([-73.9641, 40.7658]))).toBe('nyc')
   })
 
   it('finds no region for a plot outside every coverage', () => {
     expect(zoneRegionFor(square([77.59, 12.97]))).toBeUndefined()
-  })
-
-  it('never lets two regions claim the same plot', () => {
-    for (const a of ZONE_REGION_IDS) {
-      for (const b of ZONE_REGION_IDS.filter((id) => id !== a)) {
-        const [aw, as, ae, an] = ZONE_SOURCES[a].coverage
-        const [bw, bs, be, bn] = ZONE_SOURCES[b].coverage
-        expect(aw < be && bw < ae && as < bn && bs < an).toBe(false)
-      }
-    }
   })
 })
 
@@ -81,21 +70,5 @@ describe('classifyShares on the Bangkok layer', () => {
     const statusFor = (covered: number) => classifyShares(bkk, [{ code: brown, share: covered }, { code: blue, share: 1 - covered }]).status
     fc.assert(fc.property(fc.double({ min: 0.9901, max: 1, noNaN: true }), (covered) => expect(statusFor(covered)).toBe('inside')))
     fc.assert(fc.property(fc.double({ min: 0.02, max: 0.9899, noNaN: true }), (covered) => expect(statusFor(covered)).toBe('straddles')))
-  })
-})
-
-describe('classifyShares on the New York layer', () => {
-  it('names the district and holds it back, since Plotwise has no verified rules there', () => {
-    expect(classifyShares(nyc, [{ code: 'R7A', share: 1 }])).toEqual({ status: 'unsupported', parts: [{ zone: 'R7A', share: 1 }] })
-  })
-
-  it('shows the split of a plot across districts', () => {
-    expect(classifyShares(nyc, [{ code: 'C1-9', share: 0.4 }, { code: 'R8B', share: 0.6 }])).toEqual({
-      status: 'unsupported',
-      parts: [
-        { zone: 'R8B', share: 0.6 },
-        { zone: 'C1-9', share: 0.4 },
-      ],
-    })
   })
 })

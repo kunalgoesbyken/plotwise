@@ -2,9 +2,9 @@ import { describe, expect, it } from 'bun:test'
 import fc from 'fast-check'
 import type { LngLat } from '@/geo/projection'
 import fixture from './__fixtures__/nyc-lexington.arcgis.json'
+import { RECORDED_LAYER } from './__fixtures__/recorded-layer'
 import { parseZoneFeatures, type ZoneFeature } from './arcgis'
 import { zoneShares } from './shares'
-import { ZONE_SOURCES } from './sources'
 
 const WEST = 100.5755
 const SOUTH = 13.7789
@@ -88,8 +88,8 @@ describe('zoneShares', () => {
   })
 })
 
-describe('zoneShares on a recorded NYC response', () => {
-  const features = parseZoneFeatures(ZONE_SOURCES.nyc.layer, fixture)
+describe('zoneShares on a recorded ArcGIS response', () => {
+  const features = parseZoneFeatures(RECORDED_LAYER, fixture)
   const [west, south] = [-73.964096, 40.7658]
   const [dLng, dLat] = [0.00012, 0.00012]
   const straddling: LngLat[] = [

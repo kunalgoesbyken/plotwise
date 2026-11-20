@@ -10,7 +10,6 @@ export type ZoneVerdict =
   | { readonly status: 'inside'; readonly zone: string }
   | { readonly status: 'outside'; readonly zone: string; readonly covered: string }
   | { readonly status: 'straddles'; readonly parts: readonly ZonePart[]; readonly covered: string }
-  | { readonly status: 'unsupported'; readonly parts: readonly ZonePart[] }
   | { readonly status: 'unknown'; readonly reason: UnknownReason; readonly plan: Link | null }
 
 export function ringKey(ring: readonly LngLat[]): string {

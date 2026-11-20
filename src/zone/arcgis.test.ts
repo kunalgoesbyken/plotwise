@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
 import fixture from './__fixtures__/nyc-lexington.arcgis.json'
+import { RECORDED_LAYER } from './__fixtures__/recorded-layer'
 import { fetchZoneFeatures, parseZoneFeatures, zoneQueryUrl, ZoneServiceUnavailableError } from './arcgis'
 import { ZONE_SOURCES } from './sources'
 
-const { bkk, nyc } = ZONE_SOURCES
+const { bkk } = ZONE_SOURCES
 
 const counterClockwise: LngLat[] = [
   [100.5755, 13.7789],
@@ -37,8 +38,8 @@ describe('zoneQueryUrl', () => {
 })
 
 describe('parseZoneFeatures', () => {
-  it('reads the district codes and rings of a recorded NYC response', () => {
-    const features = parseZoneFeatures(nyc.layer, fixture)
+  it('reads the district codes and rings of a recorded ArcGIS response', () => {
+    const features = parseZoneFeatures(RECORDED_LAYER, fixture)
     expect(features.map(({ code }) => code)).toEqual(['R8B', 'C1-8X', 'C1-9', 'R8B'])
     expect(features[2].rings[0][0]).toEqual([-73.960399, 40.769191])
   })
@@ -51,32 +52,32 @@ describe('parseZoneFeatures', () => {
         { attributes: { ZONEDIST: 'R6' }, geometry: { rings: [[[0, 0], [1, 0], [1, 1]]] } },
       ],
     }
-    expect(parseZoneFeatures(nyc.layer, body).map(({ code }) => code)).toEqual(['R6'])
+    expect(parseZoneFeatures(RECORDED_LAYER, body).map(({ code }) => code)).toEqual(['R6'])
   })
 
   it('reads an empty answer as no features', () => {
-    expect(parseZoneFeatures(nyc.layer, { features: [] })).toEqual([])
+    expect(parseZoneFeatures(RECORDED_LAYER, { features: [] })).toEqual([])
   })
 
   it('surfaces the message of an ArcGIS error body', () => {
-    expect(() => parseZoneFeatures(nyc.layer, { error: { code: 400, message: 'Invalid query' } })).toThrow('Invalid query')
+    expect(() => parseZoneFeatures(RECORDED_LAYER, { error: { code: 400, message: 'Invalid query' } })).toThrow('Invalid query')
   })
 
   it('refuses a body that is not a feature list', () => {
-    expect(() => parseZoneFeatures(nyc.layer, { features: 'none' })).toThrow('unexpected response shape')
-    expect(() => parseZoneFeatures(nyc.layer, 'html')).toThrow('unexpected response shape')
+    expect(() => parseZoneFeatures(RECORDED_LAYER, { features: 'none' })).toThrow('unexpected response shape')
+    expect(() => parseZoneFeatures(RECORDED_LAYER, 'html')).toThrow('unexpected response shape')
   })
 })
 
 describe('fetchZoneFeatures', () => {
   it('returns the parsed features of a good answer', async () => {
-    const features = await fetchZoneFeatures(nyc.layer, counterClockwise, { fetchImpl: respondWith(() => jsonResponse(fixture)) })
+    const features = await fetchZoneFeatures(RECORDED_LAYER, counterClockwise, { fetchImpl: respondWith(() => jsonResponse(fixture)) })
     expect(features).toHaveLength(4)
   })
 
   it('reports a failing server as unavailable', async () => {
     const failing = respondWith(() => jsonResponse({}, { status: 503 }))
-    await expect(fetchZoneFeatures(nyc.layer, counterClockwise, { fetchImpl: failing })).rejects.toBeInstanceOf(ZoneServiceUnavailableError)
+    await expect(fetchZoneFeatures(RECORDED_LAYER, counterClockwise, { fetchImpl: failing })).rejects.toBeInstanceOf(ZoneServiceUnavailableError)
   })
 
   it('gives up on a server that does not answer within the timeout', async () => {
@@ -84,7 +85,7 @@ describe('fetchZoneFeatures', () => {
       (init) => new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))),
     )
     const started = performance.now()
-    await expect(fetchZoneFeatures(nyc.layer, counterClockwise, { fetchImpl: silent, timeoutMs: 30 })).rejects.toBeInstanceOf(
+    await expect(fetchZoneFeatures(RECORDED_LAYER, counterClockwise, { fetchImpl: silent, timeoutMs: 30 })).rejects.toBeInstanceOf(
       ZoneServiceUnavailableError,
     )
     expect(performance.now() - started).toBeLessThan(1_000)

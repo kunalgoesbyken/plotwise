@@ -14,7 +14,7 @@ export type ZoneGate = {
 
 const ZoneGateContext = createContext<ZoneGate | null>(null)
 
-const isRefused = (verdict: ZoneVerdict | null) => verdict?.status === 'outside' || verdict?.status === 'straddles' || verdict?.status === 'unsupported'
+const isRefused = (verdict: ZoneVerdict | null) => verdict?.status === 'outside' || verdict?.status === 'straddles'
 
 type ZoneGateProps = {
   readonly ring: readonly LngLat[] | null

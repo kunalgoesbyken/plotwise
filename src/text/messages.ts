@@ -27,6 +27,10 @@ const en = {
   'landing.title': ({ city }: { city: string }) => `Plotwise · What a ${city} plot can hold`,
   'landing.description': ({ city }: { city: string }) =>
     `Draw a plot in ${city}. See the floor area the rules allow, designs in 3D, what is left to check and a rough first cost.`,
+  'app.title': ({ city }: { city: string }) => `Plotwise · ${city} plot feasibility`,
+  'app.description': ({ city }: { city: string }) =>
+    `Trace a plot in ${city} and see the floor area the rules allow, concept designs in 3D, a pass / check / fail list and a rough first cost.`,
+  'share.image.alt': ({ city }: { city: string }) => `Plotwise: see what a ${city} plot can hold before you buy it`,
   'landing.nav.how': 'How it works',
   'landing.nav.faq': 'Questions',
   'landing.nav.code': 'Source',
@@ -191,7 +195,6 @@ const en = {
     `This plot is in the ${zone}. Plotwise covers only the ${covered} for now.`,
   'zone.straddles': ({ parts, covered }: { parts: string; covered: string }) =>
     `This plot spans more than one zone: ${parts}. Plotwise covers only the ${covered} for now, so the whole plot must lie inside it.`,
-  'zone.unsupported': ({ parts }: { parts: string }) => `This plot is in ${parts}. Plotwise has no verified rules for this zone.`,
   'zone.unknown.no-region': 'Plotwise has no zone data for this location, so it could not check the zone.',
   'zone.unknown.no-zone': 'The city plan maps no zone under all of this plot, so Plotwise could not check it.',
   'zone.unknown.unrecognised': 'The city plan uses a zone code Plotwise does not know, so it could not check the zone.',
@@ -201,7 +204,6 @@ const en = {
   'zone.hold.confirmable': ({ zone }: { zone: string }) =>
     `Plotwise's figures hold only in the ${zone}. Check the plot on the city plan, then confirm to see the floor area, designs and money.`,
   'zone.hold.refused': 'Plotwise shows no floor area, designs or money for a plot outside the zone it covers.',
-  'zone.hold.unsupported': 'Plotwise has no verified rules for this zone, so it shows no floor area, designs or money for this plot.',
   'zone.hold.confirm': 'I checked: the plot is in this zone',
   'zone.hold.panel': 'Results appear once the zone is confirmed.',
 

@@ -1,6 +1,7 @@
 import { REGIONS } from '@/region/regions'
 import { loadPack } from '@/rules'
 import type { Bbox } from '@/site/bbox'
+import { BMA_LAYER_ORIGIN } from './layer-origin'
 
 export type ZoneEntry = {
   readonly sourceCode: string
@@ -13,9 +14,7 @@ export type ArcGisLayer = {
   readonly zoneField: string
 }
 
-export type ZoneNaming =
-  | { readonly kind: 'listed'; readonly zones: readonly ZoneEntry[]; readonly coveredCode: string }
-  | { readonly kind: 'verbatim' }
+export type ZoneNaming = { readonly zones: readonly ZoneEntry[]; readonly coveredCode: string }
 
 export type Link = { readonly name: string; readonly url: string }
 
@@ -57,35 +56,22 @@ const BANGKOK_ZONES: readonly ZoneEntry[] = [
   { sourceCode: 'อ.๓', packCode: 'อ.3', name: 'pale-orange zone 3 (industrial)' },
 ]
 
+const BMA_LAYER_URL = `${BMA_LAYER_ORIGIN}/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8`
+
 export const ZONE_SOURCES = {
   bkk: {
     publisher: 'Bangkok Metropolitan Administration (BMA), City Planning and Urban Development Department',
     plan: REGIONS.bkk.cityPlan,
     layer: {
-      url: 'https://cityplangis.bangkok.go.th/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8',
+      url: BMA_LAYER_URL,
       zoneField: 'LUP_ZONE',
     },
     licence: {
       summary: 'The BMA publishes this ArcGIS REST layer without licence text, so Plotwise queries it live, stores no copy and shows only the zone name.',
-      url: 'https://cityplangis.bangkok.go.th/arcgis/rest/services/LanduseMonitor/comprehensiveplan_2556/MapServer/8',
+      url: BMA_LAYER_URL,
     },
     coverage: [100.326, 13.485, 100.94, 13.953],
-    naming: { kind: 'listed', zones: BANGKOK_ZONES, coveredCode: loadPack(REGIONS.bkk.packId).zone.code },
-  },
-  nyc: {
-    publisher: 'NYC Department of City Planning, Technical Review Division',
-    plan: { name: 'NYC ZoLa zoning map', url: 'https://zola.planning.nyc.gov' },
-    layer: {
-      url: 'https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/nyzd/FeatureServer/0',
-      zoneField: 'ZONEDIST',
-    },
-    licence: {
-      summary:
-        'NYC Open Data datasets are a public resource available without restriction or licensing requirements (Technical Standards Manual, section 2.3.2). The DCP provides this dataset for information only and does not warrant it for any particular use.',
-      url: 'https://www.nyc.gov/content/dam/nycgov/opendata/downloads/open-data-coordinators/NYC_OpenData_TechnicalStandardsManual.pdf',
-    },
-    coverage: [-74.2591, 40.4774, -73.7004, 40.9176],
-    naming: { kind: 'verbatim' },
+    naming: { zones: BANGKOK_ZONES, coveredCode: loadPack(REGIONS.bkk.packId).zone.code },
   },
 } satisfies Record<string, ZoneSource>
 

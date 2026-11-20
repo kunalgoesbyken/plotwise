@@ -1,17 +1,8 @@
 import { describe, expect, it } from 'bun:test'
 import type { LngLat } from '@/geo/projection'
-import fixture from './__fixtures__/nyc-lexington.arcgis.json'
 import { ZONE_ANSWER_MEMORY_MS, ZONE_UNREACHABLE_MEMORY_MS } from './assumptions'
 import { createZoneLookup } from './lookup'
-
-const nycPlot: LngLat[] = [
-  [-73.96355, 40.76575],
-  [-73.96345, 40.76575],
-  [-73.96345, 40.76585],
-  [-73.96355, 40.76585],
-]
-
-const otherNycPlot: LngLat[] = nycPlot.map(([lng, lat]) => [lng, lat + 0.0001])
+import { ZONE_SOURCES } from './sources'
 
 const bangkokPlot: LngLat[] = [
   [100.5755, 13.7789],
@@ -19,6 +10,16 @@ const bangkokPlot: LngLat[] = [
   [100.5759, 13.7792],
   [100.5755, 13.7792],
 ]
+
+const otherBangkokPlot: LngLat[] = bangkokPlot.map(([lng, lat]) => [lng, lat + 0.0001])
+
+const BROWN_ZONE = 'ย.๙'
+const BLUE_ZONE = 'ส.'
+const around = (lng: number, lat: number) => [[lng - 0.01, lat - 0.01], [lng - 0.01, lat + 0.01], [lng + 0.01, lat + 0.01], [lng + 0.01, lat - 0.01], [lng - 0.01, lat - 0.01]]
+
+const layerAnswer = (code: string) => ({
+  features: [{ attributes: { [ZONE_SOURCES.bkk.layer.zoneField]: code }, geometry: { rings: [around(100.5757, 13.779)] } }],
+})
 
 const bangalorePlot: LngLat[] = [
   [77.59, 12.97],
@@ -35,7 +36,7 @@ function server(respond: () => Promise<Response>) {
   return { calls, fetchImpl }
 }
 
-const answer = () => Promise.resolve(Response.json(fixture))
+const answer = (code: string) => () => Promise.resolve(Response.json(layerAnswer(code)))
 const down = () => Promise.resolve(Response.json({}, { status: 503 }))
 
 function clock(start = 1_000) {
@@ -44,31 +45,30 @@ function clock(start = 1_000) {
 }
 
 describe('zone lookup', () => {
-  it('reads a New York plot against the New York layer and names the district', async () => {
-    const { calls, fetchImpl } = server(answer)
-    const verdict = await createZoneLookup({ fetchImpl })(nycPlot)
-    expect(verdict.status).toBe('unsupported')
-    expect(verdict).toMatchObject({ parts: [{ zone: 'C1-9' }] })
+  it('reads a Bangkok plot against the BMA layer and names the zone', async () => {
+    const { calls, fetchImpl } = server(answer(BROWN_ZONE))
+    const verdict = await createZoneLookup({ fetchImpl })(bangkokPlot)
+    expect(verdict).toEqual({ status: 'inside', zone: 'brown zone 9 (very high-density residential)' })
     expect(calls).toHaveLength(1)
-    expect(calls[0].startsWith('https://services5.arcgis.com/')).toBe(true)
+    expect(calls[0].startsWith(ZONE_SOURCES.bkk.layer.url)).toBe(true)
   })
 
   it('says it has no zone data for a place with no zone source, without asking any server', async () => {
-    const { calls, fetchImpl } = server(answer)
+    const { calls, fetchImpl } = server(answer(BROWN_ZONE))
     const verdict = await createZoneLookup({ fetchImpl })(bangalorePlot)
     expect(verdict).toEqual({ status: 'unknown', reason: 'no-region', plan: null })
     expect(calls).toHaveLength(0)
   })
 
   it('answers a repeated check of the same plot from memory, until the answer goes stale', async () => {
-    const { calls, fetchImpl } = server(answer)
+    const { calls, fetchImpl } = server(answer(BROWN_ZONE))
     const time = clock()
     const lookup = createZoneLookup({ fetchImpl, now: time.now })
-    await lookup(nycPlot)
-    await lookup(nycPlot)
+    await lookup(bangkokPlot)
+    await lookup(bangkokPlot)
     expect(calls).toHaveLength(1)
     time.advance(ZONE_ANSWER_MEMORY_MS.value + 1)
-    await lookup(nycPlot)
+    await lookup(bangkokPlot)
     expect(calls).toHaveLength(2)
   })
 
@@ -77,21 +77,12 @@ describe('zone lookup', () => {
     const time = clock()
     const lookup = createZoneLookup({ fetchImpl, now: time.now })
     const expected = { status: 'unknown', reason: 'unreachable' }
-    expect(await lookup(nycPlot)).toMatchObject(expected)
-    expect(await lookup(otherNycPlot)).toMatchObject(expected)
+    expect(await lookup(bangkokPlot)).toMatchObject(expected)
+    expect(await lookup(otherBangkokPlot)).toMatchObject(expected)
     expect(calls).toHaveLength(1)
     time.advance(ZONE_UNREACHABLE_MEMORY_MS.value + 1)
-    await lookup(otherNycPlot)
+    await lookup(otherBangkokPlot)
     expect(calls).toHaveLength(2)
-  })
-
-  it('keeps one region being down from blocking another', async () => {
-    const { fetchImpl } = server(down)
-    const lookup = createZoneLookup({ fetchImpl })
-    await lookup(nycPlot)
-    const { fetchImpl: bangkokServer } = server(answer)
-    const bangkok = createZoneLookup({ fetchImpl: bangkokServer })
-    expect(await bangkok(bangkokPlot)).toMatchObject({ status: 'unknown', reason: 'no-zone' })
   })
 
   it('does not remember a check the caller cancelled as an outage', async () => {
@@ -99,10 +90,10 @@ describe('zone lookup', () => {
       new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener('abort', () => reject(init.signal?.reason)))
     const lookup = createZoneLookup({ fetchImpl: ((_url: string, init?: RequestInit) => respond(init)) as typeof fetch })
     const controller = new AbortController()
-    const pending = lookup(nycPlot, controller.signal)
+    const pending = lookup(bangkokPlot, controller.signal)
     controller.abort()
     await expect(pending).rejects.toBeDefined()
-    respond = answer
-    expect((await lookup(otherNycPlot)).status).toBe('unsupported')
+    respond = answer(BLUE_ZONE)
+    expect((await lookup(otherBangkokPlot)).status).toBe('outside')
   })
 })

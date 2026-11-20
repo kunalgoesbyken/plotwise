@@ -1,4 +1,4 @@
-export { ZONE_REGION_IDS, zoneRegionFor } from './classify'
+export { zoneRegionFor } from './classify'
 export { lookupZone } from './lookup'
 export { ZONE_SOURCES, type ZoneRegionId, type ZoneSource } from './sources'
 export type { ZoneVerdict } from './verdict'
