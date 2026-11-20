@@ -12,7 +12,8 @@ const isBuildingType = (value: string): value is BuildingType => (BUILDING_TYPES
 export function BuildingTypePicker() {
   const store = useEditorStore()
   const { draft } = useEditorState()
-  const types = loadPack(useRegion().packId).buildingTypes ?? BUILDING_TYPES
+  const { packId, buildingNames } = useRegion()
+  const types = loadPack(packId).buildingTypes ?? BUILDING_TYPES
   return (
     <PanelSection title={t('building-type.title')}>
       <ToggleGroup
@@ -25,7 +26,7 @@ export function BuildingTypePicker() {
       >
         {types.map((type) => (
           <ToggleGroupItem key={type} value={type} className="w-full data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
-            {t(`building.${type}`)}
+            {buildingNames[type]}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>

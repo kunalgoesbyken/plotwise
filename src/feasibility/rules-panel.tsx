@@ -255,8 +255,8 @@ function exemptionText(use: Extract<UseLimit, { kind: 'restricted' }>, names: re
 function Use({ plot, solution }: Pick<Ready, 'plot' | 'solution'>) {
   const { use } = solution.limits
   const station = stationDistance(solution.pack)
-  const { areaUnit } = useRegion()
-  const title = t('rules.group.use', { building: t(`building.${plot.buildingType}`) })
+  const { areaUnit, buildingNames } = useRegion()
+  const title = t('rules.group.use', { building: buildingNames[plot.buildingType] })
   if (use.kind === 'permitted' || !station) {
     return (
       <LimitGroup title={title}>

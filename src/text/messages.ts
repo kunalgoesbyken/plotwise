@@ -129,6 +129,7 @@ const en = {
   'building.condo': 'Condominium',
   'building.office': 'Office',
   'building.hotel': 'Hotel',
+  'building.apartments': 'Residential (apartments)',
 
   'shell.panel': 'Plot settings',
   'shell.steps': 'Steps',
