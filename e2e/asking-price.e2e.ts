@@ -1,11 +1,14 @@
 import type { Page } from '@playwright/test'
-import { exampleFragment } from '../src/editor/plot-url'
+import { encodePlot, exampleFragment } from '../src/editor/plot-url'
+import { MAX_ASKING_PRICE } from '../src/finance/asking-price'
 import { rangeText } from '../src/finance/figures'
 import { formatMoney } from '../src/finance/format-money'
+import { encodeAssumptions } from '../src/finance/url'
 import { exampleFigures } from '../src/landing/example'
+import { EXAMPLE_PLOT } from '../src/plot/example-plot'
 import { MONEY_REGIONS } from '../src/solve'
 import { openExample } from './app-fixtures'
-import { READY_TIMEOUT, designTable, goTo, hashParams, moneyRegion, openApp, showTab, summary } from './support/app'
+import { READY_TIMEOUT, designTable, goTo, hashParams, moneyRegion, openApp, openResults, showTab, summary } from './support/app'
 import { mockApp } from './support/site'
 import { expect, test } from './support/test'
 
@@ -19,6 +22,10 @@ const UNDER = Math.round(landValue.low * 0.75)
 const WITHIN_TEXT = `Asking ${money(WITHIN)} → within range.`
 const OVER_TEXT = `Asking ${money(OVER)} → ${money(OVER - landValue.high)} over.`
 const UNDER_TEXT = `Asking ${money(UNDER)} → ${money(landValue.low - UNDER)} under.`
+
+const INVALID_TEXT = `Enter a price above zero, up to ${money(MAX_ASKING_PRICE)}, or leave it blank.`
+
+const LOSS_MAKING_SALE_PRICE = 1_000
 
 const MUMBAI_ASKING = 500_000_000
 
@@ -61,7 +68,7 @@ test.describe('the Bangkok example', () => {
     await expect(verdict(opened)).toHaveText(OVER_TEXT)
   })
 
-  test('a blank asking price shows no verdict and leaves the link, and an unreadable one is refused', async ({ page }) => {
+  test('a blank asking price shows no verdict and leaves the link', async ({ page }) => {
     await expect(verdict(page)).toHaveCount(0)
     await askingField(page).fill(String(WITHIN))
     await expect(verdict(page)).toHaveText(WITHIN_TEXT)
@@ -69,10 +76,22 @@ test.describe('the Bangkok example', () => {
     await askingField(page).fill('')
     await expect(verdict(page)).toHaveCount(0)
     await expect.poll(() => hashParams(page).ask).toBeUndefined()
+  })
 
-    await askingField(page).fill('0')
-    await expect(askingField(page)).toHaveAttribute('aria-invalid', 'true')
-    await expect(verdict(page)).toHaveCount(0)
+  test('a zero or too large asking price says what to enter, keeps saying it after leaving the field, and keeps the last price in the link', async ({ page }) => {
+    await askingField(page).fill(String(WITHIN))
+    await expect(verdict(page)).toHaveText(WITHIN_TEXT)
+
+    for (const entry of ['0', String(MAX_ASKING_PRICE * 2)]) {
+      await askingField(page).fill(entry)
+      await expect(askingField(page)).toHaveAttribute('aria-invalid', 'true')
+      await expect(summary(page).getByText(INVALID_TEXT)).toBeVisible()
+      await expect(verdict(page)).toHaveCount(0)
+      await askingField(page).blur()
+      await expect(askingField(page)).toHaveValue(entry)
+      await expect(summary(page).getByText(INVALID_TEXT)).toBeVisible()
+      expect(hashParams(page).ask).toBe(String(WITHIN))
+    }
   })
 
   test('the print summary shows the verdict', async ({ page }) => {
@@ -80,6 +99,15 @@ test.describe('the Bangkok example', () => {
     await expect(verdict(page)).toHaveText(OVER_TEXT)
     await page.emulateMedia({ media: 'print' })
     await expect(page.getByRole('article').getByText(OVER_TEXT)).toBeVisible()
+  })
+})
+
+test('a design that supports no land value at the entered prices says the asking price is too high, not a margin', async ({ page }) => {
+  await mockApp(page)
+  const prices = encodeURIComponent(encodeAssumptions({ 'salePrice.condo': LOSS_MAKING_SALE_PRICE })!)
+  await openResults(page, `${encodePlot(EXAMPLE_PLOT)}&assume=${prices}&ask=${WITHIN}`)
+  await expect(verdict(page)).toHaveText(`Asking ${money(WITHIN)} → too high: at these prices and costs this design supports no land value.`, {
+    timeout: READY_TIMEOUT,
   })
 })
 
