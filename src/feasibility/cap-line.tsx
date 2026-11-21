@@ -1,5 +1,5 @@
-import type { CapFigures } from '@/designs'
-import { formatQuantity } from '@/text/format'
+import type { CapFigures, Ceiling } from '@/designs'
+import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import type { AreaUnit } from '@/units/area'
@@ -18,6 +18,13 @@ export function capSentence(figures: CapFigures, unit: AreaUnit): string {
         buildable: area(figures.buildableSqm),
       })
   }
+}
+
+const ceilingSentence = ({ gfaSqm, purchases }: Ceiling, unit: AreaUnit) =>
+  t('cap.up-to', { area: formatQuantity(gfaSqm, unit), purchases: formatList(purchases.map((kind) => t(`cap.up-to.${kind}`))) })
+
+export function CeilingLine({ ceiling, unit, className }: { ceiling: Ceiling; unit: AreaUnit; className?: string }) {
+  return <p className={cn('text-sm leading-snug font-medium', className)}>{ceilingSentence(ceiling, unit)}</p>
 }
 
 export function CapLine({ figures, unit, className }: { figures: CapFigures; unit: AreaUnit; className?: string }) {

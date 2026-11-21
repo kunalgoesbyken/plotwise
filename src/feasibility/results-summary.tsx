@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { useRegion } from '@/editor/plot-store'
 import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
-import { CapLine } from './cap-line'
+import { CapLine, CeilingLine } from './cap-line'
 import { FailureNotice } from './failure-notice'
 import { useFeasibility } from './feasibility-provider'
 import { limiterText } from './limiter-text'
@@ -13,7 +13,7 @@ import { ShareActions } from './share-actions'
 import { VerificationNote } from './verification-note'
 
 export function ResultsSummary({ children }: { children?: ReactNode }) {
-  const { result, design, cap } = useFeasibility()
+  const { result, design, cap, ceiling } = useFeasibility()
   const { areaUnit } = useRegion()
   if (!result) return <SummarySkeleton />
   if (result.status === 'failed') return <FailureNotice failure={result} />
@@ -33,6 +33,7 @@ export function ResultsSummary({ children }: { children?: ReactNode }) {
         <span className="text-sm text-muted-foreground">{t('design.name', design.name)}</span>
       </p>
       <CapLine figures={cap} unit={areaUnit} className="mt-1" />
+      {ceiling && <CeilingLine ceiling={ceiling} unit={areaUnit} className="mt-1" />}
       <VerificationNote solution={solution} className="mt-1" />
       {cap.kind !== 'reached' && (
         <p key={design.limitedBy} className="mt-1 animate-flash rounded text-xs leading-snug text-muted-foreground">

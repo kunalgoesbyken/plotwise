@@ -12,7 +12,11 @@ export type FarChoice = { readonly mode: 'standard' } | { readonly mode: 'bonus'
 
 export const STANDARD: FarChoice = { mode: 'standard' }
 
-export const purchaseRatios = (choice: FarChoice): PurchaseRatios => (choice.mode === 'purchased' ? choice.ratios : {})
+const AS_MUCH_AS_ALLOWED: Readonly<Record<FarPurchase['kind'], number>> = { premium: Infinity, transferableRights: Infinity, fungible: Infinity }
+
+export const EVERY_PURCHASE: FarChoice = { mode: 'purchased', ratios: AS_MUCH_AS_ALLOWED }
+
+export const purchaseRatios =(choice: FarChoice): PurchaseRatios => (choice.mode === 'purchased' ? choice.ratios : {})
 
 export type FarCap = {
   readonly mode: FarMode

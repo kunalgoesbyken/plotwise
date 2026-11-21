@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, use, useCallback, useMemo, useState, type ReactNode } from 'react'
-import { capBreakdown, capOf, rank, shownOption, type CapFigures, type Design, type TypologyId } from '@/designs'
+import { capBreakdown, capOf, purchaseCeiling, rank, shownOption, type CapFigures, type Ceiling, type Design, type TypologyId } from '@/designs'
 import { usePlot, useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
 import type { Plot } from '@/plot/plot'
@@ -18,6 +18,7 @@ export type FeasibilityView = {
   readonly result: Feasibility | null
   readonly design: Design | null
   readonly cap: CapFigures | null
+  readonly ceiling: Ceiling | null
   readonly envelope: Envelope | null
   readonly carving: CarvingRules | null
   readonly layers: EnvelopeLayers | null
@@ -62,17 +63,19 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const ready = result?.status === 'ready' ? result : null
   const ranked = useMemo(() => (ready ? rank(ready.designs) : []), [ready])
   const breakdown = useMemo(() => (ready ? capBreakdown(ready.solution, ready.designs) : null), [ready])
+  const plotCeiling = useMemo(() => (ready ? purchaseCeiling(ready.solution, ready.designs) : null), [ready])
   const shown = shownOption(ranked, designId)
   const design = shown?.design ?? null
   const cap = useMemo(() => (shown?.standing.kind === 'best' ? breakdown : shown && ready && capOf(shown.design, ready.solution)), [shown, ready, breakdown])
+  const ceiling = shown?.standing.kind === 'best' ? plotCeiling : null
   const envelope = ready ? (ready.solution.envelopes.find((e) => e.kind === design?.envelope) ?? ready.solution.envelopes.at(-1) ?? null) : null
   const solution = ready?.solution
   const carving = useMemo(() => (solution ? carvingRules(solution.pack) : null), [solution])
   const strip = useMemo(() => (solution?.widening ? wideningStrip(solution.widening, solution.site.ring) : NO_STRIP), [solution])
   const layers = useMemo(() => (envelope && solution && carving ? envelopeLayers(envelope, solution.site, step, carving) : null), [envelope, solution, step, carving])
   const view = useMemo(
-    () => ({ pack, plot, result, design, cap, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy, selectDesign: setDesignId, chooseStep: setStep }),
-    [pack, plot, result, design, cap, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy],
+    () => ({ pack, plot, result, design, cap, ceiling, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy, selectDesign: setDesignId, chooseStep: setStep }),
+    [pack, plot, result, design, cap, ceiling, envelope, carving, layers, strip, farBonus, setFarBonus, far, buy],
   )
   return <FeasibilityContext value={view}>{children}</FeasibilityContext>
 }

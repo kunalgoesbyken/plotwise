@@ -4,7 +4,7 @@ import type { DegreeOrder, UtmOrder } from '@/import/types'
 import type { LengthUnit } from '@/import/units'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import type { AreaTerms, RulesSource } from '@/region/regions'
-import type { SourceLanguage } from '@/rules'
+import type { FarPurchase, SourceLanguage } from '@/rules'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
@@ -40,7 +40,8 @@ type EngineMessages = Record<`check.${Exclude<CheckId, RatioCheckId>}`, string> 
   Record<`verification.${Exclude<RulesSource, 'draftPack'>}` | `region.${RulesSource}` | `limits.title.${RulesSource}` | `limits.intro.${RulesSource}`, string> &
   Record<`import.unit.${LengthUnit}`, string> &
   Record<`import.order.${DegreeOrder | UtmOrder}`, string> &
-  Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
+  Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string> &
+  Record<`cap.up-to.${FarPurchase['kind']}`, string>
 
 const en = {
   'app.name': 'Plotwise',
@@ -637,6 +638,10 @@ const en = {
   'cap.loss': ({ limiter, area }: Area & { limiter: string }) => `${limiter} −${area}`,
   'cap.steps': ({ cap, losses, buildable }: { cap: string; losses: readonly string[]; buildable: string }) =>
     `${[`Legal cap ${cap}`, ...losses, `${buildable} buildable`].join(' → ')}.`,
+  'cap.up-to': ({ area, purchases }: Area & { purchases: string }) => `Up to ${area} if you buy ${purchases}.`,
+  'cap.up-to.premium': 'premium FSI',
+  'cap.up-to.transferableRights': 'TDR',
+  'cap.up-to.fungible': 'fungible area',
 
   'money.title': 'Areas and first cost',
   'money.estimated': 'Estimated',

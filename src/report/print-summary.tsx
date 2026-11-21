@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import { rank, type Design } from '@/designs'
 import { useRegion } from '@/editor/plot-store'
-import { CapLine } from '@/feasibility/cap-line'
+import { CapLine, CeilingLine } from '@/feasibility/cap-line'
 import { checkLabel } from '@/feasibility/check-label'
 import type { Region } from '@/region/regions'
 import { tally } from '@/feasibility/checklist'
@@ -116,7 +116,7 @@ function useLinkAtPrint() {
 }
 
 export function PrintSummary() {
-  const { result, design, cap } = useFeasibility()
+  const { result, design, cap, ceiling } = useFeasibility()
   const finance = useFinance()
   const { askingPrice } = useAssumptions()
   const region = useRegion()
@@ -145,6 +145,7 @@ export function PrintSummary() {
           <h2 className="text-sm font-semibold">{t('design.name', design.name)}</h2>
           <p className="text-xl font-semibold">{t('report.buildable', { area: formatQuantity(design.metrics.gfaSqm, area) })}</p>
           <CapLine figures={cap} unit={area} />
+          {ceiling && <CeilingLine ceiling={ceiling} unit={area} />}
           <p className="mb-2 text-xs text-muted-foreground">{t('report.plot', { area: formatQuantity(site.areaSqm, area) })}</p>
           <DesignFacts design={design} finance={finance} area={area} />
           {askingPrice !== null && <p className="mt-2 text-sm font-medium">{askingText(askingPrice, finance, design)}</p>}
