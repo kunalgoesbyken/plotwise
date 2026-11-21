@@ -1,4 +1,6 @@
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
+import { formatNumber, formatQuantity } from '@/text/format'
+import { t } from '@/text/messages'
 import { SQM_PER_SQFT } from '@/units/area'
 import type { Interpretations, QuestionId } from './interpretations'
 
@@ -459,7 +461,7 @@ const DUBAI_APARTMENT_GROSS_SQM = ASSUMPTIONS.condoUnitSqm.value / ASSUMPTIONS.n
 
 export const DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE: Assumption = {
   value: DUBAI_APARTMENT_GROSS_SQM,
-  source: `Parking from the Trakhees regulations the plan refers to: Trakhees (Ports, Customs and Free Zone Corporation), Building Regulation Design Guidelines, Architecture Book (Blue Code), February 2021, Section 15.3.1(c) Apartments: "One parking space for each apartment (studio or single bedroom) up to 150.0 square meters floor area", https://accreditation.trakhees.ae/regulations/BLUE_2021_FEB/files/basic-html/page143.html, fetched 2026-11-21. The rule counts apartments, so it is entered as floor area per space using the apartment these designs assume (${ASSUMPTIONS.condoUnitSqm.value} m² at ${ASSUMPTIONS.netToGross.condo.value * 100}% net to gross, ${Number(DUBAI_APARTMENT_GROSS_SQM.toFixed(1))} m² of floor area per apartment); larger apartments of two or more bedrooms need 1.5 to 3 spaces each under the same section`,
+  source: `Parking from the Trakhees regulations the plan refers to: Trakhees (Ports, Customs and Free Zone Corporation), Building Regulation Design Guidelines, Architecture Book (Blue Code), February 2021, Section 15.3.1(c) Apartments: "One parking space for each apartment (studio or single bedroom) up to 150.0 square meters floor area", https://accreditation.trakhees.ae/regulations/BLUE_2021_FEB/files/basic-html/page143.html, fetched 2026-11-21. The rule counts apartments, so it is entered as floor area per space using the apartment these designs assume (${formatQuantity(ASSUMPTIONS.condoUnitSqm.value, 'sqm')} at ${formatQuantity(ASSUMPTIONS.netToGross.condo.value, 'percent')} net to gross, ${t('unit.sqm', { number: formatNumber(DUBAI_APARTMENT_GROSS_SQM, 'ratio') })} of floor area per apartment); larger apartments of two or more bedrooms need 1.5 to 3 spaces each under the same section`,
 }
 
 export const DUBAI_EXAMPLE_LIMITS_SOURCE = `Setbacks and plot coverage copied from a public Nakheel affection plan, not this plot’s own: Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only, so height in metres stays blank, and for parking says "Refer to Trakhees Building & Design Regulations in parallel with the master developer's DCR". Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20. ${DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source}`
