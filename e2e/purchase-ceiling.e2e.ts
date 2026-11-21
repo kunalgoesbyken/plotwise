@@ -47,12 +47,15 @@ test('the Mumbai example says how much it could build with every purchase its ro
   await expect(summary(page).locator('p', { hasText: ceilingLine })).toHaveText(ceilingLine)
 })
 
-test('the line goes once everything is bought, and under a design that is not the headline', async ({ page }) => {
+test('the line goes once everything is bought', async ({ page }) => {
   const bought = withEveryPurchase(solution)
   expect(purchaseCeiling(bought, designs(bought))).toBeNull()
   await openMumbaiExample(page, `${exampleHash}&buy-mum=${encodePurchase(everyPurchase)}`)
   await expect(summary(page)).toContainText(t('cap.reached', { area: formatQuantity(bought.farCap.maxGfaSqm, unit) }))
   await expect(summary(page)).not.toContainText(ceilingLine)
+})
+
+test('the line goes under a design that is not the headline', async ({ page }) => {
   await openMumbaiExample(page)
   const other = rank(options).find(({ standing }) => standing.kind !== 'best')!.design
   await designTable(page).getByRole('button', { name: t('design.show', { name: t('design.name', other.name) }) }).click()
