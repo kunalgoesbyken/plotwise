@@ -536,8 +536,8 @@ const JVC_AUTHORITY =
   'the plot lies in Jumeirah Village Circle (JVC) District 11 on OpenStreetMap, https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=25.0603&lon=55.2097, and Trakhees certified a JVC residential building: "Residential building in JVC10WMRA006, Jumeirah village circle" "has been awarded with EHS Certification established by EHS TRAKHEES", https://pcfc.ae/en/Rules%20and%20Regulations/Trakhees/Civil%20Engineering%20Department/Permits%20(Green%20Buildings)/Fact%20Sheets/Rambyk.pdf'
 
 export const DUBAI_EXAMPLE_HOME_SQM: Assumption = {
-  value: 830 * SQM_PER_SQFT,
-  source: `Property Finder, one-bedroom apartments for sale in Jumeirah Village Circle, "Unit sizes typically range from 560 to 980 sq ft" and, for District 11, where the plot lies on OpenStreetMap: "District 11 suits buyers who want slightly more interior space, with units averaging 830 sq ft", the advertised size of listings, read here as the home's net area, converted at 1 sq ft = ${SQM_PER_SQFT} m², ${PROPERTY_FINDER_JVC_ONE_BEDROOMS}, ${FETCHED}`,
+  value: Math.round(830 * SQM_PER_SQFT),
+  source: `Property Finder, one-bedroom apartments for sale in Jumeirah Village Circle, "Unit sizes typically range from 560 to 980 sq ft" and, for District 11, where the plot lies on OpenStreetMap: "District 11 suits buyers who want slightly more interior space, with units averaging 830 sq ft", the advertised size of listings, read here as the home's net area, converted at 1 sq ft = ${SQM_PER_SQFT} m² and rounded to a whole square metre,${PROPERTY_FINDER_JVC_ONE_BEDROOMS}, ${FETCHED}`,
 }
 
 export const DUBAI_EXAMPLE_PARKING_PER_HOME: Assumption = {

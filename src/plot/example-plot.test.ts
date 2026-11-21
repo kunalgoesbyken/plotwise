@@ -91,7 +91,7 @@ describe('example plots', () => {
   it('sets the Dubai example’s parking from the Trakhees rule of one space for each one-bedroom apartment, over a home of the size listed for its community', () => {
     const { solution, designs } = solved('dxb')
     expect(DUBAI_EXAMPLE_PARKING_PER_HOME.value).toBe(1)
-    expect(DUBAI_EXAMPLE_HOME_SQM.value).toBeCloseTo(830 * SQM_PER_SQFT, 9)
+    expect(DUBAI_EXAMPLE_HOME_SQM.value).toBe(Math.round(830 * SQM_PER_SQFT))
     expect(DUBAI_EXAMPLE_PLOT.limits).toMatchObject({ parkingSpacesPerHome: DUBAI_EXAMPLE_PARKING_PER_HOME.value, homeSqm: DUBAI_EXAMPLE_HOME_SQM.value })
     expect(DUBAI_EXAMPLE_PLOT.limits?.parkingSqmPerSpace).toBeUndefined()
     expect(DUBAI_EXAMPLE_PARKING_PER_HOME.source).toContain('accreditation.trakhees.ae')
