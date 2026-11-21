@@ -1,12 +1,14 @@
 import type { Page } from '@playwright/test'
 import { limitDisplay, limitLabel, shownLimit } from '../src/editor/limit-fields'
 import { edgeName } from '../src/editor/map-features'
+import { formatAmount } from '../src/finance/format-money'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import { REGIONS } from '../src/region/regions'
-import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE } from '../src/solve/assumptions'
+import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE, MUMBAI_EXAMPLE_LAND_RATE } from '../src/solve/assumptions'
 import { formatList } from '../src/text/format'
 import { t } from '../src/text/messages'
+import { perAreaToDisplay } from '../src/units/area'
 import { mockApp } from './support/site'
 import { designsRegion, designTable, frontageWidth, goTo, moneyRegion, READY_TIMEOUT, rulesRegion, showTab, summary } from './support/app'
 import { expect, test } from './support/test'
@@ -67,7 +69,7 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
 
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
-  await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue('5968.0912896')
+  await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue(formatAmount(perAreaToDisplay(MUMBAI_EXAMPLE_LAND_RATE.value, 'sqft')))
   await expect(land.getByText('Example values.')).toBeVisible()
   await land.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
@@ -90,6 +92,19 @@ test('the Mumbai example’s roads stay marked as estimated after a reload of it
   await showTab(page, 'Rules')
   const edges = MUMBAI_EXAMPLE_PLOT.roads.map(({ edge }) => edgeName(edge, MUMBAI_EXAMPLE_PLOT.ring.length))
   await expect(rulesRegion(page)).toContainText(t('rules.estimated-roads', { edges: formatList(edges) }))
+})
+
+test('the Mumbai example’s ASR, converted to sq ft, shows in whole rupees with separators and keeps its exact value when only visited', async ({ page }) => {
+  await openExample(page, 'mum')
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  const rate = land.getByLabel('ASR land rate per sq ft of land')
+  const perSqft = perAreaToDisplay(MUMBAI_EXAMPLE_LAND_RATE.value, 'sqft')
+  await expect(rate).toHaveValue(formatAmount(Math.round(perSqft)))
+  await rate.focus()
+  await rate.blur()
+  await expect(land.getByText('Example values.')).toBeVisible()
+  expect(decodeURIComponent(page.url())).not.toContain('landRate:')
 })
 
 test('the Mumbai example’s ASR stays the user’s once typed, and is not offered for another plot', async ({ page }) => {

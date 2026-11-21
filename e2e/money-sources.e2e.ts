@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test'
 import { encodeRegion } from '../src/editor/plot-url'
+import { formatAmount } from '../src/finance/format-money'
 import type { BuildingType, Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { loadPack } from '../src/rules'
@@ -52,8 +53,8 @@ test('money: the office services rate and the basement rate are estimates from t
     await expect(row.getByText(BOI)).toBeVisible()
   }
   await expect(rateRow(page, /^Services/).getByText(/unsourced Plotwise estimates.*a high-rise office totals THB 33,000 to THB 47,000 per m², which extends above both the BOI range/)).toBeVisible()
-  await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue('8000')
-  await expect(rateRow(page, /^Basement/).getByLabel('High')).toHaveValue('20000')
+  await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue(formatAmount(8000))
+  await expect(rateRow(page, /^Basement/).getByLabel('High')).toHaveValue(formatAmount(20000))
 })
 
 test('money: a rate BOI has no row for says so, stays an unsourced estimate and names the RHLB check', async ({ page }) => {
@@ -70,7 +71,7 @@ test('money: a CBD condo is priced from CBRE Q3 2026 and the land check quotes t
   await openMoney(page, CBD_PLOT)
   const land = landRegion(page)
   await expect(land.getByText(/Priced as central Bangkok \(CBD\)/)).toBeVisible()
-  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('293283')
+  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue(formatAmount(293283))
   await land.getByRole('button', { name: 'Source' }).click()
   await expect(land.getByText(/CBRE Thailand, Bangkok Overall Figures Q3 2026, published 18 November 2026/)).toBeVisible()
   await expect(land.getByText(/Official reference, not a market price, with the road names read from a partly garbled Thai text layer.*the Treasury Department's appraised value for the 2023 to 2026 cycle/)).toBeVisible()
@@ -93,7 +94,7 @@ test('money: an edited BOI-based rate travels in the share link', async ({ page 
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await showTab(page, 'Money')
   await showAssumptions(page)
-  await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue('9000')
+  await expect(rateRow(page, /^Services/).getByLabel('Low')).toHaveValue(formatAmount(9000))
 })
 
 async function expectSourceToggle(region: Locator, source: string) {

@@ -1,5 +1,6 @@
 import { expect, test, type Page, type Route } from '@playwright/test'
 import { encodePlot } from '../src/editor/plot-url'
+import { formatAmount } from '../src/finance/format-money'
 import type { Plot } from '../src/plot/plot'
 import fixture from '../src/site/__fixtures__/ratchadaphisek.overpass.json'
 import { OverpassResponseSchema } from '../src/site/overpass-response'
@@ -304,7 +305,7 @@ test('money: estimates are labelled, editable, and travel in the share link', as
   await page.reload()
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
   await showTab(page, 'Money')
-  await expect(moneyRegion(page).getByLabel('Sale price per m² of saleable area')).toHaveValue('300000')
+  await expect(moneyRegion(page).getByLabel('Sale price per m² of saleable area')).toHaveValue(formatAmount(300000))
   expect(errors).toEqual([])
 })
 
@@ -327,7 +328,7 @@ test('money: the plot area sets the default sale price and is shown with its sou
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
   await expect(land.getByText(/Priced as city fringe, about [\d.]+ km from Ratchaprasong/)).toBeVisible()
-  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('123500')
+  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue(formatAmount(123500))
   await land.getByRole('button', { name: 'Source' }).click()
   await expect(land.getByText(/Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, City Fringe/)).toBeVisible()
   expect(errors).toEqual([])
@@ -367,7 +368,7 @@ test('an old share link keeps its edited values and takes the defaults for the n
   const errors = await open(page, PLOT, OLD_KEYS_LINK)
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
-  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue('300000')
+  await expect(land.getByLabel('Sale price per m² of saleable area')).toHaveValue(formatAmount(300000))
   await expect(land.getByLabel('Target margin')).toHaveValue('20')
   await openAssumptions(page)
   await expect(moneyRegion(page).getByLabel('Finance on the land, share of land price')).toHaveValue('10')

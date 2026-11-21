@@ -5,9 +5,10 @@ import { useRegion } from '@/editor/plot-store'
 import type { MoneyRegion } from '@/solve'
 import { t } from '@/text/messages'
 import { readNumber } from '@/text/read-number'
-import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
+import { NumberInput } from '@/ui/number-input'
 import { perAreaFromDisplay, perAreaToDisplay, type AreaUnit } from '@/units/area'
+import { formatAmount } from './format-money'
 import { isValidValue, type Input as MoneyInput } from './parameters'
 import type { Finance } from './use-finance'
 
@@ -19,6 +20,11 @@ const roundOff = (value: number) => Number(value.toPrecision(PRECISION))
 function toShown({ unit }: MoneyInput, value: number, area: AreaUnit): number {
   if (unit === 'share') return value * SHARE_SCALE
   return unit === 'money' ? perAreaToDisplay(value, area) : value
+}
+
+function shownText(parameter: MoneyInput, value: number, area: AreaUnit): string {
+  const shown = toShown(parameter, value, area)
+  return parameter.unit === 'money' || parameter.unit === 'landMoney' ? formatAmount(shown) : String(roundOff(shown))
 }
 
 function fromShown({ unit }: MoneyInput, shown: number, area: AreaUnit): number {
@@ -59,7 +65,7 @@ export function ParameterInput({ finance, parameter, label, hideLabel = false }:
   const { areaUnit } = useRegion()
   const [draft, setDraft] = useState<string | null>(null)
   const value = finance.valueOf(parameter)
-  const shown = draft ?? (value === null ? '' : String(roundOff(toShown(parameter, value, areaUnit))))
+  const shown = draft ?? (value === null ? '' : shownText(parameter, value, areaUnit))
   const invalid = draft !== null && !isValidValue(parameter, parse(draft, parameter, areaUnit))
   const read = draft === null ? null : readNumber(draft)
   const comma = read?.kind === 'unreadable' && read.reason === 'comma'
@@ -76,14 +82,13 @@ export function ParameterInput({ finance, parameter, label, hideLabel = false }:
         {label}
       </Label>
       <div className="flex items-center gap-2">
-        <Input
+        <NumberInput
           id={id}
-          inputMode="decimal"
           value={shown}
           required={value === null}
           aria-invalid={invalid}
           aria-describedby={comma ? hintId : undefined}
-          onChange={(event) => change(event.target.value)}
+          onText={change}
           onBlur={() => setDraft(null)}
           className="w-32"
         />

@@ -14,3 +14,7 @@ function compactFormat(currency: string | null): Intl.NumberFormat {
 }
 
 export const formatMoney = (value: number, currency: string | null) => compactFormat(currency).format(value)
+
+const AMOUNT = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0, maximumSignificantDigits: 2, roundingPriority: 'morePrecision' })
+
+export const formatAmount = (value: number) => AMOUNT.format(value)
