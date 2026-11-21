@@ -485,6 +485,12 @@ const en = {
   'purchase.price.shareOfLandRate': ({ share, rate }: { share: string; rate: string }) => `Priced at ${share} of the ${rate}.`,
   'purchase.price.userSupplied': 'Bought on the market at the price you enter.',
   'purchase.price.perSqm': 'Priced per area by the rules.',
+  'purchase.worth.worth': ({ purchases, cost, change }: { purchases: string; cost: string; change: string }) =>
+    `Buying ${purchases} costs ${cost} and lifts the land value by ${change} after paying for it → worth it at these prices.`,
+  'purchase.worth.not-worth': ({ purchases, cost, change }: { purchases: string; cost: string; change: string }) =>
+    `Buying ${purchases} costs ${cost} and cuts the land value by ${change} after paying for it → not worth it at these prices.`,
+  'purchase.worth.depends': ({ purchases, cost, change }: { purchases: string; cost: string; change: string }) =>
+    `Buying ${purchases} costs ${cost} and moves the land value by ${change} after paying for it → whether it pays depends on the build cost.`,
   'limit.coverage': 'Ground coverage',
   'limit.coverage.detail': ({ area }: Area) => `The building may cover at most ${area} of the plot.`,
   'limit.far-bonus': ({ ratio }: Ratio) => `${ratio} bonus`,

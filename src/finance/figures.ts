@@ -1,11 +1,13 @@
 import type { Design } from '@/designs'
 import type { Region } from '@/region/regions'
+import { formatList } from '@/text/format'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 import { askingVerdict } from './asking-price'
 import { formatMoney } from './format-money'
 import { totalOf, type Estimate, type Parking, type Range } from './estimate'
 import { PURCHASE_PRICES, SCALARS, type Input, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
+import type { PurchaseWorth } from './purchase-worth'
 import type { Finance } from './use-finance'
 
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
@@ -26,6 +28,15 @@ export function askingText(asking: number, { priced, region }: Pick<Finance, 'pr
     case 'unavailable':
       return t('asking.unavailable', { asking: shown })
   }
+}
+
+export function purchaseWorthText({ purchases, cost, landValueChange, verdict }: PurchaseWorth, currency: string | null): string {
+  const change = verdict === 'not-worth' ? { low: -landValueChange.high, high: -landValueChange.low } : landValueChange
+  return t(`purchase.worth.${verdict}`, {
+    purchases: formatList(purchases.map((kind) => t(`cap.up-to.${kind}`))),
+    cost: formatMoney(cost, currency),
+    change: rangeText(change, currency),
+  })
 }
 
 export const parkingText = ({ levelsAboveGround, basementLevels }: Parking) =>

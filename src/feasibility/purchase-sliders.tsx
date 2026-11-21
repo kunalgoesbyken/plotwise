@@ -1,6 +1,6 @@
 'use client'
 
-import { useId } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useRegion } from '@/editor/plot-store'
 import type { FarPurchase } from '@/rules'
 import { PURCHASE_USE_ORDER, type PurchaseOption } from '@/solve'
@@ -50,6 +50,7 @@ function PurchaseSlider({ option, farAreaSqm }: { option: PurchaseOption; farAre
       </div>
       <input
         id={id}
+        aria-label={label}
         type="range"
         min={0}
         max={maxRatio}
@@ -64,7 +65,7 @@ function PurchaseSlider({ option, farAreaSqm }: { option: PurchaseOption; farAre
   )
 }
 
-export function PurchaseSliders() {
+export function PurchaseSliders({ children }: { children?: ReactNode }) {
   const { result } = useFeasibility()
   if (result?.status !== 'ready') return null
   const { limits, farAreaSqm } = result.solution
@@ -82,6 +83,7 @@ export function PurchaseSliders() {
           <PurchaseSlider key={option.kind} option={option} farAreaSqm={farAreaSqm} />
         ))}
       </ul>
+      {children}
     </section>
   )
 }

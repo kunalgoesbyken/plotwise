@@ -16,6 +16,8 @@ const AS_MUCH_AS_ALLOWED: Readonly<Record<FarPurchase['kind'], number>> = { prem
 
 export const EVERY_PURCHASE: FarChoice = { mode: 'purchased', ratios: AS_MUCH_AS_ALLOWED }
 
+export const NO_PURCHASE: FarChoice = { mode: 'purchased', ratios: {} }
+
 export const purchaseRatios = (choice: FarChoice): PurchaseRatios => (choice.mode === 'purchased' ? choice.ratios : {})
 
 export type FarCap = {
