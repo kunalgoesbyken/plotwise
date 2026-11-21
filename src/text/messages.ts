@@ -683,6 +683,9 @@ const en = {
   'land.indicative': 'Indicative only: a rough residual on editable assumptions, not a valuation.',
 
   'asking.label': 'Asking price for the plot',
+  'asking.basis': 'Price entered as',
+  'asking.total': 'Total',
+  'asking.per-land-unit': ({ unit }: { unit: string }) => `Per ${unit}`,
   'asking.within': ({ asking }: { asking: string }) => `Asking ${asking} → within range.`,
   'asking.above': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} over.`,
   'asking.below': ({ asking, margin }: { asking: string; margin: string }) => `Asking ${asking} → ${margin} under.`,

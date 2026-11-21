@@ -10,7 +10,7 @@ import type { Assumption } from '@/site/assumptions'
 import type { MoneyRegion } from '@/solve'
 import type { Placement } from './area'
 import { useAssumptions } from './assumptions-provider'
-import { basisOf, estimate, financeSite, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
+import { basisOf, estimate, financeSite, landUnitsOf, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
 import { landCheck, type LandCheck } from './land-check'
 import { PURCHASE_PRICES, ratesFor, storageKey, type Input, type Parameter, type PurchasePrice, type RateParameters } from './parameters'
 import { enteredValues, missingParameters, packDefaults, resolveValues, type Overrides, type Values } from './values'
@@ -25,6 +25,7 @@ export type Finance = {
   readonly region: MoneyRegion
   readonly use: BuildingType
   readonly area: Placement | null
+  readonly landUnits: number
   readonly hasEdits: boolean
   readonly missing: readonly Input[]
   readonly rates: readonly RateParameters[]
@@ -82,6 +83,7 @@ export function useFinance(): Finance | null {
       region,
       use: site.use,
       area: prices && placementIn(site, prices),
+      landUnits: landUnitsOf(site),
       hasEdits: Object.keys(overrides).length > 0,
       missing: [...(prices ? [] : missingParameters(overrides, site.use, site.pack)), ...missingPrices],
       rates: ratesFor(site.pack),

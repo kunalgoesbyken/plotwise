@@ -18,6 +18,8 @@ export type FinanceSite = {
   readonly farLimits: Limits
 }
 
+export const landUnitsOf = ({ plotAreaSqm, landUnitSqm }: FinanceSite) => plotAreaSqm / landUnitSqm
+
 export type PurchasePrices = Readonly<Partial<Record<PurchasePriceId, number>>>
 
 export const financeSite = (solution: Solution, region: MoneyRegion): FinanceSite => ({
@@ -129,7 +131,7 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values, pr
   const bought = purchaseCost(metrics, site, prices)
   const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values, bought)
   const landValue = { low: landFor(firstCost.high), high: landFor(firstCost.low) }
-  const landUnits = site.plotAreaSqm / site.landUnitSqm
+  const landUnits = landUnitsOf(site)
   return {
     buildClass,
     builtSqm: metrics.builtSqm,
