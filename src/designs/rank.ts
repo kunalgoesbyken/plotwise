@@ -13,7 +13,7 @@ export type Standing =
   | { readonly kind: 'best' }
   | { readonly kind: 'same-as'; readonly of: Design }
   | { readonly kind: 'dominated'; readonly by: Design; readonly worse: readonly Difference[]; readonly better: readonly Difference[] }
-  | { readonly kind: 'alternative'; readonly over: Design; readonly better: readonly Difference[] }
+  | { readonly kind: 'alternative'; readonly over: Design; readonly worse: readonly Difference[]; readonly better: readonly Difference[] }
 
 export type Ranked = { readonly design: Design; readonly standing: Standing }
 
@@ -48,6 +48,8 @@ function ahead(measure: Measure, a: Design, b: Design): boolean {
 
 const alike = (a: Design, b: Design) => MEASURES.every((measure) => !ahead(measure, a, b) && !ahead(measure, b, a))
 
+export const sameFloorArea = (a: Design, b: Design) => Math.abs(a.metrics.gfaSqm - b.metrics.gfaSqm) <= AREA_TOLERANCE_SQM
+
 export function dominates(a: Design, b: Design): boolean {
   if (COMPARED.some((measure) => ahead(measure, b, a))) return false
   return COMPARED.some((measure) => ahead(measure, a, b)) || ahead('open-space', a, b)
@@ -69,7 +71,7 @@ function standingOf(design: Design, best: Design, shown: readonly Design[]): Sta
   if (twin) return { kind: 'same-as', of: twin }
   const by = shown.find((other) => dominates(other, design))
   if (by) return { kind: 'dominated', by, worse: worseThan(design, by), better: betterThan(design, by) }
-  return { kind: 'alternative', over: best, better: betterThan(design, best) }
+  return { kind: 'alternative', over: best, worse: worseThan(design, best), better: betterThan(design, best) }
 }
 
 export function rank(designs: readonly Design[]): readonly Ranked[] {

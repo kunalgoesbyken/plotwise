@@ -8,7 +8,7 @@ import type { Check } from './checks'
 import { designs, type Design } from './designs'
 import { headline } from './headline'
 import type { TypologyId } from './massing'
-import { dominates, rank, shownOption, type Difference, type Measure, type Ranked } from './rank'
+import { dominates, rank, sameFloorArea, shownOption, type Difference, type Measure, type Ranked } from './rank'
 import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const designedUnder = (packId: PackId, plot: Plot) => {
@@ -145,8 +145,27 @@ describe('ranking designs for the user to choose', () => {
           if (standing.kind !== 'alternative') continue
           expect(standing.over).toBe(best)
           expect(standing.better.length).toBeGreaterThan(0)
+          for (const measure of measures(standing.better)) expect(measures(standing.worse)).not.toContain(measure)
+          for (const { amount } of standing.worse.filter((d) => 'amount' in d)) expect(amount).toBeGreaterThan(0)
           for (const shown of all.filter((d) => isShown(ranked, d))) expect(dominates(shown, design)).toBe(false)
         }
+      }),
+    )
+  })
+
+  it('names where an alternative falls short of the best, floor area included', () => {
+    const lower: Design = { ...template, metrics: { ...template.metrics, gfaSqm: template.metrics.gfaSqm - 500, heightM: template.metrics.heightM - 6 } }
+    const [, second] = rank([template, lower])
+    expect(second.standing).toEqual({ kind: 'alternative', over: template, worse: [{ measure: 'floor-area', amount: 500 }], better: [{ measure: 'height', amount: 6 }] })
+  })
+
+  it('counts two floor areas as the same only within the area tolerance, not within the wider share that shows two designs as one', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 0, max: 0.99 * AREA_TOLERANCE_SQM, noNaN: true }), fc.double({ min: 1.01 * AREA_TOLERANCE_SQM, max: 0.04 * template.metrics.gfaSqm, noNaN: true }), (tiny, gap) => {
+        const shifted = (by: number): Design => ({ ...template, metrics: { ...template.metrics, gfaSqm: template.metrics.gfaSqm - by } })
+        expect(sameFloorArea(template, shifted(tiny))).toBe(true)
+        expect(sameFloorArea(template, shifted(gap))).toBe(false)
+        expect(sameFloorArea(shifted(gap), template)).toBe(false)
       }),
     )
   })

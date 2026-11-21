@@ -3,6 +3,6 @@ export { designs, type Design, type DesignName, type Limiter, type Metrics } fro
 export { headline } from './headline'
 export { capBreakdown, capOf, type CapFigures } from './cap-breakdown'
 export { purchaseCeiling, type Ceiling } from './purchase-ceiling'
-export { rank, shownOption, type Difference, type Ranked, type Standing } from './rank'
+export { rank, sameFloorArea, shownOption, type Difference, type Ranked, type Standing } from './rank'
 export type { Form, TypologyId } from './massing'
 export type { Yield } from './programme'
