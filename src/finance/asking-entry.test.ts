@@ -8,6 +8,8 @@ const perLandUnit = (landUnits: number): AskingBasis => ({ kind: 'perLandUnit', 
 
 const RAI_IN_WAH = 400
 
+const HALF_UNIT = 0.5
+
 describe('reading an asking price', () => {
   it('reads a total, written with or without thousands groups, as the price', () => {
     expect(readAsking('300000000', TOTAL)).toEqual({ kind: 'price', price: 300_000_000 })
@@ -17,6 +19,17 @@ describe('reading an asking price', () => {
   it('reads a price per land unit as that price times the plot’s area in land units', () => {
     expect(readAsking('250,000', perLandUnit(RAI_IN_WAH))).toEqual({ kind: 'price', price: 100_000_000 })
     expect(readAsking('1000.5', perLandUnit(2))).toEqual({ kind: 'price', price: 2001 })
+  })
+
+  it('rounds a total read from a price per land unit to whole currency units, and keeps a typed total as typed', () => {
+    expect(readAsking('250,000', perLandUnit(321.4567))).toEqual({ kind: 'price', price: 80_364_175 })
+    expect(readAsking('1234.5', TOTAL)).toEqual({ kind: 'price', price: 1234.5 })
+    fc.assert(
+      fc.property(fc.integer({ min: 1, max: 10_000_000 }), fc.double({ min: 1, max: 100_000, noNaN: true }), (perUnit, landUnits) => {
+        const read = readAsking(String(perUnit), perLandUnit(landUnits))
+        return read.kind !== 'price' || Number.isInteger(read.price)
+      }),
+    )
   })
 
   it('reads blank text as no price, whatever the basis', () => {
@@ -48,7 +61,7 @@ describe('reading an asking price', () => {
       fc.property(fc.integer({ min: 1, max: 10_000_000 }), fc.double({ min: 1, max: 100_000, noNaN: true }), (perUnit, landUnits) => {
         const read = readAsking(String(perUnit), perLandUnit(landUnits))
         if (read.kind !== 'price') return perUnit * landUnits > MAX_ASKING_PRICE
-        return Math.abs(shownAsking(read.price, perLandUnit(landUnits)) - perUnit) <= perUnit * 1e-12
+        return Math.abs(shownAsking(read.price, perLandUnit(landUnits)) - perUnit) <= HALF_UNIT / landUnits + perUnit * 1e-12
       }),
     )
   })

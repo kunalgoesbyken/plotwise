@@ -129,7 +129,7 @@ test.describe('the Bangkok example', () => {
   })
 
   test('in the Money tab a price per square wah is read against the plot’s area and shared as the total, which comes back per square wah too', async ({ page, context }) => {
-    const total = PER_WAH * EXAMPLE_LAND_UNITS
+    const total = Math.round(PER_WAH * EXAMPLE_LAND_UNITS)
     await showTab(page, 'Money')
     await perLandUnit(page).click()
     await moneyAskingField(page).fill(String(PER_WAH))

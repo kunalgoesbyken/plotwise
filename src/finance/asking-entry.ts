@@ -5,7 +5,7 @@ export type AskingBasis = { readonly kind: 'total' } | { readonly kind: 'perLand
 
 export type AskingEntry = { readonly kind: 'blank' } | { readonly kind: 'price'; readonly price: number } | { readonly kind: 'invalid'; readonly comma: boolean }
 
-const totalOf = (entered: number, basis: AskingBasis) => (basis.kind === 'total' ? entered : entered * basis.landUnits)
+const totalOf = (entered: number, basis: AskingBasis) => (basis.kind === 'total' ? entered : Math.round(entered * basis.landUnits))
 
 export const shownAsking = (total: number, basis: AskingBasis) => (basis.kind === 'total' ? total : total / basis.landUnits)
 
