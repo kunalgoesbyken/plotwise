@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useMemo, type ReactNode } from 'react'
+import { useDeferredValue, useMemo, type ReactNode } from 'react'
 import { usePlot, useRegion } from '@/editor/plot-store'
 import { Button } from '@/ui/button'
 import { localFrame } from '@/geo/projection'
@@ -51,7 +51,7 @@ function LiveScene({ plot, ...scene }: PlotSceneProps & { plot: Plot }) {
     () => ({ ring: plot.ring.map(frame.toLocal), roadEdges: plot.roads.map((road) => road.edge) }),
     [plot, frame],
   )
-  const { site, status, retry } = useSite(plot.ring, useRegion().id)
+  const { site, status, retry } = useSite(plot.ring, useDeferredValue(useRegion().id))
   return (
     <SceneView frame={frame} plot={scenePlot} site={site} {...scene}>
       <SiteNotice status={status} retry={retry} />

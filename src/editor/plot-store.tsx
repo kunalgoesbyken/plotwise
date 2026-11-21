@@ -13,19 +13,35 @@ const URL_WRITE_DELAY_MS = 300
 export type EditorStore = {
   getState: () => EditorState
   dispatch: (action: EditorAction) => void
+  batch: (dispatches: () => void) => void
   subscribe: (listener: () => void) => () => void
 }
 
 function createEditorStore(): EditorStore {
   let state = initialEditorState(BUILDING_TYPES[0])
   const listeners = new Set<() => void>()
+  let batching = false
+  let changed = false
+  const notify = () => listeners.forEach((listener) => listener())
   return {
     getState: () => state,
     dispatch(action) {
       const next = reduceEditor(state, action)
       if (next === state) return
       state = next
-      listeners.forEach((listener) => listener())
+      if (batching) changed = true
+      else notify()
+    },
+    batch(dispatches) {
+      batching = true
+      try {
+        dispatches()
+      } finally {
+        batching = false
+      }
+      if (!changed) return
+      changed = false
+      notify()
     },
     subscribe(listener) {
       listeners.add(listener)
@@ -46,8 +62,10 @@ function syncWithUrl(store: EditorStore) {
   const loadFromUrl = () => {
     const linked = linkedExample(location.hash)
     if (linked) {
-      store.dispatch({ type: 'set-region', region: linked.region })
-      store.dispatch({ type: 'load-example', example: linked.example })
+      store.batch(() => {
+        store.dispatch({ type: 'set-region', region: linked.region })
+        store.dispatch({ type: 'load-example', example: linked.example })
+      })
       writeUrl(store.getState())
       return
     }
@@ -61,8 +79,10 @@ function syncWithUrl(store: EditorStore) {
       store.dispatch({ type: 'reject-link', problem: link.problem })
       return
     }
-    store.dispatch({ type: 'set-region', region: rules.region })
-    if (link && fragmentFor(store.getState()) !== fragmentFor({ region: rules.region, plot: link.plot })) store.dispatch({ type: 'load', plot: link.plot })
+    store.batch(() => {
+      store.dispatch({ type: 'set-region', region: rules.region })
+      if (link && fragmentFor(store.getState()) !== fragmentFor({ region: rules.region, plot: link.plot })) store.dispatch({ type: 'load', plot: link.plot })
+    })
   }
   loadFromUrl()
   let written: Linked = store.getState()
