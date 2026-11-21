@@ -16,14 +16,25 @@ const figures = exampleFigures()
 const sqm = (value: number) => formatQuantity(value, 'sqm')
 const buildable = sqm(figures.buildableSqm)
 const name = t('design.name', figures.designName)
-const capLine = t('cap.legal', { area: sqm(figures.cap.capSqm) })
+const capOnly = t('cap.legal', { area: sqm(figures.cap.capSqm) })
 
-function exampleCostSqm(): number {
-  if (figures.cap.kind !== 'short' || figures.cap.highRiseCostSqm === null) throw new Error('the Bangkok example no longer loses floor area to the high-rise rules')
-  return figures.cap.highRiseCostSqm
+function exampleSteps() {
+  const { cap } = figures
+  if (cap.kind !== 'short' || cap.losses.length !== 2) throw new Error('the Bangkok example no longer loses floor area to both the other limits and the high-rise rules')
+  return cap
 }
 
-const costLine = t('cap.high-rise-cost', { area: sqm(exampleCostSqm()) })
+const steps = exampleSteps()
+
+const breakdown = t('cap.steps', {
+  cap: sqm(steps.capSqm),
+  losses: steps.losses.map((loss) => t('cap.loss', { limiter: t(`limiter.${loss.limitedBy}`), area: sqm(loss.sqm) })),
+  buildable: sqm(steps.buildableSqm),
+})
+
+const STEP = ' → '
+
+const wholeNumber = (text: string) => Number(text.replace(/\D/g, ''))
 
 function exampleDesigns() {
   const result = feasibility(EXAMPLE_PLOT, loadPack(DEFAULT_REGION.packId))
@@ -40,47 +51,58 @@ async function openBangkokExample(page: Page) {
   await openResults(page, encodePlot(EXAMPLE_PLOT))
 }
 
-test('the Bangkok example leads with its largest design’s floor area, then the legal cap and what the high-rise rules cost it', async ({ page }) => {
+test('the Bangkok example leads with its largest design’s floor area, then every step from the legal cap down to it', async ({ page }) => {
   await openBangkokExample(page)
   expect(await buildableText(page)).toBe(buildable)
   await expect(summary(page)).toContainText(name)
-  await expect(summary(page)).toContainText(`${capLine} ${costLine}`)
-  const [figure, cap] = [summary(page).getByText(buildable, { exact: true }), summary(page).getByText(capLine)]
-  expect(await fontSize(figure)).toBeGreaterThan(await fontSize(cap))
+  const line = summary(page).locator('p', { hasText: breakdown })
+  await expect(line).toHaveText(breakdown)
+  expect(await fontSize(summary(page).getByText(buildable, { exact: true }))).toBeGreaterThan(await fontSize(line))
 })
 
-test('the high-rise cost shows only under the headline design it is measured against', async ({ page }) => {
+test('the steps shown in the Bangkok summary add up: the cap less what each limit takes is the buildable figure', async ({ page }) => {
+  await openBangkokExample(page)
+  const shown = (await summary(page).locator('p', { hasText: breakdown }).textContent())!.split(STEP).map(wholeNumber)
+  const [cap, ...rest] = shown
+  const built = rest.at(-1)!
+  const taken = rest.slice(0, -1)
+  expect(taken.length).toBe(2)
+  expect(cap - taken.reduce((sum, area) => sum + area, 0)).toBe(built)
+  expect(built).toBe(wholeNumber(buildable))
+})
+
+test('the steps show only under the headline design they are measured against', async ({ page }) => {
   const designs = exampleDesigns()
   const best = headline(designs)!
   const other = designs.find((design) => design.id !== best.id)!
   await openBangkokExample(page)
   await showDesign(page, t('design.name', other.name))
-  await expect(summary(page)).toContainText(capLine)
-  await expect(summary(page)).not.toContainText(costLine)
+  await expect(summary(page)).toContainText(capOnly)
+  await expect(summary(page)).not.toContainText(breakdown)
   await showDesign(page, t('design.name', best.name))
-  await expect(summary(page)).toContainText(`${capLine} ${costLine}`)
+  await expect(summary(page)).toContainText(breakdown)
 })
 
-test('a Mumbai example that reaches its cap says so, with no high-rise cost', async ({ page }) => {
+test('a Mumbai example that reaches its cap says so, with no steps', async ({ page }) => {
   await mockApp(page)
   await openResults(page, [encodeRegion('mum'), encodePlot(MUMBAI_EXAMPLE_PLOT)].filter(Boolean).join('&'))
   const reached = t('cap.reached', { area: await buildableText(page) })
   await expect(summary(page).locator('p', { hasText: reached })).toHaveText(reached)
 })
 
-test('the print summary carries the buildable figure, the cap and the high-rise cost', async ({ page }) => {
+test('the print summary carries the buildable figure and the steps from the cap', async ({ page }) => {
   await openBangkokExample(page)
   await page.emulateMedia({ media: 'print' })
   const report = page.getByRole('article')
   await expect(report).toContainText(t('report.buildable', { area: buildable }))
-  await expect(report).toContainText(`${capLine} ${costLine}`)
+  await expect(report).toContainText(breakdown)
 })
 
-test('the landing page leads with the example’s buildable figure and mentions what the high-rise rules cost it', async ({ page }) => {
+test('the landing page leads with the example’s buildable figure and the steps from the cap', async ({ page }) => {
   await page.goto('/')
   const caption = page.getByRole('figure').locator('figcaption')
   await expect(caption).toContainText(t('landing.frame.meta', { area: sqm(figures.plotSqm), buildable, name }))
-  await expect(caption).toContainText(`${capLine} ${costLine}`)
+  await expect(caption).toContainText(breakdown)
   await expect(page.getByRole('main')).not.toContainText(`up to ${sqm(figures.cap.capSqm)}`)
 })
 

@@ -1,7 +1,7 @@
 export type { Check, CheckId, ManualCheckId, Unit } from './checks'
 export { designs, type Design, type DesignName, type Limiter, type Metrics } from './designs'
 export { headline } from './headline'
-export { highRiseCost } from './high-rise-cost'
+export { capBreakdown, capOf, type CapFigures, type Loss, type Losses } from './cap-breakdown'
 export { rank, shownOption, type Difference, type Ranked, type Standing } from './rank'
 export type { Form, TypologyId } from './massing'
 export type { Yield } from './programme'

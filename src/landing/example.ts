@@ -1,6 +1,5 @@
-import { headline, highRiseCost } from '@/designs'
+import { capBreakdown, headline } from '@/designs'
 import { exampleFragment } from '@/editor/plot-url'
-import { capFigures } from '@/feasibility/cap-line'
 import { feasibility } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
 import { basisOf, estimate, financeSite } from '@/finance/estimate'
@@ -29,7 +28,8 @@ export function exampleFigures() {
   if (result.status !== 'ready') throw new Error(`The example plot no longer solves: ${result.reason}`)
   const { solution, designs } = result
   const design = headline(designs)
-  if (!design) throw new Error('The example plot no longer has a design')
+  const cap = capBreakdown(solution, designs)
+  if (!design || !cap) throw new Error('The example plot no longer has a design')
   const region = MONEY_REGIONS[DEFAULT_REGION.id]
   const site = financeSite(solution, region)
   const money = estimate(design.metrics, site, resolveValues(region.prices, basisOf(site, region.prices), {}))
@@ -45,7 +45,7 @@ export function exampleFigures() {
     plotSqm: solution.site.areaSqm,
     buildableSqm: design.metrics.gfaSqm,
     designName: design.name,
-    cap: capFigures(design, solution, highRiseCost(solution, designs)),
+    cap,
     currency: region.currency,
     firstCost: firstCostRange(money),
     landValue: money.landValue,

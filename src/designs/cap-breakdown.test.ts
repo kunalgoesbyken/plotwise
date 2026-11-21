@@ -7,9 +7,9 @@ import type { BuildingType, Plot } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { packInterpretations, satisfies, solve, withoutHighRiseRules, type Solution } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
-import { designs } from './designs'
+import { capBreakdown, capOf, type CapFigures } from './cap-breakdown'
+import { designs, type Design } from './designs'
 import { headline } from './headline'
-import { highRiseCost } from './high-rise-cost'
 import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const pack = loadPack('bkk-y9')
@@ -20,7 +20,19 @@ function designed(plot: Plot) {
   return { solution, options: designs(solution) }
 }
 
-const waivedBest = (solution: Solution) => headline(designs(withoutHighRiseRules(solution)))!.metrics.gfaSqm
+const waivedBest = (solution: Solution) => headline(designs(withoutHighRiseRules(solution)))!
+
+const lostSqm = (figures: Extract<CapFigures, { kind: 'short' }>) => figures.losses.map((loss) => loss.sqm).reduce((sum, sqm) => sum + sqm, 0)
+
+function expectSteps(figures: CapFigures | null, solution: Solution, best: Design) {
+  expect(figures).not.toBeNull()
+  if (figures?.kind !== 'short') return
+  expect(figures.capSqm).toBe(solution.farCap.maxGfaSqm)
+  expect(figures.buildableSqm).toBe(best.metrics.gfaSqm)
+  expect(figures.capSqm - lostSqm(figures)).toBeCloseTo(figures.buildableSqm, 6)
+  for (const loss of figures.losses) expect(loss.sqm).toBeGreaterThanOrEqual(0)
+  if (best.limitedBy !== 'building-class') expect(figures.losses.map((loss) => loss.limitedBy)).not.toContain('building-class')
+}
 
 describe('waiving the high-rise rules', () => {
   it('keeps the floor area cap and every other limit, and drops only the high-rise class', () => {
@@ -43,7 +55,7 @@ describe('waiving the high-rise rules', () => {
 
   it('builds no less on the Bangkok example when every road widens from 7 m to 8 m', () => {
     const withRoads = (widthM: number): Plot => ({ ...EXAMPLE_PLOT, roads: EXAMPLE_PLOT.roads.map((road) => ({ ...road, widthM })) })
-    const [narrow, wider] = [7, 8].map((widthM) => waivedBest(designed(withRoads(widthM)).solution))
+    const [narrow, wider] = [7, 8].map((widthM) => waivedBest(designed(withRoads(widthM)).solution).metrics.gfaSqm)
     expect(wider).toBeGreaterThanOrEqual(narrow - AREA_TOLERANCE_SQM)
   })
 
@@ -58,31 +70,48 @@ describe('waiving the high-rise rules', () => {
   })
 })
 
-describe('what the high-rise rules cost a plot', () => {
-  it('on the Bangkok example, is the floor area the best design gains without them, still within the cap', () => {
+describe('the steps from the legal cap down to the buildable floor area', () => {
+  it('on the Bangkok example, takes what the setbacks and road-height rule take, then what the high-rise rules take, down to the best design', () => {
     const { solution, options } = designed(EXAMPLE_PLOT)
     const best = headline(options)!
+    const waived = waivedBest(solution)
     expect(best.limitedBy).toBe('building-class')
-    const cost = highRiseCost(solution, options)!
-    expect(cost).toBeGreaterThan(AREA_TOLERANCE_SQM)
-    expect(best.metrics.gfaSqm + cost).toBeLessThanOrEqual(solution.farCap.maxGfaSqm + AREA_TOLERANCE_SQM)
-    expect(best.metrics.gfaSqm + cost).toBeCloseTo(waivedBest(solution), 6)
+    const figures = capBreakdown(solution, options)
+    expectSteps(figures, solution, best)
+    if (figures?.kind !== 'short') throw new Error('the Bangkok example reaches its cap')
+    expect(figures.losses).toEqual([
+      { limitedBy: 'envelope', sqm: solution.farCap.maxGfaSqm - waived.metrics.gfaSqm },
+      { limitedBy: 'building-class', sqm: waived.metrics.gfaSqm - best.metrics.gfaSqm },
+    ])
+    expect(waived.limitedBy).toBe('envelope')
+    for (const loss of figures.losses) expect(loss.sqm).toBeGreaterThan(AREA_TOLERANCE_SQM)
   })
 
-  it('is nothing when the best design already reaches the cap', () => {
+  it('says only that the cap is reached when the best design reaches it', () => {
     const { solution, options } = designed(plotFromMetres(rectangle(50, 70), [{ edge: 0, widthM: 16 }]))
     expect(headline(options)!.limitedBy).toBe('far')
-    expect(highRiseCost(solution, options)).toBeNull()
+    expect(capBreakdown(solution, options)).toEqual({ kind: 'reached', capSqm: solution.farCap.maxGfaSqm })
   })
 
-  it('is nothing under rules with no high-rise class', () => {
+  it('has no high-rise step under rules with no high-rise class', () => {
     const dubai = loadPack('dxb-ap')
     const plot: Plot = { ...plotFromMetres(rectangle(40, 30), [{ edge: 0, widthM: 12 }]), limits: { maxFar: 3.5, maxStoreys: 9 } }
     const solution = solve(plot, dubai, packInterpretations(dubai))
-    expect(highRiseCost(solution, designs(solution))).toBeNull()
+    const options = designs(solution)
+    const figures = capBreakdown(solution, options)
+    if (figures?.kind !== 'short') return
+    const [only, ...rest] = figures.losses
+    expect(rest).toEqual([])
+    expect(only.limitedBy as string).toBe(headline(options)!.limitedBy)
+    expect(only.sqm).toBe(figures.capSqm - figures.buildableSqm)
   })
 
-  it('on any plot, is positive only when the high-rise rules stop the best design, and never lifts it past the cap', () => {
+  it('has nothing to break down when no design fits', () => {
+    const { solution } = designed(EXAMPLE_PLOT)
+    expect(capBreakdown(solution, [])).toBeNull()
+  })
+
+  it('on any plot, adds up exactly from the cap to the best design, loses nothing below zero, and takes a high-rise step only when the building class stops the best design', () => {
     fc.assert(
       fc.property(
         fc.oneof(convexPolygon(10), starPolygon(16)),
@@ -90,15 +119,24 @@ describe('what the high-rise rules cost a plot', () => {
         fc.constantFrom<BuildingType>('condo', 'office', 'hotel'),
         (points: Vec2[], roadWidthM, buildingType) => {
           const { solution, options } = designed(plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }], buildingType))
-          const cost = highRiseCost(solution, options)
-          if (cost === null) return
-          const best = headline(options)!
-          expect(best.limitedBy).toBe('building-class')
-          expect(cost).toBeGreaterThan(AREA_TOLERANCE_SQM)
-          expect(best.metrics.gfaSqm + cost).toBeLessThanOrEqual(solution.farCap.maxGfaSqm + AREA_TOLERANCE_SQM)
+          const best = headline(options)
+          if (!best) return
+          const figures = capBreakdown(solution, options)
+          expect(figures?.kind).toBe(best.limitedBy === 'far' ? 'reached' : 'short')
+          expectSteps(figures, solution, best)
         },
       ),
       { numRuns: 30 },
     )
+  })
+})
+
+describe('the cap shown under a design that is not the headline', () => {
+  it('is the cap alone, reached or not, with no steps', () => {
+    const { solution, options } = designed(EXAMPLE_PLOT)
+    const best = headline(options)!
+    for (const design of options.filter((d) => d !== best)) {
+      expect(capOf(design, solution)).toEqual({ kind: design.limitedBy === 'far' ? 'reached' : 'legal', capSqm: solution.farCap.maxGfaSqm })
+    }
   })
 })

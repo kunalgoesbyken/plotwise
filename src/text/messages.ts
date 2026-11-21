@@ -634,7 +634,9 @@ const en = {
   'summary.land-above': ({ factor }: { factor: number }) => `That is more than ${factor} times typical asking prices nearby.`,
   'cap.legal': ({ area }: Area) => `Legal cap ${area}.`,
   'cap.reached': ({ area }: Area) => `Reaches the legal cap of ${area}.`,
-  'cap.high-rise-cost': ({ area }: Area) => `High-rise rules cost this plot ${area}.`,
+  'cap.loss': ({ limiter, area }: Area & { limiter: string }) => `${limiter} −${area}`,
+  'cap.steps': ({ cap, losses, buildable }: { cap: string; losses: readonly string[]; buildable: string }) =>
+    `${[`Legal cap ${cap}`, ...losses, `${buildable} buildable`].join(' → ')}.`,
 
   'money.title': 'Areas and first cost',
   'money.estimated': 'Estimated',
