@@ -27,7 +27,7 @@ function hintOf(entry: AskingEntry | null, currency: string | null): string | nu
   return entry.comma ? t('input.comma') : t('asking.invalid', { max: formatMoney(MAX_ASKING_PRICE, currency) })
 }
 
-const basisOf = (kind: BasisKind, { landUnits }: Finance): AskingBasis => (kind === 'total' ? { kind } : { kind, landUnits })
+const askingBasis = (kind: BasisKind, { landUnits }: Finance): AskingBasis => (kind === 'total' ? { kind } : { kind, landUnits })
 
 export function AskingPrice({ finance, design }: { readonly finance: Finance; readonly design: Design }) {
   const id = useId()
@@ -35,7 +35,7 @@ export function AskingPrice({ finance, design }: { readonly finance: Finance; re
   const { askingPrice, setAskingPrice } = useAssumptions()
   const [kind, setKind] = useState<BasisKind>('total')
   const [draft, setDraft] = useState<string | null>(null)
-  const basis = basisOf(kind, finance)
+  const basis = askingBasis(kind, finance)
   const entry = draft === null ? null : readAsking(draft, basis)
   const { currency } = finance.region
   const hint = hintOf(entry, currency)
