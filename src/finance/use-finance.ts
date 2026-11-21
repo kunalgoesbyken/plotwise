@@ -14,7 +14,7 @@ import { landCheck, type LandCheck } from './land-check'
 import { isParameter, isPurchasePrice, PURCHASE_PRICES, ratesFor, SCALARS, storageKey, type Input, type Parameter, type PurchasePrice, type RateParameters } from './parameters'
 import { purchaseWorth, type PurchaseWorth } from './purchase-worth'
 import type { ExampleChoice } from './url'
-import { BASEMENT_RATES, defaultOf, enteredOrDefault, missingParameters, moneyDefaults, NO_UNUSED_RATES, resolveValues, type DefaultKind, type Values } from './values'
+import { BASEMENT_RATES, defaultOf, enteredOrDefault, isEntered, missingParameters, moneyDefaults, NO_UNUSED_RATES, resolveValues, type DefaultKind, type Values } from './values'
 
 export type Priced = {
   readonly values: Values
@@ -86,9 +86,8 @@ export function useFinance(): Finance | null {
     const boughtPrices = Object.fromEntries(boughtInputs.map((input) => [input.id, priceOf(input)]))
     const labelOf = (parameter: Parameter): ValueLabel => {
       const kind = defaultOf(parameter, defaults)?.kind
-      return kind && entered(parameter) === undefined ? LABELS[kind] : 'estimated'
+      return kind && !isEntered(parameter, overrides, defaults) ? LABELS[kind] : 'estimated'
     }
-    const defaultValue = (input: Input) => (isParameter(input) ? defaultOf(input, defaults)?.value : undefined)
     return {
       region,
       use: site.use,
@@ -106,7 +105,7 @@ export function useFinance(): Finance | null {
         if (!solution || !values) return null
         return purchaseWorth(solution, { region, values, priceOf: (input) => priceOf(input) ?? null, basementUnrated: unused === BASEMENT_RATES })
       },
-      valueOf: (input) => priceOf(input) ?? defaultValue(input) ?? null,
+      valueOf: (input) => (isParameter(input) ? enteredOrDefault(input, overrides, defaults) : priceOf(input)) ?? null,
       sourceOf: (parameter) => defaultOf(parameter, defaults)?.source ?? null,
       labelOf,
       exampleSourceOf: (input) => exampleOf(input)?.source ?? null,

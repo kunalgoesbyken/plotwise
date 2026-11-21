@@ -170,6 +170,7 @@ type BuildRateScope = 'shellAndCore' | 'wholeBuilding'
 
 export type ExampleMoney = {
   readonly salePricePerSqm: Readonly<Partial<Record<BuildingType, Assumption>>>
+  readonly salePriceLowPerSqm?: Readonly<Partial<Record<BuildingType, Assumption>>>
   readonly landReferencePerUnit: AssumedRange
   readonly rates: {
     readonly substructure: SplitRange
@@ -546,9 +547,13 @@ const EXAMPLE = 'Example value for the example plot, not local market data for a
 
 const TALL_BUILDINGS_2026 = 'Turner & Townsend, Tall buildings construction guide 2026'
 
+const JLL_COST_GUIDE_2026 = 'JLL (PDS India), Construction Cost Guide, India – 2026, published 22 March 2026'
+
 const SQFT = 'converted at 1 sq ft = 0.09290304 m²'
 
-const MUMBAI_SHELL_AND_CORE: Band = { low: 48_000, high: 54_000 }
+const MUMBAI_HIGH_RISE_APARTMENTS: Band = { low: perSqm(4_600), high: perSqm(5_200) }
+
+const SQUARE_YARDS_MULUND_WEST = 'https://www.squareyards.com/property-rates/mulund-we-t-mumbai'
 
 const PRESTIGE_MULUND = { priceInr: 1_107_500_000, plotSqm: 9_497.3 }
 
@@ -556,7 +561,13 @@ export const MUMBAI_EXAMPLE_MONEY: ExampleMoney = {
   salePricePerSqm: {
     condo: {
       value: perSqm(29_150),
-      source: `${EXAMPLE}; Square Yards, Mulund West property rates: "Property rates in Mulund West average ₹29,150 per sq ft", an average asking price for apartments dated September 2026 that does not say whether it is per carpet or built-up area, read here per sq ft of carpet area and ${SQFT}. For comparison, the Ready Reckoner 2026-27 values a residential flat in zone 123/567 of Mulund (W) at ₹145,950 per m², an official stamp-duty rate, not a market price (https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains). https://www.squareyards.com/property-rates/mulund-we-t-mumbai, ${FETCHED}`,
+      source: `${EXAMPLE}; high end of the sale price range: Square Yards, Mulund West property rates: "Property rates in Mulund West average ₹29,150 per sq ft", an average asking price for apartments dated September 2026 that does not say whether it is per carpet or built-up area, read here per sq ft of carpet area and ${SQFT}. Another tracker states carpet-area prices: Real Estate Mumbai, Mulund West, "Apartments — buy, researched range (October 2026)" ₹30,000 to ₹45,000 per sq ft and a live median asking price of ₹29,600 per sq ft (carpet) on 21 November 2026, https://www.realestatemumbai.com/property-rates-in-mulund-west. For comparison, the Ready Reckoner 2026-27 values a residential flat in zone 123/567 of Mulund (W) at ₹145,950 per m², an official stamp-duty rate, not a market price (https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains). ${SQUARE_YARDS_MULUND_WEST}, ${FETCHED}`,
+    },
+  },
+  salePriceLowPerSqm: {
+    condo: {
+      value: perSqm(19_100),
+      source: `${EXAMPLE}; low end of the sale price range: Square Yards, Mulund West property rates, "Govt. Reg. Prices ₹ 19,100" per sq ft: "Official registration data for the period between Nov 25 and Oct 26 confirms a highly active market with 342 transactions recorded. These deals resulted in a gross value of ₹437 Cr, with average registration rates at ₹19,100 per sq ft", "as of September 2026". Registered prices are what was recorded at registration, below the asking price of ₹29,150 per sq ft on the same page; the page does not say whether they are per carpet or built-up area, read here per sq ft of carpet area and ${SQFT}. ${SQUARE_YARDS_MULUND_WEST}, ${FETCHED}`,
     },
   },
   landReferencePerUnit: {
@@ -565,10 +576,10 @@ export const MUMBAI_EXAMPLE_MONEY: ExampleMoney = {
     source: `${EXAMPLE}; low end the Ready Reckoner 2026-27 open-land rate of ₹64,240 per m² in zone 123/567 of Mulund (W), an official value, not a market price; high end a sale: Construction World, 30 July 2026, "Prestige Arm Acquires Over Two Acres In Mulund For Rs 1.11 bn": Prestige Mulund Realty bought 9,497.30 sq metres of factory land in Mulund West for "Rs 110.75 crore" (₹1,107,500,000), from registration documents accessed via CRE Matrix, https://www.constructionworld.in/policy-updates-and-economic-news/prestige-arm-acquires-over-two-acres-in-mulund-for-rs-1.11-bn/95216, ${FETCHED}. Both per sq ft of land, ${SQFT}`,
   },
   rates: splitLikeBangkok(
-    MUMBAI_SHELL_AND_CORE,
-    `${EXAMPLE}; ${TALL_BUILDINGS_2026}, Mumbai, "Mumbai's 2025 key cost ranges by sector": Residential (20-60 storeys) GIA shell and core cost "INR 48,000/m² – 54,000/m²" ("INR 4,500/ft² – 5,000/ft²"), "Costs exclude finishes, demolition, external works and utilities", https://reports.turnerandtownsend.com/tall-buildings-construction-guide-2026/mumbai, ${FETCHED}`,
+    MUMBAI_HIGH_RISE_APARTMENTS,
+    `${EXAMPLE}; ${JLL_COST_GUIDE_2026}, page 15, "Construction cost for various asset classes (INR/sq. ft.)": Residential, "High Rise Luxury Apartments", "Floors: 30+", Mumbai "4,600 to 5,200" per sq ft, on built-up area and excluding GST (${SQFT}). Page 26: "All costs are deemed to include contractor overheads, margins, direct/indirect expenses, labour insurance, and site overheads" and "all buildings are assumed with appropriate allowance for basements". The guide's shell-only note (warm shell) names commercial, retail and hospitality, not residential, so the residential row is read as the cost of the whole building, but the guide does not list what it includes. The same table gives Mumbai "Mid Rise Luxury Apartments" ("Floors: 15+") "3,200 to 3,700" and "Standard apartments" ("Floors: 5 to 12") "2,500 to 3,000". https://www.jll.com/en-in/insights/construction-cost-guide-india, PDF https://www.jll.com/content/dam/jllcom/en/in/documents/reports/research-reports/26-insights-construction-cost-guide-india-2026.pdf, ${FETCHED}`,
   ),
-  buildRateScope: 'shellAndCore',
+  buildRateScope: 'wholeBuilding',
   landRate: MUMBAI_EXAMPLE_LAND_RATE,
   tdrPrice: {
     value: perSqm(6_000),

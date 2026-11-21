@@ -131,10 +131,11 @@ export function estimate(metrics: Metrics, site: FinanceSite, values: Values, pr
   const atHigh = costAt('high', buildClass, aboveGroundSqm, parking.basementSqm, values)
   const firstCost = totalOf(atLow) <= totalOf(atHigh) ? { low: atLow, high: atHigh } : { low: atHigh, high: atLow }
   const saleableSqm = Math.max(0, metrics.builtSqm - metrics.parkingSqm) * values.saleableShare
-  const grossValue = saleableSqm * values.salePrice
+  const salePrice = { low: Math.min(values.salePriceLow, values.salePrice), high: Math.max(values.salePriceLow, values.salePrice) }
+  const grossValue = saleableSqm * salePrice.high
   const bought = purchaseCost(metrics, site, prices)
-  const landFor = (cost: CostSplit) => landResidual(grossValue, totalOf(cost), values, bought)
-  const landValue = { low: landFor(firstCost.high), high: landFor(firstCost.low) }
+  const landFor = (gross: number, cost: CostSplit) => landResidual(gross, totalOf(cost), values, bought)
+  const landValue = { low: landFor(saleableSqm * salePrice.low, firstCost.high), high: landFor(grossValue, firstCost.low) }
   const landUnits = landUnitsOf(site)
   return {
     buildClass,

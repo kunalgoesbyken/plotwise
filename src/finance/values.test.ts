@@ -5,6 +5,7 @@ import { REGIONS } from '@/region/regions'
 import { loadPack, type RulePack } from '@/rules'
 import { BANGKOK } from '@/rules/test-packs'
 import { MONEY_REGIONS, type AreaTier, type ExampleMoney, type MoneyRegion } from '@/solve'
+import { SQM_PER_SQFT } from '@/units/area'
 import { PARAMETERS, parametersFor, ratesFor, SCALARS, storageKey, type Parameter, type ParameterId } from './parameters'
 import { BASEMENT_RATES, defaultOf, missingParameters, moneyDefaults, packDefaults, resolveValues, type Overrides } from './values'
 
@@ -37,7 +38,7 @@ describe('money values where the region has no sourced local prices', () => {
   })
 
   it('asks only for the local values: sale price, build rates and nearby land prices', () => {
-    expect(missingIds({}, MONEY_REGIONS.custom, CLASSED)).toEqual(ids(localOf(PARAMETERS)))
+    expect(missingIds({}, MONEY_REGIONS.custom, CLASSED)).toEqual(ids(localOf(PARAMETERS).filter((parameter) => !parameter.follows)))
     expect(enteredValues({}, 'condo', CLASSED)).toBeNull()
     const withoutPrice = { ...everyValue('condo'), 'salePrice.condo': undefined }
     expect(enteredValues(withoutPrice, 'condo', CLASSED)).toBeNull()
@@ -58,6 +59,13 @@ describe('money values where the region has no sourced local prices', () => {
     }
   })
 
+  it('takes a typed sale price for both ends, unless the low end is typed too', () => {
+    const entered = (overrides: Overrides) => enteredValues({ ...everyValue('condo'), ...overrides }, 'condo', CLASSED)
+    expect(entered({ 'salePrice.condo': 90_000, 'salePriceLow.condo': undefined })).toMatchObject({ salePrice: 90_000, salePriceLow: 90_000 })
+    expect(entered({ 'salePrice.condo': 90_000, 'salePriceLow.condo': 60_000 })).toMatchObject({ salePrice: 90_000, salePriceLow: 60_000 })
+    expect(entered({ 'salePrice.condo': undefined, 'salePriceLow.condo': undefined })).toBeNull()
+  })
+
   it('reads the entered values for the building type of the plot, over the generic defaults', () => {
     for (const use of BUILDING_TYPES) {
       const values = enteredValues({ ...everyValue(use), [`salePrice.${use}`]: 90_000 }, use, CLASSED)
@@ -72,8 +80,8 @@ describe('money values where the region has no sourced local prices', () => {
 
 describe('example money values', () => {
   const EXAMPLES = [
-    [MONEY_REGIONS.mum, MUMBAI, REGIONS.mum.example.money],
-    [MONEY_REGIONS.dxb, DUBAI, REGIONS.dxb.example.money],
+    [MONEY_REGIONS.mum, MUMBAI, REGIONS.mum.example.money, 'JLL (PDS India), Construction Cost Guide, India – 2026'],
+    [MONEY_REGIONS.dxb, DUBAI, REGIONS.dxb.example.money, 'Tall buildings construction guide 2026'],
   ] as const
 
   it('fill every local value of an apartment plot in Mumbai and Dubai but the basement rate, each naming a source fetched on a stated date', () => {
@@ -95,7 +103,7 @@ describe('example money values', () => {
     for (const { low, high } of ratesFor(MUMBAI).filter(({ row }) => row !== 'basement')) {
       expect([defaultOf(low, defaults)?.kind, defaultOf(high, defaults)?.kind]).toEqual(['split', 'split'])
     }
-    for (const id of ['salePrice', 'landReferenceLow', 'landReferenceHigh'] as const) expect(defaultOf(SCALARS[id], defaults)?.kind).toBe('example')
+    for (const id of ['salePriceLow', 'salePrice', 'landReferenceLow', 'landReferenceHigh'] as const) expect(defaultOf(SCALARS[id], defaults)?.kind).toBe('example')
   })
 
   it('price without a basement rate only while no design has a basement, as a rate nothing is built at', () => {
@@ -106,20 +114,32 @@ describe('example money values', () => {
   })
 
   it('keep each build rate band low to high and say its split into rows is generic, not local', () => {
-    for (const [, , { rates }] of EXAMPLES) {
+    for (const [, , { rates }, guide] of EXAMPLES) {
       for (const range of [rates.substructure, rates.superstructure, rates.services.condo]) {
         expect(range?.low).toBeLessThanOrEqual(range?.high ?? Number.NaN)
-        expect(range?.source).toContain('Tall buildings construction guide 2026')
+        expect(range?.source).toContain(guide)
         expect(range?.source).toContain('that split is a generic default, not local')
       }
     }
   })
 
-  it('split the published shell and core cost so the three building rows add up to it', () => {
+  it('split the published building cost so the three building rows add up to it, Mumbai whole-building and Dubai shell and core', () => {
     const total = ({ rates }: ExampleMoney, bound: 'low' | 'high') =>
       rates.substructure[bound] + rates.superstructure[bound] + (rates.services.condo?.[bound] ?? Number.NaN)
-    expect([total(REGIONS.mum.example.money, 'low'), total(REGIONS.mum.example.money, 'high')]).toEqual([48_000, 54_000].map((v) => expect.closeTo(v, 6)))
-    expect([total(REGIONS.dxb.example.money, 'low'), total(REGIONS.dxb.example.money, 'high')]).toEqual([5_000, 6_450].map((v) => expect.closeTo(v, 6)))
+    const closeTo = (values: readonly number[]) => values.map((v) => expect.closeTo(v, 6))
+    expect([total(REGIONS.mum.example.money, 'low'), total(REGIONS.mum.example.money, 'high')]).toEqual(closeTo([4_600 / SQM_PER_SQFT, 5_200 / SQM_PER_SQFT]))
+    expect([total(REGIONS.dxb.example.money, 'low'), total(REGIONS.dxb.example.money, 'high')]).toEqual(closeTo([5_000, 6_450]))
+    expect([REGIONS.mum.example.money.buildRateScope, REGIONS.dxb.example.money.buildRateScope]).toEqual(['wholeBuilding', 'shellAndCore'])
+  })
+
+  it('give Mumbai a sale price range from the registered rate to the asking price, and Dubai its one price at both ends', () => {
+    const mumbai = defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money)
+    const [low, high] = [SCALARS.salePriceLow, SCALARS.salePrice].map((parameter) => defaultOf(parameter, mumbai))
+    expect([low?.value, high?.value]).toEqual([19_100 / SQM_PER_SQFT, 29_150 / SQM_PER_SQFT])
+    expect(low?.source).toContain('Govt. Reg. Prices')
+    expect(high?.source).toContain('average ₹29,150 per sq ft')
+    const dubai = defaultsFor(MONEY_REGIONS.dxb, DUBAI, 'condo', REGIONS.dxb.example.money)
+    expect(defaultOf(SCALARS.salePriceLow, dubai)?.value).toBe(defaultOf(SCALARS.salePrice, dubai)?.value ?? Number.NaN)
   })
 
   it('give Mumbai the ASR land rate and a TDR price, and Dubai neither', () => {

@@ -11,6 +11,8 @@ import { expect, test } from './support/test'
 
 const MUMBAI = REGIONS.mum
 const LOCAL_VALUES_MISSING = 6
+const COST_GUIDES = { mum: 'Construction Cost Guide, India – 2026', dxb: 'Tall buildings construction guide 2026' } as const
+const SHELL_AND_CORE_NOTES = { mum: 0, dxb: 1 } as const
 
 const landRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('land.title') })
 const costRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('money.title') })
@@ -37,7 +39,7 @@ for (const region of ['mum', 'dxb'] as const) {
     await expect(costRegion(page)).toBeVisible({ timeout: READY_TIMEOUT })
     await expect(costRegion(page)).toContainText(t('money.first-cost'))
     await expect(landRegion(page).getByText(t('money.examples-applied'))).toBeVisible()
-    await expect(landRegion(page).getByText(t('money.shell-and-core'))).toBeVisible()
+    await expect(landRegion(page).getByText(t('money.shell-and-core'))).toHaveCount(SHELL_AND_CORE_NOTES[region])
     await expect(landRegion(page).getByRole('note')).toHaveCount(0)
     await expect(fillButton(page)).toHaveCount(0)
 
@@ -46,7 +48,7 @@ for (const region of ['mum', 'dxb'] as const) {
     const rate = row(page, t('assumptions.rate.one-class.substructure.lowRise'))
     await expect(rate.getByText(t('assumptions.split'), { exact: true })).toBeVisible()
     await rate.getByRole('button', { name: t('assumptions.source') }).click()
-    await expect(rate).toContainText('Tall buildings construction guide 2026')
+    await expect(rate).toContainText(COST_GUIDES[region])
     const basement = row(page, t('assumptions.rate.basement', { unit: t(`area-unit.${REGIONS[region].areaUnit}`) }))
     await expect(basement.getByText(t('assumptions.blank'))).toBeVisible()
   })
@@ -96,6 +98,10 @@ test('money: a Mumbai plot of your own asks only for its local values, and the b
   await expect(sale.getByText(t('assumptions.example'), { exact: true })).toBeVisible()
   await sale.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(sale).toContainText('squareyards.com')
+  const low = row(page, t('assumptions.salePriceLow', { unit: t('area-unit.sqft'), saleable: MUMBAI.areaTerms.saleable }))
+  await expect(low.locator('input')).toHaveValue(formatAmount(19100))
+  await low.getByRole('button', { name: t('assumptions.source') }).click()
+  await expect(low).toContainText('Govt. Reg. Prices')
 })
 
 test('money: a value typed over an example value wins, and both travel in the share link', async ({ page }) => {
@@ -114,6 +120,9 @@ test('money: a value typed over an example value wins, and both travel in the sh
   await showAssumptions(page)
   const sale = row(page, t('assumptions.salePrice', { unit: t('area-unit.sqft'), saleable: MUMBAI.areaTerms.saleable }))
   await expect(sale.getByText(t('money.estimated'), { exact: true })).toBeVisible()
+  const low = row(page, t('assumptions.salePriceLow', { unit: t('area-unit.sqft'), saleable: MUMBAI.areaTerms.saleable }))
+  await expect(low.locator('input')).toHaveValue(formatAmount(25000))
+  await expect(low.getByText(t('money.estimated'), { exact: true })).toBeVisible()
   await expect(row(page, t('assumptions.landReferenceLow')).getByText(t('assumptions.example'), { exact: true })).toBeVisible()
 })
 

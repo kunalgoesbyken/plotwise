@@ -19,6 +19,10 @@ describe('assumption share links', () => {
     expect(overrides).toEqual({ 'salePrice.condo': 300000, margin: 0.2, softCost: 0.1, parkingLevels: 3, 'substructure.lowRise.low': 5000 })
   })
 
+  it('reads the low end of the sale price beside the sale price', () => {
+    expect(overridesOf('salePriceLow.condo:200000;salePrice.condo:300000')).toEqual({ 'salePriceLow.condo': 200000, 'salePrice.condo': 300000 })
+  })
+
   it('reads the land cost and reference keys', () => {
     const encoded = 'transferCosts:0.02;holdingCost:0.03;landFinance:0.15;landReferenceLow:100000;landReferenceHigh:400000'
     expect(overridesOf(encoded)).toEqual({

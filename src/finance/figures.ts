@@ -55,7 +55,7 @@ export const parkingText = ({ levelsAboveGround, basementLevels }: Parking) =>
 export const firstCostRange = ({ firstCost }: Estimate): Range => ({ low: totalOf(firstCost.low), high: totalOf(firstCost.high) })
 
 export function scalarLabel(id: ScalarId, { areaUnit, areaTerms }: Region): string {
-  if (id === 'salePrice') return t('assumptions.salePrice', { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })
+  if (id === 'salePrice' || id === 'salePriceLow') return t(`assumptions.${id}`, { unit: t(`area-unit.${areaUnit}`), saleable: areaTerms.saleable })
   return id === 'saleableShare' ? t('assumptions.saleableShare', areaTerms) : t(`assumptions.${id}`)
 }
 
