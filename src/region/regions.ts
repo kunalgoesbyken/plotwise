@@ -5,8 +5,8 @@ import type { BuildingType, Plot, PlotLimitField } from '@/plot/plot'
 import type { PackId } from '@/rules'
 import type { Assumption } from '@/site/assumptions'
 import type { Bbox } from '@/site/bbox'
-import type { RegionId } from '@/solve'
-import { AFFECTION_PLAN_TERMS, DCPR_RESIDENTIAL_USE, DUBAI_EXAMPLE_LIMITS_SOURCE, MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
+import type { ExampleMoney, RegionId } from '@/solve'
+import { AFFECTION_PLAN_TERMS, DCPR_RESIDENTIAL_USE, DUBAI_EXAMPLE_LIMITS_SOURCE, DUBAI_EXAMPLE_MONEY, MUMBAI_EXAMPLE_MONEY } from '@/solve/assumptions'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
 
@@ -37,7 +37,7 @@ export type RegionExample = {
   readonly plot: Plot
   readonly roadsEstimated: boolean
   readonly limitsSource: string | null
-  readonly landRate: Assumption<number> | null
+  readonly money: ExampleMoney | null
 }
 
 type Zone = { readonly name: string; readonly scope: string }
@@ -94,7 +94,7 @@ export const REGIONS = {
     rules: 'pack',
     limitTerms: null,
     floors: 'storeys',
-    example: { plot: EXAMPLE_PLOT, roadsEstimated: false, limitsSource: null, landRate: null },
+    example: { plot: EXAMPLE_PLOT, roadsEstimated: false, limitsSource: null, money: null },
     areaUnit: 'sqm',
     zone: BANGKOK_ZONE,
     authority: 'the BMA',
@@ -132,7 +132,7 @@ export const REGIONS = {
     rules: 'affectionPlan',
     limitTerms: AFFECTION_PLAN_TERMS,
     floors: 'gPlus',
-    example: { plot: DUBAI_EXAMPLE_PLOT, roadsEstimated: false, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, landRate: null },
+    example: { plot: DUBAI_EXAMPLE_PLOT, roadsEstimated: false, limitsSource: DUBAI_EXAMPLE_LIMITS_SOURCE, money: DUBAI_EXAMPLE_MONEY },
     areaUnit: 'sqm',
     zone: null,
     authority: 'the authority that issued the affection plan',
@@ -159,7 +159,7 @@ export const REGIONS = {
     rules: 'draftPack',
     limitTerms: null,
     floors: 'storeys',
-    example: { plot: MUMBAI_EXAMPLE_PLOT, roadsEstimated: true, limitsSource: null, landRate: MUMBAI_EXAMPLE_LAND_RATE },
+    example: { plot: MUMBAI_EXAMPLE_PLOT, roadsEstimated: true, limitsSource: null, money: MUMBAI_EXAMPLE_MONEY },
     areaUnit: 'sqft',
     zone: null,
     authority: 'MCGM',

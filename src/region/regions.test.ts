@@ -54,7 +54,7 @@ describe('regions', () => {
     expect(plotLimitFields(pack)).toEqual([])
     expect(mum.limitTerms).toBeNull()
     expect(mum.areaTerms).toMatchObject({ ratio: 'FSI', saleable: 'carpet area' })
-    expect([mum.areaUnit, MONEY_REGIONS.mum.currency, MONEY_REGIONS.mum.prices]).toEqual(['sqft', 'INR', null])
+    expect([mum.areaUnit, MONEY_REGIONS.mum.currency, MONEY_REGIONS.mum.local]).toEqual(['sqft', 'INR', null])
     expect(mum.cityPlan.version).toBe('DCPR 2034 as sanctioned in 2018')
   })
 })

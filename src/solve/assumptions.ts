@@ -142,10 +142,7 @@ export type AreaMap = {
   readonly source: string
 }
 
-export type MoneyPrices = {
-  readonly areas: AreaMap
-  readonly salePricePerSqm: Readonly<Record<BuildingType, PerTier<Assumption>>>
-  readonly landReferencePerUnit: PerTier<AssumedRange>
+export type GenericMoney = {
   readonly saleableShare: PerUse
   readonly developerMargin: Assumption
   readonly softCostShare: Assumption
@@ -153,6 +150,12 @@ export type MoneyPrices = {
   readonly holdingCostShare: Assumption
   readonly landFinanceShare: Assumption
   readonly maxAboveGroundParkingLevels: Assumption
+}
+
+export type LocalMoney = {
+  readonly areas: AreaMap
+  readonly salePricePerSqm: Readonly<Record<BuildingType, PerTier<Assumption>>>
+  readonly landReferencePerUnit: PerTier<AssumedRange>
   readonly rates: {
     readonly substructure: ClassRates
     readonly superstructure: ClassRates
@@ -161,12 +164,30 @@ export type MoneyPrices = {
   }
 }
 
+export type SplitRange = AssumedRange & { readonly kind: 'split' }
+
+type BuildRateScope = 'shellAndCore' | 'wholeBuilding'
+
+export type ExampleMoney = {
+  readonly salePricePerSqm: Readonly<Partial<Record<BuildingType, Assumption>>>
+  readonly landReferencePerUnit: AssumedRange
+  readonly rates: {
+    readonly substructure: SplitRange
+    readonly superstructure: SplitRange
+    readonly services: Readonly<Partial<Record<BuildingType, SplitRange>>>
+  }
+  readonly buildRateScope: BuildRateScope
+  readonly landRate: Assumption | null
+  readonly tdrPrice: Assumption | null
+}
+
 export type MoneyRegion = {
   readonly currency: string | null
   readonly landUnit: { readonly name: string; readonly sqm: Assumption }
   readonly oldLinkLandUnitSqm: Assumption | null
   readonly landWarningFactor: Assumption
-  readonly prices: MoneyPrices | null
+  readonly generic: GenericMoney
+  readonly local: LocalMoney | null
 }
 
 const UNSOURCED = 'Plotwise estimate, unsourced'
@@ -218,6 +239,8 @@ const HIGH_RISE_STRUCTURE = {
   superstructure: { low: 17_000, high: 24_000, source: PLOTWISE_SPLIT },
 } as const satisfies Structure
 
+const CONDO_SERVICES: Band = { low: 7_000, high: 10_000 }
+
 const defaultTotals = (services: Band) =>
   `At the default rates a low-rise building totals ${band(buildingTotal(LOW_RISE_STRUCTURE, services))} per m² and a high-rise one ${band(buildingTotal(HIGH_RISE_STRUCTURE, services))}`
 
@@ -243,7 +266,7 @@ const knightFrankCondo = (area: string, value: number): Assumption => ({
   source: `${EDITABLE}; Knight Frank Thailand, Bangkok Condominium Market Overview Q1 2026, ${area} average asking price of approximately ${thb(value)} per m², an average over all listed condominiums, not new launches, ${KNIGHT_FRANK_Q1_2026}. Knight Frank splits the city fringe from the suburbs, so it is used here. For comparison, the asking price of off-plan and under-construction condominium units in CBRE's combined Midtown/Suburban Bangkok was THB 110,696 per m² in Q3 2026, ${CBRE_Q3_2026}`,
 })
 
-const BANGKOK_PRICES = {
+const BANGKOK_LOCAL = {
   areas: {
     centre: { name: 'Ratchaprasong', lng: 100.5409, lat: 13.7446 },
     radiusKm: { cbd: 3, cityFringe: 9, coverage: 40 },
@@ -285,6 +308,28 @@ const BANGKOK_PRICES = {
       source: `${EDITABLE}; median list price per square wah on thailand-property.com, low end Lat Krabang THB 25,632 (${THAILAND_PROPERTY}/lat-krabang), high end all of Bangkok THB 82,344 (${THAILAND_PROPERTY}), undated listing site`,
     },
   },
+  rates: {
+    substructure: {
+      lowRise: LOW_RISE_STRUCTURE.substructure,
+      highRise: HIGH_RISE_STRUCTURE.substructure,
+    },
+    superstructure: {
+      lowRise: LOW_RISE_STRUCTURE.superstructure,
+      highRise: HIGH_RISE_STRUCTURE.superstructure,
+    },
+    services: {
+      condo: noBoiRow('condominium', CONDO_SERVICES),
+      office: BOI_OFFICE_SERVICES,
+      hotel: noBoiRow('hotel', { low: 13_000, high: 19_000 }),
+    },
+    basement: {
+      ...BOI_BASEMENT_CAR_PARK,
+      source: `${EDITABLE}; BOI car park, basement, ${band(BOI_BASEMENT_CAR_PARK)} per m², ${BOI_COSTS}. RHLB basement car park THB 19,500 to 23,500 per m², ${RHLB_COSTS}`,
+    },
+  },
+} as const satisfies LocalMoney
+
+const BANGKOK_GENERIC = {
   saleableShare: {
     condo: { value: ASSUMPTIONS.netToGross.condo.value, source: ASSUMPTIONS.netToGross.condo.source },
     office: { value: ASSUMPTIONS.netToGross.office.value, source: ASSUMPTIONS.netToGross.office.source },
@@ -314,26 +359,25 @@ const BANGKOK_PRICES = {
     value: 5,
     source: `${EDITABLE}; parking levels beyond this go into basements, no Bangkok practice figure was found in research`,
   },
-  rates: {
-    substructure: {
-      lowRise: LOW_RISE_STRUCTURE.substructure,
-      highRise: HIGH_RISE_STRUCTURE.substructure,
-    },
-    superstructure: {
-      lowRise: LOW_RISE_STRUCTURE.superstructure,
-      highRise: HIGH_RISE_STRUCTURE.superstructure,
-    },
-    services: {
-      condo: noBoiRow('condominium', { low: 7_000, high: 10_000 }),
-      office: BOI_OFFICE_SERVICES,
-      hotel: noBoiRow('hotel', { low: 13_000, high: 19_000 }),
-    },
-    basement: {
-      ...BOI_BASEMENT_CAR_PARK,
-      source: `${EDITABLE}; BOI car park, basement, ${band(BOI_BASEMENT_CAR_PARK)} per m², ${BOI_COSTS}. RHLB basement car park THB 19,500 to 23,500 per m², ${RHLB_COSTS}`,
-    },
+} as const satisfies GenericMoney
+
+const GENERIC_DEFAULT = 'Generic default, not local: no figure for this region was sourced, so Plotwise uses the value it uses for Bangkok, whose source follows'
+
+const generic = ({ value, source }: Assumption): Assumption => ({ value, source: `${GENERIC_DEFAULT}. ${source}` })
+
+const GENERIC_MONEY: GenericMoney = {
+  saleableShare: {
+    condo: generic(BANGKOK_GENERIC.saleableShare.condo),
+    office: generic(BANGKOK_GENERIC.saleableShare.office),
+    hotel: generic(BANGKOK_GENERIC.saleableShare.hotel),
   },
-} as const satisfies MoneyPrices
+  developerMargin: generic(BANGKOK_GENERIC.developerMargin),
+  softCostShare: generic(BANGKOK_GENERIC.softCostShare),
+  transferCostShare: generic(BANGKOK_GENERIC.transferCostShare),
+  holdingCostShare: generic(BANGKOK_GENERIC.holdingCostShare),
+  landFinanceShare: generic(BANGKOK_GENERIC.landFinanceShare),
+  maxAboveGroundParkingLevels: generic(BANGKOK_GENERIC.maxAboveGroundParkingLevels),
+}
 
 export const MONEY_REGIONS = {
   bkk: {
@@ -344,7 +388,8 @@ export const MONEY_REGIONS = {
     },
     oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
-    prices: BANGKOK_PRICES,
+    generic: BANGKOK_GENERIC,
+    local: BANGKOK_LOCAL,
   },
   dxb: {
     currency: 'AED',
@@ -357,7 +402,8 @@ export const MONEY_REGIONS = {
       source: 'one square foot, from the international foot of exactly 0.3048 m: share links written before 20 Nov 2026, when Dubai land prices were entered per sq ft, carry them per sq ft',
     },
     landWarningFactor: LAND_WARNING_FACTOR,
-    prices: null,
+    generic: GENERIC_MONEY,
+    local: null,
   },
   mum: {
     currency: 'INR',
@@ -367,14 +413,16 @@ export const MONEY_REGIONS = {
     },
     oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
-    prices: null,
+    generic: GENERIC_MONEY,
+    local: null,
   },
   custom: {
     currency: null,
     landUnit: { name: 'm²', sqm: { value: 1, source: 'one square metre, the unit areas are shown in for custom rules' } },
     oldLinkLandUnitSqm: null,
     landWarningFactor: LAND_WARNING_FACTOR,
-    prices: null,
+    generic: GENERIC_MONEY,
+    local: null,
   },
 } as const satisfies Record<string, MoneyRegion>
 
@@ -466,6 +514,91 @@ const DUBAI_APARTMENT_GROSS_SQM = ASSUMPTIONS.condoUnitSqm.value / ASSUMPTIONS.n
 export const DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE: Assumption = {
   value: DUBAI_APARTMENT_GROSS_SQM,
   source: `Parking from the Trakhees regulations the plan refers to: Trakhees (Ports, Customs and Free Zone Corporation), Building Regulation Design Guidelines, Architecture Book (Blue Code), February 2021, Section 15.3.1(c) Apartments: "One parking space for each apartment (studio or single bedroom) up to 150.0 square meters floor area", https://accreditation.trakhees.ae/regulations/BLUE_2021_FEB/files/basic-html/page143.html, fetched 2026-11-21. The rule counts apartments, so it is entered as floor area per space using the apartment these designs assume (${formatQuantity(ASSUMPTIONS.condoUnitSqm.value, 'sqm')} at ${formatQuantity(ASSUMPTIONS.netToGross.condo.value, 'percent')} net to gross, ${t('unit.sqm', { number: formatNumber(DUBAI_APARTMENT_GROSS_SQM, 'ratio') })} of floor area per apartment); larger apartments of two or more bedrooms need 1.5 to 3 spaces each under the same section`,
+}
+
+const FETCHED = 'fetched 2026-11-21'
+
+const perSqm = (perSqftValue: number) => perSqftValue / SQM_PER_SQFT
+
+const perSqft = (perSqmValue: number) => perSqmValue * SQM_PER_SQFT
+
+const HIGH_RISE_CONDO = buildingTotal(HIGH_RISE_STRUCTURE, CONDO_SERVICES)
+
+const midpoint = ({ low, high }: Band) => (low + high) / 2
+
+const proportion = (whole: Band, part: Band): Band => {
+  const share = midpoint(part) / midpoint(HIGH_RISE_CONDO)
+  return { low: whole.low * share, high: whole.high * share }
+}
+
+const SPLIT_LIKE_BANGKOK = `split into substructure, superstructure and services in the proportions of the midpoints of Plotwise's own Bangkok high-rise condominium rates (substructure ${band(HIGH_RISE_STRUCTURE.substructure)}, superstructure ${band(HIGH_RISE_STRUCTURE.superstructure)} and services ${band(CONDO_SERVICES)} per m², out of ${band(HIGH_RISE_CONDO)}), so the three rows add up to the published total; that split is a generic default, not local`
+
+function splitLikeBangkok(whole: Band, source: string): ExampleMoney['rates'] {
+  const part = (share: Band): SplitRange => ({ ...proportion(whole, share), source: `${source}; ${SPLIT_LIKE_BANGKOK}`, kind: 'split' })
+  return {
+    substructure: part(HIGH_RISE_STRUCTURE.substructure),
+    superstructure: part(HIGH_RISE_STRUCTURE.superstructure),
+    services: { condo: part(CONDO_SERVICES) },
+  }
+}
+
+const EXAMPLE = 'Example value for the example plot, not local market data for another plot'
+
+const TALL_BUILDINGS_2026 = 'Turner & Townsend, Tall buildings construction guide 2026'
+
+const SQFT = 'converted at 1 sq ft = 0.09290304 m²'
+
+const MUMBAI_SHELL_AND_CORE: Band = { low: 48_000, high: 54_000 }
+
+const PRESTIGE_MULUND = { priceInr: 1_107_500_000, plotSqm: 9_497.3 }
+
+export const MUMBAI_EXAMPLE_MONEY: ExampleMoney = {
+  salePricePerSqm: {
+    condo: {
+      value: perSqm(29_150),
+      source: `${EXAMPLE}; Square Yards, Mulund West property rates: "Property rates in Mulund West average ₹29,150 per sq ft", an average asking price for apartments dated September 2026 that does not say whether it is per carpet or built-up area, read here per sq ft of carpet area and ${SQFT}. For comparison, the Ready Reckoner 2026-27 values a residential flat in zone 123/567 of Mulund (W) at ₹145,950 per m², an official stamp-duty rate, not a market price (https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains). https://www.squareyards.com/property-rates/mulund-we-t-mumbai, ${FETCHED}`,
+    },
+  },
+  landReferencePerUnit: {
+    low: perSqft(MUMBAI_EXAMPLE_LAND_RATE.value),
+    high: perSqft(PRESTIGE_MULUND.priceInr / PRESTIGE_MULUND.plotSqm),
+    source: `${EXAMPLE}; low end the Ready Reckoner 2026-27 open-land rate of ₹64,240 per m² in zone 123/567 of Mulund (W), an official value, not a market price; high end a sale: Construction World, 30 July 2026, "Prestige Arm Acquires Over Two Acres In Mulund For Rs 1.11 bn": Prestige Mulund Realty bought 9,497.30 sq metres of factory land in Mulund West for "Rs 110.75 crore" (₹1,107,500,000), from registration documents accessed via CRE Matrix, https://www.constructionworld.in/policy-updates-and-economic-news/prestige-arm-acquires-over-two-acres-in-mulund-for-rs-1.11-bn/95216, ${FETCHED}. Both per sq ft of land, ${SQFT}`,
+  },
+  rates: splitLikeBangkok(
+    MUMBAI_SHELL_AND_CORE,
+    `${EXAMPLE}; ${TALL_BUILDINGS_2026}, Mumbai, "Mumbai's 2025 key cost ranges by sector": Residential (20-60 storeys) GIA shell and core cost "INR 48,000/m² – 54,000/m²" ("INR 4,500/ft² – 5,000/ft²"), "Costs exclude finishes, demolition, external works and utilities", https://reports.turnerandtownsend.com/tall-buildings-construction-guide-2026/mumbai, ${FETCHED}`,
+  ),
+  buildRateScope: 'shellAndCore',
+  landRate: MUMBAI_EXAMPLE_LAND_RATE,
+  tdrPrice: {
+    value: perSqm(6_000),
+    source: `${EXAMPLE}; Hindustan Times, "Mumbai real estate: Spike in Slum TDR sends real estate market into a tizzy", 16 May 2024, as reposted by NAREDCO: "According to industry executives, the TDR in Mulund has shot up from ₹3,500 per sq ft six months ago to ₹6,000 currently", ${SQFT}, https://www.naredco.in/node/1493, ${FETCHED}`,
+  },
+}
+
+const DUBAI_SHELL_AND_CORE: Band = { low: 5_000, high: 6_450 }
+
+const DUBAI_LAND_LISTING_PER_SQFT = 1_050
+
+export const DUBAI_EXAMPLE_MONEY: ExampleMoney = {
+  salePricePerSqm: {
+    condo: {
+      value: perSqm(894),
+      source: `${EXAMPLE}; Property Finder, International City sale transactions "Sourced from Dubai land department" over the last year: "Avg. price/sqft: 894" (AED) across 1,885 transactions, the latest registered on 20 Nov 2026, ${SQFT}. The average mixes ready and off-plan sales; the off-plan sales listed on 19 and 20 Nov 2026 were at AED 1,328 and 1,426 per sq ft, https://www.propertyfinder.ae/en/transactions/buy/dubai/international-city, ${FETCHED}`,
+    },
+  },
+  landReferencePerUnit: {
+    low: perSqm(DUBAI_LAND_LISTING_PER_SQFT),
+    high: perSqm(DUBAI_LAND_LISTING_PER_SQFT),
+    source: `${EXAMPLE}; one asking price, not a sale: Property Finder listing "G+6 Freehold | Residential Plot | Investor Deal" in International City, zone Al Warsan First, AED 16,821,054 for a 16,020 ft² plot with FAR 3.5, shown as "AED1,050/ft²" of plot area, ${SQFT}, https://www.propertyfinder.ae/en/plp/buy/land-for-sale-dubai-al-warsan-al-warsan-1-125648343.html, ${FETCHED}`,
+  },
+  rates: splitLikeBangkok(
+    DUBAI_SHELL_AND_CORE,
+    `${EXAMPLE}; ${TALL_BUILDINGS_2026}, Dubai, "Dubai's 2025 key cost ranges by sector": Residential (20-60 storeys) GIA shell and core cost "AED 5,000-6,450/m²", "Costs exclude finishes, demolition, external works and utilities", https://reports.turnerandtownsend.com/tall-buildings-construction-guide-2026/dubai, ${FETCHED}`,
+  ),
+  buildRateScope: 'shellAndCore',
+  landRate: null,
+  tdrPrice: null,
 }
 
 export const DUBAI_EXAMPLE_LIMITS_SOURCE = `Setbacks and plot coverage copied from a public Nakheel affection plan, not this plot’s own: Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only, so height in metres stays blank, and for parking says "Refer to Trakhees Building & Design Regulations in parallel with the master developer's DCR". Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20. ${DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source}`

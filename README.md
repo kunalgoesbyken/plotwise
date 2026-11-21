@@ -110,7 +110,7 @@ A pack is built from optional blocks in `src/rules` (FAR, bonus, purchasable FAR
 
 - **Dubai:** limits from the affection plan (GFA or FAR, height or G+ floors, setbacks, coverage, parking), in the Dubai Building Code's terms.
 - **Custom:** the limits you know for a plot anywhere.
-- Both are labelled unverified in the results, checklist and print, with no zone check and no sourced prices: every money input starts blank.
+- Both are labelled unverified in the results, checklist and print, with no zone check and no sourced local prices. Margin, fees, carpet or saleable share, holding cost, land finance and parking levels start at generic defaults labelled "Generic default, not local"; sale price, build rates and nearby land prices start blank. The Mumbai and Dubai examples open with cited example values for those, and "Fill with example values" puts them in for any plot in that region.
 
 ## Mumbai FSI stack
 

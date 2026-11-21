@@ -9,7 +9,7 @@ import { nearestRoad } from '@/site/nearest-road'
 import { OverpassResponseSchema } from '@/site/overpass-response'
 import { parseOverpass } from '@/site/parse'
 import { isParkingUnset } from '@/solve'
-import { ASSUMPTIONS, DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE, MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
+import { ASSUMPTIONS, DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE } from '@/solve/assumptions'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from './example-plot'
 
 function solved(region: 'mum' | 'dxb') {
@@ -68,10 +68,10 @@ describe('example plots', () => {
   })
 
   it('pre-fills the Mumbai example’s ASR land rate, per m² of land, from the Ready Reckoner it cites', () => {
-    expect(REGIONS.mum.example.landRate).toBe(MUMBAI_EXAMPLE_LAND_RATE)
-    expect(MUMBAI_EXAMPLE_LAND_RATE.value).toBeGreaterThan(0)
-    expect(MUMBAI_EXAMPLE_LAND_RATE.source).toContain('easr.igrmaharashtra.gov.in')
-    expect(MUMBAI_EXAMPLE_LAND_RATE.source).toContain('matched by position')
+    const landRate = REGIONS.mum.example.money.landRate
+    expect(landRate?.value).toBe(64_240)
+    expect(landRate?.source).toContain('easr.igrmaharashtra.gov.in')
+    expect(landRate?.source).toContain('matched by position')
   })
 
   it('gives Dubai a plot whose affection plan allows FAR 3.5 and G+8, with every limit the plan states entered, so nothing is left to check', () => {

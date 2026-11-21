@@ -123,7 +123,7 @@ test('money: the Mumbai example’s Ready Reckoner citation sits closed behind a
 
 test('money: the Bangkok land sources open and close behind the same Source button', async ({ page }) => {
   await openMoney(page, RESULTS_PLOT)
-  await expectSourceToggle(landRegion(page), MONEY_REGIONS.bkk.prices.areas.source)
+  await expectSourceToggle(landRegion(page), MONEY_REGIONS.bkk.local.areas.source)
 })
 
 test('money: the landing page says which money figures are published and which are Plotwise estimates', async ({ page }) => {

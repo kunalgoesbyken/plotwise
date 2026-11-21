@@ -10,9 +10,12 @@ export {
   type AreaTier,
   type AssumedRange,
   type Assumption,
-  type MoneyPrices,
+  type ExampleMoney,
+  type GenericMoney,
+  type LocalMoney,
   type MoneyRegion,
   type RegionId,
+  type SplitRange,
 } from './assumptions'
 export { compare, inRange, negate, satisfies } from './bound'
 export { isHighRiseOrExtraLarge, isLarge, type Building } from './building'
