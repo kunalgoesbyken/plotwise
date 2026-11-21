@@ -2,10 +2,10 @@ import type { Metrics } from '@/designs'
 import type { LngLat } from '@/geo/projection'
 import type { BuildingType } from '@/plot/plot'
 import type { FarPurchase, RulePack } from '@/rules'
-import { isHighRiseOrExtraLarge, purchaseUse, type Limits, type MoneyPrices, type MoneyRegion, type PurchaseOption, type Solution } from '@/solve'
+import { isHighRiseOrExtraLarge, purchaseUse, type Limits, type LocalMoney, type MoneyRegion, type PurchaseOption, type Solution } from '@/solve'
 import { placementOf, type Placement } from './area'
-import type { Basis, Bound, PurchasePriceId, RateRow } from './parameters'
-import type { Values } from './values'
+import type { Bound, PurchasePriceId, RateRow } from './parameters'
+import type { MoneySite, Values } from './values'
 
 export type BuildClass = 'lowRise' | 'highRise'
 
@@ -60,9 +60,9 @@ function pricePerSqm(price: FarPurchase['price'], prices: PurchasePrices): numbe
 const purchaseCost = (metrics: Metrics, { farLimits }: FinanceSite, prices: PurchasePrices) =>
   purchaseUse(farLimits, metrics.gfaSqm).reduce((sum, use) => (use.usedGfaSqm > 0 ? sum + use.usedGfaSqm * pricePerSqm(use.price, prices) : sum), 0)
 
-export const placementIn = ({ origin }: FinanceSite, prices: MoneyPrices): Placement => placementOf(origin, prices.areas)
+export const placementIn = ({ origin }: FinanceSite, local: LocalMoney): Placement => placementOf(origin, local.areas)
 
-export const basisOf = (site: FinanceSite, prices: MoneyPrices): Basis => ({ use: site.use, tier: placementIn(site, prices).tier })
+export const moneySiteOf = (site: FinanceSite, { local }: MoneyRegion): MoneySite => ({ pack: site.pack, use: site.use, tier: local && placementIn(site, local).tier })
 
 export type CostSplit = { readonly substructure: number; readonly superstructure: number; readonly services: number }
 export type Range = { readonly low: number; readonly high: number }

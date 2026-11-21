@@ -5,21 +5,26 @@ import { useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
 import { DEFAULT_REGION } from '@/region/regions'
 import { MONEY_REGIONS, type MoneyRegion, type RegionId } from '@/solve'
-import { decodeAskingPrice, decodeAssumptions, encodeAskingPrice, encodeAssumptions } from './url'
+import { decodeAskingPrice, decodeAssumptions, encodeAskingPrice, encodeAssumptions, type AssumptionsState, type ExampleChoice } from './url'
 import type { Overrides } from './values'
 
 export type AssumptionsView = {
   readonly region: MoneyRegion
   readonly overrides: Overrides
+  readonly examples: ExampleChoice
   readonly setOverride: (key: string, value: number) => void
-  readonly clearAll: () => void
+  readonly setExamples: (examples: ExampleChoice) => void
+  readonly clearAll: (examples: ExampleChoice) => void
   readonly askingPrice: number | null
   readonly setAskingPrice: (price: number | null) => void
 }
 
 const AssumptionsContext = createContext<AssumptionsView | null>(null)
 
-const overridesInUrl = (region: MoneyRegion) => ({ decode: (encoded: string | null) => decodeAssumptions(encoded, region), encode: encodeAssumptions })
+const assumptionsInUrl = (region: MoneyRegion) => ({
+  decode: (encoded: string | null) => decodeAssumptions(encoded, region),
+  encode: ({ overrides, examples }: AssumptionsState) => encodeAssumptions(overrides, examples),
+})
 
 const ASKING_PRICE_IN_URL = { decode: decodeAskingPrice, encode: encodeAskingPrice }
 
@@ -27,19 +32,21 @@ const regionParam = (name: string, region: RegionId) => (region === DEFAULT_REGI
 
 export function AssumptionsProvider({ children }: { readonly children: ReactNode }) {
   const { id } = useRegion()
-  const overridesCodec = useMemo(() => overridesInUrl(MONEY_REGIONS[id]), [id])
-  const [overrides, setOverrides] = useHashState(regionParam('assume', id), overridesCodec)
+  const assumptionsCodec = useMemo(() => assumptionsInUrl(MONEY_REGIONS[id]), [id])
+  const [assumptions, setAssumptions] = useHashState(regionParam('assume', id), assumptionsCodec)
   const [askingPrice, setAskingPrice] = useHashState(regionParam('ask', id), ASKING_PRICE_IN_URL)
   const view = useMemo<AssumptionsView>(
     () => ({
       region: MONEY_REGIONS[id],
-      overrides,
-      setOverride: (key, value) => setOverrides((current) => ({ ...current, [key]: value })),
-      clearAll: () => setOverrides({}),
+      overrides: assumptions.overrides,
+      examples: assumptions.examples,
+      setOverride: (key, value) => setAssumptions((current) => ({ ...current, overrides: { ...current.overrides, [key]: value } })),
+      setExamples: (examples) => setAssumptions((current) => ({ ...current, examples })),
+      clearAll: (examples) => setAssumptions({ overrides: {}, examples }),
       askingPrice,
       setAskingPrice,
     }),
-    [id, overrides, setOverrides, askingPrice, setAskingPrice],
+    [id, assumptions, setAssumptions, askingPrice, setAskingPrice],
   )
   return <AssumptionsContext value={view}>{children}</AssumptionsContext>
 }

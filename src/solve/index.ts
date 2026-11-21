@@ -10,7 +10,9 @@ export {
   type AreaTier,
   type AssumedRange,
   type Assumption,
-  type MoneyPrices,
+  type ExampleMoney,
+  type GenericMoney,
+  type LocalMoney,
   type MoneyRegion,
   type RegionId,
 } from './assumptions'

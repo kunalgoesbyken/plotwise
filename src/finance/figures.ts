@@ -5,7 +5,7 @@ import type { AreaUnit } from '@/units/area'
 import { askingVerdict } from './asking-price'
 import { formatMoney } from './format-money'
 import { totalOf, type Estimate, type Parking, type Range } from './estimate'
-import { SCALARS, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
+import { PURCHASE_PRICES, SCALARS, type Input, type PurchasePriceId, type RateRow, type ScalarId } from './parameters'
 import type { Finance } from './use-finance'
 
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
@@ -41,12 +41,20 @@ export function scalarLabel(id: ScalarId, { areaUnit, areaTerms }: Region): stri
 export const purchasePriceLabel = (id: PurchasePriceId, { areaUnit, areaTerms }: Region) =>
   id === 'landRate' ? t('land.landRate', { rate: areaTerms.landRate, unit: t(`area-unit.${areaUnit}`) }) : t('land.tdrPrice', { unit: t(`area-unit.${areaUnit}`) })
 
-type RateRows = Pick<Finance, 'rates' | 'buildClasses'>
+type MissingRows = Pick<Finance, 'missing' | 'rates' | 'buildClasses'>
 
-export const everyValueLabel = (region: Region, finance: RateRows) => [
-  ...(Object.keys(SCALARS) as ScalarId[]).map((id) => scalarLabel(id, region)),
-  ...finance.rates.map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, region.areaUnit, finance) })),
-]
+export function missingLabels(region: Region, finance: MissingRows): readonly string[] {
+  const missing = new Set<Input>(finance.missing)
+  return [
+    ...(Object.keys(SCALARS) as ScalarId[]).filter((id) => missing.has(SCALARS[id])).map((id) => scalarLabel(id, region)),
+    ...finance.rates
+      .filter(({ low, high }) => missing.has(low) || missing.has(high))
+      .map(({ row }) => t('assumptions.rate-range', { row: rateLabel(row, region.areaUnit, finance) })),
+    ...Object.values(PURCHASE_PRICES)
+      .filter((input) => missing.has(input))
+      .map((input) => purchasePriceLabel(input.id, region)),
+  ]
+}
 
 type OneClassRow = Extract<RateRow, 'substructure.lowRise' | 'superstructure.lowRise'>
 

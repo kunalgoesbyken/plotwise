@@ -7,18 +7,19 @@ import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { formatList, formatNumber } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
+import { Button } from '@/ui/button'
 import { Disclosure } from '@/ui/disclosure'
 import { AskingPrice } from './asking-price-field'
-import { everyValueLabel, purchasePriceLabel, rangeText } from './figures'
+import { missingLabels, purchasePriceLabel, rangeText } from './figures'
 import { ParameterInput } from './parameter-input'
 import { SCALARS } from './parameters'
 import { useFinance, type Finance, type Priced } from './use-finance'
 
 function areaText({ area, region }: Finance) {
-  if (!area || !region.prices) return null
+  if (!area || !region.local) return null
   const name = t(`area.${area.tier}`)
   if (!area.determined) return t('land.area-unknown', { area: name })
-  return t('land.area', { area: name, km: formatNumber(area.distanceKm, 'km'), centre: region.prices.areas.centre.name })
+  return t('land.area', { area: name, km: formatNumber(area.distanceKm, 'km'), centre: region.local.areas.centre.name })
 }
 
 function Supported({ finance, priced, design }: { finance: Finance; priced: Priced; design: Design }) {
@@ -39,21 +40,32 @@ function Supported({ finance, priced, design }: { finance: Finance; priced: Pric
 
 function NeedsPrices({ finance }: { finance: Finance }) {
   const region = useRegion()
+  const missing = missingLabels(region, finance)
   return (
     <div role="note" className="flex flex-col gap-1 text-xs leading-relaxed">
-      <p className="text-foreground">{t('money.needs-prices', { region: region.name, values: formatList(everyValueLabel(region, finance)) })}</p>
-      <p className="font-medium text-destructive">{t('money.missing', { count: finance.missing.length })}</p>
+      <p className="text-foreground">{t('money.needs-prices', { region: region.name, values: formatList(missing) })}</p>
+      <p className="font-medium text-destructive">{t('money.missing', { count: missing.length })}</p>
     </div>
   )
 }
 
+function Examples({ finance }: { finance: Finance }) {
+  if (finance.examples === 'none') return null
+  if (finance.examples === 'applied') return <p className="text-xs leading-relaxed text-muted-foreground">{t('money.examples-applied')}</p>
+  return (
+    <Button variant="outline" size="sm" className="self-start" onClick={finance.fillExamples}>
+      {t('money.fill-examples')}
+    </Button>
+  )
+}
+
 function PriceSources({ finance }: { finance: Finance }) {
-  const { prices } = finance.region
-  if (!prices) return null
+  const { local } = finance.region
+  if (!local) return null
   return (
     <Disclosure label={t('assumptions.source')} tone="muted">
       <ul className="flex flex-col gap-2 pb-2 text-xs leading-relaxed text-muted-foreground">
-        <li>{prices.areas.source}</li>
+        <li>{local.areas.source}</li>
         <li>{finance.sourceOf(SCALARS.salePrice)}</li>
         <li>{finance.sourceOf(SCALARS.margin)}</li>
         <li>{finance.sourceOf(SCALARS.landReferenceLow)}</li>
@@ -88,6 +100,7 @@ export function LandValue() {
         return source && <ExampleNote key={input.id} source={source} />
       })}
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}
+      <Examples finance={finance} />
       <AskingPrice finance={finance} design={design} />
       <p className="text-xs leading-relaxed text-muted-foreground">{t('land.indicative')}</p>
       <PriceSources finance={finance} />

@@ -3,8 +3,8 @@ import { exampleFragment } from '@/editor/plot-url'
 import { capFigures } from '@/feasibility/cap-line'
 import { feasibility } from '@/feasibility/compute'
 import { firstCostRange } from '@/finance/figures'
-import { basisOf, estimate, financeSite } from '@/finance/estimate'
-import { resolveValues } from '@/finance/values'
+import { estimate, financeSite, moneySiteOf } from '@/finance/estimate'
+import { sourcedValues } from '@/finance/values'
 import { EXAMPLE_PLOT } from '@/plot/example-plot'
 import { DEFAULT_REGION, REGIONS } from '@/region/regions'
 import { isSourceCite, loadPack } from '@/rules'
@@ -32,7 +32,7 @@ export function exampleFigures() {
   if (!design) throw new Error('The example plot no longer has a design')
   const region = MONEY_REGIONS[DEFAULT_REGION.id]
   const site = financeSite(solution, region)
-  const money = estimate(design.metrics, site, resolveValues(region.prices, basisOf(site, region.prices), {}))
+  const money = estimate(design.metrics, site, sourcedValues(region, moneySiteOf(site, region)))
   const cited = design.checks
     .filter((check) => check.status === 'pass')
     .flatMap((check) => {

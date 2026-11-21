@@ -8,15 +8,24 @@ import { Button } from '@/ui/button'
 import { Disclosure } from '@/ui/disclosure'
 import { rateLabel, scalarLabel } from './figures'
 import { ParameterInput } from './parameter-input'
-import { SCALARS, type ScalarId } from './parameters'
-import { useFinance, type Finance } from './use-finance'
+import { SCALARS, type Parameter, type ScalarId } from './parameters'
+import { useFinance, type Finance, type ValueLabel } from './use-finance'
 
-function Row({ label, source, children }: { readonly label: string; readonly source: string | null; readonly children: ReactNode }) {
+const BADGES: Readonly<Record<ValueLabel, string>> = {
+  estimated: t('money.estimated'),
+  generic: t('assumptions.generic'),
+  example: t('assumptions.example'),
+}
+
+type RowProps = { readonly label: string; readonly finance: Finance; readonly parameter: Parameter; readonly children: ReactNode }
+
+function Row({ label, finance, parameter, children }: RowProps) {
+  const source = finance.sourceOf(parameter)
   return (
     <li className="flex flex-col gap-2 py-3">
       <div className="flex items-baseline justify-between gap-3">
         <span className="text-sm">{label}</span>
-        <Badge variant="outline">{t('money.estimated')}</Badge>
+        <Badge variant="outline">{BADGES[finance.labelOf(parameter)]}</Badge>
       </div>
       <div className="flex flex-wrap gap-4">{children}</div>
       {source === null ? (
@@ -35,7 +44,7 @@ function ScalarRow({ finance, id }: { finance: Finance; id: ScalarId }) {
   const parameter = SCALARS[id]
   const label = scalarLabel(id, region)
   return (
-    <Row label={label} source={finance.sourceOf(parameter)}>
+    <Row label={label} finance={finance} parameter={parameter}>
       <ParameterInput finance={finance} parameter={parameter} label={label} hideLabel />
     </Row>
   )
@@ -60,7 +69,7 @@ export function AssumptionsPanel() {
         <h2 className="text-base leading-6 font-semibold">{t('assumptions.title')}</h2>
         {finance.hasEdits && (
           <Button variant="link" size="xs" onClick={finance.resetAll}>
-            {t(finance.region.prices ? 'assumptions.reset' : 'assumptions.clear')}
+            {t(finance.region.local ? 'assumptions.reset' : 'assumptions.clear')}
           </Button>
         )}
       </header>
@@ -83,7 +92,7 @@ export function AssumptionsPanel() {
       </Group>
       <Group title={t('assumptions.rates', { unit: t(`area-unit.${areaUnit}`) })}>
         {finance.rates.map(({ row, low, high }) => (
-          <Row key={row} label={rateLabel(row, areaUnit, finance)} source={finance.sourceOf(low)}>
+          <Row key={row} label={rateLabel(row, areaUnit, finance)} finance={finance} parameter={low}>
             <ParameterInput finance={finance} parameter={low} label={t('assumptions.low')} />
             <ParameterInput finance={finance} parameter={high} label={t('assumptions.high')} />
           </Row>

@@ -1,24 +1,19 @@
 import type { BuildingType } from '@/plot/plot'
 import { isSourceCite, type Cite, type RulePack } from '@/rules'
-import { CARPET_RATIO_NOTE, type MoneyPrices } from '@/solve'
-import { enteredAs, PARAMETERS, parametersFor, storageKey, type Assumed, type Basis, type Parameter, type ParameterId } from './parameters'
+import { CARPET_RATIO_NOTE, type AreaTier, type ExampleMoney, type GenericMoney, type LocalMoney, type MoneyRegion } from '@/solve'
+import { enteredAs, PARAMETERS, parametersFor, storageKey, type Assumed, type Parameter, type ParameterId } from './parameters'
 
 export type Overrides = Readonly<Partial<Record<string, number>>>
 export type Values = Readonly<Record<ParameterId, number>>
 
-export function resolveValues(prices: MoneyPrices, basis: Basis, overrides: Overrides): Values {
-  const entries = PARAMETERS.map((parameter) => [parameter.id, overrides[storageKey(parameter, basis.use)] ?? parameter.assumed(prices, basis).value])
-  return Object.fromEntries(entries) as Values
-}
+type RuleDefaults = Readonly<Partial<Record<ParameterId, Assumed>>>
 
-export type Defaults = Readonly<Partial<Record<ParameterId, Assumed>>>
-
-const NO_DEFAULTS: Defaults = {}
+const NO_RULE_DEFAULTS: RuleDefaults = {}
 
 const citeText = (cite: Cite) => (isSourceCite(cite) ? `${cite.clause}, page ${cite.page} line ${cite.line}: "${cite.quote}"` : cite.field)
 
-export function packDefaults({ carpetArea, sources }: RulePack): Defaults {
-  if (!carpetArea) return NO_DEFAULTS
+export function packDefaults({ carpetArea, sources }: RulePack): RuleDefaults {
+  if (!carpetArea) return NO_RULE_DEFAULTS
   const [ratio] = carpetArea.builtUpPerCarpet
   const cites = [...carpetArea.builtUpPerCarpet.map((r) => r.cite), carpetArea.definition]
   const source = Object.values(sources)[0]?.name
@@ -30,16 +25,57 @@ export function packDefaults({ carpetArea, sources }: RulePack): Defaults {
   }
 }
 
-const valueOf = (parameter: Parameter, overrides: Overrides, use: BuildingType, defaults: Defaults) =>
-  overrides[storageKey(parameter, use)] ?? defaults[parameter.id]?.value
+export type DefaultKind = 'rule' | 'example' | 'local' | 'generic'
 
-export function missingParameters(overrides: Overrides, use: BuildingType, pack: RulePack): readonly Parameter[] {
-  const defaults = packDefaults(pack)
-  return parametersFor(pack).filter((parameter) => valueOf(parameter, overrides, use, defaults) === undefined)
+export type Default = Assumed & { readonly kind: DefaultKind }
+
+export type MoneyDefaults = {
+  readonly pack: RulePack
+  readonly use: BuildingType
+  readonly rules: RuleDefaults
+  readonly generic: { readonly money: GenericMoney; readonly kind: Extract<DefaultKind, 'local' | 'generic'> }
+  readonly local: { readonly money: LocalMoney; readonly tier: AreaTier } | null
+  readonly example: ExampleMoney | null
 }
 
-export function enteredValues(overrides: Overrides, use: BuildingType, pack: RulePack): Values | null {
-  if (missingParameters(overrides, use, pack).length > 0) return null
-  const defaults = packDefaults(pack)
-  return Object.fromEntries(PARAMETERS.map((parameter) => [parameter.id, valueOf(enteredAs(parameter, pack), overrides, use, defaults)])) as Values
+export type MoneySite = { readonly pack: RulePack; readonly use: BuildingType; readonly tier: AreaTier | null }
+
+export function moneyDefaults(region: MoneyRegion, { pack, use, tier }: MoneySite, example: ExampleMoney | null): MoneyDefaults {
+  return {
+    pack,
+    use,
+    rules: packDefaults(pack),
+    generic: { money: region.generic, kind: region.local ? 'local' : 'generic' },
+    local: region.local && tier ? { money: region.local, tier } : null,
+    example,
+  }
+}
+
+const withKind = (assumed: Assumed | null, kind: DefaultKind): Default | null => assumed && { ...assumed, kind }
+
+function sourcedDefault(parameter: Parameter, { use, generic, local, example }: MoneyDefaults): Default | null {
+  if (parameter.block === 'generic') return withKind(parameter.generic(generic.money, use), generic.kind)
+  return (example && withKind(parameter.example(example, use), 'example')) ?? (local && withKind(parameter.local(local.money, { use, tier: local.tier }), 'local'))
+}
+
+export function defaultOf(parameter: Parameter, defaults: MoneyDefaults): Default | null {
+  const entered = enteredAs(parameter, defaults.pack)
+  return withKind(defaults.rules[entered.id] ?? null, 'rule') ?? sourcedDefault(entered, defaults)
+}
+
+const valueOf = (parameter: Parameter, overrides: Overrides, defaults: MoneyDefaults) =>
+  overrides[storageKey(enteredAs(parameter, defaults.pack), defaults.use)] ?? defaultOf(parameter, defaults)?.value
+
+export const missingParameters = (overrides: Overrides, defaults: MoneyDefaults): readonly Parameter[] =>
+  parametersFor(defaults.pack).filter((parameter) => valueOf(parameter, overrides, defaults) === undefined)
+
+export function resolveValues(overrides: Overrides, defaults: MoneyDefaults): Values | null {
+  const entries = PARAMETERS.map((parameter) => [parameter.id, valueOf(parameter, overrides, defaults)] as const)
+  return entries.every(([, value]) => value !== undefined) ? (Object.fromEntries(entries) as Values) : null
+}
+
+export function sourcedValues(region: MoneyRegion, site: MoneySite, overrides: Overrides = {}): Values {
+  const values = resolveValues(overrides, moneyDefaults(region, site, null))
+  if (!values) throw new Error('This region has no sourced default for every money value')
+  return values
 }
