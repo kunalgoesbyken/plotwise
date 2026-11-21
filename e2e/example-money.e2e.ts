@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
+import { formatAmount } from '../src/finance/format-money'
 import { MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
@@ -76,7 +77,7 @@ test('money: a Mumbai plot of your own asks only for its local values, and the b
   await expect(salePrice(page)).toHaveValue('')
 
   await fillButton(page).click()
-  await expect(salePrice(page)).toHaveValue('29150')
+  await expect(salePrice(page)).toHaveValue(formatAmount(29150))
   await expect(costRegion(page)).toBeVisible()
   await expect(landRegion(page).getByText(t('money.examples-applied'))).toBeVisible()
   await showAssumptions(page)
@@ -97,7 +98,7 @@ test('money: a value typed over an example value wins, and both travel in the sh
   await page.locator('[data-map-ready="true"]').waitFor({ timeout: READY_TIMEOUT })
   await goTo(page, 'Results')
   await showTab(page, 'Money')
-  await expect(salePrice(page)).toHaveValue('25000', { timeout: READY_TIMEOUT })
+  await expect(salePrice(page)).toHaveValue(formatAmount(25000), { timeout: READY_TIMEOUT })
   await expect(fillButton(page)).toHaveCount(0)
   await showAssumptions(page)
   const sale = row(page, t('assumptions.salePrice', { unit: t('area-unit.sqft'), saleable: MUMBAI.areaTerms.saleable }))

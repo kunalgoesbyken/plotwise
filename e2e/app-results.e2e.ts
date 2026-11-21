@@ -14,6 +14,7 @@ import {
   showTab,
   summary,
 } from './support/app'
+import { formatAmount } from '../src/finance/format-money'
 import { RESULTS_PLOT, hashOf, mockApp } from './support/site'
 import { expect, test } from './support/test'
 
@@ -111,7 +112,7 @@ for (const device of DEVICES)
       await opened.locator('[data-map-ready="true"]').waitFor({ timeout: READY_TIMEOUT })
       await expect(designTable(opened)).toBeAttached({ timeout: READY_TIMEOUT })
       await showTab(opened, 'Money')
-      await expect.poll(async () => (await readState(opened)).salePrice, { timeout: READY_TIMEOUT }).toBe(SALE_PRICE)
+      await expect.poll(async () => (await readState(opened)).salePrice, { timeout: READY_TIMEOUT }).toBe(formatAmount(Number(SALE_PRICE)))
       expect(await readState(opened)).toEqual(shared)
 
       await opened.reload()

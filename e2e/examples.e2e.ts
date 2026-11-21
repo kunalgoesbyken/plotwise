@@ -81,7 +81,7 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
   await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue(formatAmount(perAreaToDisplay(MUMBAI_EXAMPLE_LAND_RATE.value, 'sqft')))
   await expect(land.getByText('Example values.')).toHaveCount(2)
-  await land.getByRole('button', { name: t('assumptions.source') }).click()
+  await land.getByRole('button', { name: t('assumptions.source') }).first().click()
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
   await expect(land).toContainText('zone 123/567')
   await expect(land).toContainText('easr.igrmaharashtra.gov.in')
@@ -113,7 +113,7 @@ test('the Mumbai example’s ASR, converted to sq ft, shows in whole rupees with
   await expect(rate).toHaveValue(formatAmount(Math.round(perSqft)))
   await rate.focus()
   await rate.blur()
-  await expect(land.getByText('Example values.')).toBeVisible()
+  await expect(land.getByText('Example values.')).toHaveCount(2)
   expect(decodeURIComponent(page.url())).not.toContain('landRate:')
 })
 

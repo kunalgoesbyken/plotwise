@@ -98,7 +98,7 @@ test('money: an edited BOI-based rate travels in the share link', async ({ page 
 })
 
 async function expectSourceToggle(region: Locator, source: string) {
-  const toggle = region.getByRole('button', { name: t('assumptions.source') })
+  const toggle = region.getByRole('button', { name: t('assumptions.source') }).first()
   await expect(toggle).toHaveAttribute('aria-expanded', 'false')
   await expect(region).not.toContainText(source)
   await toggle.focus()
