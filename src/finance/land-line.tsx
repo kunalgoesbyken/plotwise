@@ -3,7 +3,7 @@
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { t } from '@/text/messages'
 import { AskingPrice } from './asking-price-field'
-import { rangeText } from './figures'
+import { hasLandValue, landValueText, noLandValueText } from './figures'
 import { useFinance } from './use-finance'
 
 export function LandLine() {
@@ -11,11 +11,12 @@ export function LandLine() {
   const finance = useFinance()
   if (!design || !finance?.priced) return null
   const estimate = finance.priced.estimateFor(design)
-  const range = rangeText(estimate.landValue, finance.region.currency)
+  const { currency } = finance.region
+  const { landValue } = estimate
   return (
     <>
       <p className="text-xs leading-snug text-muted-foreground">
-        {t('summary.land', { range })}
+        {hasLandValue(landValue) ? t('summary.land', { range: landValueText(landValue, currency) }) : noLandValueText(landValue, currency)}
         {finance.priced.landCheckOf(estimate).exceeds && (
           <strong className="font-medium text-destructive"> {t('summary.land-above', { factor: finance.region.landWarningFactor.value })}</strong>
         )}

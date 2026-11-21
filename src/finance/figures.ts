@@ -11,6 +11,16 @@ import type { Finance } from './use-finance'
 export const rangeText = ({ low, high }: Range, currency: string | null) =>
   t('money.range', { low: formatMoney(low, currency), high: formatMoney(high, currency) })
 
+export const hasLandValue = ({ high }: Range) => high > 0
+
+export function noLandValueText({ low, high }: Range, currency: string | null) {
+  const [least, most] = [formatMoney(-high, currency), formatMoney(-low, currency)]
+  return t('land.none', { shortfall: least === most ? least : t('money.range', { low: least, high: most }) })
+}
+
+export const landValueText = (landValue: Range, currency: string | null) =>
+  hasLandValue(landValue) ? rangeText({ low: Math.max(0, landValue.low), high: landValue.high }, currency) : noLandValueText(landValue, currency)
+
 export function askingText(asking: number, { priced, region }: Pick<Finance, 'priced' | 'region'>, design: Design): string {
   const verdict = askingVerdict(asking, priced && priced.estimateFor(design).landValue)
   const shown = formatMoney(asking, region.currency)

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { checkLabel } from '@/feasibility/check-label'
-import { rangeText } from '@/finance/figures'
+import { landValueText, rangeText } from '@/finance/figures'
 import { DEFAULT_REGION } from '@/region/regions'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
@@ -44,7 +44,7 @@ function Ranges({ firstCost, landValue, currency }: Pick<ExampleFigures, 'firstC
       </p>
       <p>
         <span className="text-muted-foreground">{t('landing.money.land')} </span>
-        <span className="font-medium">{rangeText(landValue, currency)}</span>
+        <span className="font-medium">{landValueText(landValue, currency)}</span>
       </p>
     </>
   )

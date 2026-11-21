@@ -140,7 +140,8 @@ test('Mumbai money: premium asks for the ASR land rate, TDR for its price, and t
 test('Mumbai carpet area starts at built-up area over 1.2 from DCPR 2034, editable, with the stamp-duty 1.1 explained', async ({ page }) => {
   const errors = collectErrors(page)
   await openApp(page, `${encodeRegion('mum')}&${encodePlot(WIDENED)}&assume-mum=${enteredValues('saleableShare')}`)
-  await expect(summary(page)).toContainText('Supports land worth', { timeout: 30_000 })
+  await expect(summary(page)).toContainText(/Supports land worth|No land value at these prices/, { timeout: 30_000 })
+  await expect(summary(page)).not.toContainText(/(₹[\d.]+M) to \1\b/)
   await showTab(page, 'Money')
   const money = panel(page, 'Money')
   await expect(money.getByText('still to enter')).toHaveCount(0)

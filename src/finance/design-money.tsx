@@ -9,7 +9,7 @@ import { formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { Badge } from '@/ui/badge'
 import type { CostSplit } from './estimate'
-import { firstCostRange, parkingText, rangeText } from './figures'
+import { firstCostRange, landValueText, parkingText, rangeText } from './figures'
 import { formatMoney } from './format-money'
 import { useFinance } from './use-finance'
 
@@ -35,7 +35,7 @@ export function useMoneyRows(): readonly MoneyRow[] {
     { label: t('money.parking-levels'), cell: (design) => parkingShown(unset, parkingText(priced.estimateFor(design).parking)) },
     { label: t('money.first-cost'), cell: (design) => rangeText(firstCostRange(priced.estimateFor(design)), currency) },
     ...(finance.purchasePrices.length > 0 ? [{ label: t('money.purchase'), cell: (design: Design) => formatMoney(priced.estimateFor(design).purchaseCost, currency) }] : []),
-    { label: t('money.land-value'), cell: (design) => rangeText(priced.estimateFor(design).landValue, currency) },
+    { label: t('money.land-value'), cell: (design) => landValueText(priced.estimateFor(design).landValue, currency) },
   ]
 }
 

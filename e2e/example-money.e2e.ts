@@ -5,7 +5,7 @@ import { MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { t } from '../src/text/messages'
-import { designsRegion, designTable, goTo, moneyRegion, READY_TIMEOUT, showTab } from './support/app'
+import { designsRegion, designTable, goTo, moneyRegion, READY_TIMEOUT, showTab, summary } from './support/app'
 import { hashOf, mockApp, RESULTS_PLOT } from './support/site'
 import { expect, test } from './support/test'
 
@@ -51,6 +51,17 @@ for (const region of ['mum', 'dxb'] as const) {
     await expect(basement.getByText(t('assumptions.blank'))).toBeVisible()
   })
 }
+
+test('money: the Dubai example, whose sourced prices do not cover its sourced costs, says so in words and never shows a negative land value', async ({ page }) => {
+  await openMoney(page, `${encodeRegion('dxb')}&example`)
+  const none = /No land value at these prices: costs exceed sales by AED\s[\d.]+M to AED\s[\d.]+M\./
+  await expect(landRegion(page)).toContainText(none, { timeout: READY_TIMEOUT })
+  await expect(landRegion(page)).not.toContainText('supports land worth')
+  await expect(summary(page)).toContainText(none)
+  await expect(landValueRow(page).first()).toContainText(none)
+  await expect(page.locator('body')).not.toContainText(/(AED\s[\d.]+M) to \1\b/)
+  await expect(page.locator('body')).not.toContainText(/[-−]\s?AED/)
+})
 
 test('money: on the Mumbai example, buying premium FSI and TDR shows what the extra floor area costs and moves the land value', async ({ page }) => {
   await openMoney(page, `${encodeRegion('mum')}&example`)
