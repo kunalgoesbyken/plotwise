@@ -72,6 +72,10 @@ export const ASSUMPTIONS = {
       'assumption, editable: a road is widened equally on both sides of its centre line, so a plot gives up half the extra width along its frontage. A development plan may take the whole widening from one side; the strip then is deeper, so check the plan’s road line',
   },
   roadWidthStepM: { value: 2, source: 'display choice: the road-width table shows the result this much narrower and wider than the width entered' },
+  sameDesignShare: {
+    value: 0.02,
+    source: 'display choice, not a rule: designs within this share of each other’s floor area and open space, and alike on every other measure, are shown as one design',
+  },
   importMinPlotSqm: {
     value: 10,
     source: 'input guard, not a rule: an imported outline smaller than a small room is a unit or coordinate mistake, not a plot',

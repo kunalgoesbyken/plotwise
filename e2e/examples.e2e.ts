@@ -1,7 +1,12 @@
 import type { Page } from '@playwright/test'
+import { rank } from '../src/designs'
 import { edgeName } from '../src/editor/map-features'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
+import { feasibility } from '../src/feasibility/compute'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
+import type { Plot } from '../src/plot/plot'
+import { REGIONS } from '../src/region/regions'
+import { loadPack } from '../src/rules'
 import { formatList } from '../src/text/format'
 import { t } from '../src/text/messages'
 import { mockApp } from './support/site'
@@ -13,6 +18,12 @@ const EXAMPLES = [
   { button: 'Dubai example', region: 'dxb', name: 'Dubai', plot: DUBAI_EXAMPLE_PLOT, allowed: '7,255 m²', label: 'Unverified: from your affection plan' },
 ] as const
 
+function shownDesigns(region: (typeof EXAMPLES)[number]['region'], plot: Plot): number {
+  const result = feasibility(plot, loadPack(REGIONS[region].packId))
+  if (result.status !== 'ready') throw new Error(`the ${region} example does not solve`)
+  return rank(result.designs).filter(({ standing }) => standing.kind !== 'same-as').length
+}
+
 const rulesPicker = (page: Page) => page.getByRole('radiogroup', { name: 'Rules' })
 
 async function expectExampleResults(page: Page, { region, name, plot, allowed, label }: (typeof EXAMPLES)[number]) {
@@ -21,7 +32,7 @@ async function expectExampleResults(page: Page, { region, name, plot, allowed, l
   await goTo(page, 'Results')
   await expect(summary(page)).toContainText(allowed, { timeout: READY_TIMEOUT })
   await expect(summary(page)).toContainText(label)
-  expect(await designTable(page).getByRole('columnheader').getByRole('button').count()).toBeGreaterThanOrEqual(2)
+  await expect(designTable(page).getByRole('columnheader').getByRole('button')).toHaveCount(shownDesigns(region, plot))
   await goTo(page, 'Plot')
   await expect(rulesPicker(page).getByRole('radio', { name })).toBeChecked()
 }

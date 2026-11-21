@@ -1,3 +1,4 @@
+import { ASSUMPTIONS } from '@/solve'
 import type { Check } from './checks'
 import type { Design } from './designs'
 import { headline } from './headline'
@@ -16,17 +17,21 @@ export type Standing =
 
 export type Ranked = { readonly design: Design; readonly standing: Standing }
 
-type Scale = { readonly gain: (design: Design) => number; readonly tolerance: number }
+type Scale = { readonly gain: (design: Design) => number; readonly tolerance: (a: number, b: number) => number }
 
 const counted = (design: Design, status: Check['status']) => design.checks.filter((check) => check.status === status).length
 
+const fixed = (tolerance: number) => () => tolerance
+
+const shareOfSmaller = (a: number, b: number) => Math.max(AREA_TOLERANCE_SQM, ASSUMPTIONS.sameDesignShare.value * Math.min(a, b))
+
 const SCALES: Readonly<Record<Measure, Scale>> = {
-  'floor-area': { gain: (d) => d.metrics.gfaSqm, tolerance: AREA_TOLERANCE_SQM },
-  height: { gain: (d) => -d.metrics.heightM, tolerance: HEIGHT_TOLERANCE_M },
-  'high-rise': { gain: (d) => (d.name.highRise ? -1 : 0), tolerance: 0 },
-  'failing-checks': { gain: (d) => -counted(d, 'fail'), tolerance: 0 },
-  'to-check': { gain: (d) => -counted(d, 'manual'), tolerance: 0 },
-  'open-space': { gain: (d) => d.metrics.openSpaceSqm, tolerance: AREA_TOLERANCE_SQM },
+  'floor-area': { gain: (d) => d.metrics.gfaSqm, tolerance: shareOfSmaller },
+  height: { gain: (d) => -d.metrics.heightM, tolerance: fixed(HEIGHT_TOLERANCE_M) },
+  'high-rise': { gain: (d) => (d.name.highRise ? -1 : 0), tolerance: fixed(0) },
+  'failing-checks': { gain: (d) => -counted(d, 'fail'), tolerance: fixed(0) },
+  'to-check': { gain: (d) => -counted(d, 'manual'), tolerance: fixed(0) },
+  'open-space': { gain: (d) => d.metrics.openSpaceSqm, tolerance: shareOfSmaller },
 }
 
 const MEASURES = Object.keys(SCALES) as Measure[]
@@ -35,7 +40,10 @@ const COMPARED = MEASURES.filter((measure) => measure !== 'open-space')
 
 const lead = (measure: Measure, a: Design, b: Design) => SCALES[measure].gain(a) - SCALES[measure].gain(b)
 
-const ahead = (measure: Measure, a: Design, b: Design) => lead(measure, a, b) > SCALES[measure].tolerance
+function ahead(measure: Measure, a: Design, b: Design): boolean {
+  const { gain, tolerance } = SCALES[measure]
+  return gain(a) - gain(b) > tolerance(gain(a), gain(b))
+}
 
 const alike = (a: Design, b: Design) => MEASURES.every((measure) => !ahead(measure, a, b) && !ahead(measure, b, a))
 

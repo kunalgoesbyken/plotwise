@@ -1,4 +1,5 @@
 import type { Difference, Ranked, Standing } from '@/designs'
+import { ASSUMPTIONS } from '@/solve'
 import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import type { AreaUnit } from '@/units/area'
@@ -38,7 +39,7 @@ function standingText(standing: Standing, unit: AreaUnit): string {
     case 'best':
       return t('standing.best')
     case 'same-as':
-      return t('standing.same-as', { name: t('design.name', standing.of.name) })
+      return t('standing.same-as', { name: t('design.name', standing.of.name), share: formatQuantity(ASSUMPTIONS.sameDesignShare.value, 'percent') })
     case 'dominated':
       return dominatedText(standing, unit)
     case 'alternative':

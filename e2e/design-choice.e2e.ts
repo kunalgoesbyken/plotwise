@@ -7,7 +7,7 @@ import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/pl
 import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { loadPack } from '../src/rules'
-import type { RegionId } from '../src/solve'
+import { ASSUMPTIONS, type RegionId } from '../src/solve'
 import { formatQuantity } from '../src/text/format'
 import { t } from '../src/text/messages'
 import { designTable, openResults, scene } from './support/app'
@@ -80,6 +80,26 @@ for (const region of ['mum', 'dxb'] as const)
       .evaluateAll((trs) => trs.map((tr) => Array.from(tr.querySelectorAll('td'), (cell) => cell.textContent)))
     const columns = shown.map((_, index) => rows.map((cells) => cells[index]).join('|'))
     expect(new Set(columns).size).toBe(shown.length)
+  })
+
+test('the Dubai example shows its two near-equal designs as one column, and says the other is within the share of its floor area', async ({ page }) => {
+  const options = ranked('dxb')
+  const collapsed = options.filter(({ standing }) => standing.kind === 'same-as')
+  expect(collapsed.length).toBeGreaterThan(0)
+  await openExample(page, 'dxb')
+  await expect(columnButtons(page)).toHaveCount(options.length - collapsed.length)
+  const share = formatQuantity(ASSUMPTIONS.sameDesignShare.value, 'percent')
+  for (const option of collapsed) {
+    if (option.standing.kind !== 'same-as') continue
+    const line = t('standing.line', { name: nameOf(option), standing: t('standing.same-as', { name: t('design.name', option.standing.of.name), share }) })
+    await expect(standings(page)).toContainText([line])
+  }
+})
+
+for (const region of ['bkk', 'mum'] as const)
+  test(`the ${REGIONS[region].name} example keeps a column for every design`, async ({ page }) => {
+    await openExample(page, region)
+    await expect(columnButtons(page)).toHaveCount(ranked(region).length)
   })
 
 test('the print summary lists every design with its mark', async ({ page }) => {

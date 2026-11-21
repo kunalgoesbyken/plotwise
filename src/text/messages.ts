@@ -584,7 +584,7 @@ const en = {
 
   'standing.label': 'How it compares',
   'standing.best': 'Most floor area.',
-  'standing.same-as': ({ name }: Name) => `Same result as the ${name}.`,
+  'standing.same-as': ({ name, share }: Name & { share: string }) => `Within ${share} of the ${name}’s floor area and open space, and alike otherwise, so shown as one.`,
   'standing.same-area': ({ name }: Name) => `Same floor area as the ${name}`,
   'standing.less-area': ({ area, name }: Area & Name) => `${area} less floor area than the ${name}`,
   'standing.dominated': ({ lead, worse, better }: { lead: string; worse: string; better: string }) =>
