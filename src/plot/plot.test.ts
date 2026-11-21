@@ -99,6 +99,14 @@ describe('limits entered for a plot', () => {
     fc.assert(fc.property(fc.double({ min: max, max: Number.MAX_VALUE, minExcluded: true, noNaN: true }), (over) => !withLimits({ [field]: over })))
   })
 
+  it.each([
+    ['parkingSqmPerSpace', ASSUMPTIONS.plotMinParkingSqmPerSpace.value],
+    ['homeSqm', ASSUMPTIONS.plotMinHomeSqm.value],
+  ])('refuses %s below its sourced minimum, where the parking demand would grow without bound', (field, min) => {
+    expect(withLimits({ [field]: min })).toBe(true)
+    fc.assert(fc.property(fc.double({ min: Number.MIN_VALUE, max: min, maxExcluded: true, noNaN: true }), (under) => !withLimits({ [field]: under })))
+  })
+
   it('bounds every limit a plot can be given', () => {
     expect(Object.keys(MAXIMA).sort()).toEqual(Object.keys(PlotLimitsSchema.shape).filter((f) => !f.endsWith('Share')).sort())
   })

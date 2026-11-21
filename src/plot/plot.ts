@@ -24,7 +24,7 @@ const RoadSchema = z
     path: ['prescribedWidthM'],
   })
 
-const { plotMaxGfaSqm, plotMaxFar, plotMaxHeightM, plotMaxStoreys, plotMaxSetbackM, plotMaxParkingSqmPerSpace, plotMaxParkingSpacesPerHome, plotMaxHomeSqm } = ASSUMPTIONS
+const { plotMaxGfaSqm, plotMaxFar, plotMaxHeightM, plotMaxStoreys, plotMaxSetbackM, plotMinParkingSqmPerSpace, plotMaxParkingSqmPerSpace, plotMaxParkingSpacesPerHome, plotMinHomeSqm, plotMaxHomeSqm } = ASSUMPTIONS
 
 const SetbackSchema = z.number().min(0).max(plotMaxSetbackM.value)
 
@@ -37,9 +37,9 @@ export const PlotLimitsSchema = z.object({
   roadSetbackM: SetbackSchema.optional(),
   boundarySetbackM: SetbackSchema.optional(),
   minOpenSpaceShare: z.number().min(0).lt(1).optional(),
-  parkingSqmPerSpace: z.number().positive().max(plotMaxParkingSqmPerSpace.value).optional(),
+  parkingSqmPerSpace: z.number().min(plotMinParkingSqmPerSpace.value).max(plotMaxParkingSqmPerSpace.value).optional(),
   parkingSpacesPerHome: z.number().positive().max(plotMaxParkingSpacesPerHome.value).optional(),
-  homeSqm: z.number().positive().max(plotMaxHomeSqm.value).optional(),
+  homeSqm: z.number().min(plotMinHomeSqm.value).max(plotMaxHomeSqm.value).optional(),
 })
 
 export const PlotSchema = z

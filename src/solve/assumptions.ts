@@ -100,6 +100,14 @@ export const ASSUMPTIONS = {
     value: 10,
     source: 'input guard, not a rule: the Dubai Building Code asks for at most 3 bays per unit (Table B.13), so ten spaces for one home entered for a plot is a typing slip',
   },
+  plotMinParkingSqmPerSpace: {
+    value: 1,
+    source: 'input guard, not a rule: no parking bay is smaller than a square metre, and a smaller figure entered for a plot makes the parking demand grow without bound',
+  },
+  plotMinHomeSqm: {
+    value: 1,
+    source: 'input guard, not a rule: no home is smaller than a square metre, and a smaller figure entered for one home makes the parking demand grow without bound',
+  },
   plotMaxHomeSqm: {
     value: 1_000,
     source: 'input guard, not a rule: a home of 1,000 m² is a whole villa or a floor of a tower, so a larger figure entered for one home is a unit mistake',
