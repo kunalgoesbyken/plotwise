@@ -12,7 +12,7 @@ import { useFeasibility } from '@/feasibility/feasibility-provider'
 import { standingLine } from '@/feasibility/standing-text'
 import { VerificationNote } from '@/feasibility/verification-note'
 import { useAssumptions } from '@/finance/assumptions-provider'
-import { askingText, firstCostRange, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
+import { askingText, firstCostRange, landValueText, rangeText, rateLabel, scalarLabel } from '@/finance/figures'
 import { formatMoney } from '@/finance/format-money'
 import { SCALARS, type Parameter, type ScalarId } from '@/finance/parameters'
 import { useFinance, type Finance, type Priced } from '@/finance/use-finance'
@@ -85,7 +85,7 @@ function MoneyFacts({ design, finance, priced, area }: { design: Design; finance
       <Fact label={t('money.saleable', areaTerms)}>{formatQuantity(estimate.saleableSqm, area)}</Fact>
       <Fact label={t('money.first-cost')}>{rangeText(firstCostRange(estimate), currency)}</Fact>
       {estimate.purchaseCost > 0 && <Fact label={t('money.purchase')}>{formatMoney(estimate.purchaseCost, currency)}</Fact>}
-      <Fact label={t('money.land-value')}>{rangeText(estimate.landValue, currency)}</Fact>
+      <Fact label={t('money.land-value')}>{landValueText(estimate.landValue, currency)}</Fact>
     </>
   )
 }

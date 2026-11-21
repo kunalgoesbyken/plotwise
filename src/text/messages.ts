@@ -688,7 +688,7 @@ const en = {
   'land.tdrPrice': ({ unit }: { unit: string }) => `TDR price per ${unit} of floor area`,
   'land.headline': ({ range }: { range: string }) => `This design supports land worth about ${range}.`,
   'land.per-unit': ({ range, unit }: { range: string; unit: string }) => `${range} per ${unit}`,
-  'land.negative': 'At these prices the costs exceed the value, so the land supports nothing.',
+  'land.none': ({ shortfall }: { shortfall: string }) => `No land value at these prices: costs exceed sales by ${shortfall}.`,
   'land.area': ({ area, km, centre }: { area: string; km: string; centre: string }) => `Priced as ${area}, about ${km} km from ${centre}.`,
   'land.area-unknown': ({ area }: { area: string }) => `The area could not be told from the location, so it is priced as ${area}.`,
   'land.reference': ({ range, unit }: { range: string; unit: string }) => `Typical asking prices nearby: ${range} per ${unit}.`,

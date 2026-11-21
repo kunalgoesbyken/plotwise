@@ -10,7 +10,7 @@ import { Badge } from '@/ui/badge'
 import { Button } from '@/ui/button'
 import { Disclosure } from '@/ui/disclosure'
 import { AskingPrice } from './asking-price-field'
-import { missingLabels, purchasePriceLabel, rangeText } from './figures'
+import { hasLandValue, landValueText, missingLabels, noLandValueText, purchasePriceLabel, rangeText } from './figures'
 import { ParameterInput } from './parameter-input'
 import { SCALARS } from './parameters'
 import { useFinance, type Finance, type Priced } from './use-finance'
@@ -29,10 +29,15 @@ function Supported({ finance, priced, design }: { finance: Finance; priced: Pric
   const { currency, landUnit, landWarningFactor } = finance.region
   return (
     <div>
-      <p className="text-sm leading-snug font-medium">{t('land.headline', { range: rangeText(landValue, currency) })}</p>
-      <p className="text-xs text-muted-foreground">{t('land.per-unit', { range: rangeText(landValuePerUnit, currency), unit: landUnit.name })}</p>
+      {hasLandValue(landValue) ? (
+        <>
+          <p className="text-sm leading-snug font-medium">{t('land.headline', { range: landValueText(landValue, currency) })}</p>
+          <p className="text-xs text-muted-foreground">{t('land.per-unit', { range: landValueText(landValuePerUnit, currency), unit: landUnit.name })}</p>
+        </>
+      ) : (
+        <p className="text-sm leading-snug font-medium">{noLandValueText(landValue, currency)}</p>
+      )}
       <p className="text-xs text-muted-foreground">{t('land.reference', { range: rangeText(reference, currency), unit: landUnit.name })}</p>
-      {landValue.high < 0 && <p className="mt-1 text-xs text-destructive">{t('land.negative')}</p>}
       {exceeds && <p className="mt-1 text-xs text-destructive">{t('land.above-reference', { factor: landWarningFactor.value })}</p>}
     </div>
   )
