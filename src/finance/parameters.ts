@@ -67,7 +67,7 @@ const UNIT_SCHEMAS: Readonly<Record<Unit, z.ZodNumber>> = {
 
 type RateRanges = {
   readonly local: (money: LocalMoney, use: BuildingType) => AssumedRange
-  readonly example: (money: ExampleMoney, use: BuildingType) => AssumedRange | null | undefined
+  readonly example: (money: ExampleMoney, use: BuildingType) => AssumedRange | undefined
 }
 
 const RATE_RANGES: Readonly<Record<RateRow, RateRanges>> = {
@@ -81,7 +81,7 @@ const RATE_RANGES: Readonly<Record<RateRow, RateRanges>> = {
 
 const boundOf = (range: AssumedRange, bound: Bound): Assumed => ({ value: range[bound], source: range.source })
 
-const exampleBound = (range: AssumedRange | null | undefined, bound: Bound) => (range ? boundOf(range, bound) : null)
+const exampleBound = (range: AssumedRange | undefined, bound: Bound) => (range ? boundOf(range, bound) : null)
 
 const generic = (id: ScalarId, unit: Unit, perUse: boolean, assumed: GenericParameter['generic']): Parameter => ({ id, unit, perUse, block: 'generic', generic: assumed })
 
@@ -91,7 +91,7 @@ const referenceParameter = (id: ScalarId, bound: Bound): Parameter => ({
   perUse: false,
   block: 'local',
   local: (money, { tier }) => boundOf(money.landReferencePerUnit[tier], bound),
-  example: (money) => exampleBound(money.landReferencePerUnit, bound),
+  example: (money) => boundOf(money.landReferencePerUnit, bound),
 })
 
 export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {

@@ -101,7 +101,7 @@ describe('example money values', () => {
 
   it('split the published shell and core cost so the three building rows add up to it', () => {
     const total = ({ rates }: ExampleMoney, bound: 'low' | 'high') =>
-      [rates.substructure, rates.superstructure, rates.services.condo].reduce((sum, range) => sum + (range?.[bound] ?? Number.NaN), 0)
+      rates.substructure[bound] + rates.superstructure[bound] + (rates.services.condo?.[bound] ?? Number.NaN)
     expect([total(REGIONS.mum.example.money, 'low'), total(REGIONS.mum.example.money, 'high')]).toEqual([48_000, 54_000].map((v) => expect.closeTo(v, 6)))
     expect([total(REGIONS.dxb.example.money, 'low'), total(REGIONS.dxb.example.money, 'high')]).toEqual([5_000, 6_450].map((v) => expect.closeTo(v, 6)))
   })

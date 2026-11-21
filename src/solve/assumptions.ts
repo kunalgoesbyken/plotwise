@@ -160,12 +160,12 @@ export type LocalMoney = {
 
 export type ExampleMoney = {
   readonly salePricePerSqm: Readonly<Partial<Record<BuildingType, Assumption>>>
-  readonly landReferencePerUnit: AssumedRange | null
+  readonly landReferencePerUnit: AssumedRange
   readonly rates: {
-    readonly substructure: AssumedRange | null
-    readonly superstructure: AssumedRange | null
+    readonly substructure: AssumedRange
+    readonly superstructure: AssumedRange
     readonly services: Readonly<Partial<Record<BuildingType, AssumedRange>>>
-    readonly basement: AssumedRange | null
+    readonly basement: AssumedRange
   }
   readonly landRate: Assumption | null
   readonly tdrPrice: Assumption | null

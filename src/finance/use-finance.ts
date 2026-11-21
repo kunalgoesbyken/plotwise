@@ -6,7 +6,7 @@ import { useRegion } from '@/editor/plot-store'
 import { useFeasibility } from '@/feasibility/feasibility-provider'
 import type { BuildingType, Plot } from '@/plot/plot'
 import { isExampleSite, type Region } from '@/region/regions'
-import type { ExampleMoney, MoneyRegion } from '@/solve'
+import type { MoneyRegion } from '@/solve'
 import type { Placement } from './area'
 import { useAssumptions } from './assumptions-provider'
 import { estimate, financeSite, moneySiteOf, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
@@ -45,8 +45,6 @@ export type Finance = {
 
 const LABELS: Readonly<Record<DefaultKind, ValueLabel>> = { rule: 'estimated', local: 'estimated', example: 'example', generic: 'generic' }
 
-const exampleMoneyOf = (region: Region): ExampleMoney | null => region.example?.money ?? null
-
 const isApplied = (choice: ExampleChoice, region: Region, plot: Plot) => choice ?? isExampleSite(region, plot.ring)
 
 function pricedBy(region: MoneyRegion, site: FinanceSite, values: Values | null, prices: PurchasePrices | null): Priced | null {
@@ -64,7 +62,7 @@ export function useFinance(): Finance | null {
   const solution = result?.status === 'ready' ? result.solution : null
   const site = useMemo(() => solution && financeSite(solution, region), [solution, region])
   const plotRegion = useRegion()
-  const exampleMoney = exampleMoneyOf(plotRegion)
+  const exampleMoney = plotRegion.example?.money ?? null
   const applied = solution !== null && exampleMoney !== null && isApplied(examples, plotRegion, solution.plot)
   return useMemo(() => {
     if (!site) return null
