@@ -25,10 +25,15 @@ export function BuildingTypePicker() {
         aria-label={t('building-type.title')}
         value={draft.buildingType}
         onValueChange={(value) => isBuildingType(value) && store.dispatch({ type: 'set-building-type', buildingType: value })}
-        className="grid w-full grid-cols-3"
+        className="grid w-full"
+        style={{ gridTemplateColumns: `repeat(${types.length}, minmax(0, 1fr))` }}
       >
         {types.map((type) => (
-          <ToggleGroupItem key={type} value={type} className="w-full data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
+          <ToggleGroupItem
+            key={type}
+            value={type}
+            className="h-auto min-h-11 w-full whitespace-normal py-2 text-center data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background"
+          >
             {region.buildingNames[type]}
           </ToggleGroupItem>
         ))}
