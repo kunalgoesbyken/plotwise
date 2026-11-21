@@ -13,8 +13,10 @@ export const rangeText = ({ low, high }: Range, currency: string | null) =>
 
 export const hasLandValue = ({ high }: Range) => high > 0
 
-export const noLandValueText = ({ low, high }: Range, currency: string | null) =>
-  t('land.none', { shortfall: rangeText({ low: -high, high: -low }, currency) })
+export function noLandValueText({ low, high }: Range, currency: string | null) {
+  const [least, most] = [formatMoney(-high, currency), formatMoney(-low, currency)]
+  return t('land.none', { shortfall: least === most ? least : t('money.range', { low: least, high: most }) })
+}
 
 export const landValueText = (landValue: Range, currency: string | null) =>
   hasLandValue(landValue) ? rangeText({ low: Math.max(0, landValue.low), high: landValue.high }, currency) : noLandValueText(landValue, currency)

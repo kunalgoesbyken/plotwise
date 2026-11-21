@@ -59,6 +59,7 @@ test('money: the Dubai example, whose sourced prices do not cover its sourced co
   await expect(landRegion(page)).not.toContainText('supports land worth')
   await expect(summary(page)).toContainText(none)
   await expect(landValueRow(page).first()).toContainText(none)
+  await expect(page.locator('body')).not.toContainText(/(AED\s[\d.]+M) to \1\b/)
   await expect(page.locator('body')).not.toContainText(/[-−]\s?AED/)
 })
 
