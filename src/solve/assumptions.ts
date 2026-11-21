@@ -1,6 +1,4 @@
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
-import { formatNumber, formatQuantity } from '@/text/format'
-import { t } from '@/text/messages'
 import { SQM_PER_SQFT } from '@/units/area'
 import type { Interpretations, QuestionId } from './interpretations'
 
@@ -97,6 +95,14 @@ export const ASSUMPTIONS = {
   plotMaxParkingSqmPerSpace: {
     value: 10_000,
     source: 'input guard, not a rule: one parking space per hectare of floor area is no parking requirement at all, so a larger figure entered for a plot is a typing slip',
+  },
+  plotMaxParkingSpacesPerHome: {
+    value: 10,
+    source: 'input guard, not a rule: the Dubai Building Code asks for at most 3 bays per unit (Table B.13), so ten spaces for one home entered for a plot is a typing slip',
+  },
+  plotMaxHomeSqm: {
+    value: 1_000,
+    source: 'input guard, not a rule: a home of 1,000 m² is a whole villa or a floor of a tower, so a larger figure entered for one home is a unit mistake',
   },
   importMaxShapes: {
     value: 200,
@@ -492,6 +498,10 @@ export const AFFECTION_PLAN_TERMS = {
       value: 'Parking requirement',
       source: dbc(89, 'Parking requirements set out in the affection plan or DCR shall take precedent over Table B.13.'),
     },
+    parkingSpacesPerHome: {
+      value: 'Parking requirement for each home',
+      source: dbc(89, 'Table B.13 Parking ratios, Residential: Studio 1 bay per unit; 1 Bedroom 1 bay per unit; 2 Bedroom 1 bay per unit; 3 Bedroom 2 bays per unit'),
+    },
   },
 } as const satisfies { document: Term; use: Term; fields: Partial<Record<PlotLimitField, Term>> }
 
@@ -509,14 +519,22 @@ export const MUMBAI_EXAMPLE_LAND_RATE: Assumption = {
     'Department of Registration and Stamps, Government of Maharashtra, Annual Statement of Rates (Ready Reckoner) 2026-27, Mumbai Suburban district, village Mulund (W), open land ₹64,240 per m² in zone 123/567. The zone is matched by position and not confirmed for this plot: on OpenStreetMap the plot lies between L.B.S. Marg and Purushottam Kheraj Road, which zone 123/567 covers: "एल.बी.एस.मार्ग व पुरूषोत्तम खेराज रोड या मधील विभाग क्रमांक 123/568 मधील मिळकती सोडून उर्वरीत सर्व मिळकती" (all properties between L.B.S. Marg and Purushottam Kheraj Road except those of zone 123/568); if it lies in zone 123/568 the rate is ₹63,400. https://easr.igrmaharashtra.gov.in/eASRCommon.aspx?hDistName=Bombaymains, fetched 2026-11-20',
 }
 
-const DUBAI_APARTMENT_GROSS_SQM = ASSUMPTIONS.condoUnitSqm.value / ASSUMPTIONS.netToGross.condo.value
+const FETCHED = 'fetched 2026-11-21'
 
-export const DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE: Assumption = {
-  value: DUBAI_APARTMENT_GROSS_SQM,
-  source: `Parking from the Trakhees regulations the plan refers to: Trakhees (Ports, Customs and Free Zone Corporation), Building Regulation Design Guidelines, Architecture Book (Blue Code), February 2021, Section 15.3.1(c) Apartments: "One parking space for each apartment (studio or single bedroom) up to 150.0 square meters floor area", https://accreditation.trakhees.ae/regulations/BLUE_2021_FEB/files/basic-html/page143.html, fetched 2026-11-21. The rule counts apartments, so it is entered as floor area per space using the apartment these designs assume (${formatQuantity(ASSUMPTIONS.condoUnitSqm.value, 'sqm')} at ${formatQuantity(ASSUMPTIONS.netToGross.condo.value, 'percent')} net to gross, ${t('unit.sqm', { number: formatNumber(DUBAI_APARTMENT_GROSS_SQM, 'ratio') })} of floor area per apartment); larger apartments of two or more bedrooms need 1.5 to 3 spaces each under the same section`,
+const PROPERTY_FINDER_JVC_ONE_BEDROOMS = 'https://www.propertyfinder.ae/en/buy/dubai/1-bedroom-apartments-for-sale-jumeirah-village-circle.html'
+
+const JVC_AUTHORITY =
+  'the plot lies in Jumeirah Village Circle (JVC) District 11 on OpenStreetMap, https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=25.0603&lon=55.2097, and Trakhees certified a JVC residential building: "Residential building in JVC10WMRA006, Jumeirah village circle" "has been awarded with EHS Certification established by EHS TRAKHEES", https://pcfc.ae/en/Rules%20and%20Regulations/Trakhees/Civil%20Engineering%20Department/Permits%20(Green%20Buildings)/Fact%20Sheets/Rambyk.pdf'
+
+export const DUBAI_EXAMPLE_HOME_SQM: Assumption = {
+  value: 830 * SQM_PER_SQFT,
+  source: `Property Finder, one-bedroom apartments for sale in Jumeirah Village Circle, "Unit sizes typically range from 560 to 980 sq ft" and, for District 11, where the plot lies on OpenStreetMap: "District 11 suits buyers who want slightly more interior space, with units averaging 830 sq ft", the advertised size of listings, read here as the home's net area, converted at 1 sq ft = ${SQM_PER_SQFT} m², ${PROPERTY_FINDER_JVC_ONE_BEDROOMS}, ${FETCHED}`,
 }
 
-const FETCHED = 'fetched 2026-11-21'
+export const DUBAI_EXAMPLE_PARKING_PER_HOME: Assumption = {
+  value: 1,
+  source: `Trakhees (Ports, Customs and Free Zone Corporation), Building Regulation Design Guidelines, Architecture Book (Blue Code), February 2021, Section 15.3.1(c) Apartments: "One parking space for each apartment (studio or single bedroom) up to 150.0 square meters floor area", https://accreditation.trakhees.ae/regulations/BLUE_2021_FEB/files/basic-html/page143.html; the Dubai Building Code (Dubai Municipality, 2021 Edition, PDF page 89) agrees, Table B.13 Parking ratios, Residential: "1 Bedroom 1 bay per unit". Trakhees' rules are the ones for this plot: ${JVC_AUTHORITY}. The rule counts apartments, so it is entered as spaces for each home; apartments of two or more bedrooms need 1.5 to 3 spaces each under the same section, ${FETCHED}`,
+}
 
 const perSqm = (perSqftValue: number) => perSqftValue / SQM_PER_SQFT
 
@@ -578,19 +596,19 @@ export const MUMBAI_EXAMPLE_MONEY: ExampleMoney = {
 
 const DUBAI_SHELL_AND_CORE: Band = { low: 5_000, high: 6_450 }
 
-const DUBAI_LAND_LISTING_PER_SQFT = 1_050
+const DUBAI_LAND_LISTING_PER_SQFT = { low: 1_025, high: 1_172 }
 
 export const DUBAI_EXAMPLE_MONEY: ExampleMoney = {
   salePricePerSqm: {
     condo: {
-      value: perSqm(894),
-      source: `${EXAMPLE}; Property Finder, International City sale transactions "Sourced from Dubai land department" over the last year: "Avg. price/sqft: 894" (AED) across 1,885 transactions, the latest registered on 20 Nov 2026, ${SQFT}. The average mixes ready and off-plan sales; the off-plan sales listed on 19 and 20 Nov 2026 were at AED 1,328 and 1,426 per sq ft, https://www.propertyfinder.ae/en/transactions/buy/dubai/international-city, ${FETCHED}`,
+      value: perSqm(1_517),
+      source: `${EXAMPLE}; Property Finder, Jumeirah Village Circle sale transactions "Sourced from Dubai land department" over the last year: "Avg. price/sqft: 1,517" (AED) across 10,656 transactions, the latest registered on 20 Nov 2026, ${SQFT}. The average mixes ready and off-plan sales, and 8 of the 10 latest were off-plan, https://www.propertyfinder.ae/en/transactions/buy/dubai/jumeirah-village-circle, ${FETCHED}`,
     },
   },
   landReferencePerUnit: {
-    low: perSqm(DUBAI_LAND_LISTING_PER_SQFT),
-    high: perSqm(DUBAI_LAND_LISTING_PER_SQFT),
-    source: `${EXAMPLE}; one asking price, not a sale: Property Finder listing "G+6 Freehold | Residential Plot | Investor Deal" in International City, zone Al Warsan First, AED 16,821,054 for a 16,020 ft² plot with FAR 3.5, shown as "AED1,050/ft²" of plot area, ${SQFT}, https://www.propertyfinder.ae/en/plp/buy/land-for-sale-dubai-al-warsan-al-warsan-1-125648343.html, ${FETCHED}`,
+    low: perSqm(DUBAI_LAND_LISTING_PER_SQFT.low),
+    high: perSqm(DUBAI_LAND_LISTING_PER_SQFT.high),
+    source: `${EXAMPLE}; three asking prices, not sales, for residential plots in Jumeirah Village Circle on Property Finder, per ft² of plot area: "Residential Plot | G+4 | Prime Location" AED 41,000,000 for 40,000 ft², "AED 1,025/ft²"; "Premium Location I Next to Mall I Residential" AED 42,500,000 for 39,711 ft², "AED 1,070/ft²"; "RESIDENTIAL PLOT SELLING @ 40.5MIL" AED 40,500,000 for 34,549 ft², "AED 1,172/ft²". Two of them state a GFA near 2.5 times the plot, not the FAR 3.5 of this example, https://www.propertyfinder.ae/en/buy/dubai/land-for-sale-jumeirah-village-circle.html, ${SQFT}, ${FETCHED}`,
   },
   rates: splitLikeBangkok(
     DUBAI_SHELL_AND_CORE,
@@ -601,4 +619,4 @@ export const DUBAI_EXAMPLE_MONEY: ExampleMoney = {
   tdrPrice: null,
 }
 
-export const DUBAI_EXAMPLE_LIMITS_SOURCE = `Setbacks and plot coverage copied from a public Nakheel affection plan, not this plot’s own: Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only, so height in metres stays blank, and for parking says "Refer to Trakhees Building & Design Regulations in parallel with the master developer's DCR". Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20. ${DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source}`
+export const DUBAI_EXAMPLE_LIMITS_SOURCE = `Setbacks and plot coverage copied from a public Nakheel affection plan for another community, not this plot’s own (the plot lies in Jumeirah Village Circle, the plan is for International City): Trakhees site plan issued 12 May 2026 for International City Phase 1 plot IC1-CTYL-16_013, mixed use (residential with retail), FAR 3.5: "Podium setback: 0.00m from all Sides; Tower setback: Front = 0.00m, Sides =:3.00m" and "Plot coverage: Podium: 100% , Tower : 60%"; the tower figures are used because these designs have no podium. That plan gives height in floors only, so height in metres stays blank, and for parking says "Refer to Trakhees Building & Design Regulations in parallel with the master developer's DCR". Published by the Consulate General of India, Dubai, https://www.cgidubai.gov.in/content/Affection-plan-Updated%20-IC1-CTYL-16_013_12.05.2026.pdf, fetched 2026-11-20. Parking: ${DUBAI_EXAMPLE_PARKING_PER_HOME.source}. Home size: ${DUBAI_EXAMPLE_HOME_SQM.source}`

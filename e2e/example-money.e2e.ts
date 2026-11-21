@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
+import { encodeAssumptions } from '../src/finance/url'
 import { formatAmount } from '../src/finance/format-money'
 import { MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Plot } from '../src/plot/plot'
@@ -11,6 +12,7 @@ import { expect, test } from './support/test'
 
 const MUMBAI = REGIONS.mum
 const LOCAL_VALUES_MISSING = 6
+const LOSS_MAKING_SALE_PRICE = 5_000
 
 const landRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('land.title') })
 const costRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('money.title') })
@@ -52,8 +54,16 @@ for (const region of ['mum', 'dxb'] as const) {
   })
 }
 
-test('money: the Dubai example, whose sourced prices do not cover its sourced costs, says so in words and never shows a negative land value', async ({ page }) => {
+test('money: the Dubai example prices its Jumeirah Village Circle plot with Jumeirah Village Circle sales and supports a land value', async ({ page }) => {
   await openMoney(page, `${encodeRegion('dxb')}&example`)
+  await expect(landRegion(page)).toContainText(/supports land worth about AED\s[\d.]+M to AED\s[\d.]+M/, { timeout: READY_TIMEOUT })
+  await expect(landRegion(page)).not.toContainText('No land value')
+  await expect(page.locator('body')).not.toContainText(/[-−]\s?AED/)
+})
+
+test('money: a Dubai sale price that does not cover the sourced costs says so in words and never shows a negative land value', async ({ page }) => {
+  const prices = encodeURIComponent(encodeAssumptions({ 'salePrice.condo': LOSS_MAKING_SALE_PRICE })!)
+  await openMoney(page, `${encodeRegion('dxb')}&example&assume-dxb=${prices}`)
   const none = /No land value at these prices: costs exceed sales by AED\s[\d.]+M to AED\s[\d.]+M\./
   await expect(landRegion(page)).toContainText(none, { timeout: READY_TIMEOUT })
   await expect(landRegion(page)).not.toContainText('supports land worth')

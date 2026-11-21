@@ -43,7 +43,7 @@ export {
 } from './limits'
 export { buildingControlOpenSpace, footprintCapSqm, permeableArea, ratioOpenSpace, type OpenSpaceNeed } from './open-space'
 export { parkingSpaces, type ParkingNeed } from './parking'
-export { isParkingUnset, isUnentered, plotLimitFields } from './plot-limits'
+export { homeSqmOf, isParkingUnset, isUnentered, plotLimitFields } from './plot-limits'
 export { wideningStrip, type Widening } from './reservations'
 export { boundarySetback, frontOpenSpaceDepth, lowRiseRow, lowRiseSetbacks, rearEdge, roadSetback, streetHeightLimitM, strictest, type HeightVsRoad, type Setback } from './setbacks'
 export { rowCites, sideRearOpenSpace, type PlotClass, type SideRearLimit } from './side-rear'

@@ -14,6 +14,7 @@ export function demandText(demand: ParkingDemand, area: AreaUnit): string {
   const sqm = (value: number) => formatQuantity(value, area)
   switch (demand.kind) {
     case 'perUnit':
+      if (demand.unitsFromSqm.value === 0) return t('parking.per-home', { spaces: demand.spacesPerUnit.value })
       return t('parking.per-unit', {
         spaces: demand.spacesPerUnit.value,
         unit: `${formatComparator(demand.unitsFromSqm.cmp)} ${sqm(demand.unitsFromSqm.value)}`,

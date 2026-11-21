@@ -1,5 +1,5 @@
 export { bandGaps, bandsCoverEverything, endsOpen } from './bands'
-export { enteredBoundarySetback, enteredOpenSpace, enteredParking, enteredRoadSetback } from './entered'
+export { enteredBoundarySetback, enteredOpenSpace, enteredParking, enteredParkingPerHome, enteredRoadSetback } from './entered'
 export {
   containsEntered,
   entered,

@@ -12,6 +12,8 @@ import { plotFromMetres, rectangle } from './test-plots'
 const CUSTOM = loadPack('custom')
 const DUBAI = loadPack('dxb-ap')
 
+const real = (min: number, max: number) => fc.double({ min, max, noNaN: true })
+
 const REQUIRED: PlotLimits = { maxGfaSqm: 5000, maxStoreys: 10 }
 
 const lot = (limits: PlotLimits, widthM = 40, depthM = 50) => ({ ...plotFromMetres(rectangle(widthM, depthM), [{ edge: 0, widthM: 12 }]), limits })
@@ -37,6 +39,8 @@ describe('packs whose every limit is entered for the plot', () => {
       'boundarySetbackM',
       'minOpenSpaceShare',
       'parkingSqmPerSpace',
+      'parkingSpacesPerHome',
+      'homeSqm',
     ])
     expect(sourceCites(CUSTOM)).toEqual([])
     expect(containsEntered(CUSTOM)).toBe(false)
@@ -52,6 +56,8 @@ describe('packs whose every limit is entered for the plot', () => {
       'roadSetbackM',
       'boundarySetbackM',
       'parkingSqmPerSpace',
+      'parkingSpacesPerHome',
+      'homeSqm',
     ])
     expect(sourceCites(DUBAI)).toEqual([])
   })
@@ -127,11 +133,42 @@ describe('entered coverage, open space and parking are optional', () => {
     for (const design of designs(solution)) expect(design.metrics.parkingSpaces).toBeGreaterThan(0)
   })
 
+  it('asks the entered spaces for every home, over the homes the plot says it builds', () => {
+    const homes = (design: Design) => (design.metrics.yield.kind === 'units' ? design.metrics.yield.count : Number.NaN)
+    const solution = solveWith(CUSTOM, { ...REQUIRED, parkingSpacesPerHome: 1.5, homeSqm: 60 })
+    expect(solution.limits.parking.rules).toMatchObject([{ scope: 'entered', condo: { kind: 'perUnit', spacesPerUnit: { value: 1.5 } } }])
+    for (const design of designs(solution)) {
+      expect(design.metrics.parkingSpaces).toBeGreaterThanOrEqual(Math.ceil(1.5 * homes(design)))
+      expect(design.metrics.parkingSpaces).toBeLessThan(Math.ceil(1.5 * homes(design)) + 2)
+    }
+  })
+
+  it('counts fewer homes when each home is larger, and the same when it is not entered', () => {
+    const homes = (limits: PlotLimits) =>
+      designs(solveWith(CUSTOM, { ...REQUIRED, ...limits })).map((design) => (design.metrics.yield.kind === 'units' ? design.metrics.yield.count : Number.NaN))
+    fc.assert(
+      fc.property(real(20, 100), real(1, 3), (homeSqm, spaces) => {
+        const small = homes({ parkingSpacesPerHome: spaces, homeSqm })
+        const large = homes({ parkingSpacesPerHome: spaces, homeSqm: homeSqm * 2 })
+        small.forEach((count, i) => expect(large[i]).toBeLessThanOrEqual(count))
+      }),
+      { numRuns: 30 },
+    )
+  })
+
+  it('holds parking for an office or hotel to the floor area, since homes mean nothing there', () => {
+    for (const buildingType of ['office', 'hotel'] as const) {
+      const solution = solve({ ...lot({ ...REQUIRED, parkingSpacesPerHome: 2 }), buildingType }, CUSTOM, packInterpretations(CUSTOM))
+      expect(isParkingUnset(solution)).toBe(true)
+    }
+  })
+
   it('says parking is not set only when the plot asks for it and it was left blank', () => {
     expect(isParkingUnset(solveWith(CUSTOM, REQUIRED))).toBe(true)
     expect(isParkingUnset(solveWith(DUBAI, REQUIRED))).toBe(true)
     expect(isParkingUnset(solveWith(CUSTOM, { ...REQUIRED, parkingSqmPerSpace: 50 }))).toBe(false)
     expect(isParkingUnset(solveWith(DUBAI, { ...REQUIRED, parkingSqmPerSpace: 50 }))).toBe(false)
+    expect(isParkingUnset(solveWith(DUBAI, { ...REQUIRED, parkingSpacesPerHome: 1 }))).toBe(false)
     for (const id of ['bkk-y9', 'mum-suburbs-res'] as const) {
       const pack = loadPack(id)
       expect(isParkingUnset(solve(lot({}), pack, packInterpretations(pack)))).toBe(false)

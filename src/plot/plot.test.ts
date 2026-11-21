@@ -90,6 +90,8 @@ describe('limits entered for a plot', () => {
     roadSetbackM: ASSUMPTIONS.plotMaxSetbackM.value,
     boundarySetbackM: ASSUMPTIONS.plotMaxSetbackM.value,
     parkingSqmPerSpace: ASSUMPTIONS.plotMaxParkingSqmPerSpace.value,
+    parkingSpacesPerHome: ASSUMPTIONS.plotMaxParkingSpacesPerHome.value,
+    homeSqm: ASSUMPTIONS.plotMaxHomeSqm.value,
   }
 
   it.each(Object.entries(MAXIMA))('accepts %s up to its sourced maximum and refuses anything above it', (field, max) => {

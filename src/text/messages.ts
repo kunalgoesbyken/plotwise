@@ -174,6 +174,7 @@ const en = {
   'limits.unit.g-plus': 'G+',
   'limits.unit.ratio': ': 1',
   'limits.unit.per-space': ({ unit }: { unit: string }) => `${unit} per space`,
+  'limits.unit.per-home': 'per home',
   'limits.custom.maxGfaSqm': 'Maximum floor area',
   'limits.custom.maxFar': 'Floor area ratio (FAR)',
   'limits.custom.maxHeightM': 'Maximum height',
@@ -183,6 +184,8 @@ const en = {
   'limits.custom.boundarySetbackM': 'Setback from neighbours',
   'limits.custom.minOpenSpaceShare': 'Minimum open space, share of the plot',
   'limits.custom.parkingSqmPerSpace': 'Parking, one space per floor area',
+  'limits.custom.parkingSpacesPerHome': 'Parking, spaces for each home',
+  'limits.custom.homeSqm': 'Average size of a home',
   'verification.pack': 'Unverified: includes limits you entered',
   'verification.draftPack': ({ plan }: { plan: string }) => `Draft: ${plan}; later amendments not applied`,
   'verification.detail.draftPack': ({ authority }: Authority) =>
@@ -413,6 +416,8 @@ const en = {
   'plot-limit.boundarySetbackM': 'the setback from neighbours',
   'plot-limit.minOpenSpaceShare': 'the minimum open space',
   'plot-limit.parkingSqmPerSpace': 'the parking requirement',
+  'plot-limit.parkingSpacesPerHome': 'the parking requirement for each home',
+  'plot-limit.homeSqm': 'the average size of a home',
   'feasibility.failed.building-type-not-covered': 'These rules do not cover this building type. Pick another building type.',
   'feasibility.failed.unknown': 'Something went wrong while checking this plot. Move a corner or change a road width to try again.',
 
@@ -565,6 +570,7 @@ const en = {
   'parking.units-band': ({ size, units }: { size: string; units: number }) => `${units} ${units === 1 ? 'unit' : 'units'} of ${size}`,
   'parking.visitors': ({ share, min }: { share: string; min: number }) => `Plus ${share} for visitors, at least ${min}.`,
   'parking.per-unit': ({ spaces, unit }: { spaces: number; unit: string }) => `${spaces} per unit of ${unit}.`,
+  'parking.per-home': ({ spaces }: { spaces: number }) => `${spaces} for each home.`,
   'parking.per-unit-by-size': ({ bands }: { bands: string }) => `Per unit by its size: ${bands}.`,
   'parking.unit-band': ({ size, spaces }: { size: string; spaces: number }) => `${spaces} per unit of ${size}`,
   'parking.per-gross-area': ({ area }: Area) => `1 per ${area} of floor area.`,

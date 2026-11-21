@@ -1,5 +1,5 @@
 import type { Cite } from '@/rules'
-import { ASSUMPTIONS, isLarge, parkingSpaces, type Building, type ParkingNeed, type Solution } from '@/solve'
+import { ASSUMPTIONS, homeSqmOf, isLarge, parkingSpaces, type Building, type ParkingNeed, type Solution } from '@/solve'
 
 export type Yield =
   | { readonly kind: 'units'; readonly count: number }
@@ -21,7 +21,7 @@ const BAY_SQM = ASSUMPTIONS.parkingGrossSqmPerSpace.value
 function needFor(solution: Solution, building: Building, grossSqm: number): ParkingNeed {
   const use = solution.plot.buildingType
   const base = { use, floorAreaSqm: grossSqm, large: isLarge(solution.pack, building), units: 0, rooms: 0, lobbySqm: 0, officeSqm: 0 }
-  const unitSqm = ASSUMPTIONS.condoUnitSqm.value
+  const unitSqm = homeSqmOf(solution)
   switch (use) {
     case 'condo':
       return { ...base, unitSqm, units: Math.floor((grossSqm * ASSUMPTIONS.netToGross.condo.value) / unitSqm) }

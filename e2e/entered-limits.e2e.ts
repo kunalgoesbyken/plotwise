@@ -37,7 +37,7 @@ test('a Dubai GFA is typed in m² by default, can be typed in sq ft, and the lin
 
   await gfa(page).blur()
   await areaUnit(page, 'sq ft').click()
-  await expect(gfa(page)).toHaveValue('32291.7312501')
+  await expect(gfa(page)).toHaveValue('32291.73')
   await expect(gfaRow(page)).toContainText('sq ft')
   await gfa(page).fill('10,763.91')
   await expect.poll(() => Math.round(Number(limitsInLink(page)?.match(/maxGfaSqm:([\d.]+)/)?.[1]))).toBe(1000)

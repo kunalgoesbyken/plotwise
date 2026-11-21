@@ -9,7 +9,7 @@ import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plo
 import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { loadPack } from '../src/rules'
-import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE, MUMBAI_EXAMPLE_LAND_RATE } from '../src/solve/assumptions'
+import { DUBAI_EXAMPLE_HOME_SQM, DUBAI_EXAMPLE_PARKING_PER_HOME, MUMBAI_EXAMPLE_LAND_RATE } from '../src/solve/assumptions'
 import { formatList } from '../src/text/format'
 import { t } from '../src/text/messages'
 import { perAreaToDisplay } from '../src/units/area'
@@ -152,9 +152,12 @@ test('the Dubai example sets its parking from the Trakhees regulations its affec
   await expect(rulesRegion(page)).not.toContainText(t('parking.not-set'))
   await goTo(page, 'Roads')
   const plan = page.getByRole('region', { name: 'From the affection plan' })
-  await expect(plan.getByLabel(limitLabel('parkingSqmPerSpace', REGIONS.dxb))).toHaveValue(shownLimit('parkingSqmPerSpace', DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value, limitDisplay(REGIONS.dxb, 'sqm')))
+  const display = limitDisplay(REGIONS.dxb, 'sqm')
+  await expect(plan.getByLabel(limitLabel('parkingSpacesPerHome', REGIONS.dxb))).toHaveValue(shownLimit('parkingSpacesPerHome', DUBAI_EXAMPLE_PARKING_PER_HOME.value, display))
+  await expect(plan.getByLabel(limitLabel('homeSqm', REGIONS.dxb))).toHaveValue(shownLimit('homeSqm', DUBAI_EXAMPLE_HOME_SQM.value, display))
   await plan.getByRole('button', { name: t('assumptions.source') }).click()
-  await expect(plan).toContainText(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
+  await expect(plan).toContainText(DUBAI_EXAMPLE_PARKING_PER_HOME.source)
+  await expect(plan).toContainText(DUBAI_EXAMPLE_HOME_SQM.source)
 })
 
 test('the Dubai example shows every area in m², as its affection plan states them, and no sq ft anywhere in the results', async ({ page }) => {

@@ -175,6 +175,8 @@ const limits = fc.record(
     boundarySetbackM: fc.double({ min: 0, max: ASSUMPTIONS.plotMaxSetbackM.value, noNaN: true }),
     minOpenSpaceShare: fc.double({ min: 0, max: 0.99, noNaN: true }),
     parkingSqmPerSpace: fc.double({ min: 1, max: ASSUMPTIONS.plotMaxParkingSqmPerSpace.value, noNaN: true }),
+    parkingSpacesPerHome: fc.double({ min: 0.1, max: ASSUMPTIONS.plotMaxParkingSpacesPerHome.value, noNaN: true }),
+    homeSqm: fc.double({ min: 1, max: ASSUMPTIONS.plotMaxHomeSqm.value, noNaN: true }),
   },
   { requiredKeys: [] },
 )

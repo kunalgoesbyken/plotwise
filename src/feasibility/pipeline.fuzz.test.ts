@@ -189,6 +189,8 @@ const entered = fc.record(
     boundarySetbackM: real(0, 30),
     minOpenSpaceShare: real(0, 0.95),
     parkingSqmPerSpace: real(10, 500),
+    parkingSpacesPerHome: real(0.5, 4),
+    homeSqm: real(15, 300),
   },
   { requiredKeys: [] },
 )
