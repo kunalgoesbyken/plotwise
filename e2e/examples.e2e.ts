@@ -116,6 +116,7 @@ test('the Dubai example has every limit its affection plan states, so nothing is
   await expect(plan.getByLabel('Setback from neighbour')).toHaveValue('3')
   await expect(plan.getByLabel('Plot coverage')).toHaveValue('60')
   await expect(plan.getByText('Example values.')).toBeVisible()
+  await plan.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(plan).toContainText('IC1-CTYL-16_013')
 })
 
@@ -127,7 +128,7 @@ test('the Dubai example sets its parking from the Trakhees regulations its affec
   await goTo(page, 'Roads')
   const plan = page.getByRole('region', { name: 'From the affection plan' })
   await expect(plan.getByLabel(limitLabel('parkingSqmPerSpace', REGIONS.dxb))).toHaveValue(shownLimit('parkingSqmPerSpace', DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value, limitDisplay(REGIONS.dxb, 'sqm')))
-  await plan.getByRole('button', { name: t('assumptions.source') }).first().click()
+  await plan.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(plan).toContainText(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
 })
 

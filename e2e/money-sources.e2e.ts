@@ -6,7 +6,7 @@ import { loadPack } from '../src/rules'
 import { MONEY_REGIONS } from '../src/solve'
 import { MUMBAI_EXAMPLE_LAND_RATE } from '../src/solve/assumptions'
 import { t } from '../src/text/messages'
-import { moneyRegion, openResults, showTab } from './support/app'
+import { goTo, moneyRegion, openApp, openResults, showTab } from './support/app'
 import { hashOf, mockApp, RESULTS_PLOT } from './support/site'
 import { expect, test } from './support/test'
 
@@ -110,7 +110,8 @@ async function expectSourceToggle(region: Locator, source: string) {
 
 test('money: the Mumbai example’s Ready Reckoner citation sits closed behind a Source button, and the print summary keeps its sources', async ({ page }) => {
   await mockApp(page)
-  await openResults(page, `${encodeRegion('mum')}&example`)
+  await openApp(page, `${encodeRegion('mum')}&example`)
+  await goTo(page, 'Results')
   await showTab(page, 'Money')
   await expectSourceToggle(landRegion(page), MUMBAI_EXAMPLE_LAND_RATE.source)
   await page.emulateMedia({ media: 'print' })
