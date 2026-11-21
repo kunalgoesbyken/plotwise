@@ -44,12 +44,13 @@ function exampleLandUnits() {
 const EXAMPLE_LAND_UNITS = exampleLandUnits()
 
 const askingField = (page: Page) => summary(page).getByLabel('Asking price')
-const basisChoice = (page: Page, name: string) => summary(page).getByRole('radiogroup', { name: t('asking.basis') }).getByRole('radio', { name })
-const totalChoice = (page: Page) => basisChoice(page, t('asking.total'))
-const perLandUnit = (page: Page) => basisChoice(page, t('asking.per-land-unit', { unit: MONEY_REGIONS.bkk.landUnit.name }))
 const caretOf = (field: Locator) => field.evaluate((input: HTMLInputElement) => input.selectionStart)
 const verdict = (page: Page) => summary(page).getByText(/^Asking .+ →/)
 const landValueRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: 'Land value' })
+const moneyAskingField = (page: Page) => landValueRegion(page).getByLabel('Asking price')
+const basisChoice = (page: Page, name: string) => landValueRegion(page).getByRole('radiogroup', { name: t('asking.basis') }).getByRole('radio', { name })
+const totalChoice = (page: Page) => basisChoice(page, t('asking.total'))
+const perLandUnit = (page: Page) => basisChoice(page, t('asking.per-land-unit', { unit: MONEY_REGIONS.bkk.landUnit.name }))
 
 test.describe('the Bangkok example', () => {
   test.beforeEach(async ({ page }) => {
@@ -127,25 +128,29 @@ test.describe('the Bangkok example', () => {
     await expect.poll(() => hashParams(page).ask).toBe(String(edited))
   })
 
-  test('a price per square wah is read against the plot’s area and shared as the total, which comes back per square wah too', async ({ page, context }) => {
+  test('in the Money tab a price per square wah is read against the plot’s area and shared as the total, which comes back per square wah too', async ({ page, context }) => {
+    const total = PER_WAH * EXAMPLE_LAND_UNITS
+    await showTab(page, 'Money')
     await perLandUnit(page).click()
-    await askingField(page).fill(String(PER_WAH))
-    await expect(verdict(page)).toContainText(money(PER_WAH * EXAMPLE_LAND_UNITS))
-    await expect.poll(() => hashParams(page).ask).toBe(String(PER_WAH * EXAMPLE_LAND_UNITS))
-    await askingField(page).blur()
-    await expect(askingField(page)).toHaveValue(formatAmount(PER_WAH))
+    await moneyAskingField(page).fill(String(PER_WAH))
+    await expect(landValueRegion(page)).toContainText(`Asking ${money(total)} →`)
+    await expect.poll(() => hashParams(page).ask).toBe(String(total))
+    await moneyAskingField(page).blur()
+    await expect(moneyAskingField(page)).toHaveValue(formatAmount(PER_WAH))
+    await expect(askingField(page)).toHaveValue(formatAmount(total))
 
     await totalChoice(page).click()
-    await expect(askingField(page)).toHaveValue(formatAmount(PER_WAH * EXAMPLE_LAND_UNITS))
+    await expect(moneyAskingField(page)).toHaveValue(formatAmount(total))
 
     const opened = await context.newPage()
     await mockApp(opened)
     await opened.goto(page.url())
     await expect(designTable(opened)).toBeAttached({ timeout: READY_TIMEOUT })
+    await showTab(opened, 'Money')
     await expect(totalChoice(opened)).toHaveAttribute('aria-checked', 'true')
-    await expect(askingField(opened)).toHaveValue(formatAmount(PER_WAH * EXAMPLE_LAND_UNITS))
+    await expect(moneyAskingField(opened)).toHaveValue(formatAmount(total))
     await perLandUnit(opened).click()
-    await expect(askingField(opened)).toHaveValue(formatAmount(PER_WAH))
+    await expect(moneyAskingField(opened)).toHaveValue(formatAmount(PER_WAH))
   })
 
   test('the print summary shows the verdict', async ({ page }) => {

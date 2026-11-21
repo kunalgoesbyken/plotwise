@@ -29,7 +29,9 @@ function hintOf(entry: AskingEntry | null, currency: string | null): string | nu
 
 const askingBasis = (kind: BasisKind, { landUnits }: Finance): AskingBasis => (kind === 'total' ? { kind } : { kind, landUnits })
 
-export function AskingPrice({ finance, design }: { readonly finance: Finance; readonly design: Design }) {
+type AskingPriceProps = { readonly finance: Finance; readonly design: Design; readonly basisChoice?: boolean }
+
+export function AskingPrice({ finance, design, basisChoice = false }: AskingPriceProps) {
   const id = useId()
   const hintId = useId()
   const { askingPrice, setAskingPrice } = useAssumptions()
@@ -68,16 +70,18 @@ export function AskingPrice({ finance, design }: { readonly finance: Finance; re
           onBlur={() => {
             if (!invalid) setDraft(null)
           }}
-          className="w-36"
+          className="w-32"
         />
         {currency && <span className="text-xs text-muted-foreground">{currency}</span>}
-        <ToggleGroup type="single" variant="outline" size="sm" aria-label={t('asking.basis')} value={kind} onValueChange={choose}>
-          {BASIS_KINDS.map((option) => (
-            <ToggleGroupItem key={option} value={option} className="px-2 text-xs data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
-              {basisLabel(option, finance.region)}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+        {basisChoice && (
+          <ToggleGroup type="single" variant="outline" size="sm" aria-label={t('asking.basis')} value={kind} onValueChange={choose}>
+            {BASIS_KINDS.map((option) => (
+              <ToggleGroupItem key={option} value={option} className="px-2 text-xs data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
+                {basisLabel(option, finance.region)}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        )}
       </div>
       {hint && (
         <p id={hintId} className="text-xs text-destructive">
