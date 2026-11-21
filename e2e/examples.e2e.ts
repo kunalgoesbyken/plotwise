@@ -1,7 +1,10 @@
 import type { Page } from '@playwright/test'
+import { limitDisplay, limitLabel, shownLimit } from '../src/editor/limit-fields'
 import { edgeName } from '../src/editor/map-features'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
+import { REGIONS } from '../src/region/regions'
+import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE } from '../src/solve/assumptions'
 import { formatList } from '../src/text/format'
 import { t } from '../src/text/messages'
 import { mockApp } from './support/site'
@@ -114,6 +117,18 @@ test('the Dubai example has every limit its affection plan states, so nothing is
   await expect(plan.getByLabel('Plot coverage')).toHaveValue('60')
   await expect(plan.getByText('Example values.')).toBeVisible()
   await expect(plan).toContainText('IC1-CTYL-16_013')
+})
+
+test('the Dubai example sets its parking from the Trakhees regulations its affection plan refers to, so no design reads parking not set', async ({ page }) => {
+  await openExample(page, 'dxb')
+  await expect(designTable(page)).not.toContainText(t('parking.not-set'))
+  await showTab(page, 'Rules')
+  await expect(rulesRegion(page)).not.toContainText(t('parking.not-set'))
+  await goTo(page, 'Roads')
+  const plan = page.getByRole('region', { name: 'From the affection plan' })
+  await expect(plan.getByLabel(limitLabel('parkingSqmPerSpace', REGIONS.dxb))).toHaveValue(shownLimit('parkingSqmPerSpace', DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value, limitDisplay(REGIONS.dxb, 'sqm')))
+  await plan.getByRole('button', { name: t('assumptions.source') }).first().click()
+  await expect(plan).toContainText(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
 })
 
 test('the Dubai example shows every area in m², as its affection plan states them, and no sq ft anywhere in the results', async ({ page }) => {

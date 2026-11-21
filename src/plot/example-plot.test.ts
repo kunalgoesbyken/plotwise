@@ -8,7 +8,8 @@ import fixture from '@/site/__fixtures__/mulund-west.overpass.json'
 import { nearestRoad } from '@/site/nearest-road'
 import { OverpassResponseSchema } from '@/site/overpass-response'
 import { parseOverpass } from '@/site/parse'
-import { MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
+import { isParkingUnset } from '@/solve'
+import { ASSUMPTIONS, DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE, MUMBAI_EXAMPLE_LAND_RATE } from '@/solve/assumptions'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from './example-plot'
 
 function solved(region: 'mum' | 'dxb') {
@@ -83,6 +84,20 @@ describe('example plots', () => {
     for (const design of designs) {
       expect(design.metrics.storeys).toBeLessThanOrEqual(9)
       expect(design.checks.filter((check) => check.status !== 'pass')).toEqual([])
+    }
+  })
+
+  it('sets the Dubai example’s parking from the Trakhees rule of one space per one-bedroom apartment, read over the apartment Plotwise designs', () => {
+    const { solution, designs } = solved('dxb')
+    const grossPerApartment = ASSUMPTIONS.condoUnitSqm.value / ASSUMPTIONS.netToGross.condo.value
+    expect(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value).toBeCloseTo(grossPerApartment, 9)
+    expect(DUBAI_EXAMPLE_PLOT.limits?.parkingSqmPerSpace).toBe(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value)
+    expect(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source).toContain('accreditation.trakhees.ae')
+    expect(REGIONS.dxb.example.limitsSource).toContain(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
+    expect(isParkingUnset(solution)).toBe(false)
+    for (const design of designs) {
+      const units = design.metrics.yield.kind === 'units' ? design.metrics.yield.count : Number.NaN
+      expect(design.metrics.parkingSpaces).toBeGreaterThanOrEqual(units)
     }
   })
 
