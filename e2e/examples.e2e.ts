@@ -66,6 +66,7 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
   await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue('5968.0912896')
   await expect(land.getByText('Example values.')).toBeVisible()
+  await land.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
   await expect(land).toContainText('zone 123/567')
   await expect(land).toContainText('easr.igrmaharashtra.gov.in')
