@@ -12,6 +12,7 @@ import { useAssumptions } from './assumptions-provider'
 import { estimate, financeSite, landUnitsOf, moneySiteOf, needsBasement, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
 import { landCheck, type LandCheck } from './land-check'
 import { isParameter, isPurchasePrice, PURCHASE_PRICES, ratesFor, SCALARS, storageKey, type Input, type Parameter, type PurchasePrice, type RateParameters } from './parameters'
+import { purchaseWorth, type PurchaseWorth } from './purchase-worth'
 import type { ExampleChoice } from './url'
 import { BASEMENT_RATES, defaultOf, enteredOrDefault, missingParameters, moneyDefaults, NO_UNUSED_RATES, resolveValues, type DefaultKind, type Values } from './values'
 
@@ -36,6 +37,7 @@ export type Finance = {
   readonly buildClasses: boolean
   readonly purchasePrices: readonly PurchasePrice[]
   readonly priced: Priced | null
+  readonly worthOfBuying: () => PurchaseWorth | null
   readonly valueOf: (input: Input) => number | null
   readonly sourceOf: (parameter: Parameter) => string | null
   readonly labelOf: (parameter: Parameter) => ValueLabel
@@ -100,6 +102,10 @@ export function useFinance(): Finance | null {
       buildClasses: site.pack.buildingClasses !== undefined,
       purchasePrices: offeredPrices(site).map((id) => PURCHASE_PRICES[id]),
       priced: pricedBy(region, site, values, missingPrices.length === 0 ? boughtPrices : null),
+      worthOfBuying: () => {
+        if (!solution || !values) return null
+        return purchaseWorth(solution, { region, values, priceOf: (input) => priceOf(input) ?? null, basementUnrated: unused === BASEMENT_RATES })
+      },
       valueOf: (input) => priceOf(input) ?? defaultValue(input) ?? null,
       sourceOf: (parameter) => defaultOf(parameter, defaults)?.source ?? null,
       labelOf,
@@ -108,5 +114,5 @@ export function useFinance(): Finance | null {
       fillExamples: () => setExamples(true),
       resetAll: () => clearAll(exampleMoney ? false : null),
     }
-  }, [site, designs, region, applied, exampleMoney, overrides, setOverride, setExamples, clearAll])
+  }, [site, solution, designs, region, applied, exampleMoney, overrides, setOverride, setExamples, clearAll])
 }

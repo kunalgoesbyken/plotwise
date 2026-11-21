@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { EditorShell, type ResultPanel } from '@/editor/editor-shell'
 import { EditorStoreProvider, useRegion } from '@/editor/plot-store'
 import { useHashState } from '@/editor/url-hash'
-import { AssumptionsPanel, AssumptionsProvider, DesignMoney, LandValue, useMoneyRows } from '@/finance'
+import { AssumptionsPanel, AssumptionsProvider, DesignMoney, LandValue, PurchaseWorthLine, useMoneyRows } from '@/finance'
 import { LandLine } from '@/finance/land-line'
 import { PrintSummary } from '@/report/print-summary'
 import { t } from '@/text/messages'
@@ -31,7 +31,9 @@ function usePanels(): readonly ResultPanel[] {
       content: (
         <div className="flex flex-col gap-5">
           <FarBonusToggle />
-          <PurchaseSliders />
+          <PurchaseSliders>
+            <PurchaseWorthLine />
+          </PurchaseSliders>
           <DesignsPanel extraRows={moneyRows} />
           <Disclosure label={t('sensitivity.label')}>
             <WidthSensitivity />

@@ -4,7 +4,7 @@ import type { RulePack } from '@/rules'
 import { ASSUMPTIONS } from './assumptions'
 import type { Envelope } from './envelope'
 import { SolveError } from './errors'
-import { EVERY_PURCHASE, farCapFor, purchaseRatios, STANDARD, type FarCap, type FarChoice } from './far'
+import { EVERY_PURCHASE, farCapFor, NO_PURCHASE, purchaseRatios, STANDARD, type FarCap, type FarChoice } from './far'
 import { allowedEnvelopes, type Hold } from './holds'
 import type { Interpretations } from './interpretations'
 import { limitsFor, type Limits } from './limits'
@@ -68,6 +68,8 @@ export function solve(plot: Plot, authored: RulePack, readings: Interpretations,
 }
 
 export const withEveryPurchase = (solution: Solution): Solution => ({ ...solution, ...bounded(solution, EVERY_PURCHASE) })
+
+export const withNoPurchase = (solution: Solution): Solution => ({ ...solution, ...bounded(solution, NO_PURCHASE) })
 
 export function withoutHighRiseRules(solution: Solution): Solution {
   const limits = { ...solution.limits, highRise: null }
