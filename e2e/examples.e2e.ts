@@ -1,14 +1,18 @@
 import type { Page } from '@playwright/test'
 import { rank } from '../src/designs'
+import { limitDisplay, limitLabel, shownLimit } from '../src/editor/limit-fields'
 import { edgeName } from '../src/editor/map-features'
+import { formatAmount } from '../src/finance/format-money'
 import { encodePlot, encodeRegion } from '../src/editor/plot-url'
 import { feasibility } from '../src/feasibility/compute'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '../src/plot/example-plot'
 import type { Plot } from '../src/plot/plot'
 import { REGIONS } from '../src/region/regions'
 import { loadPack } from '../src/rules'
+import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE, MUMBAI_EXAMPLE_LAND_RATE } from '../src/solve/assumptions'
 import { formatList } from '../src/text/format'
 import { t } from '../src/text/messages'
+import { perAreaToDisplay } from '../src/units/area'
 import { mockApp } from './support/site'
 import { designsRegion, designTable, frontageWidth, goTo, moneyRegion, READY_TIMEOUT, rulesRegion, showTab, summary } from './support/app'
 import { expect, test } from './support/test'
@@ -75,8 +79,9 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
 
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
-  await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue('5968.0912896')
+  await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue(formatAmount(perAreaToDisplay(MUMBAI_EXAMPLE_LAND_RATE.value, 'sqft')))
   await expect(land.getByText('Example values.')).toBeVisible()
+  await land.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
   await expect(land).toContainText('zone 123/567')
   await expect(land).toContainText('easr.igrmaharashtra.gov.in')
@@ -97,6 +102,19 @@ test('the Mumbai example’s roads stay marked as estimated after a reload of it
   await showTab(page, 'Rules')
   const edges = MUMBAI_EXAMPLE_PLOT.roads.map(({ edge }) => edgeName(edge, MUMBAI_EXAMPLE_PLOT.ring.length))
   await expect(rulesRegion(page)).toContainText(t('rules.estimated-roads', { edges: formatList(edges) }))
+})
+
+test('the Mumbai example’s ASR, converted to sq ft, shows in whole rupees with separators and keeps its exact value when only visited', async ({ page }) => {
+  await openExample(page, 'mum')
+  await showTab(page, 'Money')
+  const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
+  const rate = land.getByLabel('ASR land rate per sq ft of land')
+  const perSqft = perAreaToDisplay(MUMBAI_EXAMPLE_LAND_RATE.value, 'sqft')
+  await expect(rate).toHaveValue(formatAmount(Math.round(perSqft)))
+  await rate.focus()
+  await rate.blur()
+  await expect(land.getByText('Example values.')).toBeVisible()
+  expect(decodeURIComponent(page.url())).not.toContain('landRate:')
 })
 
 test('the Mumbai example’s ASR stays the user’s once typed, and is not offered for another plot', async ({ page }) => {
@@ -123,7 +141,20 @@ test('the Dubai example has every limit its affection plan states, so nothing is
   await expect(plan.getByLabel('Setback from neighbour')).toHaveValue('3')
   await expect(plan.getByLabel('Plot coverage')).toHaveValue('60')
   await expect(plan.getByText('Example values.')).toBeVisible()
+  await plan.getByRole('button', { name: t('assumptions.source') }).click()
   await expect(plan).toContainText('IC1-CTYL-16_013')
+})
+
+test('the Dubai example sets its parking from the Trakhees regulations its affection plan refers to, so no design reads parking not set', async ({ page }) => {
+  await openExample(page, 'dxb')
+  await expect(designTable(page)).not.toContainText(t('parking.not-set'))
+  await showTab(page, 'Rules')
+  await expect(rulesRegion(page)).not.toContainText(t('parking.not-set'))
+  await goTo(page, 'Roads')
+  const plan = page.getByRole('region', { name: 'From the affection plan' })
+  await expect(plan.getByLabel(limitLabel('parkingSqmPerSpace', REGIONS.dxb))).toHaveValue(shownLimit('parkingSqmPerSpace', DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value, limitDisplay(REGIONS.dxb, 'sqm')))
+  await plan.getByRole('button', { name: t('assumptions.source') }).click()
+  await expect(plan).toContainText(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
 })
 
 test('the Dubai example shows every area in m², as its affection plan states them, and no sq ft anywhere in the results', async ({ page }) => {

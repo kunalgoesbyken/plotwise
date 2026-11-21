@@ -1,4 +1,4 @@
-import { expect, test, type APIRequestContext, type Page } from '@playwright/test'
+import { expect, test, type APIRequestContext, type Page, type Response } from '@playwright/test'
 import { encodePlot } from '../src/editor/plot-url'
 import { PLACES_CACHE_S } from '../src/geocode/assumptions'
 import { EXAMPLE_PLOT } from '../src/plot/example-plot'
@@ -67,6 +67,31 @@ test('the map, its worker and the place search run without a single policy viola
   await page.getByRole('combobox', { name: 'Search for an address or place in Thailand' }).fill('asok')
   await expect(page.getByRole('listbox', { name: 'Places found' }).getByRole('option')).toHaveText(ASOK.label)
   expect(reports).toEqual([])
+})
+
+const SOURCE_MAP_COMMENT = '//# sourceMappingURL='
+
+function sourceMapOf(script: string, scriptUrl: string): string | null {
+  const at = script.lastIndexOf(SOURCE_MAP_COMMENT)
+  return at < 0 ? null : new URL(script.slice(at + SOURCE_MAP_COMMENT.length).trim(), scriptUrl).href
+}
+
+test('the app page loads without a 404, counting the source maps its scripts name, which the browser’s developer tools fetch', async ({ page, request }) => {
+  const missing: string[] = []
+  const scripts: Response[] = []
+  page.on('response', (response) => {
+    if (response.status() === 404) missing.push(response.url())
+    if (response.headers()['content-type']?.includes('javascript')) scripts.push(response)
+  })
+  const worker = page.waitForResponse((response) => response.url().includes('maplibre-gl-worker.mjs'))
+  await page.goto('/app')
+  await page.locator('[data-map-ready="true"]').waitFor({ timeout: 30_000 })
+  await worker
+  for (const script of scripts) {
+    const map = sourceMapOf(await script.text(), script.url())
+    if (map && (await request.get(map)).status() === 404) missing.push(map)
+  }
+  expect(missing).toEqual([])
 })
 
 test('the results and the 3D view run without a single policy violation', async ({ page }) => {

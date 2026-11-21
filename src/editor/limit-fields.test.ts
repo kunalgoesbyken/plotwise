@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { PlotLimitsSchema, type Plot, type PlotLimitField } from '@/plot/plot'
 import { REGIONS } from '@/region/regions'
-import { AREA_UNITS } from '@/units/area'
+import { AREA_UNITS, areaToDisplay } from '@/units/area'
 import { FIELD_UNITS, limitDisplay, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
 import { decodePlot, encodePlot } from './plot-url'
 
@@ -26,6 +26,10 @@ const read = (field: PlotLimitField, text: string, display: LimitDisplay) => {
 }
 
 const FIELDS = Object.keys(PlotLimitsSchema.shape) as PlotLimitField[]
+
+const EXACT_FIELDS = FIELDS.filter((field) => FIELD_UNITS[field] !== 'perSpace')
+
+const HUNDREDTH = 0.01
 
 describe('entered limits shown in the region’s units', () => {
   it('has a display unit for every limit a plot can carry', () => {
@@ -94,10 +98,24 @@ describe('entered limits shown in the region’s units', () => {
     }
   })
 
-  it('shows any stored value back as the text that reads to it', () => {
+  it('shows a parking area per space to the hundredth, in either unit, and leaves the stored value as it is', () => {
+    const perSpace = 140 / 3
+    expect(shownLimit('parkingSqmPerSpace', perSpace, limitDisplay(REGIONS.dxb, 'sqm'))).toBe('46.67')
+    expect(shownLimit('parkingSqmPerSpace', perSpace, DUBAI)).toBe('502.32')
+    expect(shownLimit('parkingSqmPerSpace', 50, BANGKOK)).toBe('50')
+    fc.assert(
+      fc.property(fc.double({ min: 1, max: 1e3, noNaN: true }), fc.constantFrom(...AREA_UNITS), (sqm, area) => {
+        const display = { area, floors: 'storeys' as const }
+        const shown = read('parkingSqmPerSpace', shownLimit('parkingSqmPerSpace', sqm, display), display)
+        expect(Math.abs(areaToDisplay(shown, area) - areaToDisplay(sqm, area))).toBeLessThanOrEqual(HUNDREDTH / 2 + 1e-9)
+      }),
+    )
+  })
+
+  it('shows any other stored value back as the text that reads to it', () => {
     fc.assert(
       fc.property(
-        fc.constantFrom(...FIELDS),
+        fc.constantFrom(...EXACT_FIELDS),
         fc.double({ min: 0.01, max: 1e5, noNaN: true }),
         fc.constantFrom(...AREA_UNITS),
         fc.constantFrom('storeys' as const, 'gPlus' as const),

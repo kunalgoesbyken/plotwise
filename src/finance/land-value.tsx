@@ -88,7 +88,7 @@ export function LandValue() {
         return source && <ExampleNote key={input.id} source={source} />
       })}
       {finance.priced ? <Supported finance={finance} priced={finance.priced} design={design} /> : <NeedsPrices finance={finance} />}
-      <AskingPrice finance={finance} design={design} />
+      <AskingPrice finance={finance} design={design} basisChoice />
       <p className="text-xs leading-relaxed text-muted-foreground">{t('land.indicative')}</p>
       <PriceSources finance={finance} />
     </section>

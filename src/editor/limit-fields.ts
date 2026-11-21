@@ -1,5 +1,6 @@
 import type { PlotLimitField } from '@/plot/plot'
 import type { FloorCount, Region } from '@/region/regions'
+import { formatNumber } from '@/text/format'
 import { t } from '@/text/messages'
 import { readNumber, type ReadNumber } from '@/text/read-number'
 import { areaFromDisplay, areaToDisplay, type AreaUnit } from '@/units/area'
@@ -61,8 +62,10 @@ export const limitLabel = (field: PlotLimitField, { limitTerms }: Region) => lim
 
 export const limitName = (field: PlotLimitField, { limitTerms }: Region) => limitTerms?.fields[field]?.value ?? t(`plot-limit.${field}`)
 
-export const shownLimit =(field: PlotLimitField, value: number, display: LimitDisplay) =>
-  String(Number(toShown(field, value, display).toPrecision(PRECISION)))
+export function shownLimit(field: PlotLimitField, value: number, display: LimitDisplay): string {
+  const shown = toShown(field, value, display)
+  return FIELD_UNITS[field] === 'perSpace' ? formatNumber(shown, 'ratio') : String(Number(shown.toPrecision(PRECISION)))
+}
 
 export function parseLimit(field: PlotLimitField, text: string, display: LimitDisplay): ReadNumber {
   const read = readNumber(text)

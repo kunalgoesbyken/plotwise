@@ -1,4 +1,5 @@
 import { ROAD_WIDTH_BY_CLASS_M } from '@/site/assumptions'
+import { DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE } from '@/solve/assumptions'
 import type { Plot } from './plot'
 
 export const EXAMPLE_PLOT: Plot = {
@@ -45,5 +46,5 @@ export const DUBAI_EXAMPLE_PLOT: Plot = {
   ],
   buildingType: 'condo',
   nearStation: false,
-  limits: { maxFar: 3.5, maxStoreys: 9, maxCoverageShare: 0.6, roadSetbackM: 0, boundarySetbackM: 3 },
+  limits: { maxFar: 3.5, maxStoreys: 9, maxCoverageShare: 0.6, roadSetbackM: 0, boundarySetbackM: 3, parkingSqmPerSpace: DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value },
 }

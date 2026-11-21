@@ -2,44 +2,57 @@
 
 import { useId, useState } from 'react'
 import type { Design } from '@/designs'
+import type { MoneyRegion } from '@/solve'
 import { t } from '@/text/messages'
-import { readNumber } from '@/text/read-number'
-import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
-import { isAskingPrice, MAX_ASKING_PRICE } from './asking-price'
+import { NumberInput } from '@/ui/number-input'
+import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
+import { readAsking, shownAsking, type AskingBasis, type AskingEntry } from './asking-entry'
+import { MAX_ASKING_PRICE } from './asking-price'
 import { useAssumptions } from './assumptions-provider'
 import { askingText } from './figures'
-import { formatMoney } from './format-money'
+import { formatAmount, formatMoney } from './format-money'
 import type { Finance } from './use-finance'
 
-type Entry = { readonly kind: 'blank' } | { readonly kind: 'price'; readonly price: number } | { readonly kind: 'invalid'; readonly comma: boolean }
+type BasisKind = AskingBasis['kind']
 
-function entryOf(text: string): Entry {
-  const read = readNumber(text)
-  if (read.kind === 'blank') return read
-  if (read.kind === 'number' && isAskingPrice(read.value)) return { kind: 'price', price: read.value }
-  return { kind: 'invalid', comma: read.kind === 'unreadable' && read.reason === 'comma' }
-}
+const BASIS_KINDS: readonly BasisKind[] = ['total', 'perLandUnit']
 
-function hintOf(entry: Entry | null, currency: string | null): string | null {
+const isBasisKind = (value: string): value is BasisKind => (BASIS_KINDS as readonly string[]).includes(value)
+
+const basisLabel = (kind: BasisKind, { landUnit }: MoneyRegion) => (kind === 'total' ? t('asking.total') : t('asking.per-land-unit', { unit: landUnit.name }))
+
+function hintOf(entry: AskingEntry | null, currency: string | null): string | null {
   if (entry?.kind !== 'invalid') return null
   return entry.comma ? t('input.comma') : t('asking.invalid', { max: formatMoney(MAX_ASKING_PRICE, currency) })
 }
 
-export function AskingPrice({ finance, design }: { readonly finance: Finance; readonly design: Design }) {
+const askingBasis = (kind: BasisKind, { landUnits }: Finance): AskingBasis => (kind === 'total' ? { kind } : { kind, landUnits })
+
+type AskingPriceProps = { readonly finance: Finance; readonly design: Design; readonly basisChoice?: boolean }
+
+export function AskingPrice({ finance, design, basisChoice = false }: AskingPriceProps) {
   const id = useId()
   const hintId = useId()
   const { askingPrice, setAskingPrice } = useAssumptions()
+  const [kind, setKind] = useState<BasisKind>('total')
   const [draft, setDraft] = useState<string | null>(null)
-  const entry = draft === null ? null : entryOf(draft)
+  const basis = askingBasis(kind, finance)
+  const entry = draft === null ? null : readAsking(draft, basis)
   const { currency } = finance.region
   const hint = hintOf(entry, currency)
   const invalid = hint !== null
 
   function change(text: string) {
     setDraft(text)
-    const next = entryOf(text)
+    const next = readAsking(text, basis)
     if (next.kind !== 'invalid') setAskingPrice(next.kind === 'price' ? next.price : null)
+  }
+
+  function choose(value: string) {
+    if (!isBasisKind(value)) return
+    setKind(value)
+    setDraft(null)
   }
 
   return (
@@ -48,19 +61,27 @@ export function AskingPrice({ finance, design }: { readonly finance: Finance; re
         <Label htmlFor={id} className="text-xs font-normal text-muted-foreground">
           {t('asking.label')}
         </Label>
-        <Input
+        <NumberInput
           id={id}
-          inputMode="decimal"
-          value={draft ?? (askingPrice === null ? '' : String(askingPrice))}
+          value={draft ?? (askingPrice === null ? '' : formatAmount(shownAsking(askingPrice, basis)))}
           aria-invalid={invalid}
           aria-describedby={hint ? hintId : undefined}
-          onChange={(event) => change(event.target.value)}
+          onText={change}
           onBlur={() => {
             if (!invalid) setDraft(null)
           }}
           className="w-32"
         />
         {currency && <span className="text-xs text-muted-foreground">{currency}</span>}
+        {basisChoice && (
+          <ToggleGroup type="single" variant="outline" size="sm" aria-label={t('asking.basis')} value={kind} onValueChange={choose}>
+            {BASIS_KINDS.map((option) => (
+              <ToggleGroupItem key={option} value={option} className="px-2 text-xs data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background">
+                {basisLabel(option, finance.region)}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        )}
       </div>
       {hint && (
         <p id={hintId} className="text-xs text-destructive">
