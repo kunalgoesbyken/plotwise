@@ -1,35 +1,34 @@
-import type { Design } from '@/designs'
-import type { Solution } from '@/solve'
-import { formatQuantity } from '@/text/format'
+import type { CapFigures, Ceiling } from '@/designs'
+import { formatList, formatQuantity } from '@/text/format'
 import { t } from '@/text/messages'
 import { cn } from '@/ui/cn'
 import type { AreaUnit } from '@/units/area'
 
-export type CapFigures =
-  | { readonly kind: 'reached'; readonly capSqm: number }
-  | { readonly kind: 'short'; readonly capSqm: number; readonly highRiseCostSqm: number | null }
-
-export function capFigures(design: Design, { farCap }: Solution, highRiseCostSqm: number | null): CapFigures {
-  const capSqm = farCap.maxGfaSqm
-  return design.limitedBy === 'far' ? { kind: 'reached', capSqm } : { kind: 'short', capSqm, highRiseCostSqm }
-}
-
-export function capSentences(figures: CapFigures, unit: AreaUnit) {
-  const area = formatQuantity(figures.capSqm, unit)
-  if (figures.kind === 'reached') return { cap: t('cap.reached', { area }), cost: null }
-  const { highRiseCostSqm } = figures
-  return {
-    cap: t('cap.legal', { area }),
-    cost: highRiseCostSqm === null ? null : t('cap.high-rise-cost', { area: formatQuantity(highRiseCostSqm, unit) }),
+export function capSentence(figures: CapFigures, unit: AreaUnit): string {
+  const area = (sqm: number) => formatQuantity(sqm, unit)
+  switch (figures.kind) {
+    case 'reached':
+      return t('cap.reached', { area: area(figures.capSqm) })
+    case 'legal':
+      return t('cap.legal', { area: area(figures.capSqm) })
+    case 'short':
+      return t('cap.steps', {
+        cap: area(figures.capSqm),
+        losses: figures.losses.map((loss) => t('cap.loss', { limiter: t(`limiter.${loss.limitedBy}`), area: area(loss.sqm) })),
+        buildable: area(figures.buildableSqm),
+      })
   }
 }
 
+const ceilingSentence = ({ gfaSqm, purchases }: Ceiling, unit: AreaUnit) =>
+  t('cap.up-to', { area: formatQuantity(gfaSqm, unit), purchases: formatList(purchases.map((kind) => t(`cap.up-to.${kind}`))) })
+
+export function CeilingLine({ ceiling, unit, className }: { ceiling: Ceiling; unit: AreaUnit; className?: string }) {
+  return <p className={cn('text-sm leading-snug font-medium', className)}>{ceilingSentence(ceiling, unit)}</p>
+}
+
 export function CapLine({ figures, unit, className }: { figures: CapFigures; unit: AreaUnit; className?: string }) {
-  const { cap, cost } = capSentences(figures, unit)
   return (
-    <p className={cn('text-sm leading-snug', className)}>
-      <span className="text-muted-foreground">{cap}</span>
-      {cost && <span className="font-medium"> {cost}</span>}
-    </p>
+    <p className={cn('text-sm leading-snug', figures.kind === 'short' ? 'font-medium' : 'text-muted-foreground', className)}>{capSentence(figures, unit)}</p>
   )
 }

@@ -1,3 +1,4 @@
+import { ASSUMPTIONS } from '@/solve'
 import type { Check } from './checks'
 import type { Design } from './designs'
 import { headline } from './headline'
@@ -12,21 +13,25 @@ export type Standing =
   | { readonly kind: 'best' }
   | { readonly kind: 'same-as'; readonly of: Design }
   | { readonly kind: 'dominated'; readonly by: Design; readonly worse: readonly Difference[]; readonly better: readonly Difference[] }
-  | { readonly kind: 'alternative'; readonly over: Design; readonly better: readonly Difference[] }
+  | { readonly kind: 'alternative'; readonly over: Design; readonly worse: readonly Difference[]; readonly better: readonly Difference[] }
 
 export type Ranked = { readonly design: Design; readonly standing: Standing }
 
-type Scale = { readonly gain: (design: Design) => number; readonly tolerance: number }
+type Scale = { readonly gain: (design: Design) => number; readonly tolerance: (a: number, b: number) => number }
 
 const counted = (design: Design, status: Check['status']) => design.checks.filter((check) => check.status === status).length
 
+const fixed = (tolerance: number) => () => tolerance
+
+const shareOfSmaller = (a: number, b: number) => Math.max(AREA_TOLERANCE_SQM, ASSUMPTIONS.sameDesignShare.value * Math.min(a, b))
+
 const SCALES: Readonly<Record<Measure, Scale>> = {
-  'floor-area': { gain: (d) => d.metrics.gfaSqm, tolerance: AREA_TOLERANCE_SQM },
-  height: { gain: (d) => -d.metrics.heightM, tolerance: HEIGHT_TOLERANCE_M },
-  'high-rise': { gain: (d) => (d.name.highRise ? -1 : 0), tolerance: 0 },
-  'failing-checks': { gain: (d) => -counted(d, 'fail'), tolerance: 0 },
-  'to-check': { gain: (d) => -counted(d, 'manual'), tolerance: 0 },
-  'open-space': { gain: (d) => d.metrics.openSpaceSqm, tolerance: AREA_TOLERANCE_SQM },
+  'floor-area': { gain: (d) => d.metrics.gfaSqm, tolerance: shareOfSmaller },
+  height: { gain: (d) => -d.metrics.heightM, tolerance: fixed(HEIGHT_TOLERANCE_M) },
+  'high-rise': { gain: (d) => (d.name.highRise ? -1 : 0), tolerance: fixed(0) },
+  'failing-checks': { gain: (d) => -counted(d, 'fail'), tolerance: fixed(0) },
+  'to-check': { gain: (d) => -counted(d, 'manual'), tolerance: fixed(0) },
+  'open-space': { gain: (d) => d.metrics.openSpaceSqm, tolerance: shareOfSmaller },
 }
 
 const MEASURES = Object.keys(SCALES) as Measure[]
@@ -35,9 +40,15 @@ const COMPARED = MEASURES.filter((measure) => measure !== 'open-space')
 
 const lead = (measure: Measure, a: Design, b: Design) => SCALES[measure].gain(a) - SCALES[measure].gain(b)
 
-const ahead = (measure: Measure, a: Design, b: Design) => lead(measure, a, b) > SCALES[measure].tolerance
+function ahead(measure: Measure, a: Design, b: Design): boolean {
+  const { gain, tolerance } = SCALES[measure]
+  const [gainA, gainB] = [gain(a), gain(b)]
+  return gainA - gainB > tolerance(gainA, gainB)
+}
 
 const alike = (a: Design, b: Design) => MEASURES.every((measure) => !ahead(measure, a, b) && !ahead(measure, b, a))
+
+export const sameFloorArea = (a: Design, b: Design) => Math.abs(a.metrics.gfaSqm - b.metrics.gfaSqm) <= AREA_TOLERANCE_SQM
 
 export function dominates(a: Design, b: Design): boolean {
   if (COMPARED.some((measure) => ahead(measure, b, a))) return false
@@ -60,7 +71,7 @@ function standingOf(design: Design, best: Design, shown: readonly Design[]): Sta
   if (twin) return { kind: 'same-as', of: twin }
   const by = shown.find((other) => dominates(other, design))
   if (by) return { kind: 'dominated', by, worse: worseThan(design, by), better: betterThan(design, by) }
-  return { kind: 'alternative', over: best, better: betterThan(design, best) }
+  return { kind: 'alternative', over: best, worse: worseThan(design, best), better: betterThan(design, best) }
 }
 
 export function rank(designs: readonly Design[]): readonly Ranked[] {

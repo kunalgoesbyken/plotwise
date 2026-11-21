@@ -3,12 +3,12 @@ import { describe, expect, it } from 'bun:test'
 import { DUBAI_EXAMPLE_PLOT, EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from '@/plot/example-plot'
 import type { Plot } from '@/plot/plot'
 import { loadPack, type PackId } from '@/rules'
-import { packInterpretations, solve } from '@/solve'
+import { ASSUMPTIONS, packInterpretations, solve } from '@/solve'
 import type { Check } from './checks'
 import { designs, type Design } from './designs'
 import { headline } from './headline'
 import type { TypologyId } from './massing'
-import { dominates, rank, shownOption, type Difference, type Measure, type Ranked } from './rank'
+import { dominates, rank, sameFloorArea, shownOption, type Difference, type Measure, type Ranked } from './rank'
 import { AREA_TOLERANCE_SQM } from './tolerance'
 
 const designedUnder = (packId: PackId, plot: Plot) => {
@@ -49,6 +49,10 @@ const IDS: readonly TypologyId[] = ['podium-tower', 'slab', 'low-rise']
 
 const named = fc.array(variant(near), { minLength: 1, maxLength: IDS.length }).map((all) => all.map((design, index) => ({ ...design, id: IDS[index] })))
 
+const SHARE = ASSUMPTIONS.sameDesignShare.value
+
+const withinShareOf = (value: number, of: number) => Math.abs(value - of) <= Math.max(AREA_TOLERANCE_SQM, SHARE * of)
+
 const standingOf = (ranked: readonly Ranked[], design: Design) => ranked.find((r) => r.design === design)!.standing
 const isShown = (ranked: readonly Ranked[], design: Design) => standingOf(ranked, design).kind !== 'same-as'
 const measures = (differences: readonly Difference[]) => differences.map((d) => d.measure)
@@ -85,8 +89,33 @@ describe('ranking designs for the user to choose', () => {
           expect(standing.of).not.toBe(design)
           expect(dominates(standing.of, design)).toBe(false)
           expect(dominates(design, standing.of)).toBe(false)
-          expect(Math.abs(standing.of.metrics.openSpaceSqm - design.metrics.openSpaceSqm)).toBeLessThanOrEqual(AREA_TOLERANCE_SQM)
+          expect(withinShareOf(design.metrics.openSpaceSqm, standing.of.metrics.openSpaceSqm)).toBe(true)
+          expect(withinShareOf(design.metrics.gfaSqm, standing.of.metrics.gfaSqm)).toBe(true)
         }
+      }),
+    )
+  })
+
+  it('shows as one two designs alike on every other measure whose floor area and open space are within the share of each other, and never two further apart', () => {
+    const inside = fc.double({ min: -0.95 * SHARE, max: 0.95 * SHARE, noNaN: true })
+    const outside = fc.double({ min: 1.05 * SHARE, max: 4 * SHARE, noNaN: true })
+    const pair = (gfaSqm: number, openSpaceSqm: number, gfaShift: number, openShift: number): Design[] => [
+      { ...template, metrics: { ...template.metrics, gfaSqm, openSpaceSqm } },
+      { ...template, id: IDS[1], metrics: { ...template.metrics, gfaSqm: gfaSqm * (1 + gfaShift), openSpaceSqm: openSpaceSqm * (1 + openShift) } },
+    ]
+    const area = fc.double({ min: 1000, max: 20000, noNaN: true })
+    const open = fc.double({ min: 100, max: 5000, noNaN: true })
+    fc.assert(
+      fc.property(area, open, inside, inside, (gfaSqm, openSpaceSqm, gfaShift, openShift) => {
+        const [first, second] = rank(pair(gfaSqm, openSpaceSqm, gfaShift, openShift))
+        expect([first.standing.kind, second.standing.kind].sort()).toEqual(['best', 'same-as'])
+      }),
+    )
+    fc.assert(
+      fc.property(area, open, outside, inside, fc.boolean(), fc.boolean(), (gfaSqm, openSpaceSqm, apart, near, onArea, down) => {
+        const shift = down ? -apart / (1 + apart) : apart
+        const designs = onArea ? pair(gfaSqm, openSpaceSqm, shift, near) : pair(gfaSqm, openSpaceSqm, near, shift)
+        for (const { standing } of rank(designs)) expect(standing.kind).not.toBe('same-as')
       }),
     )
   })
@@ -116,8 +145,27 @@ describe('ranking designs for the user to choose', () => {
           if (standing.kind !== 'alternative') continue
           expect(standing.over).toBe(best)
           expect(standing.better.length).toBeGreaterThan(0)
+          for (const measure of measures(standing.better)) expect(measures(standing.worse)).not.toContain(measure)
+          for (const { amount } of standing.worse.filter((d) => 'amount' in d)) expect(amount).toBeGreaterThan(0)
           for (const shown of all.filter((d) => isShown(ranked, d))) expect(dominates(shown, design)).toBe(false)
         }
+      }),
+    )
+  })
+
+  it('names where an alternative falls short of the best, floor area included', () => {
+    const lower: Design = { ...template, metrics: { ...template.metrics, gfaSqm: template.metrics.gfaSqm - 500, heightM: template.metrics.heightM - 6 } }
+    const [, second] = rank([template, lower])
+    expect(second.standing).toEqual({ kind: 'alternative', over: template, worse: [{ measure: 'floor-area', amount: 500 }], better: [{ measure: 'height', amount: 6 }] })
+  })
+
+  it('counts two floor areas as the same only within the area tolerance, not within the wider share that shows two designs as one', () => {
+    fc.assert(
+      fc.property(fc.double({ min: 0, max: 0.99 * AREA_TOLERANCE_SQM, noNaN: true }), fc.double({ min: 1.01 * AREA_TOLERANCE_SQM, max: 0.04 * template.metrics.gfaSqm, noNaN: true }), (tiny, gap) => {
+        const shifted = (by: number): Design => ({ ...template, metrics: { ...template.metrics, gfaSqm: template.metrics.gfaSqm - by } })
+        expect(sameFloorArea(template, shifted(tiny))).toBe(true)
+        expect(sameFloorArea(template, shifted(gap))).toBe(false)
+        expect(sameFloorArea(shifted(gap), template)).toBe(false)
       }),
     )
   })
@@ -218,18 +266,15 @@ describe('ranking the example designs', () => {
     }
   })
 
-  it('on the Dubai example, greys the slab for less floor area at the same height, and shows its small open-space gain', () => {
+  it('on the Dubai example, shows the slab as one with the block: within the share of its floor area and open space, alike otherwise', () => {
     const all = designedUnder('dxb-ap', DUBAI_EXAMPLE_PLOT)
     const best = headline(all)!
     const ranked = rank(all)
     const others = all.filter((d) => d !== best)
     expect(others.length).toBeGreaterThan(0)
     for (const design of others) {
-      const standing = standingOf(ranked, design)
-      expect(standing).toMatchObject({ kind: 'dominated', by: best })
-      if (standing.kind !== 'dominated') continue
-      expect(measures(standing.worse)).toEqual(['floor-area'])
-      expect(measures(standing.better)).toEqual(['open-space'])
+      expect(design.metrics.gfaSqm).toBeLessThan(best.metrics.gfaSqm - AREA_TOLERANCE_SQM)
+      expect(standingOf(ranked, design)).toEqual({ kind: 'same-as', of: best })
     }
   })
 })

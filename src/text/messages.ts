@@ -4,7 +4,7 @@ import type { DegreeOrder, UtmOrder } from '@/import/types'
 import type { LengthUnit } from '@/import/units'
 import type { BuildingType, PlotLimitField } from '@/plot/plot'
 import type { AreaTerms, RulesSource } from '@/region/regions'
-import type { SourceLanguage } from '@/rules'
+import type { FarPurchase, SourceLanguage } from '@/rules'
 import type { EnvelopeKind } from '@/solve'
 
 export const LOCALE = 'en'
@@ -26,6 +26,7 @@ type Num = { number: string }
 type Area = { area: string }
 type Authority = { authority: string }
 type Name = { name: string }
+type Compared = { lead: string; worse: string; better: string }
 type Ratio = Pick<AreaTerms, 'ratio'>
 type RatioName = Pick<AreaTerms, 'ratioName'>
 type Saleable = Pick<AreaTerms, 'saleable'>
@@ -40,7 +41,8 @@ type EngineMessages = Record<`check.${Exclude<CheckId, RatioCheckId>}`, string> 
   Record<`verification.${Exclude<RulesSource, 'draftPack'>}` | `region.${RulesSource}` | `limits.title.${RulesSource}` | `limits.intro.${RulesSource}`, string> &
   Record<`import.unit.${LengthUnit}`, string> &
   Record<`import.order.${DegreeOrder | UtmOrder}`, string> &
-  Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string>
+  Record<`limit.envelope-top.${EnvelopeKind}` | `limit.envelope-top.${EnvelopeKind}.detail`, string> &
+  Record<`cap.up-to.${FarPurchase['kind']}`, string>
 
 const en = {
   'app.name': 'Plotwise',
@@ -583,12 +585,12 @@ const en = {
 
   'standing.label': 'How it compares',
   'standing.best': 'Most floor area.',
-  'standing.same-as': ({ name }: Name) => `Same result as the ${name}.`,
+  'standing.same-as': ({ name, share }: Name & { share: string }) => `Within ${share} of the ${name}’s floor area and open space, and alike otherwise, so shown as one.`,
   'standing.same-area': ({ name }: Name) => `Same floor area as the ${name}`,
   'standing.less-area': ({ area, name }: Area & Name) => `${area} less floor area than the ${name}`,
-  'standing.dominated': ({ lead, worse, better }: { lead: string; worse: string; better: string }) =>
-    `${lead}${worse ? `, ${worse}` : ''}${better ? `; ${better}` : ''}.`,
-  'standing.alternative': ({ name, better }: Name & { better: string }) => `Against the ${name}: ${better}.`,
+  'standing.within-area': ({ name, share }: Name & { share: string }) => `Within ${share} of the floor area of the ${name}`,
+  'standing.dominated': ({ lead, worse, better }: Compared) => `${lead}${worse ? `, ${worse}` : ''}${better ? `; ${better}` : ''}.`,
+  'standing.alternative': ({ lead, worse, better }: Compared) => `${lead}${worse ? `, ${worse}` : ''}, but ${better}.`,
   'standing.line': ({ name, standing }: Name & { standing: string }) => `${name}: ${standing}`,
   'difference.worse.open-space': ({ area }: Area) => `${area} less open space`,
   'difference.better.open-space': ({ area }: Area) => `${area} more open space`,
@@ -634,7 +636,13 @@ const en = {
   'summary.land-above': ({ factor }: { factor: number }) => `That is more than ${factor} times typical asking prices nearby.`,
   'cap.legal': ({ area }: Area) => `Legal cap ${area}.`,
   'cap.reached': ({ area }: Area) => `Reaches the legal cap of ${area}.`,
-  'cap.high-rise-cost': ({ area }: Area) => `High-rise rules cost this plot ${area}.`,
+  'cap.loss': ({ limiter, area }: Area & { limiter: string }) => `${limiter} −${area}`,
+  'cap.steps': ({ cap, losses, buildable }: { cap: string; losses: readonly string[]; buildable: string }) =>
+    `${[`Legal cap ${cap}`, ...losses, `${buildable} buildable`].join(' → ')}.`,
+  'cap.up-to': ({ area, purchases }: Area & { purchases: string }) => `Up to ${area} if you buy ${purchases}.`,
+  'cap.up-to.premium': 'premium FSI',
+  'cap.up-to.transferableRights': 'TDR',
+  'cap.up-to.fungible': 'fungible area',
 
   'money.title': 'Areas and first cost',
   'money.estimated': 'Estimated',
