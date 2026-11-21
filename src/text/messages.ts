@@ -731,6 +731,7 @@ const en = {
   'assumptions.source': 'Source',
   'assumptions.reset': 'Reset to defaults',
   'assumptions.salePrice': ({ unit, saleable }: { unit: string } & Saleable) => `Sale price per ${unit} of ${saleable}`,
+  'assumptions.salePriceLow': ({ unit, saleable }: { unit: string } & Saleable) => `Sale price at the low end, per ${unit} of ${saleable}`,
   'assumptions.saleableShare': ({ saleable }: Saleable) => `${upperFirst(saleable)} as a share of built-up area above parking`,
   'assumptions.margin': 'Developer margin on sales',
   'assumptions.softCost': 'Design fees, marketing and overheads, share of first cost',

@@ -71,16 +71,18 @@ function Examples({ finance }: { finance: Finance }) {
   )
 }
 
+const PRICE_SOURCE_PARAMETERS = [SCALARS.salePriceLow, SCALARS.salePrice, SCALARS.margin, SCALARS.landReferenceLow]
+
 function PriceSources({ finance }: { finance: Finance }) {
   const { local } = finance.region
   if (!local) return null
+  const sources = new Set([local.areas.source, ...PRICE_SOURCE_PARAMETERS.flatMap((parameter) => finance.sourceOf(parameter) ?? [])])
   return (
     <Disclosure label={t('assumptions.source')} tone="muted">
       <ul className="flex flex-col gap-2 pb-2 text-xs leading-relaxed text-muted-foreground">
-        <li>{local.areas.source}</li>
-        <li>{finance.sourceOf(SCALARS.salePrice)}</li>
-        <li>{finance.sourceOf(SCALARS.margin)}</li>
-        <li>{finance.sourceOf(SCALARS.landReferenceLow)}</li>
+        {[...sources].map((source) => (
+          <li key={source}>{source}</li>
+        ))}
       </ul>
     </Disclosure>
   )

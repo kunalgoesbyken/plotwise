@@ -7,6 +7,7 @@ export type Unit = 'money' | 'landMoney' | 'share' | 'count'
 export type RateRow = 'substructure.lowRise' | 'substructure.highRise' | 'superstructure.lowRise' | 'superstructure.highRise' | 'services' | 'basement'
 export type Bound = 'low' | 'high'
 export type ScalarId =
+  | 'salePriceLow'
   | 'salePrice'
   | 'saleableShare'
   | 'margin'
@@ -34,7 +35,7 @@ type LocalParameter = {
   readonly example: (money: ExampleMoney, use: BuildingType) => ExampleAssumed | null
 }
 
-export type Parameter = Input & { readonly id: ParameterId } & (GenericParameter | LocalParameter)
+export type Parameter = Input & { readonly id: ParameterId; readonly follows?: ScalarId } & (GenericParameter | LocalParameter)
 
 export type PurchasePrice = Input & { readonly id: PurchasePriceId }
 
@@ -97,18 +98,21 @@ const referenceParameter = (id: ScalarId, bound: Bound): Parameter => ({
   example: (money) => asExample(boundOf(money.landReferencePerUnit, bound)),
 })
 
+const salePrice = (id: Extract<ScalarId, 'salePriceLow' | 'salePrice'>, example: LocalParameter['example'], follows?: ScalarId): Parameter => ({
+  id,
+  unit: 'money',
+  perUse: true,
+  follows,
+  block: 'local',
+  local: (money, { use, tier }) => money.salePricePerSqm[use][tier],
+  example,
+})
+
+const exampleSalePrice = (price: Assumed | undefined) => (price ? asExample(price) : null)
+
 export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {
-  salePrice: {
-    id: 'salePrice',
-    unit: 'money',
-    perUse: true,
-    block: 'local',
-    local: (money, { use, tier }) => money.salePricePerSqm[use][tier],
-    example: (money, use) => {
-      const price = money.salePricePerSqm[use]
-      return price ? asExample(price) : null
-    },
-  },
+  salePriceLow: salePrice('salePriceLow', (money, use) => exampleSalePrice(money.salePriceLowPerSqm?.[use] ?? money.salePricePerSqm[use]), 'salePrice'),
+  salePrice: salePrice('salePrice', (money, use) => exampleSalePrice(money.salePricePerSqm[use])),
   saleableShare: generic('saleableShare', 'share', true, (money, use) => money.saleableShare[use]),
   margin: generic('margin', 'share', false, (money) => money.developerMargin),
   softCost: generic('softCost', 'share', false, (money) => money.softCostShare),

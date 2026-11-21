@@ -76,6 +76,7 @@ export function AssumptionsPanel() {
       </header>
       <p className="text-sm leading-relaxed text-muted-foreground">{t('assumptions.note')}</p>
       <Group title={t('assumptions.price')}>
+        <ScalarRow finance={finance} id="salePriceLow" />
         <ScalarRow finance={finance} id="salePrice" />
         <ScalarRow finance={finance} id="saleableShare" />
         <ScalarRow finance={finance} id="margin" />

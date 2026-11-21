@@ -1,7 +1,7 @@
 import type { BuildingType } from '@/plot/plot'
 import { isSourceCite, type Cite, type RulePack } from '@/rules'
 import { CARPET_RATIO_NOTE, type AreaTier, type ExampleMoney, type GenericMoney, type LocalMoney, type MoneyRegion } from '@/solve'
-import { enteredAs, PARAMETERS, parametersFor, RATES, storageKey, type Assumed, type Parameter, type ParameterId } from './parameters'
+import { enteredAs, PARAMETERS, parametersFor, RATES, SCALARS, storageKey, type Assumed, type Parameter, type ParameterId } from './parameters'
 
 export type Overrides = Readonly<Partial<Record<string, number>>>
 export type Values = Readonly<Record<ParameterId, number>>
@@ -71,13 +71,22 @@ export const BASEMENT_RATES: UnusedRates = new Set(RATES.filter(({ row }) => row
 
 const UNUSED_RATE = 0
 
+const withFollowed = (parameter: Parameter): readonly Parameter[] => (parameter.follows ? [parameter, SCALARS[parameter.follows]] : [parameter])
+
+const enteredValue = (parameter: Parameter, overrides: Overrides, { pack, use }: MoneyDefaults) =>
+  withFollowed(parameter)
+    .map((candidate) => overrides[storageKey(enteredAs(candidate, pack), use)])
+    .find((value) => value !== undefined)
+
+export const isEntered = (parameter: Parameter, overrides: Overrides, defaults: MoneyDefaults) => enteredValue(parameter, overrides, defaults) !== undefined
+
 const valueOf = (parameter: Parameter, overrides: Overrides, defaults: MoneyDefaults, unused: UnusedRates) =>
-  overrides[storageKey(enteredAs(parameter, defaults.pack), defaults.use)] ?? defaultOf(parameter, defaults)?.value ?? (unused.has(parameter) ? UNUSED_RATE : undefined)
+  enteredValue(parameter, overrides, defaults) ?? defaultOf(parameter, defaults)?.value ?? (unused.has(parameter) ? UNUSED_RATE : undefined)
 
 export const enteredOrDefault = (parameter: Parameter, overrides: Overrides, defaults: MoneyDefaults) => valueOf(parameter, overrides, defaults, NO_UNUSED_RATES)
 
 export const missingParameters = (overrides: Overrides, defaults: MoneyDefaults, unused = NO_UNUSED_RATES): readonly Parameter[] =>
-  parametersFor(defaults.pack).filter((parameter) => valueOf(parameter, overrides, defaults, unused) === undefined)
+  parametersFor(defaults.pack).filter((parameter) => !parameter.follows && valueOf(parameter, overrides, defaults, unused) === undefined)
 
 export function resolveValues(overrides: Overrides, defaults: MoneyDefaults, unused = NO_UNUSED_RATES): Values | null {
   const entries = PARAMETERS.map((parameter) => [parameter.id, valueOf(parameter, overrides, defaults, unused)] as const)
