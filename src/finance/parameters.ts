@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { BUILDING_TYPES, type BuildingType } from '@/plot/plot'
 import type { RulePack } from '@/rules'
-import type { AreaTier, AssumedRange, ExampleMoney, GenericMoney, LocalMoney } from '@/solve'
+import type { AreaTier, AssumedRange, ExampleMoney, GenericMoney, LocalMoney, SplitRange } from '@/solve'
 
 export type Unit = 'money' | 'landMoney' | 'share' | 'count'
 export type RateRow = 'substructure.lowRise' | 'substructure.highRise' | 'superstructure.lowRise' | 'superstructure.highRise' | 'services' | 'basement'
@@ -21,6 +21,7 @@ export type ParameterId = ScalarId | `${RateRow}.${Bound}`
 export type PurchasePriceId = 'landRate' | 'tdrPrice'
 
 export type Assumed = { readonly value: number; readonly source: string }
+export type ExampleAssumed = Assumed & { readonly kind: 'example' | 'split' }
 export type Basis = { readonly use: BuildingType; readonly tier: AreaTier }
 
 export type Input = { readonly id: ParameterId | PurchasePriceId; readonly unit: Unit; readonly perUse: boolean }
@@ -30,7 +31,7 @@ type GenericParameter = { readonly block: 'generic'; readonly generic: (money: G
 type LocalParameter = {
   readonly block: 'local'
   readonly local: (money: LocalMoney, basis: Basis) => Assumed
-  readonly example: (money: ExampleMoney, use: BuildingType) => Assumed | null
+  readonly example: (money: ExampleMoney, use: BuildingType) => ExampleAssumed | null
 }
 
 export type Parameter = Input & { readonly id: ParameterId } & (GenericParameter | LocalParameter)
@@ -67,7 +68,7 @@ const UNIT_SCHEMAS: Readonly<Record<Unit, z.ZodNumber>> = {
 
 type RateRanges = {
   readonly local: (money: LocalMoney, use: BuildingType) => AssumedRange
-  readonly example: (money: ExampleMoney, use: BuildingType) => AssumedRange | undefined
+  readonly example: (money: ExampleMoney, use: BuildingType) => SplitRange | undefined
 }
 
 const RATE_RANGES: Readonly<Record<RateRow, RateRanges>> = {
@@ -76,12 +77,14 @@ const RATE_RANGES: Readonly<Record<RateRow, RateRanges>> = {
   'superstructure.lowRise': { local: (money) => money.rates.superstructure.lowRise, example: (money) => money.rates.superstructure },
   'superstructure.highRise': { local: (money) => money.rates.superstructure.highRise, example: (money) => money.rates.superstructure },
   services: { local: (money, use) => money.rates.services[use], example: (money, use) => money.rates.services[use] },
-  basement: { local: (money) => money.rates.basement, example: (money) => money.rates.basement },
+  basement: { local: (money) => money.rates.basement, example: () => undefined },
 }
 
 const boundOf = (range: AssumedRange, bound: Bound): Assumed => ({ value: range[bound], source: range.source })
 
-const exampleBound = (range: AssumedRange | undefined, bound: Bound) => (range ? boundOf(range, bound) : null)
+const asExample = (assumed: Assumed): ExampleAssumed => ({ ...assumed, kind: 'example' })
+
+const splitBound = (range: SplitRange | undefined, bound: Bound): ExampleAssumed | null => (range ? { ...boundOf(range, bound), kind: range.kind } : null)
 
 const generic = (id: ScalarId, unit: Unit, perUse: boolean, assumed: GenericParameter['generic']): Parameter => ({ id, unit, perUse, block: 'generic', generic: assumed })
 
@@ -91,7 +94,7 @@ const referenceParameter = (id: ScalarId, bound: Bound): Parameter => ({
   perUse: false,
   block: 'local',
   local: (money, { tier }) => boundOf(money.landReferencePerUnit[tier], bound),
-  example: (money) => boundOf(money.landReferencePerUnit, bound),
+  example: (money) => asExample(boundOf(money.landReferencePerUnit, bound)),
 })
 
 export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {
@@ -101,7 +104,10 @@ export const SCALARS: Readonly<Record<ScalarId, Parameter>> = {
     perUse: true,
     block: 'local',
     local: (money, { use, tier }) => money.salePricePerSqm[use][tier],
-    example: (money, use) => money.salePricePerSqm[use] ?? null,
+    example: (money, use) => {
+      const price = money.salePricePerSqm[use]
+      return price ? asExample(price) : null
+    },
   },
   saleableShare: generic('saleableShare', 'share', true, (money, use) => money.saleableShare[use]),
   margin: generic('margin', 'share', false, (money) => money.developerMargin),
@@ -120,7 +126,7 @@ const rateParameter = (row: RateRow, bound: Bound): Parameter => ({
   perUse: row === 'services',
   block: 'local',
   local: (money, { use }) => boundOf(RATE_RANGES[row].local(money, use), bound),
-  example: (money, use) => exampleBound(RATE_RANGES[row].example(money, use), bound),
+  example: (money, use) => splitBound(RATE_RANGES[row].example(money, use), bound),
 })
 
 export type RateParameters = { readonly row: RateRow; readonly low: Parameter; readonly high: Parameter }

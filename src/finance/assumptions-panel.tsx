@@ -15,6 +15,7 @@ const BADGES: Readonly<Record<ValueLabel, string>> = {
   estimated: t('money.estimated'),
   generic: t('assumptions.generic'),
   example: t('assumptions.example'),
+  split: t('assumptions.split'),
 }
 
 type RowProps = { readonly label: string; readonly finance: Finance; readonly parameter: Parameter; readonly children: ReactNode }

@@ -9,7 +9,7 @@ import { hashOf, mockApp, RESULTS_PLOT } from './support/site'
 import { expect, test } from './support/test'
 
 const MUMBAI = REGIONS.mum
-const LOCAL_VALUES_MISSING = 7
+const LOCAL_VALUES_MISSING = 6
 
 const landRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('land.title') })
 const costRegion = (page: Page) => moneyRegion(page).getByRole('region', { name: t('money.title') })
@@ -36,15 +36,18 @@ for (const region of ['mum', 'dxb'] as const) {
     await expect(costRegion(page)).toBeVisible({ timeout: READY_TIMEOUT })
     await expect(costRegion(page)).toContainText(t('money.first-cost'))
     await expect(landRegion(page).getByText(t('money.examples-applied'))).toBeVisible()
+    await expect(landRegion(page).getByText(t('money.shell-and-core'))).toBeVisible()
     await expect(landRegion(page).getByRole('note')).toHaveCount(0)
     await expect(fillButton(page)).toHaveCount(0)
 
     await showAssumptions(page)
     await expect(row(page, t('assumptions.margin')).getByText(t('assumptions.generic'), { exact: true })).toBeVisible()
     const rate = row(page, t('assumptions.rate.one-class.substructure.lowRise'))
-    await expect(rate.getByText(t('assumptions.example'), { exact: true })).toBeVisible()
+    await expect(rate.getByText(t('assumptions.split'), { exact: true })).toBeVisible()
     await rate.getByRole('button', { name: t('assumptions.source') }).click()
     await expect(rate).toContainText('Tall buildings construction guide 2026')
+    const basement = row(page, t('assumptions.rate.basement', { unit: t(`area-unit.${REGIONS[region].areaUnit}`) }))
+    await expect(basement.getByText(t('assumptions.blank'))).toBeVisible()
   })
 }
 

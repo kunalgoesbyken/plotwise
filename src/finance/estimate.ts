@@ -96,9 +96,13 @@ export function landResidual(grossValue: number, buildCost: number, values: Valu
   return afterBuild < 0 ? afterBuild : afterBuild / (1 + acquisitionShare(values))
 }
 
+const basementSqmOf = ({ parkingSqm, footprintSqm }: Metrics, maxAboveGround: number) => Math.max(0, parkingSqm - maxAboveGround * footprintSqm)
+
+export const needsBasement = (metrics: readonly Metrics[], maxAboveGround: number) => metrics.some((design) => basementSqmOf(design, maxAboveGround) > 0)
+
 function parkingFor(metrics: Metrics, plotAreaSqm: number, maxAboveGround: number): Parking {
   const needed = levelsFor(metrics.parkingSqm, metrics.footprintSqm)
-  const basementSqm = Math.max(0, metrics.parkingSqm - maxAboveGround * metrics.footprintSqm)
+  const basementSqm = basementSqmOf(metrics, maxAboveGround)
   return {
     levelsAboveGround: Math.min(needed, maxAboveGround),
     basementLevels: levelsFor(basementSqm, plotAreaSqm),

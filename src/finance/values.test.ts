@@ -6,7 +6,7 @@ import { loadPack, type RulePack } from '@/rules'
 import { BANGKOK } from '@/rules/test-packs'
 import { MONEY_REGIONS, type AreaTier, type ExampleMoney, type MoneyRegion } from '@/solve'
 import { PARAMETERS, parametersFor, ratesFor, SCALARS, storageKey, type Parameter, type ParameterId } from './parameters'
-import { defaultOf, missingParameters, moneyDefaults, packDefaults, resolveValues, type Overrides } from './values'
+import { BASEMENT_RATES, defaultOf, missingParameters, moneyDefaults, packDefaults, resolveValues, type Overrides } from './values'
 
 const CUSTOM = loadPack('custom')
 const MUMBAI = loadPack('mum-suburbs-res')
@@ -76,22 +76,38 @@ describe('example money values', () => {
     [MONEY_REGIONS.dxb, DUBAI, REGIONS.dxb.example.money],
   ] as const
 
-  it('fill every local value of an apartment plot in Mumbai and Dubai, each naming a source fetched on a stated date', () => {
+  it('fill every local value of an apartment plot in Mumbai and Dubai but the basement rate, each naming a source fetched on a stated date', () => {
     for (const [region, pack, example] of EXAMPLES) {
       const defaults = defaultsFor(region, pack, 'condo', example)
-      expect(missingParameters({}, defaults)).toEqual([])
-      for (const parameter of localOf(parametersFor(pack))) {
+      expect(ids(missingParameters({}, defaults))).toEqual(['basement.low', 'basement.high'])
+      expect(missingParameters({}, defaults, BASEMENT_RATES)).toEqual([])
+      for (const parameter of localOf(parametersFor(pack)).filter((p) => !BASEMENT_RATES.has(p))) {
         const filled = defaultOf(parameter, defaults)
-        expect(filled?.kind).toBe('example')
+        expect(['example', 'split']).toContain(filled?.kind ?? '')
         expect(filled?.value).toBeGreaterThan(0)
         expect(filled?.source).toContain('fetched 2026-11-21')
       }
     }
   })
 
+  it('mark the build rates split from a sourced total as a split, and the quoted figures as example values', () => {
+    const defaults = defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money)
+    for (const { low, high } of ratesFor(MUMBAI).filter(({ row }) => row !== 'basement')) {
+      expect([defaultOf(low, defaults)?.kind, defaultOf(high, defaults)?.kind]).toEqual(['split', 'split'])
+    }
+    for (const id of ['salePrice', 'landReferenceLow', 'landReferenceHigh'] as const) expect(defaultOf(SCALARS[id], defaults)?.kind).toBe('example')
+  })
+
+  it('price without a basement rate only while no design has a basement, as a rate nothing is built at', () => {
+    const values = resolveValues({}, defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money), BASEMENT_RATES)
+    expect([values?.['basement.low'], values?.['basement.high']]).toEqual([0, 0])
+    expect(resolveValues({}, defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money))).toBeNull()
+    expect(resolveValues({ 'basement.low': 9, 'basement.high': 11 }, defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money), BASEMENT_RATES)).toMatchObject({ 'basement.low': 9, 'basement.high': 11 })
+  })
+
   it('keep each build rate band low to high and say its split into rows is generic, not local', () => {
     for (const [, , { rates }] of EXAMPLES) {
-      for (const range of [rates.substructure, rates.superstructure, rates.services.condo, rates.basement]) {
+      for (const range of [rates.substructure, rates.superstructure, rates.services.condo]) {
         expect(range?.low).toBeLessThanOrEqual(range?.high ?? Number.NaN)
         expect(range?.source).toContain('Tall buildings construction guide 2026')
         expect(range?.source).toContain('that split is a generic default, not local')
@@ -117,7 +133,7 @@ describe('example money values', () => {
     const typedOver = localOf(parametersFor(MUMBAI))
     fc.assert(
       fc.property(fc.constantFrom(...typedOver), fc.integer({ min: 1, max: 1_000_000 }), (parameter, typed) => {
-        const values = resolveValues({ [storageKey(parameter, 'condo')]: typed }, defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money))
+        const values = resolveValues({ [storageKey(parameter, 'condo')]: typed }, defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'condo', REGIONS.mum.example.money), BASEMENT_RATES)
         expect(values?.[parameter.id]).toBe(typed)
       }),
     )
@@ -125,7 +141,7 @@ describe('example money values', () => {
 
   it('leave nothing filled for a building type they have no sale price for', () => {
     const office = defaultsFor(MONEY_REGIONS.mum, MUMBAI, 'office', REGIONS.mum.example.money)
-    expect(ids(missingParameters({}, office))).toEqual(['salePrice', 'services.low', 'services.high'])
+    expect(ids(missingParameters({}, office, BASEMENT_RATES))).toEqual(['salePrice', 'services.low', 'services.high'])
   })
 })
 

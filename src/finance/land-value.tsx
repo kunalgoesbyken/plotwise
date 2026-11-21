@@ -51,7 +51,14 @@ function NeedsPrices({ finance }: { finance: Finance }) {
 
 function Examples({ finance }: { finance: Finance }) {
   if (finance.examples === 'none') return null
-  if (finance.examples === 'applied') return <p className="text-xs leading-relaxed text-muted-foreground">{t('money.examples-applied')}</p>
+  if (finance.examples === 'applied') {
+    return (
+      <div className="flex flex-col gap-1 text-xs leading-relaxed text-muted-foreground">
+        <p>{t('money.examples-applied')}</p>
+        {finance.shellAndCoreOnly && <p className="font-medium text-foreground">{t('money.shell-and-core')}</p>}
+      </div>
+    )
+  }
   return (
     <Button variant="outline" size="sm" className="self-start" onClick={finance.fillExamples}>
       {t('money.fill-examples')}

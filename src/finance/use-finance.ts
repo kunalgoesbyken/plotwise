@@ -9,11 +9,11 @@ import { isExampleSite, type Region } from '@/region/regions'
 import type { MoneyRegion } from '@/solve'
 import type { Placement } from './area'
 import { useAssumptions } from './assumptions-provider'
-import { estimate, financeSite, moneySiteOf, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
+import { estimate, financeSite, moneySiteOf, needsBasement, neededPrices, offeredPrices, placementIn, type Estimate, type FinanceSite, type PurchasePrices } from './estimate'
 import { landCheck, type LandCheck } from './land-check'
-import { isParameter, isPurchasePrice, PURCHASE_PRICES, ratesFor, storageKey, type Input, type Parameter, type PurchasePrice, type RateParameters } from './parameters'
+import { isParameter, isPurchasePrice, PURCHASE_PRICES, ratesFor, SCALARS, storageKey, type Input, type Parameter, type PurchasePrice, type RateParameters } from './parameters'
 import type { ExampleChoice } from './url'
-import { defaultOf, missingParameters, moneyDefaults, resolveValues, type DefaultKind, type Values } from './values'
+import { BASEMENT_RATES, defaultOf, enteredOrDefault, missingParameters, moneyDefaults, NO_UNUSED_RATES, resolveValues, type DefaultKind, type Values } from './values'
 
 export type Priced = {
   readonly values: Values
@@ -21,7 +21,7 @@ export type Priced = {
   readonly landCheckOf: (estimate: Estimate) => LandCheck
 }
 
-export type ValueLabel = 'estimated' | 'generic' | 'example'
+export type ValueLabel = 'estimated' | 'generic' | 'example' | 'split'
 
 export type Finance = {
   readonly region: MoneyRegion
@@ -29,6 +29,7 @@ export type Finance = {
   readonly area: Placement | null
   readonly hasEdits: boolean
   readonly examples: 'applied' | 'available' | 'none'
+  readonly shellAndCoreOnly: boolean
   readonly missing: readonly Input[]
   readonly rates: readonly RateParameters[]
   readonly buildClasses: boolean
@@ -43,7 +44,9 @@ export type Finance = {
   readonly resetAll: () => void
 }
 
-const LABELS: Readonly<Record<DefaultKind, ValueLabel>> = { rule: 'estimated', local: 'estimated', example: 'example', generic: 'generic' }
+const LABELS: Readonly<Record<DefaultKind, ValueLabel>> = { rule: 'estimated', local: 'estimated', example: 'example', split: 'split', generic: 'generic' }
+
+const NO_DESIGNS: readonly Design[] = []
 
 const isApplied = (choice: ExampleChoice, region: Region, plot: Plot) => choice ?? isExampleSite(region, plot.ring)
 
@@ -58,6 +61,7 @@ function pricedBy(region: MoneyRegion, site: FinanceSite, values: Values | null,
 
 export function useFinance(): Finance | null {
   const { result } = useFeasibility()
+  const designs = result?.status === 'ready' ? result.designs : NO_DESIGNS
   const { region, overrides, examples, setOverride, setExamples, clearAll } = useAssumptions()
   const solution = result?.status === 'ready' ? result.solution : null
   const site = useMemo(() => solution && financeSite(solution, region), [solution, region])
@@ -68,13 +72,19 @@ export function useFinance(): Finance | null {
     if (!site) return null
     const example = applied ? exampleMoney : null
     const defaults = moneyDefaults(region, moneySiteOf(site, region), example)
-    const values = resolveValues(overrides, defaults)
+    const levels = enteredOrDefault(SCALARS.parkingLevels, overrides, defaults)
+    const unused = levels !== undefined && !needsBasement(designs.map(({ metrics }) => metrics), levels) ? BASEMENT_RATES : NO_UNUSED_RATES
+    const values = resolveValues(overrides, defaults, unused)
     const entered = (input: Input) => overrides[storageKey(input, site.use)]
     const exampleOf = (input: Input) => (entered(input) === undefined && example && isPurchasePrice(input) ? example[input.id] : null)
     const priceOf = (input: Input) => entered(input) ?? exampleOf(input)?.value
     const boughtInputs = neededPrices(site).map((id) => PURCHASE_PRICES[id])
     const missingPrices = boughtInputs.filter((input) => priceOf(input) === undefined)
     const boughtPrices = Object.fromEntries(boughtInputs.map((input) => [input.id, priceOf(input)]))
+    const labelOf = (parameter: Parameter): ValueLabel => {
+      const kind = defaultOf(parameter, defaults)?.kind
+      return kind && entered(parameter) === undefined ? LABELS[kind] : 'estimated'
+    }
     const defaultValue = (input: Input) => (isParameter(input) ? defaultOf(input, defaults)?.value : undefined)
     return {
       region,
@@ -82,21 +92,19 @@ export function useFinance(): Finance | null {
       area: region.local && placementIn(site, region.local),
       hasEdits: Object.keys(overrides).length > 0 || applied,
       examples: applied ? 'applied' : exampleMoney ? 'available' : 'none',
-      missing: [...missingParameters(overrides, defaults), ...missingPrices],
+      shellAndCoreOnly: example?.buildRateScope === 'shellAndCore' && ratesFor(site.pack).some(({ low }) => labelOf(low) === 'split'),
+      missing: [...missingParameters(overrides, defaults, unused), ...missingPrices],
       rates: ratesFor(site.pack),
       buildClasses: site.pack.buildingClasses !== undefined,
       purchasePrices: offeredPrices(site).map((id) => PURCHASE_PRICES[id]),
       priced: pricedBy(region, site, values, missingPrices.length === 0 ? boughtPrices : null),
       valueOf: (input) => priceOf(input) ?? defaultValue(input) ?? null,
       sourceOf: (parameter) => defaultOf(parameter, defaults)?.source ?? null,
-      labelOf: (parameter) => {
-        const kind = defaultOf(parameter, defaults)?.kind
-        return kind && entered(parameter) === undefined ? LABELS[kind] : 'estimated'
-      },
+      labelOf,
       exampleSourceOf: (input) => exampleOf(input)?.source ?? null,
       edit: (input, value) => setOverride(storageKey(input, site.use), value),
       fillExamples: () => setExamples(true),
       resetAll: () => clearAll(exampleMoney ? false : null),
     }
-  }, [site, region, applied, exampleMoney, overrides, setOverride, setExamples, clearAll])
+  }, [site, designs, region, applied, exampleMoney, overrides, setOverride, setExamples, clearAll])
 }

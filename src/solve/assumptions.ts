@@ -158,15 +158,19 @@ export type LocalMoney = {
   }
 }
 
+export type SplitRange = AssumedRange & { readonly kind: 'split' }
+
+type BuildRateScope = 'shellAndCore' | 'wholeBuilding'
+
 export type ExampleMoney = {
   readonly salePricePerSqm: Readonly<Partial<Record<BuildingType, Assumption>>>
   readonly landReferencePerUnit: AssumedRange
   readonly rates: {
-    readonly substructure: AssumedRange
-    readonly superstructure: AssumedRange
-    readonly services: Readonly<Partial<Record<BuildingType, AssumedRange>>>
-    readonly basement: AssumedRange
+    readonly substructure: SplitRange
+    readonly superstructure: SplitRange
+    readonly services: Readonly<Partial<Record<BuildingType, SplitRange>>>
   }
+  readonly buildRateScope: BuildRateScope
   readonly landRate: Assumption | null
   readonly tdrPrice: Assumption | null
 }
@@ -514,15 +518,14 @@ const proportion = (whole: Band, part: Band): Band => {
   return { low: whole.low * share, high: whole.high * share }
 }
 
-const SPLIT_LIKE_BANGKOK = `split into substructure, superstructure, services and basement in the proportions of the midpoints of Plotwise's own Bangkok high-rise condominium rates (substructure ${band(HIGH_RISE_STRUCTURE.substructure)}, superstructure ${band(HIGH_RISE_STRUCTURE.superstructure)}, services ${band(CONDO_SERVICES)} and the BOI basement car park ${band(BOI_BASEMENT_CAR_PARK)} per m², against a building total of ${band(HIGH_RISE_CONDO)}), so the three building rows add up to the published total; that split is a generic default, not local`
+const SPLIT_LIKE_BANGKOK = `split into substructure, superstructure and services in the proportions of the midpoints of Plotwise's own Bangkok high-rise condominium rates (substructure ${band(HIGH_RISE_STRUCTURE.substructure)}, superstructure ${band(HIGH_RISE_STRUCTURE.superstructure)} and services ${band(CONDO_SERVICES)} per m², out of ${band(HIGH_RISE_CONDO)}), so the three rows add up to the published total; that split is a generic default, not local`
 
 function splitLikeBangkok(whole: Band, source: string): ExampleMoney['rates'] {
-  const part = (share: Band): AssumedRange => ({ ...proportion(whole, share), source: `${source}; ${SPLIT_LIKE_BANGKOK}` })
+  const part = (share: Band): SplitRange => ({ ...proportion(whole, share), source: `${source}; ${SPLIT_LIKE_BANGKOK}`, kind: 'split' })
   return {
     substructure: part(HIGH_RISE_STRUCTURE.substructure),
     superstructure: part(HIGH_RISE_STRUCTURE.superstructure),
     services: { condo: part(CONDO_SERVICES) },
-    basement: part(BOI_BASEMENT_CAR_PARK),
   }
 }
 
@@ -552,6 +555,7 @@ export const MUMBAI_EXAMPLE_MONEY: ExampleMoney = {
     MUMBAI_SHELL_AND_CORE,
     `${EXAMPLE}; ${TALL_BUILDINGS_2026}, Mumbai, "Mumbai's 2025 key cost ranges by sector": Residential (20-60 storeys) GIA shell and core cost "INR 48,000/m² – 54,000/m²" ("INR 4,500/ft² – 5,000/ft²"), "Costs exclude finishes, demolition, external works and utilities", https://reports.turnerandtownsend.com/tall-buildings-construction-guide-2026/mumbai, ${FETCHED}`,
   ),
+  buildRateScope: 'shellAndCore',
   landRate: MUMBAI_EXAMPLE_LAND_RATE,
   tdrPrice: {
     value: perSqm(6_000),
@@ -579,6 +583,7 @@ export const DUBAI_EXAMPLE_MONEY: ExampleMoney = {
     DUBAI_SHELL_AND_CORE,
     `${EXAMPLE}; ${TALL_BUILDINGS_2026}, Dubai, "Dubai's 2025 key cost ranges by sector": Residential (20-60 storeys) GIA shell and core cost "AED 5,000-6,450/m²", "Costs exclude finishes, demolition, external works and utilities", https://reports.turnerandtownsend.com/tall-buildings-construction-guide-2026/dubai, ${FETCHED}`,
   ),
+  buildRateScope: 'shellAndCore',
   landRate: null,
   tdrPrice: null,
 }
