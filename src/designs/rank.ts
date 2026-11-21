@@ -42,7 +42,8 @@ const lead = (measure: Measure, a: Design, b: Design) => SCALES[measure].gain(a)
 
 function ahead(measure: Measure, a: Design, b: Design): boolean {
   const { gain, tolerance } = SCALES[measure]
-  return gain(a) - gain(b) > tolerance(gain(a), gain(b))
+  const [gainA, gainB] = [gain(a), gain(b)]
+  return gainA - gainB > tolerance(gainA, gainB)
 }
 
 const alike = (a: Design, b: Design) => MEASURES.every((measure) => !ahead(measure, a, b) && !ahead(measure, b, a))
