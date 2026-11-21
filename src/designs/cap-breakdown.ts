@@ -1,4 +1,5 @@
 import { withoutHighRiseRules, type Solution } from '@/solve'
+import { areaFromDisplay, areaToDisplay, type AreaUnit } from '@/units/area'
 import { designs, type Design, type Limiter } from './designs'
 import { headline } from './headline'
 import { AREA_TOLERANCE_SQM } from './tolerance'
@@ -19,22 +20,25 @@ const isOther = (limiter: Limiter): limiter is OtherLimiter => limiter !== 'far'
 const withoutClass = (solution: Solution, best: Design) =>
   best.limitedBy === 'building-class' ? (headline(designs(withoutHighRiseRules(solution))) ?? best) : best
 
-function losses(capSqm: number, free: Design, best: Design): Losses {
-  const [freeSqm, buildableSqm] = [free.metrics.gfaSqm, best.metrics.gfaSqm]
+const asShown = (sqm: number, unit: AreaUnit) => areaFromDisplay(Math.round(areaToDisplay(sqm, unit)), unit)
+
+function losses(capSqm: number, free: Design, best: Design, unit: AreaUnit): Losses {
+  const buildableSqm = asShown(best.metrics.gfaSqm, unit)
+  const freeSqm = asShown(free.metrics.gfaSqm, unit)
   if (!isOther(free.limitedBy)) return [{ limitedBy: 'building-class', sqm: capSqm - buildableSqm }]
-  if (freeSqm - buildableSqm <= AREA_TOLERANCE_SQM) return [{ limitedBy: free.limitedBy, sqm: capSqm - buildableSqm }]
+  if (free.metrics.gfaSqm - best.metrics.gfaSqm <= AREA_TOLERANCE_SQM) return [{ limitedBy: free.limitedBy, sqm: capSqm - buildableSqm }]
   return [
     { limitedBy: free.limitedBy, sqm: capSqm - freeSqm },
     { limitedBy: 'building-class', sqm: freeSqm - buildableSqm },
   ]
 }
 
-export function capBreakdown(solution: Solution, options: readonly Design[]): CapFigures | null {
+export function capBreakdown(solution: Solution, options: readonly Design[], unit: AreaUnit): CapFigures | null {
   const best = headline(options)
   if (!best) return null
-  const capSqm = solution.farCap.maxGfaSqm
-  if (best.limitedBy === 'far') return { kind: 'reached', capSqm }
-  return { kind: 'short', capSqm, losses: losses(capSqm, withoutClass(solution, best), best), buildableSqm: best.metrics.gfaSqm }
+  if (best.limitedBy === 'far') return { kind: 'reached', capSqm: solution.farCap.maxGfaSqm }
+  const [capSqm, buildableSqm] = [asShown(solution.farCap.maxGfaSqm, unit), asShown(best.metrics.gfaSqm, unit)]
+  return { kind: 'short', capSqm, losses: losses(capSqm, withoutClass(solution, best), best, unit), buildableSqm }
 }
 
 export const capOf = (design: Design, { farCap }: Solution): CapFigures => ({ kind: design.limitedBy === 'far' ? 'reached' : 'legal', capSqm: farCap.maxGfaSqm })

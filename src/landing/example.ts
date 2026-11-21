@@ -28,7 +28,7 @@ export function exampleFigures() {
   if (result.status !== 'ready') throw new Error(`The example plot no longer solves: ${result.reason}`)
   const { solution, designs } = result
   const design = headline(designs)
-  const cap = capBreakdown(solution, designs)
+  const cap = capBreakdown(solution, designs, 'sqm')
   if (!design || !cap) throw new Error('The example plot no longer has a design')
   const region = MONEY_REGIONS[DEFAULT_REGION.id]
   const site = financeSite(solution, region)

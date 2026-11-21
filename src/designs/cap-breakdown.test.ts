@@ -7,6 +7,7 @@ import type { BuildingType, Plot } from '@/plot/plot'
 import { loadPack } from '@/rules'
 import { packInterpretations, satisfies, solve, withoutHighRiseRules, type Solution } from '@/solve'
 import { plotFromMetres, rectangle } from '@/solve/test-plots'
+import { AREA_UNITS, areaToDisplay, type AreaUnit } from '@/units/area'
 import { capBreakdown, capOf, type CapFigures } from './cap-breakdown'
 import { designs, type Design } from './designs'
 import { headline } from './headline'
@@ -22,15 +23,17 @@ function designed(plot: Plot) {
 
 const waivedBest = (solution: Solution) => headline(designs(withoutHighRiseRules(solution)))!
 
-const lostSqm = (figures: Extract<CapFigures, { kind: 'short' }>) => figures.losses.map((loss) => loss.sqm).reduce((sum, sqm) => sum + sqm, 0)
+const shownIn = (unit: AreaUnit) => (sqm: number) => Math.round(areaToDisplay(sqm, unit))
 
-function expectSteps(figures: CapFigures | null, solution: Solution, best: Design) {
+function expectSteps(figures: CapFigures | null, solution: Solution, best: Design, unit: AreaUnit) {
   expect(figures).not.toBeNull()
   if (figures?.kind !== 'short') return
-  expect(figures.capSqm).toBe(solution.farCap.maxGfaSqm)
-  expect(figures.buildableSqm).toBe(best.metrics.gfaSqm)
-  expect(figures.capSqm - lostSqm(figures)).toBeCloseTo(figures.buildableSqm, 6)
-  for (const loss of figures.losses) expect(loss.sqm).toBeGreaterThanOrEqual(0)
+  const shown = shownIn(unit)
+  const steps = figures.losses.map((loss) => shown(loss.sqm))
+  expect(shown(figures.capSqm)).toBe(shown(solution.farCap.maxGfaSqm))
+  expect(shown(figures.buildableSqm)).toBe(shown(best.metrics.gfaSqm))
+  expect(shown(figures.capSqm) - steps.reduce((sum, step) => sum + step, 0)).toBe(shown(figures.buildableSqm))
+  for (const step of steps) expect(step).toBeGreaterThanOrEqual(0)
   if (best.limitedBy !== 'building-class') expect(figures.losses.map((loss) => loss.limitedBy)).not.toContain('building-class')
 }
 
@@ -76,21 +79,24 @@ describe('the steps from the legal cap down to the buildable floor area', () => 
     const best = headline(options)!
     const waived = waivedBest(solution)
     expect(best.limitedBy).toBe('building-class')
-    const figures = capBreakdown(solution, options)
-    expectSteps(figures, solution, best)
-    if (figures?.kind !== 'short') throw new Error('the Bangkok example reaches its cap')
-    expect(figures.losses).toEqual([
-      { limitedBy: 'envelope', sqm: solution.farCap.maxGfaSqm - waived.metrics.gfaSqm },
-      { limitedBy: 'building-class', sqm: waived.metrics.gfaSqm - best.metrics.gfaSqm },
-    ])
+    for (const unit of AREA_UNITS) {
+      const figures = capBreakdown(solution, options, unit)
+      expectSteps(figures, solution, best, unit)
+      if (figures?.kind !== 'short') throw new Error('the Bangkok example reaches its cap')
+      const shown = shownIn(unit)
+      expect(figures.losses.map((loss) => [loss.limitedBy, shown(loss.sqm)])).toEqual([
+        ['envelope', shown(solution.farCap.maxGfaSqm) - shown(waived.metrics.gfaSqm)],
+        ['building-class', shown(waived.metrics.gfaSqm) - shown(best.metrics.gfaSqm)],
+      ])
+      for (const loss of figures.losses) expect(loss.sqm).toBeGreaterThan(AREA_TOLERANCE_SQM)
+    }
     expect(waived.limitedBy).toBe('envelope')
-    for (const loss of figures.losses) expect(loss.sqm).toBeGreaterThan(AREA_TOLERANCE_SQM)
   })
 
   it('says only that the cap is reached when the best design reaches it', () => {
     const { solution, options } = designed(plotFromMetres(rectangle(50, 70), [{ edge: 0, widthM: 16 }]))
     expect(headline(options)!.limitedBy).toBe('far')
-    expect(capBreakdown(solution, options)).toEqual({ kind: 'reached', capSqm: solution.farCap.maxGfaSqm })
+    expect(capBreakdown(solution, options, 'sqm')).toEqual({ kind: 'reached', capSqm: solution.farCap.maxGfaSqm })
   })
 
   it('has no high-rise step under rules with no high-rise class', () => {
@@ -98,35 +104,36 @@ describe('the steps from the legal cap down to the buildable floor area', () => 
     const plot: Plot = { ...plotFromMetres(rectangle(40, 30), [{ edge: 0, widthM: 12 }]), limits: { maxFar: 3.5, maxStoreys: 9 } }
     const solution = solve(plot, dubai, packInterpretations(dubai))
     const options = designs(solution)
-    const figures = capBreakdown(solution, options)
+    const figures = capBreakdown(solution, options, 'sqm')
     if (figures?.kind !== 'short') return
     const [only, ...rest] = figures.losses
     expect(rest).toEqual([])
     expect(only.limitedBy as string).toBe(headline(options)!.limitedBy)
-    expect(only.sqm).toBe(figures.capSqm - figures.buildableSqm)
+    expectSteps(figures, solution, headline(options)!, 'sqm')
   })
 
   it('has nothing to break down when no design fits', () => {
     const { solution } = designed(EXAMPLE_PLOT)
-    expect(capBreakdown(solution, [])).toBeNull()
+    expect(capBreakdown(solution, [], 'sqm')).toBeNull()
   })
 
-  it('on any plot, adds up exactly from the cap to the best design, loses nothing below zero, and takes a high-rise step only when the building class stops the best design', () => {
+  it('on any plot and in either unit, adds up exactly in the whole numbers shown, loses nothing below zero, and takes a high-rise step only when the building class stops the best design', () => {
     fc.assert(
       fc.property(
         fc.oneof(convexPolygon(10), starPolygon(16)),
         fc.double({ min: 4, max: 40, noNaN: true }),
         fc.constantFrom<BuildingType>('condo', 'office', 'hotel'),
-        (points: Vec2[], roadWidthM, buildingType) => {
+        fc.constantFrom(...AREA_UNITS),
+        (points: Vec2[], roadWidthM, buildingType, unit) => {
           const { solution, options } = designed(plotFromMetres(points, [{ edge: 0, widthM: roadWidthM }], buildingType))
           const best = headline(options)
           if (!best) return
-          const figures = capBreakdown(solution, options)
+          const figures = capBreakdown(solution, options, unit)
           expect(figures?.kind).toBe(best.limitedBy === 'far' ? 'reached' : 'short')
-          expectSteps(figures, solution, best)
+          expectSteps(figures, solution, best, unit)
         },
       ),
-      { numRuns: 30 },
+      { numRuns: 60 },
     )
   })
 })

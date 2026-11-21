@@ -62,7 +62,7 @@ export function FeasibilityProvider({ children }: { children: ReactNode }) {
   const [step, setStep] = useState<RuleStep>(ALL_RULES)
   const ready = result?.status === 'ready' ? result : null
   const ranked = useMemo(() => (ready ? rank(ready.designs) : []), [ready])
-  const breakdown = useMemo(() => (ready ? capBreakdown(ready.solution, ready.designs) : null), [ready])
+  const breakdown = useMemo(() => (ready ? capBreakdown(ready.solution, ready.designs, region.areaUnit) : null), [ready, region.areaUnit])
   const plotCeiling = useMemo(() => (ready ? purchaseCeiling(ready.solution, ready.designs) : null), [ready])
   const shown = shownOption(ranked, designId)
   const design = shown?.design ?? null
