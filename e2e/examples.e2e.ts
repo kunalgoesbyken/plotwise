@@ -65,7 +65,7 @@ test('the Mumbai example sits on a road estimated at 12 m, marked as an estimate
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
   await expect(land.getByLabel('ASR land rate per sq ft of land')).toHaveValue('5968.0912896')
-  await expect(land.getByText('Example values.')).toBeVisible()
+  await expect(land.getByText('Example values.')).toHaveCount(2)
   await expect(land).toContainText('Annual Statement of Rates (Ready Reckoner) 2026-27')
   await expect(land).toContainText('zone 123/567')
   await expect(land).toContainText('easr.igrmaharashtra.gov.in')
@@ -93,7 +93,7 @@ test('the Mumbai example’s ASR stays the user’s once typed, and is not offer
   await showTab(page, 'Money')
   const land = moneyRegion(page).getByRole('region', { name: 'Land value' })
   await land.getByLabel('ASR land rate per sq ft of land').fill('6000')
-  await expect(land.getByText('Example values.')).toHaveCount(0)
+  await expect(land.getByText('Example values.')).toHaveCount(1)
   await expect.poll(() => decodeURIComponent(page.url())).toContain('landRate:')
 
   await page.goto(`/app#${encodeRegion('mum')}&${encodePlot({ ...MUMBAI_EXAMPLE_PLOT, ring: MUMBAI_EXAMPLE_PLOT.ring.map(([lng, lat]) => [lng + 0.001, lat] as [number, number]) })}`)

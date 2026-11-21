@@ -111,9 +111,9 @@ test('a design that supports no land value at the entered prices says the asking
   })
 })
 
-test('without sourced prices the Money tab says why there is no verdict instead of a number', async ({ page }) => {
+test('with the example values cleared, the Money tab says why there is no verdict instead of a number', async ({ page }) => {
   await mockApp(page)
-  await openApp(page, `${exampleFragment('mum')}&ask-mum=${MUMBAI_ASKING}`)
+  await openApp(page, `${exampleFragment('mum')}&assume-mum=${encodeURIComponent(encodeAssumptions({}, false) ?? '')}&ask-mum=${MUMBAI_ASKING}`)
   await goTo(page, 'Results')
   await showTab(page, 'Money')
   const asking = formatMoney(MUMBAI_ASKING, MONEY_REGIONS.mum.currency)

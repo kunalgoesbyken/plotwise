@@ -125,7 +125,7 @@ for (const viewport of [DESKTOP, PHONE]) {
     await expect(designsPanel(page).getByText('The setback from neighbours was left blank', { exact: false }).first()).toBeAttached()
 
     await showTab(page, 'Money')
-    await expect(moneyPanel(page)).toContainText('Plotwise has no sourced prices or costs for Custom rules')
+    await expect(moneyPanel(page)).toContainText('Plotwise has no sourced local prices or costs for Custom rules')
     await expect(moneyPanel(page).getByLabel('Sale price per m² of saleable area')).toHaveValue('')
 
     expect(zoneRequests).toEqual([])
