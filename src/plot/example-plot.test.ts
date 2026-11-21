@@ -9,7 +9,8 @@ import { nearestRoad } from '@/site/nearest-road'
 import { OverpassResponseSchema } from '@/site/overpass-response'
 import { parseOverpass } from '@/site/parse'
 import { isParkingUnset } from '@/solve'
-import { ASSUMPTIONS, DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE } from '@/solve/assumptions'
+import { ASSUMPTIONS, DUBAI_EXAMPLE_HOME_SQM, DUBAI_EXAMPLE_PARKING_PER_HOME } from '@/solve/assumptions'
+import { SQM_PER_SQFT } from '@/units/area'
 import { DUBAI_EXAMPLE_PLOT, MUMBAI_EXAMPLE_PLOT } from './example-plot'
 
 function solved(region: 'mum' | 'dxb') {
@@ -87,17 +88,22 @@ describe('example plots', () => {
     }
   })
 
-  it('sets the Dubai example’s parking from the Trakhees rule of one space per one-bedroom apartment, read over the apartment Plotwise designs', () => {
+  it('sets the Dubai example’s parking from the Trakhees rule of one space for each one-bedroom apartment, over a home of the size listed for its community', () => {
     const { solution, designs } = solved('dxb')
-    const grossPerApartment = ASSUMPTIONS.condoUnitSqm.value / ASSUMPTIONS.netToGross.condo.value
-    expect(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value).toBeCloseTo(grossPerApartment, 9)
-    expect(DUBAI_EXAMPLE_PLOT.limits?.parkingSqmPerSpace).toBe(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.value)
-    expect(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source).toContain('accreditation.trakhees.ae')
-    expect(REGIONS.dxb.example.limitsSource).toContain(DUBAI_EXAMPLE_PARKING_SQM_PER_SPACE.source)
+    expect(DUBAI_EXAMPLE_PARKING_PER_HOME.value).toBe(1)
+    expect(DUBAI_EXAMPLE_HOME_SQM.value).toBeCloseTo(830 * SQM_PER_SQFT, 9)
+    expect(DUBAI_EXAMPLE_PLOT.limits).toMatchObject({ parkingSpacesPerHome: DUBAI_EXAMPLE_PARKING_PER_HOME.value, homeSqm: DUBAI_EXAMPLE_HOME_SQM.value })
+    expect(DUBAI_EXAMPLE_PLOT.limits?.parkingSqmPerSpace).toBeUndefined()
+    expect(DUBAI_EXAMPLE_PARKING_PER_HOME.source).toContain('accreditation.trakhees.ae')
+    expect(DUBAI_EXAMPLE_HOME_SQM.source).toContain('propertyfinder.ae')
+    expect(REGIONS.dxb.example.limitsSource).toContain(DUBAI_EXAMPLE_PARKING_PER_HOME.source)
+    expect(REGIONS.dxb.example.limitsSource).toContain(DUBAI_EXAMPLE_HOME_SQM.source)
     expect(isParkingUnset(solution)).toBe(false)
     for (const design of designs) {
       const units = design.metrics.yield.kind === 'units' ? design.metrics.yield.count : Number.NaN
       expect(design.metrics.parkingSpaces).toBeGreaterThanOrEqual(units)
+      expect(design.metrics.parkingSpaces).toBeLessThanOrEqual(units + 1)
+      expect((units * DUBAI_EXAMPLE_HOME_SQM.value) / ASSUMPTIONS.netToGross.condo.value).toBeLessThanOrEqual(design.metrics.gfaSqm)
     }
   })
 

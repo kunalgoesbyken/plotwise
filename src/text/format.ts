@@ -2,7 +2,7 @@ import type { Comparator, Range } from '@/rules'
 import { areaToDisplay, type AreaUnit } from '@/units/area'
 import { LOCALE, t } from './messages'
 
-export type Quantity = 'm' | 'km' | AreaUnit | 'percent' | 'ratio' | 'count'
+export type Quantity = 'm' | 'km' | AreaUnit | 'percent' | 'ratio' | 'count' | 'plain'
 
 const NUMBER_FORMATS: Readonly<Record<Quantity, Intl.NumberFormat>> = {
   m: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }),
@@ -12,6 +12,7 @@ const NUMBER_FORMATS: Readonly<Record<Quantity, Intl.NumberFormat>> = {
   percent: new Intl.NumberFormat(LOCALE, { style: 'percent', maximumFractionDigits: 1 }),
   ratio: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2 }),
   count: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 }),
+  plain: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2, useGrouping: false }),
 }
 
 const LIST_FORMAT = new Intl.ListFormat(LOCALE, { type: 'conjunction' })

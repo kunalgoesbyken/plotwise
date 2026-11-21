@@ -5,7 +5,7 @@ import { t } from '@/text/messages'
 import { readNumber, type ReadNumber } from '@/text/read-number'
 import { areaFromDisplay, areaToDisplay, type AreaUnit } from '@/units/area'
 
-export type LimitUnit = 'area' | 'ratio' | 'm' | 'storeys' | 'percent' | 'perSpace'
+export type LimitUnit = 'area' | 'ratio' | 'm' | 'storeys' | 'percent' | 'perSpace' | 'perHome'
 
 export type LimitDisplay = { readonly area: AreaUnit; readonly floors: FloorCount }
 
@@ -19,12 +19,13 @@ export const FIELD_UNITS: Readonly<Record<PlotLimitField, LimitUnit>> = {
   boundarySetbackM: 'm',
   minOpenSpaceShare: 'percent',
   parkingSqmPerSpace: 'perSpace',
+  parkingSpacesPerHome: 'perHome',
+  homeSqm: 'area',
 }
 
 export const isAreaField = (field: PlotLimitField) => FIELD_UNITS[field] === 'area' || FIELD_UNITS[field] === 'perSpace'
 
 const PERCENT = 100
-const PRECISION = 12
 
 function toShown(field: PlotLimitField, value: number, { area, floors }: LimitDisplay): number {
   switch (FIELD_UNITS[field]) {
@@ -37,6 +38,7 @@ function toShown(field: PlotLimitField, value: number, { area, floors }: LimitDi
       return floors === 'gPlus' ? value - 1 : value
     case 'ratio':
     case 'm':
+    case 'perHome':
       return value
   }
 }
@@ -52,6 +54,7 @@ function fromShown(field: PlotLimitField, shown: number, { area, floors }: Limit
       return floors === 'gPlus' ? shown + 1 : shown
     case 'ratio':
     case 'm':
+    case 'perHome':
       return shown
   }
 }
@@ -63,8 +66,7 @@ export const limitLabel = (field: PlotLimitField, { limitTerms }: Region) => lim
 export const limitName = (field: PlotLimitField, { limitTerms }: Region) => limitTerms?.fields[field]?.value ?? t(`plot-limit.${field}`)
 
 export function shownLimit(field: PlotLimitField, value: number, display: LimitDisplay): string {
-  const shown = toShown(field, value, display)
-  return FIELD_UNITS[field] === 'perSpace' ? formatNumber(shown, 'ratio') : String(Number(shown.toPrecision(PRECISION)))
+  return formatNumber(toShown(field, value, display), 'plain')
 }
 
 export function parseLimit(field: PlotLimitField, text: string, display: LimitDisplay): ReadNumber {

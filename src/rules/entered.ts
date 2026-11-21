@@ -32,3 +32,8 @@ export function enteredParking(sqmPerSpace: number, field: string): ParkingRule 
   const demand: ParkingDemand = { kind: 'perGrossArea', sqmPerSpace: entered(sqmPerSpace, field) }
   return { scope: 'entered', appliesWhere: enteredCite(field), condo: demand, office: demand, hotel: demand }
 }
+
+export function enteredParkingPerHome(spacesPerHome: number, field: string): ParkingRule {
+  const demand: ParkingDemand = { kind: 'perUnit', spacesPerUnit: entered(spacesPerHome, field), unitsFromSqm: enteredBound(0, 'gte', field) }
+  return { scope: 'entered', appliesWhere: enteredCite(field), condo: demand }
+}

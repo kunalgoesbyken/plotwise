@@ -26,6 +26,8 @@ function affixOf(field: PlotLimitField, { area, floors }: LimitDisplay): Affix {
       return { prefix: null, suffix: areaName }
     case 'perSpace':
       return { prefix: null, suffix: t('limits.unit.per-space', { unit: areaName }) }
+    case 'perHome':
+      return { prefix: null, suffix: t('limits.unit.per-home') }
     case 'percent':
       return { prefix: null, suffix: t('limits.unit.percent') }
     case 'm':

@@ -2,7 +2,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'bun:test'
 import { PlotLimitsSchema, type Plot, type PlotLimitField } from '@/plot/plot'
 import { REGIONS } from '@/region/regions'
-import { AREA_UNITS, areaToDisplay } from '@/units/area'
+import { AREA_UNITS, SQM_PER_SQFT, type AreaUnit } from '@/units/area'
 import { FIELD_UNITS, limitDisplay, parseLimit, shownLimit, type LimitDisplay } from './limit-fields'
 import { decodePlot, encodePlot } from './plot-url'
 
@@ -27,9 +27,19 @@ const read = (field: PlotLimitField, text: string, display: LimitDisplay) => {
 
 const FIELDS = Object.keys(PlotLimitsSchema.shape) as PlotLimitField[]
 
-const EXACT_FIELDS = FIELDS.filter((field) => FIELD_UNITS[field] !== 'perSpace')
+const HALF_HUNDREDTH = 0.005
 
-const HUNDREDTH = 0.01
+function halfHundredth(field: PlotLimitField, area: AreaUnit): number {
+  switch (FIELD_UNITS[field]) {
+    case 'area':
+    case 'perSpace':
+      return area === 'sqft' ? HALF_HUNDREDTH * SQM_PER_SQFT : HALF_HUNDREDTH
+    case 'percent':
+      return HALF_HUNDREDTH / 100
+    default:
+      return HALF_HUNDREDTH
+  }
+}
 
 describe('entered limits shown in the region’s units', () => {
   it('has a display unit for every limit a plot can carry', () => {
@@ -50,7 +60,7 @@ describe('entered limits shown in the region’s units', () => {
     expect(read('maxStoreys', '10', DUBAI)).toBe(11)
     expect(read('maxStoreys', '0', DUBAI)).toBe(1)
     expect(shownLimit('maxStoreys', 11, DUBAI)).toBe('10')
-    expect(shownLimit('maxGfaSqm', 1000, DUBAI)).toBe('10763.9104167')
+    expect(shownLimit('maxGfaSqm', 1000, DUBAI)).toBe('10763.91')
     expect(shownLimit('maxCoverageShare', 0.6, BANGKOK)).toBe('60')
   })
 
@@ -69,7 +79,7 @@ describe('entered limits shown in the region’s units', () => {
     const stored = decoded?.ok ? decoded.plot.limits?.maxGfaSqm : undefined
     expect(stored).toBe(3000)
     expect(shownLimit('maxGfaSqm', 3000, limitDisplay(REGIONS.dxb, 'sqm'))).toBe('3000')
-    expect(shownLimit('maxGfaSqm', 3000, limitDisplay(REGIONS.dxb, 'sqft'))).toBe('32291.7312501')
+    expect(shownLimit('maxGfaSqm', 3000, limitDisplay(REGIONS.dxb, 'sqft'))).toBe('32291.73')
   })
 
   it('stores the same square metres in the link whichever unit a floor area is typed in', () => {
@@ -79,7 +89,7 @@ describe('entered limits shown in the region’s units', () => {
         const typed = read('maxGfaSqm', shownLimit('maxGfaSqm', sqm, display), display)
         const decoded = decodePlot(encodePlot({ ...PLOT, limits: { maxGfaSqm: typed } }))
         expect(decoded?.ok && decoded.plot.limits?.maxGfaSqm).toBe(typed)
-        expect(typed / sqm).toBeCloseTo(1, 9)
+        expect(Math.abs(typed - sqm)).toBeLessThanOrEqual(halfHundredth('maxGfaSqm', unit) + 1e-9)
       }),
     )
   })
@@ -98,31 +108,33 @@ describe('entered limits shown in the region’s units', () => {
     }
   })
 
-  it('shows a parking area per space to the hundredth, in either unit, and leaves the stored value as it is', () => {
+  it('shows every stored value to the hundredth in the unit it is typed in, without a floating-point tail, and leaves the stored value as it is', () => {
     const perSpace = 140 / 3
     expect(shownLimit('parkingSqmPerSpace', perSpace, limitDisplay(REGIONS.dxb, 'sqm'))).toBe('46.67')
     expect(shownLimit('parkingSqmPerSpace', perSpace, DUBAI)).toBe('502.32')
     expect(shownLimit('parkingSqmPerSpace', 50, BANGKOK)).toBe('50')
-    fc.assert(
-      fc.property(fc.double({ min: 1, max: 1e3, noNaN: true }), fc.constantFrom(...AREA_UNITS), (sqm, area) => {
-        const display = { area, floors: 'storeys' as const }
-        const shown = read('parkingSqmPerSpace', shownLimit('parkingSqmPerSpace', sqm, display), display)
-        expect(Math.abs(areaToDisplay(shown, area) - areaToDisplay(sqm, area))).toBeLessThanOrEqual(HUNDREDTH / 2 + 1e-9)
-      }),
-    )
+    expect(shownLimit('maxCoverageShare', 0.6000000000000001, BANGKOK)).toBe('60')
+    expect(shownLimit('maxFar', 0.1 + 0.2, BANGKOK)).toBe('0.3')
+    expect(shownLimit('roadSetbackM', 3.1 * 3, BANGKOK)).toBe('9.3')
+    expect(shownLimit('homeSqm', 830 * SQM_PER_SQFT, limitDisplay(REGIONS.dxb, 'sqm'))).toBe('77.11')
+    expect(shownLimit('homeSqm', 830 * SQM_PER_SQFT, limitDisplay(REGIONS.dxb, 'sqft'))).toBe('830')
+    expect(shownLimit('parkingSpacesPerHome', 1.5, BANGKOK)).toBe('1.5')
   })
 
-  it('shows any other stored value back as the text that reads to it', () => {
+  it('shows a stored value back as text that reads to within half a hundredth of it, and never groups digits', () => {
     fc.assert(
       fc.property(
-        fc.constantFrom(...EXACT_FIELDS),
-        fc.double({ min: 0.01, max: 1e5, noNaN: true }),
+        fc.constantFrom(...FIELDS),
+        fc.double({ min: 0.01, max: 1e6, noNaN: true }),
         fc.constantFrom(...AREA_UNITS),
         fc.constantFrom('storeys' as const, 'gPlus' as const),
         (field, raw, area, floors) => {
           const display = { area, floors }
           const value = field === 'maxStoreys' ? Math.ceil(raw) : raw
-          expect(read(field, shownLimit(field, value, display), display) / value).toBeCloseTo(1, 9)
+          const shown = shownLimit(field, value, display)
+          expect(shown).not.toContain(',')
+          const typed = read(field, shown, display)
+          expect(Math.abs(typed - value)).toBeLessThanOrEqual(halfHundredth(field, area) + 1e-9)
         },
       ),
     )
